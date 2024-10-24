@@ -111,11 +111,11 @@ populate()
                 # mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} -e 'ALTER INSTANCE DISABLE INNODB REDO_LOG;'
                 if [[ $myversion == 5.7.* ]]; then
                     echo "mysql $myversion"
-                    time mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} --add-drop-database --compress ${DATABASE_NAME}  < ${latest}
+                    time mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} --compress ${DATABASE_NAME}  < ${latest}
                 elif [[ $myversion == 8.* ]]; then
                     echo "mysql $myversion"
                     # time mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} --compression-algorithms=zstd --zstd-compression-level=7 --init-command='ALTER INSTANCE DISABLE INNODB REDO_LOG; SET SESSION FOREIGN_KEY_CHECKS=0;SET UNIQUE_CHECKS=0;' ${DATABASE_NAME} < ${latest}
-                    time mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} --add-drop-database --compression-algorithms=zstd --zstd-compression-level=7 --init-command='SET SESSION FOREIGN_KEY_CHECKS=0;SET UNIQUE_CHECKS=0;' ${DATABASE_NAME} < ${latest}
+                    time mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} --compression-algorithms=zstd --zstd-compression-level=7 --init-command='SET SESSION FOREIGN_KEY_CHECKS=0;SET UNIQUE_CHECKS=0;' ${DATABASE_NAME} < ${latest}
                 fi
                 # cat pre.sql ${latest} post.sql | mysql --max_allowed_packet=16M ${DATABASE_NAME}
                 echo "done"
@@ -144,12 +144,8 @@ backup()
     createconf
     # createPrePostSqlFiles
     echo -e "\nBacking up Database to - $DB_BACKUP_PATH/${BACKUP_NAME}-${TODAY}.sql"
-    # mysqldump -h ${MYSQL_HOST} -P ${MYSQL_PORT} --disable-keys  --quick --databases ${DATABASE_NAME} > "${DB_BACKUP_PATH}/${BACKUP_FILE}"
-    # mysqldump -h ${MYSQL_HOST} -P ${MYSQL_PORT} --no-autocommit --skip-add-locks --disable-keys --add-drop-database --skip-add-drop-table --quick --dump-date --databases ${DATABASE_NAME} --result-file="${DB_BACKUP_PATH}/${BACKUP_FILE}"
-    # mysqldump -h ${MYSQL_HOST} -P ${MYSQL_PORT} --opt --no-autocommit --databases ${DATABASE_NAME} --result-file="${DB_BACKUP_PATH}/${BACKUP_FILE}"
-    # mysqlpump --databases ${DATABASE_NAME} --result-file="${DB_BACKUP_PATH}/${BACKUP_FILE}"
-    mysqldump -h ${MYSQL_HOST} -P ${MYSQL_PORT} --opt --databases ${DATABASE_NAME} --result-file="$DB_BACKUP_PATH/${BACKUP_FILE}"
-    # cat $DB_BACKUP_PATH/pre.sql $DB_BACKUP_PATH/$BACKUP_FILE $DB_BACKUP_PATH/post.sql > "${DB_BACKUP_PATH}/prepost-${BACKUP_FILE}"
+    
+    mysqldump -h ${MYSQL_HOST} -P ${MYSQL_PORT} --opt --add-drop-database --databases ${DATABASE_NAME} --result-file="$DB_BACKUP_PATH/${BACKUP_FILE}"
     
     ##### Remove backups older than {BACKUP_RETAIN_DAYS} days  #####
     echo -e "\nDeleting backup files older than ${BACKUP_RETAIN_DAYS} days, if exists."
@@ -256,18 +252,12 @@ if [[ $EUID -eq 0 ]]; then
     exit 1
 fi
 
-# echo $#
-
 if [ $# -lt 2 ]; then
     findsqlfile $defSQLFileName
 elif [ $# -eq 2 ]; then
     findsqlfile $2
 fi
 
-# SQL_FILE="${SQL_FILE:-$defSQLFileName}"
-# echo "SQL file specified is $SQL_FILE"
-
-# if [ "$1" != "" ]; then
 case $1 in
     "-b" | "--backup" )
             now=$(date +"%r")
