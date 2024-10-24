@@ -150,7 +150,7 @@ JD-TC-AddMultipleAppointmentLabel-1
     ${NewCustomer}    Generate random string    10    123456789
     ${NewCustomer}    Convert To Integer  ${NewCustomer}
     Set Suite Variable  ${NewCustomer}
-    ${fname}=  FakerLibrary.name    
+    ${fname}=  generate_firstname    
     ${lname}=  FakerLibrary.last_name
     ${resp}=  AddCustomer  ${NewCustomer}   firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
@@ -173,9 +173,9 @@ JD-TC-AddMultipleAppointmentLabel-1
     ${pro_customer}    Generate random string    10    123456789
     ${pro_customer}    Convert To Integer  ${pro_customer}
     Set Suite Variable   ${pro_customer}
-    ${fname1}=  FakerLibrary.name    
+    ${fname1}=  generate_firstname    
     ${lname1}=  FakerLibrary.last_name
-    ${fname1}=  FakerLibrary.name    
+    ${fname1}=  generate_firstname    
     ${lname1}=  FakerLibrary.last_name
     ${resp}=  AddCustomer  ${pro_customer}   firstName=${fname1}   lastName=${lname1}
     Log   ${resp.json()}
