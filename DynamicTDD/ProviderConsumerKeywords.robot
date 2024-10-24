@@ -220,7 +220,7 @@ GetOrder using uid
 
 Get ProviderConsumer
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw    /spconsumer/     expected_status=any
+    ${resp}=    GET On Session    ynw    /spconsumer     expected_status=any
     Check Deprication  ${resp}  Get ProviderConsumer
     RETURN  ${resp}
 
