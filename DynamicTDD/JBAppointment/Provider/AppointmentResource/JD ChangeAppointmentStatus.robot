@@ -123,12 +123,15 @@ JD-TC-ChangeAppointmentStatus-1
     ${NewCustomer}    Convert To Integer  ${NewCustomer}
     Set Suite variable   ${NewCustomer}
     Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
-
     ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}  ${resp.json()}
-   
+    # Set Test Variable  ${cid}  ${resp.json()}
+    
+    ${resp}=  GetCustomer 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -146,8 +149,17 @@ JD-TC-ChangeAppointmentStatus-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
-    Set Test Variable  ${lname}   ${resp.json()['lastName']}
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+    # Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Test Variable  ${lname}   ${resp.json()['lastName']}
+
+    ${resp}=    Update ProviderConsumer    ${cid}    email=${pc_emailid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get ProviderConsumer
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
@@ -201,7 +213,7 @@ JD-TC-ChangeAppointmentStatus-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
-
+*** Comments ***
 JD-TC-ChangeAppointmentStatus-2
 
     [Documentation]  change status to Started from confirmed

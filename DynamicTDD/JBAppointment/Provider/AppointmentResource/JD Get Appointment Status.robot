@@ -324,7 +324,7 @@ JD-TC-GetAppointmentStatus-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
-     Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
     # Set Test Variable  ${fname}   ${resp.json()['firstName']}
     # Set Test Variable  ${lname}   ${resp.json()['lastName']}
     
