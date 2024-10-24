@@ -2541,6 +2541,7 @@ LEAD_STATUS_IS_ALREADY= "Lead status is already {}"
 LEAD_ALREADY_ASSIGNED=  "{} is already assigned"
 STAGE_NAME_SIZE = "Stage name charater should be between 3 and 100"
 DUPLICATE_NAME_INPUT = "Multiple occurance of same name."
+ALREADY_UPDATED = "Already updated"
 
 # ......  STOCK TRANSFER...........
 CANT_ST_TRNFR_BTW_SAME_INV = "You cannot transfer stock within the same inventory catalog"
