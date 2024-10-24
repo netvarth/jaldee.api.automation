@@ -66,13 +66,13 @@ JD-TC-CreateLeadSourcingChannel-2
 
 JD-TC-CreateLeadSourcingChannel-3
 
-    [Documentation]  Create Lead Sourcing Channel - where channel name is bellow 3 digit
+    [Documentation]  Create Lead Sourcing Channel - where channel name is 1 digit
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${random_number}=    Random Number 	       digits=2
+    ${random_number}=    Random Number 	       digits=1
 
     ${resp}=    Create Los Lead Sourcing Channel  ${random_number}
     Log  ${resp.content}
@@ -81,30 +81,25 @@ JD-TC-CreateLeadSourcingChannel-3
 
     ${resp}=    Get Los Sourcing Channel By UID  ${sourcinguid}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}        422
+    Should Be Equal As Strings    ${resp.status_code}        200
 
 
-JD-TC-CreateLeadSourcingChannel-4
+JD-TC-CreateLeadSourcingChannel-Uh1
 
-    [Documentation]  Create Lead Sourcing Channel - where channel name is above 200 digit
+    [Documentation]  Create Lead Sourcing Channel - where channel name is above 250 digit
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${random_number}=    Random Number 	       digits=201
+    ${random_number}=    Random Number 	       digits=251
 
     ${resp}=    Create Los Lead Sourcing Channel  ${random_number}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable    ${sourcinguid}     ${resp.json()['uid']}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${DUPLICATE_NAME_INPUT}
 
-    ${resp}=    Get Los Sourcing Channel By UID  ${sourcinguid}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}        422
-
-
-JD-TC-CreateLeadSourcingChannel-UH1
+JD-TC-CreateLeadSourcingChannel-UH2
 
     [Documentation]  Create Lead Sourcing Channel - with existing channel name
 
@@ -118,7 +113,7 @@ JD-TC-CreateLeadSourcingChannel-UH1
     Should Be Equal As Strings    ${resp.json()}        ${DUPLICATE_NAME_INPUT}
 
 
-JD-TC-CreateLeadSourcingChannel-UH2
+JD-TC-CreateLeadSourcingChannel-UH3
 
     [Documentation]  Create Lead Sourcing Channel - where channel name is empty
 
@@ -132,7 +127,7 @@ JD-TC-CreateLeadSourcingChannel-UH2
     Should Be Equal As Strings    ${resp.json()}        ${NAME_REQUIRED}
 
 
-JD-TC-CreateLeadSourcingChannel-UH3
+JD-TC-CreateLeadSourcingChannel-UH4
 
     [Documentation]  Create Lead Sourcing Channel - without login
 

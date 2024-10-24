@@ -274,3 +274,16 @@ JD-TC-GetLeadSourcingChannelByFilter-UH5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings    ${resp.json()}        ${SESSION_EXPIRED}
+
+JD-TC-GetLeadSourcingChannelByFilter-UH6
+
+    [Documentation]  Get Lead Sourcing Channel By Filter- by another provder login
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Los Sourcing Channel
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}        []
