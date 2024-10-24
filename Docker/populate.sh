@@ -4,15 +4,6 @@
 # PS4='\033[0;33m+(${BASH_SOURCE}:${LINENO}):\033[0m ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
 # set -x
 
-# MYSQL_HOST='localhost'
-# uname -r
-# cat /proc/version
-# if grep -qi microsoft /proc/version; then
-#   echo "Ubuntu on Windows"
-# else
-#   echo "native Linux"
-# fi
-# cat /proc/sys/kernel/osrelease
 if [[ "$(< /proc/sys/kernel/osrelease)" == *[Mm]icrosoft* ]]; then 
     echo "Ubuntu on Windows"
 	# host_ip=$(cat /etc/resolv.conf| grep nameserver | cut -d " " -f 2)
@@ -99,15 +90,8 @@ populate()
             # latest_file=$(echo ${latest#$DB_BACKUP_PATH/})
             if [ -a "${latest}" ]; then
                 createconf
-                # echo "Dropping Database ${DATABASE_NAME}."
-                # mysql -se "drop database $DATABASE_NAME ;"
-                # echo "Creating Database ${DATABASE_NAME}."
-                # mysql -se "create database $DATABASE_NAME ;"
                 echo "Populating Database using backup- ${latest}. Please wait"
-                # time mysql --compress --max_allowed_packet=32M ${DATABASE_NAME} < ${latest}
-                # mysql --compress --max_allowed_packet=32M ${DATABASE_NAME} < ${latest}
-                # mysql --compress --max_allowed_packet=1G < ${latest}
-                # time mysql --compression-algorithms=zstd --zstd-compression-level=7 ${DATABASE_NAME} < ${latest}
+                
                 # mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} -e 'ALTER INSTANCE DISABLE INNODB REDO_LOG;'
                 if [[ $myversion == 5.7.* ]]; then
                     echo "mysql $myversion"
@@ -133,8 +117,6 @@ populate()
 
 backup()
 {
-    # mysql -fv -u ${MYSQL_USER} ${DATABASE_NAME} < $SQL_FILE
-    # mysql -f -u ${MYSQL_USER} ${DATABASE_NAME} < $SQL_FILE
     
     if [ ! -d "$DB_BACKUP_PATH" ]; then
         echo "$DB_BACKUP_PATH does not exist. Creating it."
@@ -144,8 +126,8 @@ backup()
     createconf
     # createPrePostSqlFiles
     echo -e "\nBacking up Database to - $DB_BACKUP_PATH/${BACKUP_NAME}-${TODAY}.sql"
-    
-    mysqldump -h ${MYSQL_HOST} -P ${MYSQL_PORT} --opt --add-drop-database --databases ${DATABASE_NAME} --result-file="$DB_BACKUP_PATH/${BACKUP_FILE}"
+    mysqldump -h ${MYSQL_HOST} -P ${MYSQL_PORT} --add-drop-database --opt --databases ${DATABASE_NAME} --result-file="$DB_BACKUP_PATH/${BACKUP_FILE}"
+    # cat $DB_BACKUP_PATH/pre.sql $DB_BACKUP_PATH/$BACKUP_FILE $DB_BACKUP_PATH/post.sql > "${DB_BACKUP_PATH}/prepost-${BACKUP_FILE}"
     
     ##### Remove backups older than {BACKUP_RETAIN_DAYS} days  #####
     echo -e "\nDeleting backup files older than ${BACKUP_RETAIN_DAYS} days, if exists."
@@ -252,12 +234,18 @@ if [[ $EUID -eq 0 ]]; then
     exit 1
 fi
 
+# echo $#
+
 if [ $# -lt 2 ]; then
     findsqlfile $defSQLFileName
 elif [ $# -eq 2 ]; then
     findsqlfile $2
 fi
 
+# SQL_FILE="${SQL_FILE:-$defSQLFileName}"
+# echo "SQL file specified is $SQL_FILE"
+
+# if [ "$1" != "" ]; then
 case $1 in
     "-b" | "--backup" )
             now=$(date +"%r")
