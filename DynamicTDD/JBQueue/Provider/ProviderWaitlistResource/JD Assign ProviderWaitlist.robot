@@ -32,8 +32,6 @@ ${waitlistedby}           PROVIDER
 @{countryCode}   91  +91  48 
 @{service_names}
 
-
-
 ***Test Cases***
 
 JD-TC-AssignproviderWaitlist-1
