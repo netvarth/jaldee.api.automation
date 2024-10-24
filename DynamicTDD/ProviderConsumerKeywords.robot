@@ -823,7 +823,7 @@ Update ProviderConsumer
     Log  ${data}
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /spconsumer/  data=${data}  expected_status=any
+    ${resp}=  PUT On Session  ynw  /spconsumer  data=${data}  expected_status=any
     Check Deprication  ${resp}  Update ProviderConsumer
     RETURN  ${resp}
 
