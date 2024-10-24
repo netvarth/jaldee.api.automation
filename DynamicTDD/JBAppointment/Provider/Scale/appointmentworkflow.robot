@@ -95,7 +95,7 @@ JD-TC-PreDeploymentAppointment-1
         ${maxval}=  Convert To Integer   ${delta/2}
         ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
         ${bool1}=  Random Element  ${bool}
-        ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}  ${s_id1}  ${s_id2}
+        ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id} 
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable  ${sch_id}  ${resp.json()}
@@ -146,4 +146,28 @@ JD-TC-PreDeploymentAppointment-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    
+    clear_Label  ${PUSERNAME_B}
+
+    ${label_id}=  Create Sample Label
+
+    ${resp}=  Get Label By Id  ${label_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${lbl_name}=  Set Variable   ${resp.json()['label']}
+    ${len}=  Get Length  ${resp.json()['valueSet']}
+    ${i}=   Random Int   min=0   max=${len-1}
+    ${lbl_value}=   Set Variable   ${resp.json()['valueSet'][${i}]['value']}
+
+    ${label_dict}=  Create Label Dictionary  ${lbl_name}  ${lbl_value}
+
+    ${resp}=  Add Label for Multiple Appointment   ${label_dict}  ${apptid1} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${label}=    Create Dictionary  ${lbl_name}=${lbl_value}
+
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['label']}  ${label}
+   
