@@ -155,7 +155,7 @@ def verify_accnt(email,purpose,sessionID=''):
                 # print('Executing Query:', select_stmt)
                 if sessionID!='':
                     cur.execute("SELECT sharedkey, otp_purpose, sessionId FROM access_key_tbl WHERE sessionId=%s;", (sessionID,))
-                    print('Everything selected from access_key_tbl for login_id', email)
+                    print('Everything selected from access_key_tbl for sessionId', sessionID)
                     row = cur.fetchall()
                     print(row)
                     additional_stmt=f" and sessionId='{sessionID}'"
