@@ -367,7 +367,7 @@ JD-TC-GetAppointmentStatus-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
    
-    ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre}  ${purpose[0]}  ${apptid1}  ${s_id}  ${bool[0]}   ${bool[1]}  ${jdconID}
+    ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre}  ${purpose[0]}  ${apptid1}  ${s_id}  ${bool[0]}   ${bool[1]}  ${cid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${payref}   ${resp.json()['paymentRefId']}
