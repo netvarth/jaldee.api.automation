@@ -22,6 +22,32 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 ${self}     0
 @{service_names}
+${jpgfile}      /ebs/TDD/uploadimage.jpg
+${order}        0
+0
+${fileSize}     0.00458
+${pdffile}      /ebs/TDD/sample.pdf
+
+*** Keywords ***
+
+Create Prescription 
+    [Arguments]    ${providerConsumerId}    ${userId}    ${html}      @{vargs}    &{kwargs}
+    ${len}=  Get Length  ${vargs}
+    ${mrPrescriptions}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${mrPrescriptions}  ${vargs[${index}]}
+    END
+    ${data}=    Create Dictionary    providerConsumerId=${providerConsumerId}    doctorId=${userId}    html=${html}    mrPrescriptions=${mrPrescriptions}    
+    Check And Create YNW Session
+     FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    ${resp}=    POST On Session    ynw    /provider/medicalrecord/prescription    data=${data}    expected_status=any
+    Check Deprication  ${resp}  Create Prescription
+    RETURN  ${resp}
 
 
 *** Test Cases ***
@@ -32,6 +58,15 @@ JD-TC-PreDeploymentAppointment-1
 
     ${firstname}  ${lastname}  ${PUSERNAME_B}  ${LoginId}=  Provider Signup
     Set Suite Variable  ${PUSERNAME_B}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${pdrname}  ${decrypted_data['userName']}
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -146,6 +181,8 @@ JD-TC-PreDeploymentAppointment-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    #.....Apply Label ..............
+
     clear_Label  ${PUSERNAME_B}
 
     ${label_id}=  Create Sample Label
@@ -170,4 +207,160 @@ JD-TC-PreDeploymentAppointment-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['label']}  ${label}
-   
+
+    #..... Send Message .............
+
+    ${resp}=  db.getType   ${jpgfile}
+    Log  ${resp}
+    ${fileType1}=  Get From Dictionary       ${resp}    ${jpgfile}
+    ${caption1}=  Fakerlibrary.Sentence
+    ${fileName}=    generate_filename
+    
+    ${resp}    upload file to temporary location    ${file_action[0]}    ${provider_id}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption1}    ${fileType1}    ${EMPTY}    ${order}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200 
+    Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
+
+    ${attachments}=  Create Dictionary  owner=${provider_id}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${pdrname}
+    ${attachment}=   Create List  ${attachments}
+
+    ${uuid}=    Create List  ${apptid1}
+
+    ${resp}=    Send Message With Appointment   ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  attachments=${attachment}  uuid=${uuid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    #.... Send Attachment ............
+
+    ${resp}=  db.getType   ${jpgfile}
+    Log  ${resp}
+    ${fileType1}=  Get From Dictionary       ${resp}    ${jpgfile}
+    ${caption1}=  Fakerlibrary.Sentence
+    ${fileName}=    generate_filename
+    
+    ${resp}    upload file to temporary location    ${file_action[0]}    ${provider_id}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption1}    ${fileType1}    ${EMPTY}    ${order}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200 
+    Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
+
+    ${attachments}=  Create Dictionary  owner=${provider_id}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${pdrname}
+
+    ${resp}=  Send Attachment From Appointment   ${apptid1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Attachments In Appointment     ${apptid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    #..........Prescription creation ............
+
+    # ${name}=  FakerLibrary.name
+    # ${aliasName}=  FakerLibrary.name
+    
+    # ${resp}=    Create Case Category    ${name}  ${aliasName}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Suite Variable    ${category_id}    ${resp.json()['id']} 
+
+    # ${category}=  Create Dictionary  id=${category_id}  
+    # Set Suite Variable    ${category} 
+
+    # ${resp}=    Create Case Type    ${name}  ${aliasName}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Suite Variable    ${type_id}    ${resp.json()['id']}  
+
+    # ${type}=  Create Dictionary  id=${type_id} 
+    # ${doctor}=  Create Dictionary  id=${pid} 
+    # ${title}=  FakerLibrary.name
+    # ${description}=  FakerLibrary.last_name
+
+    # ${consumer}=  Create Dictionary  id=${cid} 
+    # Set Suite Variable    ${consumer} 
+
+    # ${resp}=    Create MR Case    ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings              ${resp.status_code}   200
+    # Set Suite Variable    ${caseId}        ${resp.json()['id']}
+    # Set Suite Variable    ${caseUId}    ${resp.json()['uid']}
+
+    # ${resp}=    Get MR Case By UID   ${caseUId}    
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+
+    # ${toothNo}=   Random Int  min=10   max=99
+    # ${note1}=  FakerLibrary.word
+    # ${investigation}=    Create List   ${note1}
+    # ${toothSurfaces}=    Create List   ${toothSurfaces[0]}
+
+    # ${resp}=    Create DentalRecord    ${toothNo}  ${toothType[0]}  ${caseUId}    investigation=${investigation}    toothSurfaces=${toothSurfaces}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings              ${resp.status_code}   200
+    # Set Suite Variable      ${id1}           ${resp.json()}
+
+    ${med_name}=      FakerLibrary.name
+    Set Suite Variable    ${med_name}
+    ${frequency}=     FakerLibrary.word
+    Set Suite Variable    ${frequency}
+    ${duration}=      FakerLibrary.sentence
+    Set Suite Variable    ${duration}
+    ${instrn}=        FakerLibrary.sentence
+    Set Suite Variable    ${instrn}
+    ${dosage}=        FakerLibrary.sentence
+    Set Suite Variable    ${dosage}
+    ${type}=     FakerLibrary.word
+    Set Suite Variable    ${type}
+    ${clinicalNote}=     FakerLibrary.word
+    Set Suite Variable    ${clinicalNote}
+    ${clinicalNote1}=        FakerLibrary.sentence
+    Set Suite Variable    ${clinicalNote1}
+    ${type1}=        FakerLibrary.sentence
+    Set Suite Variable    ${type1}
+
+
+    ${resp}=  db.getType   ${pdffile} 
+    Log  ${resp}
+    ${fileType}=  Get From Dictionary       ${resp}    ${pdffile} 
+    Set Suite Variable    ${fileType}
+    ${caption}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption}
+
+    ${resp}=  db.getType   ${jpgfile}
+    Log  ${resp}
+    ${fileType1}=  Get From Dictionary       ${resp}    ${jpgfile}
+    Set Suite Variable    ${fileType1}
+    ${caption1}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption1}
+
+
+    ${resp}    upload file to temporary location    ${LoanAction[0]}    ${pid}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}  
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200 
+    Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
+
+    ${prescriptionAttachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${pid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}   driveId=${driveId}
+    Log  ${prescriptionAttachments}
+    ${prescriptionAttachments}=  Create List   ${prescriptionAttachments}
+    Set Suite Variable    ${prescriptionAttachments}
+
+    ${mrPrescriptions}=  Create Dictionary  medicineName=${med_name}  frequency=${frequency}  duration=${duration}  instructions=${instrn}  dosage=${dosage}
+    Set Suite Variable    ${mrPrescriptions}
+    ${note}=  FakerLibrary.Text  max_nb_chars=42 
+
+    ${resp}=    Create Prescription    ${cid}    ${pid}      ${html}     ${mrPrescriptions}    prescriptionNotes=${note}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${prescription_uid}   ${resp.json()}
+
+    ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${referenceId}   ${resp.json()[0]['referenceId']}   
+    Set Suite Variable  ${uid}   ${resp.json()[0]['uid']}
+    Set Suite Variable  ${prescriptionStatus}   ${resp.json()[0]['prescriptionStatus']}
+    
+
+    ${resp1}=  Get Prescription By UID    ${prescription_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
