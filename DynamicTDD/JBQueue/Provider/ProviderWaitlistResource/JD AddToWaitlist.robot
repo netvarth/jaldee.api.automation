@@ -673,7 +673,9 @@ JD-TC-AddToWaitlist-UH1
       Log   ${resp.content}
       Should Be Equal As Strings    ${resp.status_code}   200
 
-      ${resp}=  Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}
+      ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+      ${resp}=  Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
       Log   ${resp.content}
       Should Be Equal As Strings    ${resp.status_code}   200
       Set Suite Variable  ${token}  ${resp.json()['token']}
@@ -774,7 +776,10 @@ JD-TC-AddToWaitlist-UH7
       Should Be Equal As Strings    ${resp.status_code}    202
       ${resp}=  Account Activation  ${PUSERNAME_C}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Set Credential  ${PUSERNAME_C}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_C}
+
+      ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+      ${resp}=  Account Set Credential  ${PUSERNAME_C}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_C}    JSESSIONYNW=${jsessionynw_value}
       Should Be Equal As Strings    ${resp.status_code}    200
       
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}

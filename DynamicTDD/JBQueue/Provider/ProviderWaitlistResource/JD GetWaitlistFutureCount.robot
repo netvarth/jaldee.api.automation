@@ -19,13 +19,10 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 JD-TC-GetWaitlistFutureCount-1
       [Documentation]   View waitlist count by Provider login
 
-      # clear_queue      ${HLPUSERNAME24}
-      # clear_waitlist   ${HLPUSERNAME24}    
-      # clear_location   ${HLPUSERNAME24}
-      # clear_service    ${HLPUSERNAME24}
       clear_customer    ${HLPUSERNAME24}
 
       ${resp}=  Encrypted Provider Login  ${HLPUSERNAME24}  ${PASSWORD}
+      Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
 
       ${ser_duratn}=  Random Int   min=2   max=4
@@ -69,11 +66,10 @@ JD-TC-GetWaitlistFutureCount-1
       ${desc}=   FakerLibrary.word
       Set Suite Variable   ${desc}
 
-      ${resp}=  Get Consumer By Id  ${CUSERNAME0}
-      Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${cname1}   ${resp.json()['userProfile']['firstName']}
-      Set Suite Variable  ${lname1}   ${resp.json()['userProfile']['lastName']}
+      ${cname1}=    FakerLibrary.name
+      Set Suite Variable    ${cname1}
+      ${lname1}=    FakerLibrary.name
+      Set Suite Variable    ${lname1}
 
       ${resp}=  AddCustomer  ${CUSERNAME0}  firstName=${cname1}   lastName=${lname1}
       Log   ${resp.json()}
@@ -90,11 +86,10 @@ JD-TC-GetWaitlistFutureCount-1
       ${resp}=  Get provider communications
       Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${resp}=  Get Consumer By Id  ${CUSERNAME1}
-      Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${cname2}   ${resp.json()['userProfile']['firstName']}
-      Set Suite Variable  ${lname2}   ${resp.json()['userProfile']['lastName']}
+      ${cname2}=    FakerLibrary.name
+      Set Suite Variable    ${cname2}
+      ${lname2}=    FakerLibrary.name
+      Set Suite Variable    ${lname2}
 
       ${resp}=  AddCustomer  ${CUSERNAME1}   firstName=${cname2}   lastName=${lname2}
       Log   ${resp.json()}
@@ -108,11 +103,10 @@ JD-TC-GetWaitlistFutureCount-1
       ${tid}=  Get Dictionary Keys  ${resp.json()}
       Set Suite Variable  ${token_id1}  ${tid[0]}
 
-      ${resp}=  Get Consumer By Id  ${CUSERNAME2}
-      Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${cname3}   ${resp.json()['userProfile']['firstName']}
-      Set Suite Variable  ${lname3}   ${resp.json()['userProfile']['lastName']}
+      ${cname3}=    FakerLibrary.name
+      Set Suite Variable    ${cname3}
+      ${lname3}=    FakerLibrary.name
+      Set Suite Variable    ${lname3}
 
       ${resp}=  AddCustomer  ${CUSERNAME2}   firstName=${cname3}   lastName=${lname3}
       Log   ${resp.json()}
@@ -126,11 +120,10 @@ JD-TC-GetWaitlistFutureCount-1
       ${tid}=  Get Dictionary Keys  ${resp.json()}
       Set Suite Variable  ${token_id2}  ${tid[0]}
 
-      ${resp}=  Get Consumer By Id  ${CUSERNAME3}
-      Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${cname4}   ${resp.json()['userProfile']['firstName']}
-      Set Suite Variable  ${lname4}   ${resp.json()['userProfile']['lastName']}
+      ${cname4}=    FakerLibrary.name
+      Set Suite Variable    ${cname4}
+      ${lname4}=    FakerLibrary.name
+      Set Suite Variable    ${lname4}
 
       ${resp}=  AddCustomer  ${CUSERNAME3}   firstName=${cname4}   lastName=${lname4} 
       Log   ${resp.json()}
@@ -768,7 +761,8 @@ JD-TC-GetWaitlistFutureCount-UH1
       Log   ${resp.content}
       Should Be Equal As Strings    ${resp.status_code}   200
 
-      ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
+      ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+      ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}   JSESSIONYNW=${jsessionynw_value}
       Log   ${resp.content}
       Should Be Equal As Strings    ${resp.status_code}   200
       Set Suite Variable  ${token}  ${resp.json()['token']}

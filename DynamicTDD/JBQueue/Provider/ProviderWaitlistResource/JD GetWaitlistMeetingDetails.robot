@@ -81,7 +81,8 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Verify Otp For Login   ${CUSERNAME0}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+    ${resp}=  Verify Otp For Login   ${CUSERNAME0}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
@@ -1054,7 +1055,8 @@ JD-TC-TeleserviceWaitlist-(Non billable Subdomain)-7
     Should Be Equal As Strings  "${resp.json()}"    "true"
     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
 
-    ${resp}=  Account Set Credential  ${PUSERPH2}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH2}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+    ${resp}=  Account Set Credential  ${PUSERPH2}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH2}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

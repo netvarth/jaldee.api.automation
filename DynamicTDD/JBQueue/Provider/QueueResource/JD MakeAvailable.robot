@@ -97,7 +97,9 @@ JD-TC-MakeAvailable-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
-    ${resp}=    Account Activation  ${ph1}  ${OtpPurpose['ProviderResetPassword']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Account Activation  ${ph1}  ${OtpPurpose['ProviderResetPassword']}   JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
