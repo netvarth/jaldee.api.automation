@@ -14817,7 +14817,60 @@ Update Los Lead Product Status
     Check Deprication  ${resp}  Update Los Lead Product Status
     RETURN  ${resp}
 
+Create Los Lead Stage
+    [Arguments]     ${losProduct}  ${stageType}  ${name}  ${sortOrder}  &{kwargs}
 
+    ${data}=  Create Dictionary    losProduct=${losProduct}  stageType=${stageType}  name=${name}  sortOrder=${sortOrder}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/los/lead/stage  data=${data}  expected_status=any
+    Check Deprication  ${resp}  Create Los Lead Stage 
+    RETURN  ${resp}
+
+Get Lead Stage By UID
+    [Arguments]     ${uid}
+
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /provider/los/lead/stage/${uid}   expected_status=any
+    Check Deprication  ${resp}  Get Los Stage By UID
+    RETURN  ${resp}
+
+Update Los Lead Stage
+    [Arguments]     ${losProduct}  ${uid}  ${name}
+
+    ${data}=  Create Dictionary    losProduct=${losProduct}  name=${name}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/stage/${uid}  data=${data}  expected_status=any
+    Check Deprication  ${resp}  Update Los Lead Stage
+    RETURN  ${resp}
+
+Get Los Stage
+    [Arguments]     &{param}
+    Log  ${param}
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /provider/los/lead/stage   params=${param}   expected_status=any
+    Check Deprication  ${resp}  Get Los Stage
+    RETURN  ${resp}
+
+Get Los Stage Count
+    [Arguments]     &{param}
+    Log  ${param}
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /provider/los/lead/stage/count   params=${param}   expected_status=any
+    Check Deprication  ${resp}  Get Los Stage Count
+    RETURN  ${resp}
+
+Update Los Lead Stage Status
+    [Arguments]     ${uid}  ${status}
+
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/stage/${uid}/status/${status}  expected_status=any
+    Check Deprication  ${resp}  Update Los Lead Stage Status
+    RETURN  ${resp}
 
 
 AddItemToInvoice

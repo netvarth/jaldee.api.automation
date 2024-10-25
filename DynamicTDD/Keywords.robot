@@ -298,6 +298,8 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{stockTransfer}                    DRAFT   DISPATCHED   RECEIVED   DECLINED   CANCELED
 @{toggleButton}                     enable  disable
 @{losProduct}                       CDL  PROPERTYLOAN  DOCTORSLOAN  TEACHERSLOAN
+@{stageType}                        NEW  FOLLOWUP  KYC  KYCVERIFICATION  SALESFIELD  CREDITSCORE
+
 *** Keywords ***
 
 
