@@ -17754,6 +17754,13 @@ Reset Password LoginId
     ${resp}=  POST On Session  ynw  /provider/login/reset/password   data=${data}   expected_status=any
     RETURN  ${resp}
 
+
+Check Server Availibility
+    Check And Create YNW Session
+    ${resp}=   GET On Session  ynw  /provider/server/up   expected_status=any
+    Check Deprication  ${resp}  Check server
+    RETURN  ${resp}
+
 *** Comments ***
 
 
@@ -18090,3 +18097,6 @@ Update Business Profile with schedule
     ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
     Check Deprication  ${resp}  Update Business Profile with schedule
     RETURN  ${resp}
+
+
+
