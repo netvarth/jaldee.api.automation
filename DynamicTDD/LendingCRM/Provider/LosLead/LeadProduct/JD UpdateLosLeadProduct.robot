@@ -118,14 +118,10 @@ JD-TC-UpdateLeadProduct-UH3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${productuid}=     Random Int  min=9999  max=99999
-
-    ${INVALID_X_ID}=   Replace String  ${INVALID_X_ID}  {}   Product
-
     ${resp}=    Update Los Lead Product  ${losProduct[0]}  ${productuid}  ${empty}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}        ${INVALID_X_ID}
+    Should Be Equal As Strings    ${resp.json()}        ${NAME_LENGTH_EXCEED}
 
 
 JD-TC-UpdateLeadProduct-UH4

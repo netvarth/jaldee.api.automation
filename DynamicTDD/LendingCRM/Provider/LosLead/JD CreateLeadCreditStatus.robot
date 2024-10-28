@@ -88,7 +88,7 @@ JD-TC-CreateLeadCreditStatus-UH1
     ${resp}=    Create Lead Credit Status LOS  ${empty}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${NAME_REQUIRED}
+    Should Be Equal As Strings    ${resp.json()}   ${NAME_LENGTH_EXCEED}
 
 
 JD-TC-CreateLeadCreditStatus-UH2
