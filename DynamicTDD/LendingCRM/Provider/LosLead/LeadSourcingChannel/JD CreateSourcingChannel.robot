@@ -23,7 +23,7 @@ JD-TC-CreateLeadSourcingChannel-1
 
     [Documentation]  Create Lead Sourcing Channel
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -49,7 +49,7 @@ JD-TC-CreateLeadSourcingChannel-2
 
     [Documentation]  Create Lead Sourcing Channel - where channel name as  number
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -68,7 +68,7 @@ JD-TC-CreateLeadSourcingChannel-3
 
     [Documentation]  Create Lead Sourcing Channel - where channel name is 1 digit
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -84,11 +84,11 @@ JD-TC-CreateLeadSourcingChannel-3
     Should Be Equal As Strings    ${resp.status_code}        200
 
 
-JD-TC-CreateLeadSourcingChannel-Uh1
+JD-TC-CreateLeadSourcingChannel-UH1
 
     [Documentation]  Create Lead Sourcing Channel - where channel name is above 250 digit
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -97,13 +97,13 @@ JD-TC-CreateLeadSourcingChannel-Uh1
     ${resp}=    Create Los Lead Sourcing Channel  ${random_number}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}        ${DUPLICATE_NAME_INPUT}
+    Should Be Equal As Strings    ${resp.json()}        ${NAME_LENGTH_EXCEED}
 
 JD-TC-CreateLeadSourcingChannel-UH2
 
     [Documentation]  Create Lead Sourcing Channel - with existing channel name
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -117,14 +117,14 @@ JD-TC-CreateLeadSourcingChannel-UH3
 
     [Documentation]  Create Lead Sourcing Channel - where channel name is empty
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    Create Los Lead Sourcing Channel  ${empty}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}        ${NAME_REQUIRED}
+    Should Be Equal As Strings    ${resp.json()}        ${NAME_LENGTH_EXCEED}
 
 
 JD-TC-CreateLeadSourcingChannel-UH4

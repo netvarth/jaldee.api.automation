@@ -23,7 +23,7 @@ JD-TC-UpdateLeadSourcingChannel-1
 
     [Documentation]  Update Lead Sourcing Channel - updating scouce channel name
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -62,7 +62,7 @@ JD-TC-UpdateLeadSourcingChannel-2
 
     [Documentation]  Update Lead Sourcing Channel - update with already updated chanel name
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -75,7 +75,7 @@ JD-TC-UpdateLeadSourcingChannel-UH1
 
     [Documentation]  Update Lead Sourcing Channel - where uid is invalid
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -93,7 +93,7 @@ JD-TC-UpdateLeadSourcingChannel-UH2
 
     [Documentation]  Update Lead Sourcing Channel - where channel name is empty
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -102,7 +102,7 @@ JD-TC-UpdateLeadSourcingChannel-UH2
     ${resp}=    Update Los Lead Sourcing Channel  ${sourcinguid}  ${empty}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}        ${NAME_REQUIRED}
+    Should Be Equal As Strings    ${resp.json()}        ${NAME_LENGTH_EXCEED}
 
 
 JD-TC-UpdateLeadSourcingChannel-UH3

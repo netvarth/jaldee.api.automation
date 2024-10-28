@@ -23,7 +23,7 @@ JD-TC-UpdateLeadSourcingChannelStatus-1
 
     [Documentation]  Update Lead Sourcing Channel Status
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -58,7 +58,7 @@ JD-TC-UpdateLeadSourcingChannelStatus-2
 
     [Documentation]  Update Lead Sourcing Channel Status - change disable to enable status
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -71,7 +71,7 @@ JD-TC-UpdateLeadSourcingChannelStatus-UH1
 
     [Documentation]  Update Lead Sourcing Channel Status - change status to enable which is already enabled
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -85,7 +85,7 @@ JD-TC-UpdateLeadSourcingChannelStatus-UH2
 
     [Documentation]  Update Lead Sourcing Channel Status - change status to disable which is already disabled
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

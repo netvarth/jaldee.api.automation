@@ -23,7 +23,7 @@ JD-TC-GetLeadSourcingChannelByUid-1
 
     [Documentation]  Get Lead Sourcing Channel By Uid
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -51,7 +51,7 @@ JD-TC-GetLeadSourcingChannelByUid-UH1
 
     [Documentation]  Get Lead Sourcing Channel By Uid - with invalid uid
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

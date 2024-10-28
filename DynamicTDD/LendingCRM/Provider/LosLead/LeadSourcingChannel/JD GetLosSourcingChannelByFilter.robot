@@ -23,7 +23,7 @@ JD-TC-GetLeadSourcingChannelByFilter-1
 
     [Documentation]  Get Lead Sourcing Channel By Filter- with no params
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -84,7 +84,7 @@ JD-TC-GetLeadSourcingChannelByFilter-2
 
     [Documentation]  Get Lead Sourcing Channel By Filter- by id
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -101,7 +101,7 @@ JD-TC-GetLeadSourcingChannelByFilter-3
 
     [Documentation]  Get Lead Sourcing Channel By Filter- by account
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -122,7 +122,7 @@ JD-TC-GetLeadSourcingChannelByFilter-4
 
     [Documentation]  Get Lead Sourcing Channel By Filter- by status
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -143,7 +143,7 @@ JD-TC-GetLeadSourcingChannelByFilter-5
 
     [Documentation]  Get Lead Sourcing Channel By Filter- by status after changeing one status to disable
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -164,7 +164,7 @@ JD-TC-GetLeadSourcingChannelByFilter-6
 
     [Documentation]  Get Lead Sourcing Channel By Filter- by created by
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -185,7 +185,7 @@ JD-TC-GetLeadSourcingChannelByFilter-7
 
     [Documentation]  Get Lead Sourcing Channel By Filter- by created date
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -206,7 +206,7 @@ JD-TC-GetLeadSourcingChannelByFilter-8
 
     [Documentation]  Get Lead Sourcing Channel By Filter- by name
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -222,7 +222,7 @@ JD-TC-GetLeadSourcingChannelByFilter-UH1
 
     [Documentation]  Get Lead Sourcing Channel By Filter- by invalid id
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -238,7 +238,7 @@ JD-TC-GetLeadSourcingChannelByFilter-UH2
 
     [Documentation]  Get Lead Sourcing Channel By Filter- by invalid account_id
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -254,7 +254,7 @@ JD-TC-GetLeadSourcingChannelByFilter-UH3
 
     [Documentation]  Get Lead Sourcing Channel By Filter- by invalid created by
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -270,7 +270,7 @@ JD-TC-GetLeadSourcingChannelByFilter-UH4
 
     [Documentation]  Get Lead Sourcing Channel By Filter- by invalid created date
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

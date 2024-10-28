@@ -23,7 +23,7 @@ JD-TC-GetLeadProductByUid-1
 
     [Documentation]  Get Lead Product By Uid
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -52,7 +52,7 @@ JD-TC-GetLeadProductByUid-UH1
 
     [Documentation]  Get Lead Product By Uid - with invalid uid
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

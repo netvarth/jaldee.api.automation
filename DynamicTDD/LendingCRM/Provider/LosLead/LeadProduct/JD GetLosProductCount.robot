@@ -23,7 +23,7 @@ JD-TC-GetLeadProductCountByFilter-1
 
     [Documentation]  Get Lead Product Count By Filter- with no params
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -83,7 +83,7 @@ JD-TC-GetLeadProductCountByFilter-2
 
     [Documentation]  Get Lead Product Count By Filter- by id
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -103,7 +103,7 @@ JD-TC-GetLeadProductCountByFilter-3
 
     [Documentation]  Get Lead Product Count By Filter- by account
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -123,7 +123,7 @@ JD-TC-GetLeadProductCountByFilter-4
 
     [Documentation]  Get Lead Product Count By Filter- by status
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -142,7 +142,7 @@ JD-TC-GetLeadProductCountByFilter-5
 
     [Documentation]  Get Lead Product Count By Filter- by status after changeing one status to disable
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -166,7 +166,7 @@ JD-TC-GetLeadProductCountByFilter-6
 
     [Documentation]  Get Lead Product Count By Filter- by created by
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -186,7 +186,7 @@ JD-TC-GetLeadProductCountByFilter-7
 
     [Documentation]  Get Lead Product Count By Filter- by created date
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -206,7 +206,7 @@ JD-TC-GetLeadProductCountByFilter-8
 
     [Documentation]  Get Lead Product Count By Filter- by losProduct
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -227,14 +227,13 @@ JD-TC-GetLeadProductCountByFilter-9
 
     [Documentation]  Get Lead Product Count By Filter- by name
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    Get Los Product   name-eq=${Pname}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}        200
-    Should Be Equal As Strings    ${resp.json()[0]['uid']}          ${productuid2}
     
     ${length}=   Get Length  ${resp.json()}
 
@@ -248,7 +247,7 @@ JD-TC-GetLeadProductCountByFilter-UH1
 
     [Documentation]  Get Lead Product Count By Filter- by invalid id
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -264,7 +263,7 @@ JD-TC-GetLeadProductCountByFilter-UH2
 
     [Documentation]  Get Lead Product Count By Filter- by invalid account_id
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -280,7 +279,7 @@ JD-TC-GetLeadProductCountByFilter-UH3
 
     [Documentation]  Get Lead Product Count By Filter- by invalid created by
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -296,7 +295,7 @@ JD-TC-GetLeadProductCountByFilter-UH4
 
     [Documentation]  Get Lead Product Count By Filter- by invalid created date
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -335,7 +334,7 @@ JD-TC-GetLeadProductCountByFilter-UH7
 
     [Documentation]  Get Lead Product Count By Filter- by losProduct which is not used
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

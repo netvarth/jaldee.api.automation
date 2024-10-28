@@ -23,7 +23,7 @@ JD-TC-GetLeadSourcingChannelCountByFilter-1
 
     [Documentation]  Get Lead Sourcing Channel By Filter Count- with no params
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME36}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -83,7 +83,7 @@ JD-TC-GetLeadSourcingChannelCountByFilter-2
 
     [Documentation]  Get Lead Sourcing Channel By Filter Count- by id
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME36}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -102,7 +102,7 @@ JD-TC-GetLeadSourcingChannelCountByFilter-3
 
     [Documentation]  Get Lead Sourcing Channel By Filter Count- by account
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME36}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -121,7 +121,7 @@ JD-TC-GetLeadSourcingChannelCountByFilter-4
 
     [Documentation]  Get Lead Sourcing Channel By Filter Count- by status
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME36}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -140,7 +140,7 @@ JD-TC-GetLeadSourcingChannelCountByFilter-5
 
     [Documentation]  Get Lead Sourcing Channel By Filter Count- by status after changeing one status to disable
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME36}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -163,7 +163,7 @@ JD-TC-GetLeadSourcingChannelCountByFilter-6
 
     [Documentation]  Get Lead Sourcing Channel By Filter Count- by created by
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME36}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -182,7 +182,7 @@ JD-TC-GetLeadSourcingChannelCountByFilter-7
 
     [Documentation]  Get Lead Sourcing Channel By Filter Count- by created date
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME36}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -202,7 +202,7 @@ JD-TC-GetLeadSourcingChannelCountByFilter-8
 
     [Documentation]  Get Lead Sourcing Channel By Filter Count- by name
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME36}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -221,7 +221,7 @@ JD-TC-GetLeadSourcingChannelCountByFilter-UH1
 
     [Documentation]  Get Lead Sourcing Channel By Filter Count- by invalid id
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME36}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -237,7 +237,7 @@ JD-TC-GetLeadSourcingChannelCountByFilter-UH2
 
     [Documentation]  Get Lead Sourcing Channel By Filter Count- by invalid account_id
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME36}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -253,7 +253,7 @@ JD-TC-GetLeadSourcingChannelCountByFilter-UH3
 
     [Documentation]  Get Lead Sourcing Channel By Filter Count- by invalid created by
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME36}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -269,7 +269,7 @@ JD-TC-GetLeadSourcingChannelCountByFilter-UH4
 
     [Documentation]  Get Lead Sourcing Channel By Filter Count- by invalid created date
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME36}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

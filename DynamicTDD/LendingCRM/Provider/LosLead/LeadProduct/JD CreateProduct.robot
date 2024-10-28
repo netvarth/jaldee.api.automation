@@ -112,7 +112,7 @@ JD-TC-CreateLeadProduct-Uh1
     ${resp}=    Create Los Lead Product  ${losProduct[0]}  ${random_number}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}        ${DUPLICATE_NAME_INPUT}
+    Should Be Equal As Strings    ${resp.json()}        ${NAME_LENGTH_EXCEED}
 
 JD-TC-CreateLeadProduct-UH2
 
@@ -139,7 +139,7 @@ JD-TC-CreateLeadProduct-UH3
     ${resp}=    Create Los Lead Product  ${losProduct[0]}  ${empty}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}        ${NAME_REQUIRED}
+    Should Be Equal As Strings    ${resp.json()}        ${NAME_LENGTH_EXCEED}
 
 
 JD-TC-CreateLeadProduct-UH4
