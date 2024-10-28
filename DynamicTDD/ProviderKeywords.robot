@@ -395,6 +395,8 @@ Provider Signup
     ${resp}=  Account Set Credential   ${PhoneNumber}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${LoginId}  JSESSIONYNW=${jsessionynw_value}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    Sleep  1s
+
     ${resp}=  Encrypted Provider Login   ${LoginId}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -482,6 +484,8 @@ Provider Signup without Profile
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential   ${PhoneNumber}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${LoginId}  JSESSIONYNW=${jsessionynw_value}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    Sleep  1s
 
     ${resp}=  Encrypted Provider Login   ${LoginId}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
