@@ -21,6 +21,8 @@ ${SERVICE1}  manicure
 ${SERVICE2}  pedicure
 ${count}        0
 @{dom_list}
+@{service_names}
+
 
 *** Test Cases ***
 
@@ -145,7 +147,7 @@ JD-TC-EnableDisable Appointment Schedule-1
 JD-TC-EnableDisable Appointment Schedule-2
     [Documentation]  Disable appointment schedule
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME290}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME${a}}
     # clear_location  ${PUSERNAME${a}}
@@ -181,6 +183,9 @@ JD-TC-EnableDisable Appointment Schedule-2
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     # ${lid}=  Create Sample Location
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -246,7 +251,11 @@ JD-TC-EnableDisable Appointment Schedule-UH1
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     # ${lid}=  Create Sample Location
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
+
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=${delta}
@@ -270,7 +279,7 @@ JD-TC-EnableDisable Appointment Schedule-UH1
 JD-TC-EnableDisable Appointment Schedule-UH2
     [Documentation]  Disable already disabled appointment schedule
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME291}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME${a}}
     # clear_location  ${PUSERNAME${a}}
@@ -307,6 +316,9 @@ JD-TC-EnableDisable Appointment Schedule-UH2
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     # ${lid}=  Create Sample Location
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10

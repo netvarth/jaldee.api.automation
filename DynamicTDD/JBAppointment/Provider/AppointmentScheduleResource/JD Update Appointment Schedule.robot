@@ -724,7 +724,7 @@ JD-TC-Update schedule-7
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
+ 
     # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service

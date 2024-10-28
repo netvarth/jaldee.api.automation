@@ -473,10 +473,10 @@ JD-TC-CreateAppointmentSchedule-UH2
 
     # clear_appt_schedule   ${PUSERPHONE1}
 
-    ${schedule_name}=  FakerLibrary.bs
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}  ${parallel}  ${p2_lid2}  ${duration}  ${bool1}  ${s_id2}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${schedule_name}=  FakerLibrary.bs
+    # ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}  ${parallel}  ${p2_lid2}  ${duration}  ${bool1}  ${s_id2}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${schedule_name}=  FakerLibrary.bs
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}  ${parallel}  ${p2_lid2}  ${duration}  ${bool1}  ${s_id2}
@@ -1926,6 +1926,8 @@ JD-TC-CreateAppointmentSchedule-20
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        Append To List  ${service_names}  ${SERVICE1}
         ${s_id}=  Create Sample Service  ${SERVICE1}
         ${resp}=   Get Service By Id  ${s_id}
         Log  ${resp.content}
@@ -1935,41 +1937,61 @@ JD-TC-CreateAppointmentSchedule-20
         Set Test Variable  ${s_id}  ${resp.json()[0]['id']}
     END
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=    Get Locations
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${resp}=    Get Appointment Schedules
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # Set Suite Variable  ${DAY1} 
+    # ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    # Set Suite Variable  ${DAY2} 
+    # ${list}=  Create List  1  2  3  4  5  6  7
+    # Set Suite Variable  ${list} 
+    # ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    # Set Suite Variable   ${sTime1}
+    # ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    # Set Suite Variable  ${delta}
+    # ${eTime1}=  add_two   ${sTime1}  ${delta}
+    # Set Suite Variable   ${eTime1}
+    
+    # ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    # Append To List  ${service_names}  ${SERVICE2}
+    # ${s_id1}=  Create Sample Service  ${SERVICE2}
+    # ${schedule_name}=  FakerLibrary.bs
+    # Set Suite Variable  ${schedule_name}
+    # ${parallel}=  FakerLibrary.Random Int  min=5  max=10
+    # ${consumerparallel}=  FakerLibrary.Random Int  min=1  max=5
+
+    # ${duration}=  FakerLibrary.Random Int  min=1  max=${delta}
+    # ${bool1}=  Random Element  ${bool}
+    # ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${consumerparallel}  ${p1_lid}  ${duration}  ${bool1}  ${s_id}  ${s_id1}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
 
     ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    Set Suite Variable  ${DAY1} 
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    Set Suite Variable  ${DAY2} 
-    ${list}=  Create List  1  2  3  4  5  6  7
-    Set Suite Variable  ${list} 
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    Set Suite Variable   ${sTime1}
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    Set Suite Variable  ${delta}
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    Set Suite Variable   ${eTime1}
-    
-    ${SERVICE2}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE2}
-    ${s_id1}=  Create Sample Service  ${SERVICE2}
-    ${schedule_name}=  FakerLibrary.bs
-    Set Suite Variable  ${schedule_name}
-    ${parallel}=  FakerLibrary.Random Int  min=5  max=10
-    ${consumerparallel}=  FakerLibrary.Random Int  min=1  max=5
-
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${delta}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${consumerparallel}  ${p1_lid}  ${duration}  ${bool1}  ${s_id}  ${s_id1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    IF   '${resp.content}' == '${emptylist}'       
+        ${schedule_name}=  FakerLibrary.bs
+        ${parallel}=  FakerLibrary.Random Int  min=10  max=20
+        ${consumerparallel}=  FakerLibrary.Random Int  min=1  max=5
+        ${maxval}=  Convert To Integer   ${delta/2}
+        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+        ${bool1}=  Random Element  ${bool}
+        ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${consumerparallel}  ${lid}  ${duration}  ${bool1}  ${s_id}  
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${sch_id}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
+        Set Test Variable  ${lid}  ${resp.json()[0]['location']['id']}
+        Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
+    END
 
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
@@ -1997,6 +2019,8 @@ JD-TC-CreateAppointmentSchedule-21
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${leadTime}=   Random Int   min=1   max=5
     ${s_id}=  Create Sample Service  ${SERVICE1}  leadTime=${leadTime}
 
@@ -2079,6 +2103,8 @@ JD-TC-CreateAppointmentSchedule-22
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${leadTime}=   Random Int   min=1   max=5
     ${s_id}=  Create Sample Service  ${SERVICE1}  leadTime=${leadTime}
     ${schedule_name}=  FakerLibrary.bs

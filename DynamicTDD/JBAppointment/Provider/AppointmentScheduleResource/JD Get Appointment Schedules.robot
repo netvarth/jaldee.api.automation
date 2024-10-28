@@ -149,7 +149,7 @@ JD-TC-Get Appointment schedules-3
 
     [Documentation]  Get appointment schedule by state
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME192}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME193}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME192}
     # clear_location  ${PUSERNAME192}
@@ -249,7 +249,7 @@ JD-TC-Get Appointment schedules-5
 
     [Documentation]  Get appointment schedule by batch
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME192}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME194}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME192}
     # clear_location  ${PUSERNAME192}
@@ -310,7 +310,7 @@ JD-TC-Get Appointment schedules-5
 JD-TC-Get Appointment schedules-6
     [Documentation]  Get appointment schedule by name
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME192}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME195}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME192}
     # clear_location  ${PUSERNAME192}
@@ -371,7 +371,7 @@ JD-TC-Get Appointment schedules-6
 JD-TC-Get Appointment schedules-7
     [Documentation]  Get appointment schedule without filter
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME192}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME196}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME192}
     # clear_location  ${PUSERNAME192}
