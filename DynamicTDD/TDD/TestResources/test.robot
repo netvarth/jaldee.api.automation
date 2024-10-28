@@ -92,6 +92,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 
 *** Test Cases ***
 Example Test Case
+    @{fruits}	apple	banana	orange
     
     # ${Domain}  ${SubDomain}=  Select Domain Subdomain
 
