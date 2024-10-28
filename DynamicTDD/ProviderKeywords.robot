@@ -14818,9 +14818,9 @@ Update Los Lead Product Status
     RETURN  ${resp}
 
 Create Los Lead Stage
-    [Arguments]     ${losProduct}  ${stageType}  ${name}  ${sortOrder}  &{kwargs}
+    [Arguments]     ${losProduct}  ${stageType}  ${name}  &{kwargs}
 
-    ${data}=  Create Dictionary    losProduct=${losProduct}  stageType=${stageType}  name=${name}  sortOrder=${sortOrder}
+    ${data}=  Create Dictionary    losProduct=${losProduct}  stageType=${stageType}  name=${name}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary   ${data}   ${key}=${value}
     END
@@ -14839,9 +14839,12 @@ Get Lead Stage By UID
     RETURN  ${resp}
 
 Update Los Lead Stage
-    [Arguments]     ${losProduct}  ${uid}  ${name}
+    [Arguments]     ${losProduct}  ${stageType}  ${uid}  ${name}  &{kwargs}
 
-    ${data}=  Create Dictionary    losProduct=${losProduct}  name=${name}
+    ${data}=  Create Dictionary    losProduct=${losProduct}  stageType=${stageType}  name=${name}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/los/lead/stage/${uid}  data=${data}  expected_status=any
