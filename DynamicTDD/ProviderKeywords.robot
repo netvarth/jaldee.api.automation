@@ -17814,6 +17814,20 @@ Check Server Availibility
     Check Deprication  ${resp}  Check server
     RETURN  ${resp}
 
+Send Message With Waitlist
+    [Arguments]  ${message}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  &{kwargs}  
+    #Required- uuid- list of wl ids, attachments- list of dictionaries with file details
+
+    ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
+    ${data}=  Create Dictionary  medium=${medium}  communicationMessage=${message}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/waitlist/communication   data=${data}  expected_status=any
+    RETURN  ${resp}
+
 *** Comments ***
 
 
