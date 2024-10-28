@@ -21,6 +21,8 @@ ${SERVICE1}     Consultation
 ${SERVICE2}     AvailableNow 
 ${prefix}       serviceBatch
 ${suffix}       serving
+@{service_names}
+
 
 *** Test Cases ***  
 
