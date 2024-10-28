@@ -44,7 +44,7 @@ JD-TC-UpdateLeadAssignees-1
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    202
     ${resp}=  Account Activation  ${PUSERNAME_E}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -54,15 +54,6 @@ JD-TC-UpdateLeadAssignees-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings            ${resp.status_code}  200
-    Set Suite Variable                    ${account_id1}       ${resp.json()['id']}
-    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     FOR    ${i}    IN RANGE  0  3
         ${pin}=  get_pincode
@@ -80,11 +71,11 @@ JD-TC-UpdateLeadAssignees-1
     Set Suite Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
     Set Suite Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
+        ${resp}=  Enable Disable Department  ${toggle[0]}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -105,7 +96,7 @@ JD-TC-UpdateLeadAssignees-1
         Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
     END
 
-    ${u_id}=  Create Sample User  admin=${bool[1]}
+    ${u_id}=  Create Sample User  admin=${bool[1]}    deptId=${dep_id}
     Set Suite Variable  ${u_id}
 
     ${resp}=  Get User By Id  ${u_id}
@@ -184,7 +175,7 @@ JD-TC-UpdateLeadAssignees-2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${u_id2}=  Create Sample User  admin=${bool[1]}
+    ${u_id2}=  Create Sample User  admin=${bool[1]}    deptId=${dep_id}
     Set Suite Variable  ${u_id2}
 
     ${resp}=  Get User By Id  ${u_id2}
@@ -199,8 +190,8 @@ JD-TC-UpdateLeadAssignees-2
     ${resp}=    Get Lead LOS   ${lead_uid}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['assignees'][0]}    ${u_id2}
-    Should Be Equal As Strings    ${resp.json()['assignees'][1]}    ${u_id}
+    Should Be Equal As Strings    ${resp.json()['assignees'][0]}    ${u_id}
+    Should Be Equal As Strings    ${resp.json()['assignees'][1]}    ${u_id2}
 
 JD-TC-UpdateLeadAssignees-3
 

@@ -14,7 +14,7 @@ Library           OperatingSystem
 # Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
 # Resource          /ebs/TDD/ConsumerKeywords.robot
-# Variables       /ebs/TDD/varfiles/providers.py
+Variables       /ebs/TDD/varfiles/providers.py
 # Variables       /ebs/TDD/varfiles/consumerlist.py 
 # Variables         /ebs/TDD/varfiles/hl_providers.py
 
@@ -93,6 +93,12 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 *** Test Cases ***
 Example Test Case
     @{fruits}	apple	banana	orange
+
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME376}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+
+    # ${resp}=   Check Server Availibility
     
     # ${Domain}  ${SubDomain}=  Select Domain Subdomain
 
@@ -119,12 +125,12 @@ Example Test Case
     # ${LoginID}=    FakerLibrary.user_name
     # ${provider4}=    Provider Signup  LoginId=${LoginID}
 
-    ${PO_Number}=  FakerLibrary.Numerify  %#####
-    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    ${Domain}  ${SubDomain}=  Select Random Domain and Subdomain
-    ${licid}  ${licname}=  Select Random License
-    ${LoginID}=    FakerLibrary.user_name
-    ${provider5}=    Provider Signup  PhoneNumber=${PhoneNumber}  LicenseId=${licid}  Domain=${Domain}  SubDomain=${SubDomain}  LoginId=${LoginID}
+    # ${PO_Number}=  FakerLibrary.Numerify  %#####
+    # ${PhoneNumber}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    # ${Domain}  ${SubDomain}=  Select Random Domain and Subdomain
+    # ${licid}  ${licname}=  Select Random License
+    # ${LoginID}=    FakerLibrary.user_name
+    # ${provider5}=    Provider Signup  PhoneNumber=${PhoneNumber}  LicenseId=${licid}  Domain=${Domain}  SubDomain=${SubDomain}  LoginId=${LoginID}
     
 
     

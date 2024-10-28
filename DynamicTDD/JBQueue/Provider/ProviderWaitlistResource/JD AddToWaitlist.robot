@@ -62,11 +62,11 @@ ${sample}                     4452135820
 
 #       ${SERVICE1}=    generate_unique_service_name  ${service_names}
     # Append To List  ${service_names}  ${SERVICE1} 
-#       ${SERVICE2}=    generate_service_name 
-#       ${SERVICE3}=    generate_service_name 
-#       ${SERVICE4}=    generate_service_name 
-#       ${SERVICE5}=    generate_service_name 
-#       ${SERVICE6}=    generate_service_name 
+#       ${SERVICE2}=    generate_unique_service_name  ${service_names}
+#       ${SERVICE3}=    generate_unique_service_name  ${service_names}
+#       ${SERVICE4}=    generate_unique_service_name  ${service_names}
+#       ${SERVICE5}=    generate_unique_service_name  ${service_names}
+#       ${SERVICE6}=    generate_unique_service_name  ${service_names}
 
 #       ${resp}=   Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
 #       Set Test Variable    ${ser_id1}    ${resp}  
@@ -160,19 +160,30 @@ JD-TC-AddToWaitlist-1
       Should Be Equal As Strings      ${resp.status_code}  200
      
       
-      ${resp}=   Create Sample Location
-      Set Suite Variable    ${loc_id1}    ${resp}  
-      ${resp}=   Get Location ById  ${loc_id1}
+      ${resp}=    Get Locations
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
+      IF   '${resp.content}' == '${emptylist}'
+            ${loc_id1}=  Create Sample Location
+            ${resp}=   Get Location ById  ${loc_id1}
+            Log  ${resp.content}
+            Should Be Equal As Strings  ${resp.status_code}  200
+            Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+      ELSE
+            Set Suite Variable  ${loc_id1}  ${resp.json()[0]['id']}
+            Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+      END
 
       ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1} 
+      Append To List  ${service_names}  ${SERVICE1} 
       Set Suite Variable    ${SERVICE1} 
-      ${SERVICE2}=    generate_service_name 
+
+      ${SERVICE2}=    generate_unique_service_name  ${service_names}
+      Append To List  ${service_names}  ${SERVICE2} 
       Set Suite Variable    ${SERVICE2} 
-      ${SERVICE3}=    generate_service_name 
+
+      ${SERVICE3}=    generate_unique_service_name  ${service_names}
+      Append To List  ${service_names}  ${SERVICE3} 
       Set Suite Variable    ${SERVICE3} 
 
       ${resp}=   Create Sample Service  ${SERVICE1}   maxBookingsAllowed=15
@@ -289,8 +300,14 @@ JD-TC-AddToWaitlist-5
 
       ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${SERVICE4}=    generate_unique_service_name  ${service_names}
+      Append To List  ${service_names}  ${SERVICE4} 
+      Set Suite Variable    ${SERVICE4} 
+
       ${resp}=   Create Sample Service  ${SERVICE4}
       Set Suite Variable  ${ser_id4}  ${resp} 
+     
       ${q_name1}=    FakerLibrary.name
       Set Suite Variable    ${q_name1}    
       ${strt_time1}=   db.add_timezone_time  ${tz}  3  10
@@ -369,8 +386,15 @@ JD-TC-AddToWaitlist-7
             Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
       END 
 
-      ${SERVICE5}=    generate_service_name 
-      ${SERVICE6}=    generate_service_name 
+      ${SERVICE5}=    generate_unique_service_name  ${service_names}
+      Append To List  ${service_names}  ${SERVICE5} 
+      Set Suite Variable    ${SERVICE5} 
+
+      ${SERVICE6}=    generate_unique_service_name  ${service_names}
+      Append To List  ${service_names}  ${SERVICE6} 
+      Set Suite Variable    ${SERVICE6} 
+
+     
 
       ${resp}=   Create Sample Service  ${SERVICE5}
       Set Suite Variable    ${ser_id5}    ${resp}  
@@ -511,7 +535,10 @@ JD-TC-AddToWaitlist-11
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable    ${loc_id3}   ${resp.json()[0]['id']}
       Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
-      ${SERVICE11}=    generate_service_name 
+
+      ${SERVICE11}=    generate_unique_service_name  ${service_names}
+      Append To List  ${service_names}  ${SERVICE11} 
+      Set Suite Variable    ${SERVICE11} 
 
       ${ser_id7}=   Create Sample Service  ${SERVICE11}     maxBookingsAllowed=10
       Set Suite Variable   ${ser_id7}
@@ -646,7 +673,9 @@ JD-TC-AddToWaitlist-UH1
       Log   ${resp.content}
       Should Be Equal As Strings    ${resp.status_code}   200
 
-      ${resp}=  Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}
+      ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+      ${resp}=  Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
       Log   ${resp.content}
       Should Be Equal As Strings    ${resp.status_code}   200
       Set Suite Variable  ${token}  ${resp.json()['token']}
@@ -747,7 +776,10 @@ JD-TC-AddToWaitlist-UH7
       Should Be Equal As Strings    ${resp.status_code}    202
       ${resp}=  Account Activation  ${PUSERNAME_C}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Set Credential  ${PUSERNAME_C}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_C}
+
+      ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+      ${resp}=  Account Set Credential  ${PUSERNAME_C}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_C}    JSESSIONYNW=${jsessionynw_value}
       Should Be Equal As Strings    ${resp.status_code}    200
       
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
@@ -894,7 +926,9 @@ JD-TC-AddToWaitlist-UH12
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${SERVICE8}=    generate_service_name
+      ${SERVICE8}=    generate_unique_service_name  ${service_names}
+      Append To List  ${service_names}  ${SERVICE8} 
+
       ${ser_id7}=  Create Sample Service  ${SERVICE8}
       Set Suite Variable    ${ser_id7} 
       ${queue1}=    FakerLibrary.name
@@ -1228,7 +1262,7 @@ JD-TC-AddToWaitlist-15
       Should Be Equal As Strings  ${resp.status_code}  200
             
       ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
+      Append To List  ${service_names}  ${SERVICE1}
       ${s_id}=  Create Sample Service  ${SERVICE1}
 
       ${resp}=   Get Service
@@ -1324,7 +1358,7 @@ JD-TC-AddToWaitlist-UH18
       Should Be Equal As Strings  ${resp.status_code}  200
             
       ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1} 
+      Append To List  ${service_names}  ${SERVICE1} 
       ${s_id}=  Create Sample Service  ${SERVICE1}
 
       ${resp}=   Get Service
@@ -1423,7 +1457,7 @@ JD-TC-AddToWaitlist-16
       Should Be Equal As Strings  ${resp.status_code}  200
             
       ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
+      Append To List  ${service_names}  ${SERVICE1}
       ${s_id}=  Create Sample Service  ${SERVICE1}
 
       ${resp}=   Get Service
@@ -1520,7 +1554,7 @@ JD-TC-AddToWaitlist-UH19
       Should Be Equal As Strings  ${resp.status_code}  200
             
       ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
+      Append To List  ${service_names}  ${SERVICE1}
       ${s_id}=  Create Sample Service  ${SERVICE1}
 
       ${resp}=   Get Service

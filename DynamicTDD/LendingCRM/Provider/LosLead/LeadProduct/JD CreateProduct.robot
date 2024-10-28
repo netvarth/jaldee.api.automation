@@ -19,11 +19,11 @@ Variables          /ebs/TDD/varfiles/hl_providers.py
 
 *** Test Cases ***
 
-JD-TC-CreateLeadSourcingChannel-1
+JD-TC-CreateLeadProduct-1
 
-    [Documentation]  Create Lead Sourcing Channel
+    [Documentation]  Create Lead Product
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -32,106 +32,121 @@ JD-TC-CreateLeadSourcingChannel-1
     Should Be Equal As Strings            ${resp.status_code}  200
     Set Test Variable                    ${account_id}       ${resp.json()['id']}
 
-    ${SCname}=    FakerLibrary.name
-    Set Suite Variable  ${SCname}
+    ${Pname}=    FakerLibrary.name
+    Set Suite Variable  ${Pname}
 
-    ${resp}=    Create Los Lead Sourcing Channel  ${SCname}
+    ${resp}=    Create Los Lead Product  ${losProduct[0]}  ${Pname}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable    ${sourcinguid}     ${resp.json()['uid']}
+    Set Test Variable    ${productuid}     ${resp.json()['uid']}
 
-    ${resp}=    Get Los Sourcing Channel By UID  ${sourcinguid}
+    ${resp}=    Get Los Product By UID  ${productuid}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}        200
 
 
-JD-TC-CreateLeadSourcingChannel-2
+JD-TC-CreateLeadProduct-2
 
-    [Documentation]  Create Lead Sourcing Channel - where channel name as  number
+    [Documentation]  Create Lead Product - where channel name as  number
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${random_number}=    Random Number 	       digits=8
 
-    ${resp}=    Create Los Lead Sourcing Channel  ${random_number}
+    ${resp}=    Create Los Lead Product  ${losProduct[0]}  ${random_number}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable    ${sourcinguid}     ${resp.json()['uid']}
+    Set Test Variable    ${productuid}     ${resp.json()['uid']}
 
-    ${resp}=    Get Los Sourcing Channel By UID  ${sourcinguid}
+    ${resp}=    Get Los Product By UID  ${productuid}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}        200
 
-JD-TC-CreateLeadSourcingChannel-3
+JD-TC-CreateLeadProduct-3
 
-    [Documentation]  Create Lead Sourcing Channel - where channel name is 1 digit
+    [Documentation]  Create Lead Product - where los product is changed
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${Pname3}=    FakerLibrary.name
+
+    ${resp}=    Create Los Lead Product  ${losProduct[1]}  ${Pname3}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${productuid}     ${resp.json()['uid']}
+
+JD-TC-CreateLeadProduct-4
+
+    [Documentation]  Create Lead Product - where channel name is 1 digit
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${random_number}=    Random Number 	       digits=1
 
-    ${resp}=    Create Los Lead Sourcing Channel  ${random_number}
+    ${resp}=    Create Los Lead Product  ${losProduct[0]}  ${random_number}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable    ${sourcinguid}     ${resp.json()['uid']}
+    Set Test Variable    ${productuid}     ${resp.json()['uid']}
 
-    ${resp}=    Get Los Sourcing Channel By UID  ${sourcinguid}
+    ${resp}=    Get Los Product By UID  ${productuid}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}        200
 
 
-JD-TC-CreateLeadSourcingChannel-UH1
+JD-TC-CreateLeadProduct-Uh1
 
-    [Documentation]  Create Lead Sourcing Channel - where channel name is above 250 digit
+    [Documentation]  Create Lead Product - where channel name is above 250 digit
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${random_number}=    Random Number 	       digits=251
 
-    ${resp}=    Create Los Lead Sourcing Channel  ${random_number}
+    ${resp}=    Create Los Lead Product  ${losProduct[0]}  ${random_number}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${NAME_LENGTH_EXCEED}
 
-JD-TC-CreateLeadSourcingChannel-UH2
+JD-TC-CreateLeadProduct-UH2
 
-    [Documentation]  Create Lead Sourcing Channel - with existing channel name
+    [Documentation]  Create Lead Product - with existing channel name
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Create Los Lead Sourcing Channel  ${SCname}
+    ${resp}=    Create Los Lead Product  ${losProduct[0]}  ${Pname}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${DUPLICATE_NAME_INPUT}
 
 
-JD-TC-CreateLeadSourcingChannel-UH3
+JD-TC-CreateLeadProduct-UH3
 
-    [Documentation]  Create Lead Sourcing Channel - where channel name is empty
+    [Documentation]  Create Lead Product - where channel name is empty
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Create Los Lead Sourcing Channel  ${empty}
+    ${resp}=    Create Los Lead Product  ${losProduct[0]}  ${empty}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${NAME_LENGTH_EXCEED}
 
 
-JD-TC-CreateLeadSourcingChannel-UH4
+JD-TC-CreateLeadProduct-UH4
 
-    [Documentation]  Create Lead Sourcing Channel - without login
+    [Documentation]  Create Lead Product - without login
 
-    ${resp}=    Create Los Lead Sourcing Channel  ${SCname}
+    ${resp}=    Create Los Lead Product  ${losProduct[0]}  ${Pname}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings    ${resp.json()}        ${SESSION_EXPIRED}

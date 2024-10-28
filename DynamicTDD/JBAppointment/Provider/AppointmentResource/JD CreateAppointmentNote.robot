@@ -18,8 +18,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
-${SERVICE1}  manicure 
-${SERVICE2}  pedicure
 ${self}     0
 @{service_names}
 
@@ -69,6 +67,8 @@ JD-TC-CreateAppointmentNote-1
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
 
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1} 
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -165,6 +165,9 @@ JD-TC-CreateAppointmentNote-2
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1} 
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -307,6 +310,9 @@ JD-TC-CreateAppointmentNote-UH1
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     # ${lid}=  Create Sample Location
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1} 
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10

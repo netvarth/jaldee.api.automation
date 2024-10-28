@@ -19,11 +19,11 @@ Variables          /ebs/TDD/varfiles/hl_providers.py
 
 *** Test Cases ***
 
-JD-TC-GetLeadSourcingChannelByUid-1
+JD-TC-GetLeadProductByUid-1
 
-    [Documentation]  Get Lead Sourcing Channel By Uid
+    [Documentation]  Get Lead Product By Uid
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -32,58 +32,59 @@ JD-TC-GetLeadSourcingChannelByUid-1
     Should Be Equal As Strings            ${resp.status_code}  200
     Set Suite Variable                    ${account_id}       ${resp.json()['id']}
 
-    ${SCname}=    FakerLibrary.name
+    ${Pname}=    FakerLibrary.name
 
-    ${resp}=    Create Los Lead Sourcing Channel  ${SCname}
+    ${resp}=    Create Los Lead Product  ${losProduct[0]}  ${Pname}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${sourcinguid}     ${resp.json()['uid']}
+    Set Suite Variable    ${productuid}     ${resp.json()['uid']}
 
-    ${resp}=    Get Los Sourcing Channel By UID  ${sourcinguid}
+    ${resp}=    Get Los Product By UID  ${productuid}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}        200
-    Should Be Equal As Strings    ${resp.json()['uid']}      ${sourcinguid}
-    Should Be Equal As Strings    ${resp.json()['account']}  ${account_id}
-    Should Be Equal As Strings    ${resp.json()['name']}     ${SCname}
-    Should Be Equal As Strings    ${resp.json()['status']}   ${toggle[0]}
+    Should Be Equal As Strings    ${resp.status_code}           200
+    Should Be Equal As Strings    ${resp.json()['uid']}         ${productuid}
+    Should Be Equal As Strings    ${resp.json()['account']}     ${account_id}
+    Should Be Equal As Strings    ${resp.json()['name']}        ${Pname}
+    Should Be Equal As Strings    ${resp.json()['losProduct']}  ${losProduct[0]}
+    Should Be Equal As Strings    ${resp.json()['status']}      ${toggle[0]}
 
-JD-TC-GetLeadSourcingChannelByUid-UH1
+JD-TC-GetLeadProductByUid-UH1
 
-    [Documentation]  Get Lead Sourcing Channel By Uid - with invalid uid
+    [Documentation]  Get Lead Product By Uid - with invalid uid
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${inv_uid}=     Random Int  min=9999  max=99999
 
-    ${resp}=    Get Los Sourcing Channel By UID  ${inv_uid}
+    ${resp}=    Get Los Product By UID  ${inv_uid}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}        200
     Should Be Equal As Strings    ${resp.content}    ${empty}
 
 
-JD-TC-GetLeadSourcingChannelByUid-UH2
+JD-TC-GetLeadProductByUid-UH2
 
-    [Documentation]  Get Lead Sourcing Channel By Uid - without login
+    [Documentation]  Get Lead Product By Uid - without login
 
-    ${resp}=    Get Los Sourcing Channel By UID  ${sourcinguid}
+    ${resp}=    Get Los Product By UID  ${productuid}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings    ${resp.json()}        ${SESSION_EXPIRED}
 
 
-JD-TC-GetLeadSourcingChannelByUid-UH3
+JD-TC-GetLeadProductByUid-UH3
 
-    [Documentation]  Get Lead Sourcing Channel By Uid - with another provider login
+    [Documentation]  Get Lead Product By Uid - with another provider login
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME121}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${NO_PERMISSION_X}=   Replace String  ${NO_PERMISSION_X}  {}   channel
+    ${NO_PERMISSION_X}=   Replace String  ${NO_PERMISSION_X}  {}   product
 
-    ${resp}=    Get Los Sourcing Channel By UID  ${sourcinguid}
+    ${resp}=    Get Los Product By UID  ${productuid}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${NO_PERMISSION_X}

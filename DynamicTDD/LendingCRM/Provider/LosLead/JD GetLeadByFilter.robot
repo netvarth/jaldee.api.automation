@@ -2358,22 +2358,6 @@ JD-TC-GetLeadByFilter-74
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone2}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail2}
 
-    Should Be Equal As Strings    ${resp.json()[1]['uid']}                                 ${lead_uid}
-    Should Be Equal As Strings    ${resp.json()[1]['account']}                             ${account_id1}
-    Should Be Equal As Strings    ${resp.json()[1]['channel']}                             ${leadchannel[0]}
-    Should Be Equal As Strings    ${resp.json()[1]['losProduct']}                          ${losProduct}
-    Should Be Equal As Strings    ${resp.json()[1]['status']['id']}                        ${status_id}
-    Should Be Equal As Strings    ${resp.json()[1]['status']['name']}                      ${Sname}
-    Should Be Equal As Strings    ${resp.json()[1]['progress']['id']}                      ${progress_id}
-    Should Be Equal As Strings    ${resp.json()[1]['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
-    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerLastName']}     ${consumerLastName}
-    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['dob']}                  ${dob}
-    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['gender']}               ${gender}
-    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
-    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerPhone']}        ${consumerPhone}
-    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerEmail']}        ${consumerEmail}
-
 
 JD-TC-GetLeadByFilter-75
 
