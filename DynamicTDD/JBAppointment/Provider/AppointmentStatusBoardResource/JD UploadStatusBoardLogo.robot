@@ -131,6 +131,7 @@ JD-TC-UploadStatusboardLogo-1
     
     ${attachments}=  Create Dictionary   fileName=${fileName}  
 
+*** Comments ***
     ${resp}=  Upload StatusBoard Logo  ${sb_id}   ${attachments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
