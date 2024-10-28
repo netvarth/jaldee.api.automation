@@ -1866,7 +1866,7 @@ JD-TC-Update schedule-15
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name1}  timeDuration=${duration}  apptState=${Qstate[0]}  parallelServing=${parallel}  batchEnable=${bool[1]}
+    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration}  apptState=${Qstate[0]}  parallelServing=${parallel}  batchEnable=${bool[1]}
     Should Be Equal As Strings  ${resp.json()['location']['id']}  ${lid}
     Should Be Equal As Strings  ${resp.json()['apptSchedule']['recurringType']}  ${recurringtype[1]}
     Should Be Equal As Strings  ${resp.json()['apptSchedule']['repeatIntervals']}  ${list}

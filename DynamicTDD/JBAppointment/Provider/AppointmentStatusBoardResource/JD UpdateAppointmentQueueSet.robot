@@ -18,9 +18,7 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
-${SERVICE1}     Radio Repdca111
-${SERVICE2}     Radio Repdca123
-${SERVICE3}     Radio Repdca222
+@{service_names}
 
 *** Keywords ***
 check corp
@@ -76,8 +74,13 @@ JD-TC-UpdateAppointmentQueueSet-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
+
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable  ${s_id2}
     ${lid1}=  Create Sample Location  
@@ -225,6 +228,9 @@ JD-TC-UpdateAppointmentQueueSet-2
     # clear_service   ${PUSERNAMEA}
     # clear_location  ${PUSERNAMEA}
     clear_Addon  ${PUSERNAMEA}
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
     ${lid1}=  Create Sample Location  

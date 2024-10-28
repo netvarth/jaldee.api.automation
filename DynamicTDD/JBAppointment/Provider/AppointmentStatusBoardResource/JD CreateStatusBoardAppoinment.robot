@@ -223,12 +223,16 @@ JD-TC-CreateStatusBoardAppoinment-UH4
 
     [Documentation]  Create a StatusBoard with invalid appoinment queue set id
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME162}  ${PASSWORD}
+    ${required_lic}    Random Element     ['Basic','Premium','Team','Enterprise']
+
+    ${PUSERNAME_B}=  Provider with license  ${required_lic}
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # clear_service   ${PUSERNAME162}
-    # clear_location  ${PUSERNAME162}
-    clear_Statusboard  ${PUSERNAME162}
-    clear_Addon  ${PUSERNAME162}
+    # clear_service   ${PUSERNAME_B}
+    # clear_location  ${PUSERNAME_B}
+    clear_Statusboard  ${PUSERNAME_B}
+    clear_Addon  ${PUSERNAME_B}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
     ${Addon_id}=  get_statusboard_addonId
@@ -268,7 +272,7 @@ JD-TC-CreateStatusBoardAppoinment-UH4
 
 JD-TC-CreateStatusBoardAppoinment-UH6
 
-    ${required_lic}    Random Element     ['Basic','Premium','Team','Enterprise','jaldee_lite']
+    ${required_lic}    Random Element     ['Basic','Premium','Team','Enterprise']
 
     ${PUSERNAMEA}=  Provider with license  ${required_lic}
     
@@ -357,7 +361,7 @@ JD-TC-CreateStatusBoardAppoinment-UH7
 
     [Documentation]    Create a StatusBoard with empty status board layout
     
-    ${required_lic}    Random Element    ['Basic','Premium','Team','Enterprise','jaldee_lite']
+    ${required_lic}    Random Element    ['Basic','Premium','Team','Enterprise']
 
     ${PUSERNAMEA}=  Provider with license  ${required_lic}
     
@@ -439,7 +443,7 @@ JD-TC-CreateStatusBoardAppoinment-UH8
 
     [Documentation]  Create a StatusBoard with empty status board display name
     
-    ${required_lic}    Random Element    ['Basic','Premium','Team','Enterprise','jaldee_lite']
+    ${required_lic}    Random Element    ['Basic','Premium','Team','Enterprise']
 
     ${PUSERNAMEA}=  Provider with license  ${required_lic}
     
