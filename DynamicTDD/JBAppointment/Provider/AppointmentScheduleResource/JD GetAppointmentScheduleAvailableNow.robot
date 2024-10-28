@@ -49,6 +49,8 @@ JD-TC-Appointment Schedule AvailableNow-1
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
     # clear_appt_schedule   ${PUSERNAME39}

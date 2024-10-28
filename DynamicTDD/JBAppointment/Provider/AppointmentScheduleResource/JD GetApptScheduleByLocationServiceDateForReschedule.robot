@@ -430,9 +430,11 @@ JD-TC-GetApptScheduleWithLocationServiceDateForReschedule-5
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
+    ${NewCustomer}    Generate random string    10    123456789
+    ${NewCustomer}    Convert To Integer  ${NewCustomer}
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME20}   firstName=${fname}   lastName=${lname} 
+    ${resp}=  AddCustomer  ${NewCustomer}   firstName=${fname}   lastName=${lname} 
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${cid}  ${resp.json()}
@@ -464,16 +466,16 @@ JD-TC-GetApptScheduleWithLocationServiceDateForReschedule-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME20}    ${account_id}
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME20}   ${OtpPurpose['Authentication']}
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${fname}   ${resp.json()['firstName']}
@@ -552,9 +554,11 @@ JD-TC-GetApptScheduleWithLocationServiceDateForReschedule-6
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
+    ${NewCustomer}    Generate random string    10    123456789
+    ${NewCustomer}    Convert To Integer  ${NewCustomer}
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME20}   firstName=${fname}   lastName=${lname} 
+    ${resp}=  AddCustomer  ${NewCustomer}   firstName=${fname}   lastName=${lname} 
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${cid}  ${resp.json()}
@@ -586,16 +590,16 @@ JD-TC-GetApptScheduleWithLocationServiceDateForReschedule-6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME20}    ${account_id}
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME20}   ${OtpPurpose['Authentication']}
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${fname}   ${resp.json()['firstName']}
