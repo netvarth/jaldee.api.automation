@@ -13146,7 +13146,7 @@ Create PaymentsOut With Expense
     END
     ${data}=  Create Dictionary  amount=${amount}    paidDate=${paidDate}   paymentsOutLabel=${paymentsOutLabel}  isExpense=${isExpense}    expenseUuid=${expenseUuid}         paymentInfo=${paymentMode}
     FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${paymentMode}   ${key}=${value}
+        Set To Dictionary  ${data}   ${key}=${value}
     END
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
