@@ -68,7 +68,7 @@ JD-TC-CreateLeadStage-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}        200
 
-JD-TC-CreateLeadStage-3
+JD-TC-CreateLeadStage-UH
 
     [Documentation]  Create Lead Stage - where channel name is 1 digit
 
@@ -80,12 +80,8 @@ JD-TC-CreateLeadStage-3
 
     ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${random_number}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable    ${stageuid}     ${resp.json()['uid']}
-
-    ${resp}=    Get Lead Stage By UID  ${stageuid}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}        200
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${NAME_LENGTH_SUBCEED}
 
 JD-TC-CreateLeadStage-4
 
@@ -95,7 +91,7 @@ JD-TC-CreateLeadStage-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${Sname2}=    Random Number 	       digits=1
+    ${Sname2}=    Random Number 	       digits=5
 
     ${resp}=    Create Los Lead Stage  ${losProduct[1]}  ${stageType[1]}  ${Sname2}
     Log  ${resp.content}
@@ -114,7 +110,7 @@ JD-TC-CreateLeadStage-5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${Sname2}=    Random Number 	       digits=1
+    ${Sname2}=    Random Number 	       digits=5
 
     ${resp}=    Create Los Lead Stage  ${losProduct[1]}  ${stageType[2]}  ${Sname2}
     Log  ${resp.content}

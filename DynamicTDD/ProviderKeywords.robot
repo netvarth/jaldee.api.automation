@@ -14592,9 +14592,9 @@ Get Lead Credit Status LOS
 #     RETURN  ${resp}
 
 Create Lead LOS     
-    [Arguments]  ${channel}  ${description}  ${losProduct}  ${requestedAmount}  &{kwargs}
+    [Arguments]  ${channel}  ${description}  ${requestedAmount}  &{kwargs}
 
-    ${data}=  Create Dictionary  losProduct=${losProduct}  requestedAmount=${requestedAmount}  description=${description}
+    ${data}=  Create Dictionary  requestedAmount=${requestedAmount}  description=${description}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary   ${data}   ${key}=${value}
     END

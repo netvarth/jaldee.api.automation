@@ -2542,7 +2542,8 @@ LEAD_ALREADY_ASSIGNED=  "{} is already assigned"
 STAGE_NAME_SIZE = "Stage name charater should be between 3 and 100"
 DUPLICATE_NAME_INPUT = "Multiple occurance of same name."
 ALREADY_UPDATED = "Already updated"
-NAME_LENGTH_EXCEED = "Name should not exceed 250 chars."
+NAME_LENGTH_EXCEED = "Name should not exceed 250 characters"
+NAME_LENGTH_SUBCEED = "Name should be a minimum of 3 characters."
 
 # ......  STOCK TRANSFER...........
 CANT_ST_TRNFR_BTW_SAME_INV = "You cannot transfer stock within the same inventory catalog"

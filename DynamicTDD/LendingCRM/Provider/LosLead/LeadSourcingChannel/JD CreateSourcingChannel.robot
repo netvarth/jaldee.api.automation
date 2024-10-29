@@ -64,7 +64,7 @@ JD-TC-CreateLeadSourcingChannel-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}        200
 
-JD-TC-CreateLeadSourcingChannel-3
+JD-TC-CreateLeadSourcingChannel-UH1
 
     [Documentation]  Create Lead Sourcing Channel - where channel name is 1 digit
 
@@ -76,15 +76,11 @@ JD-TC-CreateLeadSourcingChannel-3
 
     ${resp}=    Create Los Lead Sourcing Channel  ${random_number}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable    ${sourcinguid}     ${resp.json()['uid']}
-
-    ${resp}=    Get Los Sourcing Channel By UID  ${sourcinguid}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}        200
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${NAME_LENGTH_SUBCEED}
 
 
-JD-TC-CreateLeadSourcingChannel-UH1
+JD-TC-CreateLeadSourcingChannel-UH2
 
     [Documentation]  Create Lead Sourcing Channel - where channel name is above 250 digit
 
@@ -99,7 +95,7 @@ JD-TC-CreateLeadSourcingChannel-UH1
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${NAME_LENGTH_EXCEED}
 
-JD-TC-CreateLeadSourcingChannel-UH2
+JD-TC-CreateLeadSourcingChannel-UH3
 
     [Documentation]  Create Lead Sourcing Channel - with existing channel name
 
@@ -113,7 +109,7 @@ JD-TC-CreateLeadSourcingChannel-UH2
     Should Be Equal As Strings    ${resp.json()}        ${DUPLICATE_NAME_INPUT}
 
 
-JD-TC-CreateLeadSourcingChannel-UH3
+JD-TC-CreateLeadSourcingChannel-UH4
 
     [Documentation]  Create Lead Sourcing Channel - where channel name is empty
 
@@ -124,10 +120,10 @@ JD-TC-CreateLeadSourcingChannel-UH3
     ${resp}=    Create Los Lead Sourcing Channel  ${empty}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}        ${NAME_LENGTH_EXCEED}
+    Should Be Equal As Strings    ${resp.json()}        ${NAME_REQUIRED}
 
 
-JD-TC-CreateLeadSourcingChannel-UH4
+JD-TC-CreateLeadSourcingChannel-UH5
 
     [Documentation]  Create Lead Sourcing Channel - without login
 

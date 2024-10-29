@@ -79,7 +79,7 @@ JD-TC-CreateLeadProduct-3
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${productuid}     ${resp.json()['uid']}
 
-JD-TC-CreateLeadProduct-4
+JD-TC-CreateLeadProduct-UH1
 
     [Documentation]  Create Lead Product - where channel name is 1 digit
 
@@ -91,15 +91,11 @@ JD-TC-CreateLeadProduct-4
 
     ${resp}=    Create Los Lead Product  ${losProduct[0]}  ${random_number}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable    ${productuid}     ${resp.json()['uid']}
-
-    ${resp}=    Get Los Product By UID  ${productuid}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}        200
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${NAME_LENGTH_SUBCEED}
 
 
-JD-TC-CreateLeadProduct-Uh1
+JD-TC-CreateLeadProduct-UH2
 
     [Documentation]  Create Lead Product - where channel name is above 250 digit
 
@@ -114,7 +110,7 @@ JD-TC-CreateLeadProduct-Uh1
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${NAME_LENGTH_EXCEED}
 
-JD-TC-CreateLeadProduct-UH2
+JD-TC-CreateLeadProduct-UH3
 
     [Documentation]  Create Lead Product - with existing channel name
 
@@ -128,7 +124,7 @@ JD-TC-CreateLeadProduct-UH2
     Should Be Equal As Strings    ${resp.json()}        ${DUPLICATE_NAME_INPUT}
 
 
-JD-TC-CreateLeadProduct-UH3
+JD-TC-CreateLeadProduct-UH4
 
     [Documentation]  Create Lead Product - where channel name is empty
 
@@ -139,10 +135,10 @@ JD-TC-CreateLeadProduct-UH3
     ${resp}=    Create Los Lead Product  ${losProduct[0]}  ${empty}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}        ${NAME_LENGTH_EXCEED}
+    Should Be Equal As Strings    ${resp.json()}        ${NAME_REQUIRED}
 
 
-JD-TC-CreateLeadProduct-UH4
+JD-TC-CreateLeadProduct-UH5
 
     [Documentation]  Create Lead Product - without login
 

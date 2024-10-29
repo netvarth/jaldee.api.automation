@@ -102,7 +102,7 @@ JD-TC-UpdateLeadSourcingChannel-UH2
     ${resp}=    Update Los Lead Sourcing Channel  ${sourcinguid}  ${empty}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}        ${NAME_LENGTH_EXCEED}
+    Should Be Equal As Strings    ${resp.json()}        ${NAME_REQUIRED}
 
 
 JD-TC-UpdateLeadSourcingChannel-UH3
