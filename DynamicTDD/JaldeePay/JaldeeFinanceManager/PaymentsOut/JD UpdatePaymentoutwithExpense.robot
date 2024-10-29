@@ -250,7 +250,7 @@ JD-TC-Update PaymentsOut With Expense--1
     ${uploadedDocuments}=    Create List    ${Attachments}
     
     
-    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}    locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${expense_uid}   ${resp.json()['uid']}
@@ -261,7 +261,7 @@ JD-TC-Update PaymentsOut With Expense--1
     ${amount}=     roundoff    ${amount}   1
 
 
-    ${resp}=  Create PaymentsOut With Expense   ${amount}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[0]}   ${bool[1]}    ${expense_uid}    
+    ${resp}=  Create PaymentsOut With Expense   ${amount}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[0]}   ${bool[1]}    ${expense_uid}   locationId=${lid}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${payable_uid1}   ${resp.json()['uid']}

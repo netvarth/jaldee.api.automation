@@ -184,12 +184,12 @@ JD-TC-UpdatePayableStatus-1
     Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1}
     # Should Be Equal As Strings  ${resp.json()['vendorType']}  ${category_id}
 
-    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id1}   ${resp.json()}
 
-    ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id2}   ${resp.json()}

@@ -78,7 +78,7 @@ JD-TC-GetPayableCountWithFilter-1
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[0]} 
+    ${resp}=  Create Category   ${name}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id1}   ${resp.json()}
@@ -94,7 +94,7 @@ JD-TC-GetPayableCountWithFilter-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
+    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[1]}
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
