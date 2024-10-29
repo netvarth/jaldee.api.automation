@@ -64,6 +64,7 @@ JD-TC-ConsumerCreateApptRequest-1
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${sid1}=  Create Sample Service  ${SERVICE1}  date=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
+    Set Suite Variable   ${sid1}
 
     ${resp}=   Get Service By Id  ${sid1}
     Log  ${resp.json()}
@@ -86,6 +87,7 @@ JD-TC-ConsumerCreateApptRequest-1
     ${SERVICE2}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE2}
     ${sid2}=  Create Sample Service  ${SERVICE2}  dateTime=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
+    Set Suite Variable   ${sid2}
 
     ${resp}=   Get Service By Id  ${sid2}
     Log  ${resp.json()}
@@ -108,6 +110,7 @@ JD-TC-ConsumerCreateApptRequest-1
     ${SERVICE3}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE3}
     ${sid3}=  Create Sample Service  ${SERVICE3}  dateTime=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
+    Set Suite Variable   ${sid3}
 
     ${resp}=   Get Service By Id  ${sid3}
     Log  ${resp.json()}
@@ -263,8 +266,10 @@ JD-TC-ConsumerCreateApptRequest-4
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500
 
-    ${resp}=  Update Service  ${sid2}  ${SERVICE2}   ${desc}   ${service_duration}   ${bool[0]}  ${servicecharge}  ${bool[0]}
-    ...     noDateTime=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
+    ${resp}=  Update Service  ${sid2}  ${SERVICE2}  ${desc}  ${service_duration}  ${status[0]}  ${btype}  ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}
+
+    # ${resp}=  Update Service  ${sid2}  ${SERVICE2}   ${desc}   ${service_duration}   ${bool[0]}  ${servicecharge}  ${bool[0]}
+    # ...     noDateTime=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
