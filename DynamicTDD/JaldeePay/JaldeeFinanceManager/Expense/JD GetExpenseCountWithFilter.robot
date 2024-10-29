@@ -210,7 +210,7 @@ JD-TC-GetExpenseWithCountFilter-1
     ${uploadedDocuments}=    Create List    ${Attachments}
     
     
-    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}     locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${expense_uid}   ${resp.json()['uid']}
@@ -344,7 +344,7 @@ JD-TC-GetExpenseWithCountFilter-3
     ${uploadedDocuments}=    Create List    ${Attachments}
 
 
-    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${empty}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${empty}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}    locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -410,7 +410,7 @@ JD-TC-GetExpenseWithCountFilter-4
     ${uploadedDocuments}=    Create List    ${Attachments}
 
 
-    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${empty}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${empty}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}    locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -476,7 +476,7 @@ JD-TC-GetExpenseWithCountFilter-5
     ${uploadedDocuments}=    Create List    ${Attachments}
 
 
-    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${empty}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${empty}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}    locationId=${lid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${expense_uid2}   ${resp.json()['uid']}
@@ -545,7 +545,7 @@ JD-TC-GetExpenseWithCountFilter-6
     ${uploadedDocuments}=    Create List    ${Attachments}
 
 
-    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${empty}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${empty}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -614,7 +614,7 @@ JD-TC-GetExpenseWithCountFilter-7
     ${uploadedDocuments}=    Create List    ${Attachments}
 
 
-    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${empty}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${empty}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

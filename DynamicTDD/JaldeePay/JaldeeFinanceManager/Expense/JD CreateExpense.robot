@@ -208,7 +208,7 @@ JD-TC-CreateExpense-1
     ${uploadedDocuments}=    Create List    ${Attachments}
 
 
-    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -263,7 +263,7 @@ JD-TC-CreateExpense-2
     ${uploadedDocuments}=    Create List    ${Attachments}
 
 
-    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${empty}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${empty}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -319,7 +319,7 @@ JD-TC-CreateExpense-3
     ${uploadedDocuments}=    Create List    ${Attachments}
 
 
-    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${empty}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${empty}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${INVALID_VENDOR}
@@ -376,7 +376,7 @@ JD-TC-CreateExpense-4
     ${uploadedDocuments}=    Create List    ${Attachments}
 
 
-    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${empty}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${empty}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -432,7 +432,7 @@ JD-TC-CreateExpense-5
     ${uploadedDocuments}=    Create List    ${Attachments}
 
 
-    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${empty}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${empty}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}    locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -487,7 +487,7 @@ JD-TC-CreateExpense-6
     ${uploadedDocuments}=    Create List    ${Attachments}
 
 
-    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${empty}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${empty}      ${itemList}     ${departmentList}    ${uploadedDocuments}   locationId=${lid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -543,7 +543,7 @@ JD-TC-CreateExpense-7
     ${uploadedDocuments}=    Create List    ${Attachments}
 
 
-    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -599,7 +599,7 @@ JD-TC-CreateExpense-8
     ${uploadedDocuments}=    Create List    ${Attachments}
 
 
-    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -656,7 +656,7 @@ JD-TC-CreateExpense-9
     ${uploadedDocuments}=    Create List   
 
 
-    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -710,7 +710,7 @@ JD-TC-CreateExpense-10
     ${uploadedDocuments}=    Create List    ${Attachments}
 
 
-    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}    locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -765,10 +765,10 @@ JD-TC-CreateExpense-UH1
     ${uploadedDocuments}=    Create List    ${Attachments}
     
     
-    ${resp}=  Create Expense  ${category_id}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}  ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}
+    ${resp}=  Create Expense  ${EMPTY}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}  ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}  locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}  ${INVALID_EXPENSE_CATEGORY_ID}
+    Should Be Equal As Strings  ${resp.json()}  ${INVALID_EXPENSE_CATEGORY}
 
 JD-TC-CreateExpense-UH2
 
@@ -825,7 +825,7 @@ JD-TC-CreateExpense-UH2
     ${uploadedDocuments}=    Create List    ${Attachments}
     
     
-    ${resp}=  Create Expense  ${category_id}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}  ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}
+    ${resp}=  Create Expense  ${category_id}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}  ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${INVALID_EXPENSE_CATEGORY_ID}
@@ -885,7 +885,7 @@ JD-TC-CreateExpense-UH3
     ${uploadedDocuments}=    Create List    ${Attachments}
     
     
-    ${resp}=  Create Expense  ${category_id}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}  ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}
+    ${resp}=  Create Expense  ${category_id}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}  ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${INVALID_EXPENSE_CATEGORY_ID}
@@ -941,7 +941,7 @@ JD-TC-CreateExpense-UH4
     ${uploadedDocuments}=    Create List    ${Attachments}
 
 
-    ${resp}=  Create Expense  ${category_id1}  ${empty}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
+    ${resp}=  Create Expense  ${category_id1}  ${empty}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}    locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${Please_enter_an_amount}
@@ -997,10 +997,65 @@ JD-TC-CreateExpense-UH5
     ${uploadedDocuments}=    Create List    ${Attachments}
 
 
-    ${resp}=  Create Expense  ${empty}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
+    ${resp}=  Create Expense  ${empty}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}    locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${INVALID_EXPENSE_CATEGORY}
+
+JD-TC-CreateExpense-UH8
+    [Documentation]  Create Expense without location.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${expenseFor}=   FakerLibrary.word
+    ${expenseDate}=   db.get_date_by_timezone  ${tz}
+    ${amount}=   Random Int  min=500  max=2000
+    ${employeeName}=   FakerLibrary.name
+    ${item}=   FakerLibrary.word
+    ${quantity}=   Random Int  min=5  max=10
+    ${rate}=   Random Int  min=50  max=1000
+    ${amount}=   Random Int  min=50  max=1000
+    ${deptId}=   Random Int  min=50  max=100
+    ${deptName}=  FakerLibrary.word
+    ${userName}=    FakerLibrary.name
+
+    ${itemList}=  Create Dictionary  item=${item}   quantity=${quantity}  rate=${rate}    amount=${amount}
+    ${itemList}=    Create List    ${itemList}
+
+    ${departmentList}=  Create Dictionary  deptId=${deptId}   deptName=${deptName}  
+    ${departmentList}=    Create List    ${departmentList}
+
+    ${resp}=  db.getType   ${pdffile} 
+    Log  ${resp}
+    ${fileType}=  Get From Dictionary       ${resp}    ${pdffile} 
+    Set Suite Variable    ${fileType}
+    ${caption}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption}
+
+    ${resp}=  db.getType   ${jpgfile}
+    Log  ${resp}
+    ${fileType1}=  Get From Dictionary       ${resp}    ${jpgfile}
+    Set Suite Variable    ${fileType1}
+    ${caption1}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption1}
+    
+    ${Attachments}=    Create Dictionary   action=${FileAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
+    Log  ${Attachments}
+    ${uploadedDocuments}=    Create List    ${Attachments}
+
+    ${FIELD_REQUIRED}=  format String   ${FIELD_REQUIRED}   Location
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${empty}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings    ${resp.json()}    ${FIELD_REQUIRED}
 
 JD-TC-CreateExpense-UH6
     [Documentation]  Create Expense for an SP With iempty expense date.
@@ -1052,7 +1107,7 @@ JD-TC-CreateExpense-UH6
     ${uploadedDocuments}=    Create List    ${Attachments}
 
 
-    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${empty}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${empty}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}    locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${EXPENSE_DATE_CANNOT_BE_EMPTY}
@@ -1110,7 +1165,7 @@ JD-TC-CreateExpense-UH7
     ${uploadedDocuments}=    Create List    ${Attachments}
 
 
-    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}    locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

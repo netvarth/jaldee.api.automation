@@ -11,6 +11,7 @@ Library           /ebs/TDD/db.py
 Library           /ebs/TDD/excelfuncs.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
@@ -212,7 +213,7 @@ JD-TC-UploadAttachment-1
     Log  ${Attachments}
     ${uploadedDocuments}=    Create List    ${Attachments}
     
-    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}      ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}      ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${expense_uid}   ${resp.json()['uid']}
@@ -267,8 +268,43 @@ JD-TC-UploadAttachment-UH3
 
     [Documentation]   upload a attachment using consumer login.
 
-    ${resp}=   ConsumerLogin  ${CUSERNAME8}  ${PASSWORD}
+
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    #............provider consumer creation..........
+
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Suite Variable  ${PCPHONENO}  555${PH_Number}
+
+    ${fname}=  generate_firstname
+    Set Suite Variable  ${fname}
+    ${lastname}=  FakerLibrary.last_name
+   
+    ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lastname}  countryCode=${countryCodes[1]} 
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id1}  ${token} 
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
 

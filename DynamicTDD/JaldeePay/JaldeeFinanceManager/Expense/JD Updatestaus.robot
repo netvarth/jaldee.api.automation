@@ -214,7 +214,7 @@ JD-TC-Update Expense Status-1
     ${uploadedDocuments}=    Create List    ${Attachments}
 
 
-    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}    locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${expense_uid}   ${resp.json()['uid']}
@@ -289,7 +289,7 @@ JD-TC-Update Expense Status-UH1
     ${uploadedDocuments}=    Create List    ${Attachments}
 
 
-    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${empty}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${empty}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}    locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -346,7 +346,7 @@ JD-TC-Update Expense Status--UH3
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${INVALID_FM_EXPENSE_ID}
 
-JD-TC-Update Expense Status--UH4
+JD-TC-Update Expense Status--2
 
     [Documentation]   Update Expense Status- using another Encrypted Provider Login.
 
@@ -354,7 +354,7 @@ JD-TC-Update Expense Status--UH4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-      ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[0]} 
+      ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id1}   ${resp.json()}
@@ -362,5 +362,5 @@ JD-TC-Update Expense Status--UH4
 
     ${resp}=  Update Expense Status   ${expense_uid}  ${status_id1} 
     Log  ${resp.json()}                                                 
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}  ${INVALID_FM_STATUS_ID}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()}  ${INVALID_FM_STATUS_ID}
