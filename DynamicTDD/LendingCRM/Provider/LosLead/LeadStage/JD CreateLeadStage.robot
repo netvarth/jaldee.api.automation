@@ -17,6 +17,10 @@ Variables          /ebs/TDD/varfiles/providers.py
 Variables          /ebs/TDD/varfiles/consumerlist.py 
 Variables          /ebs/TDD/varfiles/hl_providers.py
 
+*** Variables ***
+
+@{sort_order}                   1  2  3  4  5  6  7  8  9
+
 *** Test Cases ***
 
 JD-TC-CreateLeadStage-1
@@ -172,3 +176,33 @@ JD-TC-CreateLeadStage-UH4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings    ${resp.json()}        ${SESSION_EXPIRED}
+
+
+JD-TC-CreateLeadStage-6
+
+    [Documentation]  Create Lead Stage - creating 3 stages some of them with sort order, on proceed and on redirect
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME75}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${Sname11}=    FakerLibrary.name
+
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${Sname11}  sortOrder=${sort_order[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${stageuid11}     ${resp.json()['uid']}
+
+    ${Sname22}=    FakerLibrary.name
+
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${Sname22}  sortOrder=${sort_order[1]}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${stageuid22}     ${resp.json()['uid']}
+
+    ${Sname33}=    FakerLibrary.name
+
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${Sname33}  sortOrder=${sort_order[2]}  onProceed=${stageuid22}  onRedirect=${stageuid11}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${stageuid33}     ${resp.json()['uid']}
