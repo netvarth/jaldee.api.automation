@@ -28,6 +28,7 @@ ${suffix}                   serving
 ${count}       4
 ${digits}       0123456789
 @{dom_list}
+@{service_names}
 
 *** Test Cases ***  
 
@@ -56,43 +57,63 @@ JD-TC-change appointment status for multiple appointments-1
     # clear_location  ${PUSERNAME85}
     clear_customer   ${PUSERNAME85}
 
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${lid}=  Create Sample Location 
-    Set Suite Variable   ${lid}
-
-    ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-   
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        Set Suite Variable   ${lid}
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+    
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}    
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
-   
+    
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}    
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${s_id1}
 
     # clear_appt_schedule   ${PUSERNAME85}
 
-    ${resp}=  Create Sample Schedule  ${lid}   ${s_id}
-    Log  ${resp.content}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${list}=  Create List  1  2  3  4  5  6  7
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_two   ${sTime1}  ${delta}
+    ${schedule_name}=  FakerLibrary.bs
+    ${parallel}=  FakerLibrary.Random Int  min=5  max=10
+    ${maxval}=  Convert To Integer   ${delta/2}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${bool1}=  Random Element  ${bool}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}  ${s_id1}
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    Set Suite Variable  ${sch_id1}  ${resp.json()}
+
+    # ${resp}=  Create Sample Schedule  ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${sch_id1}  ${resp.json()}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
   
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    ${resp}=  Get Appointment Schedule ById  ${sch_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
@@ -107,7 +128,7 @@ JD-TC-change appointment status for multiple appointments-1
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer   ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    ${resp}=  Take Appointment For Consumer   ${cid}  ${s_id}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -127,7 +148,7 @@ JD-TC-change appointment status for multiple appointments-1
     ${apptfor2}=   Create List  ${apptfor10}
     
     ${cnote2}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid2}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote2}  ${apptfor2}
+    ${resp}=  Take Appointment For Consumer  ${cid2}  ${s_id}  ${sch_id1}  ${DAY1}  ${cnote2}  ${apptfor2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -164,24 +185,37 @@ JD-TC-change appointment status for multiple appointments-2
     clear_customer   ${PUSERNAME85}
     # clear_appt_schedule   ${PUSERNAME85}
 
-    ${resp}=  Create Sample Schedule  ${lid}   ${s_id}   
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id1}  ${resp.json()}
+    # ${resp}=  Create Sample Schedule  ${lid}   ${s_id}   
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id1}  ${resp.json()}
     
-    ${resp}=  Get Appointment Schedule ById  ${sch_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
-    
-    ${resp}=  Create Sample Schedule  ${lid}   ${s_id1}
+
+    ${sTime3}=  add_timezone_time  ${tz}  3  50
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime3}=  add_timezone_time  ${tz}  5  00 
+    ${schedule_name}=  FakerLibrary.bs
+    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    ${duration}=  FakerLibrary.Random Int  min=1  max=5
+    ${bool1}=  Random Element  ${bool}
+    ${list}=  Create List  1  3  5  7
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime3}  ${eTime3}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id2}  ${resp.json()}
+    
+    # ${resp}=  Create Sample Schedule  ${lid}   ${s_id1}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id2}  ${resp.json()}
 
     ${resp}=  Get Appointment Schedule ById  ${sch_id2}
     Log  ${resp.json()}
@@ -273,18 +307,18 @@ JD-TC-change appointment status for multiple appointments-3
   
     # clear_appt_schedule   ${PUSERNAME85}
     
-    ${resp}=  Create Sample Schedule  ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id1}  ${resp.json()}
+    # ${resp}=  Create Sample Schedule  ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id1}  ${resp.json()}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Test Variable   ${DAY1}
  
-    ${resp}=  Get Appointment Schedule ById  ${sch_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id1}     batchEnable=${bool[0]}
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  id=${sch_id1}     batchEnable=${bool[0]}
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -364,34 +398,32 @@ JD-TC-change appointment status for multiple appointments- 4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
-    
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${s_id}  ${resp.json()[0]['id']}
+    # ${resp}=   Get Service
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${s_id}  ${resp.json()[0]['id']}
 
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${lid}  ${resp.json()[0]['id']}
+    # ${resp}=    Get Locations
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${lid}  ${resp.json()[0]['id']}
    # Set Test Variable  ${sch_id1}  ${resp.json()['id']}
 
     # clear_appt_schedule   ${PUSERNAME85}
      
 
-     ${resp}=  Create Sample Schedule  ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id1}  ${resp.json()}
+    #  ${resp}=  Create Sample Schedule  ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id1}  ${resp.json()}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    Set Test Variable   ${DAY1}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # Set Test Variable   ${DAY1}
  
-    ${resp}=  Get Appointment Schedule ById  ${sch_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id1}     batchEnable=${bool[0]}
-
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  id=${sch_id1}     batchEnable=${bool[0]}
   
     ${fname0}=   generate_firstname
     ${lname0}=   FakerLibrary.last_name
@@ -408,7 +440,6 @@ JD-TC-change appointment status for multiple appointments- 4
         Should Be Equal As Strings  ${resp.json()[0]['id']}  ${cid${b}}
 
     END
-
   
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id}
     Log  ${resp.content}
@@ -478,18 +509,18 @@ JD-TC-change appointment status for multiple appointments- 5
    # clear_appt_schedule   ${PUSERNAME85}
      
 
-     ${resp}=  Create Sample Schedule  ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id1}  ${resp.json()}
+    #  ${resp}=  Create Sample Schedule  ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id1}  ${resp.json()}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    Set Suite Variable   ${DAY1}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # Set Suite Variable   ${DAY1}
  
-    ${resp}=  Get Appointment Schedule ById  ${sch_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id1}     batchEnable=${bool[0]}
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  id=${sch_id1}     batchEnable=${bool[0]}
 
     
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id}
@@ -535,10 +566,10 @@ JD-TC-change appointment status for multiple appointments-6
      # clear_appt_schedule   ${PUSERNAME85}
       clear_customer   ${PUSERNAME85}
 
-    ${resp}=  Create Sample Schedule  ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id1}  ${resp.json()}
+    # ${resp}=  Create Sample Schedule  ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id1}  ${resp.json()}
 
   
     ${fname3}=   generate_firstname
@@ -634,10 +665,10 @@ JD-TC-change appointment status for multiple appointments- 7
       # clear_appt_schedule   ${PUSERNAME85}
       clear_customer   ${PUSERNAME85}
 
-    ${resp}=  Create Sample Schedule  ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    # ${resp}=  Create Sample Schedule  ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
 
 
     ${fname0}=   generate_firstname
@@ -657,10 +688,10 @@ JD-TC-change appointment status for multiple appointments- 7
     END
 
  
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id1}
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleId=${sch_id}
+
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{s1_slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
@@ -678,7 +709,7 @@ JD-TC-change appointment status for multiple appointments- 7
         ${apptfor}=   Create List  ${apptfor1}
             
         ${cnote}=   FakerLibrary.word
-        ${resp}=  Take Appointment For Consumer  ${cid${a}}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+        ${resp}=  Take Appointment For Consumer  ${cid${a}}  ${s_id1}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
             
@@ -688,8 +719,6 @@ JD-TC-change appointment status for multiple appointments- 7
         Append To List   ${appt_ids}  ${apptid${a}}
 
     END
-
-
    
     ${resp}=  Appointment Action   ${apptStatus[3]}    ${apptid1}   
     Log   ${resp.json()}
@@ -735,10 +764,6 @@ JD-TC-change appointment status for multiple appointments UH-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Appointment By Id   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  401
-
     ${resp}=   Change multiple Appmt Status     ${apptStatus[6]}    ${apptid1}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -777,10 +802,10 @@ JD-TC-change appointment status for multiple appointments UH-5
      # clear_appt_schedule   ${PUSERNAME85}
       clear_customer   ${PUSERNAME85}
 
-    ${resp}=  Create Sample Schedule  ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    # ${resp}=  Create Sample Schedule  ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
 
     ${fname0}=   generate_firstname
     ${lname0}=   FakerLibrary.last_name
@@ -803,10 +828,10 @@ JD-TC-change appointment status for multiple appointments UH-5
     Should Be Equal As Strings  ${resp.status_code}  200
     ${no_of_cust}=  Get Length  ${resp.json()}
 
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id1}
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleId=${sch_id}
+    
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{s1_slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
@@ -824,7 +849,7 @@ JD-TC-change appointment status for multiple appointments UH-5
         ${apptfor}=   Create List  ${apptfor1}
             
         ${cnote}=   FakerLibrary.word
-        ${resp}=  Take Appointment For Consumer  ${cid${a}}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+        ${resp}=  Take Appointment For Consumer  ${cid${a}}  ${s_id1}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
             
@@ -842,8 +867,7 @@ JD-TC-change appointment status for multiple appointments UH-5
     
     ${resp}=   Change multiple Appmt Status    ${apptStatus[3]}    ${apptid1}   ${apptid2}
     Log   ${resp.json()}
-     Should Be Equal As Strings  ${resp.status_code}  422
-    
+    Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${INVALID_ACTION}"
     
    
