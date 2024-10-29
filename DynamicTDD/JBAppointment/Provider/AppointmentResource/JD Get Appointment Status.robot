@@ -404,12 +404,12 @@ JD-TC-GetAppointmentStatus-3
 
     [Documentation]  Check status Confirmed after consumer takes appointment without prepayment
 
-    # clear_service   ${PUSERNAME20187}
-    # clear_location  ${PUSERNAME20187}
-    # ${pid}=  get_acc_id  ${PUSERNAME20187}
+    # clear_service   ${PUSERNAME187}
+    # clear_location  ${PUSERNAME187}
+    # ${pid}=  get_acc_id  ${PUSERNAME187}
     # ${cid}=  get_id  ${CUSERNAME24}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME20187}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME187}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -456,7 +456,7 @@ JD-TC-GetAppointmentStatus-3
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}
 
-    # clear_appt_schedule   ${PUSERNAME20187}
+    # clear_appt_schedule   ${PUSERNAME187}
 
     # ${resp}=  Get Appointment Schedules
     # Log  ${resp.json()}
@@ -549,7 +549,7 @@ JD-TC-GetAppointmentStatus-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME20187}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME187}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -561,7 +561,7 @@ JD-TC-GetAppointmentStatus-4
 
     [Documentation]  Check status Arrived when provider takes appointment for consumer
   
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME20183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -581,10 +581,24 @@ JD-TC-GetAppointmentStatus-4
     #     Should Be Equal As Strings  ${resp.status_code}  200
     # END
 
-    # clear_service   ${PUSERNAME20183}
-    # clear_location  ${PUSERNAME20183}
-    # clear_appt_schedule   ${PUSERNAME20183}
-    clear_customer   ${PUSERNAME20183}
+    # clear_service   ${PUSERNAME183}
+    # clear_location  ${PUSERNAME183}
+    # clear_appt_schedule   ${PUSERNAME183}
+    clear_customer   ${PUSERNAME183}
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     # ${resp}=   Get Service
     # Log   ${resp.json()}
@@ -607,7 +621,7 @@ JD-TC-GetAppointmentStatus-4
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${lid}=  Create Sample Location
+    # ${lid}=  Create Sample Location
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -659,7 +673,7 @@ JD-TC-GetAppointmentStatus-5
 
     [Documentation]  Check status Started
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME20183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -679,9 +693,9 @@ JD-TC-GetAppointmentStatus-5
     #     Should Be Equal As Strings  ${resp.status_code}  200
     # END
 
-    # clear_service   ${PUSERNAME20183}
-    # clear_location  ${PUSERNAME20183}
-    # clear_appt_schedule   ${PUSERNAME20183}
+    # clear_service   ${PUSERNAME183}
+    # clear_location  ${PUSERNAME183}
+    # clear_appt_schedule   ${PUSERNAME183}
 
     # ${resp}=   Get Service
     # Log   ${resp.json()}
@@ -694,15 +708,31 @@ JD-TC-GetAppointmentStatus-5
     # ${resp}=   Get Appointment Settings
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
   
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    Set Suite Variable  ${DAY1}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${lid}=  Create Sample Location
+    # ${lid}=  Create Sample Location
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}   
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -779,7 +809,7 @@ JD-TC-GetAppointmentStatus-6
 
     [Documentation]  Check status Cancelled
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME20183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -814,7 +844,7 @@ JD-TC-GetAppointmentStatus-7
 
     [Documentation]  Check status Rejected
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME20183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -852,7 +882,7 @@ JD-TC-GetAppointmentStatus-8
 
     [Documentation]  Check status Completed
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME20183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -908,61 +938,65 @@ JD-TC-GetAppointmentStatus-9
 
     [Documentation]  Check status failed
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME20183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+
+    # clear_service   ${PUSERNAME183}
+    # clear_location  ${PUSERNAME183}
+    # clear_appt_schedule   ${PUSERNAME183}
 
     ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=   Get Appointment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Disable Appointment   ${toggle[0]}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    # clear_service   ${PUSERNAME20183}
-    # clear_location  ${PUSERNAME20183}
-    # clear_appt_schedule   ${PUSERNAME20183}
-
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
-
-    ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-   
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    Set Suite Variable  ${DAY1}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
     # ${sTime1}=  db.get_time_by_timezone   ${tz}
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${lid}=  Create Sample Location
-    ${s_id}=  Create Sample Service  ${SERVICE1}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
+    
+    ${resp}=    Get Service
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    IF   '${resp.content}' == '${emptylist}'
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        Append To List  ${service_names}  ${SERVICE1}    
+        ${s_id}=  Create Sample Service  ${SERVICE1}  
+    ELSE
+        Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
+    END
+
+    ${resp}=    Get Appointment Schedules
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'       
+        ${schedule_name}=  FakerLibrary.bs
+        ${parallel}=  FakerLibrary.Random Int  min=10  max=20
+        ${maxval}=  Convert To Integer   ${delta/2}
+        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+        ${bool1}=  Random Element  ${bool}
+        ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id} 
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${sch_id}  ${resp.json()}
+    ELSE
+        Set Suite Variable  ${sch_id}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${lid}  ${resp.json()[0]['location']['id']}
+        Set Suite Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
+    END
 
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
@@ -1032,7 +1066,7 @@ JD-TC-GetAppointmentStatus-UH1
 
 JD-TC-GetAppointmentStatus-UH2
     [Documentation]  Check status of invalid appointment id
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME20183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

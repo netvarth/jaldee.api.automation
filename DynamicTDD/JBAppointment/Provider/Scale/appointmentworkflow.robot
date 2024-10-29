@@ -24,7 +24,6 @@ ${self}     0
 @{service_names}
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
 ${order}        0
-0
 ${fileSize}     0.00458
 ${pdffile}      /ebs/TDD/sample.pdf
 
