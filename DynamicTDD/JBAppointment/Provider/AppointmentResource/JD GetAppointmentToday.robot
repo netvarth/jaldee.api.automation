@@ -2614,25 +2614,27 @@ JD-TC-GetAppointmentToday-28
     ${firstName}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     Set Test Variable  ${pc_emailid1}  ${firstName}${C_Email}.${test_mail}
-    ${resp}=    Send Otp For Login    ${CUSERNAME9}    ${pid}  alternateLoginId=${pc_emailid1}
+    ${NewCustomer}    Generate random string    10    123456789
+    ${NewCustomer}    Convert To Integer  ${NewCustomer}
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${pid}  alternateLoginId=${pc_emailid1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME9}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${pc_emailid1}  ${CUSERNAME9}  ${pid}  countryCode=${countryCodes[0]}
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${pc_emailid1}  ${NewCustomer}  ${pid}  countryCode=${countryCodes[0]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200    
 
     ${resp}=  Consumer Logout   
     Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME9}  ${pid}  ${token}   countryCode=${countryCodes[0]}
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}  ${pid}  ${token}   countryCode=${countryCodes[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
