@@ -6665,7 +6665,7 @@ JD-TC-Take Appointment-UH33
     ${holidayname}=   FakerLibrary.word
     ${list}=  Create List   1  2  3  4  5  6  7
     ${desc}=    FakerLibrary.sentence
-    ${sTime11}=  db.get_time_by_timezone   ${tz}
+    ${sTime11}=  add_timezone_time  ${tz}  1  00  	
     ${delta}=  FakerLibrary.Random Int  min=10  max=30
     ${eTime11}=  add_two   ${sTime11}  ${delta}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
