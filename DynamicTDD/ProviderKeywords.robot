@@ -16443,7 +16443,8 @@ Provider with license
     [Arguments]  ${licensename}
     ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
     ${len}=   Split to lines  ${resp}
-    ${length}=  Get Length   ${len}
+    ${result}=  Get Length   ${len}
+    ${length}    Evaluate    ${result} - 1
     
     FOR   ${i}  IN RANGE   100 
         ${a}=  FakerLibrary.Random Int  min=0  max=${length}

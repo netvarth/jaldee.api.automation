@@ -35,33 +35,35 @@ check corp
 JD-TC-CreateAppointmentQueueSet-1
 
     [Documentation]   Create a Appointment QueueSet for service, queue, and appointment Schedule for provider
-    ${domresp}=  Get BusinessDomainsConf
-    Should Be Equal As Strings  ${domresp.status_code}  200
-    Set Suite Variable  ${domresp}
-    ${domlen}=  Get Length  ${domresp.json()}
-    ${len}=  Evaluate  ${domlen}-1
-    FOR  ${i}  IN RANGE  ${len}
-        Set Suite Variable  ${d1}  ${domresp.json()[${len}]['domain']}  
-        ${sublen}=    Get Length  ${domresp.json()[${len}]['subDomains']}
-        # Set Suite Variable  ${sd}  ${domresp.json()[${len}]['subDomains'][0]['subDomain']} 
-        ${corp}=  check corp  ${len}   ${sublen}   False
-        Exit For Loop If  '${corp}' == 'False'
-        ${len}=  Evaluate  ${len}-1
-    END
-    ${firstname}=  generate_firstname
-    ${lastname}=  FakerLibrary.last_name
-    ${PUSERNAME_M}=  Evaluate  ${PUSERNAME}+85471
-    ${pkg_id}=   get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd}  ${PUSERNAME_M}   ${pkg_id[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    202
-    ${resp}=  Account Activation  ${PUSERNAME_M}  0
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_M}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_M}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_M}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${domresp}=  Get BusinessDomainsConf
+    # Should Be Equal As Strings  ${domresp.status_code}  200
+    # Set Suite Variable  ${domresp}
+    # ${domlen}=  Get Length  ${domresp.json()}
+    # ${len}=  Evaluate  ${domlen}-1
+    # FOR  ${i}  IN RANGE  ${len}
+    #     Set Suite Variable  ${d1}  ${domresp.json()[${len}]['domain']}  
+    #     ${sublen}=    Get Length  ${domresp.json()[${len}]['subDomains']}
+    #     # Set Suite Variable  ${sd}  ${domresp.json()[${len}]['subDomains'][0]['subDomain']} 
+    #     ${corp}=  check corp  ${len}   ${sublen}   False
+    #     Exit For Loop If  '${corp}' == 'False'
+    #     ${len}=  Evaluate  ${len}-1
+    # END
+    # ${firstname}=  generate_firstname
+    # ${lastname}=  FakerLibrary.last_name
+    # ${PUSERNAME_M}=  Evaluate  ${PUSERNAME}+85471
+    # ${pkg_id}=   get_highest_license_pkg
+    # ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd}  ${PUSERNAME_M}   ${pkg_id[0]}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    202
+    # ${resp}=  Account Activation  ${PUSERNAME_M}  0
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Account Set Credential  ${PUSERNAME_M}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_M}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_M}  ${PASSWORD}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${firstname}  ${lastname}  ${PUSERNAME_M}  ${LoginId}=  Provider Signup
     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_M}${\n}
     Set Suite Variable  ${PUSERNAME_M}  
 
@@ -188,33 +190,37 @@ JD-TC-CreateAppointmentQueueSet-2
     [Documentation]   Create a Appointment QueueSet for service, queue, department and appointment Schedule
     # ${domresp}=  Get BusinessDomainsConf
     # Should Be Equal As Strings  ${domresp.status_code}  200
-    ${domlen}=  Get Length  ${domresp.json()}
-    ${len}=  Evaluate  ${domlen}-1
-    FOR  ${i}  IN RANGE  ${domlen} 
-    ${sublen}=  Get Length  ${domresp.json()[${len}]['subDomains']}
-    END
-    FOR  ${i}  IN RANGE  ${domlen} 
-        Set Suite Variable  ${d1}  ${domresp.json()[${len}]['domain']}    
-        ${sublen}=    Get Length  ${domresp.json()[${len}]['subDomains']}
-        # Set Suite Variable  ${sd}  ${domresp.json()[${len}]['subDomains'][0]['subDomain']} 
-        ${corp}=  check corp  ${len}   ${sublen}   True
-        Exit For Loop If  '${corp}' == 'True'
-        ${len}=  Evaluate  ${len}-1
-    END
-    ${firstname}=  generate_firstname
-    ${lastname}=  FakerLibrary.last_name
-    ${PUSERNAME_M}=  Evaluate  ${PUSERNAME}+85473
-    ${pkg_id}=   get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd}  ${PUSERNAME_M}   ${pkg_id[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    202
-    ${resp}=  Account Activation  ${PUSERNAME_M}  0
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_M}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_M}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_M}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${domlen}=  Get Length  ${domresp.json()}
+    # ${len}=  Evaluate  ${domlen}-1
+    # FOR  ${i}  IN RANGE  ${domlen} 
+    # ${sublen}=  Get Length  ${domresp.json()[${len}]['subDomains']}
+    # END
+    # FOR  ${i}  IN RANGE  ${domlen} 
+    #     Set Suite Variable  ${d1}  ${domresp.json()[${len}]['domain']}    
+    #     ${sublen}=    Get Length  ${domresp.json()[${len}]['subDomains']}
+    #     # Set Suite Variable  ${sd}  ${domresp.json()[${len}]['subDomains'][0]['subDomain']} 
+    #     ${corp}=  check corp  ${len}   ${sublen}   True
+    #     Exit For Loop If  '${corp}' == 'True'
+    #     ${len}=  Evaluate  ${len}-1
+    # END
+    # ${firstname}=  generate_firstname
+    # ${lastname}=  FakerLibrary.last_name
+    # ${PUSERNAME_M}=  Evaluate  ${PUSERNAME}+85473
+    # ${pkg_id}=   get_highest_license_pkg
+    # ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd}  ${PUSERNAME_M}   ${pkg_id[0]}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    202
+    # ${resp}=  Account Activation  ${PUSERNAME_M}  0
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Account Set Credential  ${PUSERNAME_M}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_M}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_M}  ${PASSWORD}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_M}${\n}
+    # Set Suite Variable  ${PUSERNAME_M}  
+
+    ${firstname}  ${lastname}  ${PUSERNAME_M}  ${LoginId}=  Provider Signup
     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_M}${\n}
     Set Suite Variable  ${PUSERNAME_M}  
 
@@ -955,46 +961,46 @@ JD-TC-CreateAppointmentQueueSet-UH7
     # ${s_id1}=  Create Sample Service  ${SERVICE1}
     # Set Suite Variable  ${s_id1}
 
-    ${resp}=    Get Service
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${SERVICE1}=    generate_unique_service_name  ${service_names}
-        Append To List  ${service_names}  ${SERVICE1}    
-        ${s_id1}=  Create Sample Service  ${SERVICE1}  
-    ELSE
-        Set Test Variable  ${s_id1}   ${resp.json()[0]['id']}
-    END
+    # ${resp}=    Get Service
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF   '${resp.content}' == '${emptylist}'
+    #     ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    #     Append To List  ${service_names}  ${SERVICE1}    
+    #     ${s_id1}=  Create Sample Service  ${SERVICE1}  
+    # ELSE
+    #     Set Test Variable  ${s_id1}   ${resp.json()[0]['id']}
+    # END
 
-    ${lid1}=  Create Sample Location  
+    # ${lid1}=  Create Sample Location  
 
-    ${resp}=   Get Location ById  ${lid1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    # ${resp}=   Get Location ById  ${lid1}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    Set Suite Variable  ${DAY1} 
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    Set Suite Variable  ${DAY2} 
-    ${list}=  Create List  1  2  3  4  5  6  7
-    Set Suite Variable  ${list} 
-    ${sTime1}=  add_timezone_time  ${tz}  1  30  
-    Set Suite Variable   ${sTime1}
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    Set Suite Variable  ${delta}
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    Set Suite Variable   ${eTime1}
-    ${schedule_name}=  FakerLibrary.bs
-    Set Suite Variable  ${schedule_name}
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${delta}
-    ${bool1}=  Random Element  ${bool}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # Set Suite Variable  ${DAY1} 
+    # ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    # Set Suite Variable  ${DAY2} 
+    # ${list}=  Create List  1  2  3  4  5  6  7
+    # Set Suite Variable  ${list} 
+    # ${sTime1}=  add_timezone_time  ${tz}  1  30  
+    # Set Suite Variable   ${sTime1}
+    # ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    # Set Suite Variable  ${delta}
+    # ${eTime1}=  add_two   ${sTime1}  ${delta}
+    # Set Suite Variable   ${eTime1}
+    # ${schedule_name}=  FakerLibrary.bs
+    # Set Suite Variable  ${schedule_name}
+    # ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    # ${duration}=  FakerLibrary.Random Int  min=1  max=${delta}
+    # ${bool1}=  Random Element  ${bool}
 
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid1}  ${duration}  ${bool1}   ${s_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${sch_id}  ${resp.json()}
+    # ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid1}  ${duration}  ${bool1}   ${s_id1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${sch_id}  ${resp.json()}
     ${Addon_id}=  get_statusboard_addonId
     ${resp}=  Add addon  ${Addon_id}
     Log  ${resp.json()}
