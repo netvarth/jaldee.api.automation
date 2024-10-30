@@ -13745,19 +13745,25 @@ Get Sections Filter
 
 
 Share Prescription To Patient
-    [Arguments]   ${prescriptionUid}   ${msg}   ${email}   ${telegram}  ${sms}    ${whatsapp}  
+    [Arguments]   ${prescriptionUid}   ${msg}   ${email}    &{kwargs}
     Check And Create YNW Session
-    ${medium}=  Create Dictionary  email=${email}  telegram=${telegram}   sms=${sms}   whatsapp=${whatsapp}
+    ${medium}=  Create Dictionary  email=${email} 
     ${data}=  Create Dictionary  message=${msg}   medium=${medium}  
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
     ${data}=    json.dumps    ${data}
     ${resp}=  POST On Session  ynw  /provider/medicalrecord/prescription/sharePrescription/${prescriptionUid}   data=${data}  expected_status=any
     Check Deprication  ${resp}  Share Prescription To Patient
     RETURN  ${resp}
 
 Share Prescription To ThirdParty
-    [Arguments]   ${prescriptionUid}   ${msg}   ${email}     ${sms}    ${whatsapp}  ${telegram}
+    [Arguments]   ${prescriptionUid}   ${msg}   ${email}    &{kwargs}
     Check And Create YNW Session 
-    ${data}=  Create Dictionary  message=${msg}   email=${email}    sms=${sms}   whatsapp=${whatsapp}   telegram=${telegram} 
+    ${data}=  Create Dictionary  message=${msg}   email=${email}  
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END  
     ${data}=    json.dumps    ${data}
     ${resp}=  POST On Session  ynw  /provider/medicalrecord/prescription/sharePrescription/thirdParty/${prescriptionUid}   data=${data}  expected_status=any
     Check Deprication  ${resp}  Share Prescription To ThirdParty

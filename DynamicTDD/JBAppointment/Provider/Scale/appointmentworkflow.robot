@@ -26,27 +26,8 @@ ${jpgfile}      /ebs/TDD/uploadimage.jpg
 ${order}        0
 ${fileSize}     0.00458
 ${pdffile}      /ebs/TDD/sample.pdf
-
-*** Keywords ***
-
-Create Prescription 
-    [Arguments]    ${providerConsumerId}    ${userId}    ${html}      @{vargs}    &{kwargs}
-    ${len}=  Get Length  ${vargs}
-    ${mrPrescriptions}=  Create List  
-
-    FOR    ${index}    IN RANGE    ${len}   
-        Exit For Loop If  ${len}==0
-        Append To List  ${mrPrescriptions}  ${vargs[${index}]}
-    END
-    ${data}=    Create Dictionary    providerConsumerId=${providerConsumerId}    doctorId=${userId}    html=${html}    mrPrescriptions=${mrPrescriptions}    
-    Check And Create YNW Session
-     FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary 	${data} 	${key}=${value}
-    END
-    ${data}=  json.dumps  ${data}
-    ${resp}=    POST On Session    ynw    /provider/medicalrecord/prescription    data=${data}    expected_status=any
-    Check Deprication  ${resp}  Create Prescription
-    RETURN  ${resp}
+${domain}       healthCare
+${subdomain}    dentists
 
 
 *** Test Cases ***
@@ -55,7 +36,7 @@ JD-TC-PreDeploymentAppointment-1
 
     [Documentation]  Appointment workflow for pre deployment.
 
-    ${firstname}  ${lastname}  ${PUSERNAME_B}  ${LoginId}=  Provider Signup
+    ${firstname}  ${lastname}  ${PUSERNAME_B}  ${LoginId}=  Provider Signup   Domain=${domain}   SubDomain=${subdomain}
     Set Suite Variable  ${PUSERNAME_B}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
@@ -252,52 +233,6 @@ JD-TC-PreDeploymentAppointment-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    #..........Prescription creation ............
-
-    # ${name}=  FakerLibrary.name
-    # ${aliasName}=  FakerLibrary.name
-    
-    # ${resp}=    Create Case Category    ${name}  ${aliasName}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-    # Set Suite Variable    ${category_id}    ${resp.json()['id']} 
-
-    # ${category}=  Create Dictionary  id=${category_id}  
-    # Set Suite Variable    ${category} 
-
-    # ${resp}=    Create Case Type    ${name}  ${aliasName}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-    # Set Suite Variable    ${type_id}    ${resp.json()['id']}  
-
-    # ${type}=  Create Dictionary  id=${type_id} 
-    # ${doctor}=  Create Dictionary  id=${pid} 
-    # ${title}=  FakerLibrary.name
-    # ${description}=  FakerLibrary.last_name
-
-    # ${consumer}=  Create Dictionary  id=${cid} 
-    # Set Suite Variable    ${consumer} 
-
-    # ${resp}=    Create MR Case    ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings              ${resp.status_code}   200
-    # Set Suite Variable    ${caseId}        ${resp.json()['id']}
-    # Set Suite Variable    ${caseUId}    ${resp.json()['uid']}
-
-    # ${resp}=    Get MR Case By UID   ${caseUId}    
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-
-    # ${toothNo}=   Random Int  min=10   max=99
-    # ${note1}=  FakerLibrary.word
-    # ${investigation}=    Create List   ${note1}
-    # ${toothSurfaces}=    Create List   ${toothSurfaces[0]}
-
-    # ${resp}=    Create DentalRecord    ${toothNo}  ${toothType[0]}  ${caseUId}    investigation=${investigation}    toothSurfaces=${toothSurfaces}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings              ${resp.status_code}   200
-    # Set Suite Variable      ${id1}           ${resp.json()}
-
     ${med_name}=      FakerLibrary.name
     Set Suite Variable    ${med_name}
     ${frequency}=     FakerLibrary.word
@@ -317,7 +252,6 @@ JD-TC-PreDeploymentAppointment-1
     ${type1}=        FakerLibrary.sentence
     Set Suite Variable    ${type1}
 
-
     ${resp}=  db.getType   ${pdffile} 
     Log  ${resp}
     ${fileType}=  Get From Dictionary       ${resp}    ${pdffile} 
@@ -331,7 +265,6 @@ JD-TC-PreDeploymentAppointment-1
     Set Suite Variable    ${fileType1}
     ${caption1}=  Fakerlibrary.Sentence
     Set Suite Variable    ${caption1}
-
 
     ${resp}    upload file to temporary location    ${LoanAction[0]}    ${pid}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}  
     Log  ${resp.content}
@@ -358,8 +291,19 @@ JD-TC-PreDeploymentAppointment-1
     Set Suite Variable  ${referenceId}   ${resp.json()[0]['referenceId']}   
     Set Suite Variable  ${uid}   ${resp.json()[0]['uid']}
     Set Suite Variable  ${prescriptionStatus}   ${resp.json()[0]['prescriptionStatus']}
-    
 
     ${resp1}=  Get Prescription By UID    ${prescription_uid}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
+
+    #......... Share Prescription to patient...........
+
+    ${message}=  Fakerlibrary.Sentence
+    Set Test Variable    ${message}
+
+    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${message}    ${bool[1]}       ${bool[1]}    ${bool[1]}    ${bool[1]}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
+
+    #......... Share Prescription to thirdparty...........

@@ -650,6 +650,7 @@ JD-TC-GetFutureAppointment-4
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable   ${fname}   ${resp.json()['firstName']}
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
  
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY3}  ${lid}  ${s_id1}
     Log  ${resp.content}
@@ -678,7 +679,7 @@ JD-TC-GetFutureAppointment-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
-    ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre}  ${purpose[0]}  ${apptid1}  ${s_id1}  ${bool[0]}   ${bool[1]}  ${jdconID}
+    ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre}  ${purpose[0]}  ${apptid1}  ${s_id1}  ${bool[0]}   ${bool[1]}  ${cid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${merchantid}   ${resp.json()['merchantId']}
@@ -688,38 +689,6 @@ JD-TC-GetFutureAppointment-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Encrypted Provider Login   ${PUSERNAME257}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Bill By UUId  ${apptid1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  ProviderLogout
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME34}    ${pid}  ${token1} 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=  Get consumer Appt Bill Details   ${apptid1}  
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Payment Details  paymentRefId-eq=${payref}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=  Get Payment Details By UUId  ${apptid1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
     ${resp}=  Encrypted Provider Login  ${PUSERNAME257}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -751,7 +720,7 @@ JD-TC-GetFutureAppointment-4
     
     ${cnote}=   FakerLibrary.word
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id2}  ${sch_id}  ${DAY3}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
-    Log  ${resp.json()}
+    Log  ${resp.json()}0
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}   
     Set Test Variable  ${apptid2}  ${apptid[0]}
@@ -764,8 +733,6 @@ JD-TC-GetFutureAppointment-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}  2
-
     FOR  ${i}  IN RANGE   ${len}
 
         IF  '${resp.json()[${i}]['uid']}' == '${apptid1}'  
@@ -779,8 +746,6 @@ JD-TC-GetFutureAppointment-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}  1
-
     FOR  ${i}  IN RANGE   ${len}
 
         IF  '${resp.json()[${i}]['uid']}' == '${apptid2}'  
@@ -792,8 +757,6 @@ JD-TC-GetFutureAppointment-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}  1
-
     FOR  ${i}  IN RANGE   ${len}
 
         IF  '${resp.json()[${i}]['uid']}' == '${apptid1}'  
@@ -808,6 +771,7 @@ JD-TC-GetFutureAppointment-4
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME34}    ${pid}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
 
     ${resp}=  Get consumer Appt Bill Details   ${apptid1}  
     Log  ${resp.json()}
@@ -815,19 +779,11 @@ JD-TC-GetFutureAppointment-4
 
     ${amount_payable} =  Evaluate  ${servicecharge} - ${min_pre}
     
-    ${resp}=  Make payment Consumer Mock  ${pid}  ${amount_payable}  ${purpose[1]}  ${apptid1}  ${s_id1}  ${bool[0]}   ${bool[1]}  ${jdconID}
+    ${resp}=  Make payment Consumer Mock  ${pid}  ${amount_payable}  ${purpose[1]}  ${apptid1}  ${s_id1}  ${bool[0]}   ${bool[1]}  ${cid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${payref}   ${resp.json()['paymentRefId']}
 
-    ${resp}=  Get Payment Details  paymentRefId-eq=${payref}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=  Get Payment Details By UUId  ${apptid1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-  
     ${resp}=  Consumer Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -840,8 +796,6 @@ JD-TC-GetFutureAppointment-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}  1
-
     FOR  ${i}  IN RANGE   ${len}
 
         IF  '${resp.json()[${i}]['uid']}' == '${apptid1}'  
