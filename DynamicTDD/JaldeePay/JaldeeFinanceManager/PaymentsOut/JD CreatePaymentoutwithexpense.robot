@@ -11,6 +11,7 @@ Library           /ebs/TDD/db.py
 Library           /ebs/TDD/excelfuncs.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
@@ -235,7 +236,7 @@ JD-TC-Create PaymentsOut With Expense--1
     ${amount1}=  Evaluate  ${amount}-4000
     ${amount1}=     roundoff    ${amount1}   1
 
-    ${resp}=  Create PaymentsOut With Expense   ${amount1}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[0]}   ${bool[1]}    ${expense_uid}     locationId=${lid}
+    ${resp}=  Create PaymentsOut With Expense   ${amount1}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[0]}   ${bool[1]}    ${expense_uid}     ${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${payable_uid1}   ${resp.json()['uid']}
@@ -273,6 +274,10 @@ JD-TC-Create PaymentsOut With Expense--2
     #  ${amount}=   Random Int  min=500  max=2000
     # ${amount}=     roundoff    ${amount}   1
 
+    ${due_amount2}=  Evaluate  ${due_amount}-3900
+    ${due_amount2}=     roundoff    ${due_amount2}   1
+
+
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
 
@@ -309,7 +314,7 @@ JD-TC-Create PaymentsOut With Expense--2
     Set Suite Variable   ${bankCheckNo}
 
 
-    ${resp}=  Create PaymentsOut With Expense   ${due_amount}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[1]}    ${bool[1]}    ${expense_uid}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   locationId=${lid}
+    ${resp}=  Create PaymentsOut With Expense   ${due_amount2}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[1]}    ${bool[1]}    ${expense_uid}   ${lid}   merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${payable_uid1}   ${resp.json()['uid']}
@@ -319,7 +324,7 @@ JD-TC-Create PaymentsOut With Expense--2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()['amount']}  ${due_amount}
+    Should Be Equal As Strings  ${resp.json()['amount']}  ${due_amount2}
     Should Be Equal As Strings  ${resp.json()['isExpense']}  ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['expenseUuid']}  ${expense_uid}
     Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
@@ -339,6 +344,8 @@ JD-TC-Create PaymentsOut With Expense--2
     Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
 
 
+
+
 JD-TC-Create PaymentsOut With Expense--3
 
     [Documentation]  Create a PaymentOut where payment mode is dc.
@@ -348,19 +355,24 @@ JD-TC-Create PaymentsOut With Expense--3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Get Expense By Id   ${expense_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${due_amount1}   ${resp.json()['amountDue']}
+
+
+
+    ${due_amount2}=  Evaluate  ${due_amount1}-3800
+    ${due_amount2}=     roundoff    ${due_amount2}   1
+
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
-
-    ${due_amount1}=  Evaluate  ${due_amount}-3900
-    ${due_amount1}=     roundoff    ${due_amount1}   1
-
-    Set Suite Variable   ${due_amount1}
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
 
 
 
-    ${resp}=  Create PaymentsOut With Expense   ${due_amount1}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[12]}    ${bool[1]}    ${expense_uid}       merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
+    ${resp}=  Create PaymentsOut With Expense   ${due_amount2}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[12]}    ${bool[1]}    ${expense_uid}   ${lid}    merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${payable_uid1}   ${resp.json()['uid']}
@@ -369,25 +381,27 @@ JD-TC-Create PaymentsOut With Expense--3
     ${resp}=  Get PaymentsOut By Id   ${payable_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
-    # Should Be Equal As Strings  ${resp.json()['amount']}  ${due_amount1}
-    # Should Be Equal As Strings  ${resp.json()['isExpense']}  ${bool[1]}
-    # Should Be Equal As Strings  ${resp.json()['expenseUuid']}  ${expense_uid}
-    # Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantId']}  ${merchantId}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantKey']}  ${merchantKey}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentGateway']}  ${paymentGateway[1]}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[12]}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['orderId']}  ${orderId}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['gatewayTxnId']}  ${gatewayTxnId}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['upiId']}  ${upiId}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankaccountNo']}  ${bankaccountNo}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['ifscCode']}  ${ifsc}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankName']}  ${bankName}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['branchName']}  ${branchName}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['pancardNo']}  ${pancardNo}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['gstNumber']}  ${gstNumber}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
+    Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
+    Should Be Equal As Strings  ${resp.json()['amount']}  ${due_amount2}
+    Should Be Equal As Strings  ${resp.json()['isExpense']}  ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['expenseUuid']}  ${expense_uid}
+    Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantId']}  ${merchantId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantKey']}  ${merchantKey}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentGateway']}  ${paymentGateway[1]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[12]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['orderId']}  ${orderId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gatewayTxnId']}  ${gatewayTxnId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['upiId']}  ${upiId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankaccountNo']}  ${bankaccountNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['ifscCode']}  ${ifsc}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankName']}  ${bankName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['branchName']}  ${branchName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['pancardNo']}  ${pancardNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gstNumber']}  ${gstNumber}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
+
+
 
 JD-TC-Create PaymentsOut With Expense--4
 
@@ -398,19 +412,25 @@ JD-TC-Create PaymentsOut With Expense--4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date_by_timezone  ${tz}
-    ${due_amount2}=  Evaluate  ${due_amount1}-3900
+    ${resp}=  Get Expense By Id   ${expense_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${due_amount1}   ${resp.json()['amountDue']}
+
+
+
+    ${due_amount2}=  Evaluate  ${due_amount1}-3700
     ${due_amount2}=     roundoff    ${due_amount2}   1
 
-    Set Suite Variable   ${due_amount2}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
 
 
 
-    ${resp}=  Create PaymentsOut With Expense   ${due_amount2}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[8]}    ${bool[1]}    ${expense_uid}       merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
+    ${resp}=  Create PaymentsOut With Expense   ${due_amount2}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[8]}    ${bool[1]}    ${expense_uid}   ${lid}    merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${payable_uid1}   ${resp.json()['uid']}
@@ -419,25 +439,25 @@ JD-TC-Create PaymentsOut With Expense--4
     ${resp}=  Get PaymentsOut By Id   ${payable_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
-    # Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
-    # Should Be Equal As Strings  ${resp.json()['isExpense']}  ${bool[1]}
-    # Should Be Equal As Strings  ${resp.json()['expenseUuid']}  ${expense_uid}
-    # Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantId']}  ${merchantId}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantKey']}  ${merchantKey}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentGateway']}  ${paymentGateway[1]}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[8]}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['orderId']}  ${orderId}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['gatewayTxnId']}  ${gatewayTxnId}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['upiId']}  ${upiId}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankaccountNo']}  ${bankaccountNo}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['ifscCode']}  ${ifsc}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankName']}  ${bankName}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['branchName']}  ${branchName}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['pancardNo']}  ${pancardNo}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['gstNumber']}  ${gstNumber}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
+    Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
+    Should Be Equal As Strings  ${resp.json()['amount']}  ${due_amount2}
+    Should Be Equal As Strings  ${resp.json()['isExpense']}  ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['expenseUuid']}  ${expense_uid}
+    Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantId']}  ${merchantId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantKey']}  ${merchantKey}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentGateway']}  ${paymentGateway[1]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[8]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['orderId']}  ${orderId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gatewayTxnId']}  ${gatewayTxnId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['upiId']}  ${upiId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankaccountNo']}  ${bankaccountNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['ifscCode']}  ${ifsc}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankName']}  ${bankName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['branchName']}  ${branchName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['pancardNo']}  ${pancardNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gstNumber']}  ${gstNumber}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
 
 JD-TC-Create PaymentsOut With Expense--5
 
@@ -448,19 +468,24 @@ JD-TC-Create PaymentsOut With Expense--5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Get Expense By Id   ${expense_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${due_amount1}   ${resp.json()['amountDue']}
+
+    ${due_amount2}=  Evaluate  ${due_amount1}-3600
+    ${due_amount2}=     roundoff    ${due_amount2}   1
+
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
-    ${due_amount3}=  Evaluate  ${due_amount2}-3800
-    ${due_amount3}=     roundoff    ${due_amount3}   1
 
-    Set Suite Variable   ${due_amount3}
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
 
 
 
-    ${resp}=  Create PaymentsOut With Expense   ${due_amount3}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[6]}    ${bool[1]}    ${expense_uid}       merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
+    ${resp}=  Create PaymentsOut With Expense   ${due_amount2}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[6]}    ${bool[1]}    ${expense_uid}   ${lid}    merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${payable_uid1}   ${resp.json()['uid']}
@@ -469,25 +494,25 @@ JD-TC-Create PaymentsOut With Expense--5
     ${resp}=  Get PaymentsOut By Id   ${payable_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
-    # Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
-    # Should Be Equal As Strings  ${resp.json()['isExpense']}  ${bool[1]}
-    # Should Be Equal As Strings  ${resp.json()['expenseUuid']}  ${expense_uid}
-    # Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantId']}  ${merchantId}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantKey']}  ${merchantKey}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentGateway']}  ${paymentGateway[1]}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[6]}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['orderId']}  ${orderId}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['gatewayTxnId']}  ${gatewayTxnId}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['upiId']}  ${upiId}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankaccountNo']}  ${bankaccountNo}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['ifscCode']}  ${ifsc}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankName']}  ${bankName}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['branchName']}  ${branchName}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['pancardNo']}  ${pancardNo}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['gstNumber']}  ${gstNumber}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
+    Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
+    Should Be Equal As Strings  ${resp.json()['amount']}  ${due_amount2}
+    Should Be Equal As Strings  ${resp.json()['isExpense']}  ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['expenseUuid']}  ${expense_uid}
+    Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantId']}  ${merchantId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantKey']}  ${merchantKey}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentGateway']}  ${paymentGateway[1]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[6]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['orderId']}  ${orderId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gatewayTxnId']}  ${gatewayTxnId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['upiId']}  ${upiId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankaccountNo']}  ${bankaccountNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['ifscCode']}  ${ifsc}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankName']}  ${bankName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['branchName']}  ${branchName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['pancardNo']}  ${pancardNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gstNumber']}  ${gstNumber}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
 
 JD-TC-Create PaymentsOut With Expense--6
 
@@ -498,17 +523,24 @@ JD-TC-Create PaymentsOut With Expense--6
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Get Expense By Id   ${expense_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${due_amount1}   ${resp.json()['amountDue']}
+
+    ${due_amount2}=  Evaluate  ${due_amount1}-3500
+    ${due_amount2}=     roundoff    ${due_amount2}   1
+
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
-     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundoff    ${amount}   1
+
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
 
 
 
-    ${resp}=  Create PaymentsOut With Expense   ${amount}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[7]}    ${bool[1]}    ${expense_uid}       merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
+    ${resp}=  Create PaymentsOut With Expense   ${due_amount2}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[7]}    ${bool[1]}    ${expense_uid}   ${lid}    merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${payable_uid1}   ${resp.json()['uid']}
@@ -518,7 +550,7 @@ JD-TC-Create PaymentsOut With Expense--6
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()['amount']}  ${due_amount2}
     Should Be Equal As Strings  ${resp.json()['isExpense']}  ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['expenseUuid']}  ${expense_uid}
     Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
@@ -546,6 +578,14 @@ JD-TC-Create PaymentsOut With Expense--7
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Get Expense By Id   ${expense_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${due_amount1}   ${resp.json()['amountDue']}
+
+    ${due_amount2}=  Evaluate  ${due_amount1}-3400
+    ${due_amount2}=     roundoff    ${due_amount2}   1
+
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
@@ -556,7 +596,7 @@ JD-TC-Create PaymentsOut With Expense--7
 
 
 
-    ${resp}=  Create PaymentsOut With Expense   ${amount}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[9]}    ${bool[1]}    ${expense_uid}       merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
+    ${resp}=  Create PaymentsOut With Expense   ${due_amount2}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[9]}    ${bool[1]}    ${expense_uid}   ${lid}    merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${payable_uid1}   ${resp.json()['uid']}
@@ -566,7 +606,7 @@ JD-TC-Create PaymentsOut With Expense--7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()['amount']}  ${due_amount2}
     Should Be Equal As Strings  ${resp.json()['isExpense']}  ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['expenseUuid']}  ${expense_uid}
     Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
@@ -594,17 +634,23 @@ JD-TC-Create PaymentsOut With Expense--8
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Get Expense By Id   ${expense_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${due_amount1}   ${resp.json()['amountDue']}
+
+    ${due_amount2}=  Evaluate  ${due_amount1}-3300
+    ${due_amount2}=     roundoff    ${due_amount2}   1
+
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
-     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundoff    ${amount}   1
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
 
 
 
-    ${resp}=  Create PaymentsOut With Expense   ${amount}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[4]}    ${bool[1]}    ${expense_uid}       merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
+    ${resp}=  Create PaymentsOut With Expense   ${due_amount2}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[4]}    ${bool[1]}    ${expense_uid}   ${lid}    merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${payable_uid1}   ${resp.json()['uid']}
@@ -614,7 +660,7 @@ JD-TC-Create PaymentsOut With Expense--8
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()['amount']}  ${due_amount2}
     Should Be Equal As Strings  ${resp.json()['isExpense']}  ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['expenseUuid']}  ${expense_uid}
     Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
@@ -642,17 +688,24 @@ JD-TC-Create PaymentsOut With Expense--9
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Get Expense By Id   ${expense_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${due_amount1}   ${resp.json()['amountDue']}
+
+    ${due_amount2}=  Evaluate  ${due_amount1}-3200
+    ${due_amount2}=     roundoff    ${due_amount2}   1
+
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
-     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundoff    ${amount}   1
+
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
 
 
 
-    ${resp}=  Create PaymentsOut With Expense   ${amount}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[3]}    ${bool[1]}    ${expense_uid}       merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
+    ${resp}=  Create PaymentsOut With Expense   ${due_amount2}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[3]}    ${bool[1]}    ${expense_uid}   ${lid}    merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${payable_uid1}   ${resp.json()['uid']}
@@ -662,7 +715,7 @@ JD-TC-Create PaymentsOut With Expense--9
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()['amount']}  ${due_amount2}
     Should Be Equal As Strings  ${resp.json()['isExpense']}  ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['expenseUuid']}  ${expense_uid}
     Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
@@ -690,17 +743,25 @@ JD-TC-Create PaymentsOut With Expense--10
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Get Expense By Id   ${expense_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${due_amount1}   ${resp.json()['amountDue']}
+
+    ${due_amount2}=  Evaluate  ${due_amount1}-3100
+    ${due_amount2}=     roundoff    ${due_amount2}   1
+
+
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
-     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundoff    ${amount}   1
+
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
 
 
 
-    ${resp}=  Create PaymentsOut With Expense   ${amount}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[10]}    ${bool[1]}    ${expense_uid}       merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
+    ${resp}=  Create PaymentsOut With Expense   ${due_amount2}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[10]}    ${bool[1]}    ${expense_uid}   ${lid}    merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${payable_uid1}   ${resp.json()['uid']}
@@ -710,7 +771,7 @@ JD-TC-Create PaymentsOut With Expense--10
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()['amount']}  ${due_amount2}
     Should Be Equal As Strings  ${resp.json()['isExpense']}  ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['expenseUuid']}  ${expense_uid}
     Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
@@ -738,17 +799,24 @@ JD-TC-Create PaymentsOut With Expense--11
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Get Expense By Id   ${expense_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${due_amount1}   ${resp.json()['amountDue']}
+
+    ${due_amount2}=  Evaluate  ${due_amount1}-3000
+    ${due_amount2}=     roundoff    ${due_amount2}   1
+
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
-     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundoff    ${amount}   1
+
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
 
 
 
-    ${resp}=  Create PaymentsOut With Expense   ${amount}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[13]}    ${bool[1]}    ${expense_uid}       merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
+    ${resp}=  Create PaymentsOut With Expense   ${due_amount2}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[13]}    ${bool[1]}    ${expense_uid}   ${lid}    merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${payable_uid1}   ${resp.json()['uid']}
@@ -758,7 +826,7 @@ JD-TC-Create PaymentsOut With Expense--11
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()['amount']}  ${due_amount2}
     Should Be Equal As Strings  ${resp.json()['isExpense']}  ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['expenseUuid']}  ${expense_uid}
     Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
@@ -786,17 +854,25 @@ JD-TC-Create PaymentsOut With Expense--12
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+
+    ${resp}=  Get Expense By Id   ${expense_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${due_amount1}   ${resp.json()['amountDue']}
+
+    ${due_amount2}=  Evaluate  ${due_amount1}-2900
+    ${due_amount2}=     roundoff    ${due_amount2}   1
+
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
-     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundoff    ${amount}   1
+
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
 
 
 
-    ${resp}=  Create PaymentsOut With Expense   ${amount}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[14]}    ${bool[1]}    ${expense_uid}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
+    ${resp}=  Create PaymentsOut With Expense   ${due_amount2}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[14]}    ${bool[1]}    ${expense_uid}   ${lid}   merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${payable_uid1}   ${resp.json()['uid']}
@@ -806,7 +882,7 @@ JD-TC-Create PaymentsOut With Expense--12
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()['amount']}  ${due_amount2}
     Should Be Equal As Strings  ${resp.json()['isExpense']}  ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['expenseUuid']}  ${expense_uid}
     Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
@@ -834,17 +910,24 @@ JD-TC-Create PaymentsOut With Expense--13
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Get Expense By Id   ${expense_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${due_amount1}   ${resp.json()['amountDue']}
+
+    ${due_amount2}=  Evaluate  ${due_amount1}-2800
+    ${due_amount2}=     roundoff    ${due_amount2}   1
+
+
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
-     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundoff    ${amount}   1
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
 
 
 
-    ${resp}=  Create PaymentsOut With Expense   ${amount}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[2]}    ${bool[1]}    ${expense_uid}       merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
+    ${resp}=  Create PaymentsOut With Expense   ${due_amount2}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[2]}    ${bool[1]}    ${expense_uid}   ${lid}    merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${payable_uid1}   ${resp.json()['uid']}
@@ -854,7 +937,7 @@ JD-TC-Create PaymentsOut With Expense--13
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()['amount']}  ${due_amount2}
     Should Be Equal As Strings  ${resp.json()['isExpense']}  ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['expenseUuid']}  ${expense_uid}
     Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
@@ -882,17 +965,24 @@ JD-TC-Create PaymentsOut With Expense--14
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Get Expense By Id   ${expense_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${due_amount1}   ${resp.json()['amountDue']}
+
+    ${due_amount2}=  Evaluate  ${due_amount1}-2700
+    ${due_amount2}=     roundoff    ${due_amount2}   1
+
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
-     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundoff    ${amount}   1
+
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
 
 
 
-    ${resp}=  Create PaymentsOut With Expense   ${amount}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[15]}    ${bool[1]}    ${expense_uid}       merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
+    ${resp}=  Create PaymentsOut With Expense   ${due_amount2}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[15]}    ${bool[1]}    ${expense_uid}   ${lid}    merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${payable_uid1}   ${resp.json()['uid']}
@@ -902,7 +992,7 @@ JD-TC-Create PaymentsOut With Expense--14
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()['amount']}  ${due_amount2}
     Should Be Equal As Strings  ${resp.json()['isExpense']}  ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['expenseUuid']}  ${expense_uid}
     Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
@@ -931,6 +1021,14 @@ JD-TC-Create PaymentsOut With Expense--UH1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Get Expense By Id   ${expense_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${due_amount1}   ${resp.json()['amountDue']}
+
+    ${due_amount2}=  Evaluate  ${due_amount1}-2600
+    ${due_amount2}=     roundoff    ${due_amount2}   1
+
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
@@ -941,7 +1039,7 @@ JD-TC-Create PaymentsOut With Expense--UH1
 
 
 
-    ${resp}=  Create PaymentsOut With Expense   ${amount}    ${EMPTY}   ${payableLabel}   ${finance_payment_modes[6]}    ${bool[1]}    ${expense_uid}       merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
+    ${resp}=  Create PaymentsOut With Expense   ${due_amount2}    ${EMPTY}   ${payableLabel}   ${finance_payment_modes[6]}    ${bool[1]}    ${expense_uid}   ${lid}    merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${PAID_DATE_CANNOT_BE_EMPTY}
@@ -961,7 +1059,7 @@ JD-TC-Create PaymentsOut With Expense--UH2
     ${referenceNo}=  Convert To String  ${referenceNo}
 
 
-    ${resp}=  Create PaymentsOut With Expense   ${amount}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[15]}    ${bool[1]}    ${expense_uid}      merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
+    ${resp}=  Create PaymentsOut With Expense   ${amount}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[15]}    ${bool[1]}    ${expense_uid}   ${lid}    merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -970,9 +1068,49 @@ JD-TC-Create PaymentsOut With Expense--UH3
 
     [Documentation]  Create a PaymentOut using consumer login.
 
-    ${resp}=  ConsumerLogin  ${CUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME320}  ${PASSWORD}
     Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Expense By Id   ${expense_uid}
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${due_amount1}   ${resp.json()['amountDue']}
+
+    ${due_amount2}=  Evaluate  ${due_amount1}-2500
+    ${due_amount2}=     roundoff    ${due_amount2}   1
+
+    #............provider consumer creation..........
+
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Suite Variable  ${PCPHONENO}  555${PH_Number}
+
+    ${fname}=  generate_firstname
+    Set Suite Variable  ${fname}
+    ${lastname}=  FakerLibrary.last_name
+   
+    ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lastname}  countryCode=${countryCodes[1]} 
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
 
     ${payableLabel}=   FakerLibrary.word
@@ -984,7 +1122,7 @@ JD-TC-Create PaymentsOut With Expense--UH3
     ${referenceNo}=  Convert To String  ${referenceNo}
 
 
-    ${resp}=  Create PaymentsOut With Expense   ${amount}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[15]}    ${bool[1]}    ${expense_uid}       merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
+    ${resp}=  Create PaymentsOut With Expense   ${due_amount2}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[15]}    ${bool[1]}    ${expense_uid}    ${lid}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
@@ -1008,7 +1146,7 @@ JD-TC-Create PaymentsOut With Expense--UH4
 
 
 
-    ${resp}=  Create PaymentsOut With Expense   ${EMPTY}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[6]}    ${bool[1]}    ${expense_uid}      merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
+    ${resp}=  Create PaymentsOut With Expense   ${EMPTY}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[6]}    ${bool[1]}    ${expense_uid}   ${lid}   merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${Please_enter_an_amount}
@@ -1022,27 +1160,42 @@ JD-TC-Create PaymentsOut With Expense--UH5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Get Expense By Id   ${expense_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${due_amount1}   ${resp.json()['amountDue']}
+
+    ${due_amount2}=  Evaluate  ${due_amount1}-2400
+    ${due_amount2}=     roundoff    ${due_amount2}   1
+
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
-     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundoff    ${amount}   1
+
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
 
-    ${resp}=  Create PaymentsOut With Expense   ${amount}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[6]}    ${bool[1]}    ${expense_uid}         paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}         bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
+    ${resp}=  Create PaymentsOut With Expense   ${due_amount2}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[6]}    ${bool[1]}    ${expense_uid}    ${lid}      paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}         bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${UPI_ID_CANNOT_BE_EMPTY}
 
 JD-TC-Create PaymentsOut With Expense--UH6
 
-    [Documentation]  Create a PaymentOut where payment mode is cc but details is empty.
+    [Documentation]  Payout amount is greater than expense due amount.
 
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME320}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Expense By Id   ${expense_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${due_amount1}   ${resp.json()['amountDue']}
+
+    ${due_amount2}=  Evaluate  ${due_amount1}+25000
+    ${due_amount2}=     roundoff    ${due_amount2}   1
 
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
@@ -1050,10 +1203,10 @@ JD-TC-Create PaymentsOut With Expense--UH6
     ${amount}=     roundoff    ${amount}   1
 
 
-    ${resp}=  Create PaymentsOut With Expense   ${amount}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[1]}    ${bool[1]}    ${expense_uid}   ${finance_payment_modes[1]}    
+    ${resp}=  Create PaymentsOut With Expense   ${due_amount2}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[1]}    ${bool[1]}    ${expense_uid}    ${lid}   ${finance_payment_modes[1]}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${PAYMENT_GATEWAY_CANNOT_BE_EMPTY}
+    Should Be Equal As Strings   ${resp.json()}   ${PAYOUT_AMOUNT_IS_GREATERTHAN_EXP_DUE_AMT}
 
 
 
