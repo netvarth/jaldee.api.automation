@@ -14888,6 +14888,21 @@ Get Los Lead Log
     RETURN  ${resp}
 
 
+
+Redirect LOS Lead
+    [Arguments]     ${uid}  ${stageUid}  &{kwargs}
+
+    ${data}=  Create Dictionary
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/data/redirect  data=${data}  expected_status=any
+    Check Deprication  ${resp}  Redirect LOS Lead
+    RETURN  ${resp}
+    
+
 AddItemToInvoice
    [Arguments]  ${uuid}   ${ItemLists}  &{kwargs}
     ${ItemLists}=  Create List     ${ItemLists}
