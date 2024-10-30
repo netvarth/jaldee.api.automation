@@ -13111,7 +13111,7 @@ Upload Finance Invoice Attachment
 
 Create PaymentsOut
 
-    [Arguments]    ${amount}  ${payableCategoryId}  ${paidDate}   ${payableLabel}    ${description}  ${referenceNo}  ${vendorUid}   ${paymentsOutStatus}    ${paymentStatus}    ${paymentMode}   @{vargs}    &{kwargs}
+    [Arguments]    ${amount}  ${payableCategoryId}  ${paidDate}   ${payableLabel}    ${description}  ${referenceNo}  ${vendorUid}   ${paymentsOutStatus}    ${paymentStatus}    ${paymentMode}  ${locationId}  @{vargs}    &{kwargs}
 
     ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
 
@@ -13121,7 +13121,7 @@ Create PaymentsOut
         Append To List  ${vargs}   ${ap}
         
     END
-    ${data}=  Create Dictionary  amount=${amount}   paymentsOutCategoryId=${payableCategoryId}  paidDate=${paidDate}   paymentsOutLabel=${payableLabel}  description=${description}    referenceNo=${referenceNo}  vendorUid=${vendorUid}    paymentsOutStatus=${paymentsOutStatus}    paymentStatus=${paymentStatus}    paymentInfo=${paymentMode}
+    ${data}=  Create Dictionary  amount=${amount}   paymentsOutCategoryId=${payableCategoryId}  paidDate=${paidDate}   paymentsOutLabel=${payableLabel}  description=${description}    referenceNo=${referenceNo}  vendorUid=${vendorUid}    paymentsOutStatus=${paymentsOutStatus}    paymentStatus=${paymentStatus}    paymentInfo=${paymentMode}   locationId=${locationId}
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${paymentMode}   ${key}=${value}
     END
@@ -14887,7 +14887,7 @@ Get Los Lead Log
     Check Deprication  ${resp}  Get Los Lead Log
     RETURN  ${resp}
 
-    
+
 AddItemToInvoice
    [Arguments]  ${uuid}   ${ItemLists}  &{kwargs}
     ${ItemLists}=  Create List     ${ItemLists}
