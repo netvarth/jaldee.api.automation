@@ -1661,6 +1661,7 @@ CANNOT_ASSIGN_DISABLED_LOCATION= "Cannot assign disabled location to user"
 NOT_PERMITTED_TO_CREATE_LOCATION= "You are not permitted to create new location"
 CANNOT_ASSIGN_TEAM="You are not  allowed to assign a team to this booking"
 DISABLED_USER_CANT_ADD_TOTEAM= "Disabled users cannot be added to team"
+ALREADY_UNASSIGNED = "Already unasigned"
 
 #Internal Status
 NOT_SERVICE_STATUS= "No such status found"
