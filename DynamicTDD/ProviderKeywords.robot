@@ -13170,6 +13170,27 @@ Update PaymentsOut
     Check Deprication  ${resp}  Update PaymentsOut
     RETURN  ${resp}
 
+Update PaymentsOut With Expense
+
+    [Arguments]     ${payOutUuid}     ${paymentsOutCategoryId}  ${categoryName}   ${amount}   ${paymentMode}    ${paidDate}  ${locationId}  @{vargs}    &{kwargs}
+
+    ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
+
+    ${len}=  Get Length  ${vargs}
+    FOR    ${index}    IN RANGE  1  ${len}
+        # ${ap}=  Create Dictionary  id=${vargs[${index}]}
+        Append To List  ${vargs}   ${ap}
+        
+    END
+    ${data}=  Create Dictionary  paymentsOutCategoryId=${paymentsOutCategoryId}    categoryName=${categoryName}   amount=${amount}  paymentInfo=${paymentMode}    paidDate=${paidDate}   locationId=${locationId}     
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${paymentMode}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/paymentsOut/${payOutUuid}    data=${data}  expected_status=any    headers=${headers}
+    RETURN  ${resp}
+
 Get PaymentsOut By Id
 
     [Arguments]   ${uid}  
