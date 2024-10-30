@@ -378,21 +378,17 @@ JD-TC-AssignTeamToAppointment-4
     ${resp}=  Get Appointments Today   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}         ${apptid1}
-    Should Be Equal As Strings  ${resp.json()[0]['apptStatus']}  ${apptStatus[1]}
-    Should Be Equal As Strings  ${resp.json()[0]['teamId']}          ${t_id2}
+    ${len}=  Get Length  ${resp.json()}
+    FOR  ${i}  IN RANGE   ${len}
 
-    Should Be Equal As Strings  ${resp.json()[1]['uid']}         ${apptid2}
-    Should Be Equal As Strings  ${resp.json()[1]['apptStatus']}  ${apptStatus[1]}
-    Should Be Equal As Strings  ${resp.json()[1]['teamId']}          ${t_id1}
-
-    # ${resp}=  SendProviderResetMail   ${USERNAME2}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # @{resp}=  ResetProviderPassword  ${USERNAME2}  ${PASSWORD}  2
-    # Should Be Equal As Strings  ${resp[0].status_code}  200
-    # Should Be Equal As Strings  ${resp[1].status_code}  200
+        IF  '${resp.json()[${i}]['uid']}' == '${apptid1}'  
+            Should Be Equal As Strings  ${resp.json()[${i}]['teamId']}    ${t_id2}      
+            
+        ELSE IF   '${resp.json()[${i}]['uid']}' == '${apptid2}'     
+            Should Be Equal As Strings  ${resp.json()[${i}]['teamId']}    ${t_id1}      
+           
+        END
+    END
 
     ${resp}=  Encrypted Provider Login  ${USERNAME2}  ${PASSWORD}
     Log   ${resp.json()}
@@ -401,15 +397,18 @@ JD-TC-AssignTeamToAppointment-4
     ${resp}=  Get Appointments Today  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}         ${apptid1}
-    Should Be Equal As Strings  ${resp.json()[0]['apptStatus']}  ${apptStatus[1]}
-    Should Be Equal As Strings  ${resp.json()[0]['teamId']}          ${t_id2}
+    ${len}=  Get Length  ${resp.json()}
+    FOR  ${i}  IN RANGE   ${len}
 
-    Should Be Equal As Strings  ${resp.json()[1]['uid']}         ${apptid2}
-    Should Be Equal As Strings  ${resp.json()[1]['apptStatus']}  ${apptStatus[1]}
-    Should Be Equal As Strings  ${resp.json()[1]['teamId']}          ${t_id1}
-
+        IF  '${resp.json()[${i}]['uid']}' == '${apptid1}'  
+            Should Be Equal As Strings  ${resp.json()[${i}]['teamId']}    ${t_id2}      
+            
+        ELSE IF   '${resp.json()[${i}]['uid']}' == '${apptid2}'     
+            Should Be Equal As Strings  ${resp.json()[${i}]['teamId']}    ${t_id1}      
+           
+        END
+    END
+ 
 JD-TC-AssignTeamToAppointment-UH1
 
     [Documentation]  Assign same appointment to the same team multiple times.

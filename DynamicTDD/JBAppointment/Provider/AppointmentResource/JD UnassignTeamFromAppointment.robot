@@ -166,16 +166,16 @@ JD-TC-UnassignTeamFromAppointment-1
 
 JD-TC-AssignTeamToAppointment-UH1
 
-    [Documentation]  Assign same appointment to the same team multiple times.
+    [Documentation]  UnAssign same appointment and the same team multiple times.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   Assign Team To Appointment  ${apptid1}  ${t_id2}
+    ${resp}=   Unassign Team From Appointment  ${apptid1}  ${t_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}       ${TEAM_ALREADY_ASSIGNED}
+    Should Be Equal As Strings  ${resp.json()}       ${ALREADY_UNASSIGNED}
 
 
 JD-TC-AssignTeamToAppointment-UH2

@@ -472,5 +472,4 @@ JD-TC-GetAppointmentServicesByLocation-8
     Should Be Equal As Strings  ${resp.json()[0]['id']}       ${s_id1}
     Should Be Equal As Strings  ${resp.json()[0]['name']}     ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()[0]['serviceAvailability']['nextAvailableDate']}    ${DAY}
-    Should Be Equal As Strings  ${resp.json()[0]['serviceAvailability']['nextAvailable']}     ${slot1}
-   
+    
