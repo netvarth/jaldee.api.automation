@@ -2137,6 +2137,7 @@ Draft_status="This invoice is in the 'Draft 'status"
 CANNOT_DISABLE_FINANCE="Can not disable Finance Manager since services with amount exists"
 NEED_AMOUNT_HIGHER_THAN_DISCOUNT="To apply the discount , amount needs to be higher than the discount" 
 Please_enter_an_amount="Please enter an amount"
+PAYOUT_AMOUNT_IS_GREATERTHAN_EXP_DUE_AMT ="Payout amount is greater than expense due amount";
 
 
 # ........Membership  ...............
