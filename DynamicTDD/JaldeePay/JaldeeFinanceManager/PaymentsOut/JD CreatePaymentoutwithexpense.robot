@@ -1177,8 +1177,9 @@ JD-TC-Create PaymentsOut With Expense--UH5
 
     ${resp}=  Create PaymentsOut With Expense   ${due_amount2}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[6]}    ${bool[1]}    ${expense_uid}    ${lid}      paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}         bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}   
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${UPI_ID_CANNOT_BE_EMPTY}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # No need Validation Since We are allowing Pay by Others as CC/DC/NB/UPI But they may not track the Transaction ID/UPI ID
+    # Should Be Equal As Strings   ${resp.json()}   ${UPI_ID_CANNOT_BE_EMPTY}
 
 JD-TC-Create PaymentsOut With Expense--UH6
 
