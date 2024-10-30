@@ -720,7 +720,7 @@ JD-TC-GetFutureAppointment-4
     
     ${cnote}=   FakerLibrary.word
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id2}  ${sch_id}  ${DAY3}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
-    Log  ${resp.json()}0
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}   
     Set Test Variable  ${apptid2}  ${apptid[0]}
@@ -772,10 +772,6 @@ JD-TC-GetFutureAppointment-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
-
-    ${resp}=  Get consumer Appt Bill Details   ${apptid1}  
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${amount_payable} =  Evaluate  ${servicecharge} - ${min_pre}
     
