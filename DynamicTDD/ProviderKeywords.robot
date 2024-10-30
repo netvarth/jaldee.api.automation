@@ -13134,7 +13134,7 @@ Create PaymentsOut
 
 Create PaymentsOut With Expense
 
-    [Arguments]    ${amount}  ${paidDate}   ${paymentsOutLabel}   ${paymentMode}    ${isExpense}  ${expenseUuid}   @{vargs}    &{kwargs}
+    [Arguments]    ${amount}  ${paidDate}   ${paymentsOutLabel}   ${paymentMode}    ${isExpense}  ${expenseUuid}  ${locationId}   @{vargs}    &{kwargs}
 
     ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
 
@@ -13144,9 +13144,9 @@ Create PaymentsOut With Expense
         Append To List  ${vargs}   ${ap}
         
     END
-    ${data}=  Create Dictionary  amount=${amount}    paidDate=${paidDate}   paymentsOutLabel=${paymentsOutLabel}  isExpense=${isExpense}    expenseUuid=${expenseUuid}         paymentInfo=${paymentMode}
+    ${data}=  Create Dictionary  amount=${amount}    paidDate=${paidDate}   paymentsOutLabel=${paymentsOutLabel}  isExpense=${isExpense}    expenseUuid=${expenseUuid}    locationId=${locationId}     paymentInfo=${paymentMode}
     FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
+        Set To Dictionary  ${paymentMode}   ${key}=${value}
     END
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
@@ -14879,7 +14879,15 @@ Update Los Lead Stage Status
     Check Deprication  ${resp}  Update Los Lead Stage Status
     RETURN  ${resp}
 
+Get Los Lead Log
+    [Arguments]      ${leadUid}  
 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/los/lead/${leadUid}/stage/withlog  expected_status=any
+    Check Deprication  ${resp}  Get Los Lead Log
+    RETURN  ${resp}
+
+    
 AddItemToInvoice
    [Arguments]  ${uuid}   ${ItemLists}  &{kwargs}
     ${ItemLists}=  Create List     ${ItemLists}
