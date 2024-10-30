@@ -1837,7 +1837,8 @@ Get NonDental Treatment Plan By case Id
     RETURN  ${resp}
 
 Create Prescription 
-    [Arguments]    ${providerConsumerId}    ${userId}    ${caseId}       ${dentalRecordId}    ${html}      @{vargs}    &{kwargs}
+    ##... removed  caseId=${caseId}   dentalRecordId=${dentalRecordId}  from old create prescription keyword
+    [Arguments]    ${providerConsumerId}    ${userId}    ${html}      @{vargs}    &{kwargs}
     ${len}=  Get Length  ${vargs}
     ${mrPrescriptions}=  Create List  
 
@@ -1845,7 +1846,7 @@ Create Prescription
         Exit For Loop If  ${len}==0
         Append To List  ${mrPrescriptions}  ${vargs[${index}]}
     END
-    ${data}=    Create Dictionary    providerConsumerId=${providerConsumerId}    doctorId=${userId}    caseId=${caseId}      dentalRecordId=${dentalRecordId}    html=${html}    mrPrescriptions=${mrPrescriptions}    
+    ${data}=    Create Dictionary    providerConsumerId=${providerConsumerId}    doctorId=${userId}    html=${html}    mrPrescriptions=${mrPrescriptions}    
     Check And Create YNW Session
      FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
