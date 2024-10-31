@@ -645,6 +645,7 @@ JD-TC-GetAppointmentToday-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${fname}   ${resp.json()['firstName']}
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
@@ -673,7 +674,7 @@ JD-TC-GetAppointmentToday-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Make payment Consumer Mock  ${account_id}  ${prepay_amt}  ${purpose[0]}  ${apptid1}  ${s_id}  ${bool[0]}   ${bool[1]}  ${None}
+    ${resp}=  Make payment Consumer Mock  ${account_id}  ${prepay_amt}  ${purpose[0]}  ${apptid1}  ${s_id}  ${bool[0]}   ${bool[1]}  ${cid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2181,6 +2182,7 @@ JD-TC-GetAppointmentToday-24
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${fname}   ${resp.json()['firstName']}
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id1}
     Log  ${resp.content}
@@ -2205,7 +2207,7 @@ JD-TC-GetAppointmentToday-24
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid2}=  Get From Dictionary  ${resp.json()}  ${fname}
 
-    ${resp}=  Make payment Consumer Mock  ${account_id}  ${min_pre}  ${purpose[0]}  ${apptid2}  ${s_id}  ${bool[0]}   ${bool[1]}  ${None}
+    ${resp}=  Make payment Consumer Mock  ${account_id}  ${min_pre}  ${purpose[0]}  ${apptid2}  ${s_id}  ${bool[0]}   ${bool[1]}  ${cid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
