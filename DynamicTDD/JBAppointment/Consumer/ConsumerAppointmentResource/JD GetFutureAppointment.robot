@@ -65,13 +65,27 @@ JD-TC-GetFutureAppointment-1
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
-    ${lid}=  Create Sample Location
-    Set Suite Variable   ${lid}
+    # ${lid}=  Create Sample Location
+    # Set Suite Variable   ${lid}
 
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
+    # ${resp}=   Get Location ById  ${lid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+    ${resp}=    Get Locations
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     # FOR  ${i}  IN RANGE   5
     #     ${city1}=   get_place

@@ -49,7 +49,7 @@ Get Billable Subdomain
 
 
 *** Test Cases ***
-
+*** Comments ***
 JD-TC-Take Appointment-1
 
     [Documentation]  Consumer takes appointment for a valid Provider
@@ -57,7 +57,7 @@ JD-TC-Take Appointment-1
     ${firstname}  ${lastname}  ${PUSERNAME_B}  ${LoginId}=  Provider Signup
     Set Suite Variable  ${PUSERNAME_B}
 
-    sleep   02s
+    # sleep   02s
 
     ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
     Log   ${resp.json()}
@@ -790,7 +790,7 @@ JD-TC-Take Appointment-9
         ${resp}=   Enable Disable Appointment   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
-    sleep   01s
+    # sleep   01s
     
     ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[0]}  ${boolean[0]}
     Log  ${resp.content}
@@ -1463,7 +1463,7 @@ JD-TC-Take Appointment-13
 
 
 
-    sleep  2s
+    # sleep  2s
     ${resp}=  Cancel Appointment By Consumer  ${apptid1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1726,10 +1726,10 @@ JD-TC-Take Appointment-15
     [Documentation]  Consumer takes an appointment for consumer and 2 family members, and then takes same appt again for same service with 1 family member
     
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${HLPUSERNAME2}
+    ${pid}=  get_acc_id  ${HLPUSERNAME20}
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -1760,7 +1760,7 @@ JD-TC-Take Appointment-15
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
-    # clear_appt_schedule   ${HLPUSERNAME2}
+    # clear_appt_schedule   ${HLPUSERNAME20}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -3335,7 +3335,7 @@ JD-TC-Take Appointment-UH8
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    sleep  01s
+    # sleep  01s
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -3477,130 +3477,7 @@ JD-TC-Take Appointment-UH8
     END
       
 
-JD-TC-Take Appointment-UH9
-	[Documentation]  Passing Invalid provider in the Take an appointment
-   
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME104}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-    # ${invalid}=  get_acc_id  ${Invalid_CUSER}
 
-    ${pid3}=  get_acc_id  ${PUSERNAME104}
-    Set Suite Variable   ${pid3}
-    ${invalid}=  Evaluate  ${pid3}+8000000000
-    ${cid4}=  get_id  ${CUSERNAME4}
-
-    # clear_service   ${PUSERNAME104}
-    # clear_location  ${PUSERNAME104}
-    # clear_appt_schedule   ${PUSERNAME104}
-
-    ${p1_s1}=  Create Sample Service  ${SERVICE1}
-    Set Suite Variable   ${p1_s1}
-    ${SERVICE2}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE2}
-    ${p1_s2}=  Create Sample Service  ${SERVICE2}
-    Set Suite Variable   ${p1_s2}
-
-    ${resp}=   Get License UsageInfo 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    reset_queue_metric  ${pid3}
-
-    ${p1_l1}=  Create Sample Location
-    Set Suite Variable   ${p1_l1}
-
-    ${resp}=   Get Location ById  ${p1_l1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-
-    ${resp}=  Get Appointment Schedules
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Queues
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=   Get License UsageInfo 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    Set Suite Variable   ${DAY1}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10       
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${Empty}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${p1_l1}  ${duration}  ${bool1}   ${p1_s1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${sch_id1}  ${resp.json()}
-    
-    ${resp}=  Get Appointment Schedule ById  ${sch_id1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id1}   name=${schedule_name}  apptState=${Qstate[0]}
-
-    ${resp}=   Get License UsageInfo 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${p1_s1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id1}
-    Set Suite Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
-    ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
-    ${apptfor1}=   Create List  ${apptfor1}
-    Set Suite Variable   ${apptfor1}   
-
-   #............provider consumer creation..........
-
-
-    ${f_Name}=  generate_firstname
-    Set Suite Variable  ${f_Name}
-    ${l_Name}=  FakerLibrary.last_name
-    
-    ${resp}=  AddCustomer  ${CUSERNAME4}    firstName=${f_Name}   lastName=${l_Name}  countryCode=${countryCodes[1]}  
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME4}  
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}  200
- 
-
-    ${resp}=  ProviderLogout
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Send Otp For Login    ${CUSERNAME4}    ${pid3}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token1}  ${resp.json()['token']}
-
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME4}    ${pid3}  ${token1} 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${cnote}=   FakerLibrary.word
-    ${resp}=   Customer Take Appointment   ${invalid}  ${p1_s1}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  "${resp.json()}"   "${ACCOUNT_NOT_EXIST}"    
-    Should Be Equal As Strings  ${resp.status_code}  404
 
 JD-TC-Take Appointment-UH10    
     [Documentation]   Consumer trying to take an Appointment without login
@@ -4046,6 +3923,7 @@ JD-TC-Take Appointment-UH12
     Should Be Equal As Strings  "${resp.json()}"  "${APPOINTMET_SLOT_NOT_AVAILABLE}" 
 
 
+*** Test Cases ***
 JD-TC-Take Appointment-18
     [Documentation]  consumer takes appt for a slot with another appt taken by provider when parallen serving >1
 
@@ -4159,7 +4037,7 @@ JD-TC-Take Appointment-18
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=2  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
+    ${maxval}=  Convert To Integer   ${delta/5}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
@@ -4209,7 +4087,7 @@ JD-TC-Take Appointment-18
     Should Be Equal As Strings  ${resp.status_code}  200
     ${encId1}=  Set Variable   ${resp.json()}
     
-    sleep   1s
+    # sleep   1s
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -4257,7 +4135,7 @@ JD-TC-Take Appointment-18
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME15}    ${pid_HL}  ${token7} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${cid1}  ${resp.json()['id']}
+    Set Test Variable  ${cid1}  ${resp.json()['providerConsumer']}
 
     # ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${pid}
     # Log  ${resp.content}
@@ -4383,7 +4261,7 @@ JD-TC-Take Appointment-18
     Should Be Equal As Strings  ${resp.status_code}  200
     ${encId2}=  Set Variable   ${resp.json()}
 
-    sleep  2s
+    # sleep  2s
     ${resp}=  Get Appointments Today
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -4405,7 +4283,7 @@ JD-TC-Take Appointment-18
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  1
 
-
+*** Comments ***
 JD-TC-Take Appointment-19
     [Documentation]  Consumer takes appointment for a valid Provider with different phone number for notification
     # ${resp}=  Consumer Login  ${CUSERNAME7}  ${PASSWORD}
@@ -4768,7 +4646,7 @@ JD-TC-Take Appointment-21
 
     END
     
-    sleep  2s
+    # sleep  2s
     ${dep_name1}=  FakerLibrary.bs
     ${dep_code1}=   Random Int  min=100   max=999
     ${dep_desc1}=   FakerLibrary.word  
@@ -5505,6 +5383,131 @@ JD-TC-Take Appointment-23
 
 JD-TC-Take Appointment-24
     [Documentation]  International Consumer takes appointment for a user
+
+JD-TC-Take Appointment-UH9
+	[Documentation]  Passing Invalid provider in the Take an appointment
+   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME104}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    # ${invalid}=  get_acc_id  ${Invalid_CUSER}
+
+    ${pid3}=  get_acc_id  ${PUSERNAME104}
+    Set Suite Variable   ${pid3}
+    ${invalid}=  Evaluate  ${pid3}+8000000000
+    ${cid4}=  get_id  ${CUSERNAME4}
+
+    # clear_service   ${PUSERNAME104}
+    # clear_location  ${PUSERNAME104}
+    # clear_appt_schedule   ${PUSERNAME104}
+
+    ${p1_s1}=  Create Sample Service  ${SERVICE1}
+    Set Suite Variable   ${p1_s1}
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+    ${p1_s2}=  Create Sample Service  ${SERVICE2}
+    Set Suite Variable   ${p1_s2}
+
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    reset_queue_metric  ${pid3}
+
+    ${p1_l1}=  Create Sample Location
+    Set Suite Variable   ${p1_l1}
+
+    ${resp}=   Get Location ById  ${p1_l1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+    ${resp}=  Get Appointment Schedules
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Queues
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_two   ${sTime1}  ${delta}
+    ${schedule_name}=  FakerLibrary.bs
+    ${maxval}=  Convert To Integer   ${delta/2}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${bool1}=  Random Element  ${bool}
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable   ${DAY1}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10       
+    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${Empty}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${p1_l1}  ${duration}  ${bool1}   ${p1_s1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sch_id1}  ${resp.json()}
+    
+    ${resp}=  Get Appointment Schedule ById  ${sch_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${sch_id1}   name=${schedule_name}  apptState=${Qstate[0]}
+
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${p1_s1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id1}
+    Set Suite Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+    ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
+    ${apptfor1}=   Create List  ${apptfor1}
+    Set Suite Variable   ${apptfor1}   
+
+   #............provider consumer creation..........
+
+
+    ${f_Name}=  generate_firstname
+    Set Suite Variable  ${f_Name}
+    ${l_Name}=  FakerLibrary.last_name
+    
+    ${resp}=  AddCustomer  ${CUSERNAME4}    firstName=${f_Name}   lastName=${l_Name}  countryCode=${countryCodes[1]}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME4}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+ 
+
+    ${resp}=  ProviderLogout
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME4}    ${pid3}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token1}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME4}    ${pid3}  ${token1} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=   Customer Take Appointment   ${invalid}  ${p1_s1}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  "${resp.json()}"   "${ACCOUNT_NOT_EXIST}"    
+    Should Be Equal As Strings  ${resp.status_code}  404
 
 
 
