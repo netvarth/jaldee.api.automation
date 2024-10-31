@@ -14981,10 +14981,10 @@ Save And Proceed LOS Lead Kyc
     RETURN  ${resp}
 
 Verift Los Lead Kyc 
-    [Arguments]  ${uid}  ${stageUid}
+    [Arguments]  ${uid}  ${stageUidKyc}
 
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/kyc/data/verify  expected_status=any
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${leadUid}/stage/${stageUidKyc}/kycverification/data/proceed  expected_status=any
     RETURN  ${resp}
 
 Save LOS Lead As Draft For SALESFIELD
