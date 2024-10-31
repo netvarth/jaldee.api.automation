@@ -337,11 +337,18 @@ JD-TC-Take Appointment-UH13
     Set Suite Variable   ${family_lname}
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMember   ${family_fname1}  ${family_lname1}  ${dob}  ${gender}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200  
-    Set Test Variable  ${cidfor}   ${resp.json()}
+    # ${resp}=  AddFamilyMember   ${family_fname1}  ${family_lname1}  ${dob}  ${gender}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200  
+    # Set Test Variable  ${cidfor}   ${resp.json()}
 
+    ${primnum}  FakerLibrary.Numerify   text=%%%%%%%%%%
+    ${address}  FakerLibrary.address
+
+    ${resp}=    Create Family Member       ${family_fname1}  ${family_lname1}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${cidfor}   ${resp.json()}
 
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id2}
@@ -447,12 +454,18 @@ JD-TC-Take Appointment-5
     Set Suite Variable   ${family_lname2}
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMember   ${family_fname2}  ${family_lname2}  ${dob}  ${gender}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200  
+    # ${resp}=  AddFamilyMember   ${family_fname2}  ${family_lname2}  ${dob}  ${gender}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200  
+    # Set Suite Variable  ${cidfor2}   ${resp.json()}
+
+    ${primnum}  FakerLibrary.Numerify   text=%%%%%%%%%%
+    ${address}  FakerLibrary.address
+
+    ${resp}=    Create Family Member       ${family_fname2}  ${family_lname2}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${cidfor2}   ${resp.json()}
-
-
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id2}
     Log  ${resp.content}

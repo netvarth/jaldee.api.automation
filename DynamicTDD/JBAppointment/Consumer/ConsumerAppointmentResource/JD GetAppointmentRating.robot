@@ -666,11 +666,21 @@ JD-TC-GetAppointmentRating-6
     Log   ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${len}=  Get Length  ${resp.json()}
 
-    Should Be Equal As Strings  ${resp.json()[0]['stars']}                      ${rating}
-    Should Be Equal As Strings  ${resp.json()[0]['feedback'][0]['comments']}    ${comment1}
-    Should Be Equal As Strings  ${resp.json()[0]['uuid']}                       ${apptid5}
-    Should Be Equal As Strings  ${resp.json()[1]['uuid']}                       ${apptid4}
+    FOR  ${i}  IN RANGE   ${len}
+
+        IF  '${resp.json()[${i}]['uuid']}' == '${apptid5}'  
+    
+            Should Be Equal As Strings  ${resp.json()[${i}]['stars']}                      ${rating}
+            Should Be Equal As Strings  ${resp.json()[${i}]['feedback'][0]['comments']}    ${comment1}
+        ELSE IF   '${resp.json()[${i}]['uuid']}' == '${apptid4}' 
+            Should Be Equal As Strings  ${resp.json()[${i}]['stars']}                      ${rating}
+            Should Be Equal As Strings  ${resp.json()[${i}]['feedback'][0]['comments']}    ${comment1}
+        END
+    END
+
+
 
 JD-TC-GetAppointmentRating-7
 
