@@ -3697,13 +3697,13 @@ JD-TC-Take Appointment-36
 
     [Documentation]  take appointments for service with prepayment but prepayment not done by consumer and try to take appointment for another slot
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME218}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
   
     # clear_service   ${PUSERNAME_Z}
     # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    clear_customer   ${PUSERNAME218}
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -3815,7 +3815,7 @@ JD-TC-Take Appointment-36
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME218}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3864,7 +3864,7 @@ JD-TC-Take Appointment-36
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME218}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3876,12 +3876,12 @@ JD-TC-Take Appointment-37
 
     [Documentation]  take appointments for service with prepayment but prepayment not done by consumer, cancel that appointment and try to take appointment for another slot
    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME190}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
   
     # clear_service   ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    clear_customer   ${PUSERNAME190}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -4012,7 +4012,7 @@ JD-TC-Take Appointment-37
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME190}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4067,7 +4067,7 @@ JD-TC-Take Appointment-37
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME190}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -6117,7 +6117,7 @@ JD-TC-Take Appointment-UH30
 
     [Documentation]  take an appt from consumer side on prepayment service, without making payment, take appt for same consumer on the same schedule and slot from provider side.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME191}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -6232,7 +6232,7 @@ JD-TC-Take Appointment-UH30
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME191}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
