@@ -260,6 +260,7 @@ JD-TC-Get consumer Appt Bill Details-2
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
@@ -455,6 +456,7 @@ JD-TC-Get consumer Appt Bill Details-3
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
@@ -498,6 +500,10 @@ JD-TC-Get consumer Appt Bill Details-3
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO1}   
+    Log  ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  200
   
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -725,8 +731,12 @@ JD-TC-Get consumer Appt Bill Details-4
     Set Suite Variable  ${fname2}
     ${lname2}=  FakerLibrary.last_name
     Set Suite Variable  ${lname2}
-    
-    ${resp}=  AddCustomer  ${PCPHONENO2}    firstName=${fname2}   lastName=${lname2}  countryCode=${countryCodes[1]} 
+
+
+    Set Test Variable  ${consumerEmail}  ${PCPHONENO2}${fname2}.${test_mail}
+
+
+    ${resp}=  AddCustomer  ${PCPHONENO2}    firstName=${fname2}   lastName=${lname2}  countryCode=${countryCodes[1]}   email=${consumerEmail} 
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

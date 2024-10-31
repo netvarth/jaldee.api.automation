@@ -65,29 +65,9 @@ JD-TC-GetAppointmentTodayCount-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # FOR  ${i}  IN RANGE   5
-    #     ${city1}=   get_place
-    #     Exit For Loop If  '${city1}' != '${city}'
-    # END
-    # Set Test Variable  ${city}  ${city1}  
     
     ${list}=  Create List  1  2  3  4  5  6  7
-    # ${sTime1}=  db.get_time_by_timezone  ${tz}
-    # ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    # ${eTime1}=  add_two   ${sTime1}  ${delta}
-    # ${DAY1}=  db.get_date_by_timezone  ${tz}
-    # Set Suite Variable   ${DAY1}
 
-    # ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    # ${tz1}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    # Set Suite Variable  ${tz1}
-    # ${parking}    Random Element     ${parkingType} 
-    # ${24hours}    Random Element    ['True','False']
-    # ${url}=   FakerLibrary.url
-    # ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable  ${lid1}  ${resp.json()}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
@@ -366,9 +346,10 @@ JD-TC-GetAppointmentTodayCount-1
     Set Suite Variable   ${family_lname3}
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMember   ${family_fname3}  ${family_lname3}  ${dob}  ${gender}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200  
+
+    ${resp}=    Create Family Member       ${family_fname3}  ${family_lname3}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${cidfor3}   ${resp.json()}
 
     ${resp}=  ListFamilyMember

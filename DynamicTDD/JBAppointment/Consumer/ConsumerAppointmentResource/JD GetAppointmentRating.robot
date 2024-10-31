@@ -521,7 +521,7 @@ JD-TC-GetAppointmentRating-3
     # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Customer Take Appointment  ${account_id}   ${ser_id}  ${schedule_id}  ${DAY2}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    ${resp}=   Customer Take Appointment  ${account_id}   ${ser_id}  ${schedule_id}  ${DAY2}  ${cnote}  ${apptfor}  location=${{str('${lid1}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -613,7 +613,7 @@ JD-TC-GetAppointmentRating-4
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${account_id1}  ${ser_id}  ${schedule_id}  ${DAY4}  ${cnote}   ${apptfor}  location=${{str('${lid}')}}
+    ${resp}=   Customer Take Appointment   ${account_id1}  ${ser_id}  ${schedule_id}  ${DAY4}  ${cnote}   ${apptfor}  location=${{str('${lid1}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -666,8 +666,6 @@ JD-TC-GetAppointmentRating-6
     Log   ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${len}=  Get Length  ${resp.json()}
-    # Should Be Equal As Integers  ${len}  2
 
     Should Be Equal As Strings  ${resp.json()[0]['stars']}                      ${rating}
     Should Be Equal As Strings  ${resp.json()[0]['feedback'][0]['comments']}    ${comment1}
@@ -697,16 +695,7 @@ JD-TC-GetAppointmentRating-8
 
     [Documentation]  Get Appointment Rating filter by past date. 
 
-    # ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
-    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=  Get Location By Id   ${lid1} 
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${tz}  ${resp.json()['timezone']}
-    
-    # ${resp}=  ProviderLogout 
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
     Log   ${resp.content}

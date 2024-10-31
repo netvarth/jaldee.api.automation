@@ -1124,7 +1124,7 @@ JD-TC-GetAppointmentMeetingDetails-7
 
     ${cnote}=   FakerLibrary.word
     ${virtualService}=  Create Dictionary   ${CallingModes[0]}=${ZOOM_pid2}
-    ${resp}=  Take Appointment For Consumer  ${pcid0}  ${p2_s1}  ${sch_id2}  ${DAY1}  ${cnote}  ${apptfor}   virtualService=${virtualService}  location=${{str('${p1_l1}')}}
+    ${resp}=  Take Appointment For Consumer  ${pcid0}  ${p2_s1}  ${sch_id2}  ${DAY1}  ${cnote}  ${apptfor}   virtualService=${virtualService}  location=${{str('${p2_l1}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
