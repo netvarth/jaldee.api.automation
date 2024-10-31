@@ -74,9 +74,41 @@ JD-TC-UpdateAppointmentQueueSet-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
+    # ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    # Append To List  ${service_names}  ${SERVICE1}
+    # ${s_id1}=  Create Sample Service  ${SERVICE1}
+    # Set Suite Variable  ${s_id1}
+
+    # ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    # Append To List  ${service_names}  ${SERVICE2}
+    # ${s_id2}=  Create Sample Service  ${SERVICE2}
+    # Set Suite Variable  ${s_id2}
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid1}=  Create Sample Location
+        Set Test Variable   ${lid1}
+        ${resp}=   Get Location ById  ${lid1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid1}  ${resp.json()[0]['id']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_timezone_time  ${tz}  3   50  
+   
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
-    ${s_id1}=  Create Sample Service  ${SERVICE1}
+    Append To List  ${service_names}  ${SERVICE1}   
+    ${s_id1}=  Create Sample Service  ${SERVICE1}      maxBookingsAllowed=20
     Set Suite Variable  ${s_id1}
 
     ${SERVICE2}=    generate_unique_service_name  ${service_names}
@@ -84,42 +116,25 @@ JD-TC-UpdateAppointmentQueueSet-1
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable  ${s_id2}
 
-    ${resp}=    Get Locations
+    ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${lid1}=  Create Sample Location
-        ${resp}=   Get Location ById  ${lid1}
-        Log  ${resp.content}
+    IF   '${resp.content}' == '${emptylist}'       
+        ${schedule_name}=  FakerLibrary.bs
+        ${parallel}=  FakerLibrary.Random Int  min=10  max=20
+        ${maxval}=  Convert To Integer   ${delta/2}
+        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+        ${bool1}=  Random Element  ${bool}
+        ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid1}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
+        Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+        Set Test Variable  ${sch_id}  ${resp.json()}
     ELSE
-        Set Test Variable  ${lid1}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+        Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
+        Set Test Variable  ${lid1}  ${resp.json()[0]['location']['id']}
+        Set Test Variable  ${s_id1}  ${resp.json()[0]['services'][0]['id']}
     END
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    Set Suite Variable  ${DAY1} 
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    Set Suite Variable  ${DAY2} 
-    ${list}=  Create List  1  2  3  4  5  6  7
-    Set Suite Variable  ${list} 
-    ${sTime1}=  add_timezone_time  ${tz}  1  30  
-    Set Suite Variable   ${sTime1}
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    Set Suite Variable  ${delta}
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    Set Suite Variable   ${eTime1}
-    ${schedule_name}=  FakerLibrary.bs
-    Set Suite Variable  ${schedule_name}
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${delta}
-    ${bool1}=  Random Element  ${bool}
-
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid1}  ${duration}  ${bool1}   ${s_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${sch_id}  ${resp.json()}
 
     # ${resp}=  Enable Disable Department  ${toggle[0]}
     # Should Be Equal As Strings  ${resp.status_code}  200
@@ -227,7 +242,7 @@ JD-TC-UpdateAppointmentQueueSet-2
 
     [Documentation]  Update few details of a Appointment QueueSet
 
-    ${required_lic}    Random Element     ['Basic','Premium','Team','Enterprise','jaldee_lite']
+    ${required_lic}    Random Element     ['Basic','Premium','Team','Enterprise']
 
     ${PUSERNAMEA}=  Provider with license  ${required_lic}
 

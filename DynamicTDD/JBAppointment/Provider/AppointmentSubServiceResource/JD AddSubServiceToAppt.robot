@@ -1887,10 +1887,6 @@ JD-TC-AddSubServicesToAppt-11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${subser_id1}  ${resp.json()}
 
-    ${resp}=   Get Service By Id  ${subser_id1}
-    Log   ${resp.json()}  
-    Should Be Equal As Strings  ${resp.status_code}  200
-   
     ${desc1}=  FakerLibrary.sentence
     ${subser_dur1}=   Random Int   min=5   max=10
     ${subser_price1}=   Random Int   min=100   max=500

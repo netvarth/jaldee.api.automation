@@ -1786,10 +1786,15 @@ JD-TC-ChangeAppointmentStatus-11
     Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings    ${resp.json()}    ${APPT_STATUS_NOT_CHANGEABLE}
 
-    ${resp}=  Get Appointment Status   ${apptid1}
-    Log   ${resp.json()}
+    # ${resp}=  Get Appointment Status   ${apptid1}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()[3]['appointmentStatus']}   ${apptStatus[1]}
+
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[3]['appointmentStatus']}   ${apptStatus[1]}
+    Should Be Equal As Strings   ${resp.json()['apptStatus']}  ${apptStatus[1]}
 
 JD-TC-ChangeAppointmentStatus-UH6
 
