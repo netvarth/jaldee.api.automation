@@ -14983,6 +14983,30 @@ Verift Los Lead Kyc
     ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/kyc/data/verify  expected_status=any
     RETURN  ${resp}
 
+Save LOS Lead As Draft For SALESFIELD
+    [Arguments]     ${uid}  ${stageUid}  &{kwargs}
+
+    ${data}=  Create Dictionary  
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/salesfield/data   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Save And Proceed LOS Lead SALESFIELD
+    [Arguments]     ${uid}  ${stageUid}  &{kwargs}
+
+    ${data}=  Create Dictionary  
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/salesfield/data/proceed   data=${data}  expected_status=any
+    RETURN  ${resp}
+
 AddItemToInvoice
    [Arguments]  ${uuid}   ${ItemLists}  &{kwargs}
     ${ItemLists}=  Create List     ${ItemLists}
