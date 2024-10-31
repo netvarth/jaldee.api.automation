@@ -120,8 +120,8 @@ JD-TC-SendMessageWithAppmt-1
     Set Test Variable  ${schedule_id1}  ${resp.json()}
 
 
-    # ${fname}=  generate_firstname
-    # ${lname}=  FakerLibrary.last_name
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
    
     # ${resp}=  AddCustomer  ${CUSERNAME27}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
     # Log   ${resp.content}

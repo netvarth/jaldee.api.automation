@@ -155,12 +155,12 @@ JD-TC-GetAppointmentTodayCount-1
     ${j}=  Random Int  max=${num_slots-1}
     Set Suite Variable   ${slot11}   ${slots[${j}]}
     
-    ${resp}=  AddCustomer  ${CUSERNAME17}  
+    ${resp}=  AddCustomer  ${CUSERNAME19}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME17}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME19}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
@@ -230,7 +230,7 @@ JD-TC-GetAppointmentTodayCount-1
     ${lname}=  FakerLibrary.last_name
     Set Suite Variable   ${lname}
    
-    ${resp}=  AddCustomer  ${CUSERNAME16}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
+    ${resp}=  AddCustomer  ${CUSERNAME18}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${cid}  ${resp.json()}
@@ -241,16 +241,16 @@ JD-TC-GetAppointmentTodayCount-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME16}    ${pid1}
+    ${resp}=    Send Otp For Login    ${CUSERNAME18}    ${pid1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME16}   ${OtpPurpose['Authentication']}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME18}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${fname}   ${resp.json()['firstName']}
@@ -404,7 +404,7 @@ JD-TC-GetAppointmentTodayCount-1
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME16}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
@@ -451,7 +451,7 @@ JD-TC-GetAppointmentTodayCount-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -468,7 +468,7 @@ JD-TC-GetAppointmentTodayCount-2
 
 	[Documentation]  Filter Appointment Today Count by service id.
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -483,7 +483,7 @@ JD-TC-GetAppointmentTodayCount-3
 
 	[Documentation]  Filter Appointment Today Count by appointmentEncId.
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -502,7 +502,7 @@ JD-TC-GetAppointmentTodayCount-4
 
 	[Documentation]  Filter Appointment Today Count by first name.
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -515,7 +515,7 @@ JD-TC-GetAppointmentTodayCount-5
 
 	[Documentation]  Filter Appointment Today Count by last name.
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -529,7 +529,7 @@ JD-TC-GetAppointmentTodayCount-6
 
 	[Documentation]  Filter Appointment Today Count by schedule id.
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -543,7 +543,7 @@ JD-TC-GetAppointmentTodayCount-7
 	[Documentation]  Get consumer's appointments today Count where appointment taken by consumer(apptBy).
 
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -559,7 +559,7 @@ JD-TC-GetAppointmentTodayCount-8
 	[Documentation]   Filter consumer Appointments Today Count by location.
 
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -592,7 +592,7 @@ JD-TC-GetAppointmentTodayCount-9
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -624,7 +624,7 @@ JD-TC-GetAppointmentTodayCount-10
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -655,7 +655,7 @@ JD-TC-GetAppointmentTodayCount-11
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -688,7 +688,7 @@ JD-TC-GetAppointmentTodayCount-12
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -724,7 +724,7 @@ JD-TC-GetAppointmentTodayCount-13
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -740,7 +740,7 @@ JD-TC-GetAppointmentTodayCount-14
 	[Documentation]  Filter consumer Appointments Today Count by appointment Date.
 
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

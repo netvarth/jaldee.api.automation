@@ -1401,6 +1401,7 @@ JD-TC-GetConsumerAppointments-17
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${prov_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${providerConsumer}   ${resp.json()['providerConsumer']}  
     Set Test Variable   ${cid}  ${resp.json()['id']}
 
 
@@ -1438,7 +1439,7 @@ JD-TC-GetConsumerAppointments-17
 
 
    
-    ${resp}=  Make payment Consumer Mock  ${prov_id}  ${min_pre}  ${purpose[0]}  ${apptid6}  ${ser_id1}  ${bool[0]}   ${bool[1]}  ${cid}
+    ${resp}=  Make payment Consumer Mock  ${prov_id}  ${min_pre}  ${purpose[0]}  ${apptid6}  ${ser_id1}  ${bool[0]}   ${bool[1]}  ${providerConsumer}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${payref}   ${resp.json()['paymentRefId']}

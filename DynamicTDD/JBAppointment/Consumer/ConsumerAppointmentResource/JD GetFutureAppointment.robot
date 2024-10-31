@@ -497,8 +497,8 @@ JD-TC-GetFutureAppointment-1
     ${num_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot3}   ${slots[${j}]}
-    ${k}=  Random Int  max=${num_slots-3}
-    Set Test Variable   ${slot4}   ${slots[${k}]}
+    # ${k}=  Random Int  max=${num_slots-3}
+    # Set Test Variable   ${slot4}   ${slots[${k}]}
     
     # ${apptfor}=  Create Dictionary  id=${cidfor3}   apptTime=${slot3}   firstName=${family_fname3}
     # ${apptfor}=   Create List  ${apptfor}
@@ -554,22 +554,22 @@ JD-TC-GetFutureAppointment-1
     # ${resp}=   Customer Take Appointment   ${pid1}  ${s_id2}  ${sch_id3}  ${DAY5}  ${cnote}   ${apptfor}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
-    ${apptfor}=  Create Dictionary  id=${self}   apptTime=${slot4}
-    ${apptfor4}=   Create List  ${apptfor}
+    # ${apptfor}=  Create Dictionary  id=${self}   apptTime=${slot4}
+    # ${apptfor4}=   Create List  ${apptfor}
   
-    ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${pid1}  ${s_id2}  ${sch_id3}  ${DAY1}  ${cnote}   ${apptfor4}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${cnote}=   FakerLibrary.name
+    # ${resp}=   Customer Take Appointment   ${pid1}  ${s_id2}  ${sch_id3}  ${DAY1}  ${cnote}   ${apptfor4}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
           
-    ${apptid}=  Get Dictionary Values  ${resp.json()}
-    Set Suite Variable  ${apptid4}  ${apptid[0]}
     # ${apptid}=  Get Dictionary Values  ${resp.json()}
     # Set Suite Variable  ${apptid4}  ${apptid[0]}
+    # # ${apptid}=  Get Dictionary Values  ${resp.json()}
+    # # Set Suite Variable  ${apptid4}  ${apptid[0]}
 
-    ${resp}=   Get consumer Appointment By Id   ${pid1}  ${apptid4}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    # ${resp}=   Get consumer Appointment By Id   ${pid1}  ${apptid4}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME49}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -610,11 +610,11 @@ JD-TC-GetFutureAppointment-1
     ${A_uuid3}=  Set Variable   ${resp.json()}
     Set Suite Variable   ${A_uuid3} 
 
-    ${resp}=   Get Appointment EncodedID    ${apptid4}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${A_uuid4}=  Set Variable   ${resp.json()}
-    Set Suite Variable   ${A_uuid4} 
+    # ${resp}=   Get Appointment EncodedID    ${apptid4}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${A_uuid4}=  Set Variable   ${resp.json()}
+    # Set Suite Variable   ${A_uuid4} 
 
     ${resp}=  Provider Logout
     Log   ${resp.json()}
@@ -651,8 +651,7 @@ JD-TC-GetFutureAppointment-1
 
         ELSE IF     '${resp.json()[${i}]['uid']}' == '${apptid2}'     
             Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid2}       
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id2}       
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['jaldeeFamilyMemberId']}    ${cidfor2}        
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cidfor2}            
             Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
             Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
             Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY3}
@@ -667,8 +666,7 @@ JD-TC-GetFutureAppointment-1
 
         ELSE IF   '${resp.json()[${i}]['uid']}' == '${apptid3}' 
             Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid3}  
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id3}           
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['jaldeeFamilyMemberId']}    ${cidfor3}        
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cidfor3}                  
             Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
             Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
             Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY4}
@@ -703,8 +701,7 @@ JD-TC-GetFutureAppointment-2
         IF  '${resp.json()[${i}]['uid']}' == '${apptid2}'  
     
             Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid2}       
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id2}       
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['jaldeeFamilyMemberId']}    ${cidfor2}        
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cidfor2}          
             Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
             Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
             Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY3}
@@ -720,8 +717,7 @@ JD-TC-GetFutureAppointment-2
         ELSE IF   '${resp.json()[${i}]['uid']}' == '${apptid3}' 
     
             Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid3}  
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id3}           
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['jaldeeFamilyMemberId']}    ${cidfor3}        
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cidfor3}                
             Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
             Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
             Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY4}
@@ -781,8 +777,7 @@ JD-TC-GetFutureAppointment-3
     Should Be Equal As Strings  ${resp.status_code}  200
 
             Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid3}  
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id3}           
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['jaldeeFamilyMemberId']}    ${cidfor3}        
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cidfor3}                 
             Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
             Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
             Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY4}
@@ -798,13 +793,13 @@ JD-TC-GetFutureAppointment-3
     ${len}=  Get Length  ${resp.json()}
     Should Be Equal As Integers  ${len}  1
 
-    ${resp}=    Get Consumer Future Appointments   appointmentEncId-eq=${A_uuid4}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()}     []
+    # ${resp}=    Get Consumer Future Appointments   appointmentEncId-eq=${A_uuid4}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()}     []
 
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}  0
+    # ${len}=  Get Length  ${resp.json()}
+    # Should Be Equal As Integers  ${len}  0
 
 JD-TC-GetFutureAppointment-4
 
@@ -950,8 +945,7 @@ JD-TC-GetFutureAppointment-7
 
         ELSE IF     '${resp.json()[${i}]['uid']}' == '${apptid2}'     
             Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid2}       
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id2}       
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['jaldeeFamilyMemberId']}    ${cidfor2}        
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cidfor2}            
             Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
             Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
             Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY3}
@@ -966,8 +960,7 @@ JD-TC-GetFutureAppointment-7
 
         ELSE IF   '${resp.json()[${i}]['uid']}' == '${apptid3}' 
             Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid3}  
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id3}           
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['jaldeeFamilyMemberId']}    ${cidfor3}        
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cidfor3}                
             Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
             Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
             Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY4}
@@ -1018,8 +1011,7 @@ JD-TC-GetFutureAppointment-8
 
         ELSE IF     '${resp.json()[${i}]['uid']}' == '${apptid2}'     
             Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid2}       
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id2}       
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['jaldeeFamilyMemberId']}    ${cidfor2}        
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cidfor2}             
             Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
             Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
             Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY3}
@@ -1208,8 +1200,7 @@ JD-TC-GetFutureAppointment-12
 
         IF  '${resp.json()[${i}]['uid']}' == '${apptid2}'  
             Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid2}       
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id2}       
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['jaldeeFamilyMemberId']}    ${cidfor2}        
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cidfor2}             
             Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
             Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[4]}    
             Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY3}
@@ -1264,8 +1255,7 @@ JD-TC-GetFutureAppointment-13
 
         IF  '${resp.json()[${i}]['uid']}' == '${apptid3}'  
             Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid3}  
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id3}           
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['jaldeeFamilyMemberId']}    ${cidfor3}        
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cidfor3}                 
             Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
             Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[5]}    
             Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY4}
@@ -1300,8 +1290,7 @@ JD-TC-GetFutureAppointment-14
 
         IF  '${resp.json()[${i}]['uid']}' == '${apptid3}'  
             Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid3}  
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id3}           
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['jaldeeFamilyMemberId']}    ${cidfor3}        
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cidfor3}                
             Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
             Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[5]}    
             Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY4}

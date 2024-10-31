@@ -47,9 +47,7 @@ JD-TC-Reschedule Appointment-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -66,9 +64,7 @@ JD-TC-Reschedule Appointment-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -85,11 +81,19 @@ JD-TC-Reschedule Appointment-1
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
-    ${lid}=  Create Sample Location  
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
+    ${resp}=    Get Locations
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     # clear_appt_schedule   ${PUSERNAME149}
 
@@ -455,11 +459,19 @@ JD-TC-Reschedule Appointment-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
 
-    ${lid}=  Create Sample Location  
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
+    ${resp}=    Get Locations
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     # clear_appt_schedule   ${PUSERNAME149}
 
@@ -568,7 +580,7 @@ JD-TC-Reschedule Appointment-3
     ${j}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot2}   ${slots[${j}]}
 
-    ${resp}=  Reschedule Appointment   ${pid}   ${apptid1}  ${slot2}  ${DAY1}  ${sch_id}
+    ${resp}=  Reschedule Appointment   ${pid}   ${apptid1}  ${slot2}  ${DAY3}  ${sch_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -576,7 +588,7 @@ JD-TC-Reschedule Appointment-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid1}
-    Should Be Equal As Strings  ${resp.json()['appmtDate']}   ${DAY1}
+    Should Be Equal As Strings  ${resp.json()['appmtDate']}   ${DAY3}
     Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot2}
     Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]} 
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['firstName']}   ${fname}
@@ -623,13 +635,23 @@ JD-TC-Reschedule Appointment-9
 
     ${resp}=    Get Locations
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200  
-
-    ${lid}=  Create Sample Location  
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+
+    # ${lid}=  Create Sample Location  
+    # ${resp}=   Get Location ById  ${lid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     # clear_appt_schedule   ${PUSERNAME149}
 
@@ -818,14 +840,17 @@ JD-TC-Reschedule Appointment-10
 
     ${resp}=    Get Locations
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200  
-
-    ${lid}=  Create Sample Location  
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
     # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
