@@ -420,13 +420,6 @@ JD-TC-GetAppointmentAdvancePaymentDetails-3
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
 
-    # ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${pid}  ${token} 
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-
-    # Set Test Variable  ${cid1}  ${resp.json()['id']}
-
-    # Set Test Variable  ${pc_email1}  ${fname}.${test_mail}
 
     ${resp}=    Update ProviderConsumer    ${cid}    email=${consumerEmail}
     Log   ${resp.content}

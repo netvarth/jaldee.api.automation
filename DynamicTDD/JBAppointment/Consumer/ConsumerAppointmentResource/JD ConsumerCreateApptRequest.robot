@@ -57,19 +57,7 @@ JD-TC-ConsumerCreateApptRequest-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${SERVICE2}=    generate_unique_service_name  ${service_names}
-    # Append To List  ${service_names}  ${SERVICE2}
-    # ${service_duration}=   Random Int   min=5   max=10
-    # ${desc}=   FakerLibrary.sentence
-    # ${min_pre}=   Random Int   min=1   max=50
-    # ${servicecharge}=   Random Int  min=100  max=500
 
-    # ${resp}=  Create Service  ${SERVICE2}   ${desc}   ${service_duration}   ${status[0]}  
-    # ...  ${btype}   ${bool[1]}   ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]} 
-    # ...   ${bool[1]}   dateTime=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable  ${sid2}  ${resp.json()}
 
     ${SERVICE2}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE2}
@@ -293,9 +281,7 @@ JD-TC-ConsumerCreateApptRequest-5
     Set Suite Variable   ${family_lname2}
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    # ${resp}=  AddFamilyMember   ${family_fname2}  ${family_lname2}  ${dob}  ${gender}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200  
+
 
     ${primnum}                    FakerLibrary.Numerify   text=%%%%%%%%%%
     ${address}                    FakerLibrary.address
