@@ -2271,7 +2271,7 @@ JD-TC-Block Appointment-UH15
 
     [Documentation]  Provider blocks slot without slot
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME370}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME270}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2284,13 +2284,13 @@ JD-TC-Block Appointment-UH15
     END
 
     # clear_location_n_service  ${PUSERNAME370}
-    clear_customer   ${PUSERNAME370}
+    clear_customer   ${PUSERNAME270}
 
     ${lid}=  Create Sample Location  
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     # clear_appt_schedule   ${PUSERNAME370}
     
@@ -2314,9 +2314,9 @@ JD-TC-Block Appointment-UH15
     IF   '${resp.content}' == '${emptylist}'
         ${SERVICE1}=    generate_unique_service_name  ${service_names}
         Append To List  ${service_names}  ${SERVICE1}    
-        ${s_id1}=  Create Sample Service  ${SERVICE1}  
+        ${s_id}=  Create Sample Service  ${SERVICE1}  
     ELSE
-        Set Test Variable  ${s_id1}   ${resp.json()[0]['id']}
+        Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
     END
 
     ${schedule_name}=  FakerLibrary.bs

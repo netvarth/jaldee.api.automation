@@ -6617,6 +6617,9 @@ JD-TC-Take Appointment-43
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=   Delete Holiday  ${hId}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
 JD-TC-Take Appointment-UH33
 
     [Documentation]  create holiday for a time period in between the schedule, not the entire schedule.
@@ -6668,7 +6671,6 @@ JD-TC-Take Appointment-UH33
     ${sTime11}=  add_timezone_time  ${tz}  1  00  	
     ${delta}=  FakerLibrary.Random Int  min=10  max=30
     ${eTime11}=  add_two   ${sTime11}  ${delta}
-    ${DAY1}=  db.add_timezone_date  ${tz}  4
     ${DAY21}=  db.add_timezone_date  ${tz}  6  
     # ${resp}=  Create Holiday  ${DAY1}  ${holidayname}  ${sTime1}  ${eTime1}
     ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY21}  ${EMPTY}  ${sTime11}  ${eTime11}  description${SPACE}is${SPACE}${desc}
@@ -6687,9 +6689,8 @@ JD-TC-Take Appointment-UH33
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${HDAY1}=  db.add_timezone_date  ${tz}  5
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${HDAY1}  ${s_id}
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
@@ -6714,7 +6715,7 @@ JD-TC-Take Appointment-UH33
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${HDAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  424
     Should Be Equal As Strings  "${resp.json()}"  "${APPOINTMET_SLOT_NOT_AVAILABLE}"
@@ -6730,12 +6731,12 @@ JD-TC-Take Appointment-UH33
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${HDAY1}  ${s_id}
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${HDAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
