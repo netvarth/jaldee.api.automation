@@ -3483,7 +3483,7 @@ JD-TC-Take Appointment-UH10
     [Documentation]   Consumer trying to take an Appointment without login
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Customer Take Appointment   ${pid3}  ${p1_s1}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor1}
+    ${resp}=   Customer Take Appointment   ${pid}  ${p1_s1}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  "${resp.json()}"  "${SESSION_EXPIRED}"
