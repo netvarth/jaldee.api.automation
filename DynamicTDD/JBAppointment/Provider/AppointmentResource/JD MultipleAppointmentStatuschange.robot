@@ -810,13 +810,15 @@ JD-TC-change appointment status for multiple appointments UH-5
     ${fname0}=   generate_firstname
     ${lname0}=   FakerLibrary.last_name
     FOR   ${a}  IN RANGE   ${count}
-            
-        ${resp}=  AddCustomer  ${CUSERNAME${a}}  
+        
+        ${NewCustomer}    Generate random string    10    123456789
+        ${NewCustomer}    Convert To Integer  ${NewCustomer}
+        ${resp}=  AddCustomer  ${NewCustomer}  
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${cid${a}}   ${resp.json()}
 
-        ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME${a}}
+        ${resp}=  GetCustomer  phoneNo-eq=${NewCustomer}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         Should Be Equal As Strings  ${resp.json()[0]['id']}  ${cid${a}}

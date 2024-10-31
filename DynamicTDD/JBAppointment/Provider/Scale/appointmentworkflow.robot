@@ -301,7 +301,7 @@ JD-TC-PreDeploymentAppointment-1
     ${message}=  Fakerlibrary.Sentence
     Set Test Variable    ${message}
 
-    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${message}    ${bool[1]}       ${bool[1]}    ${bool[1]}    ${bool[1]}  
+    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${message}    ${bool[1]}      
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}     ${bool[1]}

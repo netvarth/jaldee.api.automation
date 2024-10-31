@@ -2460,7 +2460,7 @@ JD-TC-AddSubServicesToAppt-UH7
 
     [Documentation]  add subservice to another providers appointment.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME169}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
