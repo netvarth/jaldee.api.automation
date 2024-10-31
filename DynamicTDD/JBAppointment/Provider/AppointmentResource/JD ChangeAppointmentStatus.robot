@@ -2749,6 +2749,8 @@ JD-TC-ChangeAppointmentStatus-UH12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    clear_customer   ${PUSERNAME376}
+
     ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2790,25 +2792,17 @@ JD-TC-ChangeAppointmentStatus-UH12
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
-    ${resp}=  GetCustomer  
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    ${NewCustomer}    Generate random string    10    123456789
+    ${NewCustomer}    Convert To Integer  ${NewCustomer}
+    Set Suite Variable   ${NewCustomer}
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
     Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${fname}=  generate_firstname
-        ${lname}=  FakerLibrary.last_name
-        ${NewCustomer}    Generate random string    10    123456789
-        ${NewCustomer}    Convert To Integer  ${NewCustomer}
-        Set Suite Variable   ${NewCustomer}
-        Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
-        ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
-        Log   ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${cid}  ${resp.json()}
-    ELSE
-        Set Test Variable  ${cid}  ${resp.json()[0]['id']}
-        Set Test Variable  ${fname}  ${resp.json()[0]['firstName']}
-    END
-   
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${cid}  ${resp.json()}
+    
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200

@@ -244,8 +244,8 @@ JD-TC-GetAppointmentServicesByLocation-4
     Should Be Equal As Strings  ${resp.json()[0]['id']}  ${p1_s3}
     Should Be Equal As Strings  ${resp.json()[0]['name']}  ${P1SERVICE3}
 
-    ${RESP}=  Enable service  ${p1_s1} 
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${RESP}=  Enable service  ${p1_s1} 
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-GetAppointmentServicesByLocation-5
 

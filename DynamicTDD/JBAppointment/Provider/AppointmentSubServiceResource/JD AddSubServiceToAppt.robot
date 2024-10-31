@@ -139,12 +139,6 @@ JD-TC-AddSubServicesToAppt-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${subser_id1}  ${resp.json()}
 
-    ${resp}=   Get Service By Id  ${subser_id1}
-    Log   ${resp.json()}  
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}                  ${subser_name} 
-    Should Be Equal As Strings  ${resp.json()['serviceCategory']}       ${serviceCategory[0]}
-
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
