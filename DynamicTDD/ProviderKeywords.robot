@@ -14976,6 +14976,13 @@ Save And Proceed LOS Lead Kyc
     ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/kyc/data/proceed   data=${data}  expected_status=any
     RETURN  ${resp}
 
+Verift Los Lead Kyc 
+    [Arguments]  ${uid}  ${stageUid}
+
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/kyc/data/verify  expected_status=any
+    RETURN  ${resp}
+
 AddItemToInvoice
    [Arguments]  ${uuid}   ${ItemLists}  &{kwargs}
     ${ItemLists}=  Create List     ${ItemLists}
