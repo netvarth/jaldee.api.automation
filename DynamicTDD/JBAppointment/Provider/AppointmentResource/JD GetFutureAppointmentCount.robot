@@ -3025,7 +3025,7 @@ JD-TC-GetFutureAppointmentCount-19
     ELSE
         Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
         Set Test Variable  ${lid}  ${resp.json()[0]['location']['id']}
-        Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
+        Set Test Variable  ${s_id1}  ${resp.json()[0]['services'][0]['id']}
     END
    
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY3}  ${s_id1}
@@ -3238,7 +3238,7 @@ JD-TC-GetFutureAppointmentCount-UH1
     ELSE
         Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
         Set Test Variable  ${lid}  ${resp.json()[0]['location']['id']}
-        Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
+        Set Test Variable  ${s_id1}  ${resp.json()[0]['services'][0]['id']}
     END
    
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY3}  ${s_id1}
