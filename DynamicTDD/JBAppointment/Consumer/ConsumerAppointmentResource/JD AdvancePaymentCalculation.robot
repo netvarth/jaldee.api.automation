@@ -418,7 +418,6 @@ JD-TC-GetAppointmentAdvancePaymentDetails-3
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME15}    ${pid}  ${token7} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${cid1}  ${resp.json()['id']}
     Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
 
     # ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${pid}  ${token} 
@@ -472,7 +471,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-3
     Should Be Equal As Strings  ${resp.status_code}  200 
 
 
-    ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre}  ${purpose[0]}  ${apptid1}  ${ser_id1}  ${bool[0]}   ${bool[1]}  ${cid1}
+    ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre}  ${purpose[0]}  ${apptid1}  ${ser_id1}  ${bool[0]}   ${bool[1]}  ${cid}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
@@ -502,7 +501,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-3
     Should Be Equal As Strings  ${resp.status_code}  200
 
     
-    ${resp}=  Make payment Consumer Mock  ${pid}  ${balamount}  ${purpose[1]}  ${apptid1}  ${ser_id1}  ${bool[0]}   ${bool[1]}  ${cid1}
+    ${resp}=  Make payment Consumer Mock  ${pid}  ${balamount}  ${purpose[1]}  ${apptid1}  ${ser_id1}  ${bool[0]}   ${bool[1]}  ${cid}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -585,7 +584,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-4
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${cid1}  ${resp.json()['id']}
+    Set Test Variable    ${cid1}    ${resp.json()['providerConsumer']}
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${loc_id1}  ${ser_id1}
     Log  ${resp.content}
@@ -736,7 +735,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-5
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${cid1}  ${resp.json()['id']}
+    Set Test Variable  ${cid1}  ${resp.json()['providerConsumer']}
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${loc_id1}  ${ser_id1}
     Log  ${resp.content}
@@ -1039,7 +1038,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-6
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME4}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${cid1}  ${resp.json()['id']}
+    Set Test Variable  ${cid1}  ${resp.json()['providerConsumer']}
 
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
@@ -1352,7 +1351,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-7
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME4}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${cid1}  ${resp.json()['id']}
+    Set Test Variable  ${cid1}  ${resp.json()['providerConsumer']}
 
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
