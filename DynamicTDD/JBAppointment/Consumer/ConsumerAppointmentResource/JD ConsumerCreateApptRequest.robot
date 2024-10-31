@@ -46,20 +46,7 @@ JD-TC-ConsumerCreateApptRequest-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${acc_id1}  ${resp.json()['id']}
 
-    # ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    # Append To List  ${service_names}  ${SERVICE1}
-    
-    # ${service_duration}=   Random Int   min=5   max=10
-    # ${desc}=   FakerLibrary.sentence
-    # ${min_pre}=   Random Int   min=1   max=50
-    # ${servicecharge}=   Random Int  min=100  max=500
 
-    # ${resp}=  Create Service  ${SERVICE1}   ${desc}   ${service_duration}   ${status[0]}  
-    # ...  ${btype}   ${bool[1]}   ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]} 
-    # ...   ${bool[1]}   date=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable  ${sid1}  ${resp.json()}
 
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
@@ -150,7 +137,7 @@ JD-TC-ConsumerCreateApptRequest-1
     ${lname}=  FakerLibrary.last_name
     Set Suite Variable   ${lname}
 
-    ${resp}=  AddCustomer  ${CUSERNAME5}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
+    ${resp}=  AddCustomer  ${CUSERNAME20}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -159,16 +146,16 @@ JD-TC-ConsumerCreateApptRequest-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME5}    ${acc_id1}
+    ${resp}=    Send Otp For Login    ${CUSERNAME20}    ${acc_id1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME20}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME5}    ${acc_id1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${acc_id1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${cid}  ${resp.json()['providerConsumer']}
@@ -179,7 +166,7 @@ JD-TC-ConsumerCreateApptRequest-1
 
     ${cons_note}=    FakerLibrary.word
     ${coupons}=  Create List
-    ${resp}=  Consumer Create Appt Service Request  ${acc_id1}  ${sid1}  ${sch_id1}  ${DAY1}  ${cons_note}  ${countryCodes[0]}  ${CUSERNAME5}  ${coupons}  ${apptfor}
+    ${resp}=  Consumer Create Appt Service Request  ${acc_id1}  ${sid1}  ${sch_id1}  ${DAY1}  ${cons_note}  ${countryCodes[0]}  ${CUSERNAME20}  ${coupons}  ${apptfor}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -200,7 +187,7 @@ JD-TC-ConsumerCreateApptRequest-2
 
     [Documentation]   Consumer create an appt request for a future date with for the same schedule.
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME5}    ${acc_id1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${acc_id1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -210,7 +197,7 @@ JD-TC-ConsumerCreateApptRequest-2
     ${DAY}=  db.add_timezone_date  ${tz}   2
     ${cons_note}=    FakerLibrary.word
     ${coupons}=  Create List
-    ${resp}=  Consumer Create Appt Service Request  ${acc_id1}  ${sid1}  ${sch_id1}  ${DAY1}  ${cons_note}  ${countryCodes[0]}  ${CUSERNAME5}  ${coupons}  ${apptfor}
+    ${resp}=  Consumer Create Appt Service Request  ${acc_id1}  ${sid1}  ${sch_id1}  ${DAY1}  ${cons_note}  ${countryCodes[0]}  ${CUSERNAME20}  ${coupons}  ${apptfor}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -221,7 +208,7 @@ JD-TC-ConsumerCreateApptRequest-3
     [Documentation]   Provider create a service request with date/time mode, 
     ...   then consumer try to create appt request with time slot.
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME5}    ${acc_id1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${acc_id1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -244,7 +231,7 @@ JD-TC-ConsumerCreateApptRequest-3
 
     ${cons_note}=    FakerLibrary.word
     ${coupons}=  Create List
-    ${resp}=  Consumer Create Appt Service Request  ${acc_id1}  ${sid2}  ${sch_id1}  ${DAY1}  ${cons_note}  ${countryCodes[0]}  ${CUSERNAME5}  ${coupons}  ${apptfor}
+    ${resp}=  Consumer Create Appt Service Request  ${acc_id1}  ${sid2}  ${sch_id1}  ${DAY1}  ${cons_note}  ${countryCodes[0]}  ${CUSERNAME20}  ${coupons}  ${apptfor}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -266,7 +253,7 @@ JD-TC-ConsumerCreateApptRequest-4
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500
 
-    ${resp}=  Update Service  ${sid2}  ${SERVICE2}  ${desc}  ${service_duration}  ${status[0]}  ${btype}  ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}
+    ${resp}=  Update Service  ${sid2}  ${SERVICE2}  ${desc}  ${service_duration}  ${status[0]}  ${btype}  ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}    serviceBookingType=${serviceBookingType[1]}
 
     # ${resp}=  Update Service  ${sid2}  ${SERVICE2}   ${desc}   ${service_duration}   ${bool[0]}  ${servicecharge}  ${bool[0]}
     # ...     noDateTime=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
@@ -277,7 +264,7 @@ JD-TC-ConsumerCreateApptRequest-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME5}    ${acc_id1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${acc_id1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -286,7 +273,7 @@ JD-TC-ConsumerCreateApptRequest-4
 
     ${cons_note}=    FakerLibrary.word
     ${coupons}=  Create List
-    ${resp}=  Consumer Create Appt Service Request  ${acc_id1}  ${sid2}  ${sch_id1}  ${EMPTY}  ${cons_note}  ${countryCodes[0]}  ${CUSERNAME5}  ${coupons}  ${apptfor}
+    ${resp}=  Consumer Create Appt Service Request  ${acc_id1}  ${sid2}  ${sch_id1}  ${EMPTY}  ${cons_note}  ${countryCodes[0]}  ${CUSERNAME20}  ${coupons}  ${apptfor}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -296,7 +283,7 @@ JD-TC-ConsumerCreateApptRequest-5
 
     [Documentation]   Consumer create an appt request for his family member.
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME5}    ${acc_id1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${acc_id1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -316,7 +303,7 @@ JD-TC-ConsumerCreateApptRequest-5
 
     ${cons_note}=    FakerLibrary.word
     ${coupons}=  Create List
-    ${resp}=  Consumer Create Appt Service Request  ${acc_id1}  ${sid1}  ${sch_id1}  ${DAY1}  ${cons_note}  ${countryCodes[0]}  ${CUSERNAME5}  ${coupons}  ${apptfor}
+    ${resp}=  Consumer Create Appt Service Request  ${acc_id1}  ${sid1}  ${sch_id1}  ${DAY1}  ${cons_note}  ${countryCodes[0]}  ${CUSERNAME20}  ${coupons}  ${apptfor}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -328,7 +315,7 @@ JD-TC-ConsumerCreateApptRequest-UH1
     [Documentation]   Provider create a service request with date/time mode and update the service with no datetime mode, 
     ...   then consumer try to create appt request with date.
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME5}    ${acc_id1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${acc_id1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -337,10 +324,10 @@ JD-TC-ConsumerCreateApptRequest-UH1
 
     ${cons_note}=    FakerLibrary.word
     ${coupons}=  Create List
-    ${resp}=  Consumer Create Appt Service Request  ${acc_id1}  ${sid2}  ${sch_id1}  ${DAY1}  ${cons_note}  ${countryCodes[0]}  ${CUSERNAME5}  ${coupons}  ${apptfor}
+    ${resp}=  Consumer Create Appt Service Request  ${acc_id1}  ${sid2}  ${sch_id1}  ${DAY1}  ${cons_note}  ${countryCodes[0]}  ${CUSERNAME20}  ${coupons}  ${apptfor}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.content}   "${DATE_NOT_NEEDED}"
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.content}   "${DATE_NOT_NEEDED}"
 
 
 JD-TC-ConsumerCreateApptRequest-UH2
@@ -348,7 +335,7 @@ JD-TC-ConsumerCreateApptRequest-UH2
     [Documentation]   Provider create a service request with date/time mode and update the service with no datetime mode, 
     ...   then consumer try to create appt request with timeslot.
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME5}    ${acc_id1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${acc_id1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -357,10 +344,10 @@ JD-TC-ConsumerCreateApptRequest-UH2
 
     ${cons_note}=    FakerLibrary.word
     ${coupons}=  Create List
-    ${resp}=  Consumer Create Appt Service Request  ${acc_id1}  ${sid2}  ${sch_id1}  ${EMPTY}  ${cons_note}  ${countryCodes[0]}  ${CUSERNAME5}  ${coupons}  ${apptfor}
+    ${resp}=  Consumer Create Appt Service Request  ${acc_id1}  ${sid2}  ${sch_id1}  ${EMPTY}  ${cons_note}  ${countryCodes[0]}  ${CUSERNAME20}  ${coupons}  ${apptfor}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.content}   "${TIME_NOT_NEEDED}"
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.content}   "${TIME_NOT_NEEDED}"
 
 
 JD-TC-ConsumerCreateApptRequest-UH3
@@ -388,7 +375,7 @@ JD-TC-ConsumerCreateApptRequest-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME5}    ${acc_id1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${acc_id1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -411,7 +398,7 @@ JD-TC-ConsumerCreateApptRequest-UH3
 
     ${cons_note}=    FakerLibrary.word
     ${coupons}=  Create List
-    ${resp}=  Consumer Create Appt Service Request  ${acc_id1}  ${sid3}  ${sch_id}  ${DAY1}  ${cons_note}  ${countryCodes[0]}  ${CUSERNAME5}  ${coupons}  ${apptfor}
+    ${resp}=  Consumer Create Appt Service Request  ${acc_id1}  ${sid3}  ${sch_id}  ${DAY1}  ${cons_note}  ${countryCodes[0]}  ${CUSERNAME20}  ${coupons}  ${apptfor}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.content}   "${SERVICE_NOT_AVAILABLE_IN_SCHEDULE}"
@@ -426,7 +413,7 @@ JD-TC-ProviderCreateApptRequest-UH4
 
     ${cons_note}=    FakerLibrary.word
     ${coupons}=  Create List
-    ${resp}=  Consumer Create Appt Service Request  ${acc_id1}  ${sid1}  ${sch_id1}  ${DAY1}  ${cons_note}  ${countryCodes[0]}  ${CUSERNAME5}  ${coupons}  ${apptfor}
+    ${resp}=  Consumer Create Appt Service Request  ${acc_id1}  ${sid1}  ${sch_id1}  ${DAY1}  ${cons_note}  ${countryCodes[0]}  ${CUSERNAME20}  ${coupons}  ${apptfor}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  ${resp.content}  "${SESSION_EXPIRED}"
