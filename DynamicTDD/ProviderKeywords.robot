@@ -14931,7 +14931,8 @@ Redirect LOS Lead
 LOS Lead As Draft For Followup Stage
     [Arguments]     ${uid}  ${stageUid}  &{kwargs}
 
-    ${data}=  Create Dictionary  
+    ${leadStage}=   Create Dictionary  uid=${stageUid}
+    ${data}=  Create Dictionary  leadStage=${leadStage}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary   ${data}   ${key}=${value}
     END
@@ -14942,8 +14943,9 @@ LOS Lead As Draft For Followup Stage
 
 Save And Proceed LOS Lead Followup
     [Arguments]     ${uid}  ${stageUid}  &{kwargs}
-
-    ${data}=  Create Dictionary  
+    
+    ${leadStage}=   Create Dictionary  uid=${stageUid}
+    ${data}=  Create Dictionary  leadStage=${leadStage}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary   ${data}   ${key}=${value}
     END
@@ -14955,7 +14957,8 @@ Save And Proceed LOS Lead Followup
 Save LOS Lead As Draft For Kyc
     [Arguments]     ${uid}  ${stageUid}  &{kwargs}
 
-    ${data}=  Create Dictionary  
+    ${leadStage}=   Create Dictionary  uid=${stageUid}
+    ${data}=  Create Dictionary  leadStage=${leadStage}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary   ${data}   ${key}=${value}
     END
@@ -14967,7 +14970,8 @@ Save LOS Lead As Draft For Kyc
 Save And Proceed LOS Lead Kyc
     [Arguments]     ${uid}  ${stageUid}  &{kwargs}
 
-    ${data}=  Create Dictionary  
+    ${leadStage}=   Create Dictionary  uid=${stageUid}
+    ${data}=  Create Dictionary  leadStage=${leadStage}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary   ${data}   ${key}=${value}
     END
@@ -14986,7 +14990,8 @@ Verift Los Lead Kyc
 Save LOS Lead As Draft For SALESFIELD
     [Arguments]     ${uid}  ${stageUid}  &{kwargs}
 
-    ${data}=  Create Dictionary  
+    ${leadStage}=   Create Dictionary  uid=${stageUid}
+    ${data}=  Create Dictionary  leadStage=${leadStage} 
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary   ${data}   ${key}=${value}
     END
@@ -14998,7 +15003,8 @@ Save LOS Lead As Draft For SALESFIELD
 Save And Proceed LOS Lead SALESFIELD
     [Arguments]     ${uid}  ${stageUid}  &{kwargs}
 
-    ${data}=  Create Dictionary  
+    ${leadStage}=   Create Dictionary  uid=${stageUid}
+    ${data}=  Create Dictionary  leadStage=${leadStage}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary   ${data}   ${key}=${value}
     END
