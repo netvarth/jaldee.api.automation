@@ -49,7 +49,7 @@ Get Billable Subdomain
 
 
 *** Test Cases ***
-*** Comments ***
+
 JD-TC-Take Appointment-1
 
     [Documentation]  Consumer takes appointment for a valid Provider
@@ -3923,7 +3923,6 @@ JD-TC-Take Appointment-UH12
     Should Be Equal As Strings  "${resp.json()}"  "${APPOINTMET_SLOT_NOT_AVAILABLE}" 
 
 
-*** Test Cases ***
 JD-TC-Take Appointment-18
     [Documentation]  consumer takes appt for a slot with another appt taken by provider when parallen serving >1
 
@@ -4283,7 +4282,7 @@ JD-TC-Take Appointment-18
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  1
 
-*** Comments ***
+
 JD-TC-Take Appointment-19
     [Documentation]  Consumer takes appointment for a valid Provider with different phone number for notification
     # ${resp}=  Consumer Login  ${CUSERNAME7}  ${PASSWORD}
