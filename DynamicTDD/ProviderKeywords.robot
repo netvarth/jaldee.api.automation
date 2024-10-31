@@ -14915,8 +14915,6 @@ Get Los Lead Log
     Check Deprication  ${resp}  Get Los Lead Log
     RETURN  ${resp}
 
-
-
 Redirect LOS Lead
     [Arguments]     ${uid}  ${stageUid}  &{kwargs}
 
@@ -14930,7 +14928,6 @@ Redirect LOS Lead
     Check Deprication  ${resp}  Redirect LOS Lead
     RETURN  ${resp}
     
-
 LOS Lead As Draft For Followup Stage
     [Arguments]     ${uid}  ${stageUid}  &{kwargs}
 
@@ -14943,6 +14940,41 @@ LOS Lead As Draft For Followup Stage
     ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/followup/data   data=${data}  expected_status=any
     RETURN  ${resp}
 
+Save And Proceed LOS Lead Followup
+    [Arguments]     ${uid}  ${stageUid}  &{kwargs}
+
+    ${data}=  Create Dictionary  
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/followup/data/proceed   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Save LOS Lead As Draft For Kyc
+    [Arguments]     ${uid}  ${stageUid}  &{kwargs}
+
+    ${data}=  Create Dictionary  
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/kyc/data   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Save And Proceed LOS Lead Kyc
+    [Arguments]     ${uid}  ${stageUid}  &{kwargs}
+
+    ${data}=  Create Dictionary  
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/kyc/data/proceed   data=${data}  expected_status=any
+    RETURN  ${resp}
 
 AddItemToInvoice
    [Arguments]  ${uuid}   ${ItemLists}  &{kwargs}

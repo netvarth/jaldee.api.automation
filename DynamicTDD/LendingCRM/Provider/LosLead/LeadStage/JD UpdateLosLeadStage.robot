@@ -72,7 +72,7 @@ JD-TC-UpdateLosLeadStage -2
 
 JD-TC-UpdateLosLeadStage -3
 
-    [Documentation]  Update Lead Stage - update stage type as KYCVERIFICATION
+    [Documentation]  Update Lead Stage - update stage type as KYCVERIFICATION (not possible)
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME45}  ${PASSWORD} 
     Log  ${resp.content}
@@ -85,7 +85,7 @@ JD-TC-UpdateLosLeadStage -3
     ${resp}=    Get Lead Stage By UID  ${stageuid}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}        200
-    Should Be Equal As Strings    ${resp.json()['stageType']}     ${stageType[2]}
+    Should Be Equal As Strings    ${resp.json()['stageType']}     ${stageType[1]}
 
 JD-TC-UpdateLosLeadStage -4
 
@@ -95,15 +95,29 @@ JD-TC-UpdateLosLeadStage -4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[2]}  ${stageuid}  ${Sname2}  onProceed=1  onRedirect=2
+    ${Sname22}=    FakerLibrary.name
+
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[2]}  ${Sname22}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${stageuid22}     ${resp.json()['uid']}
+
+    ${Sname33}=    FakerLibrary.name
+
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[3]}  ${Sname33}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${stageuid33}     ${resp.json()['uid']}
+
+    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[2]}  ${stageuid}  ${Sname2}  onProceed=${stageuid22}  onRedirect=${stageuid33}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}        200
 
     ${resp}=    Get Lead Stage By UID  ${stageuid}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}           200
-    Should Be Equal As Strings    ${resp.json()['onProceed']}   1
-    Should Be Equal As Strings    ${resp.json()['onRedirect']}  2
+    Should Be Equal As Strings    ${resp.json()['onProceed']}   ${stageuid22}
+    Should Be Equal As Strings    ${resp.json()['onRedirect']}  ${stageuid33}
 
 JD-TC-UpdateLosLeadStage -UH1
 
@@ -154,8 +168,8 @@ JD-TC-UpdateLosLeadStage -UH3
 
     ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${stageuid}  ${empty}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    # Should Be Equal As Strings    ${resp.json()}        ${NAME_LENGTH_EXCEED}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${NAME_LENGTH_EXCEED}
 
 
 JD-TC-UpdateLosLeadStage -UH4
