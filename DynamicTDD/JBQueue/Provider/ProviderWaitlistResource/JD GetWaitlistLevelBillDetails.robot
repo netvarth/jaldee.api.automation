@@ -12,7 +12,6 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Keywords ***
@@ -49,7 +48,7 @@ ${SERVICE4}               SERVICE4004
 ${SERVICE5}               SERVICE3005
 ${SERVICE6}               SERVICE4006
 ${sample}                     4452135820
-
+@{service_names}
 *** Test Cases ***
 
 JD-TC-ApplyJaldeeCouponforwaitlist-1
@@ -150,17 +149,36 @@ JD-TC-ApplyJaldeeCouponforwaitlist-1
       ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME1}
       Log   ${resp.json()}
       Should Be Equal As Strings      ${resp.status_code}  200
-     
-      ${resp}=  Create Sample Location  
-      Set Suite Variable    ${loc_id1}    ${resp}  
 
-      ${resp}=   Get Location ById  ${loc_id1}
+      ${resp}=    Get Locations
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+      IF   '${resp.content}' == '${emptylist}'
+          ${loc_id1}=  Create Sample Location
+          ${resp}=   Get Location ById  ${loc_id1}
+          Log  ${resp.content}
+          Should Be Equal As Strings  ${resp.status_code}  200
+          Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+      ELSE
+          Set Suite Variable  ${loc_id1}  ${resp.json()[0]['id']}
+          Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+      END 
+
 
       ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
       Set Suite Variable  ${CUR_DAY}
+
+      ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+      Append To List  ${service_names}  ${SERVICE1}
+      Set Suite Variable  ${SERVICE1}
+
+      ${SERVICE2}=     generate_unique_service_name  ${service_names}
+      Append To List  ${service_names}  ${SERVICE2}
+      Set Suite Variable  ${SERVICE2}
+
+      ${SERVICE3}=     generate_unique_service_name  ${service_names}
+      Append To List  ${service_names}  ${SERVICE3}
+      Set Suite Variable  ${SERVICE3}
 
       ${resp}=   Create Sample Service  ${SERVICE1}
       Set Suite Variable    ${ser_id1}    ${resp}  
@@ -168,6 +186,8 @@ JD-TC-ApplyJaldeeCouponforwaitlist-1
       Set Suite Variable    ${ser_id2}    ${resp}  
       ${resp}=   Create Sample Service  ${SERVICE3}
       Set Suite Variable    ${ser_id3}    ${resp}  
+
+
       ${q_name}=    FakerLibrary.name
       Set Suite Variable    ${q_name}
       ${list}=  Create List   1  2  3  4  5  6  7

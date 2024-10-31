@@ -127,29 +127,14 @@ JD-TC-PreDeploymentWaitlist-1
         ${resp}=    Create Sample Queue     
         Set Suite Variable  ${s_id}  ${resp['service_id']}
         Set Suite Variable  ${qid}   ${resp['queue_id']}
-        # IF   '${resp.content}' == '${emptylist}'
-        #     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
-        #     ${SERVICE1}=    generate_unique_service_name  ${service_names}
-        #     Append To List  ${service_names}  ${SERVICE1}   
-        #     ${s_id}=  Create Sample Service  ${SERVICE1}  isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre}  maxBookingsAllowed=10
-        #     ${resp}=   Get Service By Id  ${s_id}
-        #     Log  ${resp.json()}
-        #     Should Be Equal As Strings  ${resp.status_code}  200
-        #     Set Test Variable  ${min_pre}  ${resp.json()['minPrePaymentAmount']}
-            
-        # ELSE IF   ${resp.json()[0]['isPrePayment']} == ${bool[0]}
-        #     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
-        #     ${SERVICE1}=    generate_unique_service_name  ${service_names}
-        #     Append To List  ${service_names}  ${SERVICE1}
-        #     ${s_id}=  Create Sample Service  ${SERVICE1}   isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}  maxBookingsAllowed=10
-        #     ${resp}=   Get Service By Id  ${s_id}
-        #     Log  ${resp.json()}
-        #     Should Be Equal As Strings  ${resp.status_code}  200
-        #     Set Test Variable  ${min_pre}  ${resp.json()['minPrePaymentAmount']}
-        # ELSE
-        #     Set Test Variable  ${min_pre}  ${resp.json()[0]['minPrePaymentAmount']}
-        #     Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
-        # END
+
+        ${resp}=    Get Queues
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        
+        ${resp}=    Get Queue ById  ${qid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
         ${desc}=  FakerLibrary.word
         ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${qid}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
@@ -165,16 +150,6 @@ JD-TC-PreDeploymentWaitlist-1
 
     #.....Apply Label ..............
     ${label_id}=   Create Sample Label
-
-    # ${resp}=  Get Label By Id  ${label_id}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response  ${resp}  id=${label_id}
-
-    # ${resp}=  Get Waitlist By Id  ${wid} 
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response  ${resp}  date=${CUR_DAY}  waitlistStatus=${wl_status[1]}  label=${Emptydict}
 
     ${resp}=  Get Label By Id  ${label_id}
     Log  ${resp.json()}
@@ -312,7 +287,8 @@ JD-TC-PreDeploymentWaitlist-1
     ${message}=  Fakerlibrary.Sentence
     Set Test Variable    ${message}
 
-    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${message}    ${bool[1]}       ${bool[1]}    ${bool[1]}    ${bool[1]}  
+    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${message}    ${pc_emailid1}
+    # ${bool[1]}       ${bool[1]}    ${bool[1]}    ${bool[1]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
