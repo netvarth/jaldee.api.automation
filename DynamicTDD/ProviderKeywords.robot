@@ -14931,6 +14931,19 @@ Redirect LOS Lead
     RETURN  ${resp}
     
 
+LOS Lead As Draft For Followup Stage
+    [Arguments]     ${uid}  ${stageUid}  &{kwargs}
+
+    ${data}=  Create Dictionary  
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/followup/data   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+
 AddItemToInvoice
    [Arguments]  ${uuid}   ${ItemLists}  &{kwargs}
     ${ItemLists}=  Create List     ${ItemLists}

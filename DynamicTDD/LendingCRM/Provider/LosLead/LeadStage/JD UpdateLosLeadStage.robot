@@ -70,7 +70,6 @@ JD-TC-UpdateLosLeadStage -2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}        200
 
-
 JD-TC-UpdateLosLeadStage -3
 
     [Documentation]  Update Lead Stage - update stage type as KYCVERIFICATION
@@ -82,6 +81,29 @@ JD-TC-UpdateLosLeadStage -3
     ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[2]}  ${stageuid}  ${Sname2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}        200
+
+    ${resp}=    Get Lead Stage By UID  ${stageuid}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}        200
+    Should Be Equal As Strings    ${resp.json()['stageType']}     ${stageType[2]}
+
+JD-TC-UpdateLosLeadStage -4
+
+    [Documentation]  Update Lead Stage - update stage with on proceed and on redirect
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME45}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[2]}  ${stageuid}  ${Sname2}  onProceed=1  onRedirect=2
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}        200
+
+    ${resp}=    Get Lead Stage By UID  ${stageuid}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}           200
+    Should Be Equal As Strings    ${resp.json()['onProceed']}   1
+    Should Be Equal As Strings    ${resp.json()['onRedirect']}  2
 
 JD-TC-UpdateLosLeadStage -UH1
 
