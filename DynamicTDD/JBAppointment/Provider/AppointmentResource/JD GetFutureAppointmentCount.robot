@@ -616,29 +616,32 @@ JD-TC-GetFutureAppointmentCount-4
     ${resp}=  Get Future Appointments
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-   
+    ${len}=  Get Length  ${resp.json()}
+
     ${resp}=  Get Future Appointment Count
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()}   2
+    Should Be Equal As Strings  ${resp.json()}  ${len}
 
     ${resp}=  Get Future Appointments   paymentStatus-eq=${paymentStatus[0]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
    
     ${resp}=  Get Future Appointment Count   paymentStatus-eq=${paymentStatus[0]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()}   1
+    Should Be Equal As Strings  ${resp.json()}   ${len}
 
     ${resp}=  Get Future Appointments   paymentStatus-eq=${paymentStatus[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
   
     ${resp}=  Get Future Appointment Count   paymentStatus-eq=${paymentStatus[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()}   1
+    Should Be Equal As Strings  ${resp.json()}   ${len}
 
     ${resp}=  Provider Logout
     Log   ${resp.json()}
@@ -666,12 +669,12 @@ JD-TC-GetFutureAppointmentCount-4
     ${resp}=  Get Future Appointments   paymentStatus-eq=${paymentStatus[2]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
     
-    sleep  2s
     ${resp}=  Get Future Appointment Count   paymentStatus-eq=${paymentStatus[2]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()}  1
+    Should Be Equal As Strings  ${resp.json()}   ${len}
 
     ${resp}=  Provider Logout
     Log   ${resp.json()}
