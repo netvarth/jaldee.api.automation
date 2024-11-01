@@ -1722,7 +1722,7 @@ JD-TC-CreateAppointmentSchedule-18
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
+    # Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
     
     ${resp}=   Get Service
     Log  ${resp.content}
