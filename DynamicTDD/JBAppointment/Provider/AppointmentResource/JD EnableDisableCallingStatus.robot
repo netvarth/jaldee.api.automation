@@ -133,11 +133,26 @@ JD-TC-EnableDisableCallingStatus-2
     # clear_service   ${PUSERNAME252}
     # clear_location  ${PUSERNAME252}
 
-    ${lid}=  Create Sample Location  
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${lid}  ${resp.json()['id']}
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+
+    # ${lid}=  Create Sample Location  
+    # ${resp}=   Get Location ById  ${lid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     # clear_appt_schedule   ${PUSERNAME252}
     

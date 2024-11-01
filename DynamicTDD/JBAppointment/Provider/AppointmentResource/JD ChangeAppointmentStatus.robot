@@ -4346,7 +4346,7 @@ JD-TC-ChangeAppointmentStatus-UH25
     ${apptforlist}=   Create List  ${apptfor2}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptforlist}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptforlist}   location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
