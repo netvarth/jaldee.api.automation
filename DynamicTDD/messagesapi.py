@@ -2546,6 +2546,8 @@ DUPLICATE_NAME_INPUT = "Multiple occurance of same name."
 ALREADY_UPDATED = "Already updated"
 NAME_LENGTH_EXCEED = "Name should not exceed 250 characters"
 NAME_LENGTH_SUBCEED = "Name should be a minimum of 3 characters."
+INVALID_LEAD_STAGE = "Invalid lead stage. Current Lead stage is {}"
+INVALID_LEAD_STAGE_TYPE = "Invalid lead stage type. Current Lead stage is {}"
 
 # ......  STOCK TRANSFER...........
 CANT_ST_TRNFR_BTW_SAME_INV = "You cannot transfer stock within the same inventory catalog"
