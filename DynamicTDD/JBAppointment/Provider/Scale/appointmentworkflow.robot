@@ -277,7 +277,7 @@ JD-TC-PreDeploymentAppointment-1
     ${resp}=  Create Case   ${title}  ${doctor}  ${consumer}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable    ${case_id}   ${resp.json()}
+    Set Test Variable    ${case_id}   ${resp.json()['uid']}
 
     ${message}=  FakerLibrary.sentence
     ${medium}=  Create Dictionary  email=${bool[1]} 
