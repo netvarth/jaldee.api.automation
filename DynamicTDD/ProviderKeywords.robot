@@ -2199,9 +2199,9 @@ Create Inventory Catalog Item
 
 Get Item Details Inventory
 
-    [Arguments]  ${storeEncId}  ${vendorEncId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}  ${amount}  ${fixedDiscount}  ${discountPercentage}
+    [Arguments]  ${storeEncId}  ${vendorEncId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}  ${amount}  ${fixedDiscount}  ${discountPercentage}   ${mrp}
 
-    ${data}=  Create Dictionary  storeEncId=${storeEncId}    vendorEncId=${vendorEncId}  inventoryCatalogItem=${inventoryCatalogItem}       quantity=${quantity}  freeQuantity=${freeQuantity}  amount=${amount}  fixedDiscount=${fixedDiscount}   discountPercentage=${discountPercentage}  
+    ${data}=  Create Dictionary  storeEncId=${storeEncId}    vendorEncId=${vendorEncId}  inventoryCatalogItem=${inventoryCatalogItem}       quantity=${quantity}  freeQuantity=${freeQuantity}  amount=${amount}  fixedDiscount=${fixedDiscount}   discountPercentage=${discountPercentage}   mrp=${mrp}
     ${data}=  json.dumps     ${data}
     
     Check And Create YNW Session
