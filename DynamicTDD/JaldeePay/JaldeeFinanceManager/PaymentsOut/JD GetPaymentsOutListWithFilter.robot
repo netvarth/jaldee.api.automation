@@ -69,10 +69,24 @@ JD-TC-GetPayableWithFilter-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
-    ${resp}=  Create Sample Location  
-    Set Suite Variable    ${lid}    ${resp}  
+    # ${resp}=  Create Sample Location  
+    # Set Suite Variable    ${lid}    ${resp}  
 
-    ${resp}=   Get Location ById  ${lid}
+    # ${resp}=   Get Location ById  ${lid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+    ELSE
+        Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+    END
+
+    ${resp}=   Get Location By Id   ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}

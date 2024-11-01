@@ -257,6 +257,9 @@ JD-TC-Create PaymentsOut With Expense--1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${due_amount}   ${resp.json()['amountDue']}
+    Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1}
+    Should Be Equal As Strings  ${resp.json()['amountPaid']}  ${amount1} 
+    Should Be Equal As Strings  ${resp.json()['amountDue']}  4000
 
 
 

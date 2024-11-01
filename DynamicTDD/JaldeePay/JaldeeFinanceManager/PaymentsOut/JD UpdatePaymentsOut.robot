@@ -69,19 +69,40 @@ JD-TC-Update PaymentOut-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
-    ${resp}=  Create Sample Location  
-    Set Suite Variable    ${lid}    ${resp}  
+    # ${resp}=  Create Sample Location  
+    # Set Suite Variable    ${lid}    ${resp}  
 
-    ${resp}=   Get Location ById  ${lid}
+    # ${resp}=   Get Location ById  ${lid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+    ELSE
+        Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+    END
+
+    ${resp}=   Get Location By Id   ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[1]} 
+    ${resp}=  CreateVendorCategory  ${name}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${category_id1}   ${resp.json()}
+    Set Suite Variable   ${category_id}   ${resp.json()}
+
+    # ${name}=   FakerLibrary.word
+    # ${resp}=  Create Category   ${name}  ${categoryType[1]} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${category_id1}   ${resp.json()}
 
     ${name1}=   FakerLibrary.word
      Set Suite Variable  ${name1}
@@ -90,13 +111,13 @@ JD-TC-Update PaymentOut-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id2}   ${resp.json()}
 
-    ${resp}=  Get Category By Id   ${category_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[1]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+    # ${resp}=  Get Category By Id   ${category_id1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['name']}          ${name}
+    # Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[1]}
+    # Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
+    # Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
     ${resp}=  Get default status    ${categoryType[2]} 
     Log  ${resp.json()}
@@ -155,7 +176,7 @@ JD-TC-Update PaymentOut-1
     ${preferredPaymentMode}=    Create List    ${jaldeePaymentmode[0]}
     ${bankInfo}=    Create Dictionary     bankaccountNo=${bank_accno}    ifscCode=${bankIfsc}    bankName=${bankName}    upiId=${upiId}     branchName=${branchName}    pancardNo=${pan}    gstNumber=${gstin}    preferredPaymentMode=${preferredPaymentMode}    lastPaymentModeUsed=${jaldeePaymentmode[0]}
     ${bankInfo}=    Create List         ${bankInfo}                
-    ${resp}=  Create Vendor  ${category_id1}  ${vendorId}  ${vender_name}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}  
+    ${resp}=  Create Vendor  ${category_id}  ${vendorId}  ${vender_name}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${vendor_uid1}   ${resp.json()['encId']}
@@ -171,7 +192,7 @@ JD-TC-Update PaymentOut-1
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundoff    ${amount}   1
 
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}    
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}     ${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${payable_uid1}   ${resp.json()['uid']}
@@ -1133,7 +1154,7 @@ JD-TC-Update PaymentOut-UH1
 
 JD-TC-Update PaymentOut-UH2
 
-    [Documentation]   Create Paymentsout without login
+    [Documentation]   update Paymentsout without login
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
