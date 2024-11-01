@@ -395,7 +395,7 @@ Provider Signup
     ${resp}=  Account Set Credential   ${PhoneNumber}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${LoginId}  JSESSIONYNW=${jsessionynw_value}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Sleep  1s
+    # Sleep  1s
 
     ${resp}=  Encrypted Provider Login   ${LoginId}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -485,7 +485,7 @@ Provider Signup without Profile
     ${resp}=  Account Set Credential   ${PhoneNumber}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${LoginId}  JSESSIONYNW=${jsessionynw_value}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Sleep  1s
+    # Sleep  1s
 
     ${resp}=  Encrypted Provider Login   ${LoginId}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1709,16 +1709,52 @@ Disable Order Settings
 
 ######### MEDICAL RECORD #################+
 
-Create MR Case
-    [Arguments]      ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  &{kwargs}
-    ${data}=  Create Dictionary    category=${category}  type=${type}  doctor=${doctor}  consumer=${consumer}   title=${title}  description=${description}
+# Create MR Case
+#     [Arguments]      ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  &{kwargs}
+#     ${data}=  Create Dictionary    category=${category}  type=${type}  doctor=${doctor}  consumer=${consumer}   title=${title}  description=${description}
+#     FOR    ${key}    ${value}    IN    &{kwargs}
+#         Set To Dictionary 	${data} 	${key}=${value}
+#     END
+#     ${data}=  json.dumps  ${data}
+#     Check And Create YNW Session
+#     ${resp}=  POST On Session  ynw  /provider/medicalrecord/case  data=${data}  expected_status=any
+#     Check Deprication  ${resp}  Create MR Case
+#     RETURN  ${resp}
+
+Create Case
+    [Arguments]    ${title}  ${doctor}  ${consumer}  &{kwargs}
+    ${data}=  Create Dictionary     title=${title}  doctor=${doctor}   consumer=${consumer}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
     END
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/medicalrecord/case  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Create MR Case
+    RETURN  ${resp}
+
+# Share Prescription To Patient
+#     [Arguments]   ${prescriptionUid}   ${msg}   ${email}    &{kwargs}
+#     Check And Create YNW Session
+#     ${medium}=  Create Dictionary  email=${email} 
+#     ${data}=  Create Dictionary  message=${msg}   medium=${medium}  
+#     FOR    ${key}    ${value}    IN    &{kwargs}
+#         Set To Dictionary 	${data} 	${key}=${value}
+#     END
+#     ${data}=    json.dumps    ${data}
+#     ${resp}=  POST On Session  ynw  /provider/medicalrecord/prescription/sharePrescription/${prescriptionUid}   data=${data}  expected_status=any
+#     Check Deprication  ${resp}  Share Prescription To Patient
+#     RETURN  ${resp}
+
+Share Case Pdf
+    [Arguments]     ${caseid}  ${patient}  ${third_party}  ${consumer}  ${doctor}  ${message}  ${medium}  &{kwargs}
+    ${data}=  Create Dictionary     shareToPatient=${patient}  shareToThirdParty=${third_party}   consumer=${consumer}  
+    ...  doctor=${doctor}  message=${message}   shareMedium=${medium}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/medicalrecord/case/share/casepdf/${caseid}  data=${data}  expected_status=any
     RETURN  ${resp}
 
 Get MR Case By UID

@@ -261,7 +261,9 @@ JD-TC-PreDeploymentAppointment-1
 
     #......... Share Prescription to thirdparty...........
 
-    ${resp}=    Share Prescription To ThirdParty   ${prescription_uid}    ${message}     ${bool[1]}
+    ${fname}=  generate_firstname
+    Set Test Variable  ${emailid1}  ${fname}${C_Email}.${test_mail}
+    ${resp}=    Share Prescription To ThirdParty   ${prescription_uid}    ${message}     ${emailid1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
