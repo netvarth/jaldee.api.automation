@@ -2312,6 +2312,30 @@ Get Inventoryitem
     Check Deprication  ${resp}  Get Inventoryitem
     RETURN  ${resp} 
 
+Get Inventory Settings 
+
+    [Arguments]  ${storeEncId}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/settings/${storeEncId}    expected_status=any
+    Check Deprication  ${resp}  Get Inventory Settings 
+    RETURN  ${resp} 
+
+Update Inventory Settings 
+    [Arguments]   ${storeEncId}  ${status}
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw  /provider/inventory/settings/${storeEncId}/pushToFinance/${status}  expected_status=any
+    Check Deprication  ${resp}  Update Inventory Settings 
+    RETURN  ${resp}   
+
+Purchase Push to Finance 
+    [Arguments]   ${purchaseUid}  
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw  /provider/inventory/purchase/${purchaseUid}/pushToFinance  expected_status=any
+    Check Deprication  ${resp}  Purchase Push to Finance
+    RETURN  ${resp}   
+
+
 ######### LOGIN ###########
 
 Forgot LoginId
