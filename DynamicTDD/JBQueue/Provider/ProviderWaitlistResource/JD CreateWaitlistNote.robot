@@ -478,7 +478,7 @@ JD-TC-Provider Note-5
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  AddCustomer  ${CUSERNAME19}
+    ${resp}=  AddCustomer  ${CUSERNAME10}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()}
