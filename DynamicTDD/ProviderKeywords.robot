@@ -1732,19 +1732,6 @@ Create Case
     ${resp}=  POST On Session  ynw  /provider/medicalrecord/case  data=${data}  expected_status=any
     RETURN  ${resp}
 
-# Share Prescription To Patient
-#     [Arguments]   ${prescriptionUid}   ${msg}   ${email}    &{kwargs}
-#     Check And Create YNW Session
-#     ${medium}=  Create Dictionary  email=${email} 
-#     ${data}=  Create Dictionary  message=${msg}   medium=${medium}  
-#     FOR    ${key}    ${value}    IN    &{kwargs}
-#         Set To Dictionary 	${data} 	${key}=${value}
-#     END
-#     ${data}=    json.dumps    ${data}
-#     ${resp}=  POST On Session  ynw  /provider/medicalrecord/prescription/sharePrescription/${prescriptionUid}   data=${data}  expected_status=any
-#     Check Deprication  ${resp}  Share Prescription To Patient
-#     RETURN  ${resp}
-
 Share Case Pdf
     [Arguments]     ${caseid}  ${patient}  ${third_party}  ${consumer}  ${doctor}  ${message}  ${medium}  &{kwargs}
     ${data}=  Create Dictionary     shareToPatient=${patient}  shareToThirdParty=${third_party}   consumer=${consumer}  
