@@ -97,7 +97,7 @@ JD-TC-Take Appointment-1
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
     Set Suite Variable   ${s_id}
     ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=10  max=20
+    ${parallel}=  FakerLibrary.Random Int  min=5  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
