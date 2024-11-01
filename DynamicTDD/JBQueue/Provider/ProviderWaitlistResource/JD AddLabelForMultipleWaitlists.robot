@@ -1553,7 +1553,7 @@ JD-TC-AddMultipleWaitlistLabel-10
     Append To List  ${service_names}  ${SERVICE1} 
     ${min_pre}=   Random Int   min=20   max=50
     ${servicecharge}=   Random Int  min=100  max=200
-    ${s_id}=  Create Sample Service   ${SERVICE1}  isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}
+    ${s_id}=  Create Sample Service   ${SERVICE1}  isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}    maxBookingsAllowed=10
 
     # clear_queue    ${HLPUSERNAME17}
     
@@ -1852,7 +1852,7 @@ JD-TC-AddMultipleWaitlistLabel-12
     Append To List  ${service_names}  ${SERVICE1}
     ${min_pre}=   Random Int   min=10   max=50
     ${servicecharge}=   Random Int  min=100  max=200
-    ${s_id}=  Create Sample Service   ${SERVICE1}  isPrePayment=${bool[1]}  PrePaymentAmount=${min_pre}
+    ${s_id}=  Create Sample Service   ${SERVICE1}  isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}   maxBookingsAllowed=10
 
     # clear_queue    ${HLPUSERNAME17}
     
