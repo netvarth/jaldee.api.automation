@@ -1774,18 +1774,32 @@ Delete DentalRecord
     Check Deprication  ${resp}  Delete DentalRecord
     RETURN  ${resp}
 
+# Create Treatment Plan
+
+#     [Arguments]      ${caseDto}   ${dental_id}   ${treatment}  ${works}  &{kwargs}
+#     ${caseDto}=  Create Dictionary  uid=${caseDto} 
+#     ${dentalRecord}=  Create Dictionary  id=${dental_id}
+
+#     ${data}=  Create Dictionary    caseDto=${caseDto}    dentalRecord=${dentalRecord}  treatment=${treatment}  works=${works} 
+#     FOR    ${key}    ${value}    IN    &{kwargs}
+#         Set To Dictionary 	${data} 	${key}=${value}
+#     END
+#     IF  '${dental_id}' == '${EMPTY}'
+#         Remove From Dictionary 	${data} 	dentalRecord
+#     END
+#     ${data}=  json.dumps  ${data}
+#     Check And Create YNW Session
+#     ${resp}=  POST On Session  ynw  /provider/medicalrecord/treatment  data=${data}  expected_status=any
+#     Check Deprication  ${resp}  Create Treatment Plan
+#     RETURN  ${resp}
+
 Create Treatment Plan
 
-    [Arguments]      ${caseDto}   ${dental_id}   ${treatment}  ${works}  &{kwargs}
+    [Arguments]      ${caseDto}   ${treatment}  ${works}  &{kwargs}
     ${caseDto}=  Create Dictionary  uid=${caseDto} 
-    ${dentalRecord}=  Create Dictionary  id=${dental_id}
-
-    ${data}=  Create Dictionary    caseDto=${caseDto}    dentalRecord=${dentalRecord}  treatment=${treatment}  works=${works} 
+    ${data}=  Create Dictionary    caseDto=${caseDto}   treatment=${treatment}  works=${works} 
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
-    END
-    IF  '${dental_id}' == '${EMPTY}'
-        Remove From Dictionary 	${data} 	dentalRecord
     END
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
