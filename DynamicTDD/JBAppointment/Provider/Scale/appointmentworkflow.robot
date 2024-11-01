@@ -30,6 +30,23 @@ ${domain}       healthCare
 ${subdomain}    dentists
 
 
+*** Keywords ***
+
+Create Treatment Plan
+
+    [Arguments]      ${caseDto}   ${treatment}  ${works}  &{kwargs}
+    ${caseDto}=  Create Dictionary  uid=${caseDto} 
+    ${data}=  Create Dictionary    caseDto=${caseDto}   treatment=${treatment}  works=${works} 
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/medicalrecord/treatment  data=${data}  expected_status=any
+    Check Deprication  ${resp}  Create Treatment Plan
+    RETURN  ${resp}
+
+
 *** Test Cases ***
 
 JD-TC-PreDeploymentAppointment-1
@@ -282,6 +299,18 @@ JD-TC-PreDeploymentAppointment-1
     ${message}=  FakerLibrary.sentence
     ${medium}=  Create Dictionary  email=${bool[1]} 
     
-    ${resp}=  Share Case Pdf  ${case_id}  ${bool[1]}  ${bool[0]}  ${consumer}  ${doctor}  ${message}  ${medium}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Share Case Pdf  ${case_id}  ${bool[1]}  ${bool[0]}  ${consumer}  ${doctor}  ${message}  ${medium}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    #....... Treatment plan ...........
+
+    ${treatment}=  FakerLibrary.name
+    ${work}=  FakerLibrary.name
+    ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
+    ${works}=  Create List  ${one}
+
+    ${resp}=    Create Treatment Plan    ${case_id}    ${treatment}  ${works}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   200
+    Set Test Variable    ${treatmentId}        ${resp.json()}

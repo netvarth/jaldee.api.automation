@@ -431,16 +431,6 @@ JD-TC-CreateAppointmentSchedule-8
     ${p2_lid2}=  Create Sample Location
     Set Suite Variable  ${p2_lid2}  
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${p2_lid2}=  Create Sample Location
-        Set Suite Variable   ${p2_lid2}
-    ELSE
-        Set Suite Variable  ${p2_lid2}  ${resp.json()[0]['id']}
-    END
-
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=${delta}
