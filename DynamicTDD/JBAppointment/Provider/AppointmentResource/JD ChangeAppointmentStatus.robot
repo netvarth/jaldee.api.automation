@@ -2816,6 +2816,7 @@ JD-TC-ChangeAppointmentStatus-UH12
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
+    sleep  1s
     ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200

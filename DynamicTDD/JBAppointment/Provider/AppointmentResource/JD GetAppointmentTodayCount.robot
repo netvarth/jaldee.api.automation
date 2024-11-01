@@ -2671,10 +2671,15 @@ JD-TC-GetAppointmentTodayCount-28
     ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Today Appointment Count
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Should Be Equal As Strings  ${resp.json()}   1
+    ${resp}=  Get Appointments Today
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
+
+    ${resp}=  Get Today Appointment Count
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  ${len}
 
 JD-TC-GetAppointmentTodayCount-UH1
 

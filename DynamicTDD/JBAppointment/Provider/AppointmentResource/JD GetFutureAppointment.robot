@@ -580,32 +580,25 @@ JD-TC-GetFutureAppointment-4
 
     # clear_appt_schedule   ${PUSERNAME257}
 
-    ${desc}=   FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=1   max=50
-    ${servicecharge}=   Random Int  min=100  max=500
-    ${srv_duration}=   Random Int   min=10   max=20
+    # ${desc}=   FakerLibrary.sentence
+    # ${min_pre}=   Random Int   min=1   max=50
+    # ${servicecharge}=   Random Int  min=100  max=500
+    # ${srv_duration}=   Random Int   min=10   max=20
+    # ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    # Append To List  ${service_names}  ${SERVICE1}
+    # ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}   200
+    # Set Test Variable  ${s_id1}  ${resp.json()}
+
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}   200
-    Set Test Variable  ${s_id1}  ${resp.json()}
-
-    ${resp}=  Auto Invoice Generation For Service   ${s_id1}    ${toggle[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
+    Append To List  ${service_names}  ${SERVICE1}   
+    ${s_id1}=  Create Sample Service  ${SERVICE1}  isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre}  maxBookingsAllowed=10
+   
     ${SERVICE2}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-
-    ${resp}=  Auto Invoice Generation For Service   ${s_id2}    ${toggle[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Appointment Schedules
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -615,6 +608,18 @@ JD-TC-GetFutureAppointment-4
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
+
+    ${resp}=  Auto Invoice Generation For Service   ${s_id1}    ${toggle[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Auto Invoice Generation For Service   ${s_id2}    ${toggle[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointment Schedules
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10    
