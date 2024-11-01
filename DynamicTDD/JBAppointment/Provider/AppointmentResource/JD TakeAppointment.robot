@@ -6676,7 +6676,7 @@ JD-TC-Take Appointment-UH33
     ${eTime11}=  add_two   ${sTime11}  ${delta}
     ${DAY21}=  db.add_timezone_date  ${tz}  6  
     # ${resp}=  Create Holiday  ${DAY1}  ${holidayname}  ${sTime1}  ${eTime1}
-    ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY21}  ${EMPTY}  ${sTime11}  ${eTime11}  description${SPACE}is${SPACE}${desc}
+    ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY21}  ${EMPTY}  ${sTime1}  ${eTime1}  description${SPACE}is${SPACE}${desc}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${hId}    ${resp.json()['holidayId']}

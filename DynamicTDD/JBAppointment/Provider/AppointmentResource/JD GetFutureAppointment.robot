@@ -533,9 +533,9 @@ JD-TC-GetFutureAppointment-4
 
     [Documentation]  Get provider's future appointment list based on payment status
    
-    ${pid}=  get_acc_id  ${PUSERNAME257}
+    ${pid}=  get_acc_id  ${PUSERNAME357}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME257}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME357}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -594,11 +594,16 @@ JD-TC-GetFutureAppointment-4
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}   
-    ${s_id1}=  Create Sample Service  ${SERVICE1}  isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre}  maxBookingsAllowed=10
+    ${s_id1}=  Create Sample Service  ${SERVICE1}  isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre}  maxBookingsAllowed=10 
    
     ${SERVICE2}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
+
+    ${resp}=   Get Service By Id  ${s_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${servicecharge}  ${resp.json()['totalAmount']}
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -645,10 +650,28 @@ JD-TC-GetFutureAppointment-4
     
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
+
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${CUSERNAME34}  firstName=${fname}   lastName=${lname}     email=${pc_emailid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${cid}  ${resp.json()}
    
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME34}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME34}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token1}  ${resp.json()['token']}
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME34}    ${pid}  ${token1} 
     Log   ${resp.content}
@@ -694,7 +717,7 @@ JD-TC-GetFutureAppointment-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME257}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME357}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -789,7 +812,7 @@ JD-TC-GetFutureAppointment-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME257}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME357}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
