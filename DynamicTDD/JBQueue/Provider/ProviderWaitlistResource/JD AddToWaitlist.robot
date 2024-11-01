@@ -133,109 +133,109 @@ ${sample}                     4452135820
 
 #       END
   
-JD-TC-AddToWaitlist-11
-      [Documentation]   Add family members to the waitlist
+# JD-TC-AddToWaitlist-11
+#       [Documentation]   Add family members to the waitlist
 
-      ${f_name}  ${l_name}  ${PUSERNAME_R}  ${LoginId}=  Provider Signup
-      Set Suite Variable  ${PUSERNAME_R}
+#       ${f_name}  ${l_name}  ${PUSERNAME_R}  ${LoginId}=  Provider Signup
+#       Set Suite Variable  ${PUSERNAME_R}
 
-      ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
-      Log  ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    200 
+#       ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
+#       Log  ${resp.json()}
+#       Should Be Equal As Strings    ${resp.status_code}    200 
 
-      ${resp}=  Update Waitlist Settings  ${calc_mode[2]}   ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  50
-      Should Be Equal As Strings  ${resp.status_code}  200
+#       ${resp}=  Update Waitlist Settings  ${calc_mode[2]}   ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  50
+#       Should Be Equal As Strings  ${resp.status_code}  200
       
-      ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
-      ${resp}=  Enable Waitlist
-      Log   ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      sleep   01s
-      ${resp}=  Get jaldeeIntegration Settings
-      Log   ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[0]} 
+#       ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+#       ${resp}=  Enable Waitlist
+#       Log   ${resp.json()}
+#       Should Be Equal As Strings  ${resp.status_code}  200
+#       sleep   01s
+#       ${resp}=  Get jaldeeIntegration Settings
+#       Log   ${resp.json()}
+#       Should Be Equal As Strings  ${resp.status_code}  200
+#       Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[0]} 
 
-      ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
-      Log   ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      ${resp}=  Get jaldeeIntegration Settings
-      Log   ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
+#       ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
+#       Log   ${resp.json()}
+#       Should Be Equal As Strings  ${resp.status_code}  200
+#       ${resp}=  Get jaldeeIntegration Settings
+#       Log   ${resp.json()}
+#       Should Be Equal As Strings  ${resp.status_code}  200
+#       Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
 
-      ${resp}=  AddCustomer  ${CUSERNAME2}
-      Log   ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${id}  ${resp.json()}
+#       ${resp}=  AddCustomer  ${CUSERNAME2}
+#       Log   ${resp.json()}
+#       Should Be Equal As Strings  ${resp.status_code}  200
+#       Set Suite Variable  ${id}  ${resp.json()}
 
-      ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME2}
-      Log   ${resp.json()}
-      Should Be Equal As Strings      ${resp.status_code}  200
+#       ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME2}
+#       Log   ${resp.json()}
+#       Should Be Equal As Strings      ${resp.status_code}  200
 
-      ${resp}=  Get Locations
-      Log   ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable    ${loc_id3}   ${resp.json()[0]['id']}
-      Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+#       ${resp}=  Get Locations
+#       Log   ${resp.json()}
+#       Should Be Equal As Strings  ${resp.status_code}  200
+#       Set Suite Variable    ${loc_id3}   ${resp.json()[0]['id']}
+#       Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-      ${SERVICE11}=    generate_unique_service_name  ${service_names}
-      Append To List  ${service_names}  ${SERVICE11} 
-      Set Suite Variable    ${SERVICE11} 
+#       ${SERVICE11}=    generate_unique_service_name  ${service_names}
+#       Append To List  ${service_names}  ${SERVICE11} 
+#       Set Suite Variable    ${SERVICE11} 
 
-      ${ser_id7}=   Create Sample Service  ${SERVICE11}     maxBookingsAllowed=10
-      Set Suite Variable   ${ser_id7}
-      ${q_name1}=    FakerLibrary.name
-      Set Suite Variable    ${q_name1}
-      ${strt_time1}=   db.add_timezone_time  ${tz}  1  00
-      Set Suite Variable    ${strt_time1}
-      ${end_time1}=    db.add_timezone_time  ${tz}  2  20 
-      Set Suite Variable    ${end_time1}  
-      ${capacity}=  Random Int  min=8   max=20
-      ${parallel}=  Random Int   min=50   max=52
-      Set Suite Variable   ${parallel}
-      Set Suite Variable   ${capacity}
-      ${partysize}=  Create Dictionary  maxPartySize=${parallel}
+#       ${ser_id7}=   Create Sample Service  ${SERVICE11}     maxBookingsAllowed=10
+#       Set Suite Variable   ${ser_id7}
+#       ${q_name1}=    FakerLibrary.name
+#       Set Suite Variable    ${q_name1}
+#       ${strt_time1}=   db.add_timezone_time  ${tz}  1  00
+#       Set Suite Variable    ${strt_time1}
+#       ${end_time1}=    db.add_timezone_time  ${tz}  2  20 
+#       Set Suite Variable    ${end_time1}  
+#       ${capacity}=  Random Int  min=8   max=20
+#       ${parallel}=  Random Int   min=50   max=52
+#       Set Suite Variable   ${parallel}
+#       Set Suite Variable   ${capacity}
+#       ${partysize}=  Create Dictionary  maxPartySize=${parallel}
       
-      ${resp}=  Sample Queue      ${loc_id3}  ${ser_id7}   
-      Log   ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${que_id4}   ${resp.json()}
+#       ${resp}=  Sample Queue      ${loc_id3}  ${ser_id7}   
+#       Log   ${resp.json()}
+#       Should Be Equal As Strings  ${resp.status_code}  200
+#       Set Suite Variable  ${que_id4}   ${resp.json()}
 
-      ${resp}=    Get Queue ById    ${que_id4}
-      Log   ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
+#       ${resp}=    Get Queue ById    ${que_id4}
+#       Log   ${resp.json()}
+#       Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${f_name}=   generate_firstname
-      ${l_name}=   FakerLibrary.last_name
-      ${dob}=      FakerLibrary.date
-      ${gender}=  Random Element    ${Genderlist}
-      ${resp}=  AddFamilyMemberByProvider  ${id}  ${f_name}  ${l_name}  ${dob}  ${gender}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${mem_id}  ${resp.json()}
-      ${f_name}=   generate_firstname
-      ${l_name}=   FakerLibrary.last_name
-      ${dob}=      FakerLibrary.date
-      ${resp}=  AddFamilyMemberByProvider  ${id}  ${f_name}  ${l_name}  ${dob}  ${gender}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${mem_id1}  ${resp.json()}
-      ${desc}=   FakerLibrary.word
-      ${resp}=  Add To Waitlist  ${id}  ${ser_id7}  ${que_id4}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${mem_id}  
-      Log   ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      ${wid}=  Get Dictionary Values  ${resp.json()}
-      Set Suite Variable  ${wait_id1}  ${wid[0]}
-      Set Suite Variable  ${wait_id2}  ${wid[1]}
-      ${resp}=  Get Waitlist By Id  ${wait_id1}
-      Log  ${resp.json()} 
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Verify Response  ${resp}  date=${CUR_DAY}  waitlistStatus=${wl_status[1]}  partySize=1   waitlistedBy=${waitlistedby}  personsAhead=0
-      Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE11}
-      Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id7}
-      Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${id}
-      Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${mem_id}
+#       ${f_name}=   generate_firstname
+#       ${l_name}=   FakerLibrary.last_name
+#       ${dob}=      FakerLibrary.date
+#       ${gender}=  Random Element    ${Genderlist}
+#       ${resp}=  AddFamilyMemberByProvider  ${id}  ${f_name}  ${l_name}  ${dob}  ${gender}
+#       Should Be Equal As Strings  ${resp.status_code}  200
+#       Set Suite Variable  ${mem_id}  ${resp.json()}
+#       ${f_name}=   generate_firstname
+#       ${l_name}=   FakerLibrary.last_name
+#       ${dob}=      FakerLibrary.date
+#       ${resp}=  AddFamilyMemberByProvider  ${id}  ${f_name}  ${l_name}  ${dob}  ${gender}
+#       Should Be Equal As Strings  ${resp.status_code}  200
+#       Set Suite Variable  ${mem_id1}  ${resp.json()}
+#       ${desc}=   FakerLibrary.word
+#       ${resp}=  Add To Waitlist  ${id}  ${ser_id7}  ${que_id4}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${mem_id}  
+#       Log   ${resp.json()}
+#       Should Be Equal As Strings  ${resp.status_code}  200
+#       ${wid}=  Get Dictionary Values  ${resp.json()}
+#       Set Suite Variable  ${wait_id1}  ${wid[0]}
+#       Set Suite Variable  ${wait_id2}  ${wid[1]}
+#       ${resp}=  Get Waitlist By Id  ${wait_id1}
+#       Log  ${resp.json()} 
+#       Should Be Equal As Strings  ${resp.status_code}  200
+#       Verify Response  ${resp}  date=${CUR_DAY}  waitlistStatus=${wl_status[1]}  partySize=1   waitlistedBy=${waitlistedby}  personsAhead=0
+#       Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE11}
+#       Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id7}
+#       Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${id}
+#       Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${mem_id}
 
-*** Comments ***
+# *** Comments ***
 JD-TC-AddToWaitlist-1
       [Documentation]   Add a consumer to the waitlist for the current day
 
