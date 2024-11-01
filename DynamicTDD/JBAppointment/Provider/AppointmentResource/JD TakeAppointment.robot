@@ -3697,13 +3697,13 @@ JD-TC-Take Appointment-36
 
     [Documentation]  take appointments for service with prepayment but prepayment not done by consumer and try to take appointment for another slot
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME218}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME278}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
   
     # clear_service   ${PUSERNAME_Z}
     # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME218}
+    clear_customer   ${PUSERNAME278}
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -3815,7 +3815,7 @@ JD-TC-Take Appointment-36
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME218}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME278}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3864,7 +3864,7 @@ JD-TC-Take Appointment-36
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME218}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME278}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
