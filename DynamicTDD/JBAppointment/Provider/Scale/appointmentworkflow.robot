@@ -37,16 +37,15 @@ JD-TC-PreDeploymentAppointment-1
     [Documentation]  Appointment workflow for pre deployment.
 
     ${firstname}  ${lastname}  ${PUSERNAME_B}  ${LoginId}=  Provider Signup   Domain=${domain}   SubDomain=${subdomain}
-    Set Suite Variable  ${PUSERNAME_B}
-
+    
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
-    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
-    Set Suite Variable  ${pdrname}  ${decrypted_data['userName']}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+    Set Test Variable  ${pdrname}  ${decrypted_data['userName']}
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -61,45 +60,26 @@ JD-TC-PreDeploymentAppointment-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${lid}=  Create Sample Location
-        Set Suite Variable   ${lid}
         ${resp}=   Get Location ById  ${lid}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-        Set Suite Variable  ${lid}  ${resp.json()['id']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
-        Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    Set Suite Variable   ${DAY1}
     ${DAY2}=  db.add_timezone_date  ${tz}  10    
-    Set Suite Variable   ${DAY2}    
     ${list}=  Create List  1  2  3  4  5  6  7
-    Set Suite Variable   ${list}
     ${sTime1}=  db.get_time_by_timezone  ${tz}
-    Set Suite Variable   ${sTime1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    Set Suite Variable   ${delta}
     ${eTime1}=  add_timezone_time  ${tz}  3   50  
-    Set Suite Variable   ${eTime1}
-   
+    
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}   
     ${s_id}=  Create Sample Service  ${SERVICE1}      maxBookingsAllowed=20
-    Set Suite Variable  ${s_id}
-
-    # ${SERVICE2}=  generate_service_name
-    # ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
-    # Set Suite Variable   ${min_pre}
-    # ${s_id1}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=10   isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre} 
-    # Set Suite Variable  ${s_id1}
-
-    # ${SERVICE3}=    generate_unique_service_name  ${service_names}
-    # Append To List  ${service_names}  ${SERVICE3}
-    # ${s_id2}=  Create Sample Service  ${SERVICE3}   maxBookingsAllowed=10
-    # Set Suite Variable  ${s_id2}
+    Set Test Variable  ${s_id}
 
     ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
@@ -113,11 +93,11 @@ JD-TC-PreDeploymentAppointment-1
         ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id} 
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${sch_id}  ${resp.json()}
+        Set Test Variable  ${sch_id}  ${resp.json()}
     ELSE
-        Set Suite Variable  ${sch_id}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${lid}  ${resp.json()[0]['location']['id']}
-        Set Suite Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
+        Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
+        Set Test Variable  ${lid}  ${resp.json()[0]['location']['id']}
+        Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
     END
     
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
@@ -155,7 +135,7 @@ JD-TC-PreDeploymentAppointment-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
-    Set Suite Variable  ${apptid1}  ${apptid[0]}
+    Set Test Variable  ${apptid1}  ${apptid[0]}
 
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
@@ -199,7 +179,7 @@ JD-TC-PreDeploymentAppointment-1
     ${resp}    upload file to temporary location    ${file_action[0]}    ${provider_id}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption1}    ${fileType1}    ${EMPTY}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200 
-    Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
+    Set Test Variable    ${driveId}    ${resp.json()[0]['driveId']}
 
     ${attachments}=  Create Dictionary  owner=${provider_id}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${pdrname}
     ${attachment}=   Create List  ${attachments}
@@ -212,19 +192,6 @@ JD-TC-PreDeploymentAppointment-1
     
     #.... Send Attachment ............
 
-    ${resp}=  db.getType   ${jpgfile}
-    Log  ${resp}
-    ${fileType1}=  Get From Dictionary       ${resp}    ${jpgfile}
-    ${caption1}=  Fakerlibrary.Sentence
-    ${fileName}=    generate_filename
-    
-    ${resp}    upload file to temporary location    ${file_action[0]}    ${provider_id}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption1}    ${fileType1}    ${EMPTY}    ${order}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200 
-    Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
-
-    ${attachments}=  Create Dictionary  owner=${provider_id}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${pdrname}
-
     ${resp}=  Send Attachment From Appointment   ${apptid1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -234,63 +201,49 @@ JD-TC-PreDeploymentAppointment-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${med_name}=      FakerLibrary.name
-    Set Suite Variable    ${med_name}
     ${frequency}=     FakerLibrary.word
-    Set Suite Variable    ${frequency}
     ${duration}=      FakerLibrary.sentence
-    Set Suite Variable    ${duration}
     ${instrn}=        FakerLibrary.sentence
-    Set Suite Variable    ${instrn}
     ${dosage}=        FakerLibrary.sentence
-    Set Suite Variable    ${dosage}
     ${type}=     FakerLibrary.word
-    Set Suite Variable    ${type}
     ${clinicalNote}=     FakerLibrary.word
-    Set Suite Variable    ${clinicalNote}
     ${clinicalNote1}=        FakerLibrary.sentence
-    Set Suite Variable    ${clinicalNote1}
     ${type1}=        FakerLibrary.sentence
-    Set Suite Variable    ${type1}
-
+   
     ${resp}=  db.getType   ${pdffile} 
     Log  ${resp}
     ${fileType}=  Get From Dictionary       ${resp}    ${pdffile} 
-    Set Suite Variable    ${fileType}
     ${caption}=  Fakerlibrary.Sentence
-    Set Suite Variable    ${caption}
-
+   
     ${resp}=  db.getType   ${jpgfile}
     Log  ${resp}
     ${fileType1}=  Get From Dictionary       ${resp}    ${jpgfile}
-    Set Suite Variable    ${fileType1}
     ${caption1}=  Fakerlibrary.Sentence
-    Set Suite Variable    ${caption1}
-
+   
     ${resp}    upload file to temporary location    ${LoanAction[0]}    ${pid}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}  
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200 
-    Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
+    Set Test Variable    ${driveId}    ${resp.json()[0]['driveId']}
 
     ${prescriptionAttachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${pid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}   driveId=${driveId}
     Log  ${prescriptionAttachments}
     ${prescriptionAttachments}=  Create List   ${prescriptionAttachments}
-    Set Suite Variable    ${prescriptionAttachments}
+    Set Test Variable    ${prescriptionAttachments}
 
     ${mrPrescriptions}=  Create Dictionary  medicineName=${med_name}  frequency=${frequency}  duration=${duration}  instructions=${instrn}  dosage=${dosage}
-    Set Suite Variable    ${mrPrescriptions}
     ${note}=  FakerLibrary.Text  max_nb_chars=42 
 
     ${resp}=    Create Prescription    ${cid}    ${pid}      ${html}     ${mrPrescriptions}    prescriptionNotes=${note}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${prescription_uid}   ${resp.json()}
+    Set Test Variable    ${prescription_uid}   ${resp.json()}
 
     ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${referenceId}   ${resp.json()[0]['referenceId']}   
-    Set Suite Variable  ${uid}   ${resp.json()[0]['uid']}
-    Set Suite Variable  ${prescriptionStatus}   ${resp.json()[0]['prescriptionStatus']}
+    Set Test Variable  ${referenceId}   ${resp.json()[0]['referenceId']}   
+    Set Test Variable  ${uid}   ${resp.json()[0]['uid']}
+    Set Test Variable  ${prescriptionStatus}   ${resp.json()[0]['prescriptionStatus']}
 
     ${resp1}=  Get Prescription By UID    ${prescription_uid}
     Log  ${resp1.content}
@@ -307,3 +260,24 @@ JD-TC-PreDeploymentAppointment-1
     Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
 
     #......... Share Prescription to thirdparty...........
+
+    ${resp}=    Share Prescription To ThirdParty   ${prescription_uid}    ${message}     ${bool[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
+
+    #.......... Case Creation and share case............
+
+    ${doctor}=  Create Dictionary  id=${provider_id} 
+    ${consumer}=  Create Dictionary  id=${cid} 
+    ${title}=  FakerLibrary.name
+
+    ${resp}=  Create Case   ${title}  ${doctor}  ${consumer}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${message}=  FakerLibrary.sentence
+    ${medium}=  Create Dictionary  email=${bool[1]} 
+    ${resp}=  Share Case Pdf   ${bool[1]}  ${bool[0]}  ${consumer}  ${doctor}  ${message}  ${medium}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200

@@ -641,13 +641,23 @@ JD-TC-Take Appointment-11
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     ${lid1}=  Create Sample Location
+
+    sleep  1s
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -759,12 +769,19 @@ JD-TC-Take Appointment-12
     # clear_location  ${PUSERNAME_Z}
     # clear_location   ${PUSERNAME_Z}
 
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
     # clear_appt_schedule   ${PUSERNAME_Z}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -902,7 +919,7 @@ JD-TC-Take Appointment-13
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
+    # Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
 
     # clear_appt_schedule   ${PUSERNAME_A}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1973,15 +1990,34 @@ JD-TC-Take Appointment-19
         Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
     END
 
-    ${schedule_name1}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
+    ${resp}=    Get Appointment Schedules
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id1}  ${resp.json()}
+    IF   '${resp.content}' == '${emptylist}'       
+        ${schedule_name}=  FakerLibrary.bs
+        ${parallel}=  FakerLibrary.Random Int  min=10  max=20
+        ${maxval}=  Convert To Integer   ${delta/2}
+        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+        ${bool1}=  Random Element  ${bool}
+        ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}  ${s_id1}  ${s_id2}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${sch_id1}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${sch_id1}  ${resp.json()[0]['id']}
+        Set Test Variable  ${lid}  ${resp.json()[0]['location']['id']}
+        Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
+    END
+    
+    # ${schedule_name1}=  FakerLibrary.bs
+    # ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    # ${maxval}=  Convert To Integer   ${delta/2}
+    # ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    # ${bool1}=  Random Element  ${bool}
+    # ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id1}  ${resp.json()}
 
     ${resp}=  Get Appointment Schedule ById  ${sch_id1}
     Log  ${resp.json()}
@@ -4338,11 +4374,19 @@ JD-TC-Take Appointment-UH4
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     # clear_appt_schedule   ${PUSERNAME_A}
 
@@ -5204,12 +5248,19 @@ JD-TC-Take Appointment-UH19
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
     # clear_appt_schedule   ${PUSERNAME_Z}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -5503,20 +5554,14 @@ JD-TC-Take Appointment-UH23
 
     [Documentation]  take appointment and then disable location and see if appointment is accessible.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     # clear_service   ${PUSERNAME_Z}
     # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    clear_customer   ${PUSERNAME123}
  
-    ${lid1}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
-
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -5530,6 +5575,12 @@ JD-TC-Take Appointment-UH23
         Set Test Variable  ${lid}  ${resp.json()[0]['id']}
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
+    
+    ${lid1}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
 
     # clear_appt_schedule   ${PUSERNAME_Z}
    
@@ -5543,7 +5594,7 @@ JD-TC-Take Appointment-UH23
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid1}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id1}  ${resp.json()}
@@ -5561,7 +5612,7 @@ JD-TC-Take Appointment-UH23
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid1}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
@@ -5573,7 +5624,7 @@ JD-TC-Take Appointment-UH23
    
     Comment   Schedule gets automatically disabled when location is disabled.
 
-    ${resp}=  Disable Location  ${lid}
+    ${resp}=  Disable Location  ${lid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -5796,11 +5847,19 @@ JD-TC-Take Appointment-UH27
     # clear_location  ${PUSERNAME_Z}
     clear_customer   ${PUSERNAME_Z}
 
-    ${lid}=  Create Sample Location  
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     # clear_appt_schedule   ${PUSERNAME_Z}
 
