@@ -282,7 +282,7 @@ JD-TC-PreDeploymentAppointment-1
     ${message}=  FakerLibrary.sentence
     ${medium}=  Create Dictionary  email=${bool[1]} 
     
-    ${resp}=  Share Case Pdf  ${case_id}  ${bool[1]}  ${bool[0]}  ${consumer}  ${doctor}  ${message}  ${medium}
+    ${resp}=  Share Case Pdf  ${case_id}  ${bool[1]}  ${bool[0]}  ${consumer}  ${doctor}  ${message}  ${medium}  html=${html}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -297,3 +297,22 @@ JD-TC-PreDeploymentAppointment-1
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
     Set Test Variable    ${treatmentId}        ${resp.json()}
+
+1. create 2 services, one with auto enable.
+
+2. appt
+
+3. invoice view
+
+4. create invoice.
+
+5. add subservice.
+
+6. add item to invoice.
+
+7. Get Invoice.
+
+8. Reschedule.
+
+9. cancel.
+
