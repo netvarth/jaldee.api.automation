@@ -108,27 +108,27 @@ JD-TC-AssignTeamToWaitlist-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
      
-    ${USERNAME1}=  Evaluate  ${HLPUSERNAME20}+100044
-    Set Suite Variable  ${USERNAME1}
-    ${firstname}=  FakerLibrary.name
-    ${lastname}=  FakerLibrary.last_name
-    ${dob}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
-     # ${resp}=  Get LocationsByPincode     ${pin}
-     FOR    ${i}    IN RANGE    3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-     END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200 
+    # ${USERNAME1}=  Evaluate  ${HLPUSERNAME20}+100044
+    # Set Suite Variable  ${USERNAME1}
+    # ${firstname}=  FakerLibrary.name
+    # ${lastname}=  FakerLibrary.last_name
+    # ${dob}=  FakerLibrary.Date
+    # # ${pin}=  get_pincode
+    #  # ${resp}=  Get LocationsByPincode     ${pin}
+    #  FOR    ${i}    IN RANGE    3
+    #     ${pin}=  get_pincode
+    #     ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+    #     IF    '${kwstatus}' == 'FAIL'
+    #             Continue For Loop
+    #     ELSE IF    '${kwstatus}' == 'PASS'
+    #             Exit For Loop
+    #     END
+    #  END
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${whpnum}=  Evaluate  ${HLPUSERNAME20}+77487
-    ${tlgnum}=  Evaluate  ${HLPUSERNAME20}+65874
+    # ${whpnum}=  Evaluate  ${HLPUSERNAME20}+77487
+    # ${tlgnum}=  Evaluate  ${HLPUSERNAME20}+65874
 
     ${USERNAME1}  ${u_id1} =  Create and Configure Sample User
     Set Suite Variable  ${USERNAME1}
@@ -138,9 +138,9 @@ JD-TC-AssignTeamToWaitlist-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
-    ${USERNAME2}=  Evaluate  ${HLPUSERNAME20}+10458721
-    Set Suite Variable  ${USERNAME2}
-    clear_users  ${USERNAME2}
+    # ${USERNAME2}=  Evaluate  ${HLPUSERNAME20}+10458721
+    # Set Suite Variable  ${USERNAME2}
+    # clear_users  ${USERNAME2}
 
     ${firstname1}=  FakerLibrary.name
     ${lastname1}=  FakerLibrary.last_name
@@ -152,9 +152,9 @@ JD-TC-AssignTeamToWaitlist-1
     Set Suite Variable  ${u_id2}
 
     
-    ${USERNAME3}=  Evaluate  ${HLPUSERNAME20}+10458722
-    Set Suite Variable  ${USERNAME3}
-    clear_users  ${USERNAME3}
+    # ${USERNAME3}=  Evaluate  ${HLPUSERNAME20}+10458722
+    # Set Suite Variable  ${USERNAME3}
+    # clear_users  ${USERNAME3}
 
     ${firstname2}=  FakerLibrary.name
     ${lastname2}=  FakerLibrary.last_name
