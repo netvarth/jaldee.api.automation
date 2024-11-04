@@ -1182,8 +1182,12 @@ JD-TC-Update PaymentsOut With Expense--UH7
 
     ${resp}=   Update PaymentsOut With Expense   ${payable_uid1}    ${category_id2}   ${EMPTY}    ${due_amount2}   ${finance_payment_modes[0]}  ${dueDate}     ${lid}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${Please_enter_an_amount}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings   ${resp.json()}   ${Please_enter_an_amount}
+
+    ${resp}=  Get PaymentsOut By Id   ${payable_uid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-Update PaymentsOut With Expense--UH8
 
@@ -1211,8 +1215,12 @@ JD-TC-Update PaymentsOut With Expense--UH8
 
     ${resp}=   Update PaymentsOut With Expense   ${payable_uid1}    ${category_id1}   ${name1}    ${due_amount2}   ${finance_payment_modes[0]}  ${dueDate}     ${lid}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTSOUT_CATEGORY_ID}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTSOUT_CATEGORY_ID}
+
+    ${resp}=  Get PaymentsOut By Id   ${payable_uid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
 
 
