@@ -2388,6 +2388,7 @@ CANT_DISABLE_INV_CAT_FROM_SO_CAT_BCZ_ITEM = "Can't disable the inventory catalog
 X_NOT_FOUND = "{} not found"
 PURCHASE_CANT_PUSHE_TO_FINANCE_INVALID_STATUS = "You can't push to finance because this purchase is in {} status."
 ALREADY_PUSHED_TO_FINANCE = "Already pushed to finance"
+ALREADY_SET_TO="Already set to {}"
 
 # Vendor
 INVALID_NAME="Invalid Name"
