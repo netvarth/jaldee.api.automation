@@ -298,6 +298,7 @@ JD-TC-PreDeploymentAppointment-1
     Should Be Equal As Strings              ${resp.status_code}   200
     Set Test Variable    ${treatmentId}        ${resp.json()}
 
+*** Comments ***
 1. create 2 services, one with auto enable.
 
 2. appt
