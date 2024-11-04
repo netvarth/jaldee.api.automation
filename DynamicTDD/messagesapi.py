@@ -2387,6 +2387,7 @@ NO_PERMISSION_TO_CHANGE_STORE_LOCATION="No permission to change store location"
 CANT_DISABLE_INV_CAT_FROM_SO_CAT_BCZ_ITEM = "Can't disable the inventory catalog from this sales order catalog, because the inventory catalog items are there"
 X_NOT_FOUND = "{} not found"
 PURCHASE_CANT_PUSHE_TO_FINANCE_INVALID_STATUS = "You can't push to finance because this purchase is in {} status."
+ALREADY_PUSHED_TO_FINANCE = "Already pushed to finance"
 
 # Vendor
 INVALID_NAME="Invalid Name"
