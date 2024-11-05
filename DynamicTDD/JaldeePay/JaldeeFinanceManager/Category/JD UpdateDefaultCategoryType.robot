@@ -11,6 +11,7 @@ Library           /ebs/TDD/db.py
 Library           /ebs/TDD/excelfuncs.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
@@ -34,7 +35,7 @@ ${fileSize}  0.00458
 
 JD-TC- Update default category by type-1
 
-    [Documentation]   Update default category by type
+    [Documentation]   Create Category as Expense and  Update default category by type.
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME97}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -70,45 +71,16 @@ JD-TC- Update default category by type-1
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
     ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[0]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${category_id1}   ${resp.json()}
-
-    ${resp}=  Update default category by type   ${category_id1}  ${categoryType[0]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Default Category By Type   ${categoryType[0]}  
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['id']}            ${category_id1}
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
-
-    
-
-JD-TC- Update default category by type-2
-
-    [Documentation]  Create Category as Expense and  Update default category by type.
-
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME97}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${category_id1}   ${resp.json()}
+    Set Suite Variable   ${category_id1}   ${resp.json()}
 
     ${resp}=  Update default category by type   ${category_id1}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Default Category By Type  ${categoryType[1]}
+    ${resp}=  Get Default Category By Type   ${categoryType[1]}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['id']}            ${category_id1}
@@ -117,8 +89,37 @@ JD-TC- Update default category by type-2
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
+    
 
-JD-TC- Update default category by type-3
+# JD-TC- Update default category by type-2
+
+#     [Documentation]  Create Category as Expense and  Update default category by type.
+
+#     ${resp}=  Encrypted Provider Login    ${PUSERNAME97}  ${PASSWORD}
+#     Log  ${resp.json()}         
+#     Should Be Equal As Strings            ${resp.status_code}    200
+
+#     ${name}=   FakerLibrary.word
+#     ${resp}=  Create Category   ${name}  ${categoryType[1]} 
+#     Log  ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  200
+#     Set Test Variable   ${category_id1}   ${resp.json()}
+
+#     ${resp}=  Update default category by type   ${category_id1}  ${categoryType[1]} 
+#     Log  ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  200
+
+#     ${resp}=  Get Default Category By Type  ${categoryType[1]}
+#     Log  ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  200
+#     Should Be Equal As Strings  ${resp.json()['id']}            ${category_id1}
+#     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
+#     Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[1]}
+#     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
+#     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+
+
+JD-TC- Update default category by type-2
 
     [Documentation]  Create Category as Payable and  Update default category by type.
 
@@ -146,7 +147,7 @@ JD-TC- Update default category by type-3
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
 
-JD-TC- Update default category by type-4
+JD-TC- Update default category by type-3
 
     [Documentation]  Create Category as Invoice and  Update default category by type.
 
@@ -191,9 +192,44 @@ JD-TC- Update default category by type-UH2
 
     [Documentation]    Update default category by type Using Consumer Login
 
-    ${resp}=  ConsumerLogin  ${CUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME97}  ${PASSWORD}
     Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+
+    #............provider consumer creation..........
+
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Suite Variable  ${PCPHONENO}  555${PH_Number}
+
+    ${fname}=  generate_firstname
+    Set Suite Variable  ${fname}
+    ${lastname}=  FakerLibrary.last_name
+   
+    ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lastname}  countryCode=${countryCodes[1]} 
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
 
    ${resp}=  Update default category by type   ${category_id1}  ${categoryType[2]} 
     Log  ${resp.json()}
@@ -202,7 +238,7 @@ JD-TC- Update default category by type-UH2
 
 
 
-   
+*** Comments ***   
 
 
 JD-TC- Update default category by type-UH3

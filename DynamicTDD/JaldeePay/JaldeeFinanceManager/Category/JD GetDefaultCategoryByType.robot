@@ -11,6 +11,7 @@ Library           /ebs/TDD/db.py
 Library           /ebs/TDD/excelfuncs.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
@@ -69,14 +70,19 @@ JD-TC-JD GetDefaultCategoryByType-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
+     ${name}=   FakerLibrary.word
+    ${resp}=  CreateVendorCategory  ${name}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${category_id}   ${resp.json()}
+
     ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[0]} 
+    ${resp}=  Create Category   ${name}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${category_id1}   ${resp.json()}
 
-    ${resp}=  Update default category by type   ${category_id1}  ${categoryType[0]} 
-    Log  ${resp.json()}
+    ${resp}=  Update default category by type   ${category_id1}  ${category_id}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Default Category By Type   ${categoryType[0]}  
@@ -191,9 +197,43 @@ JD-TC-JD GetDefaultCategoryByType-UH2
 
     [Documentation]   Get Default Category By Type Using Consumer Login
 
-    ${resp}=  ConsumerLogin  ${CUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME95}  ${PASSWORD}
     Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+
+    #............provider consumer creation..........
+
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Suite Variable  ${PCPHONENO}  555${PH_Number}
+
+    ${fname}=  generate_firstname
+    Set Suite Variable  ${fname}
+    ${lastname}=  FakerLibrary.last_name
+   
+    ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lastname}  countryCode=${countryCodes[1]} 
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Default Category By Type   ${categoryType[0]}
     Log  ${resp.json()}
@@ -295,7 +335,7 @@ JD-TC-JD GetDefaultCategoryByType-UH4
 
 JD-TC-JD GetDefaultCategoryByType-UH5
 
-    [Documentation]   Create multiple Category as Vendor and try to  Update with different category by type.
+    [Documentation]   Create multiple Category as Expense and try to  Update with different category by type.
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME98}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -323,24 +363,24 @@ JD-TC-JD GetDefaultCategoryByType-UH5
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
     
     ${name1}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name1}  ${categoryType[0]} 
+    ${resp}=  Create Category   ${name1}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${category_id1}   ${resp.json()}
 
-    ${resp}=  Update default category by type   ${category_id1}  ${categoryType[0]} 
+    ${resp}=  Update default category by type   ${category_id1}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${name2}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name2}  ${categoryType[0]} 
+    ${resp}=  Create Category   ${name2}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${category_id2}   ${resp.json()}
 
-    ${resp}=  Update default category by type   ${category_id2}  ${categoryType[2]} 
+    ${resp}=  Update default category by type   ${category_id2}  ${categoryType[1]} 
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}     ${CANT_SET_PAYMENT}
     
 
