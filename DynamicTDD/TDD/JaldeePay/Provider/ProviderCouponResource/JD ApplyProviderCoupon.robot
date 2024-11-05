@@ -318,11 +318,13 @@ JD-TC-Apply ProviderCoupon-1
     Should Be Equal As Strings  ${resp.status_code}  200 
 
 
-    ${resp}=   Apply Provider Coupon for waitlist    ${wait_id1}   ${cupn_code}
+    # ${resp}=   Apply Provider Coupon for waitlist    ${wait_id1}   ${cupn_code}
+    # Log  ${resp.json()} 
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Apply Provider Coupon   ${invoice_uid}   ${cupn_code}
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
-
-
 
     ${resp}=  Get Invoice By Id  ${invoice_uid}
     Log  ${resp.content}

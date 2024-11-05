@@ -18016,6 +18016,14 @@ Check Server Availibility
     Check Deprication  ${resp}  Check server
     RETURN  ${resp}
 
+Update Status File Share
+
+    [Arguments]     ${status}    ${Drive_id}  
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/fileShare/upload/${status}/${Drive_id}    expected_status=any
+    Check Deprication  ${resp}  Update Status File Share
+    RETURN  ${resp}
+
 *** Comments ***
 
 

@@ -12,10 +12,11 @@ Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/providers.py
-Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/hl_providers.py
+# Variables         /ebs/TDD/varfiles/providers.py
+# Variables         /ebs/TDD/varfiles/consumerlist.py 
+# Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
+Variables          ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py
 
 *** Variables ***
 ${self}         0
@@ -28,12 +29,21 @@ ${pdffile}      /ebs/TDD/sample.pdf
 ${domain}       healthCare
 ${subdomain}    dentists
 
+${var_file}               ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py
+${data_file}              ${EXECDIR}/data/${ENVIRONMENT}data/${ENVIRONMENT}phnumbers.txt
+
 *** Test Cases ***
 JD-TC-PreDeploymentWaitlist-1
     [Documentation]   Waitlist workflow for pre-deployment.
 
-    ${firstname}  ${lastname}  ${PUSERNAME_A}  ${LoginId}=  Provider Signup     Domain=${domain}   SubDomain=${subdomain}
-    Set Suite Variable  ${PUSERNAME_A}
+    # ${firstname}  ${lastname}  ${PUSERNAME_A}  ${LoginId}=  Provider Signup     Domain=${domain}   SubDomain=${subdomain}
+    # Set Suite Variable  ${PUSERNAME_A}
+    # ${num}=  find_last  ${var_file}
+    # ${num}=  Evaluate   ${num}+1
+    # Append To File  ${data_file}  ${LoginId} - ${PASSWORD}${\n}
+    # Append To File  ${var_file}  PUSERNAME${num}=${LoginId}${\n}
+
+    ${PUSERNAME_A}=  Set Variable  ${PUSERNAME3}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
@@ -73,11 +83,14 @@ JD-TC-PreDeploymentWaitlist-1
 
     ${resp}=  Get jaldeeIntegration Settings
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[0]}   
-    ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  200  
+
+    IF  ${resp.json()['onlinePresence']}==${bool[0]}
+        ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${EMPTY}  ${EMPTY}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
     ${resp}=  Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -104,8 +117,9 @@ JD-TC-PreDeploymentWaitlist-1
     IF   '${resp.content}' == '${emptylist}'
         ${fname}=  generate_firstname
         ${lname}=  FakerLibrary.last_name
-        ${NewCustomer}    Generate random string    10    123456789
-        ${NewCustomer}    Convert To Integer  ${NewCustomer}
+        # ${NewCustomer}    Generate random string    10    123456789
+        # ${NewCustomer}    Convert To Integer  ${NewCustomer}
+        ${NewCustomer}=    Generate Random 555 Number
         Set Suite variable   ${NewCustomer}
         Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
         ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
@@ -142,10 +156,27 @@ JD-TC-PreDeploymentWaitlist-1
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${wid}  ${resp.json()['parent_uuid']}
     ELSE
-        Set Test Variable  ${wid}  ${resp.json()[0]['id']}
-        Set Test Variable  ${lid}  ${resp.json()[0]['location']['id']}
+        Set Test Variable   ${qid}   ${resp.json()[0]['id']}
         Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
     END
+
+    ${resp}=  Get Waitlist Today  waitlistStatus-eq=${wl_status[1]}     waitlistStatus-eq=${wl_status[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${prepay_wl_len}=  Get Length   ${resp.json()}
+    FOR   ${i}  IN RANGE   ${prepay_wl_len}
+
+        ${resp1}=  Waitlist Action  ${waitlist_actions[2]}   ${resp.json()[${i}]['ynwUuid']}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+
+    END
+
+    ${desc}=  FakerLibrary.word
+    ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${qid}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${wid}  ${resp.json()['parent_uuid']}
 
 
     #.....Apply Label ..............
@@ -180,6 +211,11 @@ JD-TC-PreDeploymentWaitlist-1
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200 
     Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
+    Set Suite Variable    ${S3_url}    ${resp.json()[0]['url']}
+
+    ${resp}=    Upload File To S3    ${S3_url}      ${jpgfile}
+
+    ${resp}=    Update Status File Share    ${QnrStatus[1]}     ${driveId}
 
     ${attachments}=  Create Dictionary  owner=${provider_id}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${pdrname}
     ${attachment}=   Create List  ${attachments}
@@ -201,9 +237,15 @@ JD-TC-PreDeploymentWaitlist-1
     ${resp}    upload file to temporary location    ${file_action[0]}    ${provider_id}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption1}    ${fileType1}    ${EMPTY}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200 
-    Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
+    Set Suite Variable    ${driveId1}    ${resp.json()[0]['driveId']}
+    Set Suite Variable    ${S3_url1}    ${resp.json()[0]['url']}
 
-    ${attachments}=  Create Dictionary  owner=${provider_id}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${pdrname}
+    ${resp}=    Upload File To S3    ${S3_url1}      ${jpgfile}
+
+    ${resp}=    Update Status File Share    ${QnrStatus[1]}     ${driveId1}
+
+
+    ${attachments}=  Create Dictionary  owner=${provider_id}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId1}  action=${file_action[0]}  ownerName=${pdrname}
 
     ${resp}=  Send Attachment From Waitlist    ${wid}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
     Log  ${resp.json()}
@@ -287,8 +329,47 @@ JD-TC-PreDeploymentWaitlist-1
     ${message}=  Fakerlibrary.Sentence
     Set Test Variable    ${message}
 
-    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${message}    ${pc_emailid1}
+    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${message}    ${bool[1]} 
     # ${bool[1]}       ${bool[1]}    ${bool[1]}    ${bool[1]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
+
+    #......... Share Prescription to thirdparty...........
+
+    ${fname}=  generate_firstname
+    Set Test Variable  ${emailid1}  ${fname}${C_Email}.${test_mail}
+    ${resp}=    Share Prescription To ThirdParty   ${prescription_uid}    ${message}     ${emailid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
+
+    #.......... Case Creation and share case............
+
+    ${doctor}=  Create Dictionary  id=${provider_id} 
+    ${consumer}=  Create Dictionary  id=${cid} 
+    ${title}=  FakerLibrary.name
+
+    ${resp}=  Create Case   ${title}  ${doctor}  ${consumer}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable    ${case_id}   ${resp.json()['uid']}
+
+    ${message}=  FakerLibrary.sentence
+    ${medium}=  Create Dictionary  email=${bool[1]} 
+    
+    ${resp}=  Share Case Pdf  ${case_id}  ${bool[1]}  ${bool[0]}  ${consumer}  ${doctor}  ${message}  ${medium}     html=${html}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    #....... Treatment plan ...........
+
+    ${treatment}=  FakerLibrary.name
+    ${work}=  FakerLibrary.name
+    ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
+    ${works}=  Create List  ${one}
+
+    ${resp}=    Create Treatment Plan    ${case_id}    ${treatment}  ${works}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   200
+    Set Test Variable    ${treatmentId}        ${resp.json()}
