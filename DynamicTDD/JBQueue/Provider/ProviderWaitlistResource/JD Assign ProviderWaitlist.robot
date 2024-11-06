@@ -519,6 +519,22 @@ JD-TC-AssignproviderWaitlist-5
 
     clear_customer   ${HLPUSERNAME2}
 
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1} 
     ${desc}=   FakerLibrary.sentence
@@ -527,6 +543,10 @@ JD-TC-AssignproviderWaitlist-5
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_duratn}   ${bool[0]}    ${servicecharge}  ${bool[0]}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id}  ${resp.json()}
+
+    ${resp}=  Auto Invoice Generation For Service   ${ser_id}    ${toggle[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
@@ -555,13 +575,11 @@ JD-TC-AssignproviderWaitlist-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
-    ${u_id1}=  Create Sample User 
-    Set suite Variable                    ${u_id1}
+    ${PUSERNAME_U1}  ${u_id1} =  Create and Configure Sample User
+
     ${resp}=  Get User
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
-    Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
 
     ${SERVICE2}=    generate_service_name 
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
@@ -574,55 +592,50 @@ JD-TC-AssignproviderWaitlist-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${s_id1}  ${resp.json()}
+
+    ${resp}=  Auto Invoice Generation For Service   ${s_id1}    ${toggle[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${queue_name}=  FakerLibrary.name
     ${resp}=  Create Queue   ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}    ${s_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${que_id1}  ${resp.json()}
 
-    ${u_id2}=  Create Sample User 
-    Set suite Variable                    ${u_id2}
-
-    ${SERVICE3}=    generate_service_name 
-    ${sTime2}=  add_timezone_time  ${tz}  1  15  
-    ${eTime2}=  add_timezone_time  ${tz}  2  00  
-    ${description}=  FakerLibrary.sentence
-    ${dur}=  FakerLibrary.Random Int  min=10  max=20
-    ${amt}=  FakerLibrary.Random Int  min=200  max=500
-    ${amt}=  Convert To Number  ${amt}  1
-    ${resp}=  Create Service   ${SERVICE3}  ${description}   ${dur}    ${bool[0]}     ${amt}  ${bool[0]}  
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${s_id2}  ${resp.json()}
-    ${queue_name}=  FakerLibrary.name
-    ${resp}=  Create Queue   ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  1  5  ${lid}   ${s_id2}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${que_id2}  ${resp.json()}
+    ${PUSERNAME_U2}  ${u_id2} =  Create and Configure Sample User
 
     ${resp}=   Assign provider Waitlist   ${wid}   ${u_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
+    
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bill By UUId  ${wid}
+    ${resp}=  Get Booking Invoices  ${wid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${pid}
+    Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
 
-    ${resp}=   Assign provider Waitlist   ${wid}   ${u_id2}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['billStatus']}  ${billStatus[0]}
 
-    ${resp}=  Get Waitlist By Id  ${wid} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
+    ${resp}=    Provider Logout
+    Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
+    Should Be Equal As Strings             ${resp.status_code}   200
 
-    ${resp}=  Get Bill By UUId  ${wid}
+    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['billStatus']}  ${billStatus[0]}
+
+    ${resp}=  Get Payment Details By UUId   ${wid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
