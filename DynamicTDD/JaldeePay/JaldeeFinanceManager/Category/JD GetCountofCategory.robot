@@ -247,5 +247,5 @@ JD-TC-Get count of Category-UH3
     ${resp}=  Get count of Category   categoryType-eq=${categoryType[3]}   account-eq=${account_id1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${NO_PERMISSION_TO_DO}
+    Should Be Equal As Strings   ${resp.json()}   ${NO_PERMISSION_TO_DO_OPERATION}
 

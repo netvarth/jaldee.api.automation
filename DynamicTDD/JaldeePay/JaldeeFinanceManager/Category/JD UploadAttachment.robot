@@ -96,7 +96,7 @@ JD-TC-UploadAttachment-1
     ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
     Log  ${Attachments}
 
-    ${resp}=  Upload Finance Attachment   ${category_id1}    ${categoryType[0]}    ${Attachments}
+    ${resp}=  Upload Finance Attachment   ${category_id1}    ${categoryType[1]}    ${Attachments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -215,32 +215,7 @@ JD-TC-UploadAttachment-UH1
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${INVALID_FM_CATEGORY_ID}
 
-JD-TC-UploadAttachment-UH2
 
-    [Documentation]  Create Category and upload a attachment with category id -Vendor id.(categoryType is Expense)
-
-      ${resp}=  Encrypted Provider Login    ${PUSERNAME98}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-    # Set Test Variable  ${userName}  ${resp.json()['userName']}
-
-    ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[1]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${category_id2}   ${resp.json()}
-
-    ${resp}=  Get Category By Id   ${category_id2}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
-    Log  ${Attachments}
-
-    ${resp}=  Upload Finance Attachment   ${category_id1}    ${categoryType[1]}    ${Attachments}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}  ${INVALID_FM_CATEGORY_ID}
 
 
 JD-TC-UploadAttachment-UH3
@@ -304,3 +279,32 @@ JD-TC-UploadAttachment-UH4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  ${resp.json()}  ${SESSION_EXPIRED}
+
+
+*** Comments ***
+JD-TC-UploadAttachment-UH2
+
+    [Documentation]  Create Category and upload a attachment with category id -Vendor id.(categoryType is Expense)
+
+      ${resp}=  Encrypted Provider Login    ${PUSERNAME98}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+    # Set Test Variable  ${userName}  ${resp.json()['userName']}
+
+    ${name}=   FakerLibrary.word
+    ${resp}=  Create Category   ${name}  ${categoryType[1]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${category_id2}   ${resp.json()}
+
+    ${resp}=  Get Category By Id   ${category_id2}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
+    Log  ${Attachments}
+
+    ${resp}=  Upload Finance Attachment   ${category_id1}    ${categoryType[1]}    ${Attachments}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${INVALID_FM_CATEGORY_ID}

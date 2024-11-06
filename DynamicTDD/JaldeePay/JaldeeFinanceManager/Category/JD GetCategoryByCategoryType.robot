@@ -65,11 +65,11 @@ JD-TC-GetCategoryByCategoryType-1
     ${resp}=  Get Category By CategoryType   ${categoryType[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[3]['id']}            ${category_id1}
-    Should Be Equal As Strings  ${resp.json()[3]['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()[3]['categoryType']}  ${categoryType[1]}
-    Should Be Equal As Strings  ${resp.json()[3]['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()[3]['status']}        ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()[4]['id']}            ${category_id1}
+    Should Be Equal As Strings  ${resp.json()[4]['name']}          ${name}
+    Should Be Equal As Strings  ${resp.json()[4]['categoryType']}  ${categoryType[1]}
+    Should Be Equal As Strings  ${resp.json()[4]['accountId']}     ${account_id1}
+    Should Be Equal As Strings  ${resp.json()[4]['status']}        ${toggle[0]}
 
 
 
@@ -162,20 +162,20 @@ JD-TC-GetCategoryByCategoryType-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${category_id2}   ${resp.json()}
 
-    ${resp}=  Get Category By CategoryType   ${categoryType[0]}
+    ${resp}=  Get Category By CategoryType   ${categoryType[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[4]['id']}            ${category_id1}
-    Should Be Equal As Strings  ${resp.json()[4]['name']}          ${name1}
-    Should Be Equal As Strings  ${resp.json()[4]['categoryType']}  ${categoryType[1]}
-    Should Be Equal As Strings  ${resp.json()[4]['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()[4]['status']}        ${toggle[0]}
-
-    Should Be Equal As Strings  ${resp.json()[5]['id']}            ${category_id2}
-    Should Be Equal As Strings  ${resp.json()[5]['name']}          ${name2}
+    Should Be Equal As Strings  ${resp.json()[5]['id']}            ${category_id1}
+    Should Be Equal As Strings  ${resp.json()[5]['name']}          ${name1}
     Should Be Equal As Strings  ${resp.json()[5]['categoryType']}  ${categoryType[1]}
     Should Be Equal As Strings  ${resp.json()[5]['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()[5]['status']}        ${toggle[0]}
+
+    Should Be Equal As Strings  ${resp.json()[6]['id']}            ${category_id2}
+    Should Be Equal As Strings  ${resp.json()[6]['name']}          ${name2}
+    Should Be Equal As Strings  ${resp.json()[6]['categoryType']}  ${categoryType[1]}
+    Should Be Equal As Strings  ${resp.json()[6]['accountId']}     ${account_id1}
+    Should Be Equal As Strings  ${resp.json()[6]['status']}        ${toggle[0]}
 
 
 JD-TC-GetCategoryByCategoryType-UH1
@@ -268,13 +268,13 @@ JD-TC-GetCategoryByCategoryType-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}    
-    Should Be Equal As Strings  ${len}  3
+    Should Be Equal As Strings  ${len}  4
    
 
 
 JD-TC-GetCategoryByCategoryType-UH4
 
-    [Documentation]  Create Category as Expense then update it as vendor then try to get category type as vendor.
+    [Documentation]  Create Category as Expense then update it as PaymentInOut then try to get category type as PaymentInOut.
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME10}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -313,13 +313,13 @@ JD-TC-GetCategoryByCategoryType-UH4
 
 
     ${name2}=   FakerLibrary.word
-    ${resp}=  Update Category   ${category_id1}  ${name2}  ${categoryType[0]} 
+    ${resp}=  Update Category   ${category_id1}  ${name2}  ${categoryType[2]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id2}   ${resp.json()}
 
-    ${resp}=  Get Category By CategoryType   ${categoryType[0]}
+    ${resp}=  Get Category By CategoryType   ${categoryType[2]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}    
-    Should Be Equal As Strings  ${len}  3    
+    Should Be Equal As Strings  ${len}  9    
