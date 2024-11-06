@@ -4518,7 +4518,7 @@ Get Waitlist Future
     Set To Dictionary  ${pro_headers}   &{tzheaders}
     Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw  /provider/waitlist/future  params=${kwargs}  expected_status=any
+    ${resp}=    GET On Session    ynw  /provider/waitlist/future/  params=${kwargs}  expected_status=any
     Check Deprication  ${resp}  Get Waitlist Future
     RETURN  ${resp}
 
@@ -13067,7 +13067,7 @@ Upload Finance Expense Attachment
 
 Create Invoice
 
-    [Arguments]    ${invoiceCategoryId}   ${invoiceDate}   ${invoiceLabel}    ${billedTo}  ${vendorUid}  ${invoiceId}    ${providerConsumerIdList}   ${lid}   @{vargs}   &{kwargs}
+    [Arguments]    ${invoiceCategoryId}   ${invoiceDate}   ${invoiceLabel}    ${billedTo}  ${vendorUid}  ${invoiceId}    ${providerConsumerIdList}  @{vargs}   &{kwargs}
 
      ${len}=  Get Length  ${vargs}
     ${itemList}=  Create List  
@@ -13076,7 +13076,7 @@ Create Invoice
         Exit For Loop If  ${len}==0
         Append To List  ${itemList}  ${vargs[${index}]}
     END
-    ${data}=  Create Dictionary  invoiceCategoryId=${invoiceCategoryId}     invoiceDate=${invoiceDate}   invoiceLabel=${invoiceLabel}  billedTo=${billedTo}    vendorUid=${vendorUid}  invoiceId=${invoiceId}    providerConsumerIdList=${providerConsumerIdList}   locationId=${lid}   itemList=${itemList} 
+    ${data}=  Create Dictionary  invoiceCategoryId=${invoiceCategoryId}     invoiceDate=${invoiceDate}   invoiceLabel=${invoiceLabel}  billedTo=${billedTo}    vendorUid=${vendorUid}  invoiceId=${invoiceId}    providerConsumerIdList=${providerConsumerIdList}   itemList=${itemList} 
 
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
@@ -15083,6 +15083,15 @@ Generate OTP For LOS Lead Kyc Phone Number
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/los/lead/coapplicant/phoneotp/generate   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Verify OTP For LOS Lead Kyc Phone Number
+    [Arguments]  ${phone}  ${purpose}
+    
+    ${key}=  verify accnt  ${phone}   ${purpose}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw    /provider/los/lead/coapplicant/phoneotp/${key}/verify  expected_status=any
+    Check Deprication  ${resp}  Verify OTP For LOS Lead Kyc Phone Number
     RETURN  ${resp}
 
 AddItemToInvoice
