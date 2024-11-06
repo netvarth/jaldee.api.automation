@@ -61,18 +61,6 @@ JD-TC-Reschedule Waitlist-1
     [Documentation]  Provider takes checkin for a consumer and reschedules it to another day.
     ...  ${SPACE} Check Communication messages also
     
-    # ${resp}=  Consumer Login  ${CUSERNAME12}  ${PASSWORD}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # Set Test Variable  ${jdconID}   ${resp.json()['id']}
-    # Set Test Variable  ${fname}   ${resp.json()['firstName']}
-    # Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    # Set Test Variable  ${uname}   ${resp.json()['userName']}
-
-    # ${resp}=  Consumer Logout
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    
     ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -101,9 +89,6 @@ JD-TC-Reschedule Waitlist-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 	
     ${SERVICE1}=    generate_service_name
     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -113,8 +98,19 @@ JD-TC-Reschedule Waitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
-    ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END 
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -149,7 +145,7 @@ JD-TC-Reschedule Waitlist-1
     # ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
+    ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}    location=${lid}    
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
