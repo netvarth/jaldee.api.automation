@@ -76,6 +76,10 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     ${resp}=  AddCustomer  ${CUSERNAME0}    firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  email=${pc_emailid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Send Otp For Login    ${CUSERNAME0}    ${account_id}
     Log   ${resp.content}
@@ -86,10 +90,6 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
-    
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${account_id}  ${token} 
     Log   ${resp.content}
@@ -112,121 +112,21 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
 
     Set Suite Variable  ${ZOOM_id2}    ${UserZOOM_id0}
     Set Suite Variable  ${WHATSAPP_id2}   ${countryCodes[0]}${CUSERNAME0}
-    
-    
-
-    # ${PUSERPH0}=  Evaluate  ${PUSERNAME}+19918247
-    # Set Suite Variable   ${PUSERPH0}
-    
-    # ${licid}  ${licname}=  get_highest_license_pkg
-    # Log  ${licid}
-    # Log  ${licname}
-    # ${domresp}=  Get BusinessDomainsConf
-    # Log   ${domresp.json()}
-    # Should Be Equal As Strings  ${domresp.status_code}  200
-    # ${dlen}=  Get Length  ${domresp.json()}
-    # FOR  ${pos}  IN RANGE  ${dlen}  
-    #     Set Suite Variable  ${d1}  ${domresp.json()[${pos}]['domain']}
-    #     ${sd1}  ${check}=  Get Billable Subdomain  ${d1}  ${domresp}  ${pos}  
-    #     Set Suite Variable   ${sd1}
-    #     Exit For Loop IF     '${check}' == '${bool[1]}'
-    # END
-    # Log  ${d1}
-    # Log  ${sd1}
-
-    # ${firstname}=  FakerLibrary.first_name
-    # ${lastname}=  FakerLibrary.last_name
-    # ${address}=  FakerLibrary.address
-    # ${dob}=  FakerLibrary.Date
-    # ${gender}=    Random Element    ${Genderlist}
-    # ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd1}  ${PUSERPH0}  ${licid}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${resp}=  Account Activation  ${PUSERPH0}  0
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # Should Be Equal As Strings  "${resp.json()}"    "true"
-    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
-
-    # ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
-    # Set Test Variable  ${pid}  ${resp.json()['id']}
+
     clear_customer   ${HLPUSERNAME2}
 
+    # ${list}=  Create List  1  2  3  4  5  6  7
+    # Set Suite Variable  ${list}  ${list}
+    # ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    # ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    # Set Suite Variable  ${tz}
     
-    ${list}=  Create List  1  2  3  4  5  6  7
-    Set Suite Variable  ${list}  ${list}
-    ${ph1}=  Evaluate  ${HLPUSERNAME2}+1000000000
-    ${ph2}=  Evaluate  ${HLPUSERNAME2}+2000000000
-    # ${views}=  Random Element    ${Views}
-    # ${name1}=  FakerLibrary.name
-    # ${name2}=  FakerLibrary.name
-    # ${name3}=  FakerLibrary.name
-    # ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
-    # ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    # ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
-    # ${bs}=  FakerLibrary.bs
-    # ${companySuffix}=  FakerLibrary.companySuffix
-    # ${city}=   FakerLibrary.state
-    # ${latti}=  get_latitude
-    # ${longi}=  get_longitude
-    # ${postcode}=  FakerLibrary.postcode
-    # ${address}=  get_address
-    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    Set Suite Variable  ${tz}
-    # ${parking}   Random Element   ${parkingType}
-    # ${24hours}    Random Element    ${bool}
-    # ${desc}=   FakerLibrary.sentence
-    # ${url}=   FakerLibrary.url
-    # ${DAY1}=  db.get_date_by_timezone  ${tz}
-    # ${sTime}=  add_timezone_time  ${tz}  0  15  
-    # Set Suite Variable   ${sTime}
-    # ${eTime}=  add_timezone_time  ${tz}  0  45  
-    # Set Suite Variable   ${eTime}
-    # ${DAY1}=  db.get_date_by_timezone  ${tz}
-    # Set Suite Variable  ${DAY1}  
-    
-    # ${resp}=  Update Business Profile with Schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${resp}=  Get Business Profile
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${fields}=   Get subDomain level Fields  ${d1}  ${sd1}
-    # Log  ${fields.json()}
-    # Should Be Equal As Strings    ${fields.status_code}   200
-
-    # ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
-
-    # ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sd1}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=  Get specializations Sub Domain  ${d1}  ${sd1}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-
-    # ${spec}=  get_Specializations  ${resp.json()}
-    # ${resp}=  Update Specialization  ${spec}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-
-    # Set Test Variable  ${email_id}  ${P_Email}${HLPUSERNAME2}.${test_mail}
-
-    # ${resp}=  Update Email   ${p_id}   ${firstname}  ${lastname}   ${email_id}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
     ${resp}=  Get Waitlist Settings
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -234,31 +134,6 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
         ${resp}=   Enable Waitlist
         Should Be Equal As Strings  ${resp.status_code}  200
     END
-    
-    # ${resp}=  Get jaldeeIntegration Settings
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
-
-    # ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # ${resp}=  Get jaldeeIntegration Settings
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-
-    # ${resp}=  Update Waitlist Settings  ${calc_mode[1]}  5  ${bool[0]}  ${bool[0]}  ${bool[1]}  ${bool[0]}   ${Empty}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    
-    # ${resp}=  View Waitlist Settings
-    # Log   ${resp.json()}   
-    # Should Be Equal As Strings  ${resp.status_code}  200 
-    # Verify Response  ${resp}  onlineCheckIns=${bool[1]}
-
-    # ${resp}=  Enable Disable Virtual Service  Enable
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${ZOOM_id0}=  Format String  ${ZOOM_url}  ${HLPUSERNAME2}
     Set Suite Variable   ${ZOOM_id0}
@@ -287,9 +162,10 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['status']}          ACTIVE
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['instructions']}    ${instructions2}
 
-    ${PUSERPH_id0}=  Evaluate  ${PUSERNAME}+50505
+    # ${PUSERPH_id0}=  Evaluate  ${PUSERNAME}+50505
     Set Test Variable  ${callingMode1}     ${CallingModes[1]}
-    Set Test Variable  ${ModeId1}          ${PUSERPH_id0}
+    # Set Test Variable  ${ModeId1}          ${PUSERPH_id0}
+    Set Test Variable  ${ModeId1}          ${HLPUSERNAME2}
     Set Test Variable  ${ModeStatus1}      ACTIVE
     ${Description1}=    FakerLibrary.sentence
     ${VScallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   countryCode=${countryCodes[0]}  status=${ModeStatus1}   instructions=${Description1}
@@ -301,10 +177,10 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     ${description}=    FakerLibrary.word
     Set Test Variable  ${vstype}  ${vservicetype[0]}
     ${resp}=  Create virtual Service  ${SERVICE1}   ${description}   5   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${Total1}  ${bool[0]}   ${bool[0]}   ${vstype}   ${virtualCallingModes1}
-    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${S_id1}  ${resp.json()} 
+
     ${resp}=   Get Service By Id  ${S_id1}
     Should Be Equal As Strings  ${resp.status_code}  200
     Log  ${resp.json()}
@@ -326,10 +202,10 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     ${description2}=    FakerLibrary.word
     Set Test Variable  ${vstype2}  ${vservicetype[1]}
     ${resp}=  Create virtual Service  ${SERVICE2}   ${description2}   5   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${Total2}  ${bool[0]}   ${bool[0]}   ${vstype2}   ${virtualCallingModes2}
-    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${S_id2}  ${resp.json()} 
+    
     ${resp}=   Get Service By Id  ${S_id2}
     Should Be Equal As Strings  ${resp.status_code}  200
     Log  ${resp.json()}
