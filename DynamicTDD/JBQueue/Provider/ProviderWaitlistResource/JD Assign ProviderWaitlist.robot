@@ -1916,7 +1916,7 @@ JD-TC-AssignproviderWaitlist-UH7
     Should Be Equal As Strings    ${resp.status_code}    200
 
     clear_customer   ${HLPUSERNAME2}
-    ${account_id}=  get_acc_id  ${HLPUSERNAME10}
+    ${account_id}=  get_acc_id  ${HLPUSERNAME2}
 
     ${resp}=    Get Locations
     Log   ${resp.json()}
