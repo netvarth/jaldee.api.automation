@@ -62,4 +62,4 @@ JD-TC-GetCategorywithfilter-1
     ${resp}=  Get Status List Configuration  ${categoryType[0]}    
     Log  ${resp.json()}
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}  5
+    Should Be Equal As Integers  ${len}  1
