@@ -16,7 +16,7 @@ Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/consumermail.py
+# Variables         /ebs/TDD/varfiles/consumermail.py
 
 ***Keywords***
 
