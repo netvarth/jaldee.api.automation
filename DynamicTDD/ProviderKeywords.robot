@@ -15018,8 +15018,7 @@ Save And Proceed LOS Lead Followup
 Save LOS Lead As Draft For Kyc
     [Arguments]     ${uid}  ${stageUid}  &{kwargs}
 
-    ${leadStage}=   Create Dictionary  uid=${stageUid}
-    ${data}=  Create Dictionary  leadStage=${leadStage}
+    ${data}=  Create Dictionary
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary   ${data}   ${key}=${value}
     END
@@ -15072,6 +15071,18 @@ Save And Proceed LOS Lead SALESFIELD
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/salesfield/data/proceed   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Generate OTP For LOS Lead Kyc Phone Number
+    [Arguments]  ${leadUid}  &{kwargs}
+
+    ${data}=  Create Dictionary  leadUid=${leadUid}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/los/lead/coapplicant/phoneotp/generate   data=${data}  expected_status=any
     RETURN  ${resp}
 
 AddItemToInvoice
