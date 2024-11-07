@@ -287,16 +287,21 @@ JD-TC-Apply Service to Finance-1
     ${preferredPaymentMode}=    Create List    ${jaldeePaymentmode[0]}
     ${bankInfo}=    Create Dictionary     bankaccountNo=${bank_accno}    ifscCode=${bankIfsc}    bankName=${bankName}    upiId=${upiId}     branchName=${branchName}    pancardNo=${pan}    gstNumber=${gstin}    preferredPaymentMode=${preferredPaymentMode}    lastPaymentModeUsed=${jaldeePaymentmode[0]}
     ${bankInfo}=    Create List         ${bankInfo}
-    
-    ${resp}=  Create Vendor  ${category_id}  ${vendorId}  ${vender_name}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${vendor_uid1}   ${resp.json()['encId']}
-    Set Suite Variable   ${vendor_id1}   ${resp.json()['id']}
 
-    ${resp}=  Get vendor by encId   ${vendor_uid1}
+    ${resp}=   Get next invoice Id   ${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${invoiceId}   ${resp.json()}
+    
+    # ${resp}=  Create Vendor  ${category_id}  ${vendorId}  ${vender_name}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${vendor_uid1}   ${resp.json()['encId']}
+    # Set Suite Variable   ${vendor_id1}   ${resp.json()['id']}
+
+    # ${resp}=  Get vendor by encId   ${vendor_uid1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp1}=  AddCustomer  ${CUSERNAME11}
     Log  ${resp1.content}
@@ -314,7 +319,7 @@ JD-TC-Apply Service to Finance-1
     # Set Suite Variable  ${address}
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
-    ${invoiceId}=   FakerLibrary.word
+
 
 
      ${SERVICE1}=    FakerLibrary.word
@@ -339,7 +344,7 @@ JD-TC-Apply Service to Finance-1
     ${serviceList}=    Create List    ${serviceList}
     
     
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   ${lid}   serviceList=${serviceList}
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}     ${invoiceId}    ${providerConsumerIdList}   ${lid}   serviceList=${serviceList}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]} 
@@ -1034,9 +1039,7 @@ JD-TC-Apply Services to Invoice-5
     # # ${longi}=  get_longitude
     # # ${postcode}=  FakerLibrary.postcode
     # # ${address}=  get_address
-    # ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    # ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    # Set Suite Variable  ${tz}
+
     # ${parking}   Random Element   ${parkingType}
     # ${24hours}    Random Element    ['True','False']
     # ${desc}=   FakerLibrary.sentence
@@ -1046,8 +1049,7 @@ JD-TC-Apply Services to Invoice-5
     # ${eTime}=  add_timezone_time  ${tz}  0  45  
     # Set Suite Variable   ${eTime}
 
-    # ${DAY}=  db.get_date_by_timezone  ${tz}
-    # Set Suite Variable  ${DAY}  
+
     
     # ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     # Log  ${resp.content}
@@ -1093,7 +1095,7 @@ JD-TC-Apply Services to Invoice-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Verify Response  ${resp}  onlineCheckIns=${bool[1]}
 
@@ -1167,6 +1169,13 @@ JD-TC-Apply Services to Invoice-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_lid}  ${resp.json()[0]['id']} 
 
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY}  
+
     ${min_pre}=   Random Int   min=40   max=50
     ${Tot}=   Random Int   min=100   max=300
     ${min_pre}=  Convert To Number  ${min_pre}  1
@@ -1176,10 +1185,11 @@ JD-TC-Apply Services to Invoice-5
 
     ${P1SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${P1SERVICE1}  ${desc}   ${service_duration1}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${Tot}  ${bool[1]}  ${bool[1]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${p1_sid1}  ${resp.json()}
+    # ${resp}=  Create Service  ${P1SERVICE1}  ${desc}   ${service_duration1}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${Tot}  ${bool[1]}  ${bool[1]}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${p1_sid1}  ${resp.json()}
+    ${p1_sid1}=  Create Sample Service   ${P1SERVICE1}  isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}   maxBookingsAllowed=10
 
     ${resp}=  Auto Invoice Generation For Service   ${p1_sid1}    ${toggle[0]}
     Log  ${resp.json()}
@@ -1194,10 +1204,11 @@ JD-TC-Apply Services to Invoice-5
     ${P1SERVICE2}=    FakerLibrary.word
     Set Suite Variable   ${P1SERVICE2} 
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${P1SERVICE2}  ${desc}   ${service_duration1}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${Tot}  ${bool[0]}  ${bool[1]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${p1_sid2}  ${resp.json()}
+    # ${resp}=  Create Service  ${P1SERVICE2}  ${desc}   ${service_duration1}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${Tot}  ${bool[0]}  ${bool[1]}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${p1_sid2}  ${resp.json()}
+    ${p1_sid2}=  Create Sample Service   ${P1SERVICE2}  
 
     ${quantity}=   Random Int  min=5  max=10
     ${quantity}=  Convert To Number  ${quantity}  1
@@ -1244,7 +1255,7 @@ JD-TC-Apply Services to Invoice-5
     ${email}=    FakerLibrary.Email
     Set Suite Variable    ${email}
 
-    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1253,23 +1264,34 @@ JD-TC-Apply Services to Invoice-5
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${accountId}
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${pid}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200    
    
-    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid1}    ${resp.json()['providerConsumer']}
 
 
+    Set Test Variable  ${consumerEmail}  ${primaryMobileNo}.${test_mail}
+
+    ${resp}=    Update ProviderConsumer    ${cid1}    email=${consumerEmail}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get ProviderConsumer
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
     ${msg}=  Fakerlibrary.word
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_qid}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${self}
+    ${resp}=  Add To Waitlist Consumers    ${cid1}   ${pid}  ${p1_qid}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -1295,7 +1317,7 @@ JD-TC-Apply Services to Invoice-5
 
     sleep   02s
 
-    ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre}  ${purpose[0]}  ${cwid}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${None}
+    ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre}  ${purpose[0]}  ${cwid}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${cid1}
     Log  ${resp.json()}
     # ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre}  ${purpose[0]}  ${cwid}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${cid1}
     # Log  ${resp.json()}
@@ -1381,7 +1403,7 @@ JD-TC-Apply Services to Invoice-5
 
 
 
-JD-TC-Apply Service To Finance-6
+JD-TC-Apply Service To Finance-UH1
 
     [Documentation]   Have Prepayment service for provider.consumer is try to take booking without prepayment.
 
@@ -1457,7 +1479,7 @@ JD-TC-Apply Service To Finance-6
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -1494,7 +1516,7 @@ JD-TC-Apply Service To Finance-6
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1507,33 +1529,46 @@ JD-TC-Apply Service To Finance-6
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${cid1}    ${resp.json()['providerConsumer']}
 
-    ${resp}=  Get Appointment Schedules Consumer  ${pid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Appointment Schedule ById Consumer  ${sch_id}   ${pid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${pid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    # ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${pid}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    # @{slots}=  Create List
+    # FOR   ${i}  IN RANGE   0   ${no_of_slots}
+    #     IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+    #         Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+    #     END
+    # END
+    # ${num_slots}=  Get Length  ${slots}
+    # ${j}=  Random Int  max=${num_slots-1}
+    # Set Test Variable   ${slot1}   ${slots[${j}]}
+
+    # ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
+    # ${apptfor}=   Create List  ${apptfor1}
+
+
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Set Test Variable   ${a${i}}  ${resp.json()[0]['availableSlots'][${i}]['time']}
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
         END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${num_slots-1}
-    Set Test Variable   ${slot1}   ${slots[${j}]}
+    Set Suite Variable   ${slot1}   ${slots[${j}]}
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${lid}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1553,10 +1588,13 @@ JD-TC-Apply Service To Finance-6
     Should Be Equal As Strings            ${resp.status_code}    200
 
     sleep  02s
+
+    ${NO_INVOICE_GENERATED}=  format String   ${NO_INVOICE_GENERATED}   ${apptid1}
 #   Invoice is not generated because prepayment pending
     ${resp1}=  Get Bookings Invoices  ${apptid1}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  422
+    Should Be Equal As Strings  ${resp1.json()}   ${NO_INVOICE_GENERATED}
           
 *** Comments ***
 JD-TC-Apply Service Level Discount-2
