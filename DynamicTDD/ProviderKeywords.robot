@@ -13066,8 +13066,8 @@ Upload Finance Expense Attachment
     RETURN  ${resp}
 
 Create Invoice
-
-    [Arguments]    ${invoiceCategoryId}   ${invoiceDate}   ${invoiceLabel}    ${billedTo}  ${vendorUid}  ${invoiceId}    ${providerConsumerIdList}  @{vargs}   &{kwargs}
+    # invoiceLabel=${invoiceLabel}  billedTo=${billedTo}    vendorUid=${vendorUid}
+    [Arguments]    ${invoiceCategoryId}   ${invoiceDate}    ${invoiceId}    ${providerConsumerIdList}   ${lid}   @{vargs}   &{kwargs}
 
      ${len}=  Get Length  ${vargs}
     ${itemList}=  Create List  
@@ -13076,7 +13076,7 @@ Create Invoice
         Exit For Loop If  ${len}==0
         Append To List  ${itemList}  ${vargs[${index}]}
     END
-    ${data}=  Create Dictionary  invoiceCategoryId=${invoiceCategoryId}     invoiceDate=${invoiceDate}   invoiceLabel=${invoiceLabel}  billedTo=${billedTo}    vendorUid=${vendorUid}  invoiceId=${invoiceId}    providerConsumerIdList=${providerConsumerIdList}   itemList=${itemList} 
+    ${data}=  Create Dictionary  invoiceCategoryId=${invoiceCategoryId}     invoiceDate=${invoiceDate}     invoiceId=${invoiceId}    providerConsumerIdList=${providerConsumerIdList}   locationId=${lid}  itemList=${itemList} 
 
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
@@ -13089,9 +13089,9 @@ Create Invoice
     RETURN  ${resp}
 
 Update Invoice
-
-    [Arguments]    ${uid}     ${invoiceCategoryId}    ${invoiceDate}   ${invoiceLabel}    ${billedTo}  ${vendorUid}      &{kwargs}
-    ${data}=  Create Dictionary  invoiceCategoryId=${invoiceCategoryId}     invoiceDate=${invoiceDate}   invoiceLabel=${invoiceLabel}  billedTo=${billedTo}    vendorUid=${vendorUid}  
+    # invoiceLabel=${invoiceLabel}  billedTo=${billedTo}    vendorUid=${vendorUid} 
+    [Arguments]    ${uid}     ${invoiceCategoryId}    ${invoiceDate}        &{kwargs}
+    ${data}=  Create Dictionary  invoiceCategoryId=${invoiceCategoryId}     invoiceDate=${invoiceDate}    
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END
