@@ -15086,13 +15086,40 @@ Generate OTP For LOS Lead Kyc Phone Number
     RETURN  ${resp}
 
 Verify OTP For LOS Lead Kyc Phone Number
-    [Arguments]  ${phone}  ${purpose}
+    [Arguments]  ${phone}  ${purpose}  ${leadUid}  &{kwargs}
     
-    ${key}=  verify accnt  ${phone}   ${purpose}
+    ${data}=  Create Dictionary  leadUid=${leadUid}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    ${otp}=  verify accnt  ${phone}   ${purpose}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw    /provider/los/lead/coapplicant/phoneotp/${key}/verify  expected_status=any
+    ${resp}=  POST On Session  ynw    /provider/los/lead/coapplicant/phoneotp/${otp}/verify   data=${data}  expected_status=any
     Check Deprication  ${resp}  Verify OTP For LOS Lead Kyc Phone Number
     RETURN  ${resp}
+
+Generate OTP For LOS Lead Kyc Email
+    [Arguments]  ${id}  ${leadUid}  ${consumerEmail}
+
+    ${data}=    Create Dictionary   id=${id}  leadUid=${leadUid}  consumerEmail=${consumerEmail}
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/los/lead/coapplicant/emailotp/generate   data=${data}  expected_status=any
+    Check Deprication  ${resp}  Generate OTP For LOS Lead Kyc Email
+    RETURN  ${resp}
+
+Verify OTP For LOS Lead Kyc Email
+    [Arguments]  ${consumerEmail}  ${purpose}  ${id}  ${leadUid}
+
+    ${data}=  Create Dictionary  id=${id}  leadUid=${leadUid} 
+    ${data}=    json.dumps    ${data}
+    ${otp}=  verify accnt  ${consumerEmail}   ${purpose}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw    /provider/los/lead/coapplicant/emailotp/${otp}/verify   data=${data}  expected_status=any
+    Check Deprication  ${resp}  Verify OTP For LOS Lead Kyc Email
+    RETURN  ${resp}
+
 
 AddItemToInvoice
    [Arguments]  ${uuid}   ${ItemLists}  &{kwargs}
