@@ -195,9 +195,23 @@ JD-TC-change appointment status for multiple appointments-2
     # Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Suite Variable   ${slot1}   ${slots[${j1}]}
+
+    # ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
     ${sTime3}=  add_timezone_time  ${tz}  3  50
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -206,7 +220,7 @@ JD-TC-change appointment status for multiple appointments-2
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=5
     ${bool1}=  Random Element  ${bool}
-    ${list}=  Create List  1  3  5  7
+    ${list}=  Create List  1  2  3  4  5  6  7
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime3}  ${eTime3}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -222,9 +236,23 @@ JD-TC-change appointment status for multiple appointments-2
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id2}  ${DAY1}  ${s_id1}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][0]['time']}
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot2}   ${slots[${j1}]}
+
+    # ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id2}  ${DAY1}  ${s_id1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][0]['time']}
 
     ${resp}=  AddCustomer  ${CUSERNAME4}
     Log   ${resp.json()}
@@ -575,13 +603,15 @@ JD-TC-change appointment status for multiple appointments-6
     ${fname3}=   generate_firstname
     ${lname3}=   FakerLibrary.last_name
     FOR   ${a}  IN RANGE   ${count}
-            
-        ${resp}=  AddCustomer  ${CUSERNAME${a}}  
+        
+        ${NewCustomer}    Generate random string    10    123456789
+        ${NewCustomer}    Convert To Integer  ${NewCustomer}
+        ${resp}=  AddCustomer  ${NewCustomer}  
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${cid${a}}   ${resp.json()}
 
-        ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME${a}}
+        ${resp}=  GetCustomer  phoneNo-eq=${NewCustomer}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         Should Be Equal As Strings  ${resp.json()[0]['id']}  ${cid${a}}
@@ -810,13 +840,15 @@ JD-TC-change appointment status for multiple appointments UH-5
     ${fname0}=   generate_firstname
     ${lname0}=   FakerLibrary.last_name
     FOR   ${a}  IN RANGE   ${count}
-            
-        ${resp}=  AddCustomer  ${CUSERNAME${a}}  
+        
+        ${NewCustomer}    Generate random string    10    123456789
+        ${NewCustomer}    Convert To Integer  ${NewCustomer}
+        ${resp}=  AddCustomer  ${NewCustomer}  
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${cid${a}}   ${resp.json()}
 
-        ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME${a}}
+        ${resp}=  GetCustomer  phoneNo-eq=${NewCustomer}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         Should Be Equal As Strings  ${resp.json()[0]['id']}  ${cid${a}}

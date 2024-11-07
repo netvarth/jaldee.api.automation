@@ -765,9 +765,9 @@ JD-TC-UpdateAppointmentRating-UH7
 
 	[Documentation]   Update Rating By Consumer using another provider's account id.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME104}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${pid1}=  get_acc_id  ${PUSERNAME104}
+    ${pid1}=  get_acc_id  ${PUSERNAME105}
 
     ${resp}=  Provider Logout
     Log   ${resp.json()}

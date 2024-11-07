@@ -65,29 +65,9 @@ JD-TC-GetAppointmentTodayCount-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # FOR  ${i}  IN RANGE   5
-    #     ${city1}=   get_place
-    #     Exit For Loop If  '${city1}' != '${city}'
-    # END
-    # Set Test Variable  ${city}  ${city1}  
     
     ${list}=  Create List  1  2  3  4  5  6  7
-    # ${sTime1}=  db.get_time_by_timezone  ${tz}
-    # ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    # ${eTime1}=  add_two   ${sTime1}  ${delta}
-    # ${DAY1}=  db.get_date_by_timezone  ${tz}
-    # Set Suite Variable   ${DAY1}
 
-    # ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    # ${tz1}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    # Set Suite Variable  ${tz1}
-    # ${parking}    Random Element     ${parkingType} 
-    # ${24hours}    Random Element    ['True','False']
-    # ${url}=   FakerLibrary.url
-    # ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable  ${lid1}  ${resp.json()}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
@@ -175,12 +155,12 @@ JD-TC-GetAppointmentTodayCount-1
     ${j}=  Random Int  max=${num_slots-1}
     Set Suite Variable   ${slot11}   ${slots[${j}]}
     
-    ${resp}=  AddCustomer  ${CUSERNAME17}  
+    ${resp}=  AddCustomer  ${CUSERNAME19}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME17}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME19}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
@@ -250,7 +230,7 @@ JD-TC-GetAppointmentTodayCount-1
     ${lname}=  FakerLibrary.last_name
     Set Suite Variable   ${lname}
    
-    ${resp}=  AddCustomer  ${CUSERNAME16}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
+    ${resp}=  AddCustomer  ${CUSERNAME18}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${cid}  ${resp.json()}
@@ -261,16 +241,16 @@ JD-TC-GetAppointmentTodayCount-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME16}    ${pid1}
+    ${resp}=    Send Otp For Login    ${CUSERNAME18}    ${pid1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME16}   ${OtpPurpose['Authentication']}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME18}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${fname}   ${resp.json()['firstName']}
@@ -366,9 +346,10 @@ JD-TC-GetAppointmentTodayCount-1
     Set Suite Variable   ${family_lname3}
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMember   ${family_fname3}  ${family_lname3}  ${dob}  ${gender}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200  
+
+    ${resp}=    Create Family Member       ${family_fname3}  ${family_lname3}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${cidfor3}   ${resp.json()}
 
     ${resp}=  ListFamilyMember
@@ -423,7 +404,7 @@ JD-TC-GetAppointmentTodayCount-1
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME16}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
@@ -470,7 +451,7 @@ JD-TC-GetAppointmentTodayCount-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -487,7 +468,7 @@ JD-TC-GetAppointmentTodayCount-2
 
 	[Documentation]  Filter Appointment Today Count by service id.
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -502,7 +483,7 @@ JD-TC-GetAppointmentTodayCount-3
 
 	[Documentation]  Filter Appointment Today Count by appointmentEncId.
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -521,7 +502,7 @@ JD-TC-GetAppointmentTodayCount-4
 
 	[Documentation]  Filter Appointment Today Count by first name.
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -534,7 +515,7 @@ JD-TC-GetAppointmentTodayCount-5
 
 	[Documentation]  Filter Appointment Today Count by last name.
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -548,7 +529,7 @@ JD-TC-GetAppointmentTodayCount-6
 
 	[Documentation]  Filter Appointment Today Count by schedule id.
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -562,7 +543,7 @@ JD-TC-GetAppointmentTodayCount-7
 	[Documentation]  Get consumer's appointments today Count where appointment taken by consumer(apptBy).
 
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -578,7 +559,7 @@ JD-TC-GetAppointmentTodayCount-8
 	[Documentation]   Filter consumer Appointments Today Count by location.
 
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -611,7 +592,7 @@ JD-TC-GetAppointmentTodayCount-9
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -643,7 +624,7 @@ JD-TC-GetAppointmentTodayCount-10
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -674,7 +655,7 @@ JD-TC-GetAppointmentTodayCount-11
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -707,7 +688,7 @@ JD-TC-GetAppointmentTodayCount-12
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -743,7 +724,7 @@ JD-TC-GetAppointmentTodayCount-13
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -759,7 +740,7 @@ JD-TC-GetAppointmentTodayCount-14
 	[Documentation]  Filter consumer Appointments Today Count by appointment Date.
 
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

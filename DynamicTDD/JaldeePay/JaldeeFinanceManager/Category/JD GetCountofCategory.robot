@@ -11,6 +11,7 @@ Library           /ebs/TDD/db.py
 Library           /ebs/TDD/excelfuncs.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
@@ -30,7 +31,7 @@ Get count of Category
 
 JD-TC-Get count of Category-1
 
-    [Documentation]  Create Category as Vendor and Get count of Category.
+    [Documentation]  Create Category as Expense and Get count of Category.
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME80}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -66,47 +67,25 @@ JD-TC-Get count of Category-1
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
     
     ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[0]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${category_id1}   ${resp.json()}
-
-    ${resp}=  Get Category With Filter   categoryType-eq=${categoryType[0]}   
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${len}=  Get Length  ${resp.json()}
-
-
-    ${resp}=  Get count of Category   categoryType-eq=${categoryType[0]}    account-eq=${account_id1}   
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()}   ${len}
-
-JD-TC-Get count of Category-2
-
-    [Documentation]  Create Category as Expense and Get count of Category.
-
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME80}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${category_id1}   ${resp.json()}
+    Set Suite Variable   ${category_id1}   ${resp.json()}
 
     ${resp}=  Get Category With Filter   categoryType-eq=${categoryType[1]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
 
+
     ${resp}=  Get count of Category   categoryType-eq=${categoryType[1]}    account-eq=${account_id1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}   ${len}
 
-JD-TC-Get count of Category-3
+
+
+JD-TC-Get count of Category-2
 
     [Documentation]  Create Category as Payable and Get count of Category.
 
@@ -131,7 +110,7 @@ JD-TC-Get count of Category-3
     Should Be Equal As Strings  ${resp.json()}   ${len}
 
 
-JD-TC-Get count of Category-4
+JD-TC-Get count of Category-3
 
     [Documentation]  Create Category as Income and Get count of Category.
 
@@ -156,7 +135,7 @@ JD-TC-Get count of Category-4
     Should Be Equal As Strings  ${resp.json()}   ${len}
 
 
-JD-TC-Get count of Category-5
+JD-TC-Get count of Category-4
 
     [Documentation]  Create Category as Invoice and Get count of Category.
 
@@ -195,9 +174,43 @@ JD-TC-Get count of Category-UH2
 
     [Documentation]   Get count of Category Using Consumer Login
 
-    ${resp}=  ConsumerLogin  ${CUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}
     Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+
+    #............provider consumer creation..........
+
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Suite Variable  ${PCPHONENO}  555${PH_Number}
+
+    ${fname}=  generate_firstname
+    Set Suite Variable  ${fname}
+    ${lastname}=  FakerLibrary.last_name
+   
+    ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lastname}  countryCode=${countryCodes[1]} 
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get count of Category   categoryType-eq=${categoryType[3]}    account-eq=${account_id1}   
     Log  ${resp.json()}
@@ -234,5 +247,5 @@ JD-TC-Get count of Category-UH3
     ${resp}=  Get count of Category   categoryType-eq=${categoryType[3]}   account-eq=${account_id1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${NO_PERMISSION_TO_DO}
+    Should Be Equal As Strings   ${resp.json()}   ${NO_PERMISSION_TO_DO_OPERATION}
 

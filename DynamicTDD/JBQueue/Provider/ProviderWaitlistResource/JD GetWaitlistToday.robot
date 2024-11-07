@@ -406,11 +406,10 @@ JD-TC-GetWaitlistToday-16
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200 
 
-      ${resp}=  Get Consumer By Id  ${CUSERNAME4}
-      Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${cname5}   ${resp.json()['userProfile']['firstName']}
-      Set Suite Variable  ${lname5}   ${resp.json()['userProfile']['lastName']}
+      ${cname5}=  generate_firstname
+      Set Suite Variable   ${cname5}
+      ${lname5}=  FakerLibrary.last_name
+      Set Suite Variable   ${lname5}
 
       ${resp}=  AddCustomer  ${CUSERNAME4}   firstName=${cname5}   lastName=${lname5} 
       Log   ${resp.json()}
@@ -429,11 +428,10 @@ JD-TC-GetWaitlistToday-16
       ${tid}=  Get Dictionary Keys  ${resp.json()}
       Set Suite Variable  ${token_id4}  ${tid[0]}
 
-      ${resp}=  Get Consumer By Id  ${CUSERNAME5}
-      Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${cname6}   ${resp.json()['userProfile']['firstName']}
-      Set Suite Variable  ${lname6}   ${resp.json()['userProfile']['lastName']}
+      ${cname6}=    FakerLibrary.name
+      ${lname6}=    FakerLibrary.last_name
+      Set Suite Variable  ${cname6}  
+      Set Suite Variable  ${lname6}   
 
       ${resp}=  AddCustomer  ${CUSERNAME5}   firstName=${cname6}   lastName=${lname6}
       Log   ${resp.json()}

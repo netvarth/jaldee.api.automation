@@ -141,6 +141,22 @@ JD-TC-AddToWaitlist-1
       ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}   
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}   200
+
+      ${resp}=  Get Waitlist Settings
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      IF  ${resp.json()['enabledWaitlist']}==${bool[0]}   
+            ${resp}=   Enable Waitlist
+            Should Be Equal As Strings  ${resp.status_code}  200
+      END
+
+      # ${resp}=  Get  Waitlist Settings
+      # Log  ${resp.json()}
+      # Should Be Equal As Strings  ${resp.status_code}  200\
+
+      # ${resp}=   Enable Waitlist
+      # Log   ${resp.json()}
+      # Should Be Equal As Strings  ${resp.status_code}  200
       
       ${resp}=  Get Waitlist Settings
       Log   ${resp.json()}
@@ -159,7 +175,6 @@ JD-TC-AddToWaitlist-1
       Log   ${resp.json()}
       Should Be Equal As Strings      ${resp.status_code}  200
      
-      
       ${resp}=    Get Locations
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -731,8 +746,8 @@ JD-TC-AddToWaitlist-UH5
       Set Test Variable  ${cid7}  ${resp.json()}
 
       ${resp}=  Add To Waitlist  ${cid7}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1}
-      Should Be Equal As Strings  ${resp.status_code}  404
-      Should Be Equal As Strings  "${resp.json()}"  "${NOT_A_Familiy_Member}"
+      Should Be Equal As Strings  ${resp.status_code}  401
+      Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION}"
 
 JD-TC-AddToWaitlist-UH6
       [Documentation]   Add a consumer to the same queue for the same service repeatedly

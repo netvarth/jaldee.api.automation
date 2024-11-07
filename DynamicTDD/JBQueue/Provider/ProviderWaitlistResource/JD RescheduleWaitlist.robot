@@ -61,18 +61,6 @@ JD-TC-Reschedule Waitlist-1
     [Documentation]  Provider takes checkin for a consumer and reschedules it to another day.
     ...  ${SPACE} Check Communication messages also
     
-    # ${resp}=  Consumer Login  ${CUSERNAME12}  ${PASSWORD}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # Set Test Variable  ${jdconID}   ${resp.json()['id']}
-    # Set Test Variable  ${fname}   ${resp.json()['firstName']}
-    # Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    # Set Test Variable  ${uname}   ${resp.json()['userName']}
-
-    # ${resp}=  Consumer Logout
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    
     ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -101,9 +89,6 @@ JD-TC-Reschedule Waitlist-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 	
     ${SERVICE1}=    generate_service_name
     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -113,8 +98,19 @@ JD-TC-Reschedule Waitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
-    ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END 
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -149,7 +145,7 @@ JD-TC-Reschedule Waitlist-1
     # ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
+    ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}    location=${lid}    
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -273,7 +269,7 @@ JD-TC-Reschedule Waitlist-2
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -437,7 +433,7 @@ JD-TC-Reschedule Waitlist-3
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -632,8 +628,8 @@ JD-TC-Reschedule Waitlist-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
-    clear_location   ${billable_providers[2]}
-    clear_service    ${billable_providers[2]}
+    # clear_location   ${billable_providers[2]}
+    # clear_service    ${billable_providers[2]}
     clear_customer   ${billable_providers[2]}
     clear_provider_msgs  ${billable_providers[2]}
     clear_consumer_msgs  ${CUSERNAME12}
@@ -657,7 +653,7 @@ JD-TC-Reschedule Waitlist-4
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${billable_providers[2]}
+    # clear_queue   ${billable_providers[2]}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -730,7 +726,8 @@ JD-TC-Reschedule Waitlist-4
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME12}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
+
     ${resp}=  Get consumer Waitlist By Id   ${wid4}  ${pid}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -738,8 +735,6 @@ JD-TC-Reschedule Waitlist-4
     ...   partySize=1    waitlistedBy=${waitlistedby[1]}  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${s_id}
-    # Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${jdconID}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['jaldeeId']}  ${jdconID}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${cid}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${q_id}
     
@@ -798,12 +793,6 @@ JD-TC-Reschedule Waitlist-4
     Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${s_id}
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
-
-    # ${resp}=  Get bsconf Messages
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}   200
-    # ${defcheckInML_msg}=  Set Variable   ${resp.json()['checkInML_push']} 
-    # ${defreshedule_checkin_msg}=  Set Variable   ${resp.json()['reshedule_provider_notify_checkin']} 
 
     ${resp}=  Get provider communications
     Log  ${resp.json()}
@@ -914,7 +903,7 @@ JD-TC-Reschedule Waitlist-5
     Set Test Variable   ${servicecharge}   ${resp.json()[0]['totalAmount']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${billable_providers[2]}
+    # clear_queue   ${billable_providers[2]}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -977,6 +966,10 @@ JD-TC-Reschedule Waitlist-5
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
     # Set Test Variable   ${waitingtime}   ${resp.json()['appxWaitingTime']}
 
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
     ${resp}=  Send Otp For Login    ${CUSERNAME13}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -986,14 +979,11 @@ JD-TC-Reschedule Waitlist-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
-    
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME13}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${j_cid}   ${resp.json()['providerConsumer']}
 
     ${resp}=  Get consumer Waitlist By Id   ${wid}  ${pid}   
     Log  ${resp.json()}
@@ -1002,8 +992,6 @@ JD-TC-Reschedule Waitlist-5
     ...   partySize=1  waitlistedBy=${waitlistedby[1]}  personsAhead=0
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${s_id}
-    # Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${jdconID}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['jaldeeId']}  ${jdconID}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${cid}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${q_id}
     

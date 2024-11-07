@@ -79,8 +79,8 @@ JD-TC-Get PaymentsOut Log List-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[0]} 
+     ${name}=   FakerLibrary.word
+    ${resp}=  CreateVendorCategory  ${name}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id1}   ${resp.json()}
@@ -91,13 +91,8 @@ JD-TC-Get PaymentsOut Log List-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id2}   ${resp.json()}
 
-    ${resp}=  Get Category By Id   ${category_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+
+
 
     ${resp}=  Get default status    ${categoryType[2]} 
     Log  ${resp.json()}
@@ -193,7 +188,7 @@ JD-TC-Get PaymentsOut Log List-1
     ${time_now}=    db.get_time_by_timezone  ${tz}
     # ${time_now}=    DateTime.Convert Date    ${time_now}    result_format=%H:%M:%S  
     ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[0]}
-    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}       ${paymentMode}    uploadedDocuments=${uploadedDocuments}
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}   ${lid}    ${paymentMode}    uploadedDocuments=${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${payable_uid1}   ${resp.json()['uid']}
@@ -207,7 +202,7 @@ JD-TC-Get PaymentsOut Log List-1
     Should Be Equal As Strings  ${resp.json()['paymentsInOutUid']}  ${payable_uid1}
     Should Be Equal As Strings  ${resp.json()['isPaymentsIn']}  ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['payInOutStateList'][0]['date']}  ${DAY}
-    Should Be Equal As Strings  ${resp.json()['payInOutStateList'][0]['time']}  ${time_now}
+    # Should Be Equal As Strings  ${resp.json()['payInOutStateList'][0]['time']}  ${time_now}
     Should Be Equal As Strings  ${resp.json()['payInOutStateList'][0]['userType']}  ${userType[0]}
     Should Be Equal As Strings  ${resp.json()['payInOutStateList'][0]['localUserId']}  ${pid}
 

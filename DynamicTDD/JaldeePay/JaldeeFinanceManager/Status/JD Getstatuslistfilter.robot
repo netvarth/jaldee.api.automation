@@ -11,6 +11,7 @@ Library           /ebs/TDD/db.py
 Library           /ebs/TDD/excelfuncs.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
@@ -73,16 +74,16 @@ JD-TC-GetstatusListfilter-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
     
-    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id1}   ${resp.json()}
 
-    ${resp}=  Get status list filter   categoryType-eq=${categoryType[0]}    account-eq=${account_id1}   name-eq=${New_status[0]}
+    ${resp}=  Get status list filter   categoryType-eq=${categoryType[1]}    account-eq=${account_id1}   name-eq=${New_status[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['id']}  ${status_id1}
-    Should Be Equal As Strings  ${resp.json()[0]['categoryType']}  ${categoryType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['categoryType']}  ${categoryType[1]}
     Should Be Equal As Strings  ${resp.json()[0]['name']}     ${New_status[0]}
 
 # *** Comments ***
@@ -95,16 +96,16 @@ JD-TC-GetstatusListfilter-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id2}   ${resp.json()}
 
-    ${resp}=  Get status list filter   categoryType-eq=${categoryType[0]}    account-eq=${account_id1}
+    ${resp}=  Get status list filter   categoryType-eq=${categoryType[1]}    account-eq=${account_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['id']}  ${status_id2}
-    Should Be Equal As Strings  ${resp.json()[0]['categoryType']}  ${categoryType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['categoryType']}  ${categoryType[1]}
     Should Be Equal As Strings  ${resp.json()[0]['name']}     ${New_status[1]}
 
 JD-TC-GetstatusListfilter-3
@@ -117,16 +118,16 @@ JD-TC-GetstatusListfilter-3
     # Set Test Variable  ${userName}  ${resp.json()['userName']}
 
 
-    ${resp}=  Create Finance Status   ${New_status[2]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[2]}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id1}   ${resp.json()}
 
-    ${resp}=  Get status list filter   categoryType-eq=${categoryType[0]}    account-eq=${account_id1}
+    ${resp}=  Get status list filter   categoryType-eq=${categoryType[1]}    account-eq=${account_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['id']}  ${status_id1}
-    Should Be Equal As Strings  ${resp.json()[0]['categoryType']}  ${categoryType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['categoryType']}  ${categoryType[1]}
     Should Be Equal As Strings  ${resp.json()[0]['name']}     ${New_status[2]}
 
 JD-TC-GetstatusListfilter-4
@@ -137,16 +138,16 @@ JD-TC-GetstatusListfilter-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Finance Status   ${New_status[3]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[3]}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id2}   ${resp.json()}
 
-    ${resp}=  Get status list filter   categoryType-eq=${categoryType[0]}    account-eq=${account_id1}
+    ${resp}=  Get status list filter   categoryType-eq=${categoryType[1]}    account-eq=${account_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['id']}  ${status_id2}
-    Should Be Equal As Strings  ${resp.json()[0]['categoryType']}  ${categoryType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['categoryType']}  ${categoryType[1]}
     Should Be Equal As Strings  ${resp.json()[0]['name']}     ${New_status[3]}
 
 JD-TC-GetstatusListfilter-5
@@ -157,21 +158,21 @@ JD-TC-GetstatusListfilter-5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Finance Status   ${New_status[4]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[4]}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id2}   ${resp.json()}
 
 
-    ${resp}=  Update Finance Status   ${New_status[5]}  ${categoryType[0]}   ${status_id2}
+    ${resp}=  Update Finance Status   ${New_status[5]}  ${categoryType[1]}   ${status_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get status list filter   categoryType-eq=${categoryType[0]}    account-eq=${account_id1}
+    ${resp}=  Get status list filter   categoryType-eq=${categoryType[1]}    account-eq=${account_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['id']}  ${status_id2}
-    Should Be Equal As Strings  ${resp.json()[0]['categoryType']}  ${categoryType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['categoryType']}  ${categoryType[1]}
     Should Be Equal As Strings  ${resp.json()[0]['name']}     ${New_status[5]}
 
 JD-TC-GetstatusListfilter-6
@@ -203,7 +204,7 @@ JD-TC-GetstatusListfilter-UH1
 
     [Documentation]   get with status list filter without login
 
-     ${resp}=  Get status list filter   categoryType-eq=${categoryType[0]}    account-eq=${account_id1}
+     ${resp}=  Get status list filter   categoryType-eq=${categoryType[1]}    account-eq=${account_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -212,11 +213,44 @@ JD-TC-GetstatusListfilter-UH2
 
     [Documentation]   get with status list filter Using Consumer Login
 
-    ${resp}=  ConsumerLogin  ${CUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    #............provider consumer creation..........
+
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Suite Variable  ${PCPHONENO}  555${PH_Number}
+
+    ${fname}=  generate_firstname
+    Set Suite Variable  ${fname}
+    ${lastname}=  FakerLibrary.last_name
+   
+    ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lastname}  countryCode=${countryCodes[1]} 
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get status list filter   categoryType-eq=${categoryType[0]}    account-eq=${account_id1}
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get status list filter   categoryType-eq=${categoryType[1]}    account-eq=${account_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}

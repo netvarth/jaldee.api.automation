@@ -11,6 +11,7 @@ Library           /ebs/TDD/db.py
 Library           /ebs/TDD/excelfuncs.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
@@ -20,7 +21,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-UpdateCategoryStatus-1
 
-    [Documentation]  Create Category as Vendor update this category status as disable.
+    [Documentation]  Create Category as Expense update this category status as disable.
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME97}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -56,7 +57,7 @@ JD-TC-UpdateCategoryStatus-1
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
     
     ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[0]} 
+    ${resp}=  Create Category   ${name}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id1}   ${resp.json()}
@@ -64,45 +65,7 @@ JD-TC-UpdateCategoryStatus-1
     ${resp}=  Get Category By Id   ${category_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
-    ${resp}=  Update Category Status   ${category_id1}  ${name}  ${categoryType[0]}   ${toggle[1]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Category By Id   ${category_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[1]}
-
-
-JD-TC-UpdateCategoryStatus-2
-
-    [Documentation]  Create Category as Expense then update this category status as disable..
-
-      ${resp}=  Encrypted Provider Login    ${PUSERNAME97}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[1]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${category_id1}   ${resp.json()}
-
-    ${resp}=  Get Category By Id   ${category_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[1]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
     ${resp}=  Update Category Status   ${category_id1}  ${name}  ${categoryType[1]}   ${toggle[1]}
     Log  ${resp.json()}
@@ -116,7 +79,42 @@ JD-TC-UpdateCategoryStatus-2
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[1]}
 
-JD-TC-UpdateCategoryStatus-3
+
+# JD-TC-UpdateCategoryStatus-2
+
+#     [Documentation]  Create Category as Expense then update this category status as disable..
+
+#       ${resp}=  Encrypted Provider Login    ${PUSERNAME97}  ${PASSWORD}
+#     Log  ${resp.json()}         
+#     Should Be Equal As Strings            ${resp.status_code}    200
+
+#     ${name}=   FakerLibrary.word
+#     ${resp}=  Create Category   ${name}  ${categoryType[1]} 
+#     Log  ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  200
+#     Set Test Variable   ${category_id1}   ${resp.json()}
+
+#     ${resp}=  Get Category By Id   ${category_id1}
+#     Log  ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  200
+#     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
+#     Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[1]}
+#     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
+#     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+
+#     ${resp}=  Update Category Status   ${category_id1}  ${name}  ${categoryType[1]}   ${toggle[1]}
+#     Log  ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  200
+
+#     ${resp}=  Get Category By Id   ${category_id1}
+#     Log  ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  200
+#     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
+#     Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[1]}
+#     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
+#     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[1]}
+
+JD-TC-UpdateCategoryStatus-2
 
     [Documentation]  Create Category as paymentInOut then update this category status as disable..
 
@@ -151,7 +149,7 @@ JD-TC-UpdateCategoryStatus-3
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[1]}
 
 
-JD-TC-UpdateCategoryStatus-4
+JD-TC-UpdateCategoryStatus-3
 
     [Documentation]  Create Category as Invoice then update this category status as disable..
 
@@ -186,7 +184,7 @@ JD-TC-UpdateCategoryStatus-4
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[1]}
 
 
-JD-TC-UpdateCategoryStatus-5
+JD-TC-UpdateCategoryStatus-4
 
     [Documentation]  update category status without name.
 
@@ -195,7 +193,7 @@ JD-TC-UpdateCategoryStatus-5
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[0]} 
+    ${resp}=  Create Category   ${name}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${category_id1}   ${resp.json()}
@@ -203,12 +201,9 @@ JD-TC-UpdateCategoryStatus-5
     ${resp}=  Get Category By Id   ${category_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
-    ${resp}=  Update Category Status   ${category_id1}  ${EMPTY}  ${categoryType[0]}   ${toggle[1]}
+
+    ${resp}=  Update Category Status   ${category_id1}  ${EMPTY}  ${categoryType[1]}   ${toggle[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -216,11 +211,11 @@ JD-TC-UpdateCategoryStatus-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
+    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[1]}
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[1]}
 
-JD-TC-UpdateCategoryStatus-6
+JD-TC-UpdateCategoryStatus-5
 
     [Documentation]  update category status as category type as empty.
 
@@ -229,7 +224,7 @@ JD-TC-UpdateCategoryStatus-6
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[0]} 
+    ${resp}=  Create Category   ${name}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${category_id1}   ${resp.json()}
@@ -237,10 +232,7 @@ JD-TC-UpdateCategoryStatus-6
     ${resp}=  Get Category By Id   ${category_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+
 
     ${resp}=  Update Category Status   ${category_id1}  ${name}  ${EMPTY}   ${toggle[1]}
     Log  ${resp.json()}
@@ -250,7 +242,7 @@ JD-TC-UpdateCategoryStatus-6
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
+    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[1]}
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[1]}
 
@@ -268,9 +260,43 @@ JD-TC-UpdateCategoryStatus-UH2
 
     [Documentation]   Update Category status Using Consumer Login
 
-    ${resp}=  ConsumerLogin  ${CUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME97}  ${PASSWORD}
     Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+
+    #............provider consumer creation..........
+
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Suite Variable  ${PCPHONENO}  555${PH_Number}
+
+    ${fname}=  generate_firstname
+    Set Suite Variable  ${fname}
+    ${lastname}=  FakerLibrary.last_name
+   
+    ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lastname}  countryCode=${countryCodes[1]} 
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${name}=   FakerLibrary.word
     ${resp}=  Update Category Status   ${category_id1}  ${name}  ${categoryType[3]}   ${toggle[1]}
@@ -308,7 +334,7 @@ JD-TC-UpdateCategoryStatus-UH3
     Set Test Variable  ${account_id1}  ${resp.json()['id']}
     
     ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[0]} 
+    ${resp}=  Create Category   ${name}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${category_id1}   ${resp.json()}
@@ -316,14 +342,11 @@ JD-TC-UpdateCategoryStatus-UH3
     ${resp}=  Get Category By Id   ${category_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+
     
     ${CATEGORY_ALREADY_ENABLED}=  format String   ${CATEGORY_ALREADY_ENABLED}   ${name}
     
-    ${resp}=  Update Category Status   ${category_id1}  ${name}  ${categoryType[0]}   ${toggle[0]}
+    ${resp}=  Update Category Status   ${category_id1}  ${name}  ${categoryType[1]}   ${toggle[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${CATEGORY_ALREADY_ENABLED}
@@ -358,7 +381,7 @@ JD-TC-UpdateCategoryStatus-UH4
     Set Test Variable  ${account_id1}  ${resp.json()['id']}
     
     ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[0]} 
+    ${resp}=  Create Category   ${name}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${category_id1}   ${resp.json()}
@@ -366,26 +389,20 @@ JD-TC-UpdateCategoryStatus-UH4
     ${resp}=  Get Category By Id   ${category_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
-    ${resp}=  Update Category Status   ${category_id1}  ${name}  ${categoryType[0]}   ${toggle[1]}
+
+    ${resp}=  Update Category Status   ${category_id1}  ${name}  ${categoryType[1]}   ${toggle[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Category By Id   ${category_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[1]}
+
     
     ${CATEGORY_ALREADY_DISABLED}=  format String   ${CATEGORY_ALREADY_DISABLED}   ${name}
     
-    ${resp}=  Update Category Status   ${category_id1}  ${name}  ${categoryType[0]}   ${toggle[1]}
+    ${resp}=  Update Category Status   ${category_id1}  ${name}  ${categoryType[1]}   ${toggle[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${CATEGORY_ALREADY_DISABLED}

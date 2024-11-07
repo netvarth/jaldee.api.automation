@@ -59,7 +59,7 @@ JD-TC-GetCategorywithfilter-1
     
 
 
-    ${resp}=  Get Category List Configuration  ${categoryType[0]}    
+    ${resp}=  Get Category List Configuration  ${categoryType[1]}    
     Log  ${resp.json()}
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}  3
+    Should Be Equal As Integers  ${len}  4

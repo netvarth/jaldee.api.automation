@@ -25,13 +25,24 @@ ${SERVICE2}  Hair makeup
 JD-TC-Get Schedule By Id-1
 	[Documentation]  Get Schedule by Id valid  provider
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${firstname}  ${lastname}  ${PUSERNAME_R}  ${LoginId}=  Provider Signup
+    Set Suite Variable  ${PUSERNAME_R}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Active License
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME100}
+    ${resp}=   Get Appointment Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Disable Appointment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    # clear_service   ${PUSERNAME_R}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -82,11 +93,11 @@ JD-TC-Get Schedule By Id-UH1
 
 	[Documentation]  Get Schedule by id by consumer
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${pid}=  get_acc_id  ${PUSERNAME100}
+    ${pid}=  get_acc_id  ${PUSERNAME_R}
 
     ${PH_Number}=  FakerLibrary.Numerify  %#####
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'

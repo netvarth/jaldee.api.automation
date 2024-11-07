@@ -111,16 +111,16 @@ JD-TC-ProviderGetApptRequestCount-1
     ${lid1}=  Create Sample Location
     Set Suite Variable  ${lid1}
 
+    ${resp}=  Create Sample Schedule   ${lid}   ${sid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sch_id1}  ${resp.json()}
+
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    ${resp}=  Create Sample Schedule   ${lid}   ${sid1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${sch_id1}  ${resp.json()}
-    
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        

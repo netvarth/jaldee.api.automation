@@ -11,6 +11,7 @@ Library           /ebs/TDD/db.py
 Library           /ebs/TDD/excelfuncs.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
@@ -20,7 +21,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-UpdateCategory-1
 
-    [Documentation]  Create Category as Vendor and update it as Expense.
+    [Documentation]  Create Category as Expense and update it as paymentinOut.
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME96}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -56,7 +57,7 @@ JD-TC-UpdateCategory-1
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
     
     ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[0]} 
+    ${resp}=  Create Category   ${name}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id1}   ${resp.json()}
@@ -64,13 +65,9 @@ JD-TC-UpdateCategory-1
     ${resp}=  Get Category By Id   ${category_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
     ${name1}=   FakerLibrary.word
-    ${resp}=  Update Category   ${category_id1}  ${name1}  ${categoryType[1]} 
+    ${resp}=  Update Category   ${category_id1}  ${name1}  ${categoryType[2]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -78,7 +75,7 @@ JD-TC-UpdateCategory-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name1}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[1]}
+    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[2]}
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
@@ -142,9 +139,43 @@ JD-TC-UpdateCategory-UH2
 
     [Documentation]   Update Category Using Consumer Login
 
-    ${resp}=  ConsumerLogin  ${CUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME96}  ${PASSWORD}
     Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+
+    #............provider consumer creation..........
+
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Suite Variable  ${PCPHONENO}  555${PH_Number}
+
+    ${fname}=  generate_firstname
+    Set Suite Variable  ${fname}
+    ${lastname}=  FakerLibrary.last_name
+   
+    ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lastname}  countryCode=${countryCodes[1]} 
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${name}=   FakerLibrary.word
     ${resp}=  Update Category   ${category_id1}  ${name}  ${categoryType[0]} 
@@ -180,7 +211,7 @@ JD-TC-UpdateCategory-UH3
     ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   Category Id
     
     ${name}=   FakerLibrary.word
-    ${resp}=  Update Category   ${category_id1}  ${name}  ${categoryType[0]} 
+    ${resp}=  Update Category   ${category_id1}  ${name}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${INVALID_FIELD}

@@ -179,8 +179,9 @@ JD-TC-Get Appointment Schedule Count-4
 
     [Documentation]   Another Provider Login
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME201}  ${PASSWORD}
-    Log   ${resp.json()}
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup without Profile  
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get Appointment Schedule Count

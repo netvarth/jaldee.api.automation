@@ -244,14 +244,17 @@ JD-TC-GetAppointmentServicesByLocation-4
     Should Be Equal As Strings  ${resp.json()[0]['id']}  ${p1_s3}
     Should Be Equal As Strings  ${resp.json()[0]['name']}  ${P1SERVICE3}
 
-    ${RESP}=  Enable service  ${p1_s1} 
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${RESP}=  Enable service  ${p1_s1} 
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-GetAppointmentServicesByLocation-5
 
     [Documentation]  provider get Service By LocationId, When  All Services in this location are disabled
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${RESP}=  Enable service  ${p1_s1} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${RESP}=  Disable service  ${p1_s1} 
@@ -343,8 +346,8 @@ JD-TC-GetAppointmentServicesByLocation-UH3
     Should Be Equal As Strings   ${resp.status_code}   422
     Should Be Equal As Strings   ${resp.json()}       ${LOCATION_DISABLED}
 
-    ${RESP}=  Enable Location  ${p1_l2} 
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${RESP}=  Enable Location  ${p1_l2} 
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-GetAppointmentServicesByLocation-UH4
 

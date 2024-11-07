@@ -29,7 +29,7 @@ JD-TC-UpdateSubServicesToAppt-1
 
     [Documentation]  add sub service to an appointment(walkin) without quantity then update the subservice with quantity.
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -88,7 +88,7 @@ JD-TC-UpdateSubServicesToAppt-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLPUSERNAME16}'
+            IF   not '${user_phone}' == '${HLPUSERNAME53}'
                 clear_users  ${user_phone}
             END
         END
@@ -155,12 +155,6 @@ JD-TC-UpdateSubServicesToAppt-1
     Log   ${resp.content}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${subser_id1}  ${resp.json()}
-
-    ${resp}=   Get Service By Id  ${subser_id1}
-    Log   ${resp.content}  
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}                  ${subser_name} 
-    Should Be Equal As Strings  ${resp.json()['serviceCategory']}       ${serviceCategory[0]}
 
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -264,7 +258,7 @@ JD-TC-UpdateSubServicesToAppt-2
 
     [Documentation]  add sub service to an appointment(walkin) without any users then assign one user to that service.
     
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -309,7 +303,7 @@ JD-TC-UpdateSubServicesToAppt-3
 
     [Documentation]  update the subservice with more than one user as assignee.
     
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -353,7 +347,7 @@ JD-TC-UpdateSubServicesToAppt-4
 
     [Documentation]  update the subservice with assignee conflicting with the existing one.
     
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -408,11 +402,11 @@ JD-TC-UpdateSubServicesToAppt-UH2
 
     [Documentation]  consumer tries to update a subservice to an appointment.
     
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${pid}=  get_acc_id  ${HLPUSERNAME16}
+    ${pid}=  get_acc_id  ${HLPUSERNAME53}
 
     ${resp}=  AddCustomer  ${CUSERNAME10}  
     Log   ${resp.content}
@@ -449,7 +443,7 @@ JD-TC-UpdateSubServicesToAppt-UH3
 
     [Documentation]  update an inactive subservice to an appointment
     
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -479,7 +473,7 @@ JD-TC-UpdateSubServicesToAppt-UH4
 
     [Documentation]  update the subservice with inactive user.
     
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

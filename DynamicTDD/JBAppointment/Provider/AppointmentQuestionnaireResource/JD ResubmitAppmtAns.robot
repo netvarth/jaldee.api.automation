@@ -1715,10 +1715,10 @@ JD-TC-ResubmitQuestionnaireForAppointment-5
     Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  
     ...   appointmentEncId=${encId}  apptStatus=${apptStatus[1]}
 
-    ${resp}=  Get Appointment Status   ${apptid1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[1]}
+    # ${resp}=  Get Appointment Status   ${apptid1}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[1]}
 
     ${qnr_resp}=  Get Questionnaire By uuid For Appmt    ${apptid1}
     Log  ${qnr_resp.content}

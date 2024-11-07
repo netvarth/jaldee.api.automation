@@ -153,12 +153,27 @@ JD-TC-Block Appointment-2
     clear_customer   ${PUSERNAME370}
 
     # clear_appt_schedule   ${PUSERNAME370}
-   
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
-    Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot1}   ${slots[${j1}]}
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot2}   ${slots[${j1}]}
+
+    # ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+    # Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
     
     ${apptfor1}=  Create Dictionary   apptTime=${slot1}
     ${apptfor2}=  Create Dictionary   apptTime=${slot2}
@@ -2256,7 +2271,7 @@ JD-TC-Block Appointment-UH15
 
     [Documentation]  Provider blocks slot without slot
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME370}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME270}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2269,13 +2284,13 @@ JD-TC-Block Appointment-UH15
     END
 
     # clear_location_n_service  ${PUSERNAME370}
-    clear_customer   ${PUSERNAME370}
+    clear_customer   ${PUSERNAME270}
 
     ${lid}=  Create Sample Location  
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     # clear_appt_schedule   ${PUSERNAME370}
     
@@ -2299,9 +2314,9 @@ JD-TC-Block Appointment-UH15
     IF   '${resp.content}' == '${emptylist}'
         ${SERVICE1}=    generate_unique_service_name  ${service_names}
         Append To List  ${service_names}  ${SERVICE1}    
-        ${s_id1}=  Create Sample Service  ${SERVICE1}  
+        ${s_id}=  Create Sample Service  ${SERVICE1}  
     ELSE
-        Set Test Variable  ${s_id1}   ${resp.json()[0]['id']}
+        Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
     END
 
     ${schedule_name}=  FakerLibrary.bs
@@ -2422,11 +2437,26 @@ JD-TC-Block Appointment-UH17
     # clear_location_n_service  ${PUSERNAME370}
     clear_customer   ${PUSERNAME370}
 
-    ${lid}=  Create Sample Location  
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${lid}  ${resp.json()['id']}
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+
+    # ${lid}=  Create Sample Location  
+    # ${resp}=   Get Location ById  ${lid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     # clear_appt_schedule   ${PUSERNAME370}
 

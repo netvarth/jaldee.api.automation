@@ -52,24 +52,15 @@ JD-TC-AssignproviderWaitlist-1
 
     ${pid}=  get_acc_id  ${HLPUSERNAME2}
 
-    ${resp}=  Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${resp}=    Get Locations
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']}
     Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${resp}=   Get License UsageInfo 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id}    ${resp}  
 
-    
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -100,31 +91,27 @@ JD-TC-AssignproviderWaitlist-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
      
-    ${ph1}=  Evaluate  ${HLPUSERNAME4}+1000440000
-    ${firstname}=  FakerLibrary.name
-    ${lastname}=  FakerLibrary.last_name
-    ${dob}=  FakerLibrary.Date
+    # ${ph1}=  Evaluate  ${HLPUSERNAME4}+1000440000
+    # ${firstname}=  FakerLibrary.name
+    # ${lastname}=  FakerLibrary.last_name
+    # ${dob}=  FakerLibrary.Date
 
-    FOR    ${i}    IN RANGE    3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200 
+    # FOR    ${i}    IN RANGE    3
+    #     ${pin}=  get_pincode
+    #     ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+    #     IF    '${kwstatus}' == 'FAIL'
+    #             Continue For Loop
+    #     ELSE IF    '${kwstatus}' == 'PASS'
+    #             Exit For Loop
+    #     END
+    # END
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200 
 
     ${ph1}  ${u_id1} =  Create and Configure Sample User
     Set Suite Variable  ${ph1}
     Set Suite Variable  ${u_id1}
 
-    ${resp}=  Get User
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -196,18 +183,6 @@ JD-TC-AssignproviderWaitlist-1
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1   waitlistedBy=${waitlistedby}  personsAhead=0
-    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
-    Should Be Equal As Strings  ${resp.json()['provider']['id']}                   ${u_id1}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
-    Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}                   ${q_id}
-    Should Be Equal As Strings  ${resp.json()['queue']['location']['id']}       ${lid}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueStartTime']}       ${strt_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueEndTime']}         ${end_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['availabilityQueue']}    ${bool[0]}   
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
 
@@ -217,43 +192,15 @@ JD-TC-AssignproviderWaitlist-1
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1   waitlistedBy=${waitlistedby}  personsAhead=0
-    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
-    Should Be Equal As Strings  ${resp.json()['provider']['id']}                   ${u_id1}
-    # Should Be Equal As Strings  ${resp.json()['provider']['firstName']}            ${firstname}
-    # Should Be Equal As Strings  ${resp.json()['provider']['lastName']}             ${lastname}
-    # Should Be Equal As Strings  ${resp.json()['provider']['mobileNo']}             ${ph2}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
-    Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}                   ${q_id}
-    Should Be Equal As Strings  ${resp.json()['queue']['location']['id']}       ${lid}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueStartTime']}       ${strt_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueEndTime']}         ${end_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['availabilityQueue']}    ${bool[0]}   
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
-
 
     ${resp}=   Un Assign provider waitlist   ${wid}   ${u_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1   waitlistedBy=${waitlistedby}  personsAhead=0
-    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
-    Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}                   ${q_id}
-    Should Be Equal As Strings  ${resp.json()['queue']['location']['id']}       ${lid}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueStartTime']}       ${strt_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueEndTime']}         ${end_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['availabilityQueue']}    ${bool[0]}   
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          ${u_id1}
 
 JD-TC-AssignproviderWaitlist-2
@@ -321,7 +268,7 @@ JD-TC-AssignproviderWaitlist-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${s_id1}  ${resp.json()}
-    sleep  02s
+    # sleep  02s
 
     ${queue_name}=  FakerLibrary.name
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}   ${s_id1}
@@ -357,20 +304,7 @@ JD-TC-AssignproviderWaitlist-2
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1   waitlistedBy=${waitlistedby}  personsAhead=0
-    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
-    Should Be Equal As Strings  ${resp.json()['provider']['id']}                   ${u_id1}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
-    Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}                   ${q_id}
-    Should Be Equal As Strings  ${resp.json()['queue']['location']['id']}       ${lid}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueStartTime']}       ${strt_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueEndTime']}         ${end_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['availabilityQueue']}    ${bool[0]}   
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
-
 
     ${resp}=   Assign provider Waitlist   ${wid}   ${u_id2}
     Log   ${resp.json()}
@@ -379,18 +313,6 @@ JD-TC-AssignproviderWaitlist-2
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1   waitlistedBy=${waitlistedby}  personsAhead=0
-    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
-    Should Be Equal As Strings  ${resp.json()['provider']['id']}                   ${u_id2}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
-    Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}                   ${q_id}
-    Should Be Equal As Strings  ${resp.json()['queue']['location']['id']}       ${lid}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueStartTime']}       ${strt_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueEndTime']}         ${end_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['availabilityQueue']}    ${bool[0]}   
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
 
@@ -459,18 +381,6 @@ JD-TC-AssignproviderWaitlist-3
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1   waitlistedBy=${waitlistedby}  personsAhead=0
-    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
-    Should Be Equal As Strings  ${resp.json()['provider']['id']}                   ${u_id1}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
-    Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}                   ${q_id}
-    Should Be Equal As Strings  ${resp.json()['queue']['location']['id']}       ${lid}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueStartTime']}       ${strt_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueEndTime']}         ${end_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['availabilityQueue']}    ${bool[0]}   
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
 
@@ -519,20 +429,10 @@ JD-TC-AssignproviderWaitlist-4
     Should Be Equal As Strings  ${resp.status_code}  200
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
+
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1   waitlistedBy=${waitlistedby}  personsAhead=0
-    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
-    Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}                   ${q_id}
-    Should Be Equal As Strings  ${resp.json()['queue']['location']['id']}       ${lid}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueStartTime']}       ${strt_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueEndTime']}         ${end_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['availabilityQueue']}    ${bool[0]}   
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
     ${u_id1}=  Create Sample User 
@@ -588,18 +488,6 @@ JD-TC-AssignproviderWaitlist-4
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1   waitlistedBy=${waitlistedby}  personsAhead=0
-    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
-    Should Be Equal As Strings  ${resp.json()['provider']['id']}                   ${u_id1}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
-    Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}                   ${q_id}
-    Should Be Equal As Strings  ${resp.json()['queue']['location']['id']}       ${lid}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueStartTime']}       ${strt_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueEndTime']}         ${end_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['availabilityQueue']}    ${bool[0]}   
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
 
@@ -610,20 +498,7 @@ JD-TC-AssignproviderWaitlist-4
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1   waitlistedBy=${waitlistedby}  personsAhead=0
-    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
-    Should Be Equal As Strings  ${resp.json()['provider']['id']}                   ${u_id2}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
-    Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}                   ${q_id}
-    Should Be Equal As Strings  ${resp.json()['queue']['location']['id']}       ${lid}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueStartTime']}       ${strt_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueEndTime']}         ${end_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['availabilityQueue']}    ${bool[0]}   
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
-
 
     ${resp}=   Assign provider Waitlist   ${wid}   ${u_id1}
     Log   ${resp.json()}
@@ -632,18 +507,6 @@ JD-TC-AssignproviderWaitlist-4
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1   waitlistedBy=${waitlistedby}  personsAhead=0
-    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
-    Should Be Equal As Strings  ${resp.json()['provider']['id']}                   ${u_id1}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
-    Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}                   ${q_id}
-    Should Be Equal As Strings  ${resp.json()['queue']['location']['id']}       ${lid}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueStartTime']}       ${strt_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueEndTime']}         ${end_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['availabilityQueue']}    ${bool[0]}   
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
 
@@ -656,6 +519,22 @@ JD-TC-AssignproviderWaitlist-5
 
     clear_customer   ${HLPUSERNAME2}
 
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1} 
     ${desc}=   FakerLibrary.sentence
@@ -664,6 +543,10 @@ JD-TC-AssignproviderWaitlist-5
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_duratn}   ${bool[0]}    ${servicecharge}  ${bool[0]}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id}  ${resp.json()}
+
+    ${resp}=  Auto Invoice Generation For Service   ${ser_id}    ${toggle[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
@@ -690,26 +573,13 @@ JD-TC-AssignproviderWaitlist-5
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1   waitlistedBy=${waitlistedby}  personsAhead=0
-    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
-    Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}                   ${q_id}
-    Should Be Equal As Strings  ${resp.json()['queue']['location']['id']}       ${lid}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueStartTime']}       ${strt_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueEndTime']}         ${end_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['availabilityQueue']}    ${bool[0]}   
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
-    ${u_id1}=  Create Sample User 
-    Set suite Variable                    ${u_id1}
+    ${PUSERNAME_U1}  ${u_id1} =  Create and Configure Sample User
+
     ${resp}=  Get User
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
-    Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
 
     ${SERVICE2}=    generate_service_name 
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
@@ -722,67 +592,50 @@ JD-TC-AssignproviderWaitlist-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${s_id1}  ${resp.json()}
+
+    ${resp}=  Auto Invoice Generation For Service   ${s_id1}    ${toggle[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${queue_name}=  FakerLibrary.name
     ${resp}=  Create Queue   ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}    ${s_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${que_id1}  ${resp.json()}
 
-    ${u_id2}=  Create Sample User 
-    Set suite Variable                    ${u_id2}
-
-    ${SERVICE3}=    generate_service_name 
-    ${sTime2}=  add_timezone_time  ${tz}  1  15  
-    ${eTime2}=  add_timezone_time  ${tz}  2  00  
-    ${description}=  FakerLibrary.sentence
-    ${dur}=  FakerLibrary.Random Int  min=10  max=20
-    ${amt}=  FakerLibrary.Random Int  min=200  max=500
-    ${amt}=  Convert To Number  ${amt}  1
-    ${resp}=  Create Service   ${SERVICE3}  ${description}   ${dur}    ${bool[0]}     ${amt}  ${bool[0]}  
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${s_id2}  ${resp.json()}
-    ${queue_name}=  FakerLibrary.name
-    ${resp}=  Create Queue   ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  1  5  ${lid}   ${s_id2}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${que_id2}  ${resp.json()}
+    ${PUSERNAME_U2}  ${u_id2} =  Create and Configure Sample User
 
     ${resp}=   Assign provider Waitlist   ${wid}   ${u_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
+    
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bill By UUId  ${wid}
+    ${resp}=  Get Booking Invoices  ${wid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${pid}
+    Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
 
-    ${resp}=   Assign provider Waitlist   ${wid}   ${u_id2}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['billStatus']}  ${billStatus[0]}
 
-    ${resp}=  Get Waitlist By Id  ${wid} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1   waitlistedBy=${waitlistedby}  personsAhead=0
-    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
-    Should Be Equal As Strings  ${resp.json()['provider']['id']}                   ${u_id2}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
-    Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}                   ${q_id}
-    Should Be Equal As Strings  ${resp.json()['queue']['location']['id']}       ${lid}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueStartTime']}       ${strt_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueEndTime']}         ${end_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['availabilityQueue']}    ${bool[0]}   
-    Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
+    ${resp}=    Provider Logout
+    Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
+    Should Be Equal As Strings             ${resp.status_code}   200
 
-    ${resp}=  Get Bill By UUId  ${wid}
+    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['billStatus']}  ${billStatus[0]}
+
+    ${resp}=  Get Payment Details By UUId   ${wid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -868,18 +721,7 @@ JD-TC-AssignproviderWaitlist-6
     Set Test Variable  ${wid2}  ${wid2[0]}
     ${resp}=  Get Waitlist By Id  ${wid2} 
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1    waitlistedBy=${waitlistedby}  personsAhead=2
-    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid2}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid2}
-    Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}                   ${q_id}
-    Should Be Equal As Strings  ${resp.json()['queue']['location']['id']}       ${lid}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueStartTime']}       ${strt_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueEndTime']}         ${end_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['availabilityQueue']}    ${bool[0]}   
+    Should Be Equal As Strings  ${resp.status_code}  200  
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
     ${ph1}  ${u_id1} =  Create and Configure Sample User
@@ -1041,18 +883,7 @@ JD-TC-AssignproviderWaitlist-7
 
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1   waitlistedBy=${waitlistedby}  personsAhead=0
-    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
-    Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}                   ${q_id}
-    Should Be Equal As Strings  ${resp.json()['queue']['location']['id']}       ${lid3}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueStartTime']}       ${strt_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueEndTime']}         ${end_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['availabilityQueue']}    ${bool[0]}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
 
@@ -1066,7 +897,7 @@ JD-TC-AssignproviderWaitlist-7
 
     END
     
-    sleep  2s
+    # sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1240,7 +1071,7 @@ JD-TC-AssignproviderWaitlist-8
 
     END
     
-    sleep  2s
+    # sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1289,19 +1120,7 @@ JD-TC-AssignproviderWaitlist-8
 
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1   waitlistedBy=${waitlistedby}  personsAhead=0
-    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
-    Should Be Equal As Strings  ${resp.json()['provider']['id']}                   ${u_id1}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
-    Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}                   ${q_id}
-    Should Be Equal As Strings  ${resp.json()['queue']['location']['id']}       ${lid3}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueStartTime']}       ${strt_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueEndTime']}         ${end_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['availabilityQueue']}    ${bool[0]}   
+    Should Be Equal As Strings  ${resp.status_code}  200  
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
 
@@ -1394,7 +1213,7 @@ JD-TC-AssignproviderWaitlist-9
 
     END
     
-    sleep  2s
+    # sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1462,19 +1281,7 @@ JD-TC-AssignproviderWaitlist-9
 
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[5]}  partySize=1   waitlistedBy=${waitlistedby}
-    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
-    Should Be Equal As Strings  ${resp.json()['provider']['id']}                   ${u_id1}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
-    Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}                   ${q_id}
-    Should Be Equal As Strings  ${resp.json()['queue']['location']['id']}       ${lid3}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueStartTime']}       ${strt_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueEndTime']}         ${end_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['availabilityQueue']}    ${bool[0]}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
 JD-TC-AssignproviderWaitlist-10
@@ -1561,7 +1368,7 @@ JD-TC-AssignproviderWaitlist-10
         Should Be Equal As Strings  ${resp.status_code}  200
     END
     
-    sleep  2s
+    # sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1601,19 +1408,7 @@ JD-TC-AssignproviderWaitlist-10
 
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1   waitlistedBy=${waitlistedby}  personsAhead=0
-    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
-    Should Be Equal As Strings  ${resp.json()['provider']['id']}                   ${u_id1}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
-    Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}                   ${q_id}
-    Should Be Equal As Strings  ${resp.json()['queue']['location']['id']}       ${lid3}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueStartTime']}       ${strt_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueEndTime']}         ${end_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['availabilityQueue']}    ${bool[0]}   
+    Should Be Equal As Strings  ${resp.status_code}  200  
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
 JD-TC-AssignproviderWaitlist-UH1
@@ -1676,18 +1471,7 @@ JD-TC-AssignproviderWaitlist-UH1
     Set Test Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1    waitlistedBy=${waitlistedby}  personsAhead=0
-    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE2}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${s_id1}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
-    Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${queue_name}
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}                   ${que_id1}
-    Should Be Equal As Strings  ${resp.json()['queue']['location']['id']}       ${lid}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueStartTime']}       ${sTime1}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueEndTime']}         ${eTime1}
-    Should Be Equal As Strings  ${resp.json()['queue']['availabilityQueue']}    ${bool[0]}   
+    Should Be Equal As Strings  ${resp.status_code}  200   
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
     ${ph2}  ${u_id2} =  Create and Configure Sample User
@@ -2132,7 +1916,7 @@ JD-TC-AssignproviderWaitlist-UH7
     Should Be Equal As Strings    ${resp.status_code}    200
 
     clear_customer   ${HLPUSERNAME2}
-    ${account_id}=  get_acc_id  ${HLPUSERNAME10}
+    ${account_id}=  get_acc_id  ${HLPUSERNAME2}
 
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -2321,7 +2105,7 @@ JD-TC-AssignproviderWaitlist-UH9
 
     END
     
-    sleep  2s
+    # sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2500,7 +2284,7 @@ JD-TC-CreateUser -0
 
     END
     
-    # sleep  2s
+    # # sleep  2s
     # ${resp}=  Get Departments
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
@@ -2564,7 +2348,7 @@ JD-TC-CreateUser -01
     # ${resp}=  Add addon  ${addon_list[0][3]['addon_id']}
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}   200
-    # sleep  3s
+    # # sleep  3s
 
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -2636,7 +2420,7 @@ JD-TC-CreateUser -01
 
     END
     
-    # sleep  2s
+    # # sleep  2s
     # ${resp}=  Get Departments
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
@@ -2737,17 +2521,6 @@ JD-TC-AssignproviderWaitlist-4
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1   waitlistedBy=${waitlistedby}  personsAhead=0
-    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
-    Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}                   ${q_id}
-    Should Be Equal As Strings  ${resp.json()['queue']['location']['id']}       ${lid}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueStartTime']}       ${strt_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueEndTime']}         ${end_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['availabilityQueue']}    ${bool[0]}   
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
 

@@ -395,7 +395,7 @@ Provider Signup
     ${resp}=  Account Set Credential   ${PhoneNumber}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${LoginId}  JSESSIONYNW=${jsessionynw_value}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Sleep  1s
+    # Sleep  1s
 
     ${resp}=  Encrypted Provider Login   ${LoginId}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -485,7 +485,7 @@ Provider Signup without Profile
     ${resp}=  Account Set Credential   ${PhoneNumber}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${LoginId}  JSESSIONYNW=${jsessionynw_value}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Sleep  1s
+    # Sleep  1s
 
     ${resp}=  Encrypted Provider Login   ${LoginId}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1709,16 +1709,39 @@ Disable Order Settings
 
 ######### MEDICAL RECORD #################+
 
-Create MR Case
-    [Arguments]      ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  &{kwargs}
-    ${data}=  Create Dictionary    category=${category}  type=${type}  doctor=${doctor}  consumer=${consumer}   title=${title}  description=${description}
+# Create MR Case
+#     [Arguments]      ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  &{kwargs}
+#     ${data}=  Create Dictionary    category=${category}  type=${type}  doctor=${doctor}  consumer=${consumer}   title=${title}  description=${description}
+#     FOR    ${key}    ${value}    IN    &{kwargs}
+#         Set To Dictionary 	${data} 	${key}=${value}
+#     END
+#     ${data}=  json.dumps  ${data}
+#     Check And Create YNW Session
+#     ${resp}=  POST On Session  ynw  /provider/medicalrecord/case  data=${data}  expected_status=any
+#     Check Deprication  ${resp}  Create MR Case
+#     RETURN  ${resp}
+
+Create Case
+    [Arguments]    ${title}  ${doctor}  ${consumer}  &{kwargs}
+    ${data}=  Create Dictionary     title=${title}  doctor=${doctor}   consumer=${consumer}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
     END
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/medicalrecord/case  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Create MR Case
+    RETURN  ${resp}
+
+Share Case Pdf
+    [Arguments]     ${caseid}  ${patient}  ${third_party}  ${consumer}  ${doctor}  ${message}  ${medium}  &{kwargs}
+    ${data}=  Create Dictionary     shareToPatient=${patient}  shareToThirdParty=${third_party}   consumer=${consumer}  
+    ...  doctor=${doctor}  message=${message}   shareMedium=${medium}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/medicalrecord/case/share/casepdf/${caseid}  data=${data}  expected_status=any
     RETURN  ${resp}
 
 Get MR Case By UID
@@ -1751,18 +1774,32 @@ Delete DentalRecord
     Check Deprication  ${resp}  Delete DentalRecord
     RETURN  ${resp}
 
+# Create Treatment Plan
+
+#     [Arguments]      ${caseDto}   ${dental_id}   ${treatment}  ${works}  &{kwargs}
+#     ${caseDto}=  Create Dictionary  uid=${caseDto} 
+#     ${dentalRecord}=  Create Dictionary  id=${dental_id}
+
+#     ${data}=  Create Dictionary    caseDto=${caseDto}    dentalRecord=${dentalRecord}  treatment=${treatment}  works=${works} 
+#     FOR    ${key}    ${value}    IN    &{kwargs}
+#         Set To Dictionary 	${data} 	${key}=${value}
+#     END
+#     IF  '${dental_id}' == '${EMPTY}'
+#         Remove From Dictionary 	${data} 	dentalRecord
+#     END
+#     ${data}=  json.dumps  ${data}
+#     Check And Create YNW Session
+#     ${resp}=  POST On Session  ynw  /provider/medicalrecord/treatment  data=${data}  expected_status=any
+#     Check Deprication  ${resp}  Create Treatment Plan
+#     RETURN  ${resp}
+
 Create Treatment Plan
 
-    [Arguments]      ${caseDto}   ${dental_id}   ${treatment}  ${works}  &{kwargs}
+    [Arguments]      ${caseDto}   ${treatment}  ${works}  &{kwargs}
     ${caseDto}=  Create Dictionary  uid=${caseDto} 
-    ${dentalRecord}=  Create Dictionary  id=${dental_id}
-
-    ${data}=  Create Dictionary    caseDto=${caseDto}    dentalRecord=${dentalRecord}  treatment=${treatment}  works=${works} 
+    ${data}=  Create Dictionary    caseDto=${caseDto}   treatment=${treatment}  works=${works} 
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
-    END
-    IF  '${dental_id}' == '${EMPTY}'
-        Remove From Dictionary 	${data} 	dentalRecord
     END
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
@@ -2199,9 +2236,9 @@ Create Inventory Catalog Item
 
 Get Item Details Inventory
 
-    [Arguments]  ${storeEncId}  ${vendorEncId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}  ${amount}  ${fixedDiscount}  ${discountPercentage}
+    [Arguments]  ${storeEncId}  ${vendorEncId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}  ${amount}  ${fixedDiscount}  ${discountPercentage}   ${mrp}
 
-    ${data}=  Create Dictionary  storeEncId=${storeEncId}    vendorEncId=${vendorEncId}  inventoryCatalogItem=${inventoryCatalogItem}       quantity=${quantity}  freeQuantity=${freeQuantity}  amount=${amount}  fixedDiscount=${fixedDiscount}   discountPercentage=${discountPercentage}  
+    ${data}=  Create Dictionary  storeEncId=${storeEncId}    vendorEncId=${vendorEncId}  inventoryCatalogItem=${inventoryCatalogItem}       quantity=${quantity}  freeQuantity=${freeQuantity}  amount=${amount}  fixedDiscount=${fixedDiscount}   discountPercentage=${discountPercentage}   mrp=${mrp}
     ${data}=  json.dumps     ${data}
     
     Check And Create YNW Session
@@ -2288,6 +2325,30 @@ Get Inventoryitem
     ${resp}=  GET On Session  ynw   /provider/inventory/inventoryitem/invcatalogitem/${id}   expected_status=any
     Check Deprication  ${resp}  Get Inventoryitem
     RETURN  ${resp} 
+
+Get Inventory Settings 
+
+    [Arguments]  ${storeEncId}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/settings/${storeEncId}    expected_status=any
+    Check Deprication  ${resp}  Get Inventory Settings 
+    RETURN  ${resp} 
+
+Update Inventory Settings 
+    [Arguments]   ${storeEncId}  ${status}
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw  /provider/inventory/settings/${storeEncId}/pushToFinance/${status}  expected_status=any
+    Check Deprication  ${resp}  Update Inventory Settings 
+    RETURN  ${resp}   
+
+Purchase Push to Finance 
+    [Arguments]   ${purchaseUid}  
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw  /provider/inventory/purchase/${purchaseUid}/pushToFinance  expected_status=any
+    Check Deprication  ${resp}  Purchase Push to Finance
+    RETURN  ${resp}   
+
 
 ######### LOGIN ###########
 
@@ -13005,8 +13066,8 @@ Upload Finance Expense Attachment
     RETURN  ${resp}
 
 Create Invoice
-
-    [Arguments]    ${invoiceCategoryId}   ${invoiceDate}   ${invoiceLabel}    ${billedTo}  ${vendorUid}  ${invoiceId}    ${providerConsumerIdList}  @{vargs}   &{kwargs}
+    # invoiceLabel=${invoiceLabel}  billedTo=${billedTo}    vendorUid=${vendorUid}
+    [Arguments]    ${invoiceCategoryId}   ${invoiceDate}    ${invoiceId}    ${providerConsumerIdList}   ${lid}   @{vargs}   &{kwargs}
 
      ${len}=  Get Length  ${vargs}
     ${itemList}=  Create List  
@@ -13015,7 +13076,7 @@ Create Invoice
         Exit For Loop If  ${len}==0
         Append To List  ${itemList}  ${vargs[${index}]}
     END
-    ${data}=  Create Dictionary  invoiceCategoryId=${invoiceCategoryId}     invoiceDate=${invoiceDate}   invoiceLabel=${invoiceLabel}  billedTo=${billedTo}    vendorUid=${vendorUid}  invoiceId=${invoiceId}    providerConsumerIdList=${providerConsumerIdList}   itemList=${itemList} 
+    ${data}=  Create Dictionary  invoiceCategoryId=${invoiceCategoryId}     invoiceDate=${invoiceDate}     invoiceId=${invoiceId}    providerConsumerIdList=${providerConsumerIdList}   locationId=${lid}  itemList=${itemList} 
 
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
@@ -13028,9 +13089,9 @@ Create Invoice
     RETURN  ${resp}
 
 Update Invoice
-
-    [Arguments]    ${uid}     ${invoiceCategoryId}    ${invoiceDate}   ${invoiceLabel}    ${billedTo}  ${vendorUid}      &{kwargs}
-    ${data}=  Create Dictionary  invoiceCategoryId=${invoiceCategoryId}     invoiceDate=${invoiceDate}   invoiceLabel=${invoiceLabel}  billedTo=${billedTo}    vendorUid=${vendorUid}  
+    # invoiceLabel=${invoiceLabel}  billedTo=${billedTo}    vendorUid=${vendorUid} 
+    [Arguments]    ${uid}     ${invoiceCategoryId}    ${invoiceDate}        &{kwargs}
+    ${data}=  Create Dictionary  invoiceCategoryId=${invoiceCategoryId}     invoiceDate=${invoiceDate}    
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END
@@ -13157,10 +13218,10 @@ Create PaymentsOut With Expense
 
 Update PaymentsOut
 
-    [Arguments]    ${payable_uid}     ${amount}  ${payableCategoryId}  ${paidDate}   ${payableLabel}    ${description}  ${referenceNo}  ${vendorUid}   ${paymentsOutStatus}    ${paymentStatus}    ${paymentMode}    &{kwargs}
+    [Arguments]    ${payable_uid}     ${amount}  ${payableCategoryId}  ${paidDate}   ${payableLabel}    ${description}  ${referenceNo}  ${vendorUid}   ${paymentsOutStatus}    ${paymentStatus}  ${lid}  ${paymentMode}    &{kwargs}
     
     ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
-    ${data}=  Create Dictionary  amount=${amount}   paymentsOutCategoryId=${payableCategoryId}  paidDate=${paidDate}   paymentsOutLabel=${payableLabel}  description=${description}    referenceNo=${referenceNo}  vendorUid=${vendorUid}    paymentsOutStatus=${paymentsOutStatus}    paymentStatus=${paymentStatus}    paymentInfo=${paymentMode}
+    ${data}=  Create Dictionary  amount=${amount}   paymentsOutCategoryId=${payableCategoryId}  paidDate=${paidDate}   paymentsOutLabel=${payableLabel}  description=${description}    referenceNo=${referenceNo}  vendorUid=${vendorUid}    paymentsOutStatus=${paymentsOutStatus}    paymentStatus=${paymentStatus}   locationId=${lid}   paymentInfo=${paymentMode}
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${paymentMode}   ${key}=${value}
     END
@@ -13168,6 +13229,27 @@ Update PaymentsOut
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/paymentsOut/${payable_uid}     data=${data}  expected_status=any    headers=${headers}
     Check Deprication  ${resp}  Update PaymentsOut
+    RETURN  ${resp}
+
+Update PaymentsOut With Expense
+
+    [Arguments]     ${payOutUuid}     ${paymentsOutCategoryId}  ${categoryName}   ${amount}   ${paymentMode}    ${paidDate}  ${locationId}  @{vargs}    &{kwargs}
+
+    ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
+
+    ${len}=  Get Length  ${vargs}
+    FOR    ${index}    IN RANGE  1  ${len}
+        # ${ap}=  Create Dictionary  id=${vargs[${index}]}
+        Append To List  ${vargs}   ${ap}
+        
+    END
+    ${data}=  Create Dictionary  paymentsOutCategoryId=${paymentsOutCategoryId}    categoryName=${categoryName}   amount=${amount}  paymentInfo=${paymentMode}    paidDate=${paidDate}   locationId=${locationId}     
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${paymentMode}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/paymentsOut/${payOutUuid}    data=${data}  expected_status=any    headers=${headers}
     RETURN  ${resp}
 
 Get PaymentsOut By Id
@@ -13802,11 +13884,11 @@ Auto Invoice Generation For Service
 
 Create PaymentsIn
 
-    [Arguments]    ${amount}  ${payableCategoryId}  ${receivedDate}   ${payableLabel}    ${vendorUid}    ${paymentMode}   &{kwargs}   
+    [Arguments]    ${amount}  ${payableCategoryId}  ${receivedDate}   ${payableLabel}    ${vendorUid}    ${locationId}   ${paymentMode}    &{kwargs}   
 
 
     # ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
-    ${data}=  Create Dictionary  amount=${amount}   paymentsInCategoryId=${payableCategoryId}  receivedDate=${receivedDate}   paymentsInLabel=${payableLabel}    vendorUid=${vendorUid}   paymentInfo=${paymentMode}
+    ${data}=  Create Dictionary  amount=${amount}   paymentsInCategoryId=${payableCategoryId}  receivedDate=${receivedDate}   paymentsInLabel=${payableLabel}    vendorUid=${vendorUid}   locationId=${locationId}   paymentInfo=${paymentMode}
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END
@@ -14894,8 +14976,6 @@ Get Los Lead Log
     Check Deprication  ${resp}  Get Los Lead Log
     RETURN  ${resp}
 
-
-
 Redirect LOS Lead
     [Arguments]     ${uid}  ${stageUid}  &{kwargs}
 
@@ -14909,6 +14989,137 @@ Redirect LOS Lead
     Check Deprication  ${resp}  Redirect LOS Lead
     RETURN  ${resp}
     
+LOS Lead As Draft For Followup Stage
+    [Arguments]     ${uid}  ${stageUid}  &{kwargs}
+
+    ${leadStage}=   Create Dictionary  uid=${stageUid}
+    ${data}=  Create Dictionary  leadStage=${leadStage}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/followup/data   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Save And Proceed LOS Lead Followup
+    [Arguments]     ${uid}  ${stageUid}  &{kwargs}
+    
+    ${leadStage}=   Create Dictionary  uid=${stageUid}
+    ${data}=  Create Dictionary  leadStage=${leadStage}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/followup/data/proceed   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Save LOS Lead As Draft For Kyc
+    [Arguments]     ${uid}  ${stageUid}  &{kwargs}
+
+    ${data}=  Create Dictionary
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/kyc/data   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Save And Proceed LOS Lead Kyc
+    [Arguments]     ${uid}  ${stageUid}  &{kwargs}
+
+    ${leadStage}=   Create Dictionary  uid=${stageUid}
+    ${data}=  Create Dictionary  leadStage=${leadStage}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/kyc/data/proceed   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Verift Los Lead Kyc 
+    [Arguments]  ${uid}  ${stageUidKyc}
+
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${leadUid}/stage/${stageUidKyc}/kycverification/data/proceed  expected_status=any
+    RETURN  ${resp}
+
+Save LOS Lead As Draft For SALESFIELD
+    [Arguments]     ${uid}  ${stageUid}  &{kwargs}
+
+    ${leadStage}=   Create Dictionary  uid=${stageUid}
+    ${data}=  Create Dictionary  leadStage=${leadStage} 
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/salesfield/data   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Save And Proceed LOS Lead SALESFIELD
+    [Arguments]     ${uid}  ${stageUid}  &{kwargs}
+
+    ${leadStage}=   Create Dictionary  uid=${stageUid}
+    ${data}=  Create Dictionary  leadStage=${leadStage}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/salesfield/data/proceed   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Generate OTP For LOS Lead Kyc Phone Number
+    [Arguments]  ${leadUid}  &{kwargs}
+
+    ${data}=  Create Dictionary  leadUid=${leadUid}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/los/lead/coapplicant/phoneotp/generate   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Verify OTP For LOS Lead Kyc Phone Number
+    [Arguments]  ${phone}  ${purpose}  ${leadUid}  &{kwargs}
+    
+    ${data}=  Create Dictionary  leadUid=${leadUid}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    ${otp}=  verify accnt  ${phone}   ${purpose}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw    /provider/los/lead/coapplicant/phoneotp/${otp}/verify   data=${data}  expected_status=any
+    Check Deprication  ${resp}  Verify OTP For LOS Lead Kyc Phone Number
+    RETURN  ${resp}
+
+Generate OTP For LOS Lead Kyc Email
+    [Arguments]  ${id}  ${leadUid}  ${consumerEmail}
+
+    ${data}=    Create Dictionary   id=${id}  leadUid=${leadUid}  consumerEmail=${consumerEmail}
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/los/lead/coapplicant/emailotp/generate   data=${data}  expected_status=any
+    Check Deprication  ${resp}  Generate OTP For LOS Lead Kyc Email
+    RETURN  ${resp}
+
+Verify OTP For LOS Lead Kyc Email
+    [Arguments]  ${consumerEmail}  ${purpose}  ${id}  ${leadUid}
+
+    ${data}=  Create Dictionary  id=${id}  leadUid=${leadUid} 
+    ${data}=    json.dumps    ${data}
+    ${otp}=  verify accnt  ${consumerEmail}   ${purpose}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw    /provider/los/lead/coapplicant/emailotp/${otp}/verify   data=${data}  expected_status=any
+    Check Deprication  ${resp}  Verify OTP For LOS Lead Kyc Email
+    RETURN  ${resp}
+
 
 AddItemToInvoice
    [Arguments]  ${uuid}   ${ItemLists}  &{kwargs}
@@ -17850,6 +18061,14 @@ Check Server Availibility
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/server/up   expected_status=any
     Check Deprication  ${resp}  Check server
+    RETURN  ${resp}
+
+Update Status File Share
+
+    [Arguments]     ${status}    ${Drive_id}  
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/fileShare/upload/${status}/${Drive_id}    expected_status=any
+    Check Deprication  ${resp}  Update Status File Share
     RETURN  ${resp}
 
 *** Comments ***

@@ -205,8 +205,6 @@ JD-TC-ChangeAppointmentStatus-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    sleep  2s
-
     ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1786,10 +1784,15 @@ JD-TC-ChangeAppointmentStatus-11
     Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings    ${resp.json()}    ${APPT_STATUS_NOT_CHANGEABLE}
 
-    ${resp}=  Get Appointment Status   ${apptid1}
-    Log   ${resp.json()}
+    # ${resp}=  Get Appointment Status   ${apptid1}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()[3]['appointmentStatus']}   ${apptStatus[1]}
+
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[3]['appointmentStatus']}   ${apptStatus[1]}
+    Should Be Equal As Strings   ${resp.json()['apptStatus']}  ${apptStatus[1]}
 
 JD-TC-ChangeAppointmentStatus-UH6
 
@@ -2644,9 +2647,23 @@ JD-TC-ChangeAppointmentStatus-UH11
     END
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot1}   ${slots[${j1}]}
+
+    # ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
     ${fname}=  generate_firstname  
     ${lname}=  FakerLibrary.last_name
@@ -2749,6 +2766,8 @@ JD-TC-ChangeAppointmentStatus-UH12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    clear_customer   ${PUSERNAME376}
+
     ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2790,25 +2809,17 @@ JD-TC-ChangeAppointmentStatus-UH12
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
-    ${resp}=  GetCustomer  
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    ${NewCustomer}    Generate random string    10    123456789
+    ${NewCustomer}    Convert To Integer  ${NewCustomer}
+    Set Suite Variable   ${NewCustomer}
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
     Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${fname}=  generate_firstname
-        ${lname}=  FakerLibrary.last_name
-        ${NewCustomer}    Generate random string    10    123456789
-        ${NewCustomer}    Convert To Integer  ${NewCustomer}
-        Set Suite Variable   ${NewCustomer}
-        Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
-        ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
-        Log   ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${cid}  ${resp.json()}
-    ELSE
-        Set Test Variable  ${cid}  ${resp.json()[0]['id']}
-        Set Test Variable  ${fname}  ${resp.json()[0]['firstName']}
-    END
-   
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${cid}  ${resp.json()}
+    
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -2819,6 +2830,7 @@ JD-TC-ChangeAppointmentStatus-UH12
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
+    sleep  1s
     ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -4348,7 +4360,7 @@ JD-TC-ChangeAppointmentStatus-UH25
     ${apptforlist}=   Create List  ${apptfor2}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptforlist}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptforlist}   location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -4357,12 +4369,16 @@ JD-TC-ChangeAppointmentStatus-UH25
     ${resp}=  Get Appointment By Id   ${apptid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[4]}
     
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[1]['appointmentStatus']}   ${apptStatus[4]}
-
+   
     ${resp}=  Appointment Action   ${apptStatus[1]}   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -4458,10 +4474,15 @@ JD-TC-ChangeAppointmentStatus-UH26
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[4]}
+
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[1]['appointmentStatus']}   ${apptStatus[4]}
+    # Should Be Equal As Strings  ${resp.json()[1]['appointmentStatus']}   ${apptStatus[4]}
     
 JD-TC-ChangeAppointmentStatus-14
 
@@ -4606,10 +4627,15 @@ JD-TC-ChangeAppointmentStatus-14
     Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  "${resp.json()}"  "${APPOINTMET_AlREADY_TAKEN}"
 
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[6]}
+
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[1]['appointmentStatus']}   ${apptStatus[6]}
+    # Should Be Equal As Strings  ${resp.json()[1]['appointmentStatus']}   ${apptStatus[6]}
 
 *** Comments ***
 

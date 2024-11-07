@@ -228,7 +228,8 @@ JD-TC-GetExpenseById-1
     Should Be Equal As Strings  ${resp.json()['expenseUid']}  ${expense_uid}
     # Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1}
     Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1}
-
+    Should Be Equal As Strings  ${resp.json()['amountPaid']}  0.0
+    Should Be Equal As Strings  ${resp.json()['amountDue']}  ${amount}
 JD-TC-GetExpenseById-2
 
     [Documentation]   update expense and get expense by id.

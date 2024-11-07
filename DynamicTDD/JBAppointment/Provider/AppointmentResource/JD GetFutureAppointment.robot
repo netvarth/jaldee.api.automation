@@ -84,7 +84,8 @@ JD-TC-GetFutureAppointment-1
     ${s_id}=  Create Sample Service  ${SERVICE1}      maxBookingsAllowed=20
     Set Suite Variable  ${s_id}
 
-    ${SERVICE2}=  generate_service_name
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}   
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     Set Suite Variable   ${min_pre}
     ${s_id1}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=10   isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre} 
@@ -533,9 +534,9 @@ JD-TC-GetFutureAppointment-4
 
     [Documentation]  Get provider's future appointment list based on payment status
    
-    ${pid}=  get_acc_id  ${PUSERNAME257}
+    ${pid}=  get_acc_id  ${PUSERNAME357}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME257}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME357}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -580,32 +581,30 @@ JD-TC-GetFutureAppointment-4
 
     # clear_appt_schedule   ${PUSERNAME257}
 
-    ${desc}=   FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=1   max=50
-    ${servicecharge}=   Random Int  min=100  max=500
-    ${srv_duration}=   Random Int   min=10   max=20
+    # ${desc}=   FakerLibrary.sentence
+    # ${min_pre}=   Random Int   min=1   max=50
+    # ${servicecharge}=   Random Int  min=100  max=500
+    # ${srv_duration}=   Random Int   min=10   max=20
+    # ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    # Append To List  ${service_names}  ${SERVICE1}
+    # ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}   200
+    # Set Test Variable  ${s_id1}  ${resp.json()}
+
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}   200
-    Set Test Variable  ${s_id1}  ${resp.json()}
-
-    ${resp}=  Auto Invoice Generation For Service   ${s_id1}    ${toggle[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
+    Append To List  ${service_names}  ${SERVICE1}   
+    ${s_id1}=  Create Sample Service  ${SERVICE1}  isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre}  maxBookingsAllowed=10 
+   
     ${SERVICE2}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
 
-    ${resp}=  Auto Invoice Generation For Service   ${s_id2}    ${toggle[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Appointment Schedules
+    ${resp}=   Get Service By Id  ${s_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${servicecharge}  ${resp.json()['totalAmount']}
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -615,6 +614,18 @@ JD-TC-GetFutureAppointment-4
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
+
+    ${resp}=  Auto Invoice Generation For Service   ${s_id1}    ${toggle[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Auto Invoice Generation For Service   ${s_id2}    ${toggle[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointment Schedules
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10    
@@ -640,10 +651,28 @@ JD-TC-GetFutureAppointment-4
     
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
+
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${CUSERNAME34}  firstName=${fname}   lastName=${lname}     email=${pc_emailid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${cid}  ${resp.json()}
    
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME34}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME34}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token1}  ${resp.json()['token']}
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME34}    ${pid}  ${token1} 
     Log   ${resp.content}
@@ -689,7 +718,7 @@ JD-TC-GetFutureAppointment-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME257}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME357}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -784,7 +813,7 @@ JD-TC-GetFutureAppointment-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME257}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME357}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1266,7 +1295,7 @@ JD-TC-GetFutureAppointment-8
     ELSE
         Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
         Set Test Variable  ${lid}  ${resp.json()[0]['location']['id']}
-        Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
+        Set Test Variable  ${s_id1}  ${resp.json()[0]['services'][0]['id']}
     END
     
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY3}  ${s_id1}

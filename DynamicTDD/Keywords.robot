@@ -298,7 +298,8 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{stockTransfer}                    DRAFT   DISPATCHED   RECEIVED   DECLINED   CANCELED
 @{toggleButton}                     enable  disable
 @{losProduct}                       CDL  PROPERTYLOAN  DOCTORSLOAN  TEACHERSLOAN
-@{stageType}                        NEW  FOLLOWUP  KYC  KYCVERIFICATION  SALESFIELD  CREDITSCORE
+@{stageType}                        NEW  FOLLOWUP  KYC  KYC_VERIFICATION  SALESFIELD  CREDITSCORE
+@{pushPurchaseToFinance}            AUTOMATIC   MANUAL
 
 *** Keywords ***
 
@@ -484,4 +485,18 @@ Get service names
     Append To List  ${service_names}  @{names}
     RETURN  ${service_names}
 
-    
+
+Upload File To S3
+    [Arguments]    ${url}    ${file_path}
+    # Set headers if needed
+    ${headers}=    Create Dictionary    Content-Type=multipart/form-data
+
+    # Define the file data to upload
+    ${files}=    Create Dictionary    file=@${file_path}
+
+    # Send the PUT request with file
+    ${response}=    requests.Put    ${url}    files=${files}    headers=${headers}
+
+    # Verify the upload was successful
+    Should Be Equal As Strings    ${response.status_code}    200
+    RETURN    ${response}

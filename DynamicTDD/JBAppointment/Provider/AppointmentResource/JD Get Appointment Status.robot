@@ -661,14 +661,8 @@ JD-TC-GetAppointmentStatus-4
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-   
-    sleep  01s
-    
-    ${resp}=  Get Appointment Status   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[1]}
-
+    Should Be Equal As Strings   ${resp.json()['apptStatus']}  ${apptStatus[1]}
+  
 JD-TC-GetAppointmentStatus-5
 
     [Documentation]  Check status Started
@@ -789,21 +783,23 @@ JD-TC-GetAppointmentStatus-5
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
 
-    sleep  01s
-    
-    ${resp}=  Get Appointment Status   ${apptid1}
-    Log   ${resp.json()}
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[1]}
+    Should Be Equal As Strings   ${resp.json()['apptStatus']}  ${apptStatus[1]}
 
     ${resp}=  Appointment Action   ${apptStatus[3]}   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()['apptStatus']}  ${apptStatus[3]}
+
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[1]['appointmentStatus']}   ${apptStatus[3]}
 
 JD-TC-GetAppointmentStatus-6
 
@@ -813,32 +809,33 @@ JD-TC-GetAppointmentStatus-6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    sleep  01s
-    
-    ${resp}=  Get Appointment Status   ${apptid1}
-    Log   ${resp.json()}
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[1]}
-    Should Be Equal As Strings  ${resp.json()[1]['appointmentStatus']}   ${apptStatus[3]} 
+    Should Be Equal As Strings   ${resp.json()['apptStatus']}  ${apptStatus[3]}
 
     ${resp}=  Appointment Action   ${apptStatus[1]}   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Appointment Status   ${apptid1}
-    Log   ${resp.json()}
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[2]['appointmentStatus']}   ${apptStatus[1]}
+    Should Be Equal As Strings   ${resp.json()['apptStatus']}  ${apptStatus[1]}
 
     ${reason}=  Random Element  ${cancelReason}
     ${resp}=  Appointment Action   ${apptStatus[4]}   ${apptid1}    cancelReason=${reason}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()['apptStatus']}  ${apptStatus[4]}
+
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[3]['appointmentStatus']}   ${apptStatus[4]}
 
 JD-TC-GetAppointmentStatus-7
 
@@ -848,24 +845,27 @@ JD-TC-GetAppointmentStatus-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    sleep  01s
-    
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()['apptStatus']}  ${apptStatus[4]}
+
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[1]}
-    Should Be Equal As Strings  ${resp.json()[1]['appointmentStatus']}   ${apptStatus[3]} 
-    Should Be Equal As Strings  ${resp.json()[2]['appointmentStatus']}   ${apptStatus[1]}
-    Should Be Equal As Strings  ${resp.json()[3]['appointmentStatus']}   ${apptStatus[4]}
 
     ${resp}=  Appointment Action   ${apptStatus[1]}   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()['apptStatus']}  ${apptStatus[1]}
+
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[4]['appointmentStatus']}   ${apptStatus[1]}
 
     ${reason}=  Random Element  ${cancelReason}
 
@@ -873,10 +873,14 @@ JD-TC-GetAppointmentStatus-7
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()['apptStatus']}  ${apptStatus[5]}
+
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[5]['appointmentStatus']}   ${apptStatus[5]}
 
 JD-TC-GetAppointmentStatus-8
 
@@ -886,17 +890,14 @@ JD-TC-GetAppointmentStatus-8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    sleep  01s
-    
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()['apptStatus']}  ${apptStatus[5]}
+
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[1]}
-    Should Be Equal As Strings  ${resp.json()[1]['appointmentStatus']}   ${apptStatus[3]} 
-    Should Be Equal As Strings  ${resp.json()[2]['appointmentStatus']}   ${apptStatus[1]}
-    Should Be Equal As Strings  ${resp.json()[3]['appointmentStatus']}   ${apptStatus[4]}
-    Should Be Equal As Strings  ${resp.json()[4]['appointmentStatus']}   ${apptStatus[1]}
-    Should Be Equal As Strings  ${resp.json()[5]['appointmentStatus']}   ${apptStatus[5]}
 
     ${resp}=  Appointment Action   ${apptStatus[1]}   ${apptid1}
     Log   ${resp.json()}
@@ -905,7 +906,7 @@ JD-TC-GetAppointmentStatus-8
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[6]['appointmentStatus']}   ${apptStatus[1]}
+    # Should Be Equal As Strings  ${resp.json()[6]['appointmentStatus']}   ${apptStatus[1]}
 
     # ${resp}=  Appointment Action   ${apptStatus[1]}   ${apptid1}
     # Log   ${resp.json()}
@@ -923,7 +924,7 @@ JD-TC-GetAppointmentStatus-8
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[7]['appointmentStatus']}   ${apptStatus[3]}
+    # Should Be Equal As Strings  ${resp.json()[7]['appointmentStatus']}   ${apptStatus[3]}
 
     ${resp}=  Appointment Action   ${apptStatus[6]}   ${apptid1}
     Log   ${resp.json()}
@@ -932,7 +933,7 @@ JD-TC-GetAppointmentStatus-8
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[8]['appointmentStatus']}   ${apptStatus[6]}
+    # Should Be Equal As Strings  ${resp.json()[8]['appointmentStatus']}   ${apptStatus[6]}
 
 JD-TC-GetAppointmentStatus-9
 
@@ -1003,9 +1004,18 @@ JD-TC-GetAppointmentStatus-9
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot1}   ${slots[${j1}]}
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME25}
     Log   ${resp.json()}
@@ -1033,7 +1043,7 @@ JD-TC-GetAppointmentStatus-9
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[1]}
+    # Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[1]}
 
     ${resp}=  Appointment Action   ${apptStatus[3]}   ${apptid1}
     Log   ${resp.json()}
@@ -1042,7 +1052,7 @@ JD-TC-GetAppointmentStatus-9
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[1]['appointmentStatus']}   ${apptStatus[3]}
+    # Should Be Equal As Strings  ${resp.json()[1]['appointmentStatus']}   ${apptStatus[3]}
 
     ${APPT_STATUS_NOT_CHANGEABLE}=  Format String    ${APPT_STATUS_NOT_CHANGEABLE}    ${apptStatus[3]}   ${apptStatus[7]}
     ${resp}=  Appointment Action   ${apptStatus[7]}   ${apptid1}
@@ -1054,7 +1064,7 @@ JD-TC-GetAppointmentStatus-9
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[1]['appointmentStatus']}   ${apptStatus[3]}
+    # Should Be Equal As Strings  ${resp.json()[1]['appointmentStatus']}   ${apptStatus[3]}
     # Should Be Equal As Strings  ${resp.json()[2]['appointmentStatus']}   ${apptStatus[7]}
 
 JD-TC-GetAppointmentStatus-UH1

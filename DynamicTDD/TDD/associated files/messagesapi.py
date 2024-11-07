@@ -2378,6 +2378,7 @@ INVALID_DOSAGE_VALUE="Invalid Dosage Value"
 INVALID_FREEQUENCY_VALUE="Invalid Frequency Value"
 RECORD_STATUS_SAME= "Record status is already {}"
 RX_ITEMS_ARE_NOT_AVAILABLE_FOR_ORDER_CREATION="Rx items are not available for order creation"
+PURCHASE_CANT_PUSHE_TO_FINANCE_INVALID_STATUS = "You can't push to finance because this purchase is in {} status."
 
 # Vendor
 INVALID_NAME="Invalid Name"

@@ -56,6 +56,7 @@ JD-TC-GetAppointmentAttachment-1
     clear_customer   ${PUSERNAME130}
 
     ${lid}=  Create Sample Location  
+    Set Suite Variable  ${lid}
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -145,12 +146,20 @@ JD-TC-GetAppointmentAttachment-2
     # clear_location  ${PUSERNAME130}
     clear_customer   ${PUSERNAME130}
 
-    ${lid}=  Create Sample Location  
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        Set Test Variable   ${lid}
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
     # clear_appt_schedule   ${PUSERNAME130}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}

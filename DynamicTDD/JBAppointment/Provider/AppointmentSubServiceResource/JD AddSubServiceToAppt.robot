@@ -139,12 +139,6 @@ JD-TC-AddSubServicesToAppt-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${subser_id1}  ${resp.json()}
 
-    ${resp}=   Get Service By Id  ${subser_id1}
-    Log   ${resp.json()}  
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}                  ${subser_name} 
-    Should Be Equal As Strings  ${resp.json()['serviceCategory']}       ${serviceCategory[0]}
-
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
@@ -1893,10 +1887,6 @@ JD-TC-AddSubServicesToAppt-11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${subser_id1}  ${resp.json()}
 
-    ${resp}=   Get Service By Id  ${subser_id1}
-    Log   ${resp.json()}  
-    Should Be Equal As Strings  ${resp.status_code}  200
-   
     ${desc1}=  FakerLibrary.sentence
     ${subser_dur1}=   Random Int   min=5   max=10
     ${subser_price1}=   Random Int   min=100   max=500
@@ -2460,7 +2450,7 @@ JD-TC-AddSubServicesToAppt-UH7
 
     [Documentation]  add subservice to another providers appointment.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME169}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -33,7 +33,7 @@ ${service_duration}     30
 @{New_status}    Proceed     Unassign    Block     Delete    Remove
 ${DisplayName1}   item1_DisplayName
 
-
+@{service_names} 
 
 *** Test Cases ***
 
@@ -60,10 +60,10 @@ JD-TC-Apply ProviderCoupon-1
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
 
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
+    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Enable Disable Department    ${toggle[0]}
     Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
     Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -104,6 +104,22 @@ JD-TC-Apply ProviderCoupon-1
         Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
     END
 
+    ${resp}=  Get Bill Settings 
+    Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF  ${resp.json()['enablepos']}==${bool[0]}
+    IF  ${resp.status_code}!=200 
+        ${resp}=  Enable Disable bill  ${bool[1]}
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=  Get Bill Settings 
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['enablepos']}    ${bool[1]}
+
+
     ${resp}=  Create Sample Location  
     Set Suite Variable    ${lid}    ${resp}  
 
@@ -139,7 +155,7 @@ JD-TC-Apply ProviderCoupon-1
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
     ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
-    Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
+    Set Test Variable  ${email}  ${vender_name}.${test_mail}
     ${address}=  FakerLibrary.city
     Set Suite Variable  ${address}
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
@@ -191,12 +207,12 @@ JD-TC-Apply ProviderCoupon-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${vendor_uid1}   ${resp.json()['uid']}
-    Set Suite Variable   ${vendor_id1}   ${resp.json()['id']}
+    Set Suite Variable   ${vendor_id1}   ${resp.json()['encId']}
 
-    ${resp}=  Get Vendor By Id   ${vendor_uid1}
+    ${resp}=  Get vendor by encId   ${vendor_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['id']}  ${vendor_id1}
+    Should Be Equal As Strings  ${resp.json()['encId']}  ${vendor_id1}
     Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1}
     # Should Be Equal As Strings  ${resp.json()['vendorType']}  ${category_id}
 
@@ -209,14 +225,33 @@ JD-TC-Apply ProviderCoupon-1
     ${providerConsumerIdList}=  Create List  ${pcid18}
     Set Suite Variable  ${providerConsumerIdList} 
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
     Set Suite Variable  ${SERVICE1}
+
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}    department=${dep_id}
+    ${minPrePaymentAmount}=   Random Int  min=10  max=50
+
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}      ${bool[1]}      ${servicecharge}  ${bool[0]}   department=${dep_id}   minPrePaymentAmount=${minPrePaymentAmount}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid1}  ${resp.json()} 
+
+    ${resp}=  Sample Queue      ${lid}  ${sid1}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${que_id}   ${resp.json()}
+
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${CUR_DAY}
+    ${desc}=   FakerLibrary.word
+    ${resp}=  Add To Waitlist  ${pcid18}  ${sid1}    ${que_id}  ${CUR_DAY}   ${desc}  ${bool[1]}  ${pcid18}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Suite Variable  ${wait_id1}  ${wid[0]}
+
 
     ${coupon}=    FakerLibrary.word
     ${desc}=  FakerLibrary.Sentence   nb_words=2
@@ -231,9 +266,9 @@ JD-TC-Apply ProviderCoupon-1
     ${ST_DAY}=  db.get_date_by_timezone  ${tz}
     ${EN_DAY}=  db.add_timezone_date  ${tz}  10
     ${min_bill_amount}=   Random Int   min=90   max=100
-    ${max_disc_val}=   Random Int   min=90  max=100
+    ${max_disc_val}=   Random Int   min=9  max=10
     ${max_prov_use}=   Random Int   min=10   max=20
-    ${book_channel}=   Create List   ${bookingChannel[1]}
+    ${book_channel}=   Create List   ${bookingChannel[0]}
     ${coupn_based}=  Create List   ${couponBasedOn[0]}
     ${tc}=  FakerLibrary.sentence
     ${services}=   Create list     ${sid1}    
@@ -248,7 +283,7 @@ JD-TC-Apply ProviderCoupon-1
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${invoiceLabel}=   FakerLibrary.word
-    ${invoiceDate}=   db.db.get_date_by_timezone  ${tz}
+    ${invoiceDate}=   get_date_by_timezone  ${tz}
     ${invoiceId}=   FakerLibrary.word
 
     ${quantity}=   Random Int  min=5  max=10
@@ -260,21 +295,36 @@ JD-TC-Apply ProviderCoupon-1
     ${serviceList}=    Create List    ${serviceList}
     
     
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   serviceList=${serviceList}
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   serviceList=${serviceList}       locationId=${lid}   ynwUuid=${wait_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]} 
+
+    ${resp}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${resp}=  Create Invoice for Booking   ${invoicebooking[1]}   ${wait_id1}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]} 
+
+    ${resp}=  Publish Provider Coupon    ${couponId}   ${ST_DAY}    ${EN_DAY}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
 
     ${resp}=  Get Coupons 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
 
+    # ${resp}=   Apply Provider Coupon for waitlist    ${wait_id1}   ${cupn_code}
+    # Log  ${resp.json()} 
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=   Apply Provider Coupon   ${invoice_uid}   ${cupn_code}
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
-
-
 
     ${resp}=  Get Invoice By Id  ${invoice_uid}
     Log  ${resp.content}
@@ -300,7 +350,7 @@ JD-TC-ProviderCouponBill-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -447,7 +497,7 @@ JD-TC-ProviderCouponBill-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -614,7 +664,7 @@ JD-TC-ProviderCouponBill-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -789,7 +839,7 @@ JD-TC-ProviderCouponBill-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -927,7 +977,7 @@ JD-TC-ProviderCouponBill-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -1062,7 +1112,7 @@ JD-TC-ProviderCouponBill-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -1201,7 +1251,7 @@ JD-TC-ProviderCouponBill-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -1409,7 +1459,7 @@ JD-TC-ProviderCouponBill-8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -1617,7 +1667,7 @@ JD-TC-ProviderCouponBill-9
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -2356,7 +2406,7 @@ JD-TC-ProviderCouponBill-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -2493,7 +2543,7 @@ JD-TC-ProviderCouponBill-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -2635,7 +2685,7 @@ JD-TC-ProviderCouponBill-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -2783,7 +2833,7 @@ JD-TC-ProviderCouponBill-UH4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -2910,7 +2960,7 @@ JD-TC-ProviderCouponBill-UH5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -3036,7 +3086,7 @@ JD-TC-ProviderCouponBill-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -3173,7 +3223,7 @@ JD-TC-ProviderCouponBill-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -3328,7 +3378,7 @@ JD-TC-ProviderCouponBill-UH8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 

@@ -48,13 +48,20 @@ JD-TC-GetWaitlistCountToday-1
       ${duration}=  Random Int  min=2   max=10
       ${resp}=  Update Waitlist Settings  ${calc_mode[1]}  ${duration}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
-      ${resp}=   Create Sample Location
-      Set Suite Variable    ${loc_id1}    ${resp}  
-      ${resp}=   Get Location ById  ${loc_id1}
+
+      ${resp}=    Get Locations
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+      IF   '${resp.content}' == '${emptylist}'
+            ${loc_id1}=  Create Sample Location
+            ${resp}=   Get Location ById  ${loc_id1}
+            Log  ${resp.content}
+            Should Be Equal As Strings  ${resp.status_code}  200
+            Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+      ELSE
+            Set Suite Variable  ${loc_id1}  ${resp.json()[0]['id']}
+            Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+      END 
 
       ${ser_name1}=     generate_unique_service_name  ${service_names}
       Append To List  ${service_names}  ${ser_name1}

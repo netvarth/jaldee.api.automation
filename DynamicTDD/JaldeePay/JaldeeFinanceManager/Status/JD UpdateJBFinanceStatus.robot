@@ -11,6 +11,7 @@ Library           /ebs/TDD/db.py
 Library           /ebs/TDD/excelfuncs.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
@@ -70,12 +71,12 @@ JD-TC-UpdateStatus-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
     
-    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id1}   ${resp.json()}
 
-    ${resp}=  Update Finance Status   ${New_status[0]}  ${categoryType[0]}   ${status_id1}
+    ${resp}=  Update Finance Status   ${New_status[0]}  ${categoryType[1]}   ${status_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -87,7 +88,7 @@ JD-TC-UpdateStatus-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Update Finance Status   ${New_status[5]}  ${categoryType[0]}   ${status_id1}
+    ${resp}=  Update Finance Status   ${New_status[5]}  ${categoryType[1]}   ${status_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -99,7 +100,7 @@ JD-TC-UpdateStatus-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Update Finance Status   ${New_status[6]}  ${categoryType[0]}   ${status_id1}
+    ${resp}=  Update Finance Status   ${New_status[6]}  ${categoryType[1]}   ${status_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -111,7 +112,7 @@ JD-TC-UpdateStatus-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Update Finance Status   ${New_status[3]}  ${categoryType[0]}   ${status_id1}
+    ${resp}=  Update Finance Status   ${New_status[3]}  ${categoryType[1]}   ${status_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -124,7 +125,7 @@ JD-TC-UpdateStatus-5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Update Finance Status   ${New_status[4]}  ${categoryType[0]}   ${status_id1}
+    ${resp}=  Update Finance Status   ${New_status[4]}  ${categoryType[1]}   ${status_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -133,7 +134,7 @@ JD-TC-UpdateStatus-UH1
 
     [Documentation]   Update Category without login
 
-    ${resp}=  Update Finance Status   ${New_status[4]}  ${categoryType[0]}   ${status_id1}
+    ${resp}=  Update Finance Status   ${New_status[4]}  ${categoryType[1]}   ${status_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -142,11 +143,44 @@ JD-TC-UpdateStatus-UH2
 
     [Documentation]   Update Category Using Consumer Login
 
-    ${resp}=  ConsumerLogin  ${CUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    #............provider consumer creation..........
+
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Suite Variable  ${PCPHONENO}  555${PH_Number}
+
+    ${fname}=  generate_firstname
+    Set Suite Variable  ${fname}
+    ${lastname}=  FakerLibrary.last_name
+   
+    ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lastname}  countryCode=${countryCodes[1]} 
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Update Finance Status   ${New_status[4]}  ${categoryType[0]}   ${status_id1}
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Update Finance Status   ${New_status[4]}  ${categoryType[1]}   ${status_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
@@ -179,7 +213,7 @@ JD-TC-UpdateStatus-UH3
     ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   Category Id
     
     ${name}=   FakerLibrary.word
-    ${resp}=  Update Finance Status   ${New_status[4]}  ${categoryType[0]}   ${status_id1}
+    ${resp}=  Update Finance Status   ${New_status[4]}  ${categoryType[1]}   ${status_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${INVALID_FM_STATUS_ID}
@@ -192,7 +226,7 @@ JD-TC-UpdateStatus-UH4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Update Finance Status   ${EMPTY}  ${categoryType[0]}   ${status_id1}
+    ${resp}=  Update Finance Status   ${EMPTY}  ${categoryType[1]}   ${status_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${STATUS_BOARD_NAME_NOT_EMPTY}
@@ -205,17 +239,17 @@ JD-TC-UpdateStatus-UH5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Finance Status   ${New_status[7]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[7]}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id2}   ${resp.json()}
 
-    ${resp}=  Create Finance Status   ${New_status[8]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[8]}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id3}   ${resp.json()}
 
-    ${resp}=  Update Finance Status   ${New_status[8]}  ${categoryType[0]}   ${status_id2}
+    ${resp}=  Update Finance Status   ${New_status[8]}  ${categoryType[1]}   ${status_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${STATUS_EXISTS_WITH_GIVEN_NAME}

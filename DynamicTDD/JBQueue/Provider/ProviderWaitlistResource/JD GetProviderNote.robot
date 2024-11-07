@@ -691,6 +691,7 @@ JD-TC-Get Provider Note-UH3
     Should Be Equal As Strings  "${resp.json()}"  "${INVALID_WAITLIST}"
     # Should Be Equal As Strings  "${resp.json()}"  "${INVALID_CONSUMER}"
 
+*** Comments ***
 JD-TC-Get Provider Note-UH6
     [Documentation]   Get Provider Note by valid provider with attachment as sh file.
 

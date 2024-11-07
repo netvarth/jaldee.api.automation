@@ -11,6 +11,7 @@ Library           /ebs/TDD/db.py
 Library           /ebs/TDD/excelfuncs.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
@@ -59,63 +60,37 @@ JD-TC-get Default status-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
     
-    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id0}   ${resp.json()}
 
-    ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id1}   ${resp.json()}
 
-    ${resp}=  Create Finance Status   ${New_status[2]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[2]}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id2}   ${resp.json()}
 
-    ${resp}=  Set default status    ${status_id0}    ${categoryType[0]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get default status    ${categoryType[0]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['id']}  ${status_id0}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
-    Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[0]}
-    Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[1]}
-
-
-JD-TC-get Default status-2
-
-    [Documentation]  Create Status as Proceed and Get default status .
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    # Set Test Variable  ${userName}  ${resp.json()['userName']}}
-    
-    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[1]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${status_id1}   ${resp.json()}
-
-
-    ${resp}=  Set default status    ${status_id1}    ${categoryType[1]} 
+    ${resp}=  Set default status    ${status_id0}    ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get default status    ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['id']}  ${status_id1}
+    Should Be Equal As Strings  ${resp.json()['id']}  ${status_id0}
     Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[1]}
     Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[0]}
     Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[1]}
 
 
-JD-TC-get Default status-3
+
+
+JD-TC-get Default status-2
 
     [Documentation]  Create Status as  Unassign   and Get default status  ..
 
@@ -141,7 +116,7 @@ JD-TC-get Default status-3
     Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[1]}
 
 
-JD-TC-get Default status-4
+JD-TC-get Default status-3
 
     [Documentation]  Create Status as  Block  and Get default status  ..
 
@@ -166,7 +141,7 @@ JD-TC-get Default status-4
     Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[2]}
     Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[1]}
 
-JD-TC-get Default status-5
+JD-TC-get Default status-4
 
     [Documentation]  Create Status as  Remove and Get default status  ..
 
@@ -191,7 +166,7 @@ JD-TC-get Default status-5
     Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[4]}
     Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[1]}
 
-JD-TC-get Default status-6
+JD-TC-get Default status-5
 
     [Documentation]  Create Status as Remove and Get default status  ..
 
@@ -199,20 +174,20 @@ JD-TC-get Default status-6
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Finance Status   ${New_status[4]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[4]}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id2}   ${resp.json()}
 
-    ${resp}=  Set default status    ${status_id2}    ${categoryType[0]} 
+    ${resp}=  Set default status    ${status_id2}    ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get default status    ${categoryType[0]} 
+    ${resp}=  Get default status    ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['id']}  ${status_id2}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
+    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[1]}
     Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[4]}
     Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[1]}
 
@@ -220,7 +195,7 @@ JD-TC-get Default status-UH1
 
     [Documentation]    Get default status without login
 
-   ${resp}=  Get default status    ${categoryType[0]} 
+   ${resp}=  Get default status    ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -229,11 +204,44 @@ JD-TC-get Default status-UH2
 
     [Documentation]   Get default status Using Consumer Login
 
-    ${resp}=  ConsumerLogin  ${CUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    #............provider consumer creation..........
+
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Suite Variable  ${PCPHONENO}  555${PH_Number}
+
+    ${fname}=  generate_firstname
+    Set Suite Variable  ${fname}
+    ${lastname}=  FakerLibrary.last_name
+   
+    ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lastname}  countryCode=${countryCodes[1]} 
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get default status    ${categoryType[0]} 
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get default status    ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
@@ -266,7 +274,7 @@ JD-TC-get Default status-UH4
     
     ${FIELD_DISABLED}=  format String   ${FIELD_DISABLED}   Jaldee Finance
     
-    ${resp}=  Get default status   ${categoryType[0]} 
+    ${resp}=  Get default status   ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${FIELD_DISABLED}
