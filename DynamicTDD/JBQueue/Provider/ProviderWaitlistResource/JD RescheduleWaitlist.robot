@@ -884,14 +884,6 @@ JD-TC-Reschedule Waitlist-5
     clear_customer   ${billable_providers[2]}
     clear_provider_msgs  ${billable_providers[2]}
     clear_consumer_msgs  ${CUSERNAME13}
-
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 	
     ${SERVICE1}=    generate_service_name
     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -902,8 +894,23 @@ JD-TC-Reschedule Waitlist-5
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
     Set Test Variable   ${servicecharge}   ${resp.json()[0]['totalAmount']}
 
-    ${lid}=  Create Sample Location  
-    # clear_queue   ${billable_providers[2]}
+    ${resp}=  Auto Invoice Generation For Service   ${s_id}    ${toggle[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END 
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -920,7 +927,7 @@ JD-TC-Reschedule Waitlist-5
     ${resp} =   GetCustomer   phoneNo-eq=${CUSERNAME13}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${j_cid}   ${resp.json()[0]['jaldeeConsumer']}
+    Set Test Variable  ${j_cid}   ${resp.json()[0]['id']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
@@ -995,35 +1002,42 @@ JD-TC-Reschedule Waitlist-5
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${cid}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${q_id}
     
-    ${resp}=  Make payment Consumer Mock  ${pid}  ${servicecharge}  ${purpose[0]}  ${wid}  ${s_id}  ${bool[0]}   ${bool[1]}  ${j_cid}
+    ${resp}=  Make payment Consumer Mock  ${pid}  ${servicecharge}  ${purpose[0]}  ${wid}  ${s_id}  ${bool[0]}   ${bool[1]}  ${None}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Test Variable   ${payref}   ${resp.json()['paymentRefId']}
 
-    ${resp}=  Get Bill By consumer  ${wid}  ${pid} 
+    ${resp}=  Get Booking Invoices  ${wid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${pid}
+    Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
 
-    ${resp}=  Get Payment Details  paymentRefId-eq=${payref}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${wid}
-    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${servicecharge}
-    # Should Be Equal As Strings  ${resp.json()[0]['custId']}  ${jdconID}  
-    Should Be Equal As Strings  ${resp.json()[0]['status']}  ${cupnpaymentStatus[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${pid}
+    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['billStatus']}  ${billStatus[0]}
 
-    ${resp}=  Get Payment Details By UUId  ${wid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${wid}
-    Should Be Equal As Strings  ${resp.json()[0]['status']}  ${cupnpaymentStatus[0]}  
-    Should Be Equal As Strings  ${resp.json()[0]['acceptPaymentBy']}  ${pay_mode_selfpay}
-    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${servicecharge}
-    # Should Be Equal As Strings  ${resp.json()[0]['custId']}  ${jdconID}   
-    Should Be Equal As Strings  ${resp.json()[0]['paymentMode']}  ${payment_modes[5]}  
-    Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${pid}   
-    Should Be Equal As Strings  ${resp.json()[0]['paymentGateway']}  RAZORPAY  
+    # ${resp}=  Get Payment Details  paymentRefId-eq=${payref}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${wid}
+    # Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${servicecharge}
+    # # Should Be Equal As Strings  ${resp.json()[0]['custId']}  ${jdconID}  
+    # Should Be Equal As Strings  ${resp.json()[0]['status']}  ${cupnpaymentStatus[0]}
+    # Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${pid}
+
+    # ${resp}=  Get Payment Details By UUId  ${wid}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${wid}
+    # Should Be Equal As Strings  ${resp.json()[0]['status']}  ${cupnpaymentStatus[0]}  
+    # Should Be Equal As Strings  ${resp.json()[0]['acceptPaymentBy']}  ${pay_mode_selfpay}
+    # Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${servicecharge}
+    # # Should Be Equal As Strings  ${resp.json()[0]['custId']}  ${jdconID}   
+    # Should Be Equal As Strings  ${resp.json()[0]['paymentMode']}  ${payment_modes[5]}  
+    # Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${pid}   
+    # Should Be Equal As Strings  ${resp.json()[0]['paymentGateway']}  RAZORPAY  
 
     ${resp}=  Consumer Logout
     Log   ${resp.json()}

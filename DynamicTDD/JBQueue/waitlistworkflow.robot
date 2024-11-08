@@ -19,6 +19,11 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables          ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py
 
 *** Variables ***
+@{Views}  self  all  customersOnly
+${count}  ${50}
+${zero}        0
+@{emptylist}
+
 ${self}         0
 @{service_names}
 &{Emptydict}
@@ -134,43 +139,168 @@ JD-TC-PreDeploymentWaitlist-1
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${CUR_DAY}
 
-    ${resp}=    Get Queues
+    ${s_id}=  Set Variable  ${NONE}
+    ${resp}=   Get Service  serviceType-neq=donationService
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${resp}=    Create Sample Queue     
-        Set Suite Variable  ${s_id}  ${resp['service_id']}
-        Set Suite Variable  ${qid}   ${resp['queue_id']}
-
-        ${resp}=    Get Queues
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
+    # IF   '${resp.content}' != '${emptylist}'
+    IF   "$resp.content" != "${emptylist}"
         
-        ${resp}=    Get Queue ById  ${qid}
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
+        ${service_len}=  Get Length   ${resp.json()}
+        FOR   ${i}  IN RANGE   ${service_len}
+            IF  '${resp.json()[${i}]['status']}' == '${status[0]}'
+                Set Test Variable   ${s_id}   ${resp.json()[${i}]['id']}
 
-        ${desc}=  FakerLibrary.word
-        ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${qid}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${wid}  ${resp.json()['parent_uuid']}
+                IF  '${resp.json()[${i}]['isPrePayment']}' == '${bool[1]}'
+                    ${maxbookings}=   Random Int   min=5   max=10
+                    ${resp}=  Update Service  ${s_id}  ${resp.json()[${i}]['name']}  ${EMPTY}  ${resp.json()[${i}]['serviceDuration']}  ${resp.json()[${i}]['status']}  ${btype}  ${resp.json()[${i}]['notification']}  ${resp.json()[${i}]['notificationType']}  ${resp.json()[${i}]['minPrePaymentAmount']}  ${resp.json()[${i}]['totalAmount']}  ${resp.json()[${i}]['isPrePayment']}  ${resp.json()[${i}]['taxable']}  maxBookingsAllowed=${count}
+                    Log  ${resp.content}
+                    Should Be Equal As Strings  ${resp.status_code}  200
+                ELSE
+
+                    ${maxbookings}=   Random Int   min=5   max=10
+                    ${resp}=  Update Service  ${s_id}  ${resp.json()[${i}]['name']}  ${EMPTY}  ${resp.json()[${i}]['serviceDuration']}  ${resp.json()[${i}]['status']}  ${btype}  ${resp.json()[${i}]['notification']}  ${resp.json()[${i}]['notificationType']}  ${EMPTY}  ${resp.json()[${i}]['totalAmount']}  ${resp.json()[${i}]['isPrePayment']}  ${resp.json()[${i}]['taxable']}  maxBookingsAllowed=${count}
+                    Log  ${resp.content}
+                    Should Be Equal As Strings  ${resp.status_code}  200
+
+                END
+                BREAK
+
+            END
+        END
+
+        ${srv_val}=    Get Variable Value    ${s_id}
+        IF  '${srv_val}'=='${None}'
+            ${SERVICE1}=    FakerLibrary.job
+            ${maxbookings}=   Random Int   min=5   max=10
+            ${s_id}=  Create Sample Service  ${SERVICE1}  maxBookingsAllowed=${count}
+        END
     ELSE
-        Set Test Variable   ${qid}   ${resp.json()[0]['id']}
-        Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
+
+        ${SERVICE1}=    FakerLibrary.job
+        ${maxbookings}=   Random Int   min=5   max=10
+        ${s_id}=  Create Sample Service  ${SERVICE1}  maxBookingsAllowed=${count}
+
     END
 
-    ${resp}=  Get Waitlist Today  waitlistStatus-eq=${wl_status[1]}     waitlistStatus-eq=${wl_status[0]}
+    ${resp}=  Get Waitlist Today  waitlistStatus-eq=${wl_status[0]}  waitlistStatus-neq=${wl_status[5]},${wl_status[4]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${prepay_wl_len}=  Get Length   ${resp.json()}
     FOR   ${i}  IN RANGE   ${prepay_wl_len}
 
+        ${resp1}=  Waitlist Action  ${waitlist_actions[4]}   ${resp.json()[${i}]['ynwUuid']}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        
+
+    END
+
+    ${resp}=  Get Waitlist Today  waitlistStatus-eq=${wl_status[0]}  waitlistStatus-neq=${wl_status[5]},${wl_status[4]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${prepay_wl_len}=  Get Length   ${resp.json()}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${prepay_wl_len}  ${zero}
+    
+    # ${resp}=  Get Waitlist Today   waitlistStatus-neq=${wl_status[5]},${wl_status[4]}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${today_wl_len}=  Get Length   ${resp.json()}
+    # FOR   ${i}  IN RANGE   ${today_wl_len}
+
+    #     ${resp1}=  Waitlist Action  ${waitlist_actions[4]}   ${resp.json()[${i}]['ynwUuid']}
+    #     Log  ${resp1.content}
+    #     Should Be Equal As Strings  ${resp1.status_code}  200      
+
+    # END
+
+    ${resp}=  Get Waitlist Today   waitlistStatus-neq=${wl_status[5]},${wl_status[4]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${today_wl_len}=  Get Length   ${resp.json()}
+    # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${today_wl_len}  ${zero}
+
+    ${resp}=  Get Waitlist Today
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${today_wl_len}=  Get Length   ${resp.json()}
+
+    ${resp}=  Get Waitlist Future  waitlistStatus-neq=${wl_status[5]},${wl_status[4]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${future_wl_len}=  Get Length   ${resp.json()}
+    FOR   ${i}  IN RANGE   ${future_wl_len}
+
         ${resp1}=  Waitlist Action  ${waitlist_actions[2]}   ${resp.json()[${i}]['ynwUuid']}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
+        
+    END
+
+    ${resp}=  Get Waitlist Future  waitlistStatus-neq=${wl_status[5]},${wl_status[4]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${future_wl_len}=  Get Length   ${resp.json()}
+    # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${future_wl_len}  ${zero}
+
+    ${resp}=  Get Waitlist Future
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${future_wl_len}=  Get Length   ${resp.json()}
+
+    ${resp}=  Get Provider Waitlist History  waitlistStatus-neq=${wl_status[5]},${wl_status[4]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${past_wl_len}=  Get Length   ${resp.json()}
+    FOR   ${i}  IN RANGE   ${past_wl_len}
+
+        ${resp1}=  Waitlist Action  ${waitlist_actions[2]}   ${resp.json()[${i}]['ynwUuid']}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        
+    END
+
+    ${resp}=  Get Provider Waitlist History  waitlistStatus-neq=${wl_status[5]},${wl_status[4]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${past_wl_len}=  Get Length   ${resp.json()}
+    # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${past_wl_len}  ${zero}
+
+    ${resp}=  Get Provider Waitlist History  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${past_wl_len}=  Get Length   ${resp.json()}
+
+    ${resp}=  Get Queues
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    ${queues_count}=  Get Length  ${resp.json()}
+
+    ${resp}=  Get Queues  state-eq=${Qstate[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    ${queues_count}=  Get Length  ${resp.json()}
+    FOR   ${i}  IN RANGE   ${queues_count}
+
+        ${resp1}=  Enable Disable Queue  ${resp.json()[${i}]['id']}     ${Qstate[1]}
+        Log  ${resp1.json()}
+        Should Be Equal As Strings  ${resp1.status_code}  200
 
     END
+
+
+    ${DAY}=  get_date_by_timezone  ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz} 
+    ${eTime1}=  add_timezone_time  ${tz}  0  45  
+    ${p1queue1}=    FakerLibrary.job
+    ${capacity}=  IF    ${count} > 50    Convert To Integer   ${count}    ELSE    FakerLibrary.Random Int  min=${count}  max=${count+20}
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${resp}=  Create Queue  ${p1queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  1  ${capacity}  ${lid}  ${s_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${q_id}  ${resp.json()}
+
+
 
     ${desc}=  FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${qid}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
@@ -373,3 +503,172 @@ JD-TC-PreDeploymentWaitlist-1
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
     Set Test Variable    ${treatmentId}        ${resp.json()}
+
+    #........ Auto Invoice Generation off and Create Invoice for booking ...........
+
+    ${NO_INVOICE_GENERATED}=  format String   ${NO_INVOICE_GENERATED}   ${wid}
+
+    ${resp}=  Get Bookings Invoices  ${wid}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings    ${resp.json()}    ${NO_INVOICE_GENERATED}
+
+    ${resp}=  Create Invoice for Booking  ${invoicebooking[0]}   ${wid}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    sleep   2s
+    ${resp}=  Get Bookings Invoices  ${wid}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable    ${invoice_uid}    ${resp.json()[0]['invoiceUid']}
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}                                        ${account_id}
+    Should Be Equal As Strings  ${resp.json()[0]['categoryName']}                                     ${CategoryName[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['invoiceDate']}                                      ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['providerConsumerId']}                               ${cid}
+    # Should Be Equal As Strings  ${resp.json()[0]['providerConsumerData']['phoneNos'][0]['number']}    ${NewCustomer}
+    Should Be Equal As Strings   ${resp.json()[0]['ynwUuid']}                                         ${wid}
+    # Should Be Equal As Strings   ${resp.json()[0]['amountPaid']}                                      0.0
+    # Should Be Equal As Strings   ${resp.json()[0]['amountDue']}                                       ${ser_amount1}
+    # Should Be Equal As Strings   ${resp.json()[0]['amountTotal']}                                     ${ser_amount1}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}                      ${s_id}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}                    ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['quantity']}                       1.0
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['taxable']}                        ${bool[0]}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['totalPrice']}                     ${ser_amount1}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['netRate']}                        ${ser_amount1}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceCategory']}                ${serviceCategory[1]}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['assigneeUsers']}                  ${empty_list}
+
+    #....subservice creation..........
+
+    ${subser_name}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${subser_name}
+    ${subser_id1}=  Create Sample Service    ${subser_name}    serviceCategory=${serviceCategory[0]}
+   
+    ${resp}=   Get Service By Id  ${subser_id1}
+    Log   ${resp.content}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${subser_price}  ${resp.json()['totalAmount']} 
+    Should Be Equal As Strings  ${resp.json()['name']}                  ${subser_name} 
+    Should Be Equal As Strings  ${resp.json()['serviceCategory']}       ${serviceCategory[0]}
+
+    ${subser_qnty}=   Random Int   min=1   max=5
+    ${ser_list}=  Create Dictionary  serviceId=${subser_id1}    price=${subser_price}  quantity=${subser_qnty}
+
+    # ........ Add SubService To Invoice ...........
+
+    ${resp}=  AddServiceToInvoice   ${invoice_uid}   ${ser_list}    
+    Log  ${resp.content} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${total}=    Evaluate    ${subser_qnty}*${subser_price} + ${ser_amount1}
+
+    ${resp}=  Get Bookings Invoices  ${wid}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}                                        ${account_id}
+    Should Be Equal As Strings  ${resp.json()[0]['categoryName']}                                     ${CategoryName[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['invoiceDate']}                                      ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['providerConsumerId']}                               ${cid}
+    # Should Be Equal As Strings  ${resp.json()[0]['providerConsumerData']['phoneNos'][0]['number']}    ${NewCustomer}
+    Should Be Equal As Strings   ${resp.json()[0]['ynwUuid']}                                         ${wid}
+    Should Be Equal As Numbers   ${resp.json()[0]['amountPaid']}                                      0.0
+    # Should Be Equal As Numbers   ${resp.json()[0]['amountDue']}                                       ${total}
+    # Should Be Equal As Numbers   ${resp.json()[0]['amountTotal']}                                     ${total}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}                      ${s_id}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}                    ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['quantity']}                       1.0
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['taxable']}                        ${bool[0]}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['totalPrice']}                     ${ser_amount1}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['netRate']}                        ${ser_amount1}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceCategory']}                ${serviceCategory[1]}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['assigneeUsers']}                  ${empty_list}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][1]['serviceId']}                      ${subser_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][1]['serviceName']}                    ${subser_name}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][1]['quantity']}                       ${subser_qnty}.0
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][1]['taxable']}                        ${bool[0]}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][1]['serviceCategory']}                ${serviceCategory[0]}
+
+    # ........ Add Item To Invoice ...........
+
+    ${name1}=     FakerLibrary.word
+    ${item1}=     FakerLibrary.word
+    ${itemCode1}=     FakerLibrary.word
+    ${price1}=     Random Int   min=400   max=500
+    ${price}=  Convert To Number  ${price1}  1
+    ${resp}=  Create Sample Item   ${name1}   ${item1}  ${itemCode1}  ${price}  ${bool[0]} 
+    Log  ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${item_id1}  ${resp.json()}
+
+    ${resp}=   Get Item By Id  ${item_id1}
+    Log  ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${promotionalPrice1}   ${resp.json()['promotionalPrice']}
+    
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+    ${itemList1}=  Create Dictionary  itemId=${item_id1}   quantity=${quantity}  price=${promotionalPrice1}
+    ${netTotal1}=  Evaluate  ${quantity} * ${promotionalPrice1}
+    Set Test Variable   ${netTotal1}
+
+    ${total_amount}=  Evaluate  ${netTotal1} + ${total}
+
+    ${resp}=  AddItemToInvoice   ${invoice_uid}   ${itemList1}    
+    Log  ${resp.json()} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Bookings Invoices  ${wid}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}                                        ${account_id}
+    Should Be Equal As Strings  ${resp.json()[0]['categoryName']}                                     ${CategoryName[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['invoiceDate']}                                      ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['providerConsumerId']}                               ${cid}
+    # Should Be Equal As Strings  ${resp.json()[0]['providerConsumerData']['phoneNos'][0]['number']}    ${NewCustomer}
+    Should Be Equal As Strings   ${resp.json()[0]['ynwUuid']}                                         ${wid}
+    Should Be Equal As Numbers   ${resp.json()[0]['amountPaid']}                                      0.0
+    Should Be Equal As Numbers   ${resp.json()[0]['amountDue']}                                       ${total_amount}
+    Should Be Equal As Numbers   ${resp.json()[0]['amountTotal']}                                     ${total_amount}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}                      ${s_id}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}                    ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['quantity']}                       1.0
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['taxable']}                        ${bool[0]}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['totalPrice']}                     ${ser_amount1}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['netRate']}                        ${ser_amount1}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceCategory']}                ${serviceCategory[1]}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['assigneeUsers']}                  ${empty_list}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][1]['serviceId']}                      ${subser_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][1]['serviceName']}                    ${subser_name}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][1]['quantity']}                       ${subser_qnty}.0
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][1]['taxable']}                        ${bool[0]}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][1]['serviceCategory']}                ${serviceCategory[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['itemList'][0]['itemId']}                            ${item_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['itemList'][0]['itemName']}                          ${item1}
+    Should Be Equal As Strings  ${resp.json()[0]['itemList'][0]['quantity']}                          ${quantity}
+
+    # ...... Reschedule Waitlist .............
+
+    ${resp}=  Reschedule Consumer Checkin   ${wid}  ${slot2}  ${DAY1}  ${sch_id}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointment By Id   ${wid}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot2}
+    Should Be Equal As Strings  ${resp.json()['appmtDate']}   ${DAY1}
+
+    # ....... cancel the Waitlist ..........
+    
+    ${reason}=  Random Element  ${cancelReason}
+    ${resp}=   Waitlist Action   ${waitlist_actions[2]}   ${wid}    cancelReason=${reason}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointment By Id   ${wid}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${waitlist_actions[2]}
