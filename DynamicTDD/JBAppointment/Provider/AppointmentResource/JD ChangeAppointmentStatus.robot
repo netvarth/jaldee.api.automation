@@ -1249,7 +1249,7 @@ JD-TC-ChangeAppointmentStatus-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    sleep  01s
+    # sleep  01s
 
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
@@ -1376,7 +1376,7 @@ JD-TC-ChangeAppointmentStatus-UH4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    sleep   01s
+    # sleep   01s
 
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
@@ -1756,7 +1756,7 @@ JD-TC-ChangeAppointmentStatus-11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    sleep  01s
+    # sleep  01s
 
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
@@ -1900,7 +1900,7 @@ JD-TC-ChangeAppointmentStatus-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    sleep  01s
+    # sleep  01s
 
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
@@ -2079,7 +2079,7 @@ JD-TC-ChangeAppointmentStatus-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    sleep  02s
+    # sleep  02s
 
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
@@ -2196,7 +2196,7 @@ JD-TC-ChangeAppointmentStatus-UH8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
-    sleep  01s
+    # sleep  01s
 
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
@@ -2429,7 +2429,7 @@ JD-TC-ChangeAppointmentStatus-UH10
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    sleep  02s
+    # sleep  02s
     
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
@@ -2740,7 +2740,7 @@ JD-TC-ChangeAppointmentStatus-UH11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    sleep  2s
+    # sleep  2s
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME84}  ${PASSWORD}
     Log   ${resp.json()}
@@ -2830,7 +2830,7 @@ JD-TC-ChangeAppointmentStatus-UH12
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    sleep  1s
+    # sleep  1s
     ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -4339,7 +4339,7 @@ JD-TC-ChangeAppointmentStatus-UH25
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    sleep  01s
+    # sleep  01s
 
     # ${resp}=  Get Appointment Status   ${apptid1}
     # Log   ${resp.json()}
