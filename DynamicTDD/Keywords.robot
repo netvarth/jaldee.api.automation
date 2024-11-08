@@ -118,7 +118,7 @@ ${bType}                  Waitlist
 @{mraction}                 Medical record created    Prescription created    Clinical notes created    Medical record updated   Prescription updated   Clinical notes updated   Prescription uploaded   Clinical notes uploaded   Prescription shared   Clinical notes shared   Medical record shared  Prescription removed
 ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' target='_blank' class='link'>{}</a>
 @{delayType}                delayed   delay reduced
-@{countryCodes}             +91   91  48  22  38
+@{countryCodes}             +91   91  48  22  38  +1
 @{orderInternalStatus}      SUCCESS   PREPAYMENTPENDING    FAILED
 @{grpstatus}                ENABLE  DISABLE
 @{paymentStatusReport}      Not paid  Partially paid  Fully paid  Refund

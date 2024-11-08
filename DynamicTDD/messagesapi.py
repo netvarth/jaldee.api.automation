@@ -2551,6 +2551,11 @@ NAME_LENGTH_EXCEED = "Name should not exceed 250 characters"
 NAME_LENGTH_SUBCEED = "Name should be a minimum of 3 characters."
 INVALID_LEAD_STAGE = "Invalid lead stage. Current Lead stage is {}"
 INVALID_LEAD_STAGE_TYPE = "Invalid lead stage type. Current Lead stage is {}"
+CO_APPLICANR_FIRST_NAME_REQUIRED= "Co-Applicant First Name Required"
+CO_APPLICANR_LAST_NAME_REQUIRED= "Co-Applicant Last Name Required"
+CO_APPLICANR_PHONE_NUMBER_REQUIRED ="Co-Applicant Phone Number Required"
+INVALID_CO_APPLICANR_PHONE = "Invalid Co-Applicant Phone No"
+CO_APPLICANR_DOB_REQUIRED ="Co-Applicant DoB Required"
 
 # ......  STOCK TRANSFER...........
 CANT_ST_TRNFR_BTW_SAME_INV = "You cannot transfer stock within the same inventory catalog"

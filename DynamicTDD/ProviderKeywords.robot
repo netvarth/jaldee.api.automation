@@ -15088,7 +15088,7 @@ Generate OTP For LOS Lead Kyc Phone Number
 Verify OTP For LOS Lead Kyc Phone Number
     [Arguments]  ${phone}  ${purpose}  ${leadUid}  &{kwargs}
     
-    ${data}=  Create Dictionary  leadUid=${leadUid}
+    ${data}=  Create Dictionary  leadUid=${leadUid}  consumerPhone=${phone}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary   ${data}   ${key}=${value}
     END
