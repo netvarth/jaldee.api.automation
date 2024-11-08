@@ -32,9 +32,9 @@ ${subdomain}    dentists
 
 *** Test Cases ***
 
-JD-TC-PreDeploymentAppointment-1
+JD-TC-Schedule-1
 
-    [Documentation]  Appointment workflow for pre deployment.
+    [Documentation]  Schedule workflow for pre deployment.
 
     ${firstname}  ${lastname}  ${PUSERNAME_B}  ${LoginId}=  Provider Signup   Domain=${domain}   SubDomain=${subdomain}
     
@@ -74,11 +74,7 @@ JD-TC-PreDeploymentAppointment-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bill Settings 
-    Log   ${resp.content}
-    ${resp}=  Enable Disable bill  ${bool[1]}
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ........ Location Creation .......
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -94,6 +90,34 @@ JD-TC-PreDeploymentAppointment-1
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
+    # ........ Service Creations ............
+
+    #  1. Create Service without Prepayment.
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}   
+    ${s_id1}=  Create Sample Service  ${SERVICE1}   
+    Set Test Variable  ${s_id1}
+
+    #  2. Create Service without Prepayment and Max Bookings Allowed > 1
+
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}   
+    ${s_id2}=  Create Sample Service  ${SERVICE2}      maxBookingsAllowed=10
+    Set Test Variable  ${s_id2}
+
+    #  3. Create Service without Prepayment and Max Bookings Allowed > 1
+
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}   
+    ${s_id2}=  Create Sample Service  ${SERVICE2}      maxBookingsAllowed=10
+    Set Test Variable  ${s_id2}
+
+
+
+
+
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -101,11 +125,7 @@ JD-TC-PreDeploymentAppointment-1
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_timezone_time  ${tz}  3   50  
     
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
-    ${s_id}=  Create Sample Service  ${SERVICE1}      maxBookingsAllowed=20
-    Set Test Variable  ${s_id}
-
+    
     ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
