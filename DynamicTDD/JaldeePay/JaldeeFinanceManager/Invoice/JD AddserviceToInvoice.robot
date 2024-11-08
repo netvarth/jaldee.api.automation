@@ -39,123 +39,6 @@ JD-TC-Apply Service to Finance-1
     [Documentation]  Create one invoice with one service .then add another service to invoice.
 
 
-#     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+3481864
-#     Set Suite Variable   ${PUSERPH0}
-    
-#     ${licid}  ${licname}=  get_highest_license_pkg
-#     Log  ${licid}
-#     Log  ${licname}
-#   ${domresp}=  Get BusinessDomainsConf
-#         Should Be Equal As Strings  ${domresp.status_code}  200
-
-#         ${dlen}=  Get Length  ${domresp.json()}
-#         FOR  ${pos}  IN RANGE  ${dlen}  
-#                 Set Test Variable  ${d1}  ${domresp.json()[${pos}]['domain']}
-
-#                 ${sd1}=  Get Billable Subdomain  ${d1}  ${domresp}  ${pos}  
-#                 Set Test Variable   ${sd1}
-#                 Exit For Loop IF    '${sd1}'
-
-#         END
-
-#     ${firstname}=  FakerLibrary.first_name
-#     ${lastname}=  FakerLibrary.last_name
-#     ${address}=  FakerLibrary.address
-#     ${dob}=  FakerLibrary.Date
-#     ${gender}=    Random Element    ${Genderlist}
-#     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd1}  ${PUSERPH0}  ${licid}
-#     Log   ${resp.json()}
-#     Should Be Equal As Strings    ${resp.status_code}    200
-
-#     ${resp}=  Account Activation  ${PUSERPH0}  0
-#     Log   ${resp.json()}
-#     Should Be Equal As Strings    ${resp.status_code}    200
-#     Should Be Equal As Strings  "${resp.json()}"    "true"
-#     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
-
-#     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
-#     Log   ${resp.json()}
-#     Should Be Equal As Strings    ${resp.status_code}    200
-
-#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
-#     Log  ${resp.json()}
-#     Should Be Equal As Strings    ${resp.status_code}   200
-
-#     ${resp}=   Get Appointment Settings
-#     Log   ${resp.json()}
-#     Should Be Equal As Strings  ${resp.status_code}  200
-#     ${result}=  Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
-#     Log   ${result.json()}
-#     Should Be Equal As Strings  ${result.status_code}  200
-#     ${resp}=   Get Account Settings
-#     Log   ${resp.json()}
-#     Should Be Equal As Strings  ${resp.status_code}  200
-#     Should Be Equal As Strings  ${resp.json()['appointment']}   ${bool[1]}
-    
-
-#     ${accId}=  get_acc_id  ${PUSERPH0}
-#     Set Suite Variable  ${accId}
-
-
-
-
-#     ${DAY1}=  db.get_date_by_timezone  ${tz}
-#     Set Suite Variable  ${DAY1}  
-#     ${list}=  Create List  1  2  3  4  5  6  7
-#     Set Suite Variable  ${list}  
-#     ${ph1}=  Evaluate  ${PUSERPH0}+1000000000
-#     ${ph2}=  Evaluate  ${PUSERPH0}+2000000000
-#     ${views}=  Random Element    ${Views}
-#     ${name1}=  FakerLibrary.name
-#     ${name2}=  FakerLibrary.name
-#     ${name3}=  FakerLibrary.name
-#     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
-#     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-#     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
-#     ${bs}=  FakerLibrary.bs
-#     ${city}=   get_place
-#     ${latti}=  get_latitude
-#     ${longi}=  get_longitude
-#     ${companySuffix}=  FakerLibrary.companySuffix
-#     ${postcode}=  FakerLibrary.postcode
-#     ${address}=  get_address
-#     ${parking}   Random Element   ${parkingType}
-#     ${24hours}    Random Element    ${bool}
-#     ${desc}=   FakerLibrary.sentence
-#     ${url}=   FakerLibrary.url
-#     ${sTime}=   db.add_timezone_time     ${tz}  0  15     
-#     Set Suite Variable   ${sTime}
-#     ${eTime}=   db.add_timezone_time     ${tz}  0  45    
-#     Set Suite Variable   ${eTime}
-#     ${resp}=  Update Business Profile With Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
-#     Log  ${resp.json()}
-#     Should Be Equal As Strings    ${resp.status_code}    200
-
-
-#     ${resp}=  Get Business Profile
-#     Log   ${resp.json()}
-#     Should Be Equal As Strings  ${resp.status_code}  200
-#     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
-#     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
-
-#     ${fields}=   Get subDomain level Fields  ${d1}  ${sd1}
-#     Log  ${fields.json()}
-#     Should Be Equal As Strings    ${fields.status_code}   200
-
-#     ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
-
-#     ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sd1}
-#     Log  ${resp.json()}
-#     Should Be Equal As Strings  ${resp.status_code}  200
-
-#     ${resp}=  Get specializations Sub Domain  ${d1}  ${sd1}
-#     Should Be Equal As Strings    ${resp.status_code}   200
-
-#     ${spec}=  get_Specializations  ${resp.json()}
-#     ${resp}=  Update Specialization  ${spec}
-#     Log  ${resp.json()}
-#     Should Be Equal As Strings    ${resp.status_code}   200
-
     ${firstname}  ${lastname}  ${PUSERPH0}  ${LoginId}=  Provider Signup
     Set Suite Variable  ${PUSERPH0}
 
@@ -293,15 +176,7 @@ JD-TC-Apply Service to Finance-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${invoiceId}   ${resp.json()}
     
-    # ${resp}=  Create Vendor  ${category_id}  ${vendorId}  ${vender_name}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable   ${vendor_uid1}   ${resp.json()['encId']}
-    # Set Suite Variable   ${vendor_id1}   ${resp.json()['id']}
 
-    # ${resp}=  Get vendor by encId   ${vendor_uid1}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp1}=  AddCustomer  ${CUSERNAME11}
     Log  ${resp1.content}
@@ -410,35 +285,9 @@ JD-TC-Apply Service To Finance-2
     ${privateNote}=     FakerLibrary.word
     ${displayNote}=   FakerLibrary.word
 
-    # ${resp}=  Create Sample Location  
-    # Set Suite Variable    ${lid}    ${resp}  
-
-    # ${resp}=   Get Location ById  ${lid}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-
-    # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
-    # Set Suite Variable  ${CUR_DAY}
   
     ${SERVICE3}=    FakerLibrary.word
-    # ${desc}=   FakerLibrary.sentence
-    # ${min_pre}=   Random Int   min=1   max=50
-    # ${servicecharge}=   Random Int  min=100  max=500
-    # ${min_pre}=  Convert To Number  ${min_pre}  1
-    # ${servicecharge}=  Convert To Number  ${servicecharge}  1 
-    # ${srv_duration}=   Random Int   min=10   max=20
-    # ${resp}=  Create Service  ${SERVICE3}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${min_pre}  ${servicecharge}  ${bool[0]}  ${bool[0]}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}   200
-    # clear_service  ${PUSERNAME101} 
-    # ${min_pre}=   Random Int   min=40   max=50
-    # ${min_pre}=  Convert To Number  ${min_pre}  0
 
-    # ${resp}=  Create Service  ${SERVICE3}  ${desc}   ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[1]}  minPrePaymentAmount=${min_pre}  taxable=${bool[1]}  prePaymentType=${advancepaymenttype[1]}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${s_id}  ${resp.json()}
     ${s_id}=  Create Sample Service  ${SERVICE3}
     Set Test Variable   ${s_id}
 
@@ -607,16 +456,7 @@ JD-TC-Apply Services to Invoice-3
     [Documentation]   Service auto invoice generation is on,then took walkin appointment  and check whethrer invoice is created there then add service to that invoice.
 
 
-    # ${resp}=  Consumer Login  ${CUSERNAME2}  ${PASSWORD}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # Set Test Variable  ${jdconID}   ${resp.json()['id']}
-    # Set Test Variable  ${fname1}   ${resp.json()['firstName']}
-    # Set Test Variable  ${lname1}   ${resp.json()['lastName']}
 
-    # ${resp}=  Consumer Logout
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
 
 
     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
@@ -638,12 +478,7 @@ JD-TC-Apply Services to Invoice-3
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
-    # ${lid}=  Create Sample Location  
-    # Set Suite Variable  ${lid}
-    # ${resp}=   Get Location ById  ${lid}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
     clear_appt_schedule   ${PUSERPH0}
 
     ${SERVICE1}=    FakerLibrary.word
@@ -653,10 +488,7 @@ JD-TC-Apply Services to Invoice-3
     ${min_pre}=  Convert To Number  ${min_pre}  1
 
     ${srv_duration}=   Random Int   min=10   max=20
-    # ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${min_pre}  ${servicecharge}  ${bool[1]}  ${bool[0]}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}   200
-    # Set Test Variable  ${s_id}  ${resp.json()}
+
     
     ${s_id}=  Create Sample Service   ${SERVICE1}  isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}   maxBookingsAllowed=10
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -898,12 +730,6 @@ JD-TC-Apply Services to Invoice-4
       ${resp}=  Get Waitlist By Id  ${wid} 
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-    #   Verify Response  ${resp}  date=${CUR_DAY}  waitlistStatus=${wl_status[1]}  partySize=1  appxWaitingTime=0  waitlistedBy=${waitlistedby}   personsAhead=0
-    #   Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
-    #   Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id1}
-    #   Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
-    #   Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
-    #   Should Be Equal As Strings  ${resp.json()['paymentStatus']}         ${paymentStatus[0]}
       Set Test Variable   ${fullAmount}  ${resp.json()['fullAmt']}   
 
 
@@ -950,135 +776,7 @@ JD-TC-Apply Services to Invoice-4
 JD-TC-Apply Services to Invoice-5
     [Documentation]  Taking waitlist from consumer side and the consumer doing the prepayment - check invoice(auto-invoice generation flag is on) then add service to that invoice.
 
-   
-    # ${billable_providers}=    Billable Domain Providers   min=70   max=80
-    # Log   ${billable_providers}
-    # Set Suite Variable   ${billable_providers}
-    # ${pro_len}=  Get Length   ${billable_providers}
-    # Log  ${pro_len}
-    # clear_location  ${PUSERPH1}
-    # clear_service    ${PUSERPH1}
-    # clear_queue     ${PUSERPH1}
-    # clear_customer   ${PUSERPH1}
 
-    # ${pid}=  get_acc_id  ${PUSERPH1}
-    # Set Suite Variable  ${pid}
-
-    # ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${DAY}=  db.get_date_by_timezone  ${tz}
-    # Set Suite Variable  ${DAY}
-    # ${list}=  Create List  1  2  3  4  5  6  7
-
-    # ${PO_Number}    Generate random string    8    1234564789
-    # ${PO_Number}    Convert To Integer  ${PO_Number}
-    # ${PUSERPH1}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH1}${\n}
-    # Set Suite Variable   ${PUSERPH1}
-    # ${resp}=   Run Keywords  clear_queue  ${PUSERPH1}   AND  clear_service  ${PUSERPH1}  AND  clear_Item    ${PUSERPH1}  AND   clear_Coupon   ${PUSERPH1}   AND  clear_Discount  ${PUSERPH1}  AND  clear_appt_schedule   ${PUSERPH1}
-    # ${licid}  ${licname}=  get_highest_license_pkg
-    # Log  ${licid}
-    # Log  ${licname}
-    # Set Test Variable   ${licid}
-    
-    # ${domresp}=  Get BusinessDomainsConf
-    # Log   ${domresp.content}
-    # Should Be Equal As Strings  ${domresp.status_code}  200
-    # ${dlen}=  Get Length  ${domresp.json()}
-    # ${d1}=  Random Int   min=0  max=${dlen-1}
-    # Set Test Variable  ${dom}  ${domresp.json()[${d1}]['domain']}
-    # ${sdlen}=  Get Length  ${domresp.json()[${d1}]['subDomains']}
-    # ${sdom}=  Random Int   min=0  max=${sdlen-1}
-    # Set Test Variable  ${sub_dom}  ${domresp.json()[${d1}]['subDomains'][${sdom}]['subDomain']}
-
-    # ${firstname}=  FakerLibrary.first_name
-    # ${lastname}=  FakerLibrary.last_name
-    # ${address}=  FakerLibrary.address
-    # ${dob}=  FakerLibrary.Date
-    # ${gender}    Random Element    ['Male', 'Female']
-    # ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERPH1}  ${licid}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    
-    # ${resp}=  Account Activation  ${PUSERPH1}  0
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # Should Be Equal As Strings    ${resp.content}    "true"
-    
-    # ${resp}=  Account Set Credential  ${PUSERPH1}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH1}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${resp}=   Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD} 
-    # Log  ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-
-    # ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    # Log  ${decrypted_data}
-    # Set Test Variable  ${pid}  ${decrypted_data['id']}
-    # # Set Test Variable  ${pid}  ${resp.json()['id']}
-    
-    # ${list}=  Create List  1  2  3  4  5  6  7
-    # Set Suite Variable  ${list}  
-    # @{Views}=  Create List  self  all  customersOnly
-    # ${ph1}=  Evaluate  ${PUSERPH1}+1000000000
-    # ${ph2}=  Evaluate  ${PUSERPH1}+2000000000
-    # ${views}=  Evaluate  random.choice($Views)  random
-    # ${name1}=  FakerLibrary.name
-    # ${name2}=  FakerLibrary.name
-    # ${name3}=  FakerLibrary.name
-    # ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
-    # ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    # ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.${test_mail}  ${views}
-    # ${bs}=  FakerLibrary.bs
-    # ${companySuffix}=  FakerLibrary.companySuffix
-    # # ${city}=   FakerLibrary.state
-    # # ${latti}=  get_latitude
-    # # ${longi}=  get_longitude
-    # # ${postcode}=  FakerLibrary.postcode
-    # # ${address}=  get_address
-
-    # ${parking}   Random Element   ${parkingType}
-    # ${24hours}    Random Element    ['True','False']
-    # ${desc}=   FakerLibrary.sentence
-    # ${url}=   FakerLibrary.url
-    # ${sTime}=  add_timezone_time  ${tz}  0  15  
-    # Set Suite Variable   ${sTime}
-    # ${eTime}=  add_timezone_time  ${tz}  0  45  
-    # Set Suite Variable   ${eTime}
-
-
-    
-    # ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${fields}=   Get subDomain level Fields  ${dom}  ${sub_dom}
-    # Log  ${fields.content}
-    # Should Be Equal As Strings    ${fields.status_code}   200
-
-    # ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
-
-    # ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sub_dom}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=  Get specializations Sub Domain  ${dom}  ${sub_dom}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-
-    # ${spec}=  get_Specializations  ${resp.json()}
-    
-    # ${resp}=  Update Specialization  ${spec}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-
-    # Set Test Variable  ${email_id}  ${P_Email}${PUSERPH1}.${test_mail}
-
-    # ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${firstname}  ${lastname}  ${PUSERPH1}  ${LoginId}=  Provider Signup
     Set Suite Variable  ${PUSERPH1}
@@ -1185,10 +883,7 @@ JD-TC-Apply Services to Invoice-5
 
     ${P1SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
-    # ${resp}=  Create Service  ${P1SERVICE1}  ${desc}   ${service_duration1}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${Tot}  ${bool[1]}  ${bool[1]}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable  ${p1_sid1}  ${resp.json()}
+
     ${p1_sid1}=  Create Sample Service   ${P1SERVICE1}  isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}   maxBookingsAllowed=10
 
     ${resp}=  Auto Invoice Generation For Service   ${p1_sid1}    ${toggle[0]}
@@ -1204,10 +899,7 @@ JD-TC-Apply Services to Invoice-5
     ${P1SERVICE2}=    FakerLibrary.word
     Set Suite Variable   ${P1SERVICE2} 
     ${desc}=   FakerLibrary.sentence
-    # ${resp}=  Create Service  ${P1SERVICE2}  ${desc}   ${service_duration1}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${Tot}  ${bool[0]}  ${bool[1]}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable  ${p1_sid2}  ${resp.json()}
+
     ${p1_sid2}=  Create Sample Service   ${P1SERVICE2}  
 
     ${quantity}=   Random Int  min=5  max=10
@@ -1238,12 +930,6 @@ JD-TC-Apply Services to Invoice-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=  Consumer Login  ${CUSERNAME6}  ${PASSWORD}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${cid1}=  get_id  ${CUSERNAME6}
-    # Set Suite Variable   ${cid1}
 
     ${firstName}=  FakerLibrary.name
     Set Suite Variable    ${firstName}
@@ -1489,12 +1175,7 @@ JD-TC-Apply Service To Finance-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
 
-    # ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # Set Test Variable  ${jdconID}   ${resp.json()['id']}
-    # Set Test Variable  ${fname}   ${resp.json()['firstName']}
-    # Set Test Variable  ${lname}   ${resp.json()['lastName']}
+
 
 
     ${firstName}=  FakerLibrary.name
@@ -1529,24 +1210,6 @@ JD-TC-Apply Service To Finance-UH1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${cid1}    ${resp.json()['providerConsumer']}
 
-
-
-    # ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${pid}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
-    # @{slots}=  Create List
-    # FOR   ${i}  IN RANGE   0   ${no_of_slots}
-    #     IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-    #         Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
-    #     END
-    # END
-    # ${num_slots}=  Get Length  ${slots}
-    # ${j}=  Random Int  max=${num_slots-1}
-    # Set Test Variable   ${slot1}   ${slots[${j}]}
-
-    # ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
-    # ${apptfor}=   Create List  ${apptfor1}
 
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id}
