@@ -4518,7 +4518,7 @@ Get Waitlist Future
     Set To Dictionary  ${pro_headers}   &{tzheaders}
     Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw  /provider/waitlist/future/  params=${kwargs}  expected_status=any
+    ${resp}=    GET On Session    ynw  /provider/waitlist/future  params=${kwargs}  expected_status=any
     Check Deprication  ${resp}  Get Waitlist Future
     RETURN  ${resp}
 
