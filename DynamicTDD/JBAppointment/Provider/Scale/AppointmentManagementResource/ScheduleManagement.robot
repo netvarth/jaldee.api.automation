@@ -197,6 +197,7 @@ JD-TC-Schedule-1
     ${resp}=   Get Service By Id  ${s_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${ser_amount1}  ${resp.json()['totalAmount']} 
     
     ${resp}=   Get Service By Id  ${s_id2}
     Log  ${resp.json()}
@@ -289,8 +290,8 @@ JD-TC-Schedule-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${pcid}  ${resp.json()}
 
-    ${NewCustomer}    Generate random string    10    123456789
-    ${NewCustomer1}    Convert To Integer  ${NewCustomer}
+    ${NewCustomer1}    Generate random string    10    123456789
+    ${NewCustomer1}    Convert To Integer  ${NewCustomer1}
     ${fname1}=  generate_firstname
     ${lname1}=  FakerLibrary.last_name
     Set Test Variable  ${pc_emailid2}  ${fname}${C_Email}.${test_mail}
@@ -491,13 +492,13 @@ JD-TC-Schedule-1
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}                                        ${account_id}
     Should Be Equal As Strings  ${resp.json()[0]['categoryName']}                                     ${CategoryName[0]}
     Should Be Equal As Strings  ${resp.json()[0]['invoiceDate']}                                      ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['providerConsumerId']}                               ${cid}
+    Should Be Equal As Strings  ${resp.json()[0]['providerConsumerId']}                               ${pcid}
     Should Be Equal As Strings  ${resp.json()[0]['providerConsumerData']['phoneNos'][0]['number']}    ${NewCustomer}
     Should Be Equal As Strings   ${resp.json()[0]['ynwUuid']}                                         ${apptid1}
     Should Be Equal As Strings   ${resp.json()[0]['amountPaid']}                                      0.0
     Should Be Equal As Strings   ${resp.json()[0]['amountDue']}                                       ${ser_amount1}
     Should Be Equal As Strings   ${resp.json()[0]['amountTotal']}                                     ${ser_amount1}
-    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}                      ${s_id}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}                      ${s_id1}
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}                    ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['quantity']}                       1.0
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['taxable']}                        ${bool[0]}
@@ -506,5 +507,7 @@ JD-TC-Schedule-1
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceCategory']}                ${serviceCategory[1]}
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['assigneeUsers']}                  ${empty_list}
     
-    
+    ${resp}=  Make payment Consumer Mock  ${account_id}  ${ser_amount1}  ${purpose[1]}  ${apptid1}  ${s_id1}  ${bool[0]}   ${bool[1]}  ${pcid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
