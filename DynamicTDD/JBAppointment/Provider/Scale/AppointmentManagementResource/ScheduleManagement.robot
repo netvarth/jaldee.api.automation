@@ -289,6 +289,16 @@ JD-TC-Schedule-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${pcid}  ${resp.json()}
 
+    ${NewCustomer}    Generate random string    10    123456789
+    ${NewCustomer1}    Convert To Integer  ${NewCustomer}
+    ${fname1}=  generate_firstname
+    ${lname1}=  FakerLibrary.last_name
+    Set Test Variable  ${pc_emailid2}  ${fname}${C_Email}.${test_mail}
+    ${resp}=  AddCustomer  ${NewCustomer1}   firstName=${fname1}   lastName=${lname1}  countryCode=${countryCodes[1]}   email=${pc_emailid2}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${pcid1}  ${resp.json()}
+
     # ......... Take 1 Appointment with Attachment and Note .......
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id1}
@@ -333,6 +343,168 @@ JD-TC-Schedule-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    # ........Take 1 Appointment by Blocking a Slot and Confirming ....
 
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot2}   ${slots[${j1}]}
 
+    ${apptfor1}=  Create Dictionary   apptTime=${slot2}
+    ${apptfor}=   Create List  ${apptfor1}
+
+    ${resp}=  Block Appointment For Consumer  ${s_id2}  ${sch_id}  ${DAY1}  ${apptfor}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${value}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
+    Set Test Variable  ${apptid2}  ${value[0]}
+    
+    ${apptfor1}=  Create Dictionary  id=${pcid}   apptTime=${slot2}
+    ${apptfor}=   Create List  ${apptfor1}
+
+    ${resp}=  Confirm Blocked Appointment   ${pcid}   ${apptid2}  ${apptfor}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointment By Id   ${apptid2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['appmtTime']}    ${slot2}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+
+    # ..... Change Appointment Status(Arrived-started-Completed) .........
+
+    # ${resp}=  Get Appointment By Id   ${apptid1}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+
+    ${resp}=  Appointment Action   ${apptStatus[3]}   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[3]}
+
+    ${resp}=  Appointment Action   ${apptStatus[6]}   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[6]}
+
+    # ...Create 2 Appointments (Cancel 1, Reject the Other) .........
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot1}   ${slots[${j1}]}
+
+    ${apptfor1}=  Create Dictionary  id=${pcid}   apptTime=${slot1}
+    ${apptfor}=   Create List  ${apptfor1}
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Take Appointment For Consumer  ${pcid}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
+    Set Test Variable  ${apptid3}  ${apptid[0]}
+
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${reason}=  Random Element  ${cancelReason}
+    ${resp}=  Appointment Action   ${apptStatus[4]}   ${apptid3}    cancelReason=${reason}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointment By Id   ${apptid3}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[4]}
+
+    ${apptfor1}=  Create Dictionary  id=${pcid1}   apptTime=${slot1}
+    ${apptfor}=   Create List  ${apptfor1}
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Take Appointment For Consumer  ${pcid1}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
+    Set Test Variable  ${apptid4}  ${apptid[0]}
+
+    ${resp}=  Get Appointment By Id   ${apptid4}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${reason}=  Random Element  ${cancelReason}
+    ${resp}=  Appointment Action   ${apptStatus[5]}   ${apptid4}    rejectReason=${reason}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointment By Id   ${apptid4}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[5]}
+
+    # ......Settle Bill for 1 of the Appointments ...
+
+    ${NO_INVOICE_GENERATED}=  format String   ${NO_INVOICE_GENERATED}   ${apptid1}
+
+    ${resp}=  Get Bookings Invoices  ${apptid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings    ${resp.json()}    ${NO_INVOICE_GENERATED}
+
+    ${resp}=  Create Invoice for Booking  ${invoicebooking[0]}   ${apptid1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    sleep   2s
+    ${resp}=  Get Bookings Invoices  ${apptid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable    ${invoice_uid}    ${resp.json()[0]['invoiceUid']}
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}                                        ${account_id}
+    Should Be Equal As Strings  ${resp.json()[0]['categoryName']}                                     ${CategoryName[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['invoiceDate']}                                      ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['providerConsumerId']}                               ${cid}
+    Should Be Equal As Strings  ${resp.json()[0]['providerConsumerData']['phoneNos'][0]['number']}    ${NewCustomer}
+    Should Be Equal As Strings   ${resp.json()[0]['ynwUuid']}                                         ${apptid1}
+    Should Be Equal As Strings   ${resp.json()[0]['amountPaid']}                                      0.0
+    Should Be Equal As Strings   ${resp.json()[0]['amountDue']}                                       ${ser_amount1}
+    Should Be Equal As Strings   ${resp.json()[0]['amountTotal']}                                     ${ser_amount1}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}                      ${s_id}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}                    ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['quantity']}                       1.0
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['taxable']}                        ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['totalPrice']}                     ${ser_amount1}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['netRate']}                        ${ser_amount1}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceCategory']}                ${serviceCategory[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['assigneeUsers']}                  ${empty_list}
+    
+    
 
