@@ -511,3 +511,41 @@ JD-TC-Schedule-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${filter}=  Create Dictionary      
+    ${resp}=  Generate Report REST details  ${reportType[6]}  ${Report_Date_Category[4]}  ${filter}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${token_id1}   ${resp.json()}
+  
+    ${resp}=  Get Report Status By Token Id  ${token_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${tot_amt}   ${resp.json()['reportContent']['dataHeader']['Grand Total']}
+
+    ${total_amt}=    Evaluate    ${ser_amount}+${total}
+    ${ser_date} =	Convert Date	${DAY1}	result_format=%d-%m-%Y
+    ${tot_amt} =    Replace String    ${tot_amt}    Rs.     ${EMPTY}
+    ${tot_amt} =    Replace String    ${tot_amt}    ,       ${EMPTY}
+    ${tot_amt}=  Convert To Number  ${tot_amt}  1
+
+    Should Be Equal As Strings  ${resp.json()['status']}                                        ${Report_Status[0]}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['5']}                 ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['6']}                 1
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['7']}                 ${ser_amount}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['4']}                 ${userf_name} ${userl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['5']}                 ${subser_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['6']}                 ${subser_qnty}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['7']}                 ${total}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['count']}                        2
+    Should Be Equal As Strings  ${tot_amt}                                                      ${total_amt}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportName']}                   User Performance Report
+    Should Be Equal As Strings  ${resp.json()['reportType']}                                    ${reportType[6]}
+    Should Be Equal As Strings  ${resp.json()['reportResponseType']}                            ${ReportResponseType[0]}
+    Should Be Equal As Strings  ${resp.json()['reportTokenID']}                                 ${token_id1}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_filter[4]}  
