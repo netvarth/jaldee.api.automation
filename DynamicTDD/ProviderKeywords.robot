@@ -15083,6 +15083,7 @@ Generate OTP For LOS Lead Kyc Phone Number
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/los/lead/coapplicant/phoneotp/generate   data=${data}  expected_status=any
+    Check Deprication  ${resp}  Generate OTP For LOS Lead Kyc Phone Number
     RETURN  ${resp}
 
 Verify OTP For LOS Lead Kyc Phone Number
@@ -15120,6 +15121,22 @@ Verify OTP For LOS Lead Kyc Email
     Check Deprication  ${resp}  Verify OTP For LOS Lead Kyc Email
     RETURN  ${resp}
 
+Generate OTP For LOS Lead Consumer Kyc Phone Number
+    [Arguments]  ${leadUid}
+
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/los/lead/consumer/phoneotp/generate/${leadUid}  expected_status=any
+    Check Deprication  ${resp}  Generate OTP For LOS Lead Consumer Kyc Phone Number
+    RETURN  ${resp}
+
+Verify OTP For LOS Lead Consumer Kyc Phone Number
+    [Arguments]  ${phone}  ${purpose}  ${leadUid}
+    
+    ${otp}=  verify accnt  ${phone}   ${purpose}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw    /provider/los/lead/consumer/phoneotp/${otp}/verify  expected_status=any
+    Check Deprication  ${resp}  Verify OTP For LOS Lead Consumer Kyc Phone Number
+    RETURN  ${resp}
 
 AddItemToInvoice
    [Arguments]  ${uuid}   ${ItemLists}  &{kwargs}

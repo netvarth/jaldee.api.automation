@@ -2559,6 +2559,11 @@ CO_APPLICANR_DOB_REQUIRED ="Co-Applicant DoB Required"
 LEAD_KYC_ID_REQUIRED = "Lead KYC ID required"
 CO_APPLICANR_EMAIL_REQUIRED ="Co-Applicant Email Required"
 LEAD_ID_REQUIRED = "Lead ID required"
+INVALID_LEAD_KYC_ID = "Invalid lead KYC ID"
+INVALID_CONSUMER_PHONE = "Invalid Consumer Phone No"
+CONSUMER_KYC_FIRST_NAME_REQUIRED= "Consumer First Name Required for KYC"
+CONSUMER_KYC_LAST_NAME_REQUIRED= "Consumer Last Name Required  for KYC"
+CONSUMER_KYC_DOB_REQUIRED ="Consumer DoB Required for KYC"
 
 # ......  STOCK TRANSFER...........
 CANT_ST_TRNFR_BTW_SAME_INV = "You cannot transfer stock within the same inventory catalog"
