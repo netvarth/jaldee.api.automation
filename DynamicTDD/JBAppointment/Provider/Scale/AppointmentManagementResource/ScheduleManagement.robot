@@ -384,6 +384,11 @@ JD-TC-Schedule-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=  Get Appointment EncodedID   ${apptid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${encId}=  Set Variable   ${resp.json()}
+
     # ........Take 1 Appointment by Blocking a Slot and Confirming ....
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id2}
