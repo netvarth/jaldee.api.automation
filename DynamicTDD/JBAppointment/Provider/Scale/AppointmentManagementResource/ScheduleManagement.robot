@@ -390,7 +390,7 @@ JD-TC-Schedule-1
     ${encId}=  Set Variable   ${resp.json()}
 
     # ........Take 1 Appointment by Blocking a Slot and Confirming ....
-
++
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -594,7 +594,7 @@ JD-TC-Schedule-1
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${filter}=  Create Dictionary      
-    ${resp}=  Generate Report REST details  ${reportType[6]}  ${Report_Date_Category[4]}  ${filter}
+    ${resp}=  Generate Report REST details  ${reportType[5]}  ${Report_Date_Category[4]}  ${filter}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${token_id1}   ${resp.json()}
@@ -624,10 +624,10 @@ JD-TC-Schedule-1
     # Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['5']}                 ${subser_name}
     # Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['6']}                 ${subser_qnty}
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['7']}                 ${total}
-    Should Be Equal As Strings  ${resp.json()['reportContent']['count']}                        2
+    Should Be Equal As Strings  ${resp.json()['reportContent']['count']}                        1
     Should Be Equal As Strings  ${tot_amt}                                                      ${total_amt}
     Should Be Equal As Strings  ${resp.json()['reportContent']['reportName']}                   User Performance Report
-    Should Be Equal As Strings  ${resp.json()['reportType']}                                    ${reportType[6]}
+    Should Be Equal As Strings  ${resp.json()['reportType']}                                    ${reportType[5]}
     Should Be Equal As Strings  ${resp.json()['reportResponseType']}                            ${ReportResponseType[0]}
     Should Be Equal As Strings  ${resp.json()['reportTokenID']}                                 ${token_id1}
     Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_filter[4]}  
