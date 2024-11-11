@@ -593,8 +593,10 @@ JD-TC-Schedule-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    #...... Generate Appointment Report ...........
+
     ${filter}=  Create Dictionary      
-    ${resp}=  Generate Report REST details  ${reportType[5]}  ${Report_Date_Category[4]}  ${filter}
+    ${resp}=  Generate Report REST details  ${reportType[1]}  ${Report_Date_Category[4]}  ${filter}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${token_id1}   ${resp.json()}
@@ -627,7 +629,7 @@ JD-TC-Schedule-1
     Should Be Equal As Strings  ${resp.json()['reportContent']['count']}                        1
     Should Be Equal As Strings  ${tot_amt}                                                      ${total_amt}
     Should Be Equal As Strings  ${resp.json()['reportContent']['reportName']}                   User Performance Report
-    Should Be Equal As Strings  ${resp.json()['reportType']}                                    ${reportType[5]}
+    Should Be Equal As Strings  ${resp.json()['reportType']}                                    ${reportType[1]}
     Should Be Equal As Strings  ${resp.json()['reportResponseType']}                            ${ReportResponseType[0]}
     Should Be Equal As Strings  ${resp.json()['reportTokenID']}                                 ${token_id1}
     Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_filter[4]}  
