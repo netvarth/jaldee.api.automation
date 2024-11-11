@@ -18104,7 +18104,41 @@ Check Server Availibility
     Check Deprication  ${resp}  Check server
     RETURN  ${resp}
 
+#################INVOICE TEMPLATE###############################################
 
+Create Invoice Template
+
+    [Arguments]    ${templateName}   &{kwargs}
+    ${data}=  Create Dictionary  templateName=${templateName}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    POST On Session    ynw    /provider/jp/finance/invoice/template    data=${data}  expected_status=any    headers=${headers}
+   Check Deprication  ${resp}  Create Invoice Template
+    RETURN  ${resp}
+
+Update Invoice Template
+
+    [Arguments]    ${templateuid}  ${templateName}   &{kwargs}
+    ${data}=  Create Dictionary  templateName=${templateName}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/template/${templateuid}    data=${data}  expected_status=any    headers=${headers}
+   Check Deprication  ${resp}  Update Invoice Template
+    RETURN  ${resp}
+
+Get InvoiceTemplate By Uid
+
+    [Arguments]   ${uid}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/invoice/template/${uid}    expected_status=any
+   Check Deprication  ${resp}  Get InvoiceTemplate By Uid
+    RETURN  ${resp}
 *** Comments ***
 
 
