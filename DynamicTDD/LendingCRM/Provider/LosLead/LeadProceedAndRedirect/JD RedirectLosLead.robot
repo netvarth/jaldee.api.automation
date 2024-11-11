@@ -233,11 +233,11 @@ JD-TC-RedirectLosLead-1
     ${lead}=    Create Dictionary  product=${product}  sourcingChannel=${sourcingChannel}  status=${cdl_status}  progress=${progress}  requestedAmount=${requestedAmount}  description=${description}  consumerKyc=${consumerKyc}
     Set Suite Variable  ${lead}
 
-    ${resp}=    LOS Lead As Draft For Followup Stage  ${lead_uid}  ${stageuid11}  lead=${lead}  remarks=${remarks}
+    ${resp}=    LOS Lead As Draft For Followup Stage  ${lead_uid}  ${stageuid11}  remarks=${remarks}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Save And Proceed LOS Lead Followup  ${lead_uid}  ${stageuid11}  lead=${lead}    
+    ${resp}=    Save And Proceed LOS Lead Followup  ${lead_uid}  ${stageuid11} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -279,11 +279,11 @@ JD-TC-RedirectLosLead-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    LOS Lead As Draft For Followup Stage  ${lead_uid}  ${stageuid11}  lead=${lead}  remarks=${remarks}
+    ${resp}=    LOS Lead As Draft For Followup Stage  ${lead_uid}  ${stageuid11}  remarks=${remarks}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Save And Proceed LOS Lead Followup  ${lead_uid}  ${stageuid11}  lead=${lead}    
+    ${resp}=    Save And Proceed LOS Lead Followup  ${lead_uid}  ${stageuid11}  
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -329,11 +329,11 @@ JD-TC-RedirectLosLead-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    LOS Lead As Draft For Followup Stage  ${lead_uid}  ${stageuid11}  lead=${lead}  remarks=${remarks}
+    ${resp}=    LOS Lead As Draft For Followup Stage  ${lead_uid}  ${stageuid11}  remarks=${remarks}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Save And Proceed LOS Lead Followup  ${lead_uid}  ${stageuid11}  lead=${lead}    
+    ${resp}=    Save And Proceed LOS Lead Followup  ${lead_uid}  ${stageuid11}    
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

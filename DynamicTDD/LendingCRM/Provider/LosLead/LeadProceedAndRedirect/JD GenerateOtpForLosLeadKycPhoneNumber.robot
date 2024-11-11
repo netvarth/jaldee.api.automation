@@ -25,19 +25,20 @@ ${aadhaar}          555555555555
 ${pan}              5555555555
 ${bankAccountNo}    55555555555
 ${bankIfsc}         55555555555
+${real_number}      9995805992
 
 *** Test Cases ***
 
-JD-TC-LosLeadAsDraftForFollowupStage-1
+JD-TC-GenerateOTPForLOSLeadKycPhoneNumber-1
 
-    [Documentation]  LOS Lead As Draft For Followup Stage
+    [Documentation]  Generate OTP For LOS Lead Kyc Phone Number
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
-    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
     Set Test Variable  ${provider_name}  ${decrypted_data['userName']}
 
     ${resp}=  Get Business Profile
@@ -120,8 +121,6 @@ JD-TC-LosLeadAsDraftForFollowupStage-1
     Should Be Equal As Strings    ${resp.json()['name']}     ${SCname}
     Should Be Equal As Strings    ${resp.json()['status']}   ${toggle[0]}
 
-# ...... Creating stages and updating redirect and proceed values
-
     ${Sname11}=    FakerLibrary.name
 
     ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${Sname11}  sortOrder=${sort_order[0]}
@@ -130,7 +129,6 @@ JD-TC-LosLeadAsDraftForFollowupStage-1
     Set Suite Variable    ${stageuid11}     ${resp.json()['uid']}
 
     ${Sname22}=    FakerLibrary.name
-    Set Suite variable  ${Sname22}
 
     ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[2]}  ${Sname22}  sortOrder=${sort_order[1]}  onRedirect=${stageuid11}
     Log  ${resp.content}
@@ -138,6 +136,7 @@ JD-TC-LosLeadAsDraftForFollowupStage-1
     Set Suite Variable    ${stageuid22}     ${resp.json()['uid']}
 
     ${Sname33}=    FakerLibrary.name
+    Set Suite Variable  ${Sname33}
 
     ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[3]}  ${Sname33}  sortOrder=${sort_order[2]}  onRedirect=${stageuid22}
     Log  ${resp.content}
@@ -170,20 +169,21 @@ JD-TC-LosLeadAsDraftForFollowupStage-1
     ${PH_Number}    Random Number 	       digits=5 
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
-    Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Set Suite Variable    ${consumerPhone}  555${PH_Number}
     Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
+    Set Suite Variable  ${consumerFirstName}
     ${consumerLastName}=    FakerLibrary.last_name  
+    Set Suite Variable  ${consumerLastName}
     ${dob}=    FakerLibrary.Date
+    Set Suite Variable  ${dob}
     ${permanentAddress1}=  FakerLibrary.address
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
+    Set Suite Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
 
     ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${ageyrs}  ${agemonths}=  db.calculate_age_years_months     ${dob}
 
     ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
     Log   ${resp.json()}
@@ -211,112 +211,27 @@ JD-TC-LosLeadAsDraftForFollowupStage-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+    ${PH_Number2}    Random Number 	       digits=5 
+    ${PH_Number2}=    Evaluate    f'{${PH_Number2}:0>7d}'
+    Log  ${PH_Number2}
+    Set Suite Variable    ${Co_Applicant_Phone}  555${PH_Number2}
+    ${CO_Applicant_FirstName}=   FakerLibrary.first_name
+    Set Suite Variable  ${CO_Applicant_FirstName}
+    ${CO_Applicant_LastName}=    FakerLibrary.last_name  
+    Set Suite Variable  ${CO_Applicant_LastName}
+
+    ${leadStage}=   Create Dictionary   uid=${stageuid11}
+    Set Suite Variable  ${leadStage}
     ${remarks}=    FakerLibrary.name
     Set Suite Variable  ${remarks}
     ${lead}=    Create Dictionary  product=${product}  sourcingChannel=${sourcingChannel}  status=${cdl_status}  progress=${progress}  requestedAmount=${requestedAmount}  description=${description}  consumerKyc=${consumerKyc}
     Set Suite Variable  ${lead}
 
-    ${resp}=    LOS Lead As Draft For Followup Stage  ${lead_uid}  ${stageuid11}  generatedBy=${provider_id}  remarks=${remarks}
+    ${resp}=    LOS Lead As Draft For Followup Stage  ${lead_uid}  ${stageuid11}  remarks=${remarks}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-LosLeadAsDraftForFollowupStage-2
-
-    [Documentation]  LOS Lead As Draft For Followup Stage - which already saved
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    LOS Lead As Draft For Followup Stage  ${lead_uid}  ${stageuid11}  generatedBy=${provider_id}  remarks=${remarks}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-
-JD-TC-LosLeadAsDraftForFollowupStage-3
-
-    [Documentation]  LOS Lead As Draft For Followup Stage - without providing product, channel, status, progress and kyc
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    LOS Lead As Draft For Followup Stage  ${lead_uid}  ${stageuid11}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-
-JD-TC-LosLeadAsDraftForFollowupStage-4
-
-    [Documentation]  LOS Lead As Draft For Followup Stage - where remark as sempty
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    LOS Lead As Draft For Followup Stage  ${lead_uid}  ${stageuid11}  remarks=${empty}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-
-JD-TC-LosLeadAsDraftForFollowupStage-UH1
-
-    [Documentation]  LOS Lead As Draft For Followup Stage - where lead uid is invalid
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${inv}=     Random Int  min=9999  max=999999
-
-    ${INVALID_X_ID}=   Replace String  ${INVALID_X_ID}  {}   Lead
-
-    ${resp}=    LOS Lead As Draft For Followup Stage  ${inv}  ${stageuid22}
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings    ${resp.json()}            ${INVALID_X_ID}
-
-
-JD-TC-LosLeadAsDraftForFollowupStage-UH2
-
-    [Documentation]  LOS Lead As Draft For Followup Stage - where stage uid is invalid
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${inv}=     Random Int  min=9999  max=999999
-
-    ${INVALID_X_ID}=   Replace String  ${INVALID_X_ID}  {}   Stage
-
-    ${resp}=    LOS Lead As Draft For Followup Stage  ${lead_uid}  ${inv}
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings    ${resp.json()}            ${INVALID_X_ID}
-
-
-JD-TC-LosLeadAsDraftForFollowupStage-UH3
-
-    [Documentation]  LOS Lead As Draft For Followup Stage - without login
-
-    ${resp}=    LOS Lead As Draft For Followup Stage  ${lead_uid}  ${stageuid22}
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}   419
-    Should Be Equal As Strings    ${resp.json()}        ${SESSION_EXPIRED}
-
-JD-TC-LosLeadAsDraftForFollowupStage-UH4
-
-    [Documentation]  LOS Lead As Draft For Followup Stage - where current stage was different
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    LOS Lead As Draft For Followup Stage  ${lead_uid}  ${stageuid11}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Save And Proceed LOS Lead Followup  ${lead_uid}  ${stageuid11}   
+    ${resp}=    Save And Proceed LOS Lead Followup  ${lead_uid}  ${stageuid11}  
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -325,25 +240,179 @@ JD-TC-LosLeadAsDraftForFollowupStage-UH4
     Should Be Equal As Strings      ${resp.status_code}   200
     Should Be Equal As Strings      ${resp.json()['stage']['uid']}   ${stageuid22}
 
-    ${INVALID_LEAD_STAGE_TYPE}=   Replace String  ${INVALID_LEAD_STAGE_TYPE}  {}   ${Sname22}
-
-    ${resp}=    LOS Lead As Draft For Followup Stage  ${lead_uid}  ${stageuid22}
+    ${resp}=    Generate OTP For LOS Lead Kyc Phone Number  ${lead_uid}  consumerFirstName=${CO_Applicant_FirstName}  consumerLastName=${CO_Applicant_LastName}  consumerPhoneCode=${countryCodes[0]}  consumerPhone=${Co_Applicant_Phone}  gender=${Genderlist[0]}  dob=${dob}  relationType=${relationType[3]}
     Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings      ${resp.json()}          ${INVALID_LEAD_STAGE_TYPE}
+    Should Be Equal As Strings      ${resp.status_code}   200
 
+JD-TC-GenerateOTPForLOSLeadKycPhoneNumber-2
 
-JD-TC-LosLeadAsDraftForFollowupStage-UH5
+    [Documentation]  Generate OTP For LOS Lead Kyc Phone Number - generate otp twice for same number
 
-    [Documentation]  LOS Lead As Draft For Followup Stage - with another provider login
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME125}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${NO_PERMISSION_X}=     Replace String  ${NO_PERMISSION_X}  {}   lead
+    ${resp}=    Generate OTP For LOS Lead Kyc Phone Number  ${lead_uid}  consumerFirstName=${CO_Applicant_FirstName}  consumerLastName=${CO_Applicant_LastName}  consumerPhoneCode=${countryCodes[0]}  consumerPhone=${Co_Applicant_Phone}  gender=${Genderlist[0]}  dob=${dob}  relationType=${relationType[3]}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}   200
 
-    ${resp}=    LOS Lead As Draft For Followup Stage  ${lead_uid}  ${stageuid22}
+JD-TC-GenerateOTPForLOSLeadKycPhoneNumber-UH1
+
+    [Documentation]  Generate OTP For LOS Lead Kyc Phone Number - where lead uid is invalid
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${inv}=     Random Int  min=999  max=9999
+
+    ${resp}=    Generate OTP For LOS Lead Kyc Phone Number  ${inv}  consumerFirstName=${CO_Applicant_FirstName}  consumerLastName=${CO_Applicant_LastName}  consumerPhoneCode=${countryCodes[0]}  consumerPhone=${Co_Applicant_Phone}  gender=${Genderlist[0]}  dob=${dob}  relationType=${relationType[3]}
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}        ${NO_PERMISSION_X}
+    
+
+JD-TC-GenerateOTPForLOSLeadKycPhoneNumber-UH2
+
+    [Documentation]  Generate OTP For LOS Lead Kyc Phone Number - where firstname is empty
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Generate OTP For LOS Lead Kyc Phone Number  ${lead_uid}  consumerFirstName=${empty}  consumerLastName=${CO_Applicant_LastName}  consumerPhoneCode=${countryCodes[0]}  consumerPhone=${Co_Applicant_Phone}  gender=${Genderlist[0]}  dob=${dob}  relationType=${relationType[3]}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${CO_APPLICANR_FIRST_NAME_REQUIRED}
+
+
+JD-TC-GenerateOTPForLOSLeadKycPhoneNumber-UH3
+
+    [Documentation]  Generate OTP For LOS Lead Kyc Phone Number - where last name is empty
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Generate OTP For LOS Lead Kyc Phone Number  ${lead_uid}  consumerFirstName=${CO_Applicant_FirstName}  consumerLastName=${empty}  consumerPhoneCode=${countryCodes[0]}  consumerPhone=${Co_Applicant_Phone}  gender=${Genderlist[0]}  dob=${dob}  relationType=${relationType[3]}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${CO_APPLICANR_LAST_NAME_REQUIRED}
+
+
+JD-TC-GenerateOTPForLOSLeadKycPhoneNumber-UH4
+
+    [Documentation]  Generate OTP For LOS Lead Kyc Phone Number - where country code is outside india
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Generate OTP For LOS Lead Kyc Phone Number  ${lead_uid}  consumerFirstName=${CO_Applicant_FirstName}  consumerLastName=${CO_Applicant_LastName}  consumerPhoneCode=${countryCodes[2]}  consumerPhone=${Co_Applicant_Phone}  gender=${Genderlist[0]}  dob=${dob}  relationType=${relationType[3]}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}   422
+
+
+JD-TC-GenerateOTPForLOSLeadKycPhoneNumber-UH5
+
+    [Documentation]  Generate OTP For LOS Lead Kyc Phone Number - with real number and other country code
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Generate OTP For LOS Lead Kyc Phone Number  ${lead_uid}  consumerFirstName=${CO_Applicant_FirstName}  consumerLastName=${CO_Applicant_LastName}  consumerPhoneCode=${countryCodes[5]}  consumerPhone=${real_number}  gender=${Genderlist[0]}  dob=${dob}  relationType=${relationType[3]}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}   200
+    ${otp}=  verify accnt  ${real_number}   ${OtpPurpose['CoApplicantVerifyPhone']}
+
+JD-TC-GenerateOTPForLOSLeadKycPhoneNumber-UH6
+
+    [Documentation]  Generate OTP For LOS Lead Kyc Phone Number - where consumer phone is empty
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Generate OTP For LOS Lead Kyc Phone Number  ${lead_uid}  consumerFirstName=${CO_Applicant_FirstName}  consumerLastName=${CO_Applicant_LastName}  consumerPhoneCode=${countryCodes[0]}  consumerPhone=${empty}  gender=${Genderlist[0]}  dob=${dob}  relationType=${relationType[3]}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${CO_APPLICANR_PHONE_NUMBER_REQUIRED}
+
+
+JD-TC-GenerateOTPForLOSLeadKycPhoneNumber-UH7
+
+    [Documentation]  Generate OTP For LOS Lead Kyc Phone Number - where phone number is 8 digit
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${inv}=     Random Int  min=11111111  max=99999999
+ 
+    ${resp}=    Generate OTP For LOS Lead Kyc Phone Number  ${lead_uid}  consumerFirstName=${CO_Applicant_FirstName}  consumerLastName=${CO_Applicant_LastName}  consumerPhoneCode=${countryCodes[0]}  consumerPhone=${inv}  gender=${Genderlist[0]}  dob=${dob}  relationType=${relationType[3]}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${INVALID_CO_APPLICANR_PHONE}
+
+
+JD-TC-GenerateOTPForLOSLeadKycPhoneNumber-3
+
+    [Documentation]  Generate OTP For LOS Lead Kyc Phone Number - where gender is not provided
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Generate OTP For LOS Lead Kyc Phone Number  ${lead_uid}  consumerFirstName=${CO_Applicant_FirstName}  consumerLastName=${CO_Applicant_LastName}  consumerPhoneCode=${countryCodes[0]}  consumerPhone=${Co_Applicant_Phone}  dob=${dob}  relationType=${relationType[3]}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}   200
+
+
+JD-TC-GenerateOTPForLOSLeadKycPhoneNumber-UH8
+
+    [Documentation]  Generate OTP For LOS Lead Kyc Phone Number - where dob is empty
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Generate OTP For LOS Lead Kyc Phone Number  ${lead_uid}  consumerFirstName=${CO_Applicant_FirstName}  consumerLastName=${CO_Applicant_LastName}  consumerPhoneCode=${countryCodes[0]}  consumerPhone=${Co_Applicant_Phone}  gender=${Genderlist[0]}  dob=${empty}  relationType=${relationType[3]}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${CO_APPLICANR_DOB_REQUIRED}
+
+
+JD-TC-GenerateOTPForLOSLeadKycPhoneNumber-UH9
+
+    [Documentation]  Generate OTP For LOS Lead Kyc Phone Number - where relation ship is empty
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Generate OTP For LOS Lead Kyc Phone Number  ${lead_uid}  consumerFirstName=${CO_Applicant_FirstName}  consumerLastName=${CO_Applicant_LastName}  consumerPhoneCode=${countryCodes[0]}  consumerPhone=${Co_Applicant_Phone}  gender=${Genderlist[0]}  dob=${dob}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${KYC_RELATION_TYPE_REQUIRED}
+
+
+JD-TC-GenerateOTPForLOSLeadKycPhoneNumber-UH10
+
+    [Documentation]  Generate OTP For LOS Lead Kyc Phone Number - without login
+
+    ${resp}=    Generate OTP For LOS Lead Kyc Phone Number  ${lead_uid}  consumerFirstName=${CO_Applicant_FirstName}  consumerLastName=${CO_Applicant_LastName}  consumerPhoneCode=${countryCodes[0]}  consumerPhone=${Co_Applicant_Phone}  gender=${Genderlist[0]}  dob=${dob}  relationType=${relationType[3]}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     419
+    Should Be Equal As Strings      ${resp.json()}          ${SESSION_EXPIRED}
+
+
+JD-TC-GenerateOTPForLOSLeadKycPhoneNumber-UH11
+
+    [Documentation]  Generate OTP For LOS Lead Kyc Phone Number - with another login
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Generate OTP For LOS Lead Kyc Phone Number  ${lead_uid}  consumerFirstName=${CO_Applicant_FirstName}  consumerLastName=${CO_Applicant_LastName}  consumerPhoneCode=${countryCodes[0]}  consumerPhone=${Co_Applicant_Phone}  gender=${Genderlist[0]}  dob=${dob}  relationType=${relationType[3]}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}   419

@@ -26,18 +26,19 @@ ${pan}              5555555555
 ${bankAccountNo}    55555555555
 ${bankIfsc}         55555555555
 
+
 *** Test Cases ***
 
-JD-TC-LosLeadAsDraftForFollowupStage-1
+JD-TC-WorkFlowLosLead-1
 
-    [Documentation]  LOS Lead As Draft For Followup Stage
+    [Documentation]  WorkFlow Los Lead
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME99}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
-    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
     Set Test Variable  ${provider_name}  ${decrypted_data['userName']}
 
     ${resp}=  Get Business Profile
@@ -61,6 +62,8 @@ JD-TC-LosLeadAsDraftForFollowupStage-1
     Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
     Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
 
+#...... Creating Lead status ........
+
     ${Sname}=    FakerLibrary.name
 
     ${resp}=    Create Lead Status LOS  ${Sname}
@@ -75,6 +78,8 @@ JD-TC-LosLeadAsDraftForFollowupStage-1
     Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
     Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
 
+#...... Creating Lead Progress ........
+
     ${Pname}=    FakerLibrary.name
 
     ${resp}=    Create Lead Progress LOS  ${Pname}
@@ -88,6 +93,8 @@ JD-TC-LosLeadAsDraftForFollowupStage-1
     Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
     Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
     Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+#...... Creating Lead Product ........
 
     ${Pdtname}=    FakerLibrary.name
 
@@ -105,6 +112,8 @@ JD-TC-LosLeadAsDraftForFollowupStage-1
     Should Be Equal As Strings    ${resp.json()['losProduct']}  ${losProduct[0]}
     Should Be Equal As Strings    ${resp.json()['status']}      ${toggle[0]}
 
+#...... Creating Lead Sourcing Channel ........
+
     ${SCname}=    FakerLibrary.name
 
     ${resp}=    Create Los Lead Sourcing Channel  ${SCname}
@@ -120,9 +129,10 @@ JD-TC-LosLeadAsDraftForFollowupStage-1
     Should Be Equal As Strings    ${resp.json()['name']}     ${SCname}
     Should Be Equal As Strings    ${resp.json()['status']}   ${toggle[0]}
 
-# ...... Creating stages and updating redirect and proceed values
+# ...... Creating stages followUp, Kyc, Kyc verification and salesfield ....... 
 
     ${Sname11}=    FakerLibrary.name
+    Set Suite Variable  ${Sname11}
 
     ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${Sname11}  sortOrder=${sort_order[0]}
     Log  ${resp.content}
@@ -130,7 +140,6 @@ JD-TC-LosLeadAsDraftForFollowupStage-1
     Set Suite Variable    ${stageuid11}     ${resp.json()['uid']}
 
     ${Sname22}=    FakerLibrary.name
-    Set Suite variable  ${Sname22}
 
     ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[2]}  ${Sname22}  sortOrder=${sort_order[1]}  onRedirect=${stageuid11}
     Log  ${resp.content}
@@ -143,6 +152,15 @@ JD-TC-LosLeadAsDraftForFollowupStage-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${stageuid33}     ${resp.json()['uid']}
+
+    ${Sname44}=    FakerLibrary.name
+
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[3]}  ${Sname44}  sortOrder=${sort_order[3]}  onRedirect=${stageuid33}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${stageuid44}     ${resp.json()['uid']}
+
+# ..... updating stages redirect and proceed uids ........
 
     ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${stageuid11}  ${Sname11}  onProceed=${stageuid22}
     Log  ${resp.content}
@@ -163,9 +181,21 @@ JD-TC-LosLeadAsDraftForFollowupStage-1
     Should Be Equal As Strings    ${resp.json()['onProceed']}   ${stageuid33}
     Should Be Equal As Strings    ${resp.json()['onRedirect']}  ${stageuid11}
 
+    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${stageuid33}  ${Sname33}  onProceed=${stageuid44}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead Stage By UID  ${stageuid33} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['onProceed']}   ${stageuid44}
+    Should Be Equal As Strings    ${resp.json()['onRedirect']}  ${stageuid22}
+
     ${resp}=    Get Los Stage
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+# .....  Add customer .........
 
     ${PH_Number}    Random Number 	       digits=5 
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
@@ -190,6 +220,8 @@ JD-TC-LosLeadAsDraftForFollowupStage-1
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
 
+# ...... Create Lead For Los ...........
+
     ${requestedAmount}=     Random Int  min=30000  max=600000
     ${description}=         FakerLibrary.bs
     ${permanentAddress2}=   FakerLibrary.address  
@@ -211,112 +243,20 @@ JD-TC-LosLeadAsDraftForFollowupStage-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+# ...... LOS Lead As Draft For Followup Stage ...........
+
     ${remarks}=    FakerLibrary.name
     Set Suite Variable  ${remarks}
     ${lead}=    Create Dictionary  product=${product}  sourcingChannel=${sourcingChannel}  status=${cdl_status}  progress=${progress}  requestedAmount=${requestedAmount}  description=${description}  consumerKyc=${consumerKyc}
     Set Suite Variable  ${lead}
 
-    ${resp}=    LOS Lead As Draft For Followup Stage  ${lead_uid}  ${stageuid11}  generatedBy=${provider_id}  remarks=${remarks}
+    ${resp}=    LOS Lead As Draft For Followup Stage  ${lead_uid}  ${stageuid11}  remarks=${remarks}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-LosLeadAsDraftForFollowupStage-2
+# ...... Save And Proceed LOS Lead Followup ...........
 
-    [Documentation]  LOS Lead As Draft For Followup Stage - which already saved
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    LOS Lead As Draft For Followup Stage  ${lead_uid}  ${stageuid11}  generatedBy=${provider_id}  remarks=${remarks}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-
-JD-TC-LosLeadAsDraftForFollowupStage-3
-
-    [Documentation]  LOS Lead As Draft For Followup Stage - without providing product, channel, status, progress and kyc
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    LOS Lead As Draft For Followup Stage  ${lead_uid}  ${stageuid11}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-
-JD-TC-LosLeadAsDraftForFollowupStage-4
-
-    [Documentation]  LOS Lead As Draft For Followup Stage - where remark as sempty
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    LOS Lead As Draft For Followup Stage  ${lead_uid}  ${stageuid11}  remarks=${empty}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-
-JD-TC-LosLeadAsDraftForFollowupStage-UH1
-
-    [Documentation]  LOS Lead As Draft For Followup Stage - where lead uid is invalid
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${inv}=     Random Int  min=9999  max=999999
-
-    ${INVALID_X_ID}=   Replace String  ${INVALID_X_ID}  {}   Lead
-
-    ${resp}=    LOS Lead As Draft For Followup Stage  ${inv}  ${stageuid22}
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings    ${resp.json()}            ${INVALID_X_ID}
-
-
-JD-TC-LosLeadAsDraftForFollowupStage-UH2
-
-    [Documentation]  LOS Lead As Draft For Followup Stage - where stage uid is invalid
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${inv}=     Random Int  min=9999  max=999999
-
-    ${INVALID_X_ID}=   Replace String  ${INVALID_X_ID}  {}   Stage
-
-    ${resp}=    LOS Lead As Draft For Followup Stage  ${lead_uid}  ${inv}
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings    ${resp.json()}            ${INVALID_X_ID}
-
-
-JD-TC-LosLeadAsDraftForFollowupStage-UH3
-
-    [Documentation]  LOS Lead As Draft For Followup Stage - without login
-
-    ${resp}=    LOS Lead As Draft For Followup Stage  ${lead_uid}  ${stageuid22}
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}   419
-    Should Be Equal As Strings    ${resp.json()}        ${SESSION_EXPIRED}
-
-JD-TC-LosLeadAsDraftForFollowupStage-UH4
-
-    [Documentation]  LOS Lead As Draft For Followup Stage - where current stage was different
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    LOS Lead As Draft For Followup Stage  ${lead_uid}  ${stageuid11}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Save And Proceed LOS Lead Followup  ${lead_uid}  ${stageuid11}   
+    ${resp}=    Save And Proceed LOS Lead Followup  ${lead_uid}  ${stageuid11}  
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -325,25 +265,47 @@ JD-TC-LosLeadAsDraftForFollowupStage-UH4
     Should Be Equal As Strings      ${resp.status_code}   200
     Should Be Equal As Strings      ${resp.json()['stage']['uid']}   ${stageuid22}
 
-    ${INVALID_LEAD_STAGE_TYPE}=   Replace String  ${INVALID_LEAD_STAGE_TYPE}  {}   ${Sname22}
+# ...... LOS Lead As Draft For KYC Stage ...........
 
-    ${resp}=    LOS Lead As Draft For Followup Stage  ${lead_uid}  ${stageuid22}
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings      ${resp.json()}          ${INVALID_LEAD_STAGE_TYPE}
-
-
-JD-TC-LosLeadAsDraftForFollowupStage-UH5
-
-    [Documentation]  LOS Lead As Draft For Followup Stage - with another provider login
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME125}  ${PASSWORD} 
+    ${resp}=    Save LOS Lead As Draft For Kyc  ${lead_uid}  ${stageuid22}  lead=${lead}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${NO_PERMISSION_X}=     Replace String  ${NO_PERMISSION_X}  {}   lead
+# ...... Save And Proceed LOS Lead KYC ...........
 
-    ${resp}=    LOS Lead As Draft For Followup Stage  ${lead_uid}  ${stageuid22}
+    ${resp}=    Save And Proceed LOS Lead Kyc  ${lead_uid}  ${stageuid22}  lead=${lead}
     Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}        ${NO_PERMISSION_X}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead LOS   ${lead_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}   200
+    Should Be Equal As Strings      ${resp.json()['stage']['uid']}   ${stageuid33}
+
+# ...... LOS Lead Verify Kyc ...........
+
+    ${resp}=    Verift Los Lead Kyc   ${lead_uid}  ${stageuid33}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead LOS   ${lead_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}   200
+    Should Be Equal As Strings      ${resp.json()['stage']['uid']}   ${stageuid44}
+
+# ...... LOS Lead As Draft For salesfield Stage ...........
+
+    ${resp}=    Save LOS Lead As Draft For SALESFIELD  ${lead_uid}  ${stageuid44}  lead=${lead}   remarks=${remarks}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+# ...... Save And Proceed LOS Lead salesfield ...........
+
+    ${resp}=    Save And Proceed LOS Lead SALESFIELD  ${lead_uid}  ${stageuid44}  lead=${lead}   remarks=${remarks}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead LOS   ${lead_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}   200
+    Should Be Equal As Strings      ${resp.json()['stage']['uid']}   ${stageuid44}
