@@ -2556,6 +2556,9 @@ CO_APPLICANR_LAST_NAME_REQUIRED= "Co-Applicant Last Name Required"
 CO_APPLICANR_PHONE_NUMBER_REQUIRED ="Co-Applicant Phone Number Required"
 INVALID_CO_APPLICANR_PHONE = "Invalid Co-Applicant Phone No"
 CO_APPLICANR_DOB_REQUIRED ="Co-Applicant DoB Required"
+LEAD_KYC_ID_REQUIRED = "Lead KYC ID required"
+CO_APPLICANR_EMAIL_REQUIRED ="Co-Applicant Email Required"
+LEAD_ID_REQUIRED = "Lead ID required"
 
 # ......  STOCK TRANSFER...........
 CANT_ST_TRNFR_BTW_SAME_INV = "You cannot transfer stock within the same inventory catalog"
