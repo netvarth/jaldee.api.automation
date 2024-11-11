@@ -1157,13 +1157,13 @@ upload file to temporary location
     Check Deprication  ${resp}  upload file to temporary location
     RETURN  ${resp}
 
-change status of the uploaded file
+Change Status Of The Uploaded File
 
     [Arguments]    ${status}    ${driveId}
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  provider/fileShare/upload/${status}/${driveId}  expected_status=any
-    Check Deprication  ${resp}  change status of the uploaded file
+    Check Deprication  ${resp}  Change Status Of The Uploaded File
     RETURN  ${resp}
 
 ######### APPOINTMENT ###########
@@ -15134,8 +15134,32 @@ Verify OTP For LOS Lead Consumer Kyc Phone Number
     
     ${otp}=  verify accnt  ${phone}   ${purpose}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw    /provider/los/lead/consumer/phoneotp/${otp}/verify  expected_status=any
+    ${resp}=  POST On Session  ynw    /provider/los/lead/consumer/phoneotp/${otp}/verify/${leadUid}  expected_status=any
     Check Deprication  ${resp}  Verify OTP For LOS Lead Consumer Kyc Phone Number
+    RETURN  ${resp}
+
+Generate OTP For LOS Lead Consumer Kyc Email
+    [Arguments]  ${id}  ${leadUid}  &{kwargs}
+
+    ${data}=    Create Dictionary   id=${id}  leadUid=${leadUid}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/los/lead/consumer/emailotp/generate   data=${data}  expected_status=any
+    Check Deprication  ${resp}  Generate OTP For LOS Consumer Lead Kyc Email
+    RETURN  ${resp}
+
+Verify OTP For LOS Lead Consumer Kyc Email
+    [Arguments]  ${consumerEmail}  ${purpose}  ${id}  ${leadUid}
+
+    ${data}=  Create Dictionary  id=${id}  leadUid=${leadUid} 
+    ${data}=    json.dumps    ${data}
+    ${otp}=  verify accnt  ${consumerEmail}   ${purpose}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw    /provider/los/lead/coapplicant/emailotp/${otp}/verify   data=${data}  expected_status=any
+    Check Deprication  ${resp}  Verify OTP For LOS Lead Kyc Email
     RETURN  ${resp}
 
 AddItemToInvoice
@@ -18080,13 +18104,6 @@ Check Server Availibility
     Check Deprication  ${resp}  Check server
     RETURN  ${resp}
 
-Update Status File Share
-
-    [Arguments]     ${status}    ${Drive_id}  
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/fileShare/upload/${status}/${Drive_id}    expected_status=any
-    Check Deprication  ${resp}  Update Status File Share
-    RETURN  ${resp}
 
 *** Comments ***
 
