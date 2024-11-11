@@ -18139,6 +18139,23 @@ Get InvoiceTemplate By Uid
     ${resp}=  GET On Session  ynw  /provider/jp/finance/invoice/template/${uid}    expected_status=any
    Check Deprication  ${resp}  Get InvoiceTemplate By Uid
     RETURN  ${resp}
+
+Update Invoice Template Status
+
+    [Arguments]    ${uid}  ${status}    
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/template/${uid}/status/${status}      expected_status=any    headers=${headers}
+    Check Deprication  ${resp}  Update Invoice Template Status
+    RETURN  ${resp}
+
+Remove Invoice Template 
+
+    [Arguments]    ${uid}    
+    Check And Create YNW Session
+    ${resp}=    DELETE On Session    ynw    /provider/jp/finance/invoice/template/${uid}      expected_status=any    headers=${headers}
+    Check Deprication  ${resp}  Remove Invoice Template 
+    RETURN  ${resp}
+
 *** Comments ***
 
 
