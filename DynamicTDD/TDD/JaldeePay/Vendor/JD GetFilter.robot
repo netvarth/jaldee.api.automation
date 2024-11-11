@@ -121,7 +121,7 @@ JD-TC-GetFilter-1
     ${resp}=   Get vendor by encId    ${vendor_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${vendorStatus}   ${resp.json()['vendorStatusName']}
+    Set Suite Variable    ${vendorStatus}   ${resp.json()['vendorStatusId']}
     # Should Be Equal As Strings  ${resp.json()['id']}  ${vendor_id1}
     Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1}
     # Should Be Equal As Strings  ${resp.json()['vendorType']}  ${category_id1}
@@ -317,3 +317,38 @@ JD-TC-GetFilter-10
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+JD-TC-GetFilter-11
+
+    [Documentation]  Create Vendor for an SP and get with filter -status as enabled  then disable vendor and check the status with disabled status.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME204}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Vendor List with filter    status-eq=${toggle[0]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+#    Should Be Equal As Strings  ${resp.json()[0]['id']}  ${vendor_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${account_id1}
+    # Should Be Equal As Strings  ${resp.json()[0]['vendorType']}  ${category_id1}
+    # Should Be Equal As Strings  ${resp.json()[0]['vendorTypeName']}  ${name}
+    Should Be Equal As Strings  ${resp.json()[0]['vendorId']}  ${vendorId}
+    Should Be Equal As Strings  ${resp.json()[0]['vendorName']}  ${vender_name}
+    Should Be Equal As Strings  ${resp.json()[0]['contactPersonName']}  ${contactPersonName}
+    Should Be Equal As Strings  ${resp.json()[0]['vendorUid']}  ${vendor_uid11}
+
+    ${resp}=  Update Vendor Status   ${vendor_uid1}  ${toggle[1]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Vendor List with filter    status-eq=${toggle[1]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+#    Should Be Equal As Strings  ${resp.json()[0]['id']}  ${vendor_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${account_id1}
+    # Should Be Equal As Strings  ${resp.json()[0]['vendorType']}  ${category_id1}
+    # Should Be Equal As Strings  ${resp.json()[0]['vendorTypeName']}  ${name}
+    Should Be Equal As Strings  ${resp.json()[0]['vendorId']}  ${vendorId}
+    Should Be Equal As Strings  ${resp.json()[0]['vendorName']}  ${vender_name}
+    Should Be Equal As Strings  ${resp.json()[0]['contactPersonName']}  ${contactPersonName}
+    Should Be Equal As Strings  ${resp.json()[0]['vendorUid']}  ${vendor_uid11}

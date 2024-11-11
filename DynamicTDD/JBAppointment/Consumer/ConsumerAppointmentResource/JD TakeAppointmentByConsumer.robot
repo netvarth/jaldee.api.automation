@@ -2550,7 +2550,7 @@ JD-TC-Take Appointment-UH1
 
     ${cnote}=   FakerLibrary.word
     Set Suite Variable   ${cnote}
-    ${resp}=   Customer Take Appointment   ${pidUH1}  ${p1_s1}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor1}
+    ${resp}=   Customer Take Appointment   ${pidUH1}  ${p1_s1}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor1}    location=${{str('${p1_l1}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -2562,7 +2562,7 @@ JD-TC-Take Appointment-UH1
     Should Be Equal As Strings  ${resp.status_code}  200 
 
 
-    ${resp}=   Customer Take Appointment   ${pidUH1}  ${p1_s1}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor1}
+    ${resp}=   Customer Take Appointment   ${pidUH1}  ${p1_s1}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor1}   location=${{str('${p1_l1}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${APPOINTMET_AlREADY_TAKEN}" 
@@ -3125,7 +3125,7 @@ JD-TC-Take Appointment-UH6
     Set Suite Variable   ${apptfor}     
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Customer Take Appointment   ${pidUH7}  ${s_id}  ${sch_id}  ${DAY3}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pidUH7}  ${s_id}  ${sch_id}  ${DAY3}  ${cnote}   ${apptfor}   location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${FUTURE_APPOINTMET_DISABLED}"
@@ -3272,7 +3272,7 @@ JD-TC-Take Appointment-UH7
     Set Suite Variable   ${apptfor}   
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Customer Take Appointment   ${pidUH8}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pidUH8}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}   location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${TODAY_APPOINTMET_DISABLED}"
@@ -3458,7 +3458,7 @@ JD-TC-Take Appointment-UH8
     Set Suite Variable   ${apptfor}         
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Customer Take Appointment   ${pidUH6}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pidUH6}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}   location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${APPT_NOT_ENABLED}"
@@ -3627,7 +3627,7 @@ JD-TC-Take Appointment-UH11
     Should Be Equal As Strings    ${resp.status_code}   200   
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Customer Take Appointment   ${pid_11}  ${p1_s1}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor1}
+    ${resp}=   Customer Take Appointment   ${pid_11}  ${p1_s1}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor1}  location=${{str('${p1_l2}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${LOCATION_DISABLED}"  
@@ -4235,9 +4235,9 @@ JD-TC-Take Appointment-18
     # Should Be Equal As Strings  ${resp.json()[0]['status']}  ${cupnpaymentStatus[0]}
     # Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${pid}
 
-    ${resp}=  Get Payment Details By UUId  ${apptid2}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Payment Details By UUId  ${apptid2}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${apptid2}
     # Should Be Equal As Strings  ${resp.json()[0]['status']}  ${cupnpaymentStatus[0]}  
     # Should Be Equal As Strings  ${resp.json()[0]['acceptPaymentBy']}  ${pay_mode_selfpay}

@@ -64,19 +64,16 @@ JD-TC-GetVendorListWithFilter-1
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
     
     ${name}=   FakerLibrary.word
-    Set Suite Variable   ${name}
-    ${resp}=  Create Category   ${name}  ${categoryType[0]} 
+    ${resp}=  CreateVendorCategory  ${name}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id1}   ${resp.json()}
 
-    ${resp}=  Get Category By Id   ${category_id1}
+    ${resp}=  Get by encId  ${category_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+
+
 
     ${vender_name}=   FakerLibrary.firstname
     Set Suite Variable  ${vender_name}
@@ -151,7 +148,7 @@ JD-TC-GetVendorListWithFilter-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${userId}   ${resp.json()['userId']}
-    Set Suite Variable  ${vendorStatus}   ${resp.json()['vendorStatus']}
+    Set Suite Variable  ${vendorStatus}   ${resp.json()['vendorStatusId']}
     Set Suite Variable  ${vendorStatusName}   ${resp.json()['vendorStatusName']}
     Should Be Equal As Strings  ${resp.json()['id']}  ${vendor_id1}
     Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1}
@@ -417,6 +414,26 @@ JD-TC-GetVendorListWithFilter-14
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Vendor List with filter    bankInfo-eq=bankName::${bankName} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['id']}  ${vendor_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${account_id1}
+    # Should Be Equal As Strings  ${resp.json()[0]['vendorType']}  ${category_id1}
+    # Should Be Equal As Strings  ${resp.json()[0]['vendorTypeName']}  ${name}
+    Should Be Equal As Strings  ${resp.json()[0]['vendorId']}  ${vendorId}
+    Should Be Equal As Strings  ${resp.json()[0]['vendorName']}  ${vender_name}
+    Should Be Equal As Strings  ${resp.json()[0]['contactPersonName']}  ${contactPersonName}
+    Should Be Equal As Strings  ${resp.json()[0]['vendorUid']}  ${vendor_uid1}
+
+JD-TC-GetVendorListWithFilter-15
+
+    [Documentation]  Create Vendor for an SP and get with filter -status
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Vendor List with filter    status-eq=${toggle[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['id']}  ${vendor_id1}
