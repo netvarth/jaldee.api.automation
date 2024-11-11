@@ -18156,6 +18156,13 @@ Remove Invoice Template
     Check Deprication  ${resp}  Remove Invoice Template 
     RETURN  ${resp}
 
+Get InvoiceTemplates by account
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/invoice/template   expected_status=any
+   Check Deprication  ${resp}  Get InvoiceTemplates by account
+    RETURN  ${resp}
+
+
 *** Comments ***
 
 
