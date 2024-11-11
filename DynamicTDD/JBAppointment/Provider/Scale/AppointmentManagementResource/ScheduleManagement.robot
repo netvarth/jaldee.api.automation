@@ -16,6 +16,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
+Variables          ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py
 
 
 *** Variables ***
@@ -31,6 +32,9 @@ ${subdomain}    dentists
 ${MEET_URL}    https://meet.google.com/{meeting_id}
 @{service_duration}  10  20  30   40   50
 
+${var_file}               ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py
+${data_file}              ${EXECDIR}/data/${ENVIRONMENT}data/${ENVIRONMENT}phnumbers.txt
+
 *** Test Cases ***
 
 JD-TC-Schedule-1
@@ -39,6 +43,13 @@ JD-TC-Schedule-1
 
     ${firstname}  ${lastname}  ${PUSERNAME_B}  ${LoginId}=  Provider Signup   Domain=${domain}   SubDomain=${subdomain}
     Set Global Variable   ${PUSERNAME_B}
+    ${num}=  find_last  ${var_file}
+    ${num}=  Evaluate   ${num}+1
+    Append To File  ${data_file}  ${LoginId} - ${PASSWORD}${\n}
+    Append To File  ${var_file}  PUSERNAME${num}=${LoginId}${\n}
+    Log    PUSERNAME${num}
+    # ${PUSERNAME_B}=  Set Variable  ${PUSERNAME4}
+
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -384,10 +395,10 @@ JD-TC-Schedule-1
 
     # ..... Change Appointment Status(Arrived-started-Completed) .........
 
-    # ${resp}=  Get Appointment By Id   ${apptid1}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
 
     ${resp}=  Appointment Action   ${apptStatus[3]}   ${apptid1}
     Log   ${resp.json()}

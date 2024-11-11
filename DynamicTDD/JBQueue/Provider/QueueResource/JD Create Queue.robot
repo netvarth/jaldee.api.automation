@@ -40,11 +40,28 @@ JD-TC-CreateQueue-1
     # clear_location  ${HLPUSERNAME1}
     # clear_queue  ${HLPUSERNAME1}
 
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END 
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
+    Set Suite Variable  ${SERVICE1}
+
+    ${SERVICE2}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+    Set Suite Variable  ${SERVICE2}
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
 
@@ -184,6 +201,14 @@ JD-TC-CreateQueue-3
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}   200
 
+    ${SERVICE5}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE5}
+    Set Suite Variable  ${SERVICE5}
+
+    ${SERVICE6}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE6}
+    Set Suite Variable  ${SERVICE6}
+
     ${s_id4}=  Create Sample Service  ${SERVICE5}
     ${s_id5}=  Create Sample Service  ${SERVICE6}
     ${sTime2}=  add_timezone_time  ${tz}  0  35  
@@ -219,6 +244,14 @@ JD-TC-CreateQueue-4
 
     # clear_service   ${PUSERNAME_U1}
     # clear_queue  ${PUSERNAME_U1}
+
+    ${SERVICE7}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE7}
+    Set Suite Variable  ${SERVICE7}
+
+    ${SERVICE8}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE8}
+    Set Suite Variable  ${SERVICE8}
 
     ${s_id6}=  Create Sample Service  ${SERVICE7}
     ${s_id7}=  Create Sample Service  ${SERVICE8}
@@ -257,6 +290,11 @@ JD-TC-CreateQueue-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+    ${SERVICE9}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE9}
+    Set Suite Variable  ${SERVICE9}
+
     ${s_id8}=  Create Sample Service  ${SERVICE9}
 
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  1  5  ${lid1}  ${s_id8}
@@ -283,11 +321,20 @@ JD-TC-CreateQueue-6
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}   200
 
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    # ${lid}=  Create Sample Location
+    # ${resp}=   Get Location ById  ${lid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
+    Set Suite Variable  ${SERVICE1}
+
+    ${SERVICE2}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+    Set Suite Variable  ${SERVICE2}
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
 
@@ -339,6 +386,15 @@ JD-TC-CreateQueue-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${list}=  Create List  2  4  6
+
+    ${SERVICE3}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE3}
+    Set Suite Variable  ${SERVICE3}
+
+    ${SERVICE4}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE4}
+    Set Suite Variable  ${SERVICE4}
+
     ${s_id2}=  Create Sample Service  ${SERVICE3}
     Set Suite Variable  ${s_id2}
     ${s_id3}=  Create Sample Service  ${SERVICE4}
@@ -487,6 +543,11 @@ JD-TC-CreateQueue-8
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+    ${SERVICE3}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE3}
+    Set Suite Variable  ${SERVICE3}
+
     ${s_id2}=  Create Sample Service  ${SERVICE3}
     Set Suite Variable  ${s_id2}
     ${queue_name}=  FakerLibrary.bs
@@ -585,6 +646,15 @@ JD-TC-CreateQueue-10
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
+    Set Suite Variable  ${SERVICE1}
+
+    ${SERVICE2}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+    Set Suite Variable  ${SERVICE2} 
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
 
@@ -641,6 +711,15 @@ JD-TC-CreateQueue-11
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
+    Set Suite Variable  ${SERVICE1}
+
+    ${SERVICE2}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+    Set Suite Variable  ${SERVICE2}
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
 
@@ -713,6 +792,15 @@ JD-TC-CreateQueue-12
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
+    Set Suite Variable  ${SERVICE1}
+
+    ${SERVICE2}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+    Set Suite Variable  ${SERVICE2}
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
 
@@ -835,6 +923,10 @@ JD-TC-CreateQueue-UH7
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME4}
 
+    ${SERVICE6}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE6}
+    Set Suite Variable  ${SERVICE6}
+
     ${s_id6}=  Create Sample Service  ${SERVICE6}
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -892,6 +984,15 @@ JD-TC-CreateQueue-UH10
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
+    Set Suite Variable  ${SERVICE1}
+
+    ${SERVICE2}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+    Set Suite Variable  ${SERVICE2}
+    
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
 
