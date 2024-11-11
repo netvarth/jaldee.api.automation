@@ -16,7 +16,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables          ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py
+# Variables          ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py
 
 
 *** Variables ***
@@ -91,18 +91,32 @@ JD-TC-Schedule-1
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${lid}=  Create Sample Location
-        ${resp}=   Get Location ById  ${lid}
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['timezone']}
-    ELSE
-        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+    FOR    ${i}    IN RANGE  1  len(${resp.json()})
+        IF   '${resp.json()[${i}]['status']}' == '${status[0]}' && '${resp.json()[${i}]['baseLocation']}' == '${bool[0]}'
+            ${resp}=  Disable Location  ${resp.json()[${i}]['id']}
+            Log  ${resp.content}
+            Should Be Equal As Strings  ${resp.status_code}  200
+        END
     END
 
+    ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()['timezone']}
+
     # ........ Service Creations ............
+
+    ${resp}=    Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    FOR    ${i}    IN RANGE  1  len(${resp.json()})
+        IF   '${resp.json()[${i}]['status']}' == '${status[0]}' 
+            ${resp}=  Disable service  ${resp.json()[${i}]['id']}
+            Log  ${resp.content}
+            Should Be Equal As Strings  ${resp.status_code}  200
+        END
+    END
 
     #  1. Create Service without Prepayment.
 
@@ -122,41 +136,41 @@ JD-TC-Schedule-1
     Append To List  ${service_names}  ${SERVICE3}   
     ${min_pre3}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${s_id3}=  Create Sample Service  ${SERVICE3}   isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre3} 
-   
+
     #  4. Create Service with Percentage Prepayment
 
     ${SERVICE4}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE4}   
     ${min_pre4}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${s_id4}=  Create Sample Service  ${SERVICE4}   isPrePayment=${bool[1]}   prePaymentType=${advancepaymenttype[0]}  minPrePaymentAmount=${min_pre4} 
-   
+
     #  5. Create Taxable Service
 
     ${SERVICE5}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE5}   
     ${s_id5}=  Create Sample Service  ${SERVICE5}   taxable=${bool[1]} 
-   
+
     #  6. Create Service with Lead Time
 
     ${SERVICE6}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE6}  
     ${leadTime}=   Random Int   min=1   max=5 
     ${s_id6}=  Create Sample Service  ${SERVICE6}    leadTime=${leadTime}
-   
+
     #  7. Create Service with International Pricing
 
     ${SERVICE7}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE7}
     ${intlamt}=  Pyfloat  right_digits=1  min_value=250  max_value=500
     ${s_id7}=  Create Sample Service  ${SERVICE7}  supportInternationalConsumer=${bool[1]}  internationalAmount=${intlamt}
-   
+
     #  8. Create Service with Dynamic Pricing
 
     ${SERVICE8}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE8}  
     ${leadTime}=   Random Int   min=1   max=5 
     ${s_id8}=  Create Sample Service  ${SERVICE8}    priceDynamic=${bool[1]}
- 
+
     #  9. Create Virtual Service with Audio Only
 
     ${meeting_id}=   FakerLibrary.lexify  text='???-????-???'  letters=${lower}
@@ -248,6 +262,17 @@ JD-TC-Schedule-1
 
     # ...... Create Schedule ........
 
+    ${resp}=    Get Appointment Schedules
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    FOR    ${i}    IN RANGE  1  len(${resp.json()})
+        IF   '${resp.json()[${i}]['apptState']}' == '${Qstate[0]}' 
+            ${resp}=  Enable Disable Appointment Schedule  ${resp.json()[${i}]['id']}   ${Qstate[1]}
+            Log  ${resp.content}
+            Should Be Equal As Strings  ${resp.status_code}  200
+        END
+    END
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -291,8 +316,9 @@ JD-TC-Schedule-1
 
     # .......... Add Customer ..........
 
-    ${NewCustomer}    Generate random string    10    123456789
-    ${NewCustomer}    Convert To Integer  ${NewCustomer}
+    ${NewCustomer}=  Generate Random 555 Number
+    # ${NewCustomer}    Generate random string    10    123456789
+    # ${NewCustomer}    Convert To Integer  ${NewCustomer}
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
@@ -301,8 +327,7 @@ JD-TC-Schedule-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${pcid}  ${resp.json()}
 
-    ${NewCustomer1}    Generate random string    10    123456789
-    ${NewCustomer1}    Convert To Integer  ${NewCustomer1}
+    ${NewCustomer1}=    Generate Random 555 Number
     ${fname1}=  generate_firstname
     ${lname1}=  FakerLibrary.last_name
     Set Test Variable  ${pc_emailid2}  ${fname}${C_Email}.${test_mail}
@@ -340,6 +365,10 @@ JD-TC-Schedule-1
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200 
     Set Test Variable    ${driveId}    ${resp.json()[0]['driveId']}
+    # Set Test Variable    ${S3_url}    ${resp.json()[0]['url']}
+
+    # ${resp}=    Upload File To S3    ${S3_url}      ${jpgfile}
+    ${resp}=    Change Status Of The Uploaded File    ${QnrStatus[1]}     ${driveId}
 
     ${attachments}=  Create Dictionary  owner=${provider_id}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${pdrname}
     ${attachment}=   Create List  ${attachments}
@@ -393,7 +422,16 @@ JD-TC-Schedule-1
     Should Be Equal As Strings  ${resp.json()['appmtTime']}    ${slot2}
     Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
 
-    # ..... Change Appointment Status(Arrived-started-Completed) .........
+    # ..... Change Appointment Status(Confirmed-Arrived--started-Completed) .........
+
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
+
+    ${resp}=  Appointment Action   ${apptStatus[2]}   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
