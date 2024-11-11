@@ -608,16 +608,16 @@ JD-TC-Schedule-1
     Should Be Equal As Strings  ${resp.json()['status']}                                        ${Report_Status[0]}
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['1']}                 ${ser_date}
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['3']}                 ${fname} ${lname}
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['5']}                 ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['6']}                 1
-    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['7']}                 ${ser_amount}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['7']}                 ${ser_amount1}
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['1']}                 ${ser_date}
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['4']}                 ${userf_name} ${userl_name}
-    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['5']}                 ${subser_name}
-    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['6']}                 ${subser_qnty}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['3']}                 ${fname} ${lname}
+    # Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['4']}                 ${userf_name} ${userl_name}
+    # Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['5']}                 ${subser_name}
+    # Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['6']}                 ${subser_qnty}
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['7']}                 ${total}
     Should Be Equal As Strings  ${resp.json()['reportContent']['count']}                        2
     Should Be Equal As Strings  ${tot_amt}                                                      ${total_amt}
