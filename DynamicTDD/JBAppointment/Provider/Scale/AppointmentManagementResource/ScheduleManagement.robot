@@ -599,7 +599,7 @@ JD-TC-Schedule-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${tot_amt}   ${resp.json()['reportContent']['dataHeader']['Grand Total']}
 
-    ${total_amt}=    Evaluate    ${ser_amount}+${total}
+    ${total_amt}=    Evaluate    ${ser_amount1}+${total}
     ${ser_date} =	Convert Date	${DAY1}	result_format=%d-%m-%Y
     ${tot_amt} =    Replace String    ${tot_amt}    Rs.     ${EMPTY}
     ${tot_amt} =    Replace String    ${tot_amt}    ,       ${EMPTY}
