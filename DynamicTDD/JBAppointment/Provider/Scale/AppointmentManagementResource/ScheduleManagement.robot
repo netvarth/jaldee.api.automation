@@ -580,6 +580,14 @@ JD-TC-Schedule-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=  Consumer Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
     ${filter}=  Create Dictionary      
     ${resp}=  Generate Report REST details  ${reportType[6]}  ${Report_Date_Category[4]}  ${filter}
     Log   ${resp.content}
