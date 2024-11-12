@@ -18168,6 +18168,31 @@ Get InvoiceTemplates by account
    Check Deprication  ${resp}  Get InvoiceTemplates by account
     RETURN  ${resp}
 
+Get InvoiceTemplate Filter
+
+    [Arguments]  &{param}
+
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/jp/finance/invoice/template   params=${param}   expected_status=any
+    Check Deprication  ${resp}  Get InvoiceTemplate Filter
+    RETURN  ${resp}
+
+Get InvoiceTemplate Count Filter
+
+    [Arguments]  &{param}
+
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/jp/finance/invoice/template/count   params=${param}   expected_status=any
+    Check Deprication  ${resp}  Get InvoiceTemplate Count Filter
+    RETURN  ${resp}
+
+Get InvoiceTemplate By Name
+
+    [Arguments]   ${name} 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/invoice/template/name/${name}   expected_status=any
+   Check Deprication  ${resp}  Get InvoiceTemplate By Name
+    RETURN  ${resp}
 
 *** Comments ***
 
