@@ -17,10 +17,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 # Suite Setup     Run Keywords  clear_queue  ${HLPUSERNAME7}  AND  clear_location  ${HLPUSERNAME7}  AND  clear_service  ${HLPUSERNAME7}  
 
 *** Variables ***
-${SERVICE1}  Makeup  
-${SERVICE2}  Hair makeup
-${SERVICE3}  Face Makeup  
-${SERVICE4}  Facial
+@{service_names}
 
 *** Test Cases ***
 
@@ -36,6 +33,23 @@ JD-TC-Available Queues-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
+    Set Suite Variable  ${SERVICE1}
+
+    ${SERVICE2}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+    Set Suite Variable  ${SERVICE2}
+
+    ${SERVICE3}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE3}
+    Set Suite Variable  ${SERVICE3}
+
+    ${SERVICE4}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE4}
+    Set Suite Variable  ${SERVICE4}
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE3}
@@ -132,6 +146,23 @@ JD-TC-Available Queues-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
+    Set Suite Variable  ${SERVICE1}
+
+    ${SERVICE2}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+    Set Suite Variable  ${SERVICE2}
+
+    ${SERVICE3}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE3}
+    Set Suite Variable  ${SERVICE3}
+
+    ${SERVICE4}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE4}
+    Set Suite Variable  ${SERVICE4}
+    
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE3}

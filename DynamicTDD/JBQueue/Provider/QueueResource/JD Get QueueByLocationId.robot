@@ -16,9 +16,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 *** Variables ***
-${SERVICE1}  Makeup  
-${SERVICE2}  Hair makeup
-
+@{service_names}
 *** Test Cases ***
 
 JD-TC-Get Queue By Location Id-1
@@ -46,6 +44,14 @@ JD-TC-Get Queue By Location Id-1
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}    ${postcode}  ${address}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid1}  ${resp.json()}
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
+    Set Suite Variable  ${SERVICE1}
+
+    ${SERVICE2}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+    Set Suite Variable  ${SERVICE2}
 
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id}

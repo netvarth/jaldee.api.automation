@@ -16,10 +16,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
-${SERVICE1}  Makeup  
-${SERVICE2}  Hair makeup
-${SERVICE3}  Face Makeup  
-${SERVICE4}  Facial
+@{service_names}
 @{countryCode}   91  +91  48 
 @{emptylist} 
 
@@ -118,7 +115,7 @@ JD-TC-MakeAvailable-1
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
     ${amt}=  Convert To Number  ${amt}  1
-    ${resp}=  Create Service For User  ${SERVICE1}  ${description}   ${dur}  ${bool[0]}  ${amt}  ${bool[0]}  minPrePaymentAmount=0  ${dep_id}  ${u_id}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}   ${dur}  ${bool[0]}  ${amt}  ${bool[0]}  minPrePaymentAmount=0  ${dep_id}  ${u_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id}  ${resp.json()}
@@ -195,7 +192,7 @@ JD-TC-MakeAvailable-2
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
     ${amt}=  Convert To Number  ${amt}  1
-    ${resp}=  Create Service For User  ${SERVICE1}  ${description}   ${dur}  ${bool[0]}  ${amt}  ${bool[0]}  minPrePaymentAmount=0  ${dep_id}  ${u_id1}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}   ${dur}  ${bool[0]}  ${amt}  ${bool[0]}  minPrePaymentAmount=0  ${dep_id}  ${u_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id}  ${resp.json()}
@@ -318,7 +315,7 @@ JD-TC-MakeAvailable-3
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
     ${amt}=  Convert To Number  ${amt}  1
-    ${resp}=  Create Service For User  ${SERVICE1}  ${description}   ${dur}  ${bool[0]}  ${amt}  ${bool[0]}  minPrePaymentAmount=0  ${dep_id1}  ${u_id2}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}   ${dur}  ${bool[0]}  ${amt}  ${bool[0]}  minPrePaymentAmount=0  ${dep_id1}  ${u_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id2}  ${resp.json()}
@@ -362,11 +359,15 @@ JD-TC-MakeAvailable-4
     Set Suite Variable   ${lid1}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
+    Set Suite Variable  ${SERVICE1}
+
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
     ${amt}=  Convert To Number  ${amt}  1
-    ${resp}=  Create Service For User  ${SERVICE1}  ${description}   ${dur}  ${bool[0]}  ${amt}  ${bool[0]}  minPrePaymentAmount=0  ${dep_id1}  ${p1_id1}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}   ${dur}  ${bool[0]}  ${amt}  ${bool[0]}  minPrePaymentAmount=0  ${dep_id1}  ${p1_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id2}  ${resp.json()}
@@ -466,11 +467,15 @@ JD-TC-MakeAvailable-5
     ${resp}=  Encrypted Provider Login  ${ph2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
+    Set Suite Variable  ${SERVICE1}
+
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
     ${amt}=  Convert To Number  ${amt}  1
-    ${resp}=  Create Service For User  ${SERVICE1}  ${description}   ${dur}  ${bool[0]}  ${amt}  ${bool[0]}  minPrePaymentAmount=0  ${dep_id2}  ${u_id6}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}   ${dur}  ${bool[0]}  ${amt}  ${bool[0]}  minPrePaymentAmount=0  ${dep_id2}  ${u_id6}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id2}  ${resp.json()}
@@ -596,6 +601,9 @@ JD-TC-MakeAvailable-UH3
     ${eTime5}=  add_timezone_time  ${tz}  1  00  
    
     ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
+    Set Suite Variable  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=  Is Available Queue Now
@@ -674,7 +682,7 @@ JD-TC-MakeAvailable-UH3
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
     ${amt}=  Convert To Number  ${amt}  1
-    ${resp}=  Create Service For User  ${SERVICE1}  ${description}   ${dur}  ${bool[0]}  ${amt}  ${bool[0]}  minPrePaymentAmount=0  ${dep_id}  ${u_id2}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}   ${dur}  ${bool[0]}  ${amt}  ${bool[0]}  minPrePaymentAmount=0  ${dep_id}  ${u_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id}  ${resp.json()}

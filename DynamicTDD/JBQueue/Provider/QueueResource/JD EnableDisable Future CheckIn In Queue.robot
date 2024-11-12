@@ -17,9 +17,7 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 *** Variables ***
 
-${SERVICE1}    Bridal MakeupQ2
-${SERVICE2}    Bridal 
-
+@{service_names}
 
 *** Test Cases ***
 
@@ -44,6 +42,14 @@ JD-TC-Future Checkin In Queue-1
         Set Test Variable  ${lid}  ${resp.json()[0]['id']}
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
+    Set Suite Variable  ${SERVICE1}
+
+    ${SERVICE2}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+    Set Suite Variable  ${SERVICE2}
 
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
@@ -128,6 +134,14 @@ JD-TC-Future Checkin In Queue-2
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
+    Set Suite Variable  ${SERVICE1}
+
+    ${SERVICE2}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+    Set Suite Variable  ${SERVICE2}
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     
@@ -194,6 +208,14 @@ JD-TC-Future Checkin In Queue-3
         Set Test Variable  ${lid}  ${resp.json()[0]['id']}
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
+    Set Suite Variable  ${SERVICE1}
+
+    ${SERVICE2}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+    Set Suite Variable  ${SERVICE2}
     
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
@@ -240,6 +262,14 @@ JD-TC-Future Checkin In Queue-UH1
         Set Test Variable  ${lid}  ${resp.json()[0]['id']}
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
+    Set Suite Variable  ${SERVICE1}
+
+    ${SERVICE2}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+    Set Suite Variable  ${SERVICE2}
     
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}

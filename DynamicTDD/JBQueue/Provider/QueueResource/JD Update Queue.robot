@@ -17,14 +17,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 
 
 *** Variables ***
-${SERVICE1}  Makeup  
-${SERVICE2}  Hair makeup
-${SERVICE3}  Facial
-${SERVICE4}  Bridal makeup
-${SERVICE5}  Hair remove
-${SERVICE6}  Bleach
-${SERVICE7}  Hair cut
-${SERVICE8}  Threading
+@{service_names}
 ${start}        90
 
 *** Test Cases ***
@@ -44,6 +37,23 @@ JD-TC-UpdateQueue-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
+    Set Suite Variable  ${SERVICE1}
+
+    ${SERVICE2}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+    Set Suite Variable  ${SERVICE2}
+
+    ${SERVICE3}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE3}
+    Set Suite Variable  ${SERVICE3}
+
+    ${SERVICE4}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE4}
+    Set Suite Variable  ${SERVICE4}
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
@@ -160,6 +170,14 @@ JD-TC-UpdateQueue-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
+
+    ${SERVICE2}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+
+
     ${s_id4}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id4}
     ${s_id5}=  Create Sample Service  ${SERVICE2}
@@ -277,6 +295,13 @@ JD-TC-UpdateQueue-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
+
+    ${SERVICE2}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id}
     ${s_id1}=  Create Sample Service  ${SERVICE2}

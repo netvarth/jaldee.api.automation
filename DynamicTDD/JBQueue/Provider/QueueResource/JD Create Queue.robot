@@ -15,18 +15,20 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
-${SERVICE1}  Makeup  
-${SERVICE2}  Hair makeup
-${SERVICE3}  Facial
-${SERVICE4}  Bridal makeup
-${SERVICE5}  Hair remove
-${SERVICE6}  Bleach
-${SERVICE7}  Hair cut
-${SERVICE8}  Threading
-${SERVICE9}  Threading12
-${SERVICE10}  Threading13
+# ${SERVICE1}  Makeup  
+# ${SERVICE2}  Hair makeup
+# ${SERVICE3}  Facial
+# ${SERVICE4}  Bridal makeup
+# ${SERVICE5}  Hair remove
+# ${SERVICE6}  Bleach
+# ${SERVICE7}  Hair cut
+# ${SERVICE8}  Threading
+# ${SERVICE9}  Threading12
+# ${SERVICE10}  Threading13
 @{appointment}            Enable  Disable
 ${start}    10
+@{service_names}
+
 *** Test Cases ***
 
 JD-TC-CreateQueue-1
@@ -152,6 +154,15 @@ JD-TC-CreateQueue-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+    ${SERVICE3}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE3}
+    Set Suite Variable  ${SERVICE3}
+
+    ${SERVICE4}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE4}
+    Set Suite Variable  ${SERVICE4}
+
     ${s_id}=  Create Sample Service  ${SERVICE3}
     Set Suite Variable  ${s_id}
     ${s_id1}=  Create Sample Service  ${SERVICE4}
@@ -992,7 +1003,7 @@ JD-TC-CreateQueue-UH10
     ${SERVICE2}=     generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE2}
     Set Suite Variable  ${SERVICE2}
-    
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
 
@@ -1036,6 +1047,10 @@ JD-TC-CreateQueue-UH11
     ${description}=  FakerLibrary.sentence
     ${notifytype}    Random Element     ['none','pushMsg','email']
     ${notify}    Random Element     ['True','False'] 
+
+    ${SERVICE10}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE10}
+
     ${resp}=  Create Service  ${SERVICE10}  ${description}   5  ${bool[0]}  500  ${bool[0]}  minPrePaymentAmount=0  taxable=${bool[1]}
     Should Be Equal As Strings  ${resp.status_code}  200    
     Set Suite Variable  ${s_id1}  ${resp.json()} 

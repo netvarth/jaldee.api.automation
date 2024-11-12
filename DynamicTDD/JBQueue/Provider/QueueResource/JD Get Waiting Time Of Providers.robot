@@ -15,8 +15,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
-${SERVICE1}  Makeup  
-${SERVICE2}  Hair makeup
+@{service_names}
 ${self}      0
 @{service_names}
 
@@ -41,6 +40,15 @@ JD-TC-GetWaitingTimeOfProviders-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
+    Set Suite Variable  ${SERVICE1}
+
+    ${SERVICE2}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+    Set Suite Variable  ${SERVICE2}
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
@@ -95,6 +103,15 @@ JD-TC-GetWaitingTimeOfProviders-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz2}  ${resp.json()['timezone']}
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
+    Set Suite Variable  ${SERVICE1}
+
+    ${SERVICE2}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+    Set Suite Variable  ${SERVICE2}
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
@@ -222,6 +239,29 @@ JD-TC-GetWaitingTimeOfProviders-2
     ${id1}=  get_acc_id  ${HLPUSERNAME13}
     ${id2}=  get_acc_id  ${HLPUSERNAME11}
     ${id3}=  get_acc_id  ${HLPUSERNAME12}
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Send Otp For Login    ${CUSERNAME1}    ${id2}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=  Verify Otp For Login   ${CUSERNAME1}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+   
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME1}    ${id2}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
     ${resp}=  Get Waiting Time Of Providers  ${id1}-${lid1}  ${id2}-${lid2}  ${id3}-${lid3}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['provider']['id']}  ${id1}
@@ -266,12 +306,12 @@ JD-TC-GetWaitingTimeOfProviders-3
 
 JD-TC-GetWaitingTimeOfProviders-4
     [Documentation]  Get Waiting Time Of a provider when queue capacity is 1, checking that provider available only at next day
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME159}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # clear_service   ${PUSERNAME159}
-    # clear_location  ${PUSERNAME159}
-    # clear_queue  ${PUSERNAME159}
-    clear_customer   ${PUSERNAME159}
+    # clear_service   ${HLPUSERNAME11}
+    # clear_location  ${HLPUSERNAME11}
+    # clear_queue  ${HLPUSERNAME11}
+    clear_customer   ${HLPUSERNAME11}
     ${resp}=  Update Waitlist Settings  ${calc_mode[1]}  10  true  true  true  true  ${EMPTY}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${lid1}=  Create Sample Location
@@ -281,6 +321,15 @@ JD-TC-GetWaitingTimeOfProviders-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
+    Set Suite Variable  ${SERVICE1}
+
+    ${SERVICE2}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+    Set Suite Variable  ${SERVICE2}
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
@@ -291,7 +340,7 @@ JD-TC-GetWaitingTimeOfProviders-4
     ${eTime1}=  add_timezone_time  ${tz}   1  58
     Set Suite Variable   ${eTime1}
     ${queue_name}=  FakerLibrary.bs
-    # clear_queue  ${PUSERNAME159}
+    # clear_queue  ${HLPUSERNAME11}
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  1  ${lid1}  ${s_id}  ${s_id1}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${qid1}  ${resp.json()}
@@ -303,7 +352,7 @@ JD-TC-GetWaitingTimeOfProviders-4
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${qid1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${id1}=  get_acc_id  ${PUSERNAME159}
+    ${id1}=  get_acc_id  ${HLPUSERNAME11}
     ${resp}=  Get Waiting Time Of Providers  ${id1}-${lid1}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${DAY2}=  db.add_timezone_date  ${tz}  1  
@@ -316,95 +365,17 @@ JD-TC-GetWaitingTimeOfProviders-4
  
 JD-TC-GetWaitingTimeOfProviders-5
     [Documentation]  Get Waiting Time Of current queue
-    ${domresp}=  Get BusinessDomainsConf
-    Should Be Equal As Strings  ${domresp.status_code}  200
-    ${len}=  Get Length  ${domresp.json()}
-    ${len}=  Evaluate  ${len}-1
-    ${PUSERNAME}=  Evaluate  ${PUSERNAME}+89899
-    Set Test Variable  ${d1}  ${domresp.json()[${len}]['domain']}    
-    Set Test Variable  ${sd}  ${domresp.json()[${len}]['subDomains'][0]['subDomain']} 
-    ${firstname}=  generate_firstname
-    ${lastname}=  FakerLibrary.last_name
-    ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd}  ${PUSERNAME}   ${highest_package[0]}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${PUSERNAME}  0
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME}
-    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${firstname}  ${lastname}  ${PUSERNAME}  ${LoginId}=  Provider Signup    
+    Set Suite Variable  ${PUSERNAME}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${PUSERNAME}
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME}${\n} 
     
-    
-    ${PUSERPH1}=  Evaluate  ${PUSERNAME}+100100302
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH1}${\n}
-    
-    ${PUSERPH2}=  Evaluate  ${PUSERNAME}+100100303
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
-    
-    ${PUSERMAIL0}=   Set Variable  ${P_Email}ph301.${test_mail}
-    ${views}=  Evaluate  random.choice($Views)  random
-    Log   ${views}
-    ${name1}=  FakerLibrary.name
-    ${name2}=  FakerLibrary.name
-    ${name3}=  FakerLibrary.name
-    ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${PUSERPH1}  ${views}
-    ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL0}  ${views}
-    ${bs}=  FakerLibrary.bs
-    ${companySuffix}=  FakerLibrary.companySuffix
-    # ${city}=   FakerLibrary.state
-    # ${latti}=  get_latitude
-    # ${longi}=  get_longitude
-    # ${postcode}=  FakerLibrary.postcode
-    # ${address}=  get_address
-    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    Set Suite Variable  ${tz}
-    ${sTime}=  add_timezone_time  ${tz}  0  15  
-    ${eTime}=  add_timezone_time  ${tz}  0  30   
-    ${DAY}=  db.get_date_by_timezone  ${tz}
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${desc}=   FakerLibrary.sentence
-    ${url}=   FakerLibrary.url
-    ${parking}   Random Element   ${parkingType}
-    ${24hours}    Random Element    ['True','${bool[0]}']
-    ${resp}=  Update Business Profile with schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    sleep   01s
-    ${resp}=  Get Business Profile
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${fields}=   Get subDomain level Fields  ${d1}  ${sd}
-    Log  ${fields.json()}
-    Should Be Equal As Strings    ${fields.status_code}   200
-
-    ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
-
-    ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sd}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get specializations Sub Domain  ${d1}  ${sd}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${spec}=  get_Specializations  ${resp.json()}
-    ${resp}=  Update Specialization  ${spec}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=  Update Waitlist Settings  ${calc_mode[1]}  10  true  true  true  true  ${EMPTY}
-    Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Enable Waitlist
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    sleep   01s
+
     ${resp}=  Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -425,10 +396,20 @@ JD-TC-GetWaitingTimeOfProviders-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
+    Set Suite Variable  ${SERVICE1}
+
+    ${SERVICE2}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+    Set Suite Variable  ${SERVICE2}
+    
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable  ${s_id1}
+
     ${sTime1}=  db.subtract_timezone_time  ${tz}  1  00
     Set Suite Variable   ${sTime1}
     ${eTime1}=  add_timezone_time  ${tz}   1  58
@@ -460,26 +441,15 @@ JD-TC-GetWaitingTimeOfProviders-5
 
 JD-TC-GetWaitingTimeOfProviders-6
     [Documentation]  Get Waiting Time Of future queue
-    ${domresp}=  Get BusinessDomainsConf
-    Should Be Equal As Strings  ${domresp.status_code}  200
-    ${len}=  Get Length  ${domresp.json()}
-    ${len}=  Evaluate  ${len}-1
-    ${PUSERNAME}=  Evaluate  ${PUSERNAME}+89895
-    Set Test Variable  ${d1}  ${domresp.json()[${len}]['domain']}    
-    Set Test Variable  ${sd}  ${domresp.json()[${len}]['subDomains'][0]['subDomain']} 
-    ${firstname}=  generate_firstname
-    ${lastname}=  FakerLibrary.last_name
-    ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd}  ${PUSERNAME}    ${highest_package[0]}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${PUSERNAME}  0
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME}
-    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${firstname}  ${lastname}  ${PUSERNAME}  ${LoginId}=  Provider Signup    
+    Set Suite Variable  ${PUSERNAME}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${PUSERNAME}
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME}${\n} 
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
     ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
     Set Suite Variable  ${tz}
@@ -496,7 +466,14 @@ JD-TC-GetWaitingTimeOfProviders-6
     ${resp}=  Enable Waitlist
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    sleep   01s
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
+    Set Suite Variable  ${SERVICE1}
+
+    ${SERVICE2}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+    Set Suite Variable  ${SERVICE2}
     
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id}

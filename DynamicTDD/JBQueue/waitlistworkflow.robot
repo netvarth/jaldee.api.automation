@@ -41,14 +41,14 @@ ${data_file}              ${EXECDIR}/data/${ENVIRONMENT}data/${ENVIRONMENT}phnum
 JD-TC-PreDeploymentWaitlist-1
     [Documentation]   Waitlist workflow for pre-deployment.
 
-    # ${firstname}  ${lastname}  ${PUSERNAME_A}  ${LoginId}=  Provider Signup     Domain=${domain}   SubDomain=${subdomain}
-    # Set Suite Variable  ${PUSERNAME_A}
+    ${firstname}  ${lastname}  ${PUSERNAME_A}  ${LoginId}=  Provider Signup     Domain=${domain}   SubDomain=${subdomain}
+    Set Suite Variable  ${PUSERNAME_A}
     # ${num}=  find_last  ${var_file}
     # ${num}=  Evaluate   ${num}+1
     # Append To File  ${data_file}  ${LoginId} - ${PASSWORD}${\n}
     # Append To File  ${var_file}  PUSERNAME${num}=${LoginId}${\n}
 
-    ${PUSERNAME_A}=  Set Variable  ${PUSERNAME3}
+    # ${PUSERNAME_A}=  Set Variable  ${PUSERNAME3}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
@@ -345,7 +345,7 @@ JD-TC-PreDeploymentWaitlist-1
 
     ${resp}=    Upload File To S3    ${S3_url}      ${jpgfile}
 
-    ${resp}=    Update Status File Share    ${QnrStatus[1]}     ${driveId}
+    ${resp}=    change status of the uploaded file    ${QnrStatus[1]}     ${driveId}
 
     ${attachments}=  Create Dictionary  owner=${provider_id}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${pdrname}
     ${attachment}=   Create List  ${attachments}
@@ -372,7 +372,7 @@ JD-TC-PreDeploymentWaitlist-1
 
     ${resp}=    Upload File To S3    ${S3_url1}      ${jpgfile}
 
-    ${resp}=    Update Status File Share    ${QnrStatus[1]}     ${driveId1}
+    ${resp}=    change status of the uploaded file    ${QnrStatus[1]}     ${driveId1}
 
 
     ${attachments}=  Create Dictionary  owner=${provider_id}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId1}  action=${file_action[0]}  ownerName=${pdrname}

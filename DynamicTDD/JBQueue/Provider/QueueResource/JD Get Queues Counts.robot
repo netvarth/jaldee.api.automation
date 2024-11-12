@@ -15,8 +15,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 *** Variables ***
-${SERVICE1}  Makeup  
-${SERVICE2}  Hair makeup
+@{service_names}
 
 *** Test Cases ***
 
@@ -43,6 +42,15 @@ JD-TC-GetQueuesCount-1
     Set Suite Variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
+    Set Suite Variable  ${SERVICE1}
+
+    ${SERVICE2}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+    Set Suite Variable  ${SERVICE2}
+    
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id}
     ${s_id1}=  Create Sample Service  ${SERVICE2}

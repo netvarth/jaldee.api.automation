@@ -17,15 +17,7 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 *** Variables ***
 
-${SERVICE1}  Makeup  
-${SERVICE2}  Hair makeup
-${SERVICE3}  Facial
-${SERVICE4}  Bridal makeup
-${SERVICE5}  Hair remove
-${SERVICE6}  Bleach
-${SERVICE7}  Hair cut
-${SERVICE8}  Threading
-${SERVICE9}  Threading12
+@{service_names}
 @{appointment}            Enable  Disable
 ${start}    10
 
@@ -57,8 +49,16 @@ JD-TC-GETQueueAvailabilityByLocation,ServiceAndDate-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid2}
-
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
+    Set Suite Variable  ${SERVICE1}
+
+    ${SERVICE2}=     generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+    Set Suite Variable  ${SERVICE2}
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable  ${s_id}
