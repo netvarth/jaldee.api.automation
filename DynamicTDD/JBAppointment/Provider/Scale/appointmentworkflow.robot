@@ -225,9 +225,9 @@ JD-TC-PreDeploymentAppointment-1
     
     #.... Send Attachment ............
 
-    # ${resp}=  Send Attachment From Appointment   ${apptid1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Send Attachment From Appointment   ${apptid1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Attachments In Appointment     ${apptid1}
     Log  ${resp.json()}

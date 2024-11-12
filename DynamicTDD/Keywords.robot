@@ -495,7 +495,7 @@ Upload File To S3
     ${files}=    Create Dictionary    file=@${file_path}
 
     # Send the PUT request with file
-    ${response}=    requests.Put    ${url}    files=${files}    headers=${headers}
+    ${response}=    RequestsLibrary.PUT    ${url}    files=${files}    headers=${headers}
 
     # Verify the upload was successful
     Should Be Equal As Strings    ${response.status_code}    200

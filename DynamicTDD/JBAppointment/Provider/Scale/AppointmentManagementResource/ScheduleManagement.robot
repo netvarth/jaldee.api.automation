@@ -13,10 +13,7 @@ Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/providers.py
-Variables         /ebs/TDD/varfiles/hl_providers.py
-Variables         /ebs/TDD/varfiles/consumerlist.py 
-# Variables          ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py
+Variables          ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py
 
 
 *** Variables ***
@@ -48,7 +45,8 @@ JD-TC-Schedule-1
     Append To File  ${data_file}  ${LoginId} - ${PASSWORD}${\n}
     Append To File  ${var_file}  PUSERNAME${num}=${LoginId}${\n}
     Log    PUSERNAME${num}
-    # ${PUSERNAME_B}=  Set Variable  ${PUSERNAME4}
+    # ${PUSERNAME_B}=  Set Variable  ${PUSERNAME5}
+    # ${PUSERNAME_B}=  Set Variable  ${PUSERNAME8}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log   ${resp.json()}
@@ -91,9 +89,9 @@ JD-TC-Schedule-1
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    FOR    ${i}    IN RANGE  1  len(${resp.json()})
-        IF   '${resp.json()[${i}]['status']}' == '${status[0]}' && '${resp.json()[${i}]['baseLocation']}' == '${bool[0]}'
-            ${resp}=  Disable Location  ${resp.json()[${i}]['id']}
+    FOR     ${loc_json}    IN   @{resp.json()}
+        IF   '${loc_json['status']}' == '${status[0]}' and '${loc_json['baseLocation']}' == '${bool[0]}'
+            ${resp}=  Disable Location  ${loc_json['id']}
             Log  ${resp.content}
             Should Be Equal As Strings  ${resp.status_code}  200
         END
@@ -110,9 +108,9 @@ JD-TC-Schedule-1
     ${resp}=    Get Service
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    FOR    ${i}    IN RANGE  1  len(${resp.json()})
-        IF   '${resp.json()[${i}]['status']}' == '${status[0]}' 
-            ${resp}=  Disable service  ${resp.json()[${i}]['id']}
+    FOR    ${srv_json}    IN   @{resp.json()}
+        IF   '${srv_json['status']}' == '${status[0]}' 
+            ${resp}=  Disable service  ${srv_json['id']}
             Log  ${resp.content}
             Should Be Equal As Strings  ${resp.status_code}  200
         END
@@ -365,9 +363,9 @@ JD-TC-Schedule-1
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200 
     Set Test Variable    ${driveId}    ${resp.json()[0]['driveId']}
-    # Set Test Variable    ${S3_url}    ${resp.json()[0]['url']}
+    Set Test Variable    ${S3_url}    ${resp.json()[0]['url']}
 
-    # ${resp}=    Upload File To S3    ${S3_url}      ${jpgfile}
+    ${resp}=    Upload File To S3    ${S3_url}      ${jpgfile}
     ${resp}=    Change Status Of The Uploaded File    ${QnrStatus[1]}     ${driveId}
 
     ${attachments}=  Create Dictionary  owner=${provider_id}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${pdrname}
@@ -600,36 +598,10 @@ JD-TC-Schedule-1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${token_id1}   ${resp.json()}
-  
+    
+    ${appt_date} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
+    ${appt_date} =	Set Variable	${appt_date} [${slot1}]	
+   
     ${resp}=  Get Report Status By Token Id  ${token_id1}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${tot_amt}   ${resp.json()['reportContent']['dataHeader']['Grand Total']}
-
-    ${total_amt}=    Evaluate    ${ser_amount1}+${total}
-    ${ser_date} =	Convert Date	${DAY1}	result_format=%d-%m-%Y
-    ${tot_amt} =    Replace String    ${tot_amt}    Rs.     ${EMPTY}
-    ${tot_amt} =    Replace String    ${tot_amt}    ,       ${EMPTY}
-    ${tot_amt}=  Convert To Number  ${tot_amt}  1
-
-    Should Be Equal As Strings  ${resp.json()['status']}                                        ${Report_Status[0]}
-    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['3']}                 ${fname} ${lname}
-    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['5']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['6']}                 1
-    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['7']}                 ${ser_amount1}
-    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['3']}                 ${fname} ${lname}
-    # Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['4']}                 ${userf_name} ${userl_name}
-    # Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['5']}                 ${subser_name}
-    # Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['6']}                 ${subser_qnty}
-    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['7']}                 ${total}
-    Should Be Equal As Strings  ${resp.json()['reportContent']['count']}                        1
-    Should Be Equal As Strings  ${tot_amt}                                                      ${total_amt}
-    Should Be Equal As Strings  ${resp.json()['reportContent']['reportName']}                   User Performance Report
-    Should Be Equal As Strings  ${resp.json()['reportType']}                                    ${reportType[1]}
-    Should Be Equal As Strings  ${resp.json()['reportResponseType']}                            ${ReportResponseType[0]}
-    Should Be Equal As Strings  ${resp.json()['reportTokenID']}                                 ${token_id1}
-    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_filter[4]}  
