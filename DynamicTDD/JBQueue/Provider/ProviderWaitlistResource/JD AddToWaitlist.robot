@@ -164,7 +164,7 @@ JD-TC-AddToWaitlist-1
 
       ${resp}=  Get Waitlist Settings
       Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200\
+      Should Be Equal As Strings  ${resp.status_code}  200
 
       ${resp}=  AddCustomer  ${CUSERNAME1}
       Log   ${resp.json()}
