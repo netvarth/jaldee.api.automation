@@ -15158,7 +15158,7 @@ Verify OTP For LOS Lead Consumer Kyc Email
     ${data}=    json.dumps    ${data}
     ${otp}=  verify accnt  ${consumerEmail}   ${purpose}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw    /provider/los/lead/coapplicant/emailotp/${otp}/verify   data=${data}  expected_status=any
+    ${resp}=  POST On Session  ynw    /provider/los/lead/consumer/emailotp/${otp}/verify   data=${data}  expected_status=any
     Check Deprication  ${resp}  Verify OTP For LOS Lead Kyc Email
     RETURN  ${resp}
 
