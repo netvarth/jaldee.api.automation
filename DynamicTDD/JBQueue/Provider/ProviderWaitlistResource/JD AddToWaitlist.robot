@@ -150,10 +150,6 @@ JD-TC-AddToWaitlist-1
             Should Be Equal As Strings  ${resp.status_code}  200
       END
 
-      # ${resp}=  Get  Waitlist Settings
-      # Log  ${resp.json()}
-      # Should Be Equal As Strings  ${resp.status_code}  200\
-
       # ${resp}=   Enable Waitlist
       # Log   ${resp.json()}
       # Should Be Equal As Strings  ${resp.status_code}  200
@@ -162,9 +158,13 @@ JD-TC-AddToWaitlist-1
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}   200
 
-      ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
+      ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  0  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  0
       Log    ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${resp}=  Get Waitlist Settings
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200\
 
       ${resp}=  AddCustomer  ${CUSERNAME1}
       Log   ${resp.json()}
@@ -226,6 +226,11 @@ JD-TC-AddToWaitlist-1
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${que_id1}   ${resp.json()}
+
+      ${resp}=  Get Queue ById  ${que_id1}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
       ${desc}=   FakerLibrary.word
       Set Suite Variable  ${desc}
       ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
@@ -333,6 +338,11 @@ JD-TC-AddToWaitlist-5
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${que_id2}  ${resp.json()}
+
+      ${resp}=  Get Queue ById  ${que_id2}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cid}  ${ser_id4}  ${que_id2}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
       Should Be Equal As Strings  ${resp.status_code}  200
