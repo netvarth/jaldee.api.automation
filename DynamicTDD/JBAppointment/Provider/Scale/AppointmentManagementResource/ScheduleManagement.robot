@@ -46,7 +46,7 @@ JD-TC-Schedule-1
     Append To File  ${var_file}  PUSERNAME${num}=${LoginId}${\n}
     Log    PUSERNAME${num}
     # ${PUSERNAME_B}=  Set Variable  ${PUSERNAME5}
-    # ${PUSERNAME_B}=  Set Variable  ${PUSERNAME8}
+    # ${PUSERNAME_B}=  Set Variable  ${PUSERNAME11}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log   ${resp.json()}
@@ -263,9 +263,9 @@ JD-TC-Schedule-1
     ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    FOR    ${i}    IN RANGE  1  len(${resp.json()})
-        IF   '${resp.json()[${i}]['apptState']}' == '${Qstate[0]}' 
-            ${resp}=  Enable Disable Appointment Schedule  ${resp.json()[${i}]['id']}   ${Qstate[1]}
+    FOR    ${sch_json}  IN  @{resp.json()}
+        IF   '${sch_json['apptState']}' == '${Qstate[0]}' 
+            ${resp}=  Enable Disable Appointment Schedule  ${sch_json['id']}   ${Qstate[1]}
             Log  ${resp.content}
             Should Be Equal As Strings  ${resp.status_code}  200
         END
@@ -314,6 +314,17 @@ JD-TC-Schedule-1
 
     # .......... Add Customer ..........
 
+    ${resp}=  GetCustomer 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    FOR    ${cus_json}  IN  @{resp.json()}
+        IF   '${cus_json['status']}' == '${status[0]}' 
+            ${resp}=  Change Customer Status  ${cus_json['id']}   ${status[1]}
+            Log  ${resp.content}
+            Should Be Equal As Strings  ${resp.status_code}  200
+        END
+    END
+
     ${NewCustomer}=  Generate Random 555 Number
     # ${NewCustomer}    Generate random string    10    123456789
     # ${NewCustomer}    Convert To Integer  ${NewCustomer}
@@ -333,6 +344,10 @@ JD-TC-Schedule-1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${pcid1}  ${resp.json()}
+
+    ${resp}=  GetCustomer 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     # ......... Take 1 Appointment with Attachment and Note .......
 
