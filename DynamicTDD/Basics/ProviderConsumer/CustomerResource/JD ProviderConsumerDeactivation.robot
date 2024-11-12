@@ -537,7 +537,7 @@ JD-TC-SPConsumer Deactivation -5
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Change Provider Consumer Profile Status    ${cid}    ${status[1]}  
+    ${resp}=    Change Customer Status    ${cid}    ${status[1]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

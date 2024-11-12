@@ -652,7 +652,7 @@ Change Customer Status
     [Arguments]    ${consumerId}   ${status}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/customers/${consumerId}/changeStatus/${status}   expected_status=any
-    Check Deprication  ${resp}  Change Provider Consumer Profile Status
+    Check Deprication  ${resp}  Change Customer Status
     RETURN  ${resp}
 
 Get Departments

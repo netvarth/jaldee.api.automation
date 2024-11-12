@@ -297,7 +297,7 @@ AddCustomer
     ${resp}=  POST On Session  ynw  url=/provider/customers  data=${data}  expected_status=any
     RETURN  ${resp}
 
-Change Provider Consumer Profile Status 
+Change Customer Status 
     [Arguments]    ${consumerId}   ${status}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/customers/${consumerId}/changeStatus/${status}   expected_status=any
