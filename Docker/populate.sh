@@ -99,7 +99,7 @@ populate()
                 elif [[ $myversion == 8.* ]]; then
                     echo "mysql $myversion"
                     # time mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} --compression-algorithms=zstd --zstd-compression-level=7 --init-command='ALTER INSTANCE DISABLE INNODB REDO_LOG; SET SESSION FOREIGN_KEY_CHECKS=0;SET UNIQUE_CHECKS=0;' ${DATABASE_NAME} < ${latest}
-                    time mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} --compression-algorithms=zstd --zstd-compression-level=7 --init-command='SET SESSION FOREIGN_KEY_CHECKS=0;SET UNIQUE_CHECKS=0;' ${DATABASE_NAME} < ${latest}
+                    time mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} --compression-algorithms=zstd --zstd-compression-level=7 --init-command='ALTER INSTANCE DISABLE INNODB REDO_LOG;SET SESSION FOREIGN_KEY_CHECKS=0;SET UNIQUE_CHECKS=0;' ${DATABASE_NAME} < ${latest}
                 fi
                 # cat pre.sql ${latest} post.sql | mysql --max_allowed_packet=16M ${DATABASE_NAME}
                 echo "done"
