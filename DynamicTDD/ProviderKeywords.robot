@@ -648,7 +648,7 @@ GetCustomer
     Check Deprication  ${resp}  GetCustomer
     RETURN  ${resp}
 
-Change Provider Consumer Profile Status 
+Change Customer Status 
     [Arguments]    ${consumerId}   ${status}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/customers/${consumerId}/changeStatus/${status}   expected_status=any

@@ -375,16 +375,6 @@ Update Read Count
     Check Deprication  ${resp}  Update Read Count
     RETURN  ${resp}
 
-Inactive ProviderCustomer 
-
-    [Arguments]     ${consumerId}   ${status}
-
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw   /provider/customers/${consumerId}/changeStatus/${status}    expected_status=any
-    Check Deprication  ${resp}  Inactive ProviderCustomer 
-    RETURN  ${resp}
-
-
 #----------- LOS LEAD ---------
 
 PC Create Lead LOS     
