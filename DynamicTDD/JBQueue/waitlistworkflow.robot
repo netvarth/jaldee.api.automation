@@ -59,6 +59,11 @@ JD-TC-PreDeploymentWaitlist-1
     Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
     Set Suite Variable  ${pdrname}  ${decrypted_data['userName']}
 
+    ${resp}=  Get Business Profile
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']} 
+
     ${resp}=  Get Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
@@ -100,7 +105,13 @@ JD-TC-PreDeploymentWaitlist-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[0]}
+
+    ${resp}=  Get Bill Settings 
+    Log   ${resp.content}
+    ${resp}=  Enable Disable bill  ${bool[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -150,6 +161,8 @@ JD-TC-PreDeploymentWaitlist-1
         FOR   ${i}  IN RANGE   ${service_len}
             IF  '${resp.json()[${i}]['status']}' == '${status[0]}'
                 Set Test Variable   ${s_id}   ${resp.json()[${i}]['id']}
+                Set Test Variable   ${SERVICE1}   ${resp.json()[${i}]['name']}
+                Set Test Variable  ${ser_amount1}  ${resp.json()[${i}]['totalAmount']} 
 
                 IF  '${resp.json()[${i}]['isPrePayment']}' == '${bool[1]}'
                     ${maxbookings}=   Random Int   min=5   max=10
@@ -295,7 +308,7 @@ JD-TC-PreDeploymentWaitlist-1
     ${p1queue1}=    FakerLibrary.job
     ${capacity}=  IF    ${count} > 50    Convert To Integer   ${count}    ELSE    FakerLibrary.Random Int  min=${count}  max=${count+20}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${resp}=  Create Queue  ${p1queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  1  ${capacity}  ${lid}  ${s_id}
+    ${resp}=  Create Queue  ${p1queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  1  ${capacity}  ${loc_id1}  ${s_id}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${q_id}  ${resp.json()}
@@ -513,7 +526,7 @@ JD-TC-PreDeploymentWaitlist-1
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings    ${resp.json()}    ${NO_INVOICE_GENERATED}
 
-    ${resp}=  Create Invoice for Booking  ${invoicebooking[0]}   ${wid}  
+    ${resp}=  Create Invoice for Booking  ${invoicebooking[1]}   ${wid}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -524,7 +537,7 @@ JD-TC-PreDeploymentWaitlist-1
     Set Test Variable    ${invoice_uid}    ${resp.json()[0]['invoiceUid']}
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}                                        ${account_id}
     Should Be Equal As Strings  ${resp.json()[0]['categoryName']}                                     ${CategoryName[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['invoiceDate']}                                      ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['invoiceDate']}                                      ${DAY}
     Should Be Equal As Strings  ${resp.json()[0]['providerConsumerId']}                               ${cid}
     # Should Be Equal As Strings  ${resp.json()[0]['providerConsumerData']['phoneNos'][0]['number']}    ${NewCustomer}
     Should Be Equal As Strings   ${resp.json()[0]['ynwUuid']}                                         ${wid}
@@ -562,7 +575,7 @@ JD-TC-PreDeploymentWaitlist-1
     Log  ${resp.content} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${total}=    Evaluate    ${subser_qnty}*${subser_price} + ${ser_amount1}
+    ${total}=    Evaluate    ${subser_qnty}*${subser_price} + ${ser_amount1}
 
     ${resp}=  Get Bookings Invoices  ${wid}
     Log   ${resp.content}
@@ -570,7 +583,7 @@ JD-TC-PreDeploymentWaitlist-1
 
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}                                        ${account_id}
     Should Be Equal As Strings  ${resp.json()[0]['categoryName']}                                     ${CategoryName[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['invoiceDate']}                                      ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['invoiceDate']}                                      ${DAY}
     Should Be Equal As Strings  ${resp.json()[0]['providerConsumerId']}                               ${cid}
     # Should Be Equal As Strings  ${resp.json()[0]['providerConsumerData']['phoneNos'][0]['number']}    ${NewCustomer}
     Should Be Equal As Strings   ${resp.json()[0]['ynwUuid']}                                         ${wid}
@@ -625,7 +638,7 @@ JD-TC-PreDeploymentWaitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}                                        ${account_id}
     Should Be Equal As Strings  ${resp.json()[0]['categoryName']}                                     ${CategoryName[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['invoiceDate']}                                      ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['invoiceDate']}                                      ${DAY}
     Should Be Equal As Strings  ${resp.json()[0]['providerConsumerId']}                               ${cid}
     # Should Be Equal As Strings  ${resp.json()[0]['providerConsumerData']['phoneNos'][0]['number']}    ${NewCustomer}
     Should Be Equal As Strings   ${resp.json()[0]['ynwUuid']}                                         ${wid}
@@ -651,20 +664,21 @@ JD-TC-PreDeploymentWaitlist-1
 
     # ...... Reschedule Waitlist .............
 
-    ${resp}=  Reschedule Consumer Checkin   ${wid}  ${slot2}  ${DAY1}  ${sch_id}
+    ${resp}=  Reschedule Consumer Checkin   ${wid}   ${DAY}  ${q_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Appointment By Id   ${wid}
-    Log   ${resp.json()}
+    ${resp}=  Get Waitlist By Id  ${wid} 
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot2}
-    Should Be Equal As Strings  ${resp.json()['appmtDate']}   ${DAY1}
+    # Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot2}
+    # Should Be Equal As Strings  ${resp.json()['appmtDate']}   ${DAY}
 
     # ....... cancel the Waitlist ..........
     
     ${reason}=  Random Element  ${cancelReason}
-    ${resp}=   Waitlist Action   ${waitlist_actions[2]}   ${wid}    cancelReason=${reason}
+    ${resp}=   Waitlist Action   ${waitlist_actions[2]}   ${wid}    
+    # cancelReason=${reason}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

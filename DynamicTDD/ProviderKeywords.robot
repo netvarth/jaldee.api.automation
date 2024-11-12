@@ -4583,20 +4583,26 @@ Get Provider Waitlist History Count
     # RETURN  ${resp}    
 
 Waitlist Action
-    [Arguments]  ${action}  ${id} 
+    #... for cancel can add  cancelReason=${cancelReason}  communicationMessage=${message} 
+    [Arguments]  ${action}  ${id}   &{kwargs}
+    ${data}=  Create Dictionary
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/waitlist/${id}/${action}  expected_status=any
+    ${resp}=  PUT On Session  ynw  /provider/waitlist/${id}/${action}    data=${data}  expected_status=any
     Check Deprication  ${resp}  Waitlist Action
     RETURN  ${resp}
 
-Waitlist Action Cancel
-    [Arguments]  ${ids}  ${CR}  ${CM}
-    ${auth}=  Create Dictionary  cancelReason=${CR}  communicationMessage=${CM}
-    ${apple}=  json.dumps  ${auth}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/waitlist/${ids}/CANCEL  data=${apple}    expected_status=any
-    Check Deprication  ${resp}  Waitlist Action Cancel
-    RETURN  ${resp}
+# Waitlist Action Cancel
+#     [Arguments]  ${ids}  ${CR}  ${CM}
+#     ${auth}=  Create Dictionary  cancelReason=${CR}  communicationMessage=${CM}
+#     ${apple}=  json.dumps  ${auth}
+#     Check And Create YNW Session
+#     ${resp}=  PUT On Session  ynw  /provider/waitlist/${ids}/CANCEL  data=${apple}    expected_status=any
+#     Check Deprication  ${resp}  Waitlist Action Cancel
+#     RETURN  ${resp}
 
 Get Waitlist State Changes
     [Arguments]    ${uuid}
