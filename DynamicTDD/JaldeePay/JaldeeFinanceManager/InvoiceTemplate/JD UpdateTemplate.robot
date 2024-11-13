@@ -305,6 +305,34 @@ JD-TC-Update Invoice Template-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['itemList']}  []
 
+JD-TC-Update Invoice Template-7
+
+    [Documentation]   update allow use to other users flag enable   .
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${USERNAME1}  ${u_id1} =  Create and Configure Sample User
+    Set Suite Variable  ${USERNAME1}
+    Set Suite Variable  ${u_id1}
+
+    ${name1}=   FakerLibrary.word
+    ${resp}=  Update Invoice Template    ${templateUid}   ${name1}   allowToUseOtherUsers=${bool[1]}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp}=   Encrypted Provider Login  ${USERNAME1}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Get InvoiceTemplate Filter    
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+
 JD-TC-Update Invoice Template-UH3
 
     [Documentation]   Update Invoice Template using invalid template name
