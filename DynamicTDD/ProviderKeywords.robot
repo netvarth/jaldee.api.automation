@@ -16884,9 +16884,12 @@ Create Sales Order Invoice
 
 Make Cash Payment For SalesOrder
 
-    [Arguments]  ${SO_uuid}     ${acceptPaymentMode}    ${amount}     ${paymentNote}
+    [Arguments]  ${SO_uuid}     ${acceptPaymentMode}    ${amount}     ${paymentNote}   &{kwargs}
     ${data}=  Create Dictionary    uuid=${SO_uuid}   acceptPaymentBy=${acceptPaymentMode}   amount=${amount}     paymentNote=${paymentNote}    
-    ${data}=  json.dumps  ${data}  
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/so/payment/acceptPayment        data=${data}     expected_status=any
     Check Deprication  ${resp}  Make Cash Payment For SalesOrder
