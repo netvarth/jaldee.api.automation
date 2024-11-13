@@ -21,6 +21,7 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 ${SERVICE1}     Radio Repdca111
 ${SERVICE2}     Radio Repdca123
 ${SERVICE3}     Radio Repdca222
+@{service_names}
 
 *** Test Cases ***
 
