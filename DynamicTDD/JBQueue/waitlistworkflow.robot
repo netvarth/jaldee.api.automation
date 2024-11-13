@@ -677,12 +677,11 @@ JD-TC-PreDeploymentWaitlist-1
     # ....... cancel the Waitlist ..........
     
     ${reason}=  Random Element  ${cancelReason}
-    ${resp}=   Waitlist Action   ${waitlist_actions[2]}   ${wid}    
-    # cancelReason=${reason}
+    ${resp}=   Waitlist Action   ${waitlist_actions[2]}   ${wid}    cancelReason=${reason}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Appointment By Id   ${wid}
+    ${resp}=  Get Waitlist By Id    ${wid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${waitlist_actions[2]}
+    Should Be Equal As Strings  ${resp.json()['waitlistStatus']}   ${wl_status[4]}
