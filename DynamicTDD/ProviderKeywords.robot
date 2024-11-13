@@ -15168,6 +15168,41 @@ Verify OTP For LOS Lead Consumer Kyc Email
     Check Deprication  ${resp}  Verify OTP For LOS Lead Kyc Email
     RETURN  ${resp}
 
+Enable Disable Jaldee Lending
+    [Arguments]  ${status}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw    /provider/account/settings/jaldeelending/${status}  expected_status=any
+    Check Deprication  ${resp}  Enable Disable Jaldee Lending
+    RETURN  ${resp}
+
+Enable Disable Lending Lead
+    [Arguments]  ${status}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw    /provider/account/settings/loslead/${status}   expected_status=any
+    Check Deprication  ${resp}  Enable Disable Lending Lead
+    RETURN  ${resp}
+
+Enable Disable Loan Application
+    [Arguments]  ${status}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw    /provider/account/settings/losloanapplication/${status}    expected_status=any
+    Check Deprication  ${resp}  Enable Disable Loan Application
+    RETURN  ${resp}
+
+Enable Disable Los Loan
+    [Arguments]  ${status}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw    /provider/account/settings/losloan/${status}     expected_status=any
+    Check Deprication  ${resp}  Enable Disable Los Loan
+    RETURN  ${resp}
+
+Enable Disable Lending AI RBAC 
+    [Arguments]  ${status}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw    /provider/account/settings/jaldeelendingrbac/${status}      expected_status=any
+    Check Deprication  ${resp}  Enable Disable Lending AI RBAC 
+    RETURN  ${resp}
+
 AddItemToInvoice
    [Arguments]  ${uuid}   ${ItemLists}  &{kwargs}
     ${ItemLists}=  Create List     ${ItemLists}

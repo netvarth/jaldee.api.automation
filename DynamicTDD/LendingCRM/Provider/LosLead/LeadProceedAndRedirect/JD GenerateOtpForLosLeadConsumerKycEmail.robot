@@ -28,9 +28,9 @@ ${bankIfsc}         55555555555
 
 *** Test Cases ***
 
-JD-TC-SaveLosLeadAsDraftForKyc-1
+JD-TC-GenerateOTPForLOSLeadConsumerKycEmail-1
 
-    [Documentation]  Save LOS Lead As Draft For Kyc
+    [Documentation]  Generate OTP For LOS Lead Consumer Kyc Email
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
     Log  ${resp.content}
@@ -172,10 +172,11 @@ JD-TC-SaveLosLeadAsDraftForKyc-1
     Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
+    Set Suite Variable  ${consumerLastName}
     ${dob}=    FakerLibrary.Date
     ${permanentAddress1}=  FakerLibrary.address
     ${gender}=  Random Element    ${Genderlist}
-    Set Suite Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
 
     ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
     Log   ${resp.json()}
@@ -209,15 +210,6 @@ JD-TC-SaveLosLeadAsDraftForKyc-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${PH_Number2}    Random Number 	       digits=5 
-    ${PH_Number2}=    Evaluate    f'{${PH_Number2}:0>7d}'
-    Log  ${PH_Number2}
-    Set Suite Variable    ${Co_Applicant_Phone}  555${PH_Number2}
-    ${CO_Applicant_FirstName}=   FakerLibrary.first_name
-    Set Suite Variable  ${CO_Applicant_FirstName}
-    ${CO_Applicant_LastName}=    FakerLibrary.last_name  
-    Set Suite Variable  ${CO_Applicant_LastName}
-
     ${leadStage}=   Create Dictionary   uid=${stageuid11}
     Set Suite Variable  ${leadStage}
     ${remarks}=    FakerLibrary.name
@@ -242,44 +234,115 @@ JD-TC-SaveLosLeadAsDraftForKyc-1
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}   200
 
-    ${resp}=    Verify OTP For LOS Lead Consumer Kyc Phone Number  ${consumerPhone}  ${OtpPurpose['ConsumerVerifyPhone']}  ${lead_uid}
+    ${resp}=    Verify OTP For LOS Lead Consumer Kyc Phone Number  ${consumerPhone}  ${OtpPurpose['CoApplicantVerifyPhone']}  ${lead_uid}
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}   200
     Set Suite Variable  ${kyc_id}   ${resp.json()['id']}
+
+    Set Suite Variable  ${email}  ${consumerLastName}${consumerPhone}.${test_mail}
     
     ${resp}=    Generate OTP For LOS Lead Consumer Kyc Email  ${kyc_id}  ${lead_uid}
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}   200
 
-    ${resp}=    Verify OTP For LOS Lead Consumer Kyc Email  ${consumerEmail}  ${OtpPurpose['ConsumerVerifyEmail']}  ${kyc_id}  ${lead_uid}
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}   200
 
-# ..... Co-Applicant KYC .........
+JD-TC-GenerateOTPForLOSLeadConsumerKycEmail-2
 
-    ${resp}=    Generate OTP For LOS Lead Kyc Phone Number  ${lead_uid}  consumerFirstName=${CO_Applicant_FirstName}  consumerLastName=${CO_Applicant_LastName}  consumerPhoneCode=${countryCodes[0]}  consumerPhone=${Co_Applicant_Phone}  gender=${Genderlist[0]}  dob=${dob}  relationType=${relationType[3]}
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}   200
+    [Documentation]  Generate OTP For LOS Lead Consumer Kyc Email - Generate otp for email twice
 
-    ${resp}=    Verify OTP For LOS Lead Kyc Phone Number  ${Co_Applicant_Phone}  ${OtpPurpose['CoApplicantVerifyPhone']}  ${lead_uid}  consumerFirstName=${CO_Applicant_FirstName}  consumerLastName=${CO_Applicant_LastName}  consumerPhoneCode=${countryCodes[0]}  consumerPhone=${Co_Applicant_Phone}  gender=${Genderlist[0]}  dob=${dob}  relationType=${relationType[3]}
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}   200
-    Set Suite Variable  ${CO_Applicant_kyc_id}   ${resp.json()['id']}
-
-    Set Suite Variable  ${CO_email}  ${CO_Applicant_LastName}${Co_Applicant_Phone}.${test_mail}
-    
-    ${resp}=    Generate OTP For LOS Lead Kyc Email  ${CO_Applicant_kyc_id}  ${lead_uid}  ${CO_email}
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}   200
-
-    ${resp}=    Verify OTP For LOS Lead Kyc Email  ${CO_email}  ${OtpPurpose['CoApplicantVerifyEmail']}  ${CO_Applicant_kyc_id}  ${lead_uid}
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}   200
-
-
-    ${Co_Applicant_Kyc}=   Create Dictionary  id=${CO_Applicant_kyc_id}  leadUid=${lead_uid}  isCoApplicant=${boolean[1]}  currentAddress1=${permanentAddress1}
-
-    ${resp}=    Save LOS Lead As Draft For Kyc  ${lead_uid}  ${stageuid22}  consumerKyc=${cKyc}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Generate OTP For LOS Lead Consumer Kyc Email  ${kyc_id}  ${lead_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}   200
+
+
+JD-TC-GenerateOTPForLOSLeadConsumerKycEmail-UH1
+
+    [Documentation]  Generate OTP For LOS Lead Consumer Kyc Email - kyc_id is invalid
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${inv}=     Random Int  min=9999  max=9999999
+
+    ${INVALID_X_ID}=   Replace String  ${INVALID_X_ID}  {}   lead KYC
+
+    ${resp}=    Generate OTP For LOS Lead Consumer Kyc Email  ${inv}  ${lead_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${INVALID_X_ID}
+
+
+JD-TC-GenerateOTPForLOSLeadConsumerKycEmail-UH2
+
+    [Documentation]  Generate OTP For LOS Lead Consumer Kyc Email - kyc id is empty
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Generate OTP For LOS Lead Consumer Kyc Email  ${empty}  ${lead_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${LEAD_KYC_ID_REQUIRED}
+
+JD-TC-GenerateOTPForLOSLeadConsumerKycEmail-UH3
+
+    [Documentation]  Generate OTP For LOS Lead Consumer Kyc Email - lead uid is empty
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Generate OTP For LOS Lead Consumer Kyc Email  ${kyc_id}  ${empty}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${LEAD_ID_REQUIRED}
+
+
+JD-TC-GenerateOTPForLOSLeadConsumerKycEmail-UH4
+
+    [Documentation]  Generate OTP For LOS Lead Consumer Kyc Email - lead uid is invalid
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${inv}=     Random Int  min=9999  max=99999
+    ${INVALID_X_ID}=   Replace String  ${INVALID_X_ID}  {}   lead
+
+    ${resp}=    Generate OTP For LOS Lead Consumer Kyc Email  ${kyc_id}  ${inv}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${INVALID_X_ID}
+
+
+JD-TC-GenerateOTPForLOSLeadConsumerKycEmail-UH5
+
+    [Documentation]  Generate OTP For LOS Lead Consumer Kyc Email - without login
+
+    ${resp}=    Generate OTP For LOS Lead Consumer Kyc Email  ${kyc_id}  ${lead_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     419
+    Should Be Equal As Strings      ${resp.json()}          ${SESSION_EXPIRED}
+
+
+JD-TC-GenerateOTPForLOSLeadConsumerKycEmail-UH6
+
+    [Documentation]  Generate OTP For LOS Lead Consumer Kyc Email - with another provider login
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${NO_PERMISSION_X}=   Replace String  ${NO_PERMISSION_X}  {}   KYC
+
+    ${resp}=    Generate OTP For LOS Lead Consumer Kyc Email  ${kyc_id}  ${lead_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${NO_PERMISSION_X}
 

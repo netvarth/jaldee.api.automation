@@ -175,7 +175,7 @@ JD-TC-VerifyOTPForLOSLeadKycEmail-1
     ${dob}=    FakerLibrary.Date
     ${permanentAddress1}=  FakerLibrary.address
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
+    Set Suite Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
 
     ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
     Log   ${resp.json()}
@@ -489,7 +489,7 @@ JD-TC-VerifyOTPForLOSLeadKycEmail-UH2
     Should Be Equal As Strings      ${resp.status_code}   200
     Set Suite Variable  ${kyc_id}   ${resp.json()['id']}
 
-    Set Test Variable  ${email}  ${CO_Applicant_LastName}${Co_Applicant_Phone}.${test_mail}
+    Set Suite Variable  ${email}  ${CO_Applicant_LastName}${Co_Applicant_Phone}.${test_mail}
     
     ${resp}=    Generate OTP For LOS Lead Kyc Email  ${kyc_id}  ${lead_uid}  ${email}
     Log  ${resp.content}
@@ -498,10 +498,10 @@ JD-TC-VerifyOTPForLOSLeadKycEmail-UH2
     ${resp}=    Verify OTP For LOS Lead Kyc Email  ${empty}  ${OtpPurpose['CoApplicantVerifyEmail']}  ${kyc_id}  ${lead_uid}
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings      ${resp.json()}          ${EMAIL_VERIFIED}
+    Should Be Equal As Strings      ${resp.json()}          ${ENTER_VALID_OTP}
 
 
-JD-TC-VerifyOTPForLOSLeadKycEmail-UH2
+JD-TC-VerifyOTPForLOSLeadKycEmail-UH3
 
     [Documentation]  Verify OTP For LOS Lead Kyc Email - Email is invalid
 
@@ -509,20 +509,13 @@ JD-TC-VerifyOTPForLOSLeadKycEmail-UH2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-#     ${inv}=     Random Int  min=9999  max=99999
-#     Set Test Variable  ${email}  ${CO_Applicant_LastName}${inv}.${test_mail}
-
-#     ${resp}=    Generate OTP For LOS Lead Kyc Email  ${kyc_id}  ${lead_uid}  ${email}
-#     Log  ${resp.content}
-#     Should Be Equal As Strings      ${resp.status_code}   200
-
     ${resp}=    Verify OTP For LOS Lead Kyc Email  ${CO_Applicant_LastName}  ${OtpPurpose['CoApplicantVerifyEmail']}  ${kyc_id}  ${lead_uid}
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings      ${resp.json()}          
+    Should Be Equal As Strings      ${resp.json()}          ${ENTER_VALID_OTP}
 
 
-JD-TC-VerifyOTPForLOSLeadKycEmail-UH3
+JD-TC-VerifyOTPForLOSLeadKycEmail-UH4
 
     [Documentation]  Verify OTP For LOS Lead Kyc Email - otp purpose is invalid
 
@@ -533,10 +526,10 @@ JD-TC-VerifyOTPForLOSLeadKycEmail-UH3
     ${resp}=    Verify OTP For LOS Lead Kyc Email  ${email}  ${OtpPurpose['CoApplicantVerifyPhone']}  ${kyc_id}  ${lead_uid}
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings      ${resp.json()}          
+    Should Be Equal As Strings      ${resp.json()}          ${ENTER_VALID_OTP}          
 
 
-JD-TC-VerifyOTPForLOSLeadKycEmail-UH4
+JD-TC-VerifyOTPForLOSLeadKycEmail-UH5
 
     [Documentation]  Verify OTP For LOS Lead Kyc Email - kyc is is empty
 
@@ -547,10 +540,10 @@ JD-TC-VerifyOTPForLOSLeadKycEmail-UH4
     ${resp}=    Verify OTP For LOS Lead Kyc Email  ${email}  ${OtpPurpose['CoApplicantVerifyEmail']}  ${empty}  ${lead_uid}
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings      ${resp.json()}          
+    Should Be Equal As Strings      ${resp.json()}          ${LEAD_KYC_ID_REQUIRED}
 
 
-JD-TC-VerifyOTPForLOSLeadKycEmail-UH5
+JD-TC-VerifyOTPForLOSLeadKycEmail-UH6
 
     [Documentation]  Verify OTP For LOS Lead Kyc Email - KYC Id is invalid
 
@@ -563,10 +556,10 @@ JD-TC-VerifyOTPForLOSLeadKycEmail-UH5
     ${resp}=    Verify OTP For LOS Lead Kyc Email  ${email}  ${OtpPurpose['CoApplicantVerifyEmail']}  ${inv}  ${lead_uid}
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings      ${resp.json()}          
+    Should Be Equal As Strings      ${resp.json()}          ${INVALID_LEAD_KYC_ID}
 
 
-JD-TC-VerifyOTPForLOSLeadKycEmail-UH6
+JD-TC-VerifyOTPForLOSLeadKycEmail-UH7
 
     [Documentation]  Verify OTP For LOS Lead Kyc Email - Lead Uid is empty
 
@@ -577,10 +570,10 @@ JD-TC-VerifyOTPForLOSLeadKycEmail-UH6
     ${resp}=    Verify OTP For LOS Lead Kyc Email  ${email}  ${OtpPurpose['CoApplicantVerifyEmail']}  ${kyc_id}  ${empty}
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings      ${resp.json()}          
+    Should Be Equal As Strings      ${resp.json()}          ${LEAD_ID_REQUIRED}
 
 
-JD-TC-VerifyOTPForLOSLeadKycEmail-UH7
+JD-TC-VerifyOTPForLOSLeadKycEmail-UH8
 
     [Documentation]  Verify OTP For LOS Lead Kyc Email - Lead uid is invalid
 
@@ -598,16 +591,16 @@ JD-TC-VerifyOTPForLOSLeadKycEmail-UH7
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_X_ID}
 
 
-JD-TC-VerifyOTPForLOSLeadKycEmail-UH8
+JD-TC-VerifyOTPForLOSLeadKycEmail-UH9
 
     [Documentation]  Verify OTP For LOS Lead Kyc Email - without login
 
     ${resp}=    Verify OTP For LOS Lead Kyc Email  ${email}  ${OtpPurpose['CoApplicantVerifyEmail']}  ${kyc_id}  ${lead_uid}
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     419
-    Should Be Equal As Strings      ${resp.json()}          
+    Should Be Equal As Strings      ${resp.json()}           
 
-JD-TC-VerifyOTPForLOSLeadKycEmail-UH9
+JD-TC-VerifyOTPForLOSLeadKycEmail-UH10
 
     [Documentation]  Verify OTP For LOS Lead Kyc Email
 
@@ -615,7 +608,7 @@ JD-TC-VerifyOTPForLOSLeadKycEmail-UH9
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${NO_PERMISSION_X}=   Replace String  ${NO_PERMISSION_X}  {}   lead
+    ${NO_PERMISSION_X}=   Replace String  ${NO_PERMISSION_X}  {}   KYC
 
     ${resp}=    Verify OTP For LOS Lead Kyc Email  ${email}  ${OtpPurpose['CoApplicantVerifyEmail']}  ${kyc_id}  ${lead_uid}
     Log  ${resp.content}
