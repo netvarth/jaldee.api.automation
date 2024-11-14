@@ -226,6 +226,7 @@ JD-TC-Schedule-1
     ${resp}=   Get Service By Id  ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${ser_amount2}  ${resp.json()['totalAmount']} 
 
     ${resp}=   Get Service By Id  ${s_id3}
     Log  ${resp.json()}
@@ -432,86 +433,46 @@ JD-TC-Schedule-1
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.json()['waitlistStatus']}     ${wl_status[1]}
 
-*** Comments ***
-    # ...Create 2 Appointments (Cancel 1, Reject the Other) .........
 
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
-    @{slots}=  Create List
-    FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
-        END
-    END
-    ${num_slots}=  Get Length  ${slots}
-    ${j1}=  Random Int  max=${num_slots-1}
-    Set Test Variable   ${slot1}   ${slots[${j1}]}
+    # ...Create 2 Waitlist (Cancel 1, Reject the Other) .........
 
-    ${apptfor1}=  Create Dictionary  id=${pcid}   apptTime=${slot1}
-    ${apptfor}=   Create List  ${apptfor1}
-
-    ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${pcid}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    ${desc}=  FakerLibrary.word
+    ${resp}=  Add To Waitlist  ${pcid}  ${s_id2}  ${q_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${pcid}     
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
-    Set Test Variable  ${apptid3}  ${apptid[0]}
+    Set Test Variable  ${wid1}  ${resp.json()['parent_uuid']}
 
-    ${resp}=  Get Appointment By Id   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${reason}=  Random Element  ${cancelReason}
-    ${resp}=  Appointment Action   ${apptStatus[4]}   ${apptid3}    cancelReason=${reason}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Appointment By Id   ${apptid3}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[4]}
-
-    ${apptfor1}=  Create Dictionary  id=${pcid1}   apptTime=${slot1}
-    ${apptfor}=   Create List  ${apptfor1}
-
-    ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${pcid1}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    ${resp}=  Get Waitlist By Id  ${wid1} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
-    Set Test Variable  ${apptid4}  ${apptid[0]}
-
-    ${resp}=  Get Appointment By Id   ${apptid4}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['waitlistStatus']}     ${wl_status[1]}
 
     ${reason}=  Random Element  ${cancelReason}
-    ${resp}=  Appointment Action   ${apptStatus[5]}   ${apptid4}    rejectReason=${reason}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Appointment By Id   ${apptid4}
+    ${resp}=  Waitlist Action   ${waitlist_actions[2]}   ${wid1}     cancelReason=${reason}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[5]}
+
+    ${resp}=  Get Waitlist By Id  ${wid1} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['waitlistStatus']}     ${wl_status[4]}
 
     # ......Settle Bill for 1 of the Appointments ...
 
-    ${NO_INVOICE_GENERATED}=  format String   ${NO_INVOICE_GENERATED}   ${apptid1}
+    ${NO_INVOICE_GENERATED}=  format String   ${NO_INVOICE_GENERATED}   ${wid}
 
-    ${resp}=  Get Bookings Invoices  ${apptid1}
+    ${resp}=  Get Bookings Invoices  ${wid}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings    ${resp.json()}    ${NO_INVOICE_GENERATED}
 
-    ${resp}=  Create Invoice for Booking  ${invoicebooking[0]}   ${apptid1}  
+    ${resp}=  Create Invoice for Booking  ${invoicebooking[1]}   ${wid}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     sleep   2s
-    ${resp}=  Get Bookings Invoices  ${apptid1}
+    ${resp}=  Get Bookings Invoices  ${wid}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable    ${invoice_uid}    ${resp.json()[0]['invoiceUid']}
@@ -520,16 +481,16 @@ JD-TC-Schedule-1
     Should Be Equal As Strings  ${resp.json()[0]['invoiceDate']}                                      ${DAY1}
     Should Be Equal As Strings  ${resp.json()[0]['providerConsumerId']}                               ${pcid}
     Should Be Equal As Strings  ${resp.json()[0]['providerConsumerData']['phoneNos'][0]['number']}    ${NewCustomer}
-    Should Be Equal As Strings   ${resp.json()[0]['ynwUuid']}                                         ${apptid1}
+    Should Be Equal As Strings   ${resp.json()[0]['ynwUuid']}                                         ${wid}
     Should Be Equal As Strings   ${resp.json()[0]['amountPaid']}                                      0.0
-    Should Be Equal As Strings   ${resp.json()[0]['amountDue']}                                       ${ser_amount1}
-    Should Be Equal As Strings   ${resp.json()[0]['amountTotal']}                                     ${ser_amount1}
-    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}                      ${s_id1}
-    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}                    ${SERVICE1}
+    Should Be Equal As Strings   ${resp.json()[0]['amountDue']}                                       ${ser_amount2}
+    Should Be Equal As Strings   ${resp.json()[0]['amountTotal']}                                     ${ser_amount2}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}                      ${s_id2}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}                    ${SERVICE2}
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['quantity']}                       1.0
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['taxable']}                        ${bool[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['totalPrice']}                     ${ser_amount1}
-    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['netRate']}                        ${ser_amount1}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['totalPrice']}                     ${ser_amount2}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['netRate']}                        ${ser_amount2}
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceCategory']}                ${serviceCategory[1]}
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['assigneeUsers']}                  ${empty_list}
     
@@ -553,7 +514,7 @@ JD-TC-Schedule-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
 
-    ${resp}=  Make payment Consumer Mock  ${account_id}  ${ser_amount1}  ${purpose[1]}  ${apptid1}  ${s_id1}  ${bool[0]}   ${bool[1]}  ${cid}
+    ${resp}=  Make payment Consumer Mock  ${account_id}  ${ser_amount2}  ${purpose[1]}  ${wid}  ${s_id1}  ${bool[0]}   ${bool[1]}  ${cid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -564,6 +525,7 @@ JD-TC-Schedule-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+*** Comments ***
 
     #...... Generate Appointment Report ...........
 
