@@ -119,12 +119,12 @@ JD-TC-Enable Disable Consent Form-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${CDL_ALREDY_DISABLED}=  format String   ${CDL_ALREDY_DISABLED}   Consent Form
+    ${ALREDY_DISABLED}=  format String   ${ALREDY_DISABLED}   Consent Form
 
     ${resp}=    Enable Disable Provider Consent Form  ${toggle[1]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}       ${CDL_ALREDY_DISABLED}
+    Should Be Equal As Strings  ${resp.json()}       ${ALREDY_DISABLED}
 
 JD-TC-Enable Disable Consent Form-UH3
     
