@@ -500,6 +500,15 @@ JD-TC-Schedule-1
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid3}  ${apptid[0]}
 
+    ${subser_price}=   Random Int   min=100   max=500
+    ${subser_price}=  Convert To Number  ${subser_price}  1
+
+    ${subser_list1}=  Create Dictionary  serviceId=${s_id3}  serviceAmount=${subser_price}  
+    
+    ${resp}=   Add SubService To Appointment    ${apptid3}   ${subser_list1}
+    Log   ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

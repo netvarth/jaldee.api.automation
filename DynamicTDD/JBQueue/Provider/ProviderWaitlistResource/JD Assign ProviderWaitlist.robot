@@ -732,7 +732,8 @@ JD-TC-AssignproviderWaitlist-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE2}=    generate_service_name 
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2} 
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${eTime1}=  add_timezone_time  ${tz}  1  00  
     ${description}=  FakerLibrary.sentence
@@ -931,6 +932,8 @@ JD-TC-AssignproviderWaitlist-7
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
     ${amt}=  Convert To Number  ${amt}  1
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2} 
     ${resp}=  Create Service   ${SERVICE2}  ${description}   ${dur}   ${bool[0]}   ${amt}  ${bool[0]}   department=${dep_id3}  provider=${u_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1248,6 +1251,8 @@ JD-TC-AssignproviderWaitlist-9
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
     ${amt}=  Convert To Number  ${amt}  1
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2} 
     ${resp}=  Create Service   ${SERVICE2}  ${description}   ${dur}    ${bool[0]}   ${amt}  ${bool[0]}   department=${dep_id3}  provider=${u_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1434,7 +1439,8 @@ JD-TC-AssignproviderWaitlist-UH1
     Set Suite Variable  ${ph1}
     Set Suite Variable  ${u_id1}
 
-    ${SERVICE2}=    generate_service_name 
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2} 
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -1484,6 +1490,8 @@ JD-TC-AssignproviderWaitlist-UH1
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
     ${amt}=  Convert To Number  ${amt}  1
+    ${SERVICE3}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE3} 
     ${resp}=  Create Service   ${SERVICE3}  ${description}   ${dur}    ${bool[0]}   ${amt}  ${bool[0]}  provider=${u_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1561,6 +1569,8 @@ JD-TC-AssignproviderWaitlist-UH3
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
     ${amt}=  Convert To Number  ${amt}  1
+    ${SERVICE3}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE3} 
     ${resp}=  Create Service   ${SERVICE3}  ${description}   ${dur}  ${bool[0]}    ${amt}  ${bool[0]}    provider=${u_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

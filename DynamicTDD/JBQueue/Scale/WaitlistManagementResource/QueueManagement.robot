@@ -386,6 +386,10 @@ JD-TC-Schedule-1
     ${attachments}=  Create Dictionary  owner=${provider_id}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${pdrname}
     ${attachment}=   Create List  ${attachments}
 
+    ${resp}=    Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${desc}=  FakerLibrary.word
     ${resp}=  Add To Waitlist  ${pcid}  ${s_id2}  ${q_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${pcid}     attachments=${attachment}
     Log  ${resp.json()}
