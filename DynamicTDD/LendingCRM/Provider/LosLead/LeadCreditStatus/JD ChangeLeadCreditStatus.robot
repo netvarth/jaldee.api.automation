@@ -36,6 +36,28 @@ JD-TC-ChangeLeadCreditStatus-1
     Log  ${decrypted_data}
     Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
+    ${resp2}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp2.status_code}  200
+    Should Be Equal As Strings  ${resp2.json()['jaldeeLending']}         ${bool[0]}
+    Should Be Equal As Strings  ${resp2.json()['losLead']}               ${bool[0]}
+
+    IF  '${resp2.json()['jaldeeLending']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Jaldee Lending  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
+    IF  '${resp2.json()['losLead']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Lending Lead  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
     Should Be Equal As Strings            ${resp.status_code}  200
@@ -222,9 +244,95 @@ JD-TC-ChangeLeadCreditStatus-UH4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+    ${resp2}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp2.status_code}  200
+    Should Be Equal As Strings  ${resp2.json()['jaldeeLending']}         ${bool[0]}
+    Should Be Equal As Strings  ${resp2.json()['losLead']}               ${bool[0]}
+
+    IF  '${resp2.json()['jaldeeLending']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Jaldee Lending  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
+    IF  '${resp2.json()['losLead']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Lending Lead  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
     ${NO_PERMISSION_X}=   Replace String  ${NO_PERMISSION_X}  {}   lead
 
     ${resp}=    Change Lead Credit Status LOS  ${lead_uid}  ${creditstatus} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${NO_PERMISSION_X}
+
+
+JD-TC-ChangeLeadCreditStatus-UH5
+
+    [Documentation]             Change Lead Credit Status - where Lending Lead is disabled
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME38}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp2}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp2.status_code}  200
+
+    IF  '${resp2.json()['jaldeeLending']}'=='${bool[1]}'
+
+        ${resp}=    Enable Disable Jaldee Lending  ${toggle[1]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
+    ${VARIABLE_DISABLE}=  format String   ${VARIABLE_DISABLE}   Jaldee Lending AI
+
+    ${resp}=    Change Lead Credit Status LOS  ${lead_uid}  ${creditstatus} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${VARIABLE_DISABLE}
+
+
+JD-TC-ChangeLeadCreditStatus-UH6
+
+    [Documentation]             Change Lead Credit Status - where jaldeeLending is disabled
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME38}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp2}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp2.status_code}  200
+
+    IF  '${resp2.json()['jaldeeLending']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Jaldee Lending  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
+    IF  '${resp2.json()['losLead']}'=='${bool[1]}'
+
+        ${resp}=    Enable Disable Lending Lead  ${toggle[1]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
+    ${VARIABLE_DISABLE}=  format String   ${VARIABLE_DISABLE}   Lending Lead
+
+    ${resp}=    Change Lead Credit Status LOS  ${lead_uid}  ${creditstatus} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${VARIABLE_DISABLE}
