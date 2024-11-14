@@ -2558,6 +2558,8 @@ INVALID_CONSUMER_PHONE = "Invalid Consumer Phone No"
 CONSUMER_KYC_FIRST_NAME_REQUIRED= "Consumer First Name Required for KYC"
 CONSUMER_KYC_LAST_NAME_REQUIRED= "Consumer Last Name Required  for KYC"
 CONSUMER_KYC_DOB_REQUIRED ="Consumer DoB Required for KYC"
+ENABLE_JALDEE_LENDING_TO_UPDATE = "You need to enable Jaldee Lending AI to update {}"
+ENABLE_RBAC_TO_UPDATE = "You need to enable account level RBAC to update {} RBAC"
 
 # ......  STOCK TRANSFER...........
 CANT_ST_TRNFR_BTW_SAME_INV = "You cannot transfer stock within the same inventory catalog"

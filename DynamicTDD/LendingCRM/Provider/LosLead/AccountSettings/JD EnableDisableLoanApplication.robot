@@ -20,11 +20,11 @@ Variables          /ebs/TDD/varfiles/hl_providers.py
 
 *** Test Cases ***
 
-JD-TC-EnableDisableJaldeeLending-1
+JD-TC-EnableDisableLoanApplication-1
 
-    [Documentation]  Enable Disable Jaldee Lending
+    [Documentation]  Enable Disable Loan Application
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME104}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -49,53 +49,82 @@ JD-TC-EnableDisableJaldeeLending-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['jaldeeLending']}  ${bool[1]}
 
-JD-TC-EnableDisableJaldeeLending-UH1
-
-    [Documentation]  Enable Disable Jaldee Lending - which is already enabled
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=    Enable Disable Loan Application  ${toggle[0]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${ALREDY_ENABLED}=  format String   ${ALREDY_ENABLED}   Jaldee Lending AI
+    ${resp}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['losLoanApplication']}  ${bool[1]}
 
-    ${resp}=    Enable Disable Jaldee Lending  ${toggle[0]}
+JD-TC-EnableDisableLoanApplication-UH1
+
+    [Documentation]  Enable Disable Loan Application - which is already enabled
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME104}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${ALREDY_ENABLED}=  format String   ${ALREDY_ENABLED}   Loan Application
+
+    ${resp}=    Enable Disable Loan Application  ${toggle[0]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${ALREDY_ENABLED}
 
-JD-TC-EnableDisableJaldeeLending-2
+JD-TC-EnableDisableLoanApplication-2
 
-    [Documentation]  Enable Disable Jaldee Lending - disabled which is enabled
+    [Documentation]  Enable Disable Loan Application - disabled which is enabled
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME104}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Enable Disable Jaldee Lending  ${toggle[1]}
+    ${resp}=    Enable Disable Loan Application  ${toggle[1]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-EnableDisableJaldeeLending-UH2
+JD-TC-EnableDisableLoanApplication-UH2
 
-    [Documentation]  Enable Disable Jaldee Lending - disable already disabled
+    [Documentation]  Enable Disable Loan Application - disable already disabled
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME104}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${ALREDY_DISABLED}=  format String   ${ALREDY_DISABLED}   Jaldee Lending AI
+    ${ALREDY_DISABLED}=  format String   ${ALREDY_DISABLED}   Loan Application
 
-    ${resp}=    Enable Disable Jaldee Lending  ${toggle[1]}
+    ${resp}=    Enable Disable Loan Application  ${toggle[1]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${ALREDY_DISABLED}
 
-JD-TC-EnableDisableJaldeeLending-UH3
 
-    [Documentation]  Enable Disable Jaldee Lending - without Login
+JD-TC-EnableDisableLoanApplication-UH3
+
+    [Documentation]  Enable Disable Loan Application - ebanle where Jaldee Lending is disabled
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME104}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    Enable Disable Jaldee Lending  ${toggle[1]}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${ENABLE_JALDEE_LENDING_TO_UPDATE}=  format String   ${ENABLE_JALDEE_LENDING_TO_UPDATE}   Loan Application
+
+    ${resp}=    Enable Disable Loan Application  ${toggle[1]}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${ENABLE_JALDEE_LENDING_TO_UPDATE}
+
+JD-TC-EnableDisableLoanApplication-UH4
+
+    [Documentation]  Enable Disable Loan Application - without Login
+
+    ${resp}=    Enable Disable Loan Application  ${toggle[1]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings    ${resp.json()}        ${SESSION_EXPIRED}

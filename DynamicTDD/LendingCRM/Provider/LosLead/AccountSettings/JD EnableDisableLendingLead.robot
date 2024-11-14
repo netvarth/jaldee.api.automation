@@ -20,11 +20,11 @@ Variables          /ebs/TDD/varfiles/hl_providers.py
 
 *** Test Cases ***
 
-JD-TC-EnableDisableJaldeeLending-1
+JD-TC-EnableDisableLendingLead-1
 
-    [Documentation]  Enable Disable Jaldee Lending
+    [Documentation]  Enable Disable Lending Lead
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -49,53 +49,82 @@ JD-TC-EnableDisableJaldeeLending-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['jaldeeLending']}  ${bool[1]}
 
-JD-TC-EnableDisableJaldeeLending-UH1
-
-    [Documentation]  Enable Disable Jaldee Lending - which is already enabled
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=    Enable Disable Lending Lead  ${toggle[0]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${ALREDY_ENABLED}=  format String   ${ALREDY_ENABLED}   Jaldee Lending AI
+    ${resp}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['losLead']}  ${bool[1]}
 
-    ${resp}=    Enable Disable Jaldee Lending  ${toggle[0]}
+JD-TC-EnableDisableLendingLead-UH1
+
+    [Documentation]  Enable Disable Lending Lead - which is already enabled
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${ALREDY_ENABLED}=  format String   ${ALREDY_ENABLED}   Lending Lead
+
+    ${resp}=    Enable Disable Lending Lead  ${toggle[0]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${ALREDY_ENABLED}
 
-JD-TC-EnableDisableJaldeeLending-2
+JD-TC-EnableDisableLendingLead-2
 
-    [Documentation]  Enable Disable Jaldee Lending - disabled which is enabled
+    [Documentation]  Enable Disable Lending Lead - disabled which is enabled
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Enable Disable Jaldee Lending  ${toggle[1]}
+    ${resp}=    Enable Disable Lending Lead  ${toggle[1]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-EnableDisableJaldeeLending-UH2
+JD-TC-EnableDisableLendingLead-UH2
 
-    [Documentation]  Enable Disable Jaldee Lending - disable already disabled
+    [Documentation]  Enable Disable Lending Lead - disable already disabled
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${ALREDY_DISABLED}=  format String   ${ALREDY_DISABLED}   Jaldee Lending AI
+    ${ALREDY_DISABLED}=  format String   ${ALREDY_DISABLED}   Lending Lead
 
-    ${resp}=    Enable Disable Jaldee Lending  ${toggle[1]}
+    ${resp}=    Enable Disable Lending Lead  ${toggle[1]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${ALREDY_DISABLED}
 
-JD-TC-EnableDisableJaldeeLending-UH3
 
-    [Documentation]  Enable Disable Jaldee Lending - without Login
+JD-TC-EnableDisableLendingLead-UH3
+
+    [Documentation]  Enable Disable Lending Lead - ebanle where Jaldee Lending is disabled
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    Enable Disable Jaldee Lending  ${toggle[1]}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${ENABLE_JALDEE_LENDING_TO_UPDATE}=  format String   ${ENABLE_JALDEE_LENDING_TO_UPDATE}   Lending Lead
+
+    ${resp}=    Enable Disable Lending Lead  ${toggle[1]}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${ENABLE_JALDEE_LENDING_TO_UPDATE}
+
+JD-TC-EnableDisableLendingLead-UH4
+
+    [Documentation]  Enable Disable Lending Lead - without Login
+
+    ${resp}=    Enable Disable Lending Lead  ${toggle[1]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings    ${resp.json()}        ${SESSION_EXPIRED}
