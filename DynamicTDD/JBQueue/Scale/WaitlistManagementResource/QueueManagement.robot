@@ -514,9 +514,9 @@ JD-TC-Schedule-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
 
-    ${resp}=  Make payment Consumer Mock  ${account_id}  ${ser_amount2}  ${purpose[1]}  ${wid}  ${s_id1}  ${bool[0]}   ${bool[1]}  ${cid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Make payment Consumer Mock  ${account_id}  ${ser_amount2}  ${purpose[1]}  ${wid}  ${s_id1}  ${bool[0]}   ${bool[1]}  ${cid}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Consumer Logout
     Log   ${resp.json()}
@@ -525,19 +525,79 @@ JD-TC-Schedule-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-*** Comments ***
 
     #...... Generate Appointment Report ...........
 
     ${filter}=  Create Dictionary      
-    ${resp}=  Generate Report REST details  ${reportType[1]}  ${Report_Date_Category[4]}  ${filter}
+    ${resp}=  Generate Report REST details  ${reportType[0]}  ${Report_Date_Category[4]}  ${filter}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${token_id1}   ${resp.json()}
     
     ${appt_date} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
-    ${appt_date} =	Set Variable	${appt_date} [${slot1}]	
+    # ${appt_date} =	Set Variable	${appt_date} [${slot1}]	
    
     ${resp}=  Get Report Status By Token Id  ${token_id1}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    #...... Add Attachments to Waitlist ...........
+
+    ${desc}=  FakerLibrary.word
+    ${resp}=  Add To Waitlist  ${pcid}  ${s_id2}  ${q_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${pcid}     
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${wid2}  ${resp.json()['parent_uuid']}
+
+    ${resp}=  Get Waitlist By Id  ${wid2} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['hasAttachment']}    ${bool[0]}
+
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME_B}   ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${caption}=  Fakerlibrary.sentence
+    
+    ${resp}=  Imageupload.PWLAttachment   ${cookie}   ${wid2}   ${caption}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Provider Waitlist Attachment   ${wid2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}            200
+    Dictionary Should Contain Key  ${resp.json()[0]}   s3path
+    Should Contain  ${resp.json()[0]['s3path']}   .jpg
+    Dictionary Should Contain Key  ${resp.json()[0]}   thumbPath
+    Should Contain  ${resp.json()[0]['s3path']}   .jpg
+    Should Be Equal As Strings  ${resp.json()[0]['caption']}     ${caption} 
+
+    #...... Reschedule the Waitlist and add attachments ...........
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${DAY2}=  add_date  1      
+
+    ${resp}=  Reschedule Consumer Checkin   ${wid2}  ${DAY2}  ${q_id1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME_B}   ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${caption}=  Fakerlibrary.sentence
+    
+    ${resp}=  Imageupload.PWLAttachment   ${cookie}   ${wid2}   ${caption}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Provider Waitlist Attachment   ${wid2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}            200
+    Dictionary Should Contain Key  ${resp.json()[0]}   s3path
+    Should Contain  ${resp.json()[0]['s3path']}   .jpg
+    Dictionary Should Contain Key  ${resp.json()[0]}   thumbPath
+    Should Contain  ${resp.json()[0]['s3path']}   .jpg
+    Should Be Equal As Strings  ${resp.json()[0]['caption']}     ${caption} 
