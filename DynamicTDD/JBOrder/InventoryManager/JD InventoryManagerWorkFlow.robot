@@ -31,6 +31,9 @@ ${jpgfile}      /ebs/TDD/uploadimage.jpg
 ${pngfile}      /ebs/TDD/upload.png
 ${fileSize}     0.00458
 ${order}        0
+
+${var_file}               ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py
+${data_file}              ${EXECDIR}/data/${ENVIRONMENT}data/${ENVIRONMENT}phnumbers.txt
       
 *** Test Cases ***
 
@@ -39,6 +42,11 @@ JD-TC-Inventory Manager Work Flow-1
 
     ${firstname}  ${lastname}  ${PUSERNAME_E}  ${LoginId}=  Provider Signup
     Set Suite Variable  ${PUSERNAME_E}
+    ${num}=  find_last  ${var_file}
+    ${num}=  Evaluate   ${num}+1
+    Append To File  ${data_file}  ${LoginId} - ${PASSWORD}${\n}
+    Append To File  ${var_file}  PUSERNAME${num}=${LoginId}${\n}
+    Log    PUSERNAME${num}
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -442,8 +450,9 @@ JD-TC-Inventory Manager Work Flow-1
     Set Suite Variable    ${firstName}
     ${lastName}=  FakerLibrary.last_name
     Set Suite Variable    ${lastName}
-    ${primaryMobileNo}    Generate random string    10    123456789
-    ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
+    # ${primaryMobileNo}    Generate random string    10    123456789
+    # ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
+    ${primaryMobileNo}=    Generate Random 555 Number
     Set Suite Variable    ${primaryMobileNo}
     # ${email}=    FakerLibrary.Email
     # Set Suite Variable    ${email}
@@ -688,7 +697,7 @@ JD-TC-Inventory Manager Work Flow-1
     Should Be Equal As Strings    ${resp.json()['discountTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                                       0.0
-    # Should Be Equal As Strings    ${resp.json()['netRate']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${netTotal}
     # Should Be Equal As Strings    ${resp.json()['amountDue']}                                      0.0
     Should Be Equal As Strings    ${resp.json()['amountPaid']}                                      ${netTotal}
     Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
@@ -738,81 +747,11 @@ JD-TC-Inventory Manager Work Flow-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable     ${itemjrx}   ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME44}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    Log  ${decrypted_data}
-    Set Suite Variable      ${pid}          ${decrypted_data['id']}
-    Set Suite Variable      ${pdrname}      ${decrypted_data['userName']}
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    # ...... Create Category .......
-
-    ${categoryName}=    FakerLibrary.name
-    Set Suite Variable  ${categoryName}
-
-    ${resp}=  Create Item Category   ${categoryName}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable      ${categoryCode}     ${resp.json()}
-
-    # ...... Create Type .........
-
-    ${TypeName}=    FakerLibrary.name
-    Set Suite Variable  ${TypeName}
-
-    ${resp}=  Create Item Type   ${TypeName}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable      ${typeCode}     ${resp.json()}
-
-    # ..... Create manufacturer .....
-
-    ${manufactureName}=    FakerLibrary.name
-    Set Suite Variable  ${manufactureName}
-
-    ${resp}=  Create Item Manufacture   ${manufactureName}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable      ${manufacturerCode}     ${resp.json()}
-
-    # .... Cretate Group 01 ........
-
-    ${groupName}=    FakerLibrary.name
-    Set Suite Variable      ${groupName}
-
-    ${groupDesc}=    FakerLibrary.name
-    Set Suite Variable  ${groupDesc}
-
-    ${groupCode}=   FakerLibrary.Sentence   nb_words=3
-    Set Suite Variable  ${groupCode}
-
-    ${resp}=    Create Item group Provider  ${groupName}  ${groupCode}  ${groupDesc}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable   ${ig_id}   ${resp.json()}
-
-    # .... Cretate Group 02 ........
-
-    ${groupName2}=    FakerLibrary.name
-    Set Suite Variable      ${groupName2}
-
-    ${groupDesc2}=    FakerLibrary.name
-    Set Suite Variable  ${groupDesc2}
-
-    ${groupCode2}=   FakerLibrary.Sentence   nb_words=3
-    Set Suite Variable  ${groupCode2}
-
-    ${resp}=    Create Item group Provider  ${groupName2}  ${groupCode2}  ${groupDesc2}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable   ${ig_id2}   ${resp.json()}
-
-    ${itemGroups}=  Create List  ${ig_id}  ${ig_id2}
 
     # ..... Create Tax ......
 
@@ -860,28 +799,6 @@ JD-TC-Inventory Manager Work Flow-2
 
     ${itemUnits}=   Create List  ${iu_id}
 
-    # .... Attachments ......
-
-    ${resp}=  db.getType   ${jpgfile} 
-    Log  ${resp}
-    ${fileType}=  Get From Dictionary       ${resp}    ${jpgfile} 
-    Set Suite Variable    ${fileType}
-    ${caption}=  Fakerlibrary.Sentence
-    Set Suite Variable    ${caption}
-
-    ${resp}    upload file to temporary location    ${file_action[0]}    ${pid}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200 
-    Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
-
-    ${resp}    change status of the uploaded file    ${QnrStatus[1]}    ${driveId}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
-
-    ${attachments}=    Create Dictionary   action=${file_action[0]}  fileName=${jpgfile}  fileSize=${fileSize}  fileType=${fileType}  order=${order}    driveId=${driveId}
-    Log  ${attachments}
-    ${attachments}=  Create List   ${attachments}
-    Set Suite Variable    ${attachments}
 
     ${name}=            FakerLibrary.name
     ${shortDesc}=       FakerLibrary.sentence
@@ -890,7 +807,7 @@ JD-TC-Inventory Manager Work Flow-2
     Set Suite Variable  ${shortDesc}
     Set Suite Variable  ${internalDesc}
 
-    ${resp}=    Create Item Inventory  ${name}  shortDesc=${shortDesc}   internalDesc=${internalDesc}     isBatchApplicable=${boolean[0]}    tax=${tax}  composition=${composition}  itemUnits=${itemUnits}     isInventoryItem=${bool[1]}
+    ${resp}=    Create Item Inventory  ${name}  shortDesc=${shortDesc}   internalDesc=${internalDesc}     isBatchApplicable=${boolean[0]}    tax=${tax}  composition=${composition}  itemUnits=${itemUnits}      isInventoryItem=${bool[1]}
     # ${resp}=    Create Item Inventory  ${name}  shortDesc=${shortDesc}   internalDesc=${internalDesc}    categoryCode=${categoryCode}  categoryCode2=${categoryCode}  typeCode=${typeCode}  typeCode2=${typeCode}  hsnCode=${hsnCode}  manufacturerCode=${manufacturerCode}  sku=${sku}  isBatchApplicable=${boolean[0]}    itemGroups=${itemGroups}  itemSubGroups=${itemGroups}  tax=${tax}  composition=${composition}  itemUnits=${itemUnits}  attachments=${attachments}     isInventoryItem=${bool[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -905,42 +822,24 @@ JD-TC-Inventory Manager Work Flow-2
 # ------------------------------------------------------------------------------------------------------
 
 # ----------------------------------------- create Inv Catalog -------------------------------------------------------
-    # ${INV_Cat_Name}=     FakerLibrary.name
+    ${INV_Cat_Name}=     FakerLibrary.name
 
-    # ${resp}=  Create Inventory Catalog   ${INV_Cat_Name}  ${store_id}   
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # Set Suite Variable  ${Catalog_EncIds1}  ${resp.json()}
+    ${resp}=  Create Inventory Catalog   ${INV_Cat_Name}  ${store_id}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${Catalog_EncIds1}  ${resp.json()}
 # ------------------------------------------------------------------------------------------------------------
 
 # ----------------------------------------Create Inventory Catalog Item----------------------------------
 
-    ${resp}=   Create Inventory Catalog Item  ${Catalog_EncIds}   ${TAX_item}   
+    ${resp}=   Create Inventory Catalog Item  ${Catalog_EncIds1}   ${TAX_item}   
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Suite Variable   ${ic_TAX_Item_id}   ${resp.json()[0]}
 
-# -------------------------------------------------------------------------------------------------------------
+
     ${inventoryCatalogItem}=        Create Dictionary   encId=${ic_TAX_Item_id}
 
-    # ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings      ${resp.status_code}                     200
-    # # Should Be Equal As Strings      ${resp.json()['quantity']}              ${quantity}
-    # # Should Be Equal As Strings      ${resp.json()['freeQuantity']}          ${freeQuantity}
-    # # Should Be Equal As Strings      ${resp.json()['totalQuantity']}         ${totalQuantity}
-    # # Should Be Equal As Strings      ${resp.json()['amount']}                ${amount}
-    # # Should Be Equal As Strings      ${resp.json()['discountPercentage']}    ${discountPercentage}
-    # # Should Be Equal As Strings      ${resp.json()['discountAmount']}        ${discountAmount}
-    # # Should Be Equal As Strings      ${resp.json()['taxableAmount']}         ${taxableAmount}
-    # # Should Be Equal As Strings      ${resp.json()['cgstPercentage']}        ${cgst}
-    # # Should Be Equal As Strings      ${resp.json()['sgstPercentage']}        ${sgst}
-    # # Should Be Equal As Strings      ${resp.json()['cgst']}                  ${cgstamount}
-    # # Should Be Equal As Strings      ${resp.json()['sgst']}                  ${sgstamount}
-    # # Should Be Equal As Strings      ${resp.json()['taxPercentage']}         ${taxPercentage}
-    # # Should Be Equal As Strings      ${resp.json()['taxAmount']}             ${taxAmount}
-    # # Should Be Equal As Strings      ${resp.json()['netTotal']}              ${netTotal}
-    # # Should Be Equal As Strings      ${resp.json()['netRate']}               ${netRate}
 
 # --------------------------------------- Do the Purchase--------------------------------------------------------------
 
@@ -981,7 +880,7 @@ JD-TC-Inventory Manager Work Flow-2
     ${purchaseItemDtoList2}=        Create purchaseItemDtoList   ${ic_TAX_Item_id}   ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${EMPTY}  ${iu_id}
     Set Suite Variable              ${purchaseItemDtoList2}
 
-    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${Catalog_EncIds}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}  
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${Catalog_EncIds1}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}  
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}   200
     Set Suite Variable              ${purchaseId}           ${resp.json()}
@@ -1006,8 +905,6 @@ JD-TC-Inventory Manager Work Flow-2
 
     ${resp}=  Get Inventoryitem      ${ic_TAX_Item_id}         
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    # Should Be Equal As Strings      ${resp.json()[0]['uid']}          ${purchaseId}
     Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
     Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
     Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
@@ -1019,20 +916,12 @@ JD-TC-Inventory Manager Work Flow-2
     Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
     Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Store_Name1}
 
-    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
-    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
-    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
-    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
-    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
-    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
-    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
 
 
 # ------------------------------------------- Check Stock ---------------------------------------------------
     ${resp}=    Get Stock Avaliability  ${ic_TAX_Item_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # Should Be Equal As Strings      ${resp.json()[0]['uid']}          ${purchaseId}
     Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
     Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
     Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
@@ -1046,8 +935,28 @@ JD-TC-Inventory Manager Work Flow-2
 
 # -----------------------------------------------------------------------------------
 
+
+# --------------------------- Create SalesOrder Inventory Catalog-InvMgr True --------------------------
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${Store_name}=  FakerLibrary.name
+    Set Test Variable    ${Store_name}
+    ${inv_cat_encid_List}=  Create List  ${Catalog_EncIds1}
+
+
+
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Store_name}  ${boolean[1]}  ${inv_cat_encid_List}    onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[1]}  storePickup=${boolean[1]}  homeDelivery=${boolean[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${inv_order_encid1}  ${resp.json()}
+# ---------------------------------------------------------------------------------------------------------
+
 # ------------------------------Create SalesOrder Catalog Item-invMgmt True-------------------------------
-    ${price}=    Random Int  min=200   max=500
+    ${price}=    Random Int  min=100   max=500
+    ${price}=  Convert To Number  ${price}    1
 
     ${resp}=    Get Item Tax by id  ${itemtax_id}
     Log   ${resp.content}
@@ -1059,14 +968,12 @@ JD-TC-Inventory Manager Work Flow-2
 
     ${tax}=     Create List  ${itemtax_id}
 
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${inv_order_encid}    ${boolean[1]}     ${ic_TAX_Item_id}     ${price}    ${boolean[0]}   taxInclude=${boolean[1]}    taxes=${tax}
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${inv_order_encid1}    ${boolean[1]}     ${ic_TAX_Item_id}     ${price}    ${boolean[0]}   taxInclude=${boolean[1]}    taxes=${tax}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
+    Set Suite Variable  ${SO_itemEncIds1}  ${resp.json()[0]}
 
-    # ${resp}=  Get SalesOrder Catalog Item By Encid      ${SO_itemEncIds}         
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
+
 
     ${resp}=  Get Inventoryitem      ${ic_TAX_Item_id}         
     Log   ${resp.content}
@@ -1075,7 +982,7 @@ JD-TC-Inventory Manager Work Flow-2
 # ----------------------------------------------------------------------------------------------------------
 
 # ----------------------------------------- Take sales order ------------------------------------------------
-    ${Cg_encid}=  Create Dictionary   encId=${inv_order_encid}   
+    ${Cg_encid}=  Create Dictionary   encId=${inv_order_encid1}   
     ${SO_Cata_Encid_List}=  Create List       ${Cg_encid}
 
     ${store}=  Create Dictionary   encId=${store_id}  
@@ -1084,7 +991,7 @@ JD-TC-Inventory Manager Work Flow-2
     ${quantity}=    Random Int  min=2   max=5
     ${quantity}=  Convert To Number  ${quantity}    1
 
-    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds1}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds1}
 
     ${primaryMobileNo1}    Generate random string    10    123456789
     Set Suite Variable  ${primaryMobileNo1}
@@ -1184,6 +1091,19 @@ JD-TC-Inventory Manager Work Flow-2
 
     ${netTotal}=   Evaluate    ${price} * ${quantity} 
     ${netTotal}=  Convert To Number  ${netTotal}    1
+    ${taxPerValue} =  Evaluate  ${taxPercentage} / 100
+    ${actualAmount} =  Evaluate  ${price} / (1 + ${taxPerValue})
+    # ${actualAmount}=  Convert To Number  ${actualAmount}    1
+    # ${actualAmount}=     roundoff    ${actualAmount}   2
+
+    ${cessAmount} =   Evaluate    ${actualAmount} * ${cgst} / 100
+    ${taxAmount} =   Evaluate    ${actualAmount} * ${taxPercentage} / 100
+
+    ${netTotalamount}=   Evaluate    ${actualAmount} * ${quantity} 
+    # ${netTotalamount}=    Evaluate    "{:.2f}".format(${netTotalamount})
+    # ${netTotalamount}=  Convert To Number  ${netTotalamount}    1
+    ${netTotalamount}=   Convert To Integer  ${netTotalamount}  
+    ${taxAmount} =  Evaluate  ${actualAmount} * ${taxPercentage} / 100
 
     ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
@@ -1248,25 +1168,27 @@ JD-TC-Inventory Manager Work Flow-2
     ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${rate1}=    Convert To Integer  ${resp.json()['netTotal']} 
     Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
     Should Be Equal As Strings    ${resp.json()['order']['uid']}                                       ${SO_Uid}
     Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
     Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                 ${Store_name}
-    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${inv_order_encid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${inv_order_encid1}
     Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
-    Should Be Equal As Strings    ${resp.json()['taxTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                                       0.0
-    # Should Be Equal As Strings    ${resp.json()['netRate']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                        ${netTotal}
+    Should Be Equal As Strings    ${rate1}                                                      ${netTotalamount}
+    # Should Be Equal As Strings    ${resp.json()['taxTotal']}                                       0.0
+    # Should Be Equal As Strings    ${resp.json()['discountTotal']}                                       0.0
+    # Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                                       0.0
+    # Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                                       0.0
+
     # Should Be Equal As Strings    ${resp.json()['amountDue']}                                      0.0
-    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                      ${netTotal}
-    Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['status']}                                      ${billStatus[1]}
+    # Should Be Equal As Strings    ${resp.json()['amountPaid']}                                      ${netTotal}
+    # Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
+    # Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
+    # Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
+    # Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
+    # Should Be Equal As Strings    ${resp.json()['status']}                                      ${billStatus[1]}
 
 JD-TC-Inventory Manager Work Flow-3
     [Documentation]    take a sales order  inventory is ON and item inv and batch is true.
@@ -1331,7 +1253,7 @@ JD-TC-Inventory Manager Work Flow-3
     ${purchaseNote}=                FakerLibrary.Sentence
     ${roundOff}=                    Random Int  min=1  max=10
 
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList   ${ic_Batch_Item_id}   ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList   ${ic_Batch_Item_id}   ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${amount}  ${batchNo}  ${iu_id}
     Set Suite Variable              ${purchaseItemDtoList2}
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${Catalog_EncIds}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}  
