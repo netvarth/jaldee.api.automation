@@ -1289,6 +1289,45 @@ JD-TC-CreateService-37
     ${SERVICE1}=    generate_unique_service_name  ${service_names1}
     Append To List  ${service_names1}  ${SERVICE1}
     Log  ${service_names1}
+JD-TC-CreateService-38
+    [Documentation]  Create a service with sortOrder field.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${description}=    FakerLibrary.sentence
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
+
+    ${SERVICE}=    generate_unique_service_name  ${service_names1}
+    Append To List  ${service_names1}  ${SERVICE}
+
+    ${resp}=  Create Service  ${SERVICE}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${id1}  ${resp.json()}
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names1}
+    Append To List  ${service_names1}  ${SERVICE1}
+
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}     sortOrder=1
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${id2}  ${resp.json()}
+
+    ${SERVICE2}=    generate_unique_service_name  ${service_names1}
+    Append To List  ${service_names1}  ${SERVICE2}
+
+    ${resp}=  Create Service  ${SERVICE2}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${id3}  ${resp.json()}
+
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['name']}   ${SERVICE1} 
+    Should Be Equal As Strings  ${resp.json()[0]['id']}     ${id2}
 
 
 JD-TC-CreateService-UH1
@@ -2172,8 +2211,21 @@ JD-TC-CreateService-UH34
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${INVALID_MEET_ID}"
 
+JD-TC-CreateService-UH35
+    [Documentation]  Create a service with EMPTY sortOrder field.
 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${description}=    FakerLibrary.sentence
+    ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  sortOrder=${EMPTY}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-
-
+    ${resp}=  Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200

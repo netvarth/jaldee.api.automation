@@ -286,7 +286,7 @@ JD-TC-WaitlistAction-UH5
       ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${desc}=   FakerLibrary.word
-      ${resp}=  Waitlist Action      ${waitlist_actions[2]}  ${waitlist_id1}  ${waitlist_cancl_reasn[3]} 
+      ${resp}=  Waitlist Action      ${waitlist_actions[2]}  ${waitlist_id1}  cancelReason=${waitlist_cancl_reasn[3]} 
       Should Be Equal As Strings  ${resp.status_code}  422
       Should Be Equal As Strings  "${resp.json()}"  "${WAITLIST_CANCEL_STATUS}"
 
@@ -323,7 +323,7 @@ JD-TC-WaitlistAction-UH8
       ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${desc}=   FakerLibrary.word
-      ${resp}=  Waitlist Action     ${waitlist_actions[2]}  ${waitlist_id}  ${waitlist_cancl_reasn[3]}      
+      ${resp}=  Waitlist Action     ${waitlist_actions[2]}  ${waitlist_id}  cancelReason=${waitlist_cancl_reasn[3]}      
       Should Be Equal As Strings  ${resp.status_code}  422
       Should Be Equal As Strings  "${resp.json()}"  "${WAITLIST_CANCEL_STATUS}" 
 
