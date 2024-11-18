@@ -15023,60 +15023,63 @@ Save And Proceed LOS Lead Followup
     RETURN  ${resp}
 
 Save LOS Lead As Draft For Kyc
-    [Arguments]     ${uid}  ${stageUid}  &{kwargs}
+    [Arguments]     ${uid}  ${stageUid}  ${remarks}  ${consumerKyc}  ${coApplicantKyc}  &{kwargs}
 
-    ${data}=  Create Dictionary
+    ${list}=  Create List
     FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary   ${data}   ${key}=${value}
+        Append To List  ${list}  ${key}=${value}
     END
+    ${data}=  Create Dictionary  consumerKyc=${consumerKyc}  coApplicantKyc=${list}  remarks=${remarks}
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/kyc/data   data=${data}  expected_status=any
     RETURN  ${resp}
 
 Save And Proceed LOS Lead Kyc
-    [Arguments]     ${uid}  ${stageUid}  &{kwargs}
+    [Arguments]     ${uid}  ${stageUid}  ${remarks}  ${consumerKyc}  ${coApplicantKyc}  &{kwargs}
 
-    ${leadStage}=   Create Dictionary  uid=${stageUid}
-    ${data}=  Create Dictionary  leadStage=${leadStage}
+    ${list}=  Create List
     FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary   ${data}   ${key}=${value}
+        Append To List  ${list}  ${key}=${value}
     END
+    ${data}=  Create Dictionary  consumerKyc=${consumerKyc}  coApplicantKyc=${list}  remarks=${remarks}
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/kyc/data/proceed   data=${data}  expected_status=any
     RETURN  ${resp}
 
 Verift Los Lead Kyc 
-    [Arguments]  ${uid}  ${stageUidKyc}
+    [Arguments]  ${uid}  ${stageUidKyc}  &{kwargs}
+
+    ${data}=  Create Dictionary 
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
 
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/los/lead/${leadUid}/stage/${stageUidKyc}/kycverification/data/proceed  expected_status=any
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${leadUid}/stage/${stageUidKyc}/kycverification/data/proceed   data=${data}  expected_status=any
     RETURN  ${resp}
 
 Save LOS Lead As Draft For SALESFIELD
-    [Arguments]     ${uid}  ${stageUid}  &{kwargs}
+    [Arguments]     ${uid}  ${stageUid}  ${originFrom}  ${location}  &{kwargs}
 
-    ${leadStage}=   Create Dictionary  uid=${stageUid}
-    ${data}=  Create Dictionary  leadStage=${leadStage} 
+    ${data}=   Create Dictionary  originFrom=${originFrom}  location=${location}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary   ${data}   ${key}=${value}
     END
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/salesfield/data   data=${data}  expected_status=any
+    ${resp}=  PUT On Session  ynw  provider/los/lead/${uid}/stage/${stageUid}/salesfield/data   data=${data}  expected_status=any
     RETURN  ${resp}
 
 Save And Proceed LOS Lead SALESFIELD
-    [Arguments]     ${uid}  ${stageUid}  &{kwargs}
+    [Arguments]     ${uid}  ${stageUid}  ${originFrom}  ${location}  &{kwargs}
 
-    ${leadStage}=   Create Dictionary  uid=${stageUid}
-    ${data}=  Create Dictionary  leadStage=${leadStage}
+    ${data}=   Create Dictionary  originFrom=${originFrom}  location=${location}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary   ${data}   ${key}=${value}
     END
     ${data}=    json.dumps    ${data}
-    Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/salesfield/data/proceed   data=${data}  expected_status=any
     RETURN  ${resp}
 

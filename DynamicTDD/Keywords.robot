@@ -210,7 +210,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{bankType}                 ProviderPaytm     JaldeeBank     NoBank     PrimaryBank
 @{jsonNames}                businessProfile  virtualFields  terminologies  services  donationServices  location
 @{catalogType}              submission  itemOrder
-@{originFrom}               Lead   Enquire  LoanApplication  Loan  Task  NONE
+@{originFrom}               Lead   Enquire  LoanApplication  Loan  Task  NONE  LOS_LOAN_APPLICATION
 @{serviceBookingType}       booking   request
 @{rbac_feature}             cdl       booking      medicalrecord      adminSettings
 @{rbac_capabilities}        createLoanApplication  updateLoanApplication  viewLoanApplication  verifyPartnerLoanApplication
@@ -298,8 +298,9 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{stockTransfer}                    DRAFT   DISPATCHED   RECEIVED   DECLINED   CANCELED
 @{toggleButton}                     enable  disable
 @{losProduct}                       CDL  PROPERTYLOAN  DOCTORSLOAN  TEACHERSLOAN
-@{stageType}                        NEW  FOLLOWUP  KYC  KYC_VERIFICATION  SALESFIELD  CREDITSCORE
+@{stageType}                        NEW  FOLLOWUP  KYC  KYC_VERIFICATION  SALESFIELD  SALESFIELD_VERIFICATION  DOCUMENT  FINANCIAL_INFO  PROPERTY_INFO  BUSINESS_INFO  CREDIT_VERIFICATION  BRANCH_VERIFICATION
 @{pushPurchaseToFinance}            AUTOMATIC   MANUAL
+
 
 *** Keywords ***
 
