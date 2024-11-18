@@ -18,6 +18,11 @@ Variables       /ebs/TDD/varfiles/providers.py
 # Variables       /ebs/TDD/varfiles/consumerlist.py 
 # Variables         /ebs/TDD/varfiles/hl_providers.py
 
+*** Variables ***
+
+${var_file}               ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py
+${data_file}              ${EXECDIR}/data/${ENVIRONMENT}data/${ENVIRONMENT}phnumbers.txt
+
 
 *** Keywords ***
 # Check Deprication
@@ -91,8 +96,22 @@ Variables       /ebs/TDD/varfiles/providers.py
 
 
 *** Test Cases ***
-Example Test Case
-    @{fruits}	apple	banana	orange
+Testing signup in test server
+
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${LoginId}=  Provider Signup
+    ${num}=  find_last  ${var_file}
+    ${num}=  Evaluate   ${num}+1
+    Append To File  ${data_file}  ${LoginId} - ${PASSWORD}${\n}
+    Append To File  ${var_file}  PUSERNAME${num}=${LoginId}${\n}
+    Log    PUSERNAME${num}
+
+    ${resp}=  Encrypted Provider Login  ${LoginId}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+# Example Test Case
+
+    # @{fruits}	apple	banana	orange
 
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME376}  ${PASSWORD}
     # Log   ${resp.json()}

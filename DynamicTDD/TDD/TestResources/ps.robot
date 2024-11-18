@@ -18,6 +18,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 # ${licpkgid}    1
 # ${licpkgname}   basic
 @{Views}  self  all  customersOnly
+${var_file}               ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py
+${data_file}              ${EXECDIR}/data/${ENVIRONMENT}data/${ENVIRONMENT}phnumbers.txt
 
 
 *** Test Cases ***
@@ -25,7 +27,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 JD-TC-Provider_Signup-1
     [Documentation]   Provider Signup in Random Domain 
 
-    Create Directory   ${EXECDIR}/TDD/scaledata/
+    # Create Directory   ${EXECDIR}/TDD/scaledata/    #->scalephnumbers.txt
     
     # ${PO_Number}=  FakerLibrary.Numerify  %#####
     # ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
@@ -36,120 +38,15 @@ JD-TC-Provider_Signup-1
     FOR  ${index}  IN RANGE   1
         ${ph}=  Evaluate   ${PUSERPH0}+${index}
         Log   ${ph}
-        Set Suite Variable  ${ph}
-        ${ph1}=  Evaluate  ${ph}+1000000000
-        ${ph2}=  Evaluate  ${ph}+2000000000
-        # ${licresp}=   Get Licensable Packages
-        # Should Be Equal As Strings  ${licresp.status_code}  200
-        # # Log   ${licresp.content}
-        # ${liclen}=  Get Length  ${licresp.json()}
-        # Set Test Variable  ${licpkgid}  ${licresp.json()[0]['pkgId']}
-        # Set Test Variable  ${licpkgname}  ${licresp.json()[0]['displayName']}
-        ${licpkgid}  ${licpkgname}=  get_highest_license_pkg
-        ${corp_resp}=   get_iscorp_subdomains  1
-        ${resp}=  Get BusinessDomainsConf
-        # Log   ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${dom_len}=  Get Length  ${resp.json()}
-        ${dom}=  random.randint  ${0}  ${dom_len-1}
-        ${sdom_len}=  Get Length  ${resp.json()[${dom}]['subDomains']}
-        Set Test Variable  ${domain}  ${resp.json()[${dom}]['domain']}
-        Log   ${domain}
-        
-        FOR  ${subindex}  IN RANGE  ${sdom_len}
-            ${sdom}=  random.randint  ${0}  ${sdom_len-1}
-            Set Test Variable  ${subdomain}  ${resp.json()[${dom}]['subDomains'][${subindex}]['subDomain']}
-            ${is_corp}=  check_is_corp  ${subdomain}
-            Exit For Loop If  '${is_corp}' == 'False'
-        END
-        Log   ${subdomain}
-        ${fname}=  FakerLibrary.name
-        ${lname}=  FakerLibrary.lastname
-        ${resp}=  Account SignUp  ${fname}  ${lname}  ${None}  ${domain}  ${subdomain}  ${ph}  ${licpkgid}
-        # Log   ${resp.content}
+        ${firstname}  ${lastname}  ${PhoneNumber}  ${LoginId}=  Provider Signup  PhoneNumber=${ph}
+        ${num}=  find_last  ${var_file}
+        ${num}=  Evaluate   ${num}+1
+        Append To File  ${data_file}  ${LoginId} - ${PASSWORD}${\n}
+        Append To File  ${var_file}  PUSERNAME${num}=${LoginId}${\n}
+        Log    PUSERNAME${num}
+
+        ${resp}=  Encrypted Provider Login  ${LoginId}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${resp}=  Account Activation  ${ph}  0
-        # Log   ${resp.content}
-        Should Be Equal As Strings    ${resp.status_code}    200
-        ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${ph}
-        # Log   ${resp.content}
-        Should Be Equal As Strings    ${resp.status_code}    200
-        sleep  03s
-        ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
-        Should Be Equal As Strings    ${resp.status_code}    200
-        Append To File  ${EXECDIR}/TDD/scaledata/scalephnumbers.txt  ${ph} - ${PASSWORD}${\n}
-        
-        ${list}=  Create List  1  2  3  4  5  6  7
-        ${ph1}=  Evaluate  ${PUSERPH0}+1000000000
-        ${ph2}=  Evaluate  ${PUSERPH0}+2000000000
-        ${views}=  Evaluate  random.choice($Views)  random
-        ${name1}=  FakerLibrary.name
-        ${name2}=  FakerLibrary.name
-        ${name3}=  FakerLibrary.name
-        ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
-        ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-        ${emails1}=  Emails  ${name3}  Email  ${P_Email}${ph}.${test_mail}  ${views}
-        ${bs}=  FakerLibrary.bs
-        ${companySuffix}=  FakerLibrary.companySuffix
-        ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-        ${parking}   Random Element   ${parkingType}
-        ${24hours}    Random Element    ['True','False']
-        ${desc}=   FakerLibrary.sentence
-        ${url}=   FakerLibrary.url
-        ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-        Set Suite Variable  ${tz}
-        ${DAY1}=  db.get_date_by_timezone  ${tz}
-        ${Time}=  db.get_time_by_timezone  ${tz}
-        ${sTime}=  db.add_timezone_time  ${tz}  0  15  
-        ${eTime}=  db.add_timezone_time  ${tz}  0  45  
-        ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
-        # Log  ${resp.content}
-        Should Be Equal As Strings    ${resp.status_code}    200
-
-        ${resp}=  Get Business Profile
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${account_id}  ${resp.json()['id']}
-
-        ${fields}=   Get subDomain level Fields  ${domain}  ${subdomain}
-        Log  ${fields.content}
-        Should Be Equal As Strings    ${fields.status_code}   200
-
-        ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
-
-        ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${subdomain}
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-
-        ${resp}=  Get specializations Sub Domain  ${domain}  ${subdomain}
-        Should Be Equal As Strings    ${resp.status_code}   200
-
-        ${spec}=  get_Specializations  ${resp.json()}
-        
-        ${resp}=  Update Specialization  ${spec}
-        Log  ${resp.content}
-        Should Be Equal As Strings    ${resp.status_code}   200
-
-        ${resp}=  Get Features  ${subdomain}
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${service_name}  ${resp.json()['features']['defaultServices'][0]['service']}
-        Set Test Variable  ${service_duration}  ${resp.json()['features']['defaultServices'][0]['duration']}
-        Set Test Variable  ${service_status}  ${resp.json()['features']['defaultServices'][0]['status']}    
-
-        ${resp}=  Get Service
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Verify Response List   ${resp}  0  name=${service_name}  status=${service_status}  serviceDuration=${service_duration}
-
-        ${resp}=  Get Order Settings by account id
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
-        Should Be Equal As Strings  ${resp.json()['enableOrder']}     ${bool[0]}
-        Should Be Equal As Strings  ${resp.json()['storeContactInfo']['firstName']}    ${fname}
-        Should Be Equal As Strings  ${resp.json()['storeContactInfo']['lastName']}     ${lname}
-        Should Be Equal As Strings  ${resp.json()['storeContactInfo']['phone']}        ${ph}
 
         ############For Appointment##############3
 
@@ -166,11 +63,8 @@ JD-TC-Provider_Signup-1
         ${resp}=   Get jaldeeIntegration Settings
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        IF  '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[0]}'
-            ${resp1}=   Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
-            Should Be Equal As Strings  ${resp1.status_code}  200
-        ELSE IF    '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[1]}'
-            ${resp1}=   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[0]}
+        IF  '${resp.json()['onlinePresence']}'=='${bool[0]}'
+            ${resp1}=   Set jaldeeIntegration Settings    ${boolean[1]}  ${EMPTY}  ${EMPTY}
             Should Be Equal As Strings  ${resp1.status_code}  200
         END
 
