@@ -697,6 +697,7 @@ Get User By Id
 #     RETURN  ${resp}
 
 Create Service
+    # kwargs available : sortOrder,
     [Arguments]  ${name}  ${desc}  ${durtn}  ${isPrePayment}  ${totalAmount}  ${notfcn}  &{kwargs}
     ${items}=  Get Dictionary items  ${kwargs}
     ${data}=  Create Dictionary  name=${name}  description=${desc}  serviceDuration=${durtn}  isPrePayment=${isPrePayment}  totalAmount=${totalAmount}  notification=${notfcn}  

@@ -196,7 +196,7 @@ JD-TC-WaitlistAction-7
       Should Be Equal As Strings  ${resp.status_code}  200
       Verify Response  ${resp}  waitlistStatus=${wl_status[0]}
       ${desc}=   FakerLibrary.word
-      ${resp}=  Waitlist Action Cancel  ${waitlist_id1}  ${waitlist_cancl_reasn[2]}  ${desc}
+      ${resp}=  Waitlist Action      ${waitlist_actions[2]}  ${waitlist_id1}  cancelReason=${waitlist_cancl_reasn[2]}  
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Waitlist By Id  ${waitlist_id1}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -215,7 +215,7 @@ JD-TC-WaitlistAction-8
       Should Be Equal As Strings  ${resp.status_code}  200
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id2}  ${wid[0]}
-      ${resp}=  Waitlist Action Cancel  ${waitlist_id2}  ${waitlist_cancl_reasn[3]}  ${desc}
+      ${resp}=  Waitlist Action      ${waitlist_actions[2]}  ${waitlist_id2}  cancelReason=${waitlist_cancl_reasn[3]}    
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Waitlist By Id  ${waitlist_id2}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -286,7 +286,7 @@ JD-TC-WaitlistAction-UH5
       ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${desc}=   FakerLibrary.word
-      ${resp}=  Waitlist Action Cancel  ${waitlist_id1}  ${waitlist_cancl_reasn[3]}  ${desc}
+      ${resp}=  Waitlist Action      ${waitlist_actions[2]}  ${waitlist_id1}  ${waitlist_cancl_reasn[3]} 
       Should Be Equal As Strings  ${resp.status_code}  422
       Should Be Equal As Strings  "${resp.json()}"  "${WAITLIST_CANCEL_STATUS}"
 
@@ -323,7 +323,7 @@ JD-TC-WaitlistAction-UH8
       ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${desc}=   FakerLibrary.word
-      ${resp}=  Waitlist Action Cancel  ${waitlist_id}  ${waitlist_cancl_reasn[3]}  ${desc}
+      ${resp}=  Waitlist Action     ${waitlist_actions[2]}  ${waitlist_id}  ${waitlist_cancl_reasn[3]}      
       Should Be Equal As Strings  ${resp.status_code}  422
       Should Be Equal As Strings  "${resp.json()}"  "${WAITLIST_CANCEL_STATUS}" 
 
@@ -354,7 +354,7 @@ JD-TC-WaitlistAction-UH10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${desc}=   FakerLibrary.word
       Set Suite Variable    ${desc}
-      ${resp}=  Waitlist Action Cancel  ${waitlist_id3}  ${waitlist_cancl_reasn[3]}  ${desc}
+      ${resp}=  Waitlist Action     ${waitlist_actions[2]}  ${waitlist_id3}  cancelReason=${waitlist_cancl_reasn[3]} 
       Should Be Equal As Strings  ${resp.status_code}  422
       Should Be Equal As Strings  "${resp.json()}"  "${WAITLIST_CANCEL_STATUS}" 
 
@@ -388,7 +388,7 @@ JD-TC-WaitlistAction-UH13
       ${resp}=  Waitlist Action   ${waitlist_actions[3]}  ${waitlist_id3}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${resp}=  Waitlist Action Cancel  ${waitlist_id3}  ${waitlist_cancl_reasn[3]}  ${desc}
+      ${resp}=  Waitlist Action     ${waitlist_actions[2]}  ${waitlist_id3}  cancelReason=${waitlist_cancl_reasn[3]}  
       Should Be Equal As Strings  ${resp.status_code}  200
       sleep  3s
       ${resp}=  Waitlist Action   ${waitlist_actions[0]}  ${waitlist_id3}

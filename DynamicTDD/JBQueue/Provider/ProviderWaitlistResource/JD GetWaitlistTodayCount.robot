@@ -184,7 +184,7 @@ JD-TC-GetWaitlistCountToday-2
 
       ${resp}=  Encrypted Provider Login  ${HLPUSERNAME23}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${resp}=  Waitlist Action Cancel    ${waitlist_id}  ${waitlist_cancl_reasn[4]}   ${desc}
+      ${resp}=  Waitlist Action      ${waitlist_actions[2]}    ${waitlist_id}  cancelReason=${waitlist_cancl_reasn[4]}         
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Waitlist Action  ${waitlist_actions[1]}   ${waitlist_id1}
       Log   ${resp.json()}
@@ -832,7 +832,7 @@ JD-TC-GetWaitlistCountToday-63
 
       ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200  
-      ${resp}=  Waitlist Action Cancel    ${waitlist_id5}   ${waitlist_cancl_reasn[3]}   ${desc}
+      ${resp}=  Waitlist Action      ${waitlist_actions[2]}    ${waitlist_id5}   cancelReason=${waitlist_cancl_reasn[3]}       
       Should Be Equal As Strings  ${resp.status_code}  200
       sleep   2s
       ${resp}=  Get Waitlist Count Today  location-eq=${lid1}  waitlistStatus-eq=${wl_status[4]}  from=0  count=10

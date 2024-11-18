@@ -637,7 +637,7 @@ JD-TC-AddToWaitlist-12
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${wid1}  ${wid[0]}
       ${cncl_resn}=   Random Element     ${waitlist_cancl_reasn}
-      ${resp}=  Waitlist Action Cancel  ${wid1}  ${cncl_resn}  ${desc}
+      ${resp}=  Waitlist Action     ${waitlist_actions[2]}   ${wid1}  cancelReason=${cncl_resn}  
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Add To Waitlist   ${c_id}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${c_id} 
       Should Be Equal As Strings  ${resp.status_code}  200

@@ -143,7 +143,7 @@ JD-TC-GetFollowUpDetailsWl-2
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${msg}=  Fakerlibrary.word
-    ${resp}=  Waitlist Action Cancel  ${wid}  ${waitlist_cancl_reasn[4]}  ${msg}
+    ${resp}=  Waitlist Action    ${waitlist_actions[2]}  ${wid}  cancelReason=${waitlist_cancl_reasn[4]}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

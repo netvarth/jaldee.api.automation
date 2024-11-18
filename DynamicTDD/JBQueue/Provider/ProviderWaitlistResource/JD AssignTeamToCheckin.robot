@@ -806,7 +806,7 @@ JD-TC-AssignTeamToWaitlist-UH7
     
     ${cncl_resn}=   Random Element     ${waitlist_cancl_reasn}
     ${desc}=   FakerLibrary.word
-    ${resp}=  Waitlist Action Cancel  ${wid1}  ${cncl_resn}  ${desc}
+    ${resp}=  Waitlist Action    ${waitlist_actions[2]}  ${wid1}  cancelReason=${cncl_resn}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     

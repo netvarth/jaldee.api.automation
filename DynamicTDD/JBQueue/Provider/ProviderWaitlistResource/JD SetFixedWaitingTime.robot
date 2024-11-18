@@ -427,7 +427,7 @@ JD-TC-FixedWaitingTime-UH3
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                    ${cid}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}           ${cid}
 
-    ${resp}=  Waitlist Action Cancel  ${wid1}  ${waitlist_cancl_reasn[2]}   ${desc}
+    ${resp}=  Waitlist Action    ${waitlist_actions[2]}  ${wid1}  cancelReason=${waitlist_cancl_reasn[2]}    
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Waitlist By Id  ${wid1}
     Should Be Equal As Strings  ${resp.status_code}  200

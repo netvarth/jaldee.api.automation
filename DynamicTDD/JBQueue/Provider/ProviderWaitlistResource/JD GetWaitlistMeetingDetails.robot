@@ -294,7 +294,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
 
     ${msg}=  Fakerlibrary.word
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=  Waitlist Action Cancel  ${wid1}  ${waitlist_cancl_reasn[4]}   ${msg}
+    ${resp}=  Waitlist Action   ${waitlist_actions[2]}  ${wid1}  cancelReason=${waitlist_cancl_reasn[4]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -364,7 +364,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-2
 
     ${msg}=  Fakerlibrary.word
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=  Waitlist Action Cancel  ${wid2}  ${waitlist_cancl_reasn[4]}   ${msg}
+    ${resp}=  Waitlist Action   ${waitlist_actions[2]}  ${wid2}  cancelReason=${waitlist_cancl_reasn[4]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -461,7 +461,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-UH1
 
     ${msg}=  Fakerlibrary.word
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=  Waitlist Action Cancel  ${wid3}  ${waitlist_cancl_reasn[4]}   ${msg}
+    ${resp}=  Waitlist Action   ${waitlist_actions[2]}  ${wid3}  cancelReason=${waitlist_cancl_reasn[4]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -528,7 +528,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-3
 
     ${msg}=  Fakerlibrary.word
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=  Waitlist Action Cancel  ${wid4}  ${waitlist_cancl_reasn[4]}   ${msg}
+    ${resp}=  Waitlist Action    ${waitlist_actions[2]}  ${wid4}  cancelReason=${waitlist_cancl_reasn[4]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -609,7 +609,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-4
 
     ${msg}=  Fakerlibrary.word
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=  Waitlist Action Cancel  ${wid5}  ${waitlist_cancl_reasn[4]}   ${msg}
+    ${resp}=  Waitlist Action   ${waitlist_actions[2]}  ${wid5}  cancelReason=${waitlist_cancl_reasn[4]}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -686,7 +686,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-UH2
 
     ${msg}=  Fakerlibrary.word
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=  Waitlist Action Cancel  ${wid6}  ${waitlist_cancl_reasn[4]}   ${msg}
+    ${resp}=  Waitlist Action    ${waitlist_actions[2]}  ${wid6}  cancelReason=${waitlist_cancl_reasn[4]}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -763,7 +763,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-5
 
     ${msg}=  Fakerlibrary.word
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=  Waitlist Action Cancel  ${wid7}  ${waitlist_cancl_reasn[4]}   ${msg}
+    ${resp}=  Waitlist Action    ${waitlist_actions[2]}  ${wid7}  cancelReason=${waitlist_cancl_reasn[4]}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -842,16 +842,12 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-6
 
     ${msg}=  Fakerlibrary.word
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=  Waitlist Action Cancel  ${wid8}  ${waitlist_cancl_reasn[4]}   ${msg}
+    ${resp}=  Waitlist Action    ${waitlist_actions[2]}  ${wid8}  cancelReason=${waitlist_cancl_reasn[4]}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
-
-
-
-
 
 JD-TC-GetWaitlistMeetingDetails-UH3
     [Documentation]    Create waitlist teleservice meeting request  with invalid  waitlist id 

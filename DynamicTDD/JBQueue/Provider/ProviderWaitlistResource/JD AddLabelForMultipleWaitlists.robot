@@ -1767,7 +1767,7 @@ JD-TC-AddMultipleWaitlistLabel-11
     ${msg}=  FakerLibrary.word
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${wl_cancel}=  Evaluate  random.choice($waitlist_cancl_reasn)  random
-    ${resp}=  Waitlist Action Cancel  ${wid1}  ${wl_cancel}   ${msg}
+    ${resp}=  Waitlist Action  ${waitlist_actions[2]}      ${wid1}    cancelReason=${wl_cancel}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

@@ -154,7 +154,7 @@ JD-TC-GetWaitlistFutureCount-2
 
       ${resp}=  Encrypted Provider Login  ${HLPUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${resp}=  Waitlist Action CANCEL  ${waitlist_id}  ${waitlist_cancl_reasn[4]}  ${desc}
+      ${resp}=  Waitlist Action     ${waitlist_actions[2]}  ${waitlist_id}  cancelReason=${waitlist_cancl_reasn[4]}  
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Waitlist Count Future  waitlistStatus-eq=${wl_status[4]}   from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200

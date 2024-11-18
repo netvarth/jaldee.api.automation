@@ -727,7 +727,7 @@ JD-TC-UnAssignproviderWaitlist-UH1
 
     ${desc}=   FakerLibrary.word
     ${cncl_resn}=   Random Element     ${waitlist_cancl_reasn}
-    ${resp}=  Waitlist Action Cancel  ${wid}  ${cncl_resn}  ${desc}
+    ${resp}=  Waitlist Action    ${waitlist_actions[2]}  ${wid}  cancelReason=${cncl_resn}   
     Should Be Equal As Strings  ${resp.status_code}  200
   
     ${resp}=   Un Assign provider waitlist   ${wid}   ${u_id1}

@@ -144,7 +144,7 @@ JD-TC-WaitlistStateChange-3
       ${resp}=  Encrypted Provider Login  ${HLPUSERNAME26}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${desc}=   FakerLibrary.word
-      ${resp}=  Waitlist Action Cancel  ${waitlist_id}  ${waitlist_cancl_reasn[4]}   ${desc}
+      ${resp}=  Waitlist Action     ${waitlist_actions[2]}  ${waitlist_id}  cancelReason=${waitlist_cancl_reasn[4]}      
       Should Be Equal As Strings  ${resp.status_code}  200
       sleep  1s
       ${resp}=  Get Waitlist State Changes  ${waitlist_id}

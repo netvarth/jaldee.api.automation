@@ -1886,7 +1886,7 @@ JD-TC-AssignproviderWaitlist-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${cncl_resn}=   Random Element     ${waitlist_cancl_reasn}
-    ${resp}=  Waitlist Action Cancel  ${wid}  ${cncl_resn}  ${desc}
+    ${resp}=  Waitlist Action    ${waitlist_actions[2]}  ${wid}  cancelReason=${cncl_resn}  
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${ph2}  ${u_id2} =  Create and Configure Sample User
@@ -2099,7 +2099,7 @@ JD-TC-AssignproviderWaitlist-UH9
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Waitlist Action  ${waitlist_actions[1]}    ${wid}
+    ${resp}=  Waitlist Action  ${waitlist_actions[1]}    ${wid}     
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Waitlist By Id  ${wid}

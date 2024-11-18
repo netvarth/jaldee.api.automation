@@ -4694,7 +4694,7 @@ JD-TC-Reschedule Waitlist-UH23
 
     ${msg}=  Fakerlibrary.word
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=  Waitlist Action Cancel  ${wid}  ${waitlist_cancl_reasn[1]}   ${msg}
+    ${resp}=  Waitlist Action   ${waitlist_actions[2]}  ${wid}  cancelReason=${waitlist_cancl_reasn[1]}      
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
