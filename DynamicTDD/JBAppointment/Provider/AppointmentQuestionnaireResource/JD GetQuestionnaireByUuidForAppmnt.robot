@@ -260,9 +260,9 @@ JD-TC-GetQuestionnaireByUuidForAppointment-1
         ${resp1}=  AddCustomer  ${CUSERNAME8}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
-        Set Suite Variable  ${cid}  ${resp1.json()}
+        Set Test Variable  ${cid}  ${resp1.json()}
     ELSE
-        Set Suite Variable  ${cid}  ${resp.json()[0]['id']}
+        Set Test Variable  ${cid}  ${resp.json()[0]['id']}
     END
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
@@ -290,7 +290,7 @@ JD-TC-GetQuestionnaireByUuidForAppointment-2
 
     [Documentation]  Resubmit questionnaire for appointment after starting appointment
 
-    clear_customer   ${PUSERNAME332}
+    # clear_customer   ${PUSERNAME332}
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME332}  ${PASSWORD}
     Log  ${resp.content}
@@ -313,10 +313,22 @@ JD-TC-GetQuestionnaireByUuidForAppointment-2
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
 
-    ${resp}=  AddCustomer  ${CUSERNAME11}   
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME9}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${cid}  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${resp1}=  AddCustomer  ${CUSERNAME9}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Test Variable  ${cid}  ${resp1.json()}
+    ELSE
+        Set Test Variable  ${cid}  ${resp.json()[0]['id']}
+    END
+
+    # ${resp}=  AddCustomer  ${CUSERNAME11}   
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${cid}  ${resp.json()}
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -371,7 +383,7 @@ JD-TC-GetQuestionnaireByUuidForAppointment-3
 
     [Documentation]  Resubmit questionnaire for appointment after completing appointment
 
-    clear_customer   ${PUSERNAME332}
+    # clear_customer   ${PUSERNAME332}
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME332}  ${PASSWORD}
     Log  ${resp.content}
@@ -392,10 +404,22 @@ JD-TC-GetQuestionnaireByUuidForAppointment-3
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
 
-    ${resp}=  AddCustomer  ${CUSERNAME11}   
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME10}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${cid}  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${resp1}=  AddCustomer  ${CUSERNAME10}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Test Variable  ${cid}  ${resp1.json()}
+    ELSE
+        Set Test Variable  ${cid}  ${resp.json()[0]['id']}
+    END
+
+    # ${resp}=  AddCustomer  ${CUSERNAME11}   
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${cid}  ${resp.json()}
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -442,7 +466,7 @@ JD-TC-GetQuestionnaireByUuidForAppointment-4
 
     [Documentation]  Resubmit questionnaire for appointment after completing appointment
 
-    clear_customer   ${PUSERNAME332}
+    # clear_customer   ${PUSERNAME332}
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME332}  ${PASSWORD}
     Log  ${resp.content}
@@ -463,10 +487,22 @@ JD-TC-GetQuestionnaireByUuidForAppointment-4
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
 
-    ${resp}=  AddCustomer  ${CUSERNAME11}   
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME11}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${cid}  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${resp1}=  AddCustomer  ${CUSERNAME11}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Test Variable  ${cid}  ${resp1.json()}
+    ELSE
+        Set Test Variable  ${cid}  ${resp.json()[0]['id']}
+    END
+
+    # ${resp}=  AddCustomer  ${CUSERNAME11}   
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${cid}  ${resp.json()}
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}

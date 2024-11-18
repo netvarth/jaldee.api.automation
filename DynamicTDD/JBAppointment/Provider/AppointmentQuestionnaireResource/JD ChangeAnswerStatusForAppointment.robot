@@ -349,7 +349,7 @@ JD-TC-ChangeAnsStatusForAppt-1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Check Answers   ${resp}  ${data}
-*** Comments ***
+
 JD-TC-ChangeAnsStatusForAppt-2
 
     [Documentation]   change Answer status to complete from incomplete for online appointment.
@@ -1763,7 +1763,7 @@ JD-TC-ChangeAnsStatusForAppt-UH7
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
+    Set Test Variable   ${lid}   ${resp.json()[0]['id']}  
 
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}

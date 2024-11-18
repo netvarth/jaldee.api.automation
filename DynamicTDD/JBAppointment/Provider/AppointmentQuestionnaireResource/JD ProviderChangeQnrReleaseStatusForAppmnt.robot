@@ -317,11 +317,20 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-1
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
 
-    ${resp}=  AddCustomer  ${CUSERNAME8} 
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}   ${resp.json()}
-    
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME19}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
+        ${resp1}=  AddCustomer  ${CUSERNAME19}    firstName=${fname}   lastName=${lname}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Suite Variable  ${cid}  ${resp1.json()}
+    ELSE
+        Set Suite Variable  ${cid}  ${resp.json()[0]['id']}
+    END
+
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
@@ -358,18 +367,18 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME8}    ${account_id}
+    ${resp}=    Send Otp For Login    ${CUSERNAME19}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME19}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -388,7 +397,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME8}    ${account_id}    ${token}
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME19}    ${account_id}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -405,7 +414,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-2
 
     [Documentation]  submit questionnaire for appointment taken from provider side
 
-    clear_customer   ${PUSERNAME301}
+    # clear_customer   ${PUSERNAME301}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME301}  ${PASSWORD}
     Log  ${resp.content}
@@ -496,10 +505,23 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-2
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
 
-    ${resp}=  AddCustomer  ${CUSERNAME11}   
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME22}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${cid}  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
+        ${resp1}=  AddCustomer  ${CUSERNAME22}    firstName=${fname}   lastName=${lname}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Suite Variable  ${cid}  ${resp1.json()}
+    ELSE
+        Set Suite Variable  ${cid}  ${resp.json()[0]['id']}
+    END
+    # ${resp}=  AddCustomer  ${CUSERNAME22}   
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${cid}  ${resp.json()}
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -555,7 +577,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-3
 
     [Documentation]  Take a online checkin and consumer submit after questionnaire 
 
-    clear_customer   ${PUSERNAME301}
+    # clear_customer   ${PUSERNAME301}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME301}  ${PASSWORD}
     Log  ${resp.content}
@@ -620,29 +642,43 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-3
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
 
-    ${fname}=  generate_firstname
-    ${lname}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME11}    firstName=${fname}   lastName=${lname}
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}   ${resp.json()}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME23}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
+        ${resp1}=  AddCustomer  ${CUSERNAME23}    firstName=${fname}   lastName=${lname}
+        Log   ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Test Variable  ${cid}  ${resp1.json()}
+    ELSE
+        Set Test Variable  ${cid}  ${resp.json()[0]['id']}
+    END
+
+    # ${fname}=  generate_firstname
+    # ${lname}=  FakerLibrary.last_name
+    # ${resp}=  AddCustomer  ${CUSERNAME22}    firstName=${fname}   lastName=${lname}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${cid}   ${resp.json()}
 
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME11}    ${account_id}
+    ${resp}=    Send Otp For Login    ${CUSERNAME23}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME11}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME23}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME23}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${fname}   ${resp.json()['firstName']}
@@ -721,7 +757,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-4
 
     [Documentation]  consumer submit questionnaire for waitlist taken from provider side
 
-    clear_customer   ${PUSERNAME301}
+    # clear_customer   ${PUSERNAME301}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME301}  ${PASSWORD}
     Log  ${resp.content}
@@ -812,10 +848,24 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-4
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
 
-    ${resp}=  AddCustomer  ${CUSERNAME8} 
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}   ${resp.json()}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME24}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
+        ${resp1}=  AddCustomer  ${CUSERNAME24}    firstName=${fname}   lastName=${lname}
+        Log   ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Test Variable  ${cid}  ${resp1.json()}
+    ELSE
+        Set Test Variable  ${cid}  ${resp.json()[0]['id']}
+    END
+
+    # ${resp}=  AddCustomer  ${CUSERNAME19} 
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${cid}   ${resp.json()}
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -853,18 +903,18 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME8}    ${account_id}
+    ${resp}=    Send Otp For Login    ${CUSERNAME24}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME24}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME24}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
@@ -888,7 +938,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME8}    ${account_id}    ${token}
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME24}    ${account_id}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -905,7 +955,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-5
 
     [Documentation]  consumer submit questionnaire for waitlist taken from consumer side
 
-    clear_customer   ${PUSERNAME301}
+    # clear_customer   ${PUSERNAME301}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME301}  ${PASSWORD}
     Log  ${resp.content}
@@ -970,29 +1020,43 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-5
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
 
-    ${fname}=  generate_firstname
-    ${lname}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME13}    firstName=${fname}   lastName=${lname}
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}   ${resp.json()}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME25}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
+        ${resp1}=  AddCustomer  ${CUSERNAME25}    firstName=${fname}   lastName=${lname}
+        Log   ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Test Variable  ${cid}  ${resp1.json()}
+    ELSE
+        Set Test Variable  ${cid}  ${resp.json()[0]['id']}
+    END
+
+    # ${fname}=  generate_firstname
+    # ${lname}=  FakerLibrary.last_name
+    # ${resp}=  AddCustomer  ${CUSERNAME24}    firstName=${fname}   lastName=${lname}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${cid}   ${resp.json()}
 
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME13}    ${account_id}
+    ${resp}=    Send Otp For Login    ${CUSERNAME25}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME13}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME25}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME13}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME25}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${fname}   ${resp.json()['firstName']}
@@ -1044,7 +1108,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME13}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME25}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1062,7 +1126,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME13}    ${account_id}    ${token}
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME25}    ${account_id}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1080,7 +1144,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-UH1
 
     [Documentation]  change questinare release status by consumer login
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME13}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME25}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1101,7 +1165,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-UH3
 
     [Documentation]   change questinare release status for a canceled appointment
 
-    clear_customer   ${PUSERNAME301}
+    # clear_customer   ${PUSERNAME301}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME301}  ${PASSWORD}
     Log  ${resp.content}
@@ -1165,28 +1229,42 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-UH3
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
 
-    ${fname}=  generate_firstname
-    ${lname}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME11}    firstName=${fname}   lastName=${lname}
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME26}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
+        ${resp1}=  AddCustomer  ${CUSERNAME26}    firstName=${fname}   lastName=${lname}
+        Log   ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Test Variable  ${cid}  ${resp1.json()}
+    ELSE
+        Set Test Variable  ${cid}  ${resp.json()[0]['id']}
+    END
+
+    # ${fname}=  generate_firstname
+    # ${lname}=  FakerLibrary.last_name
+    # ${resp}=  AddCustomer  ${CUSERNAME22}    firstName=${fname}   lastName=${lname}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME11}    ${account_id}
+    ${resp}=    Send Otp For Login    ${CUSERNAME26}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME11}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME26}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME26}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${fname}   ${resp.json()['firstName']}
@@ -1246,7 +1324,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME26}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

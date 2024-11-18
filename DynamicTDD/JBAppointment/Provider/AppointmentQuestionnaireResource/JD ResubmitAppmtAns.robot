@@ -311,15 +311,15 @@ JD-TC-ResubmitQuestionnaireForAppointment-1
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
 
-    # ${resp}=  AddCustomer  ${CUSERNAME8} 
+    # ${resp}=  AddCustomer  ${CUSERNAME20} 
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${cid}   ${resp.json()}
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME8}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME8}
+        ${resp1}=  AddCustomer  ${CUSERNAME20}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Suite Variable  ${cid}  ${resp1.json()}
@@ -388,7 +388,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-1
 JD-TC-ResubmitQuestionnaireForAppointment-2
     [Documentation]  Resubmit questionnaire for appointment taken from consumer side
 
-    clear_customer   ${PUSERNAME328}
+    # clear_customer   ${PUSERNAME328}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME328}  ${PASSWORD}
     Log  ${resp.content}
@@ -478,7 +478,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-2
     # ${j1}=  Random Int  max=${num_slots-1}
     # Set Test Variable   ${slot1}   ${slots[${j1}]}
 
-    # ${resp}=  AddCustomer  ${CUSERNAME11}   firstName=${fname}   lastName=${lname}
+    # ${resp}=  AddCustomer  ${CUSERNAME33}   firstName=${fname}   lastName=${lname}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${cid}  ${resp.json()}
@@ -509,30 +509,44 @@ JD-TC-ResubmitQuestionnaireForAppointment-2
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${fname}=  generate_firstname
-    ${lname}=  FakerLibrary.last_name
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME32}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
+        ${resp1}=  AddCustomer  ${CUSERNAME32}    firstName=${fname}   lastName=${lname}
+        Log   ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Test Variable  ${cid}  ${resp1.json()}
+    ELSE
+        Set Test Variable  ${cid}  ${resp.json()[0]['id']}
+    END
+
+    # ${fname}=  generate_firstname
+    # ${lname}=  FakerLibrary.last_name
   
-    ${resp}=  AddCustomer  ${CUSERNAME22}  firstName=${fname}   lastName=${lname}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}  ${resp.json()}
+    # ${resp}=  AddCustomer  ${CUSERNAME32}  firstName=${fname}   lastName=${lname}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${cid}  ${resp.json()}
    
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME22}    ${account_id}
+    ${resp}=    Send Otp For Login    ${CUSERNAME32}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
     
-    ${resp}=    Verify Otp For Login   ${CUSERNAME22}   ${OtpPurpose['Authentication']}   JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME32}   ${OtpPurpose['Authentication']}   JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME22}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME32}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -620,7 +634,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-3
 
     [Documentation]  Resubmit questionnaire for appointment after starting appointment
 
-    clear_customer   ${PUSERNAME328}
+    # clear_customer   ${PUSERNAME328}
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME328}  ${PASSWORD}
     Log  ${resp.content}
@@ -696,11 +710,25 @@ JD-TC-ResubmitQuestionnaireForAppointment-3
     ${num_slots}=  Get Length  ${slots}
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
-
-    ${resp}=  AddCustomer  ${CUSERNAME11}   
+    
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME33}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${cid}  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
+        ${resp1}=  AddCustomer  ${CUSERNAME33}    firstName=${fname}   lastName=${lname}
+        Log   ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Test Variable  ${cid}  ${resp1.json()}
+    ELSE
+        Set Test Variable  ${cid}  ${resp.json()[0]['id']}
+    END
+
+    # ${resp}=  AddCustomer  ${CUSERNAME33}   
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${cid}  ${resp.json()}
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -781,7 +809,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-3
 JD-TC-ResubmitQuestionnaireForAppointment-4
     [Documentation]  Resubmit questionnaire for appointment after completing appointment
 
-    clear_customer   ${PUSERNAME328}
+    # clear_customer   ${PUSERNAME328}
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME328}  ${PASSWORD}
     Log  ${resp.content}
@@ -879,10 +907,24 @@ JD-TC-ResubmitQuestionnaireForAppointment-4
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
 
-    ${resp}=  AddCustomer  ${CUSERNAME11}   
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME34}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${cid}  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
+        ${resp1}=  AddCustomer  ${CUSERNAME34}    firstName=${fname}   lastName=${lname}
+        Log   ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Test Variable  ${cid}  ${resp1.json()}
+    ELSE
+        Set Test Variable  ${cid}  ${resp.json()[0]['id']}
+    END
+
+    # ${resp}=  AddCustomer  ${CUSERNAME33}   
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${cid}  ${resp.json()}
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -977,7 +1019,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-4
 JD-TC-ResubmitQuestionnaireForAppointment-UH1
     [Documentation]  Resubmit questionnaire for cancelled appointment
     
-    clear_customer   ${PUSERNAME328}
+    # clear_customer   ${PUSERNAME328}
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME328}  ${PASSWORD}
     Log  ${resp.content}
@@ -1068,11 +1110,25 @@ JD-TC-ResubmitQuestionnaireForAppointment-UH1
     ${num_slots}=  Get Length  ${slots}
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
-
-    ${resp}=  AddCustomer  ${CUSERNAME9}   
+    
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME9}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${cid}  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
+        ${resp1}=  AddCustomer  ${CUSERNAME9}    firstName=${fname}   lastName=${lname}
+        Log   ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Test Variable  ${cid}  ${resp1.json()}
+    ELSE
+        Set Test Variable  ${cid}  ${resp.json()[0]['id']}
+    END
+
+    # ${resp}=  AddCustomer  ${CUSERNAME9}   
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${cid}  ${resp.json()}
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -1156,7 +1212,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-UH1
 JD-TC-ResubmitQuestionnaireForAppointment-UH2
     [Documentation]  Resubmit answers without revalidating data
 
-    clear_customer   ${PUSERNAME328}
+    # clear_customer   ${PUSERNAME328}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME328}  ${PASSWORD}
     Log  ${resp.content}
@@ -1255,10 +1311,24 @@ JD-TC-ResubmitQuestionnaireForAppointment-UH2
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
 
-    ${resp}=  AddCustomer  ${CUSERNAME9}   
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME29}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${cid}  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
+        ${resp1}=  AddCustomer  ${CUSERNAME29}    firstName=${fname}   lastName=${lname}
+        Log   ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Test Variable  ${cid}  ${resp1.json()}
+    ELSE
+        Set Test Variable  ${cid}  ${resp.json()[0]['id']}
+    END
+
+    # ${resp}=  AddCustomer  ${CUSERNAME9}   
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${cid}  ${resp.json()}
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -1329,7 +1399,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-UH2
 JD-TC-ResubmitQuestionnaireForAppointment-UH3
     [Documentation]  Resubmit answers with invalid data
 
-    clear_customer   ${PUSERNAME328}
+    # clear_customer   ${PUSERNAME328}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME328}  ${PASSWORD}
     Log  ${resp.content}
@@ -1424,10 +1494,19 @@ JD-TC-ResubmitQuestionnaireForAppointment-UH3
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
 
-    ${resp}=  AddCustomer  ${CUSERNAME9}   
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME37}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${cid}  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
+        ${resp1}=  AddCustomer  ${CUSERNAME37}    firstName=${fname}   lastName=${lname}
+        Log   ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Test Variable  ${cid}  ${resp1.json()}
+    ELSE
+        Set Test Variable  ${cid}  ${resp.json()[0]['id']}
+    END
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -1688,10 +1767,24 @@ JD-TC-ResubmitQuestionnaireForAppointment-5
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
 
-    ${resp}=  AddCustomer  ${CUSERNAME11}   
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME38}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${cid}  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
+        ${resp1}=  AddCustomer  ${CUSERNAME38}    firstName=${fname}   lastName=${lname}
+        Log   ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Test Variable  ${cid}  ${resp1.json()}
+    ELSE
+        Set Test Variable  ${cid}  ${resp.json()[0]['id']}
+    END
+
+    # ${resp}=  AddCustomer  ${CUSERNAME33}   
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${cid}  ${resp.json()}
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
