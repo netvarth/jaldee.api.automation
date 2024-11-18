@@ -32,13 +32,33 @@ JD-TC-RedirectLosLead-1
 
     [Documentation]  Redirect Los Lead -  After proceeding from followup stage
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable  ${provider_id}  ${decrypted_data['id']}
     Set Test Variable  ${provider_name}  ${decrypted_data['userName']}
+
+    ${resp2}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp2.status_code}  200
+
+    IF  '${resp2.json()['jaldeeLending']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Jaldee Lending  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
+    IF  '${resp2.json()['losLead']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Lending Lead  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -262,7 +282,7 @@ JD-TC-RedirectLosLead-UH1
 
     [Documentation]  Redirect Los Lead - where it is first stage
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -275,7 +295,7 @@ JD-TC-RedirectLosLead-2
 
     [Documentation]  Redirect Los Lead -  After kyc stage saving
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -310,7 +330,7 @@ JD-TC-RedirectLosLead-UH2
 
     [Documentation]  Redirect Los Lead - with wrong stage uid
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -325,7 +345,7 @@ JD-TC-RedirectLosLead-3
 
     [Documentation]  Redirect Los Lead -  After proceeding from kyc stage
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -369,7 +389,7 @@ JD-TC-RedirectLosLead-4
 
     [Documentation]  Redirect Los Lead -  After verify kyc
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -404,7 +424,7 @@ JD-TC-RedirectLosLead-5
 
     [Documentation]  Redirect Los Lead -  After Save LOS Lead As Draft For SALESFIELD
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -429,7 +449,7 @@ JD-TC-RedirectLosLead-6
 
     [Documentation]  Redirect Los Lead -  After Proceed Lead For SALESFIELD
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -450,7 +470,7 @@ JD-TC-RedirectLosLead-UH3
 
     [Documentation]  Redirect Los Lead - where lead uid is invalid
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -468,7 +488,7 @@ JD-TC-RedirectLosLead-UH4
 
     [Documentation]  Redirect Los Lead - where stage uid is invalid
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -499,6 +519,26 @@ JD-TC-RedirectLosLead-UH6
     ${resp}=   Encrypted Provider Login  ${PUSERNAME125}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp2}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp2.status_code}  200
+
+    IF  '${resp2.json()['jaldeeLending']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Jaldee Lending  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
+    IF  '${resp2.json()['losLead']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Lending Lead  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
 
     ${NO_PERMISSION_X}=     Replace String  ${NO_PERMISSION_X}  {}   lead
 

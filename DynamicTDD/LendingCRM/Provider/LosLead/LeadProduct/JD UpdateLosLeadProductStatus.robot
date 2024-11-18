@@ -27,6 +27,27 @@ JD-TC-UpdateLeadProductStatus-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+    ${resp2}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp2.status_code}  200
+    
+
+    IF  '${resp2.json()['jaldeeLending']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Jaldee Lending  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
+    IF  '${resp2.json()['losLead']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Lending Lead  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
     Should Be Equal As Strings            ${resp.status_code}  200
@@ -106,6 +127,27 @@ JD-TC-UpdateLeadProductStatus-UH3
     ${resp}=   Encrypted Provider Login  ${PUSERNAME78}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp2}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp2.status_code}  200
+    
+
+    IF  '${resp2.json()['jaldeeLending']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Jaldee Lending  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
+    IF  '${resp2.json()['losLead']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Lending Lead  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
 
     ${NO_PERMISSION_X}=   Replace String  ${NO_PERMISSION_X}  {}   product
 

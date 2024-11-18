@@ -33,13 +33,33 @@ JD-TC-GenerateOTPForLOSLeadConsumerKycPhoneNumber-1
 
     [Documentation]  Generate OTP For LOS Lead Consumer Kyc Phone Number
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable  ${provider_id}  ${decrypted_data['id']}
     Set Test Variable  ${provider_name}  ${decrypted_data['userName']}
+
+    ${resp2}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp2.status_code}  200
+
+    IF  '${resp2.json()['jaldeeLending']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Jaldee Lending  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
+    IF  '${resp2.json()['losLead']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Lending Lead  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -239,7 +259,7 @@ JD-TC-GenerateOTPForLOSLeadConsumerKycPhoneNumber-2
 
     [Documentation]  Generate OTP For LOS Lead Consumer Kyc Phone Number - generate otp twice for same number
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -251,7 +271,7 @@ JD-TC-GenerateOTPForLOSLeadConsumerKycPhoneNumber-UH1
 
     [Documentation]  Generate OTP For LOS Lead Consumer Kyc Phone Number - where lead uid is invalid
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -282,6 +302,26 @@ JD-TC-GenerateOTPForLOSLeadConsumerKycPhoneNumber-UH3
     ${resp}=   Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp2}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp2.status_code}  200
+
+    IF  '${resp2.json()['jaldeeLending']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Jaldee Lending  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
+    IF  '${resp2.json()['losLead']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Lending Lead  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
 
     ${NO_PERMISSION_X}=   Replace String  ${NO_PERMISSION_X}  {}   lead
 

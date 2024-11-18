@@ -25,16 +25,36 @@ ${bankIfsc}                      55555555555
 
 *** Test Cases ***
 
-JD-TC-GetAuditLogorHistory-1
+JD-TC-GenerateCibil-1
 
-    [Documentation]             Get Audit Log Or History
+    [Documentation]             Generate Cibil
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+
+    ${resp2}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp2.status_code}  200
+
+    IF  '${resp2.json()['jaldeeLending']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Jaldee Lending  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
+    IF  '${resp2.json()['losLead']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Lending Lead  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -111,17 +131,15 @@ JD-TC-GetAuditLogorHistory-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable      ${lead_uid}      ${resp.json()['uid']}
 
-    ${resp}=    Get Audit Log or History LOS  ${lead_uid} 
+    ${resp}=    Generate CIBIL LOS  ${lead_uid} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['account']}     ${account_id1}
-    Should Be Equal As Strings    ${resp.json()['leadUid']}     ${lead_uid}
 
-JD-TC-GetAuditLogorHistory-UH1
+JD-TC-GenerateCibil-UH1
 
-    [Documentation]             Get Audit Log Or History- lead uid is invalid
+    [Documentation]             Generate Cibil- lead uid is invalid
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -129,31 +147,51 @@ JD-TC-GetAuditLogorHistory-UH1
 
     ${INVALID_X_ID}=   Replace String  ${INVALID_X_ID}  {}   Lead
 
-    ${resp}=    Get Audit Log or History LOS  ${fake} 
+    ${resp}=    Generate CIBIL LOS  ${fake} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${INVALID_X_ID}
 
-JD-TC-GetAuditLogorHistory-UH2
+JD-TC-GenerateCibil-UH2
 
-    [Documentation]             Get Audit Log Or History- without login
+    [Documentation]             Generate Cibil- without login
 
-    ${resp}=    Get Audit Log or History LOS  ${lead_uid} 
+    ${resp}=    Generate CIBIL LOS  ${lead_uid} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings    ${resp.json()}        ${SESSION_EXPIRED}
 
-JD-TC-GetAuditLogorHistory-UH3
+JD-TC-GenerateCibil-UH3
 
-    [Documentation]             Get Audit Log Or History- with another provider login
+    [Documentation]             Generate Cibil- with another provider login
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME78}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME72}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+    ${resp2}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp2.status_code}  200
+
+    IF  '${resp2.json()['jaldeeLending']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Jaldee Lending  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
+    IF  '${resp2.json()['losLead']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Lending Lead  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
     ${NO_PERMISSION_X}=   Replace String  ${NO_PERMISSION_X}  {}   lead
 
-    ${resp}=    Get Audit Log or History LOS  ${lead_uid} 
+    ${resp}=    Generate CIBIL LOS  ${lead_uid} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${NO_PERMISSION_X}

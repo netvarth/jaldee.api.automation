@@ -32,13 +32,33 @@ JD-TC-SaveAndProceedLosLeadFollowup-1
 
     [Documentation]  Save And Proceed LOS Lead Followup
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
     Set Test Variable  ${provider_name}  ${decrypted_data['userName']}
+
+    ${resp2}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp2.status_code}  200
+
+    IF  '${resp2.json()['jaldeeLending']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Jaldee Lending  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
+    IF  '${resp2.json()['losLead']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Lending Lead  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -236,7 +256,7 @@ JD-TC-SaveAndProceedLosLeadFollowup-UH1
 
     [Documentation]  Save And Proceed LOS Lead Followup - which already Proceed
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -252,7 +272,7 @@ JD-TC-SaveAndProceedLosLeadFollowup-UH2
 
     [Documentation]  Save And Proceed LOS Lead Followup - where lead uid is invalid
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -270,7 +290,7 @@ JD-TC-SaveAndProceedLosLeadFollowup-UH3
 
     [Documentation]  Save And Proceed LOS Lead Followup - where stage uid is invalid
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -301,6 +321,26 @@ JD-TC-SaveAndProceedLosLeadFollowup-UH5
     ${resp}=   Encrypted Provider Login  ${PUSERNAME125}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp2}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp2.status_code}  200
+
+    IF  '${resp2.json()['jaldeeLending']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Jaldee Lending  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
+    IF  '${resp2.json()['losLead']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Lending Lead  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
 
     ${NO_PERMISSION_X}=     Replace String  ${NO_PERMISSION_X}  {}   lead
 

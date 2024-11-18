@@ -32,13 +32,33 @@ JD-TC-GenerateOTPForLOSLeadKycEmail-1
 
     [Documentation]  Generate OTP For LOS Lead Kyc Email
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable  ${provider_id}  ${decrypted_data['id']}
     Set Test Variable  ${provider_name}  ${decrypted_data['userName']}
+
+    ${resp2}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp2.status_code}  200
+
+    IF  '${resp2.json()['jaldeeLending']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Jaldee Lending  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
+    IF  '${resp2.json()['losLead']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Lending Lead  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -258,7 +278,7 @@ JD-TC-GenerateOTPForLOSLeadKycEmail-2
 
     [Documentation]  Generate OTP For LOS Lead Kyc Email - Generate otp for email twice
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -271,7 +291,7 @@ JD-TC-GenerateOTPForLOSLeadKycEmail-UH1
 
     [Documentation]  Generate OTP For LOS Lead Kyc Email - kyc_id is invalid
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -289,7 +309,7 @@ JD-TC-GenerateOTPForLOSLeadKycEmail-UH2
 
     [Documentation]  Generate OTP For LOS Lead Kyc Email - kyc id is empty
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -302,7 +322,7 @@ JD-TC-GenerateOTPForLOSLeadKycEmail-UH3
 
     [Documentation]  Generate OTP For LOS Lead Kyc Email - lead uid is empty
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -316,7 +336,7 @@ JD-TC-GenerateOTPForLOSLeadKycEmail-UH4
 
     [Documentation]  Generate OTP For LOS Lead Kyc Email - lead uid is invalid
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -333,7 +353,7 @@ JD-TC-GenerateOTPForLOSLeadKycEmail-UH5
 
     [Documentation]  Generate OTP For LOS Lead Kyc Email - email id is empty
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -347,7 +367,7 @@ JD-TC-GenerateOTPForLOSLeadKycEmail-UH6
 
     [Documentation]  Generate OTP For LOS Lead Kyc Email - email id is invalid
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -376,6 +396,26 @@ JD-TC-GenerateOTPForLOSLeadKycEmail-UH8
     ${resp}=   Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp2}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp2.status_code}  200
+
+    IF  '${resp2.json()['jaldeeLending']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Jaldee Lending  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
+    IF  '${resp2.json()['losLead']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Lending Lead  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
 
     ${NO_PERMISSION_X}=   Replace String  ${NO_PERMISSION_X}  {}   KYC
 

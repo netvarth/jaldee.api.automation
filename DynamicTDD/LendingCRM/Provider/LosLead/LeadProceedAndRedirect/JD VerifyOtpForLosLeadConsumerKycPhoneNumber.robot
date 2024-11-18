@@ -33,13 +33,33 @@ JD-TC-VerifyOTPForLOSLeadConsumerKycPhoneNumber-1
 
     [Documentation]  Verify OTP For LOS Lead Consumer Kyc Phone Number
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable  ${provider_id}  ${decrypted_data['id']}
     Set Test Variable  ${provider_name}  ${decrypted_data['userName']}
+
+    ${resp2}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp2.status_code}  200
+
+    IF  '${resp2.json()['jaldeeLending']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Jaldee Lending  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
+    IF  '${resp2.json()['losLead']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Lending Lead  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -246,7 +266,7 @@ JD-TC-VerifyOTPForLOSLeadConsumerKycPhoneNumber-UH1
 
     [Documentation]  Verify OTP For LOS Lead Consumer Kyc Phone Number - verifying twice
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -259,7 +279,7 @@ JD-TC-VerifyOTPForLOSLeadConsumerKycPhoneNumber-UH4
 
     [Documentation]  Verify OTP For LOS Lead Consumer Kyc Phone Number - otp purpose is wrong
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -273,7 +293,7 @@ JD-TC-VerifyOTPForLOSLeadConsumerKycPhoneNumber-UH5
 
     [Documentation]  Verify OTP For LOS Lead Consumer Kyc Phone Number - lead_uid is invalid
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

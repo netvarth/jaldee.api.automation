@@ -32,13 +32,33 @@ JD-TC-LosLeadAsDraftForFollowupStage-1
 
     [Documentation]  LOS Lead As Draft For Followup Stage
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME121}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
     Set Test Variable  ${provider_name}  ${decrypted_data['userName']}
+
+    ${resp2}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp2.status_code}  200
+
+    IF  '${resp2.json()['jaldeeLending']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Jaldee Lending  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
+    IF  '${resp2.json()['losLead']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Lending Lead  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -224,7 +244,7 @@ JD-TC-LosLeadAsDraftForFollowupStage-2
 
     [Documentation]  LOS Lead As Draft For Followup Stage - which already saved
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME121}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -237,7 +257,7 @@ JD-TC-LosLeadAsDraftForFollowupStage-3
 
     [Documentation]  LOS Lead As Draft For Followup Stage - without providing product, channel, status, progress and kyc
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME121}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -250,7 +270,7 @@ JD-TC-LosLeadAsDraftForFollowupStage-4
 
     [Documentation]  LOS Lead As Draft For Followup Stage - where remark as sempty
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME121}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -263,7 +283,7 @@ JD-TC-LosLeadAsDraftForFollowupStage-UH1
 
     [Documentation]  LOS Lead As Draft For Followup Stage - where lead uid is invalid
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME121}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -281,7 +301,7 @@ JD-TC-LosLeadAsDraftForFollowupStage-UH2
 
     [Documentation]  LOS Lead As Draft For Followup Stage - where stage uid is invalid
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME121}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -308,7 +328,7 @@ JD-TC-LosLeadAsDraftForFollowupStage-UH4
 
     [Documentation]  LOS Lead As Draft For Followup Stage - where current stage was different
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME121}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -340,6 +360,26 @@ JD-TC-LosLeadAsDraftForFollowupStage-UH5
     ${resp}=   Encrypted Provider Login  ${PUSERNAME125}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp2}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp2.status_code}  200
+
+    IF  '${resp2.json()['jaldeeLending']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Jaldee Lending  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
+    IF  '${resp2.json()['losLead']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Lending Lead  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
 
     ${NO_PERMISSION_X}=     Replace String  ${NO_PERMISSION_X}  {}   lead
 

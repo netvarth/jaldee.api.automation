@@ -294,12 +294,12 @@ JD-TC-ChangeLeadCreditStatus-UH5
 
     END
 
-    ${VARIABLE_DISABLE}=  format String   ${VARIABLE_DISABLE}   Jaldee Lending AI
+    ${TASK_DISABLED}=  format String   ${TASK_DISABLED}   Jaldee Lending AI
 
     ${resp}=    Change Lead Credit Status LOS  ${lead_uid}  ${creditstatus} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}        ${VARIABLE_DISABLE}
+    Should Be Equal As Strings    ${resp.json()}        ${TASK_DISABLED}
 
 
 JD-TC-ChangeLeadCreditStatus-UH6
@@ -330,9 +330,10 @@ JD-TC-ChangeLeadCreditStatus-UH6
 
     END
 
-    ${VARIABLE_DISABLE}=  format String   ${VARIABLE_DISABLE}   Lending Lead
+    ${TASK_DISABLED}=  format String   ${TASK_DISABLED}   Lending Lead
 
     ${resp}=    Change Lead Credit Status LOS  ${lead_uid}  ${creditstatus} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}        ${VARIABLE_DISABLE}
+    Should Be Equal As Strings    ${resp.json()}        ${TASK_DISABLED}
+    

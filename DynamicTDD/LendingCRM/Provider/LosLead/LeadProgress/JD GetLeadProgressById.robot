@@ -32,6 +32,28 @@ JD-TC-GetLeadProgressById-1
     Log  ${decrypted_data}
     Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
+    ${resp2}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp2.status_code}  200
+    Should Be Equal As Strings  ${resp2.json()['jaldeeLending']}         ${bool[0]}
+    Should Be Equal As Strings  ${resp2.json()['losLead']}               ${bool[0]}
+
+    IF  '${resp2.json()['jaldeeLending']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Jaldee Lending  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
+    IF  '${resp2.json()['losLead']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Lending Lead  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
     Should Be Equal As Strings            ${resp.status_code}  200
@@ -66,7 +88,7 @@ JD-TC-GetLeadProgressById-UH2
 
     [Documentation]             Get lead Progress by id where Progress is invalid
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME54}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -83,6 +105,28 @@ JD-TC-GetLeadProgressById-UH3
     ${resp}=   Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp2}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp2.status_code}  200
+    Should Be Equal As Strings  ${resp2.json()['jaldeeLending']}         ${bool[0]}
+    Should Be Equal As Strings  ${resp2.json()['losLead']}               ${bool[0]}
+
+    IF  '${resp2.json()['jaldeeLending']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Jaldee Lending  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
+    IF  '${resp2.json()['losLead']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Lending Lead  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
 
     ${resp}=    Get Lead Progress by id LOS   ${progress_id}
     Log  ${resp.content}

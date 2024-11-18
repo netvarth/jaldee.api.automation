@@ -33,13 +33,33 @@ JD-TC-GenerateOTPForLOSLeadKycPhoneNumber-1
 
     [Documentation]  Generate OTP For LOS Lead Kyc Phone Number
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable  ${provider_id}  ${decrypted_data['id']}
     Set Test Variable  ${provider_name}  ${decrypted_data['userName']}
+
+    ${resp2}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp2.status_code}  200
+
+    IF  '${resp2.json()['jaldeeLending']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Jaldee Lending  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
+    IF  '${resp2.json()['losLead']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Lending Lead  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -248,7 +268,7 @@ JD-TC-GenerateOTPForLOSLeadKycPhoneNumber-2
 
     [Documentation]  Generate OTP For LOS Lead Kyc Phone Number - generate otp twice for same number
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -260,7 +280,7 @@ JD-TC-GenerateOTPForLOSLeadKycPhoneNumber-UH1
 
     [Documentation]  Generate OTP For LOS Lead Kyc Phone Number - where lead uid is invalid
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -274,7 +294,7 @@ JD-TC-GenerateOTPForLOSLeadKycPhoneNumber-UH1
 JD-TC-GenerateOTPForLOSLeadKycPhoneNumber-UH2
 
     [Documentation]  Generate OTP For LOS Lead Kyc Phone Number - where firstname is empty
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -288,7 +308,7 @@ JD-TC-GenerateOTPForLOSLeadKycPhoneNumber-UH3
 
     [Documentation]  Generate OTP For LOS Lead Kyc Phone Number - where last name is empty
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -302,7 +322,7 @@ JD-TC-GenerateOTPForLOSLeadKycPhoneNumber-UH4
 
     [Documentation]  Generate OTP For LOS Lead Kyc Phone Number - where country code is outside india
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -315,7 +335,7 @@ JD-TC-GenerateOTPForLOSLeadKycPhoneNumber-UH5
 
     [Documentation]  Generate OTP For LOS Lead Kyc Phone Number - with real number and other country code
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -328,7 +348,7 @@ JD-TC-GenerateOTPForLOSLeadKycPhoneNumber-UH6
 
     [Documentation]  Generate OTP For LOS Lead Kyc Phone Number - where consumer phone is empty
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -342,7 +362,7 @@ JD-TC-GenerateOTPForLOSLeadKycPhoneNumber-UH7
 
     [Documentation]  Generate OTP For LOS Lead Kyc Phone Number - where phone number is 8 digit
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -358,7 +378,7 @@ JD-TC-GenerateOTPForLOSLeadKycPhoneNumber-3
 
     [Documentation]  Generate OTP For LOS Lead Kyc Phone Number - where gender is not provided
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -371,7 +391,7 @@ JD-TC-GenerateOTPForLOSLeadKycPhoneNumber-UH8
 
     [Documentation]  Generate OTP For LOS Lead Kyc Phone Number - where dob is empty
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -385,7 +405,7 @@ JD-TC-GenerateOTPForLOSLeadKycPhoneNumber-UH9
 
     [Documentation]  Generate OTP For LOS Lead Kyc Phone Number - where relation ship is empty
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -412,6 +432,26 @@ JD-TC-GenerateOTPForLOSLeadKycPhoneNumber-UH11
     ${resp}=   Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp2}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp2.status_code}  200
+
+    IF  '${resp2.json()['jaldeeLending']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Jaldee Lending  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
+    IF  '${resp2.json()['losLead']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Lending Lead  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
 
     ${resp}=    Generate OTP For LOS Lead Kyc Phone Number  ${lead_uid}  consumerFirstName=${CO_Applicant_FirstName}  consumerLastName=${CO_Applicant_LastName}  consumerPhoneCode=${countryCodes[0]}  consumerPhone=${Co_Applicant_Phone}  gender=${Genderlist[0]}  dob=${dob}  relationType=${relationType[3]}
     Log  ${resp.content}

@@ -122,3 +122,70 @@ JD-TC-CreateLeadCreditStatus-UH2
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
 
+
+JD-TC-CreateLeadCreditStatus-UH3
+
+    [Documentation]             Create lead Credit Status - where Lending Lead is disabled
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp2}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp2.status_code}  200
+
+    IF  '${resp2.json()['jaldeeLending']}'=='${bool[1]}'
+
+        ${resp}=    Enable Disable Jaldee Lending  ${toggle[1]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
+    ${TASK_DISABLED}=  format String   ${TASK_DISABLED}   Jaldee Lending AI
+
+    ${name2}=    Random Int  min=300  max=999
+
+    ${resp}=    Create Lead Credit Status LOS  ${name2}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${TASK_DISABLED}
+
+
+JD-TC-CreateLeadCreditStatus-UH4
+
+    [Documentation]             Create lead Credit Status - where jaldeeLending is disabled
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp2}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp2.status_code}  200
+
+    IF  '${resp2.json()['jaldeeLending']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable Jaldee Lending  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
+    IF  '${resp2.json()['losLead']}'=='${bool[1]}'
+
+        ${resp}=    Enable Disable Lending Lead  ${toggle[1]}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+    END
+
+    ${TASK_DISABLED}=  format String   ${TASK_DISABLED}   Lending Lead
+
+    ${name2}=    Random Int  min=300  max=999
+
+    ${resp}=    Create Lead Credit Status LOS  ${name2}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${TASK_DISABLED}
