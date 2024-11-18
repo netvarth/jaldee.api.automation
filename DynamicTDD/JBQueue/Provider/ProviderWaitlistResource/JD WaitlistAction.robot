@@ -527,7 +527,7 @@ JD-TC-WaitlistAction-UH23
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}   200
       
-      clear_queue  ${PUSERNAME216}
+      # clear_queue  ${PUSERNAME216}
       clear_customer    ${PUSERNAME216}
       
       ${resp}=    Get Locations

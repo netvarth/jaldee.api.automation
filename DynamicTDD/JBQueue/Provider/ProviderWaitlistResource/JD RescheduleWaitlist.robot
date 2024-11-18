@@ -61,7 +61,7 @@ JD-TC-Reschedule Waitlist-1
     [Documentation]  Provider takes checkin for a consumer and reschedules it to another day.
     ...  ${SPACE} Check Communication messages also
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -83,7 +83,7 @@ JD-TC-Reschedule Waitlist-1
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_customer   ${PUSERNAME32}
+    clear_customer   ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -199,7 +199,7 @@ JD-TC-Reschedule Waitlist-1
     Should Be Equal As Strings  ${resp.status_code}   200
 
 
-    ${account_id}=  get_acc_id  ${PUSERNAME32}
+    ${account_id}=  get_acc_id  ${HLPUSERNAME34}
     Set Suite Variable  ${account_id}
     ${resp}=  Send Otp For Login    ${CUSERNAME12}    ${account_id}
     Log   ${resp.content}
@@ -242,7 +242,7 @@ JD-TC-Reschedule Waitlist-2
     ...   ${SPACE}Also check Provider and Consumer messages.
 
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -250,7 +250,7 @@ JD-TC-Reschedule Waitlist-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_customer   ${PUSERNAME32}
+    clear_customer   ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -269,7 +269,7 @@ JD-TC-Reschedule Waitlist-2
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    # clear_queue   ${PUSERNAME32}
+    clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -400,7 +400,7 @@ JD-TC-Reschedule Waitlist-3
     ...   ${SPACE}and checks messages
   
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -414,7 +414,7 @@ JD-TC-Reschedule Waitlist-3
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_customer   ${PUSERNAME32}
+    clear_customer   ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -433,7 +433,7 @@ JD-TC-Reschedule Waitlist-3
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    # clear_queue   ${PUSERNAME32}
+    clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -1093,7 +1093,7 @@ JD-TC-Reschedule Waitlist-5
 JD-TC-Reschedule Waitlist-6
     [Documentation]  Provider takes checkin for a consumer using token and reschedules it to a future date
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1125,7 +1125,7 @@ JD-TC-Reschedule Waitlist-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  showTokenId=${bool[1]}
     
-    clear_customer   ${PUSERNAME32}
+    clear_customer   ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1144,7 +1144,7 @@ JD-TC-Reschedule Waitlist-6
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -1249,7 +1249,7 @@ JD-TC-Reschedule Waitlist-7
     [Documentation]  Provider takes checkin for a consumer using token and reschedules it to a future date when there is already a checkin there
 
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1279,7 +1279,7 @@ JD-TC-Reschedule Waitlist-7
     Log  ${resp.json()}
     Verify Response  ${resp}  showTokenId=${bool[1]}
 
-    clear_customer   ${PUSERNAME32}
+    clear_customer   ${HLPUSERNAME34}
 
 
     ${resp}=   Get Service
@@ -1299,7 +1299,7 @@ JD-TC-Reschedule Waitlist-7
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -1435,7 +1435,7 @@ JD-TC-Reschedule Waitlist-8
     [Documentation]  Provider takes future checkin for a consumer and reschedules it to today.
     ...  ${SPACE} Check Communication messages als
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1462,7 +1462,7 @@ JD-TC-Reschedule Waitlist-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  showTokenId=${bool[0]}
 
-    clear_customer   ${PUSERNAME32}
+    clear_customer   ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1481,7 +1481,7 @@ JD-TC-Reschedule Waitlist-8
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -1735,7 +1735,7 @@ JD-TC-Reschedule Waitlist-9
 JD-TC-Reschedule Waitlist-10
     [Documentation]  Provider takes checkin for a consumer and reschedules it to another queue with token
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1749,7 +1749,7 @@ JD-TC-Reschedule Waitlist-10
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_customer   ${PUSERNAME32}
+    clear_customer   ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1768,7 +1768,7 @@ JD-TC-Reschedule Waitlist-10
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -1871,7 +1871,7 @@ JD-TC-Reschedule Waitlist-10
 JD-TC-Reschedule Waitlist-11
     [Documentation]  Provider takes checkin for a consumer and reschedules it it to a future date when future checkin is disable
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1885,11 +1885,11 @@ JD-TC-Reschedule Waitlist-11
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
-    clear_customer   ${PUSERNAME32}
-    clear_consumer_msgs  ${CUSERNAME12}
-    clear_provider_msgs  ${PUSERNAME32}
+    # clear_location   ${HLPUSERNAME34}
+    # clear_service    ${HLPUSERNAME34}
+    clear_customer   ${HLPUSERNAME34}
+    # clear_consumer_msgs  ${CUSERNAME12}
+    # clear_provider_msgs  ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1908,7 +1908,7 @@ JD-TC-Reschedule Waitlist-11
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -1995,7 +1995,7 @@ JD-TC-Reschedule Waitlist-12
     [Documentation]  Consumer takes checkin for a provider and provider reschedules it to another day.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2040,7 +2040,7 @@ JD-TC-Reschedule Waitlist-12
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -2091,7 +2091,7 @@ JD-TC-Reschedule Waitlist-12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2276,7 +2276,7 @@ JD-TC-Reschedule Waitlist-UH1
 JD-TC-Reschedule Waitlist-UH2
     [Documentation]  Provider takes checkin for a consumer and reschedules it to another day after queue end date
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2290,11 +2290,11 @@ JD-TC-Reschedule Waitlist-UH2
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
-    clear_customer   ${PUSERNAME32}
-    clear_consumer_msgs  ${CUSERNAME12}
-    clear_provider_msgs  ${PUSERNAME32}
+    # clear_location   ${HLPUSERNAME34}
+    # clear_service    ${HLPUSERNAME34}
+    clear_customer   ${HLPUSERNAME34}
+    # clear_consumer_msgs  ${CUSERNAME12}
+    # clear_provider_msgs  ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2313,7 +2313,7 @@ JD-TC-Reschedule Waitlist-UH2
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -2387,7 +2387,7 @@ JD-TC-Reschedule Waitlist-UH2
 JD-TC-Reschedule Waitlist-UH3
     [Documentation]  Provider takes checkin for a consumer and reschedules it to another day before queue start date
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2401,11 +2401,11 @@ JD-TC-Reschedule Waitlist-UH3
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
-    clear_customer   ${PUSERNAME32}
-    clear_consumer_msgs  ${CUSERNAME12}
-    clear_provider_msgs  ${PUSERNAME32}
+    # clear_location   ${HLPUSERNAME34}
+    # clear_service    ${HLPUSERNAME34}
+    clear_customer   ${HLPUSERNAME34}
+    # clear_consumer_msgs  ${CUSERNAME12}
+    # clear_provider_msgs  ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2424,7 +2424,7 @@ JD-TC-Reschedule Waitlist-UH3
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -2496,7 +2496,7 @@ JD-TC-Reschedule Waitlist-UH3
 JD-TC-Reschedule Waitlist-UH4
     [Documentation]  Provider takes checkin for a consumer and reschedules it to a past date
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2510,11 +2510,11 @@ JD-TC-Reschedule Waitlist-UH4
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
-    clear_customer   ${PUSERNAME32}
-    clear_consumer_msgs  ${CUSERNAME12}
-    clear_provider_msgs  ${PUSERNAME32}
+    # clear_location   ${HLPUSERNAME34}
+    # clear_service    ${HLPUSERNAME34}
+    clear_customer   ${HLPUSERNAME34}
+    # clear_consumer_msgs  ${CUSERNAME12}
+    # clear_provider_msgs  ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2533,7 +2533,7 @@ JD-TC-Reschedule Waitlist-UH4
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -2607,7 +2607,7 @@ JD-TC-Reschedule Waitlist-UH4
 JD-TC-Reschedule Waitlist-UH5
     [Documentation]  Provider takes checkin for a consumer and reschedules it after changing waitlist status to completed
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2621,11 +2621,11 @@ JD-TC-Reschedule Waitlist-UH5
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
-    clear_customer   ${PUSERNAME32}
-    clear_consumer_msgs  ${CUSERNAME12}
-    clear_provider_msgs  ${PUSERNAME32}
+    # clear_location   ${HLPUSERNAME34}
+    # clear_service    ${HLPUSERNAME34}
+    clear_customer   ${HLPUSERNAME34}
+    # clear_consumer_msgs  ${CUSERNAME12}
+    # clear_provider_msgs  ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2644,7 +2644,7 @@ JD-TC-Reschedule Waitlist-UH5
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -2728,7 +2728,7 @@ JD-TC-Reschedule Waitlist-UH5
 JD-TC-Reschedule Waitlist-UH6
     [Documentation]  Provider takes checkin for a consumer and reschedules it with the same details twic
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2742,11 +2742,11 @@ JD-TC-Reschedule Waitlist-UH6
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
-    clear_customer   ${PUSERNAME32}
-    clear_consumer_msgs  ${CUSERNAME12}
-    clear_provider_msgs  ${PUSERNAME32}
+    # clear_location   ${HLPUSERNAME34}
+    # clear_service    ${HLPUSERNAME34}
+    clear_customer   ${HLPUSERNAME34}
+    # clear_consumer_msgs  ${CUSERNAME12}
+    # clear_provider_msgs  ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2765,7 +2765,7 @@ JD-TC-Reschedule Waitlist-UH6
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -2908,7 +2908,7 @@ JD-TC-Reschedule Waitlist-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2922,11 +2922,11 @@ JD-TC-Reschedule Waitlist-UH7
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
-    clear_customer   ${PUSERNAME32}
-    clear_consumer_msgs  ${CUSERNAME12}
-    clear_provider_msgs  ${PUSERNAME32}
+    # clear_location   ${HLPUSERNAME34}
+    # clear_service    ${HLPUSERNAME34}
+    clear_customer   ${HLPUSERNAME34}
+    # clear_consumer_msgs  ${CUSERNAME12}
+    # clear_provider_msgs  ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2945,7 +2945,7 @@ JD-TC-Reschedule Waitlist-UH7
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -3009,7 +3009,7 @@ JD-TC-Reschedule Waitlist-UH7
 JD-TC-Reschedule Waitlist-UH9
     [Documentation]  Provider takes checkin for a consumer and reschedules it with current checkin details
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3023,11 +3023,11 @@ JD-TC-Reschedule Waitlist-UH9
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
-    clear_customer   ${PUSERNAME32}
-    clear_consumer_msgs  ${CUSERNAME12}
-    clear_provider_msgs  ${PUSERNAME32}
+    # clear_location   ${HLPUSERNAME34}
+    # clear_service    ${HLPUSERNAME34}
+    clear_customer   ${HLPUSERNAME34}
+    # clear_consumer_msgs  ${CUSERNAME12}
+    # clear_provider_msgs  ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3046,7 +3046,7 @@ JD-TC-Reschedule Waitlist-UH9
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -3110,7 +3110,7 @@ JD-TC-Reschedule Waitlist-UH9
 JD-TC-Reschedule Waitlist-UH10
     [Documentation]  Provider takes checkin for a consumer and reschedules it to non existant queue
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3124,11 +3124,11 @@ JD-TC-Reschedule Waitlist-UH10
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
-    clear_customer   ${PUSERNAME32}
-    clear_consumer_msgs  ${CUSERNAME12}
-    clear_provider_msgs  ${PUSERNAME32}
+    # clear_location   ${HLPUSERNAME34}
+    # clear_service    ${HLPUSERNAME34}
+    clear_customer   ${HLPUSERNAME34}
+    # clear_consumer_msgs  ${CUSERNAME12}
+    # clear_provider_msgs  ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3147,7 +3147,7 @@ JD-TC-Reschedule Waitlist-UH10
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -3213,7 +3213,7 @@ JD-TC-Reschedule Waitlist-UH10
 JD-TC-Reschedule Waitlist-UH11
     [Documentation]  Provider takes checkin for a consumer and reschedules it to non working day
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3227,11 +3227,11 @@ JD-TC-Reschedule Waitlist-UH11
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
-    clear_customer   ${PUSERNAME32}
-    clear_consumer_msgs  ${CUSERNAME12}
-    clear_provider_msgs  ${PUSERNAME32}
+    # clear_location   ${HLPUSERNAME34}
+    # clear_service    ${HLPUSERNAME34}
+    clear_customer   ${HLPUSERNAME34}
+    # clear_consumer_msgs  ${CUSERNAME12}
+    # clear_provider_msgs  ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3250,7 +3250,7 @@ JD-TC-Reschedule Waitlist-UH11
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -3320,7 +3320,7 @@ JD-TC-Reschedule Waitlist-UH11
 JD-TC-Reschedule Waitlist-UH12
     [Documentation]  Provider takes checkin for a consumer and reschedules it to holiday
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3334,11 +3334,11 @@ JD-TC-Reschedule Waitlist-UH12
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
-    clear_customer   ${PUSERNAME32}
-    clear_consumer_msgs  ${CUSERNAME12}
-    clear_provider_msgs  ${PUSERNAME32}
+    # clear_location   ${HLPUSERNAME34}
+    # clear_service    ${HLPUSERNAME34}
+    clear_customer   ${HLPUSERNAME34}
+    # clear_consumer_msgs  ${CUSERNAME12}
+    # clear_provider_msgs  ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3357,7 +3357,7 @@ JD-TC-Reschedule Waitlist-UH12
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -3437,7 +3437,7 @@ JD-TC-Reschedule Waitlist-UH12
 JD-TC-Reschedule Waitlist-UH13
     [Documentation]  Provider reschedules an invalid waitlist id
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3451,11 +3451,11 @@ JD-TC-Reschedule Waitlist-UH13
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
-    clear_customer   ${PUSERNAME32}
-    clear_consumer_msgs  ${CUSERNAME12}
-    clear_provider_msgs  ${PUSERNAME32}
+    # clear_location   ${HLPUSERNAME34}
+    # clear_service    ${HLPUSERNAME34}
+    clear_customer   ${HLPUSERNAME34}
+    # clear_consumer_msgs  ${CUSERNAME12}
+    # clear_provider_msgs  ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3474,7 +3474,7 @@ JD-TC-Reschedule Waitlist-UH13
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -3536,8 +3536,8 @@ JD-TC-Reschedule Waitlist-UH14
     clear_location   ${PUSERNAME33}
     clear_service    ${PUSERNAME33}
     clear_customer   ${PUSERNAME33}
-    clear_consumer_msgs  ${CUSERNAME12}
-    clear_provider_msgs  ${PUSERNAME32}
+    # clear_consumer_msgs  ${CUSERNAME12}
+    # clear_provider_msgs  ${HLPUSERNAME34}
     
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3611,7 +3611,7 @@ JD-TC-Reschedule Waitlist-UH14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3625,11 +3625,11 @@ JD-TC-Reschedule Waitlist-UH14
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
-    clear_customer   ${PUSERNAME32}
-    clear_consumer_msgs  ${CUSERNAME12}
-    clear_provider_msgs  ${PUSERNAME32}
+    # clear_location   ${HLPUSERNAME34}
+    # clear_service    ${HLPUSERNAME34}
+    clear_customer   ${HLPUSERNAME34}
+    # clear_consumer_msgs  ${CUSERNAME12}
+    # clear_provider_msgs  ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3648,7 +3648,7 @@ JD-TC-Reschedule Waitlist-UH14
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -3689,7 +3689,7 @@ JD-TC-Reschedule Waitlist-UH14
 JD-TC-Reschedule Waitlist-UH15
     [Documentation]  Provider reschedules without login
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3703,11 +3703,11 @@ JD-TC-Reschedule Waitlist-UH15
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
-    clear_customer   ${PUSERNAME32}
-    clear_consumer_msgs  ${CUSERNAME12}
-    clear_provider_msgs  ${PUSERNAME32}
+    # clear_location   ${HLPUSERNAME34}
+    # clear_service    ${HLPUSERNAME34}
+    clear_customer   ${HLPUSERNAME34}
+    # clear_consumer_msgs  ${CUSERNAME12}
+    # clear_provider_msgs  ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3726,7 +3726,7 @@ JD-TC-Reschedule Waitlist-UH15
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -3796,7 +3796,7 @@ JD-TC-Reschedule Waitlist-UH15
 JD-TC-Reschedule Waitlist-UH16
     [Documentation]  Reschedules with consumer login
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3810,11 +3810,11 @@ JD-TC-Reschedule Waitlist-UH16
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
-    clear_customer   ${PUSERNAME32}
-    clear_consumer_msgs  ${CUSERNAME12}
-    clear_provider_msgs  ${PUSERNAME32}
+    # clear_location   ${HLPUSERNAME34}
+    # clear_service    ${HLPUSERNAME34}
+    clear_customer   ${HLPUSERNAME34}
+    # clear_consumer_msgs  ${CUSERNAME12}
+    # clear_provider_msgs  ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3833,7 +3833,7 @@ JD-TC-Reschedule Waitlist-UH16
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -3906,7 +3906,7 @@ JD-TC-Reschedule Waitlist-UH16
 JD-TC-Reschedule Waitlist-UH17
     [Documentation]  Reschedules without waitlist id
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3920,11 +3920,11 @@ JD-TC-Reschedule Waitlist-UH17
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
-    clear_customer   ${PUSERNAME32}
-    clear_consumer_msgs  ${CUSERNAME12}
-    clear_provider_msgs  ${PUSERNAME32}
+    # clear_location   ${HLPUSERNAME34}
+    # clear_service    ${HLPUSERNAME34}
+    clear_customer   ${HLPUSERNAME34}
+    # clear_consumer_msgs  ${CUSERNAME12}
+    # clear_provider_msgs  ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3943,7 +3943,7 @@ JD-TC-Reschedule Waitlist-UH17
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -4008,7 +4008,7 @@ JD-TC-Reschedule Waitlist-UH17
 JD-TC-Reschedule Waitlist-UH18
     [Documentation]  Reschedules without queue
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4022,11 +4022,11 @@ JD-TC-Reschedule Waitlist-UH18
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
-    clear_customer   ${PUSERNAME32}
-    clear_consumer_msgs  ${CUSERNAME12}
-    clear_provider_msgs  ${PUSERNAME32}
+    # clear_location   ${HLPUSERNAME34}
+    # clear_service    ${HLPUSERNAME34}
+    clear_customer   ${HLPUSERNAME34}
+    # clear_consumer_msgs  ${CUSERNAME12}
+    # clear_provider_msgs  ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -4045,7 +4045,7 @@ JD-TC-Reschedule Waitlist-UH18
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -4110,7 +4110,7 @@ JD-TC-Reschedule Waitlist-UH18
 JD-TC-Reschedule Waitlist-UH19
     [Documentation]  Reschedules without date
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4124,11 +4124,11 @@ JD-TC-Reschedule Waitlist-UH19
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
-    clear_customer   ${PUSERNAME32}
-    clear_consumer_msgs  ${CUSERNAME12}
-    clear_provider_msgs  ${PUSERNAME32}
+    # clear_location   ${HLPUSERNAME34}
+    # clear_service    ${HLPUSERNAME34}
+    clear_customer   ${HLPUSERNAME34}
+    # clear_consumer_msgs  ${CUSERNAME12}
+    # clear_provider_msgs  ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -4147,7 +4147,7 @@ JD-TC-Reschedule Waitlist-UH19
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -4222,7 +4222,7 @@ JD-TC-Reschedule Waitlist-UH19
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
     
-#     ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4236,11 +4236,11 @@ JD-TC-Reschedule Waitlist-UH19
 #     Set Test Variable  ${pid}  ${resp.json()['id']}
 #     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-#     clear_location   ${PUSERNAME32}
-#     clear_service    ${PUSERNAME32}
-#     clear_customer   ${PUSERNAME32}
+#     clear_location   ${HLPUSERNAME34}
+#     clear_service    ${HLPUSERNAME34}
+#     clear_customer   ${HLPUSERNAME34}
 #     clear_consumer_msgs  ${CUSERNAME12}
-#     clear_provider_msgs  ${PUSERNAME32}
+#     clear_provider_msgs  ${HLPUSERNAME34}
 
 #     ${resp}=   Get Service
 #     Log   ${resp.json()}
@@ -4261,7 +4261,7 @@ JD-TC-Reschedule Waitlist-UH19
 #     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
 #     ${lid}=  Create Sample Location  
-#     clear_queue   ${PUSERNAME32}
+    clear_queue   ${HLPUSERNAME34}
 
 #     ${resp}=  Get Queues
 #     Log  ${resp.json()}
@@ -4352,7 +4352,7 @@ JD-TC-Reschedule Waitlist-UH21
     [Documentation]  Provider takes checkin for a consumer and reschedules it to a disabled queue
     ...   ${SPACE}and checks messages
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4366,11 +4366,11 @@ JD-TC-Reschedule Waitlist-UH21
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
-    clear_customer   ${PUSERNAME32}
-    clear_consumer_msgs  ${CUSERNAME12}
-    clear_provider_msgs  ${PUSERNAME32}
+    # clear_location   ${HLPUSERNAME34}
+    # clear_service    ${HLPUSERNAME34}
+    clear_customer   ${HLPUSERNAME34}
+    # clear_consumer_msgs  ${CUSERNAME12}
+    # clear_provider_msgs  ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -4389,7 +4389,7 @@ JD-TC-Reschedule Waitlist-UH21
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -4475,7 +4475,7 @@ JD-TC-Reschedule Waitlist-UH21
 JD-TC-Reschedule Waitlist-UH22
     [Documentation]  Provider takes future checkin for a consumer and reschedules it to today when today checkin is disable
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4489,11 +4489,11 @@ JD-TC-Reschedule Waitlist-UH22
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
-    clear_customer   ${PUSERNAME32}
-    clear_consumer_msgs  ${CUSERNAME12}
-    clear_provider_msgs  ${PUSERNAME32}
+    # clear_location   ${HLPUSERNAME34}
+    # clear_service    ${HLPUSERNAME34}
+    clear_customer   ${HLPUSERNAME34}
+    # clear_consumer_msgs  ${CUSERNAME12}
+    # clear_provider_msgs  ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -4512,7 +4512,7 @@ JD-TC-Reschedule Waitlist-UH22
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -4587,7 +4587,7 @@ JD-TC-Reschedule Waitlist-UH22
 JD-TC-Reschedule Waitlist-UH23
     [Documentation]  Provider takes checkin for a consumer and reschedules it after cancelling waitlist
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4614,11 +4614,11 @@ JD-TC-Reschedule Waitlist-UH23
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
-    clear_customer   ${PUSERNAME32}
-    clear_consumer_msgs  ${CUSERNAME12}
-    clear_provider_msgs  ${PUSERNAME32}
+    # clear_location   ${HLPUSERNAME34}
+    # clear_service    ${HLPUSERNAME34}
+    clear_customer   ${HLPUSERNAME34}
+    # clear_consumer_msgs  ${CUSERNAME12}
+    # clear_provider_msgs  ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -4637,7 +4637,7 @@ JD-TC-Reschedule Waitlist-UH23
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -4724,7 +4724,7 @@ JD-TC-Reschedule Waitlist-UH23
 JD-TC-Reschedule Waitlist-UH24
     [Documentation]  Provider takes checkin for a consumer and reschedules it after changing waitlist status to started
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4738,11 +4738,11 @@ JD-TC-Reschedule Waitlist-UH24
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
-    clear_customer   ${PUSERNAME32}
-    clear_consumer_msgs  ${CUSERNAME12}
-    clear_provider_msgs  ${PUSERNAME32}
+    # clear_location   ${HLPUSERNAME34}
+    # clear_service    ${HLPUSERNAME34}
+    clear_customer   ${HLPUSERNAME34}
+    # clear_consumer_msgs  ${CUSERNAME12}
+    # clear_provider_msgs  ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -4761,7 +4761,7 @@ JD-TC-Reschedule Waitlist-UH24
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -4875,7 +4875,7 @@ JD-TC-Reschedule Waitlist-UH25
     [Documentation]  Provider takes today checkin and future checkin for a consumer and reschedules the future checkin to today.
     ...  ${SPACE} Check Communication messages als
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4902,11 +4902,11 @@ JD-TC-Reschedule Waitlist-UH25
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  showTokenId=${bool[0]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
-    clear_customer   ${PUSERNAME32}
-    clear_consumer_msgs  ${CUSERNAME12}
-    clear_provider_msgs  ${PUSERNAME32}
+    # clear_location   ${HLPUSERNAME34}
+    # clear_service    ${HLPUSERNAME34}
+    clear_customer   ${HLPUSERNAME34}
+    # clear_consumer_msgs  ${CUSERNAME12}
+    # clear_provider_msgs  ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -4925,7 +4925,7 @@ JD-TC-Reschedule Waitlist-UH25
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -5013,7 +5013,7 @@ JD-TC-Reschedule Waitlist-UH26
     ...  ${SPACE} Check Communication messages also
 
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -5041,11 +5041,11 @@ JD-TC-Reschedule Waitlist-UH26
     # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
     # Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
-    clear_customer   ${PUSERNAME32}
-    clear_consumer_msgs  ${CUSERNAME12}
-    clear_provider_msgs  ${PUSERNAME32}
+    # clear_location   ${HLPUSERNAME34}
+    # clear_service    ${HLPUSERNAME34}
+    clear_customer   ${HLPUSERNAME34}
+    # clear_consumer_msgs  ${CUSERNAME12}
+    # clear_provider_msgs  ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -5064,7 +5064,7 @@ JD-TC-Reschedule Waitlist-UH26
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -5134,7 +5134,7 @@ JD-TC-Reschedule Waitlist-UH26
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -5156,7 +5156,7 @@ JD-TC-Reschedule Waitlist-UH27
     [Documentation]  Provider reschedules waitlist after provider takes checkin and consumer cancels it.
     ...  ${SPACE} Check Communication messages also
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -5186,11 +5186,11 @@ JD-TC-Reschedule Waitlist-UH27
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
-    clear_customer   ${PUSERNAME32}
-    clear_consumer_msgs  ${CUSERNAME12}
-    clear_provider_msgs  ${PUSERNAME32}
+    # clear_location   ${HLPUSERNAME34}
+    # clear_service    ${HLPUSERNAME34}
+    clear_customer   ${HLPUSERNAME34}
+    # clear_consumer_msgs  ${CUSERNAME12}
+    # clear_provider_msgs  ${HLPUSERNAME34}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -5209,7 +5209,7 @@ JD-TC-Reschedule Waitlist-UH27
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -5290,7 +5290,7 @@ JD-TC-Reschedule Waitlist-UH27
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
