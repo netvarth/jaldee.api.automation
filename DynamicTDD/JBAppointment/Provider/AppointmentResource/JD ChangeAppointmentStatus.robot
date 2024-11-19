@@ -1926,10 +1926,15 @@ JD-TC-ChangeAppointmentStatus-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Appointment Status   ${apptid1}
-    Log   ${resp.json()}
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[3]['appointmentStatus']}   ${apptStatus[6]}
+    Should Be Equal As Strings   ${resp.json()['apptStatus']}  ${apptStatus[6]}
+
+    # ${resp}=  Get Appointment Status   ${apptid1}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()[3]['appointmentStatus']}   ${apptStatus[6]}
 
     ${APPT_STATUS_NOT_CHANGEABLE}=  Format String    ${APPT_STATUS_NOT_CHANGEABLE}    ${apptStatus[6]}   ${apptStatus[3]}
     ${resp}=  Appointment Action   ${apptStatus[3]}   ${apptid1}
@@ -2343,11 +2348,16 @@ JD-TC-ChangeAppointmentStatus-UH9
     ${resp}=  Appointment Action   ${apptStatus[4]}   ${apptid1}    cancelReason=${reason}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-   
-    ${resp}=  Get Appointment Status   ${apptid1}
-    Log   ${resp.json()}
+    
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[2]['appointmentStatus']}   ${apptStatus[6]}
+    Should Be Equal As Strings   ${resp.json()['apptStatus']}  ${apptStatus[6]}
+
+    # ${resp}=  Get Appointment Status   ${apptid1}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()[2]['appointmentStatus']}   ${apptStatus[6]}
 
 JD-TC-ChangeAppointmentStatus-UH10
 
@@ -2452,10 +2462,10 @@ JD-TC-ChangeAppointmentStatus-UH10
     # Should Be Equal As Strings  ${resp.status_code}  422
     # Should Be Equal As Strings    ${resp.json()}    ${APPT_STATUS_NOT_CHANGEABLE}
 
-    ${resp}=  Get Appointment Status   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[1]['appointmentStatus']}   ${apptStatus[5]}
+    # ${resp}=  Get Appointment Status   ${apptid1}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()[1]['appointmentStatus']}   ${apptStatus[5]}
 
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}

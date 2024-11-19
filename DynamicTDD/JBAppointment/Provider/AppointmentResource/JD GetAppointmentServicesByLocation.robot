@@ -26,7 +26,7 @@ JD-TC-GetAppointmentServicesByLocation-1
 
     [Documentation]  Provider get Service By LocationId.  
   
-    ${PUSERNAME_R}=  Evaluate  ${PUSERNAME}+556601145
+    # ${PUSERNAME_R}=  Evaluate  ${PUSERNAME}+556601145
     ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_R}=  Provider Signup without Profile  PhoneNumber=${PUSERNAME_R}
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}

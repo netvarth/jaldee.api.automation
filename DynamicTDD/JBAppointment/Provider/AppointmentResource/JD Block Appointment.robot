@@ -74,6 +74,7 @@ JD-TC-Block Appointment-1
     Set Suite Variable  ${s_id}
 
     ${SERVICE2}=  generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}   
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     Set Suite Variable   ${min_pre}
     ${s_id1}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=10   isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre} 

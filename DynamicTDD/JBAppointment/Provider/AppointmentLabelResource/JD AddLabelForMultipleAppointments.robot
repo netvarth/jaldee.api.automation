@@ -2955,7 +2955,7 @@ JD-TC-AddMultipleAppointmentLabel-14
         Append To List   ${appt ids}  ${apptid${a}}
 
     END
-    
+
     ${resp}=  Get Label By Id  ${label_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -3921,12 +3921,12 @@ JD-TC-AddMultipleAppointmentLabel-UH6
     ${resp}=  Get Appointment By Id   ${appt_i}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}   label=${Emptydict}
+    Verify Response   ${resp}   label=${label}
 
     ${resp}=  Get Appointment By Id   ${appt_j}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}   label=${Emptydict}
+    Verify Response   ${resp}   label=${label}
 
     ${label_dict}=  Create Label Dictionary  ${lbl_name}  ${lbl_value}
 

@@ -38,7 +38,7 @@ JD-TC-GetAppointmentStatus-1
     # # clear_service   ${PUSERNAME200}
     # # clear_location  ${PUSERNAME200}
     # ${pid}=  get_acc_id  ${PUSERNAME200}
-    # ${cid}=  get_id  ${CUSERNAME24}
+    # ${cid}=  get_id  ${NewCustomer}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
     Log   ${resp.json()}
@@ -132,7 +132,7 @@ JD-TC-GetAppointmentStatus-1
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
-    ${resp}=  AddCustomer  ${CUSERNAME24}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
+    ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()}
@@ -141,18 +141,18 @@ JD-TC-GetAppointmentStatus-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME24}    ${pid}
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME24}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME24}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     # Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -211,7 +211,7 @@ JD-TC-GetAppointmentStatus-2
     # clear_service   ${PUSERNAME201}
     # clear_location  ${PUSERNAME201}
     # ${pid}=  get_acc_id  ${PUSERNAME201}
-    # ${cid}=  get_id  ${CUSERNAME24}
+    # ${cid}=  get_id  ${NewCustomer}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME201}  ${PASSWORD}
     Log   ${resp.json()}
@@ -304,7 +304,8 @@ JD-TC-GetAppointmentStatus-2
   
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME24}  firstName=${fname}   lastName=${lname}   
+    ${NewCustomer}=  Generate Random 555 Number
+    ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${cid}  ${resp.json()}
@@ -313,18 +314,18 @@ JD-TC-GetAppointmentStatus-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME24}    ${pid}
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME24}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME24}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -407,7 +408,7 @@ JD-TC-GetAppointmentStatus-3
     # clear_service   ${PUSERNAME187}
     # clear_location  ${PUSERNAME187}
     # ${pid}=  get_acc_id  ${PUSERNAME187}
-    # ${cid}=  get_id  ${CUSERNAME24}
+    # ${cid}=  get_id  ${NewCustomer}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME187}  ${PASSWORD}
     Log   ${resp.json()}
@@ -488,7 +489,7 @@ JD-TC-GetAppointmentStatus-3
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
-    ${resp}=  AddCustomer  ${CUSERNAME24}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
+    ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()}
@@ -497,18 +498,18 @@ JD-TC-GetAppointmentStatus-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME24}    ${pid}
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME24}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME24}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     # Set Test Variable  ${jdconID}   ${resp.json()['id']}
