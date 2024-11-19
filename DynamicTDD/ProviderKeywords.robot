@@ -15007,6 +15007,7 @@ LOS Lead As Draft For Followup Stage
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/followup/data   data=${data}  expected_status=any
+    Check Deprication  ${resp}  LOS Lead As Draft For Followup Stage
     RETURN  ${resp}
 
 Save And Proceed LOS Lead Followup
@@ -15020,6 +15021,7 @@ Save And Proceed LOS Lead Followup
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/followup/data/proceed   data=${data}  expected_status=any
+    Check Deprication  ${resp}  Save And Proceed LOS Lead Followup
     RETURN  ${resp}
 
 Save LOS Lead As Draft For Kyc
@@ -15033,6 +15035,7 @@ Save LOS Lead As Draft For Kyc
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/kyc/data   data=${data}  expected_status=any
+    Check Deprication  ${resp}  Save LOS Lead As Draft For Kyc
     RETURN  ${resp}
 
 Save And Proceed LOS Lead Kyc
@@ -15046,6 +15049,7 @@ Save And Proceed LOS Lead Kyc
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/kyc/data/proceed   data=${data}  expected_status=any
+    Check Deprication  ${resp}  Save And Proceed LOS Lead Kyc
     RETURN  ${resp}
 
 Verift Los Lead Kyc 
@@ -15058,6 +15062,7 @@ Verift Los Lead Kyc
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/los/lead/${leadUid}/stage/${stageUidKyc}/kycverification/data/proceed   data=${data}  expected_status=any
+    Check Deprication  ${resp}  Verift Los Lead Kyc 
     RETURN  ${resp}
 
 Save LOS Lead As Draft For SALESFIELD
@@ -15070,6 +15075,7 @@ Save LOS Lead As Draft For SALESFIELD
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  provider/los/lead/${uid}/stage/${stageUid}/salesfield/data   data=${data}  expected_status=any
+    Check Deprication  ${resp}  Save LOS Lead As Draft For SALESFIELD
     RETURN  ${resp}
 
 Save And Proceed LOS Lead SALESFIELD
@@ -15080,7 +15086,37 @@ Save And Proceed LOS Lead SALESFIELD
         Set To Dictionary   ${data}   ${key}=${value}
     END
     ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/salesfield/data/proceed   data=${data}  expected_status=any
+    Check Deprication  ${resp}  Save And Proceed LOS Lead SALESFIELD
+    RETURN  ${resp}
+
+Save And Proceed LOS Lead Sales Field Verification
+    [Arguments]     ${uid}  ${stageUid}
+
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/salesfieldverification/data/proceed  expected_status=any
+    Check Deprication  ${resp}  Save And Proceed LOS Lead Sales Field Verification
+    RETURN  ${resp}
+
+Verify AADHAAR For LOS Lead Kyc
+    [Arguments]     ${idTypes}  ${id}  ${leadUid}  ${aadhaar}  ${aadhaarAttachments}
+
+    ${data}=  Create Dictionary  id=${id}  leadUid=${leadUid}  aadhaar=${aadhaar}  aadhaarAttachments=${aadhaarAttachments}
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=    PUT On Session  ynw  /provider/los/lead/kyc/document/${idTypes}/update  data=${data}  expected_status=any
+    Check Deprication  ${resp}  Verify AADHAAR For LOS Lead Kyc
+    RETURN  ${resp}
+
+Verify PAN For LOS Lead Kyc
+    [Arguments]     ${idTypes}  ${id}  ${leadUid}  ${pan}  ${panAttachments}
+
+    ${data}=  Create Dictionary  id=${id}  leadUid=${leadUid}  pan=${pan}  panAttachments=${panAttachments}
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=    PUT On Session  ynw  /provider/los/lead/kyc/document/${idTypes}/update  data=${data}  expected_status=any
+    Check Deprication  ${resp}  Verify AADHAAR For LOS Lead Kyc
     RETURN  ${resp}
 
 Generate OTP For LOS Lead Kyc Phone Number
@@ -15206,6 +15242,20 @@ Enable Disable Lending AI RBAC
     ${resp}=  PUT On Session  ynw    /provider/account/settings/jaldeelendingrbac/${status}      expected_status=any
     Check Deprication  ${resp}  Enable Disable Lending AI RBAC 
     RETURN  ${resp}
+
+Save As Draft LOS Document Data
+    [Arguments]     ${uid}  ${stageUid}  ${originFrom}  ${location}  &{kwargs}
+
+    ${data}=   Create Dictionary  originFrom=${originFrom}  location=${location}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/salesfield/data/proceed   data=${data}  expected_status=any
+    Check Deprication  ${resp}  Save And Proceed LOS Lead SALESFIELD
+    RETURN  ${resp}
+
 
 AddItemToInvoice
    [Arguments]  ${uuid}   ${ItemLists}  &{kwargs}
