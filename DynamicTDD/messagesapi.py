@@ -2383,6 +2383,7 @@ X_NOT_FOUND = "{} not found"
 PURCHASE_CANT_PUSHE_TO_FINANCE_INVALID_STATUS = "You can't push to finance because this purchase is in {} status."
 ALREADY_PUSHED_TO_FINANCE = "Already pushed to finance"
 ALREADY_SET_TO="Already set to {}"
+DUPLICATE_LINE_ITEMS = "Input contains duplicate {}"
 
 # Vendor
 INVALID_NAME="Invalid Name"
