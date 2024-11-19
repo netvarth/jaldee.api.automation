@@ -269,7 +269,7 @@ JD-TC-Reschedule Waitlist-2
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${HLPUSERNAME34}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -433,7 +433,7 @@ JD-TC-Reschedule Waitlist-3
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${HLPUSERNAME34}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -1144,7 +1144,7 @@ JD-TC-Reschedule Waitlist-6
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${HLPUSERNAME34}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -1618,7 +1618,7 @@ JD-TC-Reschedule Waitlist-9
 
     ${lid}=  Create Sample Location  
     ${lid1}=  Create Sample Location
-    clear_queue   ${multilocPro[2]}
+    # clear_queue   ${multilocPro[2]}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -2185,7 +2185,7 @@ JD-TC-Reschedule Waitlist-UH1
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME82}
+    # clear_queue   ${PUSERNAME82}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -2858,8 +2858,7 @@ JD-TC-Reschedule Waitlist-UH7
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_location   ${PUSERNAME33}
-    clear_service    ${PUSERNAME33}
+    
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2878,7 +2877,7 @@ JD-TC-Reschedule Waitlist-UH7
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME33}
+    # clear_queue   ${PUSERNAME33}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -3533,8 +3532,7 @@ JD-TC-Reschedule Waitlist-UH14
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_location   ${PUSERNAME33}
-    clear_service    ${PUSERNAME33}
+    
     clear_customer   ${PUSERNAME33}
     # clear_consumer_msgs  ${CUSERNAME12}
     # clear_provider_msgs  ${HLPUSERNAME34}
@@ -4261,7 +4259,7 @@ JD-TC-Reschedule Waitlist-UH19
 #     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
 #     ${lid}=  Create Sample Location  
-    clear_queue   ${HLPUSERNAME34}
+    # clear_queue   ${HLPUSERNAME34}
 
 #     ${resp}=  Get Queues
 #     Log  ${resp.json()}
@@ -5209,7 +5207,7 @@ JD-TC-Reschedule Waitlist-UH27
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid}=  Create Sample Location  
-    clear_queue   ${HLPUSERNAME34}
+    # clear_queue   ${HLPUSERNAME34}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}

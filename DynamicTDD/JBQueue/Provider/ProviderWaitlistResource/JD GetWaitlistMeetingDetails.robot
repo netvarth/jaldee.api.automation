@@ -63,6 +63,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${account_id}=  get_acc_id  ${HLPUSERNAME2}
+    Set Suite Variable  ${account_id}
 
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
@@ -347,7 +348,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-2
      ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${accId}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -444,7 +445,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-UH1
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${accId}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -511,7 +512,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-3
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${accId}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -540,7 +541,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-3
 JD-TC-TeleserviceWaitlist-(Billable Subdomain)-4
     [Documentation]  Create Teleservice meeting request for waitlist in Zoom (ONLINE CHECKIN)
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${accId}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${cid}=  get_id  ${CUSERNAME0}    
@@ -592,7 +593,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-4
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${accId}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -622,7 +623,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-UH2
     [Documentation]  Create Teleservice meeting request for waitlist  in Zoom and WhatsApp (ONLINE CHECKIN)
 
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${accId}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${cid}=  get_id  ${CUSERNAME0}    
@@ -669,7 +670,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-UH2
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${accId}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -697,7 +698,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-UH2
 JD-TC-TeleserviceWaitlist-(Billable Subdomain)-5
 
     [Documentation]   Create waitlist teleservice Zoom meeting request Which  is already created
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${accId}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${cid}=  get_id  ${CUSERNAME0}    
@@ -746,7 +747,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-5
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${accId}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -775,7 +776,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-5
 JD-TC-TeleserviceWaitlist-(Billable Subdomain)-6
 
     [Documentation]   Create waitlist teleservice Whatsapp meeting request Which  is already created
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${accId}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${cid}=  get_id  ${CUSERNAME0}    
@@ -825,7 +826,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-6
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${accId}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1141,7 +1142,7 @@ JD-TC-TeleserviceWaitlist-(Non billable Subdomain)-7
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${account_id}  ${token} 
+     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${accId}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

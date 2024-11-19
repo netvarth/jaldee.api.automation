@@ -18,11 +18,8 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 *** Variables ***
 ${order}    0
 ${service_duration}     30
-
+@{service_names}
 ${DisplayName1}   item1_DisplayName
-
-
-
 
 *** Test Cases ***
 
@@ -63,6 +60,12 @@ JD-TC-Invoice pay via link-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
+    ${resp}=  Get Bill Settings 
+    Log   ${resp.content}
+    ${resp}=  Enable Disable bill  ${bool[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get payment profiles  
     Log  ${resp.json()}
@@ -253,14 +256,16 @@ JD-TC-Invoice pay via link-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id1}   ${resp.json()}
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     Set Suite Variable  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
     ${serviceprice}=   Random Int  min=10  max=15
     ${serviceprice}=  Convert To Number  ${serviceprice}  1
-
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}     ${bool[1]}    ${servicecharge}  ${bool[0]}     minPrePaymentAmount=${min_pre}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid1}  ${resp.json()}
@@ -277,8 +282,8 @@ JD-TC-Invoice pay via link-1
     ${adhocItemList}=    Create List    ${adhocItemList}
 
 
-    
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}    serviceList=${serviceList}   adhocItemList=${adhocItemList}    billStatus=${billStatus[0]}   locationId=${lid}
+
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}  ${lid}    ${itemList}  invoiceStatus=${status_id1}    serviceList=${serviceList}   adhocItemList=${adhocItemList}    billStatus=${billStatus[0]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_id}   ${resp.json()['idList'][0]}
@@ -613,7 +618,7 @@ JD-TC-Invoice pay via link-UH10
     ${adhocItemList}=    Create List    ${adhocItemList}
 
     
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}       adhocItemList=${adhocItemList}    locationId=${lid}
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}       adhocItemList=${adhocItemList}    locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_id}   ${resp.json()['idList'][0]}
