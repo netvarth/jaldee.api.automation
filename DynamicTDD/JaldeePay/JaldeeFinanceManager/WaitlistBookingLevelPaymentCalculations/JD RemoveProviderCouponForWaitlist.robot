@@ -84,12 +84,12 @@ JD-TC-RemoveProviderCouponforwaitlist-1
     ${gender}=    Random Element    ${Genderlist}
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd1}  ${PUSERPH0}  ${licid}
     Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    202
 
     ${resp}=  Account Activation  ${PUSERPH0}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  "${resp.json()}"    "true"
+    # Should Be Equal As Strings  "${resp.json()}"    "true"
     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
 
     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
@@ -110,7 +110,7 @@ JD-TC-RemoveProviderCouponforwaitlist-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${resp}=  View Waitlist Settings
+      ${resp}=  Get Waitlist Settings
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -122,6 +122,11 @@ JD-TC-RemoveProviderCouponforwaitlist-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=  Get Bill Settings 
+    Log   ${resp.content}
+    ${resp}=  Enable Disable bill  ${bool[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
     
     IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
         ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}

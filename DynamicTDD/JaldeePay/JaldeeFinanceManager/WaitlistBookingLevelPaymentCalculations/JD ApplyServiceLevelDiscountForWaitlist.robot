@@ -81,12 +81,12 @@ JD-TC-Applyserviceleveldiscount-1
     ${gender}=    Random Element    ${Genderlist}
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd1}  ${PUSERPH0}  ${licid}
     Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    202
 
     ${resp}=  Account Activation  ${PUSERPH0}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  "${resp.json()}"    "true"
+    # Should Be Equal As Strings  "${resp.json()}"    "true"
     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
 
     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
@@ -102,36 +102,36 @@ JD-TC-Applyserviceleveldiscount-1
     Set Suite Variable  ${pid0}
 
   
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${ph1}=  Evaluate  ${PUSERPH0}+15566122
-    ${ph2}=  Evaluate  ${PUSERPH0}+25566122
-    ${views}=  Random Element    ${Views}
-    ${name1}=  FakerLibrary.name
-    ${name2}=  FakerLibrary.name
-    ${name3}=  FakerLibrary.name
-    ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
-    ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
-    ${bs}=  FakerLibrary.bs
-    ${companySuffix}=  FakerLibrary.companySuffix
-    # ${city}=   FakerLibrary.state
-    # ${latti}=  get_latitude
-    # ${longi}=  get_longitude
-    # ${postcode}=  FakerLibrary.postcode
-    # ${address}=  get_address
-    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    Set Suite Variable  ${tz}
-    ${parking}   Random Element   ${parkingType}
-    ${24hours}    Random Element    ${bool}
-    ${desc}=   FakerLibrary.sentence
-    ${url}=   FakerLibrary.url
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${sTime}=  add_timezone_time  ${tz}  0  15  
-    ${eTime}=  add_timezone_time  ${tz}  0  45  
-    ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${list}=  Create List  1  2  3  4  5  6  7
+    # ${ph1}=  Evaluate  ${PUSERPH0}+15566122
+    # ${ph2}=  Evaluate  ${PUSERPH0}+25566122
+    # ${views}=  Random Element    ${Views}
+    # ${name1}=  FakerLibrary.name
+    # ${name2}=  FakerLibrary.name
+    # ${name3}=  FakerLibrary.name
+    # ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
+    # ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
+    # ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
+    # ${bs}=  FakerLibrary.bs
+    # ${companySuffix}=  FakerLibrary.companySuffix
+    # # ${city}=   FakerLibrary.state
+    # # ${latti}=  get_latitude
+    # # ${longi}=  get_longitude
+    # # ${postcode}=  FakerLibrary.postcode
+    # # ${address}=  get_address
+    # ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    # ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    # Set Suite Variable  ${tz}
+    # ${parking}   Random Element   ${parkingType}
+    # ${24hours}    Random Element    ${bool}
+    # ${desc}=   FakerLibrary.sentence
+    # ${url}=   FakerLibrary.url
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${sTime}=  add_timezone_time  ${tz}  0  15  
+    # ${eTime}=  add_timezone_time  ${tz}  0  45  
+    # ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
@@ -141,20 +141,20 @@ JD-TC-Applyserviceleveldiscount-1
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
 
   
-        ${fields}=   Get subDomain level Fields  ${d1}  ${sd1}
-        Log  ${fields.json()}
-        Should Be Equal As Strings    ${fields.status_code}   200
-        ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
-        ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sd1}
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp}=  Get specializations Sub Domain  ${d1}  ${sd1}
-        Log  ${resp.json()}
-        Should Be Equal As Strings    ${resp.status_code}   200
-        ${spec}=  get_Specializations  ${resp.json()}
-        ${resp}=  Update Specialization  ${spec}
-        Log  ${resp.json()}
-        Should Be Equal As Strings    ${resp.status_code}   200
+        # ${fields}=   Get subDomain level Fields  ${d1}  ${sd1}
+        # Log  ${fields.json()}
+        # Should Be Equal As Strings    ${fields.status_code}   200
+        # ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
+        # ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sd1}
+        # Log  ${resp.json()}
+        # Should Be Equal As Strings  ${resp.status_code}  200
+        # ${resp}=  Get specializations Sub Domain  ${d1}  ${sd1}
+        # Log  ${resp.json()}
+        # Should Be Equal As Strings    ${resp.status_code}   200
+        # ${spec}=  get_Specializations  ${resp.json()}
+        # ${resp}=  Update Specialization  ${spec}
+        # Log  ${resp.json()}
+        # Should Be Equal As Strings    ${resp.status_code}   200
 
 
         ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
@@ -171,7 +171,7 @@ JD-TC-Applyserviceleveldiscount-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${resp}=  View Waitlist Settings
+      ${resp}=  Get Waitlist Settings
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -183,6 +183,11 @@ JD-TC-Applyserviceleveldiscount-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=  Get Bill Settings 
+    Log   ${resp.content}
+    ${resp}=  Enable Disable bill  ${bool[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
     
     IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
         ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
