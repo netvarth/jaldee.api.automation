@@ -15244,18 +15244,30 @@ Enable Disable Lending AI RBAC
     RETURN  ${resp}
 
 Save As Draft LOS Document Data
-    [Arguments]     ${uid}  ${stageUid}  ${originFrom}  ${location}  &{kwargs}
+    [Arguments]     ${leadUid}  ${stageUid}  ${originFrom}  &{kwargs}
 
-    ${data}=   Create Dictionary  originFrom=${originFrom}  location=${location}
+    ${data}=   Create Dictionary  originFrom=${originFrom}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary   ${data}   ${key}=${value}
     END
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/stage/${stageUid}/salesfield/data/proceed   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Save And Proceed LOS Lead SALESFIELD
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${leadUid}/stage/${stageUid}/document/data   data=${data}  expected_status=any
+    Check Deprication  ${resp}  Save As Draft LOS Document Data
     RETURN  ${resp}
 
+Save And Proceed LOS Document Data
+
+    [Arguments]     ${leadUid}  ${stageUid}  ${originFrom}  &{kwargs}
+
+    ${data}=   Create Dictionary  originFrom=${originFrom}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${leadUid}/stage/${stageUid}/document/data/proceed   data=${data}  expected_status=any
+    Check Deprication  ${resp}  Save And Proceed LOS Document Data
 
 AddItemToInvoice
    [Arguments]  ${uuid}   ${ItemLists}  &{kwargs}
