@@ -257,6 +257,7 @@ JD-TC-GetAppointmentServicesByLocation-5
     ${RESP}=  Enable service  ${p1_s1} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    sleep  2s
     ${RESP}=  Disable service  ${p1_s1} 
     Should Be Equal As Strings  ${resp.status_code}  200
 

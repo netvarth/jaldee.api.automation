@@ -460,13 +460,13 @@ JD-TC-GetFutureAppointmentCount-4
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id1}  ${resp.json()}
 
-    ${resp}=  Auto Invoice Generation For Service   ${s_id1}    ${toggle[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${SERVICE2}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
+
+    ${resp}=  Auto Invoice Generation For Service   ${s_id1}    ${toggle[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Auto Invoice Generation For Service   ${s_id2}    ${toggle[0]}
     Log  ${resp.content}
@@ -2302,6 +2302,8 @@ JD-TC-GetFutureAppointmentCount-15
     Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
 
     ${lid2}=  Create Sample Location
+
+    sleep  2s
     ${resp}=   Get Location ById  ${lid2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
