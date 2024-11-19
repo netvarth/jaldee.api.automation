@@ -466,6 +466,7 @@ JD-TC-Apply Item Level Discount-UH4
     ${resp}=   Apply Item Level Discount   ${invoice_uid}   ${wrongdiscount}    ${discountprice}   ${privateNote}  ${displayNote}  ${itemId}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${INCORRECT_DISCOUNT_ID}
+    # Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_NO_ACCESS_FOR_URL}"
 
 JD-TC-Apply Item Level Discount-UH5
 

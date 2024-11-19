@@ -367,5 +367,234 @@ JD-TC-Update Invoice Template-UH4
     Should Be Equal As Strings   ${resp.json()}   ${INVALID_FIELD}
 
 
+JD-TC-Update Invoice Template-8
+
+    [Documentation]  create invoice template with item list update the quantity of item
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${name1}=   FakerLibrary.word
+
+
+
+    ${item}=   FakerLibrary.word
+    ${itemCode1}=     FakerLibrary.word
+    ${price}=   Random Int  min=10  max=15
+    ${price}=  Convert To Number  ${price}  1
+    ${resp}=  Create Sample Item   ${DisplayName1}   ${item}  ${itemCode1}  ${price}  ${bool[0]} 
+    Log  ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${itemId1}   ${resp.json()} 
+
+    ${rate}=   Random Int  min=50  max=1000
+    ${amount}=   Random Int  min=50  max=1000
+    ${amount}=  Convert To Number  ${amount}  1
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+
+    ${itemList}=  Create Dictionary  itemId=${itemId1}   quantity=${quantity}  rate=${rate}    amount=${amount}
+    ${itemList}=    Create List    ${itemList}
+
+
+    ${resp}=  Create Invoice Template   ${name1}   itemList=${itemList}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${templateUid1}   ${resp.json()['templateUid']}
+
+    ${quantity1}=   Random Int  min=1  max=4
+    ${quantity1}=  Convert To Number  ${quantity1}  1
+    ${itemList1}=  Create Dictionary  itemId=${itemId1}   quantity=${quantity1}  rate=${rate}    amount=${amount}
+    ${itemList1}=    Create List    ${itemList1}
+
+    ${resp}=  Update Invoice Template    ${templateUid1}   ${name1}   itemList=${itemList1}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get InvoiceTemplate By Uid  ${templateUid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['templateUid']}  ${templateUid1}
+
+JD-TC-Update Invoice Template-UH5
+
+    [Documentation]  create invoice template with 2 same item list update the quantity of item
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${name1}=   FakerLibrary.word
+
+
+
+    ${item}=   FakerLibrary.word
+    ${itemCode1}=     FakerLibrary.word
+    ${price}=   Random Int  min=10  max=15
+    ${price}=  Convert To Number  ${price}  1
+    ${resp}=  Create Sample Item   ${DisplayName1}   ${item}  ${itemCode1}  ${price}  ${bool[0]} 
+    Log  ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${itemId1}   ${resp.json()} 
+
+    ${rate}=   Random Int  min=50  max=1000
+    ${amount}=   Random Int  min=50  max=1000
+    ${amount}=  Convert To Number  ${amount}  1
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+
+    ${itemList}=  Create Dictionary  itemId=${itemId1}   quantity=${quantity}  rate=${rate}    amount=${amount}
+    ${itemList}=    Create List    ${itemList}  ${itemList}
+
+    ${DUPLICATE_LINE_ITEMS}=  Format String  ${DUPLICATE_LINE_ITEMS}    items
+    ${resp}=  Create Invoice Template   ${name1}   itemList=${itemList}    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${DUPLICATE_LINE_ITEMS}
+
+
+
+JD-TC-Update Invoice Template-UH6
+
+    [Documentation]  create invoice template  update same item 2 times
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${name1}=   FakerLibrary.word
+
+
+
+    ${item}=   FakerLibrary.word
+    ${itemCode1}=     FakerLibrary.word
+    ${price}=   Random Int  min=10  max=15
+    ${price}=  Convert To Number  ${price}  1
+    ${resp}=  Create Sample Item   ${DisplayName1}   ${item}  ${itemCode1}  ${price}  ${bool[0]} 
+    Log  ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${itemId1}   ${resp.json()} 
+
+    ${rate}=   Random Int  min=50  max=1000
+    ${amount}=   Random Int  min=50  max=1000
+    ${amount}=  Convert To Number  ${amount}  1
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+
+    ${itemList}=  Create Dictionary  itemId=${itemId1}   quantity=${quantity}  rate=${rate}    amount=${amount}
+    ${itemList}=    Create List    ${itemList}  ${itemList}
+
+
+    ${resp}=  Create Invoice Template   ${name1}    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${templateUid1}   ${resp.json()['templateUid']}
+
+    ${resp}=   Get InvoiceTemplate By Uid  ${templateUid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${DUPLICATE_LINE_ITEMS}=  Format String  ${DUPLICATE_LINE_ITEMS}    items
+
+    ${resp}=  Update Invoice Template    ${templateUid1}   ${name1}   itemList=${itemList}     
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${DUPLICATE_LINE_ITEMS}
+
+
+JD-TC-Update Invoice Template-UH7
+
+    [Documentation]  create invoice template  update same service2 times
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${name1}=   FakerLibrary.word
+
+
+    ${SERVICE1}=    FakerLibrary.word
+    ${desc}=   FakerLibrary.sentence
+    ${servicecharge}=   Random Int  min=100  max=500
+
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}  ${bool[0]}  ${servicecharge}  ${bool[1]}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${sid1}  ${resp.json()} 
+
+
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+    ${serviceprice}=   Random Int  min=100  max=500
+    ${serviceprice}=  Convert To Number  ${serviceprice}  1
+    ${netRate}=  Evaluate  ${quantity} * ${serviceprice}
+
+    ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}   price=${serviceprice} 
+    ${serviceList}=    Create List    ${serviceList}   ${serviceList}
+
+
+    ${resp}=  Create Invoice Template   ${name1}    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${templateUid1}   ${resp.json()['templateUid']}
+
+    ${resp}=   Get InvoiceTemplate By Uid  ${templateUid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${DUPLICATE_LINE_ITEMS}=  Format String  ${DUPLICATE_LINE_ITEMS}    services
+
+    ${resp}=  Update Invoice Template    ${templateUid1}   ${name1}    serviceList=${serviceList}    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${DUPLICATE_LINE_ITEMS}
+
+
+JD-TC-Update Invoice Template-12
+
+    [Documentation]  create invoice template  update same adhoc item 2  times
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${name1}=   FakerLibrary.word
+
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+    ${itemName}=    FakerLibrary.word
+    ${price}=   Random Int  min=10  max=15
+    ${price}=  Convert To Number  ${price}  1
+    ${adhocItemList}=  Create Dictionary  itemName=${itemName}   quantity=${quantity}   price=${price}
+    ${adhocItemList}=    Create List    ${adhocItemList}  ${adhocItemList}
+
+    ${resp}=  Create Invoice Template   ${name1}    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${templateUid1}   ${resp.json()['templateUid']}
+
+    ${resp}=   Get InvoiceTemplate By Uid  ${templateUid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${DUPLICATE_LINE_ITEMS}=  Format String  ${DUPLICATE_LINE_ITEMS}    adhoc items
+    ${resp}=  Update Invoice Template    ${templateUid1}   ${name1}   adhocItemList=${adhocItemList}    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${DUPLICATE_LINE_ITEMS}
+
+
 
 
