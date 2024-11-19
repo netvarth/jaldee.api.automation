@@ -19,6 +19,7 @@ ${self}     0
 @{service_names}
 ${digits}       0123456789
 &{Emptydict}
+@{time}    5  10  15
 
 *** Test Cases ***
 
@@ -2933,6 +2934,11 @@ JD-TC-AddMultipleAppointmentLabel-14
 
         ${apptfor1}=  Create Dictionary  id=${cid${a}}   apptTime=${slot1}
         ${apptfor}=   Create List  ${apptfor1}
+
+        # IF  '${key}' in @{custdeets}
+        IF  ${a} in @{time}
+            sleep  1s
+        END
     
         ${DAY}=  db.add_timezone_date  ${tz}  ${a}
         ${cnote}=   FakerLibrary.word
