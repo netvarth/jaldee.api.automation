@@ -1171,3 +1171,59 @@ JD-TC-CreateItemInv-UH21
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    419
     Should Be Equal As Strings    ${resp.json()}         ${SESSION_EXPIRED}
+
+JD-TC-CreateItemInv-31
+
+    [Documentation]   Create Item Inv with badge
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    # .... Attachments ......
+
+    ${resp}=  db.getType   ${jpgfile} 
+    Log  ${resp}
+    ${fileType}=  Get From Dictionary       ${resp}    ${jpgfile} 
+    Set Suite Variable    ${fileType}
+    ${caption}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption}
+
+    ${resp}    upload file to temporary location    ${file_action[0]}    ${pid}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200 
+    Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
+
+    ${resp}    change status of the uploaded file    ${QnrStatus[1]}    ${driveId}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+    ${attachments}=    Create Dictionary   action=${file_action[0]}  fileName=${jpgfile}  fileSize=${fileSize}  fileType=${fileType}  order=${order}    driveId=${driveId}
+    Log  ${attachments}
+    ${attachments}=  Create List   ${attachments}
+    Set Suite Variable    ${attachments}
+
+
+    ${name2}=            FakerLibrary.name
+    ${shortDesc2}=       FakerLibrary.sentence
+
+    ${badges}=  Create Dictionary  attachments=${attachments}   name=${name2}   link=${name2}
+    ${badges1}=  Create List   ${badges}
+
+    ${resp}=    Create Item Inventory  ${name2}    badges=${badges1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable      ${item}  ${resp.json()}
+
+    ${resp}=    Get Item Inventory  ${item}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()['badges'][0]['name']}                         ${name2}
+    Should Be Equal As Strings      ${resp.json()['badges'][0]['link']}                         ${name2}
+    Should Be Equal As Strings      ${resp.json()['badges'][0]['attachments'][0]['fileName']}                ${jpgfile}
+    Should Be Equal As Strings      ${resp.json()['badges'][0]['attachments'][0]['fileSize']}                ${fileSize}
+    Should Be Equal As Strings      ${resp.json()['badges'][0]['attachments'][0]['fileType']}                ${fileType}
+    Should Be Equal As Strings      ${resp.json()['badges'][0]['attachments'][0]['order']}                   ${order}
+    Should Be Equal As Strings      ${resp.json()['badges'][0]['attachments'][0]['action']}                  ${file_action[0]}
+    Should Be Equal As Strings      ${resp.json()['badges'][0]['attachments'][0]['driveId']}                 ${driveId}
