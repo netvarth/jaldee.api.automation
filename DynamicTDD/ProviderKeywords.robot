@@ -15268,6 +15268,14 @@ Save And Proceed LOS Document Data
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/los/lead/${leadUid}/stage/${stageUid}/document/data/proceed   data=${data}  expected_status=any
     Check Deprication  ${resp}  Save And Proceed LOS Document Data
+    RETURN  ${resp}
+
+Get Financial Sub category Enum
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/los/lead/financialinfo/onload  expected_status=any
+    Check Deprication  ${resp}  Get Financial Sub category Enum
+    RETURN  ${resp}
 
 AddItemToInvoice
    [Arguments]  ${uuid}   ${ItemLists}  &{kwargs}
