@@ -519,7 +519,7 @@ JD-TC-Update Invoice Template-UH7
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${name1}=   FakerLibrary.word
+    ${name1}=   FakerLibrary.last_name
 
 
     ${SERVICE1}=    FakerLibrary.word
