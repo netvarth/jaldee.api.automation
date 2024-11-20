@@ -15288,6 +15288,49 @@ Get Financial Sub category Enum
     Check Deprication  ${resp}  Get Financial Sub category Enum
     RETURN  ${resp}
 
+Save LOS Lead Financial Info
+    [Arguments]     ${leadUid}  ${stageUidFinInfo}  ${income}  ${expense}  &{kwargs}
+
+    ${data}=   Create Dictionary   income=${income}  expense=${expense}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${leadUid}/stage/${stageUidFinInfo}/financialinfo/data  data=${data}  expected_status=any
+    Check Deprication  ${resp}  Save LOS Lead Financial Info
+    RETURN  ${resp}
+
+Save And Proceed LOS Lead Financial Info
+    [Arguments]     ${leadUid}  ${stageUidFinInfo}  ${income}  ${expense}  &{kwargs}
+
+    ${data}=   Create Dictionary   income=${income}  expense=${expense}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${leadUid}/stage/${stageUidFinInfo}/financialinfo/data/proceed  data=${data}  expected_status=any
+    Check Deprication  ${resp}  Save And Proceed LOS Lead Financial Info
+    RETURN  ${resp}
+
+Get LOS Lead Financial Info
+    [Arguments]     ${leadUid}  ${stageUidFinInfo}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/los/lead/${leadUid}/stage/${stageUidFinInfo}/financialinfo/data  expected_status=any
+    Check Deprication  ${resp}  Get LOS Lead Financial Info
+    RETURN  ${resp}
+
+
+GET LOS Lead Sales Field
+    [Arguments]     ${leadUid}  ${stageUidFinInfo}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/los/lead/${leadUid}/stage/${stageUid}/salesfield/data  expected_status=any
+    Check Deprication  ${resp}  GET LOS Lead Sales Field
+    RETURN  ${resp}
+
 AddItemToInvoice
    [Arguments]  ${uuid}   ${ItemLists}  &{kwargs}
     ${ItemLists}=  Create List     ${ItemLists}
