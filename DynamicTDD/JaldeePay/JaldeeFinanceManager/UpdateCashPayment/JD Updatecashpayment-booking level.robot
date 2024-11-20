@@ -59,43 +59,11 @@ JD-TC-Update cash payment- booking level-1
 
     [Documentation]  Update cash payment- booking level then consumer get details
     
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33712551
-    Set Suite Variable   ${PUSERPH0}
-    
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
-    Log  ${licname}
-    ${domresp}=  Get BusinessDomainsConf
-    Log   ${domresp.json()}
-    Should Be Equal As Strings  ${domresp.status_code}  200
-    ${dlen}=  Get Length  ${domresp.json()}
-    FOR  ${pos}  IN RANGE  ${dlen}  
-        Set Suite Variable  ${d1}  ${domresp.json()[${pos}]['domain']}
-        ${sd1}  ${check}=  Get Billable Subdomain  ${d1}  ${domresp}  ${pos}  
-        Set Suite Variable   ${sd1}
-        Exit For Loop IF     '${check}' == '${bool[1]}'
-    END
-    Log  ${d1}
-    Log  ${sd1}
 
-    ${firstname}=  FakerLibrary.first_name
-    ${lastname}=  FakerLibrary.last_name
-    ${address}=  FakerLibrary.address
-    ${dob}=  FakerLibrary.Date
-    ${gender}=    Random Element    ${Genderlist}
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd1}  ${PUSERPH0}  ${licid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Account Activation  ${PUSERPH0}  0
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  "${resp.json()}"    "true"
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
-
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${firstname}  ${lastname}  ${PUSERPH0}  ${LoginId} =  Provider Signup   
+    Set Suite Variable   ${PUSERPH0}
 
     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
@@ -108,25 +76,25 @@ JD-TC-Update cash payment- booking level-1
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
 
-      ${resp}=  Create Sample Location  
-      Set Suite Variable    ${loc_id1}    ${resp}  
+    ${resp}=  Create Sample Location  
+    Set Suite Variable    ${loc_id1}    ${resp}  
 
-      ${resp}=   Get Location ById  ${loc_id1}
-      Log  ${resp.content}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${resp}=  Enable Waitlist
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${resp}=  View Waitlist Settings
-      Log   ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}   200
+    ${resp}=  Get Waitlist Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}   200
 
-      ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
-      Log    ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
+    Log    ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
@@ -152,62 +120,62 @@ JD-TC-Update cash payment- booking level-1
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${resp}=  AddCustomer  ${CUSERNAME1}
-      Log   ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${cid}  ${resp.json()}
+    ${resp}=  AddCustomer  ${CUSERNAME1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${cid}  ${resp.json()}
 
-      ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME1}
-      Log   ${resp.json()}
-      Should Be Equal As Strings      ${resp.status_code}  200
-     
-      ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
-      Set Suite Variable  ${CUR_DAY}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${CUR_DAY}
 
-      ${resp}=   Create Sample Service  ${SERVICE1}
-      Set Suite Variable    ${ser_id1}    ${resp}  
-      ${resp}=   Get Service By Id  ${ser_id1}
-      Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable   ${servicetotalAmount}  ${resp.json()['totalAmount']}       
-      ${resp}=   Create Sample Service  ${SERVICE2}
-      Set Suite Variable    ${ser_id2}    ${resp}  
-      ${resp}=   Create Sample Service  ${SERVICE3}
-      Set Suite Variable    ${ser_id3}    ${resp}  
-      ${q_name}=    FakerLibrary.name
-      Set Suite Variable    ${q_name}
-      ${list}=  Create List   1  2  3  4  5  6  7
-      Set Suite Variable    ${list}
-      ${strt_time}=   db.add_timezone_time     ${tz}  1  00
-      Set Suite Variable    ${strt_time}
-      ${end_time}=    db.add_timezone_time     ${tz}  3  00 
-      Set Suite Variable    ${end_time}   
-      ${parallel}=   Random Int  min=1   max=1
-      Set Suite Variable   ${parallel}
-      ${capacity}=  Random Int   min=10   max=20
-      Set Suite Variable   ${capacity}
-      ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  ${ser_id2}  ${ser_id3}
-      Log   ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${que_id1}   ${resp.json()}
-      ${desc}=   FakerLibrary.word
-      Set Suite Variable  ${desc}
-      ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
-      Log   ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      
-      ${wid}=  Get Dictionary Values  ${resp.json()}
-      Set Suite Variable  ${wid}  ${wid[0]}
-      ${resp}=  Get Waitlist By Id  ${wid} 
-      Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Verify Response  ${resp}  date=${CUR_DAY}  waitlistStatus=${wl_status[1]}  partySize=1  appxWaitingTime=0  waitlistedBy=${waitlistedby}   personsAhead=0
-      Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
-      Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id1}
-      Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
-      Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
-      Should Be Equal As Strings  ${resp.json()['paymentStatus']}         ${paymentStatus[0]}
-      Set Test Variable   ${fullAmount}  ${resp.json()['fullAmt']}         
+    ${resp}=   Create Sample Service  ${SERVICE1}
+    Set Suite Variable    ${ser_id1}    ${resp}  
+    ${resp}=   Get Service By Id  ${ser_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${servicetotalAmount}  ${resp.json()['totalAmount']}       
+    ${resp}=   Create Sample Service  ${SERVICE2}
+    Set Suite Variable    ${ser_id2}    ${resp}  
+    ${resp}=   Create Sample Service  ${SERVICE3}
+    Set Suite Variable    ${ser_id3}    ${resp}  
+    ${q_name}=    FakerLibrary.name
+    Set Suite Variable    ${q_name}
+    ${list}=  Create List   1  2  3  4  5  6  7
+    Set Suite Variable    ${list}
+    ${strt_time}=   db.add_timezone_time     ${tz}  1  00
+    Set Suite Variable    ${strt_time}
+    ${end_time}=    db.add_timezone_time     ${tz}  3  00 
+    Set Suite Variable    ${end_time}   
+    ${parallel}=   Random Int  min=1   max=1
+    Set Suite Variable   ${parallel}
+    ${capacity}=  Random Int   min=10   max=20
+    Set Suite Variable   ${capacity}
+    ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  ${ser_id2}  ${ser_id3}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${que_id1}   ${resp.json()}
+    ${desc}=   FakerLibrary.word
+    Set Suite Variable  ${desc}
+    ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Suite Variable  ${wid}  ${wid[0]}
+    ${resp}=  Get Waitlist By Id  ${wid} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  date=${CUR_DAY}  waitlistStatus=${wl_status[1]}  partySize=1  appxWaitingTime=0  waitlistedBy=${waitlistedby}   personsAhead=0
+    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id1}
+    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
+    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
+    Should Be Equal As Strings  ${resp.json()['paymentStatus']}         ${paymentStatus[0]}
+    Set Test Variable   ${fullAmount}  ${resp.json()['fullAmt']}         
 
     # ${adhoc_amt}=    Evaluate  ${price}*${quantity}
     # ${service_amt}=    Evaluate  ${serviceprice}*${quantity}
@@ -253,11 +221,6 @@ JD-TC-Update cash payment- booking level-1
     Should Be Equal As Strings  ${resp.json()['amountDue']}  ${amountdue}
     Should Be Equal As Strings  ${resp.json()['netTotal']}  ${servicetotalAmount}
 
-
-
-
-
-
 JD-TC-Update cash payment- booking level-2
 
     [Documentation]  Update cash payment- booking level with different amount.
@@ -290,8 +253,6 @@ JD-TC-Update cash payment- booking level-3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_appt_schedule   ${HLPUSERNAME1}
-
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -301,7 +262,6 @@ JD-TC-Update cash payment- booking level-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
-
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
@@ -326,13 +286,13 @@ JD-TC-Update cash payment- booking level-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${servicetotalAmount1}  ${resp.json()['totalAmount']}  
 
-      ${resp}=  Create Sample Location  
-      Set Test Variable    ${loc_id1}    ${resp}  
+    ${resp}=  Create Sample Location  
+    Set Test Variable    ${loc_id1}    ${resp}  
 
-      ${resp}=   Get Location ById  ${loc_id1}
-      Log  ${resp.content}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Test Variable  ${tz}  ${resp.json()['timezone']}
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
@@ -382,14 +342,11 @@ JD-TC-Update cash payment- booking level-3
     Should Be Equal As Strings  ${resp.status_code}  200
     ${encId}=  Set Variable   ${resp.json()}
 
-
-
     ${note}=    FakerLibrary.word
     Set Suite Variable  ${note}   
     ${resp}=  Make Payment By Cash   ${apptid1}  ${payment_modes[0]}  10  ${note}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
 
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
@@ -401,12 +358,9 @@ JD-TC-Update cash payment- booking level-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${paymentRefId_appt}  ${resp.json()[0]['paymentRefId']} 
 
-
-
     ${resp}=  Update cash payment- booking level   ${apptid1}  ${payment_modes[0]}  20  ${note}  ${paymentRefId_appt}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
 
     ${amountdue}=  Evaluate  ${servicetotalAmount1}-20
     ${resp}=   Get Appointment level Bill Details      ${apptid1} 
@@ -429,7 +383,6 @@ JD-TC-Update cash payment- booking level-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
     ${amountdue}=  Evaluate  ${servicetotalAmount1}-50
     ${resp}=   Get Appointment level Bill Details      ${apptid1} 
     Log  ${resp.json()}
@@ -437,10 +390,6 @@ JD-TC-Update cash payment- booking level-4
     Should Be Equal As Strings  ${resp.json()['totalAmountPaid']}  50.0
     Should Be Equal As Strings  ${resp.json()['amountDue']}  ${amountdue}
     Should Be Equal As Strings  ${resp.json()['netTotal']}  ${servicetotalAmount1}
-
-
-
-
 
 JD-TC-Update cash payment- booking level-UH1
 
@@ -450,7 +399,6 @@ JD-TC-Update cash payment- booking level-UH1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-
     ${note}=    FakerLibrary.word
     ${wid}=    FakerLibrary.word
     ${resp}=  Update cash payment- booking level   ${wid}  ${payment_modes[0]}  200  ${note}  ${paymentRefId}
@@ -458,13 +406,9 @@ JD-TC-Update cash payment- booking level-UH1
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${RECORD_NOT_FOUND}" 
 
-
-
 JD-TC-Update cash payment- booking level-UH2
 
     [Documentation]  Update cash payment- booking level without login
-
-
 
     ${note}=    FakerLibrary.word
     ${wid}=    FakerLibrary.word
