@@ -27,11 +27,11 @@ JD-TC-Consumer Signup-1
     Create File   ${EXECDIR}/TDD/varfiles/consumermail.py
     Remove File   ${EXECDIR}/TDD/varfiles/consumerlist.py
     Create File   ${EXECDIR}/TDD/varfiles/consumerlist.py
-    Set Global Variable  ${US}  0
+    Set Suite Variable  ${US}  0
     FOR  ${c_count}  IN RANGE  ${consumer_count} 
         ${CUSERNAME}=  Evaluate  ${CUSERNAME}+1
         ${CUSERNAME_SECOND}=  Evaluate  ${CUSERNAME}+1000
-        Set Global Variable  ${CUSERNAME}
+        Set Suite Variable  ${CUSERNAME}
         ${firstname}=  FakerLibrary.name
         ${lastname}=  FakerLibrary.last_name
         ${address}=  FakerLibrary.address
@@ -60,7 +60,7 @@ JD-TC-Consumer Signup-1
         Append To File  ${EXECDIR}/TDD/varfiles/consumerlist.py  CUSERNAME${US}=${CUSERNAME}${\n}
         Append To File  ${EXECDIR}/TDD/varfiles/aprenumbers.txt  ${CUSERNAME}${\n}
         ${US} =  Evaluate  ${US}+1
-        Set Global Variable  ${US}
+        Set Suite Variable  ${US}
 
         ${resp}=  Update Consumer Profile  ${firstname}  ${lastname}  ${address}  ${dob}  ${gender}   email=${C_Email}${CUSERNAME}.${test_mail}
         Log   ${resp.json()}

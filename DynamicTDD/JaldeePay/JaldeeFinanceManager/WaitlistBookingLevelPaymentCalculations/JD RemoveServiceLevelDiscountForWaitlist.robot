@@ -171,27 +171,26 @@ JD-TC-RemoveServiceLevelDiscountforwaitlist-1
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
+    ${resp}=  Get Bill Settings 
+    Log   ${resp.content}
+    ${resp}=  Enable Disable bill  ${bool[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Enable Waitlist
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${resp}=  Get Waitlist Settings
-      Log   ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}   200
+    ${resp}=  Get Waitlist Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}   200
 
-      ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
-      Log    ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
+    Log    ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Bill Settings 
-    Log   ${resp.content}
-    ${resp}=  Enable Disable bill  ${bool[1]}
-    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}

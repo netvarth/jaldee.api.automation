@@ -39,7 +39,7 @@ JD-TC-Schedule-1
     [Documentation]  Schedule workflow for pre deployment.
 
     ${firstname}  ${lastname}  ${PUSERNAME_B}  ${LoginId}=  Provider Signup   Domain=${domain}   SubDomain=${subdomain}
-    Set Global Variable   ${PUSERNAME_B}
+    Set Suite Variable   ${PUSERNAME_B}
     ${num}=  find_last  ${var_file}
     ${num}=  Evaluate   ${num}+1
     Append To File  ${data_file}  ${LoginId} - ${PASSWORD}${\n}

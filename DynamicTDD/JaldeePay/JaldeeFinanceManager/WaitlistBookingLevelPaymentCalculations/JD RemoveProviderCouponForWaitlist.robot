@@ -106,6 +106,12 @@ JD-TC-RemoveProviderCouponforwaitlist-1
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
 
+    ${resp}=  Get Bill Settings 
+    Log   ${resp.content}
+    ${resp}=  Enable Disable bill  ${bool[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Enable Waitlist
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -120,12 +126,6 @@ JD-TC-RemoveProviderCouponforwaitlist-1
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Bill Settings 
-    Log   ${resp.content}
-    ${resp}=  Enable Disable bill  ${bool[1]}
-    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}

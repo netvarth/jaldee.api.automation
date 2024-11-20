@@ -437,7 +437,7 @@ JD-TC-ApplyJaldeeCoupon-UH3
 
     [Documentation]   Apply a jaldee coupon when no bill
     
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=   Get Active License
@@ -477,12 +477,17 @@ JD-TC-ApplyJaldeeCoupon-UH3
     ${resp}=  SuperAdmin Logout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Enable Jaldee Coupon By Provider  ${cupn_code0112}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  AddCustomer  ${CUSERNAME3}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${cid}  ${resp.json()}
 
     # ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${qid1}  ${DAY2}  ${des}  ${bool[1]}  ${cid}
     ${resp}=    Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${DAY2}  ${desc}  ${bool[1]}  ${cid}

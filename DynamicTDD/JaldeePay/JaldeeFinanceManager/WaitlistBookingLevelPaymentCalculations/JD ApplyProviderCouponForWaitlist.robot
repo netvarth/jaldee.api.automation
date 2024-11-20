@@ -103,26 +103,26 @@ JD-TC-ApplyProviderCouponforwaitlist-1
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
 
-    ${resp}=  Enable Waitlist
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-      ${resp}=  Get Waitlist Settings
-      Log   ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}   200
-
-      ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
-      Log    ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${resp}=  Get Bill Settings 
     Log   ${resp.content}
     ${resp}=  Enable Disable bill  ${bool[1]}
     Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Enable Waitlist
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Waitlist Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}   200
+
+    ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
+    Log    ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
@@ -144,73 +144,73 @@ JD-TC-ApplyProviderCouponforwaitlist-1
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${resp}=  AddCustomer  ${CUSERNAME1}
-      Log   ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${cid}  ${resp.json()}
+    ${resp}=  AddCustomer  ${CUSERNAME1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${cid}  ${resp.json()}
 
-      ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME1}
-      Log   ${resp.json()}
-      Should Be Equal As Strings      ${resp.status_code}  200
-     
-      ${resp}=  Create Sample Location  
-      Set Suite Variable    ${loc_id1}    ${resp}  
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    
+    ${resp}=  Create Sample Location  
+    Set Suite Variable    ${loc_id1}    ${resp}  
 
-      ${resp}=   Get Location ById  ${loc_id1}
-      Log  ${resp.content}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-      ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
-      Set Suite Variable  ${CUR_DAY}
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${CUR_DAY}
 
-      ${resp}=   Create Sample Service  ${SERVICE1} 
-      Set Suite Variable    ${ser_id1}    ${resp}
-      ${q_name}=    FakerLibrary.name
-      Set Suite Variable    ${q_name}
-      ${list}=  Create List   1  2  3  4  5  6  7
-      Set Suite Variable    ${list}
-      ${strt_time}=   db.add_timezone_time     ${tz}  1  00
-      Set Suite Variable    ${strt_time}
-      ${end_time}=    db.add_timezone_time     ${tz}  3  00 
-      Set Suite Variable    ${end_time}   
-      ${parallel}=   Random Int  min=1   max=1
-      Set Suite Variable   ${parallel}
-      ${capacity}=  Random Int   min=10   max=20
-      Set Suite Variable   ${capacity}
-      ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
-      Log   ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${que_id1}   ${resp.json()}
-      ${desc}=   FakerLibrary.word
-      Set Suite Variable  ${desc}
-      ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
-      Log   ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      
-      ${wid}=  Get Dictionary Values  ${resp.json()}
-      Set Suite Variable  ${wid}  ${wid[0]}
-      ${resp}=  Get Waitlist By Id  ${wid} 
-      Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Verify Response  ${resp}  date=${CUR_DAY}  waitlistStatus=${wl_status[1]}  partySize=1  appxWaitingTime=0  waitlistedBy=${waitlistedby}   personsAhead=0
-      Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
-      Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id1}
-      Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
-      Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
-      Should Be Equal As Strings  ${resp.json()['paymentStatus']}         ${paymentStatus[0]}
-      Set Test Variable   ${fullAmount}  ${resp.json()['fullAmt']}     
+    ${resp}=   Create Sample Service  ${SERVICE1} 
+    Set Suite Variable    ${ser_id1}    ${resp}
+    ${q_name}=    FakerLibrary.name
+    Set Suite Variable    ${q_name}
+    ${list}=  Create List   1  2  3  4  5  6  7
+    Set Suite Variable    ${list}
+    ${strt_time}=   db.add_timezone_time     ${tz}  1  00
+    Set Suite Variable    ${strt_time}
+    ${end_time}=    db.add_timezone_time     ${tz}  3  00 
+    Set Suite Variable    ${end_time}   
+    ${parallel}=   Random Int  min=1   max=1
+    Set Suite Variable   ${parallel}
+    ${capacity}=  Random Int   min=10   max=20
+    Set Suite Variable   ${capacity}
+    ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${que_id1}   ${resp.json()}
+    ${desc}=   FakerLibrary.word
+    Set Suite Variable  ${desc}
+    ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Suite Variable  ${wid}  ${wid[0]}
+    ${resp}=  Get Waitlist By Id  ${wid} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  date=${CUR_DAY}  waitlistStatus=${wl_status[1]}  partySize=1  appxWaitingTime=0  waitlistedBy=${waitlistedby}   personsAhead=0
+    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id1}
+    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
+    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
+    Should Be Equal As Strings  ${resp.json()['paymentStatus']}         ${paymentStatus[0]}
+    Set Test Variable   ${fullAmount}  ${resp.json()['fullAmt']}     
 
     ${description}=  FakerLibrary.sentence
     ${min_pre}=   Random Int   min=10   max=50
     ${Total}=   Random Int   min=100   max=500
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${Total}=  Convert To Number  ${Total}  1
-    ${resp}=  Create Service  ${SERVICE2}   ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[0]} 
+    ${resp}=  Create Service  ${SERVICE2}   ${description}   ${service_duration[1]}    ${bool[1]}     ${Total}  ${bool[1]}   minPrePaymentAmount=${min_pre}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid}  ${resp.json()}    
 
-    ${resp}=  Create Service  ${SERVICE3}   ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[1]} 
+    ${resp}=  Create Service  ${SERVICE3}   ${description}   ${service_duration[1]}     ${bool[1]}     ${Total}  ${bool[1]}    minPrePaymentAmount=${min_pre}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid1}  ${resp.json()}
 
@@ -269,7 +269,7 @@ JD-TC-ApplyProviderCouponforwaitlist-2
     ${Total}=   Random Int   min=100   max=500
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${Total}=  Convert To Number  ${Total}  1
-    ${resp}=  Create Service  ${SERVICE2}   ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[0]} 
+    ${resp}=  Create Service  ${SERVICE2}   ${description}   ${service_duration[1]}   ${bool[1]}    ${Total}  ${bool[1]}   minPrePaymentAmount=${min_pre}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sid}  ${resp.json()}   
 
@@ -349,8 +349,6 @@ JD-TC-ApplyProviderCouponforwaitlist-3
     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-
-
  
     ${SERVICE2}=  FakerLibrary.word
     ${description}=  FakerLibrary.sentence
@@ -358,8 +356,7 @@ JD-TC-ApplyProviderCouponforwaitlist-3
     ${Total}=   Random Int   min=100   max=500
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${Total}=  Convert To Number  ${Total}  1
-    ${resp}=  Create Service  ${SERVICE2}   ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[1]} 
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Create Service  ${SERVICE2}   ${description}   ${service_duration[1]}    ${bool[1]}      ${Total}  ${bool[1]}   minPrePaymentAmount=${min_pre}
     Set Test Variable  ${sid}  ${resp.json()}   
    
 
@@ -434,11 +431,6 @@ JD-TC-ApplyProviderCouponforwaitlist-3
     Should Be Equal As Strings  ${resp.json()['amountDue']}                  ${netRate}
     
 
-
-    
-
-
-
 JD-TC-ApplyProviderCouponforwaitlist-UH3
       [Documentation]  Create provider coupon only for online  bookings and then try to apply that coupon via walkin.
 
@@ -452,11 +444,10 @@ JD-TC-ApplyProviderCouponforwaitlist-UH3
     ${Total}=   Random Int   min=100   max=500
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${Total}=  Convert To Number  ${Total}  1
-    ${resp}=  Create Service  ${SERVICE2}   ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[1]} 
+    ${resp}=  Create Service  ${SERVICE2}   ${description}   ${service_duration[1]}    ${bool[1]}     ${Total}  ${bool[1]}   minPrePaymentAmount=${min_pre}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sid}  ${resp.json()}   
 
-    
     ${coupon}=    FakerLibrary.word
     ${desc}=  FakerLibrary.Sentence   nb_words=2
     ${pc_amount}=   Random Int   min=10  max=50
@@ -524,24 +515,24 @@ JD-TC-ApplyProviderCouponforwaitlist-UH3
 
 
 JD-TC-ApplyProviderCouponforwaitlist-UH4
-      [Documentation]  Apply provider coupon from another provider login.
-        ${resp}=   Encrypted Provider Login  ${PUSERNAME107}  ${PASSWORD} 
+    [Documentation]  Apply provider coupon from another provider login.
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME107}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=   Apply Provider Coupon for waitlist    ${wid}    ${cupn_code}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
-   Should Be Equal As Strings    ${resp.json()}    ${NO_PERMISSION}
+    Should Be Equal As Strings    ${resp.json()}    ${NO_PERMISSION}
 
 
 JD-TC-ApplyProviderCouponforwaitlist-UH5
-      [Documentation]  Apply provider coupon without login.
+    [Documentation]  Apply provider coupon without login.
 
     ${resp}=   Apply Provider Coupon for waitlist    ${wid}    ${cupn_code}   
     Log  ${resp.json()}
-       Should Be Equal As Strings    ${resp.status_code}   419
-       Should Be Equal As Strings   "${resp.json()}"   "${SESSION_EXPIRED}"
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings   "${resp.json()}"   "${SESSION_EXPIRED}"
 
 
 JD-TC-ApplyProviderCouponforwaitlist-UH6
@@ -552,13 +543,13 @@ JD-TC-ApplyProviderCouponforwaitlist-UH6
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-     ${SERVICE4}=   FakerLibrary.name
+    ${SERVICE4}=   FakerLibrary.name
     ${description}=  FakerLibrary.sentence
     ${min_pre}=   Random Int   min=10   max=50
     ${Total}=   Random Int   min=100   max=500
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${Total}=  Convert To Number  ${Total}  1
-    ${resp}=  Create Service  ${SERVICE4}   ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[1]} 
+    ${resp}=  Create Service  ${SERVICE4}   ${description}   ${service_duration[1]}      ${bool[1]}      ${Total}  ${bool[1]}   minPrePaymentAmount=${min_pre}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sid2}  ${resp.json()}
 
@@ -619,7 +610,7 @@ JD-TC-ApplyProviderCouponforwaitlist-UH7
     ${Total}=   Random Int   min=100   max=500
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${Total}=  Convert To Number  ${Total}  1
-    ${resp}=  Create Service  ${SERVICE4}   ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[1]} 
+    ${resp}=  Create Service  ${SERVICE4}   ${description}   ${service_duration[1]}     ${bool[1]}  ${Total}  ${bool[1]}   minPrePaymentAmount=${min_pre}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sid}  ${resp.json()}
 
@@ -687,7 +678,7 @@ JD-TC-ApplyProviderCouponforwaitlist-UH8
     ${Total}=   Random Int   min=100   max=500
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${Total}=  Convert To Number  ${Total}  1
-    ${resp}=  Create Service  ${SERVICE4}   ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[1]} 
+    ${resp}=  Create Service  ${SERVICE4}   ${description}   ${service_duration[1]}     ${bool[1]}  ${Total}  ${bool[1]}  minPrePaymentAmount=${min_pre}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sid}  ${resp.json()}
 
@@ -768,10 +759,6 @@ JD-TC-ApplyProviderCouponforwaitlist-UH8
 JD-TC-ApplyProviderCouponforwaitlist-UH9
 
     [Documentation]  Take check-in before the coupon start time then try to apply this coupon to bill.
-
-    clear_queue      ${PUSERNAME107}
-    clear_location   ${PUSERNAME107}
-    clear_service    ${PUSERNAME107}
     clear_customer   ${PUSERNAME107}
     clear_Coupon     ${PUSERNAME107}
 
@@ -825,7 +812,7 @@ JD-TC-ApplyProviderCouponforwaitlist-UH9
     ${ser_amount}=   Random Int   min=150   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
     ${SERVICE1}=    FakerLibrary.word
-    ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount1}  ${bool[0]}   ${bool[0]} 
+    ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}     ${bool[1]}     ${ser_amount1}  ${bool[0]}   minPrePaymentAmount=${min_pre}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid1}  ${resp.json()}
@@ -974,7 +961,7 @@ JD-TC-ApplyProviderCouponforwaitlist-UH10
     ${ser_amount}=   Random Int   min=150   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
     ${SERVICE1}=    FakerLibrary.word
-    ${resp}=  Create Service  ${P1SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount1}  ${bool[0]}   ${bool[0]} 
+    ${resp}=  Create Service  ${P1SERVICE1}   ${description}   ${ser_durtn}     ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount1}  ${bool[0]}   ${bool[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${p1_sid2}  ${resp.json()}

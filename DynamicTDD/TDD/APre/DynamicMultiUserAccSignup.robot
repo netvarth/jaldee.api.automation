@@ -35,8 +35,8 @@ Remove Files
 
 JD-TC-Branch_Signup-1
     [Documentation]    Create a provider with all valid attributes
-    Set Global Variable  ${US}  0
-    Set Global Variable  ${BR}  ${0}
+    Set Suite Variable  ${US}  0
+    Set Suite Variable  ${BR}  ${0}
     
     ${domresp}=  Get BusinessDomainsConf
     Should Be Equal As Strings  ${domresp.status_code}  200
@@ -58,7 +58,7 @@ JD-TC-Branch_Signup-1
 
     # ${usercount}=  Set Variable If  ${provider_count}>${defaultCount}  ${provider_count}   ${defaultCount} 
     ${count}=  Set Variable If  ${provider_count}>${totnods}  ${provider_count}   ${totnods}
-    Set Global Variable  ${count}   
+    Set Suite Variable  ${count}   
     #${newrange}=  Set Variable If  ${newlen}>${liclen}  ${newlen}   ${liclen}  
     # ${licresp}=   Get Licensable Packages
     # Should Be Equal As Strings   ${licresp.status_code}   200
@@ -154,7 +154,7 @@ SignUp Account
         Log  ${is_corp}
         Continue For Loop If  '${is_corp}' == 'False'
          ${PUSER}=  Evaluate   ${PUSER}+1
-        Set Global Variable   ${PUSER}
+        Set Suite Variable   ${PUSER}
         ${firstname}=  FakerLibrary.name
         ${lastname}=  FakerLibrary.last_name
         ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d}  ${sd}   ${PUSER}  ${pkgId}
@@ -181,7 +181,7 @@ SignUp Account
         Append To File  ${EXECDIR}/TDD/varfiles/hl_providers.py  HLPUSERNAME${BR}= ${PUSER}${\n}
         END
         ${BR} =	Set Variable If	 '${pkgId}' == '${highest_pkg[0]}'	${BR+1}	 ${BR}
-        Set Global Variable  ${BR}
+        Set Suite Variable  ${BR}
 
         sleep  01s
 
@@ -205,7 +205,7 @@ SignUp Account
         Should Be Equal As Strings  ${resp.status_code}  200
         Verify Response  ${resp}  status=INCOMPLETE
         ${US} =  Evaluate  ${US}+1
-        Set Global Variable  ${US} 
+        Set Suite Variable  ${US} 
         # ${DAY1}=  get_date
         # Set Suite Variable  ${DAY1}  ${DAY1}
         ${list}=  Create List  1  2  3  4  5  6  7
@@ -337,7 +337,7 @@ Domain Loop
     ${resp}=  Get BusinessDomainsConf
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
-    #Set Global Variable  ${US}  0
+    #Set Suite Variable  ${US}  0
     FOR  ${domindex}  IN RANGE  ${len}
         Exit For Loop If    '${US}' == '${count}' 
         Set Test Variable  ${d1}  ${resp.json()[${domindex}]['domain']}    

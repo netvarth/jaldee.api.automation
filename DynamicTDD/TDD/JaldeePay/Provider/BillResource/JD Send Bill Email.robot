@@ -145,7 +145,7 @@ JD-TC-Send Bill Email -UH1
 
     [Documentation]  Create bill AND  Send Bill To consumer do not  have  Email 
     ${CUSERNAME}=  Evaluate  ${CUSERNAME}+112
-    Set Global Variable  ${CUSERNAME}
+    Set Suite Variable  ${CUSERNAME}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${businessname}=  FakerLibrary.address

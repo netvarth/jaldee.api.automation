@@ -54,11 +54,11 @@ JD-TC-Enable OnlinePresence
                 ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=    Provider Signup  LicenseId=${licid}  Domain=${dom}  SubDomain=${sdom}
                 Append To File  ${pro_var_file}  PUSERNAME${US}=${PUSERNAME_A}${\n}
                 ${US} =  Evaluate  ${US}+1
-                Set Global Variable  ${US}
+                Set Suite Variable  ${US}
                 IF  '${licid}' == '${hl_licid}'
                     Append To File  ${hlpro_var_file}  HLPUSERNAME${hl_US}= ${PUSERNAME_A}${\n}
                     ${hl_US} =  Evaluate  ${hl_US}+1
-                    Set Global Variable  ${hl_US}
+                    Set Suite Variable  ${hl_US}
                 END
         
                 ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
