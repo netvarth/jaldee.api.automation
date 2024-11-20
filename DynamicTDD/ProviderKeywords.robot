@@ -387,7 +387,7 @@ Provider Signup
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ['Male', 'Female']
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${Domain}  ${SubDomain}  ${PhoneNumber}  ${LicenseId}
+    ${resp}=    Account SignUp  ${firstname}  ${lastname}  ${None}  ${Domain}  ${SubDomain}  ${PhoneNumber}  ${LicenseId}
     Should Be Equal As Strings    ${resp.status_code}    202
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
     ${resp}=  Account Activation   ${PhoneNumber}  ${OtpPurpose['ProviderSignUp']}  JSESSIONYNW=${jsessionynw_value}
@@ -699,9 +699,9 @@ Get User By Id
 Create Service
     # kwargs available : sortOrder,
     [Arguments]  ${name}  ${desc}  ${durtn}  ${isPrePayment}  ${totalAmount}  ${notfcn}  &{kwargs}
-    ${items}=  Get Dictionary items  ${kwargs}
+    # ${items}=  Get Dictionary items  ${kwargs}
     ${data}=  Create Dictionary  name=${name}  description=${desc}  serviceDuration=${durtn}  isPrePayment=${isPrePayment}  totalAmount=${totalAmount}  notification=${notfcn}  
-    FOR  ${key}  ${value}  IN  @{items}
+    FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END
     Log  ${data}
@@ -3832,27 +3832,16 @@ Get Virtual Calling Mode
 #     ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
 #     Check Deprication  ${resp}  Create Service with info
 #     RETURN  ${resp}
-
-
-Update Service with info
-    [Arguments]   ${sid}   ${name}   ${desc}   ${durtn}   ${notfcn}   ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}   ${status}   ${bType}   ${isPrePayment}   ${taxable}   ${serviceType}   ${virtualServiceType}   ${virtualCallingModes}   ${depid}   ${u_id}   ${consumerNoteMandatory}   ${consumerNoteTitle}   ${preInfoEnabled}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled}   ${postInfoTitle}   ${postInfoText}
-    ${user_id}=  Create Dictionary  id=${u_id}
-    ${data}=  Create Dictionary   id=${sid}  name=${name}  description=${desc}  serviceDuration=${durtn}  notification=${notfcn}  notificationType=${notiTp}  minPrePaymentAmount=${minPrePaymentAmount}   totalAmount=${totalAmount}   status=${status}  bType=${btype}  isPrePayment=${isPrePayment}  taxable=${taxable}   serviceType=${serviceType}   virtualServiceType=${virtualServiceType}  virtualCallingModes=${virtualCallingModes}  department=${depid}   provider=${user_id}   consumerNoteMandatory=${consumerNoteMandatory}   consumerNoteTitle=${consumerNoteTitle}   preInfoEnabled=${preInfoEnabled}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${postInfoEnabled}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session  
-    ${resp}=  PUT On Session  ynw  /provider/services  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Update Service with info
-    RETURN  ${resp}
     
 
-Create Service With serviceType
-    [Arguments]  ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}   ${serviceType}
-    ${data}=  Create Dictionary  name=${name}  description=${desc}  serviceDuration=${durtn}  notification=${notfcn}  notificationType=${notiTp}  minPrePaymentAmount=${minPrePaymentAmount}   totalAmount=${totalAmount}   status=${status}  bType=${btype}  isPrePayment=${isPrePayment}  taxable=${taxable}   serviceType=${serviceType}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session  
-    ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Create Service With serviceType
-    RETURN  ${resp}
+# Create Service With serviceType
+#     [Arguments]  ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}   ${serviceType}
+#     ${data}=  Create Dictionary  name=${name}  description=${desc}  serviceDuration=${durtn}  notification=${notfcn}  notificationType=${notiTp}  minPrePaymentAmount=${minPrePaymentAmount}   totalAmount=${totalAmount}   status=${status}  bType=${btype}  isPrePayment=${isPrePayment}  taxable=${taxable}   serviceType=${serviceType}
+#     ${data}=  json.dumps  ${data}
+#     Check And Create YNW Session  
+#     ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
+#     Check Deprication  ${resp}  Create Service With serviceType
+#     RETURN  ${resp}
 
 
 
@@ -3873,37 +3862,37 @@ Create Sample Service with Prepayment For User
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     RETURN  ${resp.json()}
 
-Create Service Department
-    [Arguments]  ${name}  ${desc}  ${durtn}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}  ${depid}  
-    ${data}=  Create Dictionary  name=${name}  description=${desc}  serviceDuration=${durtn}  notification=${notfcn}  notificationType=${notiTp}  minPrePaymentAmount=${minPrePaymentAmount}   totalAmount=${totalAmount}  bType=${btype}  isPrePayment=${isPrePayment}  taxable=${taxable}  department=${depid} 
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session  
-    ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Create Service Department
-    RETURN  ${resp}
+# Create Service Department
+#     [Arguments]  ${name}  ${desc}  ${durtn}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}  ${depid}  
+#     ${data}=  Create Dictionary  name=${name}  description=${desc}  serviceDuration=${durtn}  notification=${notfcn}  notificationType=${notiTp}  minPrePaymentAmount=${minPrePaymentAmount}   totalAmount=${totalAmount}  bType=${btype}  isPrePayment=${isPrePayment}  taxable=${taxable}  department=${depid} 
+#     ${data}=  json.dumps  ${data}
+#     Check And Create YNW Session  
+#     ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
+#     Check Deprication  ${resp}  Create Service Department
+#     RETURN  ${resp}
 
-Create Service For User
-    [Arguments]  ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}  ${depid}   ${u_id}  &{kwargs}
-    ${user_id}=  Create Dictionary  id=${u_id}
-    ${data}=  Create Dictionary  name=${name}  description=${desc}  serviceDuration=${durtn}  notification=${notfcn}  notificationType=${notiTp}  minPrePaymentAmount=${minPrePaymentAmount}   totalAmount=${totalAmount}   status=${status}  bType=${btype}  isPrePayment=${isPrePayment}  taxable=${taxable}  department=${depid}   provider=${user_id}
-    FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary 	${data} 	${key}=${value}
-    END
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session  
-    ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Create Service For User
-    RETURN  ${resp}
+# Create Service For User
+#     [Arguments]  ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}  ${depid}   ${u_id}  &{kwargs}
+#     ${user_id}=  Create Dictionary  id=${u_id}
+#     ${data}=  Create Dictionary  name=${name}  description=${desc}  serviceDuration=${durtn}  notification=${notfcn}  notificationType=${notiTp}  minPrePaymentAmount=${minPrePaymentAmount}   totalAmount=${totalAmount}   status=${status}  bType=${btype}  isPrePayment=${isPrePayment}  taxable=${taxable}  department=${depid}   provider=${user_id}
+#     FOR    ${key}    ${value}    IN    &{kwargs}
+#         Set To Dictionary 	${data} 	${key}=${value}
+#     END
+#     ${data}=  json.dumps  ${data}
+#     Check And Create YNW Session  
+#     ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
+#     Check Deprication  ${resp}  Create Service For User
+#     RETURN  ${resp}
 
-Update Service For User
-    [Arguments]  ${id}   ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}  ${depid}   ${u_id}
-    ${user_id}=  Create Dictionary  id=${u_id}
-    ${data}=  Create Dictionary  id=${id}  name=${name}  description=${desc}  serviceDuration=${durtn}  notification=${notfcn}  notificationType=${notiTp}  minPrePaymentAmount=${minPrePaymentAmount}   totalAmount=${totalAmount}   status=${status}  bType=${btype}  isPrePayment=${isPrePayment}  taxable=${taxable}    department=${depid}    provider=${user_id}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/services  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Update Service For User
-    RETURN  ${resp}
+# Update Service For User
+#     [Arguments]  ${id}   ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}  ${depid}   ${u_id}
+#     ${user_id}=  Create Dictionary  id=${u_id}
+#     ${data}=  Create Dictionary  id=${id}  name=${name}  description=${desc}  serviceDuration=${durtn}  notification=${notfcn}  notificationType=${notiTp}  minPrePaymentAmount=${minPrePaymentAmount}   totalAmount=${totalAmount}   status=${status}  bType=${btype}  isPrePayment=${isPrePayment}  taxable=${taxable}    department=${depid}    provider=${user_id}
+#     ${data}=  json.dumps  ${data}
+#     Check And Create YNW Session
+#     ${resp}=  PUT On Session  ynw  /provider/services  data=${data}  expected_status=any
+#     Check Deprication  ${resp}  Update Service For User
+#     RETURN  ${resp}
 
 # Update Service
 #     [Arguments]  ${id}   ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}  
@@ -3914,37 +3903,59 @@ Update Service For User
 #     Check Deprication  ${resp}  Update Service
 #     RETURN  ${resp}
 
+# Update Service with info
+#     [Arguments]   ${sid}   ${name}   ${desc}   ${durtn}   ${notfcn}   ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}   ${status}   ${bType}   ${isPrePayment}   ${taxable}   ${serviceType}   ${virtualServiceType}   ${virtualCallingModes}   ${depid}   ${u_id}   ${consumerNoteMandatory}   ${consumerNoteTitle}   ${preInfoEnabled}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled}   ${postInfoTitle}   ${postInfoText}
+#     ${user_id}=  Create Dictionary  id=${u_id}
+#     ${data}=  Create Dictionary   id=${sid}  name=${name}  description=${desc}  serviceDuration=${durtn}  notification=${notfcn}  notificationType=${notiTp}  minPrePaymentAmount=${minPrePaymentAmount}   totalAmount=${totalAmount}   status=${status}  bType=${btype}  isPrePayment=${isPrePayment}  taxable=${taxable}   serviceType=${serviceType}   virtualServiceType=${virtualServiceType}  virtualCallingModes=${virtualCallingModes}  department=${depid}   provider=${user_id}   consumerNoteMandatory=${consumerNoteMandatory}   consumerNoteTitle=${consumerNoteTitle}   preInfoEnabled=${preInfoEnabled}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${postInfoEnabled}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
+#     ${data}=  json.dumps  ${data}
+#     Check And Create YNW Session  
+#     ${resp}=  PUT On Session  ynw  /provider/services  data=${data}  expected_status=any
+#     Check Deprication  ${resp}  Update Service with info
+#     RETURN  ${resp}
+
+# Update Service
+#     [Arguments]  ${id}   ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}  &{kwargs}
+#     ${items}=  Get Dictionary items  ${kwargs}
+#     ${data}=  Create Dictionary  id=${id}  name=${name}  description=${desc}  serviceDuration=${durtn}  notification=${notfcn}  notificationType=${notiTp}  minPrePaymentAmount=${minPrePaymentAmount}   totalAmount=${totalAmount}   status=${status}  bType=${btype}  isPrePayment=${isPrePayment}  taxable=${taxable}
+#     FOR  ${key}  ${value}  IN  @{items}
+#         Set To Dictionary  ${data}   ${key}=${value}
+#     END
+#     Log  ${data}
+#     ${data}=  json.dumps  ${data}
+#     Check And Create YNW Session
+#     ${resp}=  PUT On Session  ynw  /provider/services  data=${data}  expected_status=any
+#     Check Deprication  ${resp}  Update Service
+#     RETURN  ${resp}
+
 Update Service
-    [Arguments]  ${id}   ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}  &{kwargs}
-    ${items}=  Get Dictionary items  ${kwargs}
-    ${data}=  Create Dictionary  id=${id}  name=${name}  description=${desc}  serviceDuration=${durtn}  notification=${notfcn}  notificationType=${notiTp}  minPrePaymentAmount=${minPrePaymentAmount}   totalAmount=${totalAmount}   status=${status}  bType=${btype}  isPrePayment=${isPrePayment}  taxable=${taxable}
-    FOR  ${key}  ${value}  IN  @{items}
+    [Arguments]  ${id}  ${name}  ${desc}  ${duration}  ${isPrePayment}  ${totalAmount}    &{kwargs}
+    ${data}=  Create Dictionary  id=${id}  name=${name}  description=${desc}  serviceDuration=${duration}  isPrePayment=${isPrePayment}  totalAmount=${totalAmount}
+    FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END
-    Log  ${data}
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/services  data=${data}  expected_status=any
     Check Deprication  ${resp}  Update Service
     RETURN  ${resp}
 
-Update Service With Service Type
-    [Arguments]  ${id}   ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}   ${serviceType} 
-    ${data}=  Create Dictionary  id=${id}  name=${name}  description=${desc}  serviceDuration=${durtn}  notification=${notfcn}  notificationType=${notiTp}  minPrePaymentAmount=${minPrePaymentAmount}   totalAmount=${totalAmount}   status=${status}  bType=${btype}  isPrePayment=${isPrePayment}  taxable=${taxable}   serviceType=${serviceType}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/services  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Update Service With Service Type
-    RETURN  ${resp}
+# Update Service With Service Type
+#     [Arguments]  ${id}   ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}   ${serviceType} 
+#     ${data}=  Create Dictionary  id=${id}  name=${name}  description=${desc}  serviceDuration=${durtn}  notification=${notfcn}  notificationType=${notiTp}  minPrePaymentAmount=${minPrePaymentAmount}   totalAmount=${totalAmount}   status=${status}  bType=${btype}  isPrePayment=${isPrePayment}  taxable=${taxable}   serviceType=${serviceType}
+#     ${data}=  json.dumps  ${data}
+#     Check And Create YNW Session
+#     ${resp}=  PUT On Session  ynw  /provider/services  data=${data}  expected_status=any
+#     Check Deprication  ${resp}  Update Service With Service Type
+#     RETURN  ${resp}
 
-Update Virtual Service
-    [Arguments]  ${id}   ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}   ${serviceType}   ${virtualCallingModes}
-    ${data}=  Create Dictionary  id=${id}  name=${name}  description=${desc}  serviceDuration=${durtn}  notification=${notfcn}  notificationType=${notiTp}  minPrePaymentAmount=${minPrePaymentAmount}   totalAmount=${totalAmount}   status=${status}  bType=${btype}  isPrePayment=${isPrePayment}  taxable=${taxable}   serviceType=${serviceType}   virtualCallingModes=${virtualCallingModes}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/services  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Update Virtual Service
-    RETURN  ${resp}   
+# Update Virtual Service
+#     [Arguments]  ${id}   ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}   ${serviceType}   ${virtualCallingModes}
+#     ${data}=  Create Dictionary  id=${id}  name=${name}  description=${desc}  serviceDuration=${durtn}  notification=${notfcn}  notificationType=${notiTp}  minPrePaymentAmount=${minPrePaymentAmount}   totalAmount=${totalAmount}   status=${status}  bType=${btype}  isPrePayment=${isPrePayment}  taxable=${taxable}   serviceType=${serviceType}   virtualCallingModes=${virtualCallingModes}
+#     ${data}=  json.dumps  ${data}
+#     Check And Create YNW Session
+#     ${resp}=  PUT On Session  ynw  /provider/services  data=${data}  expected_status=any
+#     Check Deprication  ${resp}  Update Virtual Service
+#     RETURN  ${resp}   
 
 
 Get ServiceImage

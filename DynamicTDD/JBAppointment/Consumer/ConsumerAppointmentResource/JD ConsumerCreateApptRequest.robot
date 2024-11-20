@@ -241,7 +241,8 @@ JD-TC-ConsumerCreateApptRequest-4
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500
 
-    ${resp}=  Update Service  ${sid2}  ${SERVICE2}  ${desc}  ${service_duration}  ${status[0]}  ${btype}  ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}    serviceBookingType=${serviceBookingType[1]}
+    # ${resp}=  Update Service  ${sid2}  ${SERVICE2}  ${desc}  ${service_duration}  ${status[0]}  ${btype}  ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}    serviceBookingType=${serviceBookingType[1]}
+    ${resp}=  Update Service  ${sid2}  ${SERVICE2}  ${desc}  ${service_duration}  ${bool[0]}  ${servicecharge}  noDateTime=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
 
     # ${resp}=  Update Service  ${sid2}  ${SERVICE2}   ${desc}   ${service_duration}   ${bool[0]}  ${servicecharge}  ${bool[0]}
     # ...     noDateTime=${bool[1]}  serviceBookingType=${serviceBookingType[1]}

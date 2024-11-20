@@ -2035,16 +2035,16 @@ JD-TC-Take Appointment-16
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${s_id}   ${resp.json()[0]['id']}
 
-    ${sname}=  generate_firstname
-
-        ${description}=  FakerLibrary.sentence
-        ${min_pre}=   Random Int   min=10   max=20
-        ${Total}=   Random Int   min=21   max=40
-        ${min_pre}=  Convert To Number  ${min_pre}  0
-        ${Total}=  Convert To Number  ${Total}  0
-        ${resp}=  Update Service  ${s_id}  ${sname}  ${description}   ${service_duration[3]}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[0]}  ${min_pre}  0  ${bool[1]}  ${bool[0]}   maxBookingsAllowed=10
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
+    ${sname}=  generate_unique_service_name  ${service_names}
+    ${description}=  FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=10   max=20
+    ${Total}=   Random Int   min=21   max=40
+    ${min_pre}=  Convert To Number  ${min_pre}  0
+    ${Total}=  Convert To Number  ${Total}  0
+    # ${resp}=  Update Service  ${s_id}  ${sname}  ${description}   ${service_duration[3]}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[0]}  ${min_pre}  0  ${bool[1]}  ${bool[0]}   maxBookingsAllowed=10
+    ${resp}=  Update Service  ${s_id}  ${sname}  ${description}  ${service_duration[3]}  ${bool[1]}  0  minPrePaymentAmount=${min_pre}  maxBookingsAllowed=10
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
 
 

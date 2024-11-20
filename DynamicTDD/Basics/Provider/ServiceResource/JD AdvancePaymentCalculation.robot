@@ -628,7 +628,8 @@ JD-TC-AdvancePaymentcalculation-11
     ${SERVICE2}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE2}
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Update Service  ${ser_id1}  ${SERVICE2}  ${desc}   ${ser_durtn}   ${status[0]}    ${btype}   ${bool[0]}  ${notifytype[0]}  ${min_pre}   ${service_amount}    ${bool[1]}  ${bool[0]}  prePaymentType=${advancepaymenttype[1]}
+    # ${resp}=  Update Service  ${ser_id1}  ${SERVICE2}  ${desc}   ${ser_durtn}   ${status[0]}    ${btype}   ${bool[0]}  ${notifytype[0]}  ${min_pre}   ${service_amount}    ${bool[1]}  ${bool[0]}  prePaymentType=${advancepaymenttype[1]}
+    ${resp}=  Update Service  ${ser_id1}  ${SERVICE2}  ${desc}  ${ser_durtn}  ${bool[1]}  ${service_amount}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[1]}
     Log  ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -670,7 +671,8 @@ JD-TC-AdvancePaymentcalculation-12
     ${SERVICE2}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE2}
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Update Service  ${ser_id1}  ${SERVICE2}  ${desc}   ${ser_durtn}   ${status[0]}    ${btype}   ${bool[0]}  ${notifytype[0]}  ${min_pre}   ${service_amount}    ${bool[1]}  ${bool[0]}  prePaymentType=${advancepaymenttype[0]}
+    # ${resp}=  Update Service  ${ser_id1}  ${SERVICE2}  ${desc}   ${ser_durtn}   ${status[0]}    ${btype}   ${bool[0]}  ${notifytype[0]}  ${min_pre}   ${service_amount}    ${bool[1]}  ${bool[0]}  prePaymentType=${advancepaymenttype[0]}
+    ${resp}=  Update Service  ${ser_id1}  ${SERVICE2}  ${desc}  ${ser_durtn}  ${bool[1]}  ${service_amount}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[0]}
     Log  ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -716,7 +718,8 @@ JD-TC-AdvancePaymentcalculation-13
     ${SERVICE2}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE2}
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Update Service  ${ser_id1}  ${SERVICE2}  ${desc}   ${ser_durtn}   ${status[0]}    ${btype}   ${bool[0]}  ${notifytype[0]}  ${min_pre}   ${service_amount}    ${bool[1]}  ${bool[0]}  prePaymentType=${advancepaymenttype[0]}
+    # ${resp}=  Update Service  ${ser_id1}  ${SERVICE2}  ${desc}   ${ser_durtn}   ${status[0]}    ${btype}   ${bool[0]}  ${notifytype[0]}  ${min_pre}   ${service_amount}    ${bool[1]}  ${bool[0]}  prePaymentType=${advancepaymenttype[0]}
+    ${resp}=  Update Service  ${ser_id1}  ${SERVICE2}  ${desc}  ${ser_durtn}  ${bool[1]}  ${service_amount}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[0]}
     Log  ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  200
 
