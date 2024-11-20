@@ -258,8 +258,8 @@ JD-TC-Apply ProviderCoupon-1
     ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}  price=${serviceprice}
     ${serviceList}=    Create List    ${serviceList}
     
-    
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   serviceList=${serviceList}
+
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}     ${invoiceId}    ${providerConsumerIdList}   ${lid}   serviceList=${serviceList}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]} 
@@ -2829,8 +2829,8 @@ JD-TC-ProviderCouponBill-UH3
     ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}  price=${serviceprice}
     ${serviceList}=    Create List    ${serviceList}
     
-    
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   serviceList=${serviceList}   ynwUuid=${wid}
+
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}     ${invoiceId}    ${providerConsumerIdList}   ${loc_id1}   serviceList=${serviceList}   ynwUuid=${wid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]} 

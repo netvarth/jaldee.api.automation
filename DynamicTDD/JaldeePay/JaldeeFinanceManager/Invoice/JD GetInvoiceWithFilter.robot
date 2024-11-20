@@ -218,7 +218,7 @@ JD-TC-Get Invoice With Filter -1
     Set Suite Variable   ${status_id1}   ${resp.json()}
 
     
-    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}
+    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}   ${lid}   ${itemList}  invoiceStatus=${status_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}   
@@ -293,7 +293,7 @@ JD-TC-Get Invoice With Filter -2
     ${adhocItemList}=    Create List    ${adhocItemList} 
 
     
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  adhocItemList=${adhocItemList}
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}     ${invoiceId}    ${providerConsumerIdList}   ${lid}  adhocItemList=${adhocItemList}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len1}=  Get Length  ${resp.json()['idList']}

@@ -206,7 +206,7 @@ JD-TC-GenerateLinkForInvoice-1
     Set Test Variable   ${status_id1}   ${resp.json()}
 
     
-    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}   billStatus=${billStatus[0]}
+    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}     ${invoiceId}    ${providerConsumerIdList}   ${lid}    ${itemList}   invoiceStatus=${status_id1}   billStatus=${billStatus[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_id}   ${resp.json()['idList'][0]}
@@ -473,7 +473,7 @@ JD-TC-GenerateLinkForInvoice-UH8
     Set Test Variable   ${status_id1}   ${resp.json()}
 
     
-    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}   
+    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}   ${lid}   ${itemList}  invoiceStatus=${status_id1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_id}   ${resp.json()['idList'][0]}

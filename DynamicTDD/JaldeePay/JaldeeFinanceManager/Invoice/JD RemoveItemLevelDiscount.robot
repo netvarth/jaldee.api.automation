@@ -359,7 +359,7 @@ JD-TC-Remove Item Level Discount-1
     Set Test Variable   ${totalPrice}
     
     
-    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  ${itemList}  serviceList=${serviceList}   billStatus=${billStatus[0]}
+    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}     ${invoiceId}    ${providerConsumerIdList}   ${lid}   ${itemList}  serviceList=${serviceList}   billStatus=${billStatus[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]} 
@@ -674,7 +674,7 @@ JD-TC-Remove Item Level Discount-2
     Set Suite Variable   ${netTotal}
     
     
-    ${resp}=  Create Invoice   ${category_id3}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid2}   ${invoiceId}    ${providerConsumerIdList}   ${itemList}   adhocItemList=${adhocItemList}   billStatus=${billStatus[0]}
+    ${resp}=  Create Invoice   ${category_id3}    ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}   ${lid}  ${itemList}   adhocItemList=${adhocItemList}   billStatus=${billStatus[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid1}   ${resp.json()['uidList'][0]} 
@@ -871,7 +871,7 @@ JD-TC-Remove Item Level Discount-4
     Set Suite Variable   ${netTotal1}
     
     
-    ${resp}=  Create Invoice   ${category_id3}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid2}   ${invoiceId}    ${providerConsumerIdList}   ${itemList}   
+    ${resp}=  Create Invoice   ${category_id3}    ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}   ${lid}  ${itemList}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid3}   ${resp.json()['uidList'][0]} 
@@ -1287,7 +1287,7 @@ JD-TC-Remove Item Level Discount-5
     Set Test Variable   ${totalPrice}
     
     
-    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  ${itemList}  serviceList=${serviceList}
+    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}   ${lid}   ${itemList}  serviceList=${serviceList}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${invoice_uid}   ${resp.json()['uidList'][0]} 
@@ -1586,7 +1586,7 @@ JD-TC-Remove Item Level Discount-6
     Set Test Variable   ${totalPrice}
     
     
-    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  ${itemList}  serviceList=${serviceList}
+    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}     ${invoiceId}    ${providerConsumerIdList}   ${lid}  ${itemList}  serviceList=${serviceList}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${invoice_uid}   ${resp.json()['uidList'][0]} 
@@ -1813,7 +1813,7 @@ JD-TC-Remove Item Level Discount-UH6
     ${itemList}=  Create Dictionary  itemId=${itemId1}   quantity=${quantity}  price=${promotionalPrice}
     
     
-    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  ${itemList}  
+    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}   ${lid}   ${itemList}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid1}   ${resp.json()['uidList'][0]} 
@@ -2084,7 +2084,7 @@ JD-TC-Remove Item Level Discount-3
     ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}  price=${promotionalPrice}
     
     
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   ${itemList}   adhocItemList=${adhocItemList}
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}   ${lid}   ${itemList}   adhocItemList=${adhocItemList}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid1}   ${resp.json()['uidList'][0]} 

@@ -216,7 +216,7 @@ JD-TC-GetInvoiceCountwithFilter-1
     Set Suite Variable   ${status_id1}   ${resp.json()}
 
     
-    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}
+    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}   ${lid}   ${itemList}  invoiceStatus=${status_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()['idList']}
@@ -288,7 +288,7 @@ JD-TC-GetInvoiceCountwithFilter-2
     ${serviceList}=    Create List    ${serviceList} 
 
     
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  serviceList=${serviceList} 
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}     ${invoiceId}    ${providerConsumerIdList}  ${lid}  serviceList=${serviceList} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len1}=  Get Length  ${resp.json()['idList']}

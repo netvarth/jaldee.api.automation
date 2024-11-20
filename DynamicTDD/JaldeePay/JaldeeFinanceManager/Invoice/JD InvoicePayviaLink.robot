@@ -618,7 +618,7 @@ JD-TC-Invoice pay via link-UH10
     ${adhocItemList}=    Create List    ${adhocItemList}
 
     
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}       adhocItemList=${adhocItemList}    locationId=${lid}
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}    ${lid}    ${itemList}  invoiceStatus=${status_id1}       adhocItemList=${adhocItemList}    locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_id}   ${resp.json()['idList'][0]}

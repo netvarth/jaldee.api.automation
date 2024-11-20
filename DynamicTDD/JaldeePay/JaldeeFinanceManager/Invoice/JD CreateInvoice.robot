@@ -259,7 +259,7 @@ JD-TC-CreateInvoice-1
     ${adhocItemList}=    Create List    ${adhocItemList}
 
     
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}    serviceList=${serviceList}   adhocItemList=${adhocItemList}   locationId=${lid}
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}     ${invoiceId}    ${providerConsumerIdList}  ${lid}   ${itemList}  invoiceStatus=${status_id1}    serviceList=${serviceList}   adhocItemList=${adhocItemList}   locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_id}   ${resp.json()['idList'][0]}
@@ -329,7 +329,7 @@ JD-TC-CreateInvoice-2
     ${adhocItemList}=  Create Dictionary  itemName=${itemName}   quantity=${quantity}   price=${price}
     ${adhocItemList}=    Create List    ${adhocItemList}
     
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   adhocItemList=${adhocItemList}    locationId=${lid}
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}   ${lid}  adhocItemList=${adhocItemList}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid1}   ${resp.json()['uidList'][0]}  
@@ -402,7 +402,7 @@ JD-TC-CreateInvoice-3
      ${netRate}=  Convert To Number  ${netRate}  4
 
     
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   ${itemList}  invoiceStatus=${status_id1}    locationId=${lid}
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}    ${invoiceId}    ${providerConsumerIdList}   ${lid}    ${itemList}  invoiceStatus=${status_id1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid3}   ${resp.json()['uidList'][0]}  
@@ -491,7 +491,7 @@ JD-TC-CreateInvoice-4
 
 
     
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   serviceList=${serviceList}    locationId=${lid} 
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}   ${lid}    serviceList=${serviceList}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid3}   ${resp.json()['uidList'][0]}  
@@ -527,7 +527,7 @@ JD-TC-CreateInvoice-UH1
     ${adhocItemList}=  Create Dictionary  itemName=${itemName}   quantity=${quantity}   price=${price}
     ${adhocItemList}=    Create List    ${adhocItemList}
     
-    ${resp}=  Create Invoice   ${EMPTY}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  adhocItemList=${adhocItemList}
+    ${resp}=  Create Invoice   ${EMPTY}    ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}   ${lid}  adhocItemList=${adhocItemList}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${INVALID_INVOICE_CATEGORY}
@@ -562,7 +562,7 @@ JD-TC-CreateInvoice-UH2
     ${adhocItemList}=  Create Dictionary  itemName=${itemName}   quantity=${quantity}   price=${price}
     ${adhocItemList}=    Create List    ${adhocItemList}
     
-    ${resp}=  Create Invoice   ${category_id2}    ${EMPTY}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   adhocItemList=${adhocItemList}
+    ${resp}=  Create Invoice   ${category_id2}    ${EMPTY}      ${invoiceId}    ${providerConsumerIdList}  ${lid}  adhocItemList=${adhocItemList}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${INVOICE_DATE_CANNOT_EMPTY}
@@ -588,7 +588,7 @@ JD-TC-CreateInvoice-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${invoiceId}   ${resp.json()}
     
-    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}   ${EMPTY}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}
+    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}  ${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${LINE_ITEMS_CANNOT_EMPTY}
@@ -799,7 +799,7 @@ JD-TC-CreateInvoice-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${category_id}   ${resp.json()}
     
-    ${resp}=  Create Invoice   ${category_id}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   serviceList=${serviceList}        ynwUuid=${wid}
+    ${resp}=  Create Invoice   ${category_id}    ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}   ${loc_id1}   serviceList=${serviceList}        ynwUuid=${wid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid3}   ${resp.json()['uidList'][0]}  
@@ -874,7 +874,7 @@ JD-TC-CreateInvoice-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id}   ${resp.json()}
     
-    ${resp}=  Create Invoice   ${category_id}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   serviceList=${serviceList}        ynwUuid=${wid1}
+    ${resp}=  Create Invoice   ${category_id}    ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}   ${loc_id1}   serviceList=${serviceList}        ynwUuid=${wid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid3}   ${resp.json()['uidList'][0]}  
@@ -897,7 +897,7 @@ JD-TC-CreateInvoice-7
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Invoice   ${category_id}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   serviceList=${serviceList}        ynwUuid=${wid1}
+    ${resp}=  Create Invoice   ${category_id}    ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}   ${loc_id1}   serviceList=${serviceList}        ynwUuid=${wid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1095,7 +1095,7 @@ JD-TC-CreateInvoice-9
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Invoice   ${category_id}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   serviceList=${serviceList}        ynwUuid=${apptid1}
+    ${resp}=  Create Invoice   ${category_id}    ${invoiceDate}    ${invoiceId}    ${providerConsumerIdList}   ${loc_id1}    serviceList=${serviceList}        ynwUuid=${apptid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid4}   ${resp.json()['uidList'][0]}  
@@ -1123,7 +1123,7 @@ JD-TC-CreateInvoice-10
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Invoice   ${category_id}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   serviceList=${serviceList}        ynwUuid=${apptid1}
+    ${resp}=  Create Invoice   ${category_id}    ${invoiceDate}     ${invoiceId}    ${providerConsumerIdList}   ${loc_id1}    serviceList=${serviceList}        ynwUuid=${apptid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2565,7 +2565,7 @@ JD-TC-CreateInvoice-15
     ${netTotal}=    Evaluate  ${nonTaxableTotal}+${taxableTotal}
     Set Suite Variable  ${netTotal}
     
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}    serviceList=${serviceList}   adhocItemList=${adhocItemList}   locationId=${lid}
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}   ${lid1}    ${itemList}  invoiceStatus=${status_id1}    serviceList=${serviceList}   adhocItemList=${adhocItemList}   locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_id}   ${resp.json()['idList'][0]}
@@ -2750,7 +2750,7 @@ JD-TC-CreateInvoice-17
     ${totalamt}=  twodigitfloat  ${totalamt}
     # ${totalamt}=  Evaluate  round(${totalamt})
     
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}    serviceList=${serviceList}      locationId=${lid}
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}     ${invoiceId}    ${providerConsumerIdList}   ${lid1}   ${itemList}  invoiceStatus=${status_id1}    serviceList=${serviceList}      locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_id}   ${resp.json()['idList'][0]}
@@ -3182,117 +3182,119 @@ JD-TC-CreateInvoice-UH4
     [Documentation]  Try to disable finance after taking waitlist from consumer side and the consumer doing the prepayment -  (Tax enabled)
 
    
+    ${firstname}  ${lastname}  ${PUSERPH2}  ${LoginId}=  Provider Signup
+    Set Suite Variable  ${PUSERPH2}
 
-    ${PO_Number}    Generate random string    8    9784564123
-    ${PO_Number}    Convert To Integer  ${PO_Number}
-    ${PUSERPH2}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
-    Set Suite Variable   ${PUSERPH2}
-    ${resp}=   Run Keywords  clear_queue  ${PUSERPH2}   AND  clear_service  ${PUSERPH2}  AND  clear_Item    ${PUSERPH2}  AND   clear_Coupon   ${PUSERPH2}   AND  clear_Discount  ${PUSERPH2}  AND  clear_appt_schedule   ${PUSERPH2}
-    ${licid}  ${licname}=  get_highest_license_pkg
-    Log  ${licid}
-    Log  ${licname}
-    Set Test Variable   ${licid}
+    # ${PO_Number}    Generate random string    8    9784564123
+    # ${PO_Number}    Convert To Integer  ${PO_Number}
+    # ${PUSERPH2}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
+    # Set Suite Variable   ${PUSERPH2}
+    # ${resp}=   Run Keywords  clear_queue  ${PUSERPH2}   AND  clear_service  ${PUSERPH2}  AND  clear_Item    ${PUSERPH2}  AND   clear_Coupon   ${PUSERPH2}   AND  clear_Discount  ${PUSERPH2}  AND  clear_appt_schedule   ${PUSERPH2}
+    # ${licid}  ${licname}=  get_highest_license_pkg
+    # Log  ${licid}
+    # Log  ${licname}
+    # Set Test Variable   ${licid}
     
-    ${domresp}=  Get BusinessDomainsConf
-    Log   ${domresp.content}
-    Should Be Equal As Strings  ${domresp.status_code}  200
-    ${dlen}=  Get Length  ${domresp.json()}
-    ${d1}=  Random Int   min=0  max=${dlen-1}
-    Set Test Variable  ${dom}  ${domresp.json()[${d1}]['domain']}
-    ${sdlen}=  Get Length  ${domresp.json()[${d1}]['subDomains']}
-    ${sdom}=  Random Int   min=0  max=${sdlen-1}
-    Set Test Variable  ${sub_dom}  ${domresp.json()[${d1}]['subDomains'][${sdom}]['subDomain']}
+    # ${domresp}=  Get BusinessDomainsConf
+    # Log   ${domresp.content}
+    # Should Be Equal As Strings  ${domresp.status_code}  200
+    # ${dlen}=  Get Length  ${domresp.json()}
+    # ${d1}=  Random Int   min=0  max=${dlen-1}
+    # Set Test Variable  ${dom}  ${domresp.json()[${d1}]['domain']}
+    # ${sdlen}=  Get Length  ${domresp.json()[${d1}]['subDomains']}
+    # ${sdom}=  Random Int   min=0  max=${sdlen-1}
+    # Set Test Variable  ${sub_dom}  ${domresp.json()[${d1}]['subDomains'][${sdom}]['subDomain']}
 
-    ${firstname}=  FakerLibrary.first_name
-    ${lastname}=  FakerLibrary.last_name
-    ${address}=  FakerLibrary.address
-    ${dob}=  FakerLibrary.Date
-    ${gender}    Random Element    ['Male', 'Female']
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERPH2}  ${licid}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${firstname}=  FakerLibrary.first_name
+    # ${lastname}=  FakerLibrary.last_name
+    # ${address}=  FakerLibrary.address
+    # ${dob}=  FakerLibrary.Date
+    # ${gender}    Random Element    ['Male', 'Female']
+    # ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERPH2}  ${licid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Account Activation  ${PUSERPH2}  0
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.content}    "true"
+    # ${resp}=  Account Activation  ${PUSERPH2}  0
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Should Be Equal As Strings    ${resp.content}    "true"
     
-    ${resp}=  Account Set Credential  ${PUSERPH2}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH2}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Account Set Credential  ${PUSERPH2}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH2}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=   Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD} 
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${pid1}  ${decrypted_data['id']}
-    # Set Test Variable  ${pid}  ${resp.json()['id']}
+    # ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    # Log  ${decrypted_data}
+    # Set Test Variable  ${pid1}  ${decrypted_data['id']}
+    # # Set Test Variable  ${pid}  ${resp.json()['id']}
     
-    ${list}=  Create List  1  2  3  4  5  6  7
-    Set Suite Variable  ${list}  
-    @{Views}=  Create List  self  all  customersOnly
-    ${ph1}=  Evaluate  ${PUSERPH2}+1000000000
-    ${ph2}=  Evaluate  ${PUSERPH2}+2000000000
-    ${views}=  Evaluate  random.choice($Views)  random
-    ${name1}=  FakerLibrary.name
-    ${name2}=  FakerLibrary.name
-    ${name3}=  FakerLibrary.name
-    ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
-    ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.${test_mail}  ${views}
-    ${bs}=  FakerLibrary.bs
-    ${companySuffix}=  FakerLibrary.companySuffix
-    # ${city}=   FakerLibrary.state
-    # ${latti}=  get_latitude
-    # ${longi}=  get_longitude
-    # ${postcode}=  FakerLibrary.postcode
-    # ${address}=  get_address
-    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    Set Test Variable  ${tz}
-    ${parking}   Random Element   ${parkingType}
-    ${24hours}    Random Element    ['True','False']
-    ${desc}=   FakerLibrary.sentence
-    ${url}=   FakerLibrary.url
-    ${sTime}=  add_timezone_time  ${tz}  0  15  
-    Set Test Variable   ${sTime}
-    ${eTime}=  add_timezone_time  ${tz}  0  45  
-    Set Test Variable   ${eTime}
+    # ${list}=  Create List  1  2  3  4  5  6  7
+    # Set Suite Variable  ${list}  
+    # @{Views}=  Create List  self  all  customersOnly
+    # ${ph1}=  Evaluate  ${PUSERPH2}+1000000000
+    # ${ph2}=  Evaluate  ${PUSERPH2}+2000000000
+    # ${views}=  Evaluate  random.choice($Views)  random
+    # ${name1}=  FakerLibrary.name
+    # ${name2}=  FakerLibrary.name
+    # ${name3}=  FakerLibrary.name
+    # ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
+    # ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
+    # ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.${test_mail}  ${views}
+    # ${bs}=  FakerLibrary.bs
+    # ${companySuffix}=  FakerLibrary.companySuffix
+    # # ${city}=   FakerLibrary.state
+    # # ${latti}=  get_latitude
+    # # ${longi}=  get_longitude
+    # # ${postcode}=  FakerLibrary.postcode
+    # # ${address}=  get_address
+    # ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    # ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    # Set Test Variable  ${tz}
+    # ${parking}   Random Element   ${parkingType}
+    # ${24hours}    Random Element    ['True','False']
+    # ${desc}=   FakerLibrary.sentence
+    # ${url}=   FakerLibrary.url
+    # ${sTime}=  add_timezone_time  ${tz}  0  15  
+    # Set Test Variable   ${sTime}
+    # ${eTime}=  add_timezone_time  ${tz}  0  45  
+    # Set Test Variable   ${eTime}
 
-    ${DAY}=  db.get_date_by_timezone  ${tz}
-    Set Test Variable  ${DAY}  
+    # ${DAY}=  db.get_date_by_timezone  ${tz}
+    # Set Test Variable  ${DAY}  
     
-    ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${fields}=   Get subDomain level Fields  ${dom}  ${sub_dom}
-    Log  ${fields.content}
-    Should Be Equal As Strings    ${fields.status_code}   200
+    # ${fields}=   Get subDomain level Fields  ${dom}  ${sub_dom}
+    # Log  ${fields.content}
+    # Should Be Equal As Strings    ${fields.status_code}   200
 
-    ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
+    # ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
 
-    ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sub_dom}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sub_dom}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get specializations Sub Domain  ${dom}  ${sub_dom}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=  Get specializations Sub Domain  ${dom}  ${sub_dom}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${spec}=  get_Specializations  ${resp.json()}
+    # ${spec}=  get_Specializations  ${resp.json()}
     
-    ${resp}=  Update Specialization  ${spec}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=  Update Specialization  ${spec}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH2}.${test_mail}
+    # Set Test Variable  ${email_id}  ${P_Email}${PUSERPH2}.${test_mail}
 
-    ${resp}=  Update Email   ${pid1}   ${firstname}   ${lastname}   ${email_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Update Email   ${pid1}   ${firstname}   ${lastname}   ${email_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     
     # ------------- Get general details and settings of the provider and update all needed settings
     
@@ -4049,118 +4051,119 @@ JD-TC-CreateInvoice-24
 
     [Documentation]  Try to disable finance where only one service is there with zero amount(we can disable finance manager in this case)
 
-   
+    ${firstname}  ${lastname}  ${PUSERPH5}  ${LoginId}=  Provider Signup
+    Set Suite Variable  ${PUSERPH5}   
 
-    ${PO_Number}    Generate random string    8    9784654123
-    ${PO_Number}    Convert To Integer  ${PO_Number}
-    ${PUSERPH5}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH5}${\n}
-    Set Suite Variable   ${PUSERPH5}
-    ${resp}=   Run Keywords  clear_queue  ${PUSERPH5}   AND  clear_service  ${PUSERPH5}  AND  clear_Item    ${PUSERPH5}  AND   clear_Coupon   ${PUSERPH5}   AND  clear_Discount  ${PUSERPH5}  AND  clear_appt_schedule   ${PUSERPH5}
-    ${licid}  ${licname}=  get_highest_license_pkg
-    Log  ${licid}
-    Log  ${licname}
-    Set Test Variable   ${licid}
+    # ${PO_Number}    Generate random string    8    9784654123
+    # ${PO_Number}    Convert To Integer  ${PO_Number}
+    # ${PUSERPH5}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH5}${\n}
+    # Set Suite Variable   ${PUSERPH5}
+    # ${resp}=   Run Keywords  clear_queue  ${PUSERPH5}   AND  clear_service  ${PUSERPH5}  AND  clear_Item    ${PUSERPH5}  AND   clear_Coupon   ${PUSERPH5}   AND  clear_Discount  ${PUSERPH5}  AND  clear_appt_schedule   ${PUSERPH5}
+    # ${licid}  ${licname}=  get_highest_license_pkg
+    # Log  ${licid}
+    # Log  ${licname}
+    # Set Test Variable   ${licid}
     
-    ${domresp}=  Get BusinessDomainsConf
-    Log   ${domresp.content}
-    Should Be Equal As Strings  ${domresp.status_code}  200
-    ${dlen}=  Get Length  ${domresp.json()}
-    ${d1}=  Random Int   min=0  max=${dlen-1}
-    Set Test Variable  ${dom}  ${domresp.json()[${d1}]['domain']}
-    ${sdlen}=  Get Length  ${domresp.json()[${d1}]['subDomains']}
-    ${sdom}=  Random Int   min=0  max=${sdlen-1}
-    Set Test Variable  ${sub_dom}  ${domresp.json()[${d1}]['subDomains'][${sdom}]['subDomain']}
+    # ${domresp}=  Get BusinessDomainsConf
+    # Log   ${domresp.content}
+    # Should Be Equal As Strings  ${domresp.status_code}  200
+    # ${dlen}=  Get Length  ${domresp.json()}
+    # ${d1}=  Random Int   min=0  max=${dlen-1}
+    # Set Test Variable  ${dom}  ${domresp.json()[${d1}]['domain']}
+    # ${sdlen}=  Get Length  ${domresp.json()[${d1}]['subDomains']}
+    # ${sdom}=  Random Int   min=0  max=${sdlen-1}
+    # Set Test Variable  ${sub_dom}  ${domresp.json()[${d1}]['subDomains'][${sdom}]['subDomain']}
 
-    ${firstname}=  FakerLibrary.first_name
-    ${lastname}=  FakerLibrary.last_name
-    ${address}=  FakerLibrary.address
-    ${dob}=  FakerLibrary.Date
-    ${gender}    Random Element    ['Male', 'Female']
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERPH5}  ${licid}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${firstname}=  FakerLibrary.first_name
+    # ${lastname}=  FakerLibrary.last_name
+    # ${address}=  FakerLibrary.address
+    # ${dob}=  FakerLibrary.Date
+    # ${gender}    Random Element    ['Male', 'Female']
+    # ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERPH5}  ${licid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Account Activation  ${PUSERPH5}  0
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.content}    "true"
+    # ${resp}=  Account Activation  ${PUSERPH5}  0
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Should Be Equal As Strings    ${resp.content}    "true"
     
-    ${resp}=  Account Set Credential  ${PUSERPH5}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH5}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Account Set Credential  ${PUSERPH5}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH5}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Encrypted Provider Login  ${PUSERPH5}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=   Encrypted Provider Login  ${PUSERPH5}  ${PASSWORD} 
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${pid1}  ${decrypted_data['id']}
-    # Set Test Variable  ${pid}  ${resp.json()['id']}
+    # ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    # Log  ${decrypted_data}
+    # Set Test Variable  ${pid1}  ${decrypted_data['id']}
+    # # Set Test Variable  ${pid}  ${resp.json()['id']}
     
-    ${list}=  Create List  1  2  3  4  5  6  7
-    Set Suite Variable  ${list}  
-    @{Views}=  Create List  self  all  customersOnly
-    ${ph1}=  Evaluate  ${PUSERPH5}+1000000000
-    ${ph2}=  Evaluate  ${PUSERPH5}+2000000000
-    ${views}=  Evaluate  random.choice($Views)  random
-    ${name1}=  FakerLibrary.name
-    ${name2}=  FakerLibrary.name
-    ${name3}=  FakerLibrary.name
-    ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
-    ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.${test_mail}  ${views}
-    ${bs}=  FakerLibrary.bs
-    ${companySuffix}=  FakerLibrary.companySuffix
-    # ${city}=   FakerLibrary.state
-    # ${latti}=  get_latitude
-    # ${longi}=  get_longitude
-    # ${postcode}=  FakerLibrary.postcode
-    # ${address}=  get_address
-    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    Set Test Variable  ${tz}
-    ${parking}   Random Element   ${parkingType}
-    ${24hours}    Random Element    ['True','False']
-    ${desc}=   FakerLibrary.sentence
-    ${url}=   FakerLibrary.url
-    ${sTime}=  add_timezone_time  ${tz}  0  15  
-    Set Test Variable   ${sTime}
-    ${eTime}=  add_timezone_time  ${tz}  0  45  
-    Set Test Variable   ${eTime}
+    # ${list}=  Create List  1  2  3  4  5  6  7
+    # Set Suite Variable  ${list}  
+    # @{Views}=  Create List  self  all  customersOnly
+    # ${ph1}=  Evaluate  ${PUSERPH5}+1000000000
+    # ${ph2}=  Evaluate  ${PUSERPH5}+2000000000
+    # ${views}=  Evaluate  random.choice($Views)  random
+    # ${name1}=  FakerLibrary.name
+    # ${name2}=  FakerLibrary.name
+    # ${name3}=  FakerLibrary.name
+    # ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
+    # ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
+    # ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.${test_mail}  ${views}
+    # ${bs}=  FakerLibrary.bs
+    # ${companySuffix}=  FakerLibrary.companySuffix
+    # # ${city}=   FakerLibrary.state
+    # # ${latti}=  get_latitude
+    # # ${longi}=  get_longitude
+    # # ${postcode}=  FakerLibrary.postcode
+    # # ${address}=  get_address
+    # ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    # ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    # Set Test Variable  ${tz}
+    # ${parking}   Random Element   ${parkingType}
+    # ${24hours}    Random Element    ['True','False']
+    # ${desc}=   FakerLibrary.sentence
+    # ${url}=   FakerLibrary.url
+    # ${sTime}=  add_timezone_time  ${tz}  0  15  
+    # Set Test Variable   ${sTime}
+    # ${eTime}=  add_timezone_time  ${tz}  0  45  
+    # Set Test Variable   ${eTime}
 
-    ${DAY}=  db.get_date_by_timezone  ${tz}
-    Set Test Variable  ${DAY}  
+    # ${DAY}=  db.get_date_by_timezone  ${tz}
+    # Set Test Variable  ${DAY}  
     
-    ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${fields}=   Get subDomain level Fields  ${dom}  ${sub_dom}
-    Log  ${fields.content}
-    Should Be Equal As Strings    ${fields.status_code}   200
+    # ${fields}=   Get subDomain level Fields  ${dom}  ${sub_dom}
+    # Log  ${fields.content}
+    # Should Be Equal As Strings    ${fields.status_code}   200
 
-    ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
+    # ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
 
-    ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sub_dom}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sub_dom}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get specializations Sub Domain  ${dom}  ${sub_dom}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=  Get specializations Sub Domain  ${dom}  ${sub_dom}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${spec}=  get_Specializations  ${resp.json()}
+    # ${spec}=  get_Specializations  ${resp.json()}
     
-    ${resp}=  Update Specialization  ${spec}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=  Update Specialization  ${spec}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH5}.${test_mail}
+    # Set Test Variable  ${email_id}  ${P_Email}${PUSERPH5}.${test_mail}
 
-    ${resp}=  Update Email   ${pid1}   ${firstname}   ${lastname}   ${email_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Update Email   ${pid1}   ${firstname}   ${lastname}   ${email_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     
     # ------------- Get general details and settings of the provider and update all needed settings
     

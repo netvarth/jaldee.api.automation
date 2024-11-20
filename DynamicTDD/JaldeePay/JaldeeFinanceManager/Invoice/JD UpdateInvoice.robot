@@ -217,7 +217,7 @@ JD-TC-UpdateInvoice-1
     ${adhocItemList}=    Create List    ${adhocItemList}
 
     
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   serviceList=${serviceList}   adhocItemList=${adhocItemList} 
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}   ${lid}   serviceList=${serviceList}   adhocItemList=${adhocItemList} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}    
@@ -231,7 +231,7 @@ JD-TC-UpdateInvoice-1
     ${adhocItemList1}=    Create List    ${adhocItemList1}
 
 
-    ${resp}=  Update Invoice   ${invoice_uid}    ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   adhocItemList=${adhocItemList1}
+    ${resp}=  Update Invoice   ${invoice_uid}      ${invoiceDate}    adhocItemList=${adhocItemList1}   invoiceLabel=${invoiceLabel}  billedTo=${address}    vendorUid=${vendor_uid1} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
