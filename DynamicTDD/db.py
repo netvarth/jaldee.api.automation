@@ -2181,19 +2181,42 @@ def get_lowest_license_pkg():
     name= str(data['basePackages'][0]['name'])
     return [id, name]
 
+# def get_billable_domain():
+#     try:
+#         with open(bizjson,'r', encoding="utf-8") as f:
+#             data=json.load(f)
+#     except IOError:
+#         print ('File',bizjson,'not accessible')
+#     domlist=[]
+#     subdomlist=[]
+#     for i in range(len(data['businessDomains'])):        
+#         if data['businessDomains'][i]['subDomains'][0]['serviceBillable'] == True:
+#             domlist.append(data['businessDomains'][i]['domain'])
+#             subdomlist.append(data['businessDomains'][i]['subDomains'][0]['subDomain'])
+#     return [domlist, subdomlist]
+
 def get_billable_domain():
     try:
-        with open(bizjson,'r', encoding="utf-8") as f:
-            data=json.load(f)
+        with open(bizjson, 'r', encoding="utf-8") as f:
+            data = json.load(f)
     except IOError:
-        print ('File',bizjson,'not accessible')
-    domlist=[]
-    subdomlist=[]
-    for i in range(len(data['businessDomains'])):        
-        if data['businessDomains'][i]['subDomains'][0]['serviceBillable'] == True:
-            domlist.append(data['businessDomains'][i]['domain'])
-            subdomlist.append(data['businessDomains'][i]['subDomains'][0]['subDomain'])
-    return [domlist, subdomlist]
+        print('File', bizjson, 'not accessible')
+        return {}
+
+    domain_dict = {}
+
+    for domain_info in data['businessDomains']:
+        domain = domain_info['domain']
+        # Loop through all subdomains for the current domain
+        for subdomain_info in domain_info['subDomains']:
+            if subdomain_info['serviceBillable']:
+                subdomain = subdomain_info['subDomain']
+                # Add the subdomain to the domain in the dictionary
+                if domain not in domain_dict:
+                    domain_dict[domain] = []
+                domain_dict[domain].append(subdomain)
+
+    return domain_dict
 
 def get_nonbillable_domains():
     try:

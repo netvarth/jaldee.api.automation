@@ -51,7 +51,7 @@ JD-TC-UpdateService-1
     ${srv_duration}=   Random Int   min=2   max=10
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
-    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${srv_duration}  ${bool[0]}  ${Total}  ${bool[1]}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${srv_duration}  ${bool[0]}  ${Total}  ${bool[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${s_id}  ${resp.json()} 
@@ -110,7 +110,73 @@ JD-TC-UpdateService-3
     ${resp}=   Get Service By Id  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['serviceDuration']}   ${srv_duration}
+    Should Be Equal As Strings  ${resp.json()['serviceDuration']}   ${srv_duration}
+
+
+JD-TC-UpdateService-4
+    [Documentation]  Update service to enable prepayment for a billable account.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${s_id}   ${resp.json()[0]['id']}
+
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${resp}=  Update Service  ${s_id}  ${resp.json()[0]['name']}  ${resp.json()[0]['description']}  ${resp.json()[0]['serviceDuration']}  ${bool[1]}  ${resp.json()[0]['totalAmount']}  minPrePaymentAmount=${min_pre}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['isPrePayment']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['minPrePaymentAmount']}   ${min_pre}
+
+
+JD-TC-UpdateService-5
+    [Documentation]  Update service charge for a billable account.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${s_id}   ${resp.json()[0]['id']}
+
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${resp}=  Update Service  ${s_id}  ${resp.json()[0]['name']}  ${resp.json()[0]['description']}  ${resp.json()[0]['serviceDuration']}  ${bool[1]}  ${resp.json()[0]['totalAmount']}  minPrePaymentAmount=${min_pre}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['isPrePayment']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['minPrePaymentAmount']}   ${min_pre}
+
+
+JD-TC-UpdateService-5
+    [Documentation]  Update service charge for a billable account.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${s_id}   ${resp.json()[0]['id']}
+
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${resp}=  Update Service  ${s_id}  ${resp.json()[0]['name']}  ${resp.json()[0]['description']}  ${resp.json()[0]['serviceDuration']}  ${bool[1]}  ${resp.json()[0]['totalAmount']}  minPrePaymentAmount=${min_pre}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['isPrePayment']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['minPrePaymentAmount']}   ${min_pre}
 
 
 *** Comments ***
