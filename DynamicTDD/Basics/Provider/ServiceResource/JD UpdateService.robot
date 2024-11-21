@@ -93,7 +93,24 @@ JD-TC-UpdateService-2
 
 
 JD-TC-UpdateService-3
-    [Documentation]  update service description for a service.
+    [Documentation]  update service duration for a service.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${s_id}   ${resp.json()[0]['id']}
+
+    ${srv_duration}=   Random Int   min=2   max=10
+    ${resp}=  Update Service  ${s_id}  ${resp.json()[0]['name']}  ${resp.json()[0]['description']}  ${srv_duration}  ${resp.json()[0]['isPrePayment']}  ${resp.json()[0]['totalAmount']}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['description']}   ${description}
 
 
 *** Comments ***

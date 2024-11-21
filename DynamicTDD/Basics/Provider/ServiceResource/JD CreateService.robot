@@ -1552,7 +1552,7 @@ JD-TC-CreateService-UH7
     ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
-    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${EMPTY}  ${bool[0]}  ${Total}  ${bool[1]}  notificationType=${EMPTY}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${EMPTY}  ${bool[0]}  ${Total}  ${bool[1]}  notificationType=${NONE}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   422
 
