@@ -18385,6 +18385,31 @@ Get InvoiceTemplate By Name
    Check Deprication  ${resp}  Get InvoiceTemplate By Name
     RETURN  ${resp}
 
+#---------------------Item Badge---------------------------------------
+UpdateBadge
+
+    [Arguments]    ${spItemCode}  ${badges}   &{kwargs}  
+    ${data}=  Create Dictionary  badges=${badges}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}  
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw   /provider/spitem/${spItemCode}/updatebadges   data=${data}  expected_status=any    headers=${headers}
+    RETURN  ${resp}
+
+Remove Badge
+
+    [Arguments]    ${spItemCode}  ${badges}   &{kwargs}  
+    ${data}=  Create Dictionary  badges=${badges}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}  
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw  /provider/spitem/${spItemCode}/removebadges   data=${data}  expected_status=any    headers=${headers}
+    RETURN  ${resp}
+
 *** Comments ***
 
 
