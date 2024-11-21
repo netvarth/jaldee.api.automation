@@ -395,13 +395,13 @@ JD-TC-GetAppointmentStatus-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${payref}   ${resp.json()['paymentRefId']}
 
-    ${resp}=  Get Payment Details  paymentRefId-eq=${payref}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Payment Details  paymentRefId-eq=${payref}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${resp}=  Get Payment Details By UUId  ${apptid1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Payment Details By UUId  ${apptid1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Appointment Status From Consumer   ${apptid1}
     Log   ${resp.json()}

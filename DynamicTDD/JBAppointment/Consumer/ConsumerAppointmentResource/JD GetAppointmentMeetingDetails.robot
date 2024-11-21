@@ -35,10 +35,11 @@ ${self}     0
 JD-TC-GetAppointmentMeetingDetails-1
     [Documentation]  Create Teleservice meeting request for Appointment in WhatsApp (ONLINE CHECKIN)
     
-    ${UserZOOM_id0}=  Format String  ${ZOOM_url}  ${CUSERNAME0}
+    ${NewCustomer}=  Generate Random 555 Number
+    ${UserZOOM_id0}=  Format String  ${ZOOM_url}  ${NewCustomer}
 
     Set Suite Variable  ${ZOOM_id2}    ${UserZOOM_id0}
-    Set Suite Variable  ${WHATSAPP_id2}   ${countryCodes[0]}${CUSERNAME0}
+    Set Suite Variable  ${WHATSAPP_id2}   ${countryCodes[0]}${NewCustomer}
     
 
     ${firstname}  ${lastname}  ${PUSERPH0}  ${LoginId}=  Provider Signup
@@ -1099,14 +1100,17 @@ JD-TC-GetAppointmentMeetingDetails-7
 
 
 
-    ${resp}=  Get Consumer By Id  ${CUSERNAME0}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${jdconID0}   ${resp.json()['userProfile']['id']}
-    Set Suite Variable  ${f_Name0}   ${resp.json()['userProfile']['firstName']}
-    Set Suite Variable  ${l_Name0}   ${resp.json()['userProfile']['lastName']}
+    # ${resp}=  Get Consumer By Id  ${NewCustomer}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${jdconID0}   ${resp.json()['userProfile']['id']}
+    # Set Suite Variable  ${f_Name0}   ${resp.json()['userProfile']['firstName']}
+    # Set Suite Variable  ${l_Name0}   ${resp.json()['userProfile']['lastName']}
     
-    ${resp}=  AddCustomer  ${CUSERNAME0}    firstName=${f_Name0}   lastName=${l_Name0}
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    ${NewCustomer}=  Generate Random 555 Number
+    ${resp}=  AddCustomer  ${NewCustomer}    firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pcid0}  ${resp.json()} 
@@ -1162,16 +1166,16 @@ JD-TC-GetAppointmentMeetingDetails-7
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME0}    ${pid}
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME0}   ${OtpPurpose['Authentication']}
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token3}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${pid}  ${token3} 
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token3} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
