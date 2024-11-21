@@ -110,7 +110,7 @@ JD-TC-UpdateService-3
     ${resp}=   Get Service By Id  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['description']}   ${description}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceDuration']}   ${srv_duration}
 
 
 *** Comments ***
