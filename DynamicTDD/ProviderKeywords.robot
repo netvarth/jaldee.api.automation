@@ -14699,9 +14699,10 @@ Get Lead Credit Status LOS
 #     RETURN  ${resp}
 
 Create Lead LOS     
-    [Arguments]  ${channel}  ${description}  ${requestedAmount}  &{kwargs}
+    [Arguments]  ${channel}  ${description}  ${requestedAmount}  ${branch}  &{kwargs}
 
-    ${data}=  Create Dictionary  requestedAmount=${requestedAmount}  description=${description}
+    ${branch}=  Create Dictionary  id=${branch}
+    ${data}=  Create Dictionary  requestedAmount=${requestedAmount}  description=${description}  branch=${branch}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary   ${data}   ${key}=${value}
     END
@@ -15329,6 +15330,30 @@ GET LOS Lead Sales Field
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/los/lead/${leadUid}/stage/${stageUid}/salesfield/data  expected_status=any
     Check Deprication  ${resp}  GET LOS Lead Sales Field
+    RETURN  ${resp}
+
+GET LOS Lead KYC
+    [Arguments]     ${leadUid}  ${stageUid}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/los/lead/${leadUid}/stage/${stageUid}/kyc/data  expected_status=any
+    Check Deprication  ${resp}  GET LOS Lead KYC
+    RETURN  ${resp}
+
+GET LOS FollowUp Data
+    [Arguments]     ${leadUid}  ${stageUid}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/los/lead/${leadUid}/stage/${stageUid}/followup/data  expected_status=any
+    Check Deprication  ${resp}  GET LOS FollowUp Data
+    RETURN  ${resp}
+
+GET LOS Document Data
+    [Arguments]     ${leadUid}  ${stageUid}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/los/lead/${leadUid}/stage/${stageUid}/document/data  expected_status=any
+    Check Deprication  ${resp}  GET LOS Document Data
     RETURN  ${resp}
 
 AddItemToInvoice
