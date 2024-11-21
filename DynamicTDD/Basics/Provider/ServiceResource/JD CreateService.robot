@@ -827,7 +827,7 @@ JD-TC-CreateService-27
 
 
 # ................Donation................... #
-JD-TC-CreateService-27
+JD-TC-CreateService-28
     [Documentation]   Create a donation service
 
     ${licid}  ${licname}=  get_highest_license_pkg
@@ -859,7 +859,7 @@ JD-TC-CreateService-27
     Should Be Equal As Strings  ${resp.json()['serviceType']}   ${ServiceType[2]}
 
 
-JD-TC-CreateService-28
+JD-TC-CreateService-29
     [Documentation]   Create  a donation service(Non billable domain)
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -885,7 +885,7 @@ JD-TC-CreateService-28
 
     
 # ................................ Virtual Service .......................... #
-JD-TC-CreateService-29
+JD-TC-CreateService-30
     [Documentation]   Create a Virtual service
 
     ${licid}  ${licname}=  get_highest_license_pkg
@@ -934,7 +934,7 @@ JD-TC-CreateService-29
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['callingMode']}   ${CallingModes[1]}
 
 
-JD-TC-CreateService-30
+JD-TC-CreateService-31
     [Documentation]   Create a Virtual service in a department
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
@@ -999,7 +999,7 @@ JD-TC-CreateService-30
 
 
 
-JD-TC-CreateService-31
+JD-TC-CreateService-32
     [Documentation]   Create a Virtual service with prepayment
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
@@ -1034,7 +1034,7 @@ JD-TC-CreateService-31
     Should Be Equal As Strings  ${resp.json()['serviceType']}   ${ServiceType[0]}
 
 
-JD-TC-CreateService-32
+JD-TC-CreateService-33
     [Documentation]   Create a Virtual service with whatsapp only.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
@@ -1061,7 +1061,7 @@ JD-TC-CreateService-32
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['callingMode']}   ${CallingModes[1]}
 
 
-JD-TC-CreateService-33
+JD-TC-CreateService-34
     [Documentation]   Create two virtual services for a provider using same virtual calling mode.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
@@ -1108,7 +1108,7 @@ JD-TC-CreateService-33
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['callingMode']}   ${CallingModes[1]}
 
 
-JD-TC-CreateService-34
+JD-TC-CreateService-35
     [Documentation]   Use different google meet ids and different virtual service type to create different Virtual services
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
@@ -1177,7 +1177,7 @@ JD-TC-CreateService-34
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['callingMode']}   ${CallingModes[3]}
 
 
-JD-TC-CreateService-35
+JD-TC-CreateService-36
     [Documentation]   Use different Zoom id and same virtual service type to create different Virtual services
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
@@ -1236,7 +1236,7 @@ JD-TC-CreateService-35
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['callingMode']}   ${CallingModes[0]}
 
 
-JD-TC-CreateService-36
+JD-TC-CreateService-37
     [Documentation]   Use 2 virtual calling modes to create a single virtual service
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
@@ -1275,7 +1275,7 @@ JD-TC-CreateService-36
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['callingMode']}   ${CallingModes[1]}
 
 
-JD-TC-CreateService-37
+JD-TC-CreateService-38
     [Documentation]   Use Google_meet and Whatsapp virtual calling modes to create a video services
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
@@ -1310,7 +1310,7 @@ JD-TC-CreateService-37
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['callingMode']}   ${CallingModes[1]}
 
 
-JD-TC-CreateService-38
+JD-TC-CreateService-39
     [Documentation]   Use Phone_call and Whatsapp virtual calling modes to create a audio services
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
@@ -1353,7 +1353,7 @@ JD-TC-CreateService-38
     Append To List  ${service_names1}  ${SERVICE1}
     Log  ${service_names1}
 
-JD-TC-CreateService-39
+JD-TC-CreateService-40
     [Documentation]  Create a service with sortOrder field.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
