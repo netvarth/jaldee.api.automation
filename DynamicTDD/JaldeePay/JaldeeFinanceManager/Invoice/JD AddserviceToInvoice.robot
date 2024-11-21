@@ -288,12 +288,12 @@ JD-TC-Apply Service To Finance-2
   
     ${SERVICE3}=    FakerLibrary.word
 
-    ${s_id}=  Create Sample Service  ${SERVICE3}
+    ${s_id}=  Create Sample Service  ${SERVICE3}    automaticInvoiceGeneration=${bool[1]}
     Set Test Variable   ${s_id}
 
-    ${resp}=  Auto Invoice Generation For Service   ${s_id}    ${toggle[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Auto Invoice Generation For Service   ${s_id}    ${toggle[0]}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service By Id  ${s_id}
     Log  ${resp.json()}
@@ -490,7 +490,7 @@ JD-TC-Apply Services to Invoice-3
     ${srv_duration}=   Random Int   min=10   max=20
 
     
-    ${s_id}=  Create Sample Service   ${SERVICE1}  isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}   maxBookingsAllowed=10
+    ${s_id}=  Create Sample Service   ${SERVICE1}  isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}   maxBookingsAllowed=10     automaticInvoiceGeneration=${bool[1]}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -498,9 +498,9 @@ JD-TC-Apply Services to Invoice-3
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
 
-    ${resp}=  Auto Invoice Generation For Service   ${s_id}    ${toggle[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Auto Invoice Generation For Service   ${s_id}    ${toggle[0]}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service By Id  ${s_id}
     Log  ${resp.content}
@@ -685,12 +685,12 @@ JD-TC-Apply Services to Invoice-4
       ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
       Set Suite Variable  ${CUR_DAY} 
     ${SERVICE1}=    FakerLibrary.word
-      ${resp}=   Create Sample Service  ${SERVICE1}
+      ${resp}=   Create Sample Service  ${SERVICE1}    automaticInvoiceGeneration=${bool[1]}
       Set Suite Variable    ${ser_id1}    ${resp}  
 
-    ${resp}=  Auto Invoice Generation For Service   ${ser_id1}    ${toggle[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Auto Invoice Generation For Service   ${ser_id1}    ${toggle[0]}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service By Id  ${ser_id1}
     Log  ${resp.content}
@@ -884,11 +884,11 @@ JD-TC-Apply Services to Invoice-5
     ${P1SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
 
-    ${p1_sid1}=  Create Sample Service   ${P1SERVICE1}  isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}   maxBookingsAllowed=10
+    ${p1_sid1}=  Create Sample Service   ${P1SERVICE1}  isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}   maxBookingsAllowed=10    automaticInvoiceGeneration=${bool[1]}
 
-    ${resp}=  Auto Invoice Generation For Service   ${p1_sid1}    ${toggle[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Auto Invoice Generation For Service   ${p1_sid1}    ${toggle[0]}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service By Id  ${p1_sid1}
     Log  ${resp.content}
@@ -900,7 +900,7 @@ JD-TC-Apply Services to Invoice-5
     Set Suite Variable   ${P1SERVICE2} 
     ${desc}=   FakerLibrary.sentence
 
-    ${p1_sid2}=  Create Sample Service   ${P1SERVICE2}  
+    ${p1_sid2}=  Create Sample Service   ${P1SERVICE2}     automaticInvoiceGeneration=${bool[1]}
 
     ${quantity}=   Random Int  min=5  max=10
     ${quantity}=  Convert To Number  ${quantity}  1
@@ -908,9 +908,9 @@ JD-TC-Apply Services to Invoice-5
     ${serviceprice}=  Convert To Number  ${serviceprice}  1
     ${serviceList1}=  Create Dictionary  serviceId=${p1_sid2}   quantity=${quantity}   price=${serviceprice} 
 
-    ${resp}=  Auto Invoice Generation For Service   ${p1_sid2}    ${toggle[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Auto Invoice Generation For Service   ${p1_sid2}    ${toggle[0]}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service By Id  ${p1_sid2}
     Log  ${resp.content}
@@ -1129,11 +1129,11 @@ JD-TC-Apply Service To Finance-UH1
     # Should Be Equal As Strings  ${resp.status_code}   200
     # Set Test Variable  ${s_id}  ${resp.json()}
 
-    ${s_id}=  Create Sample Service   ${SERVICE3}  isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}   maxBookingsAllowed=10
+    ${s_id}=  Create Sample Service   ${SERVICE3}  isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}   maxBookingsAllowed=10    automaticInvoiceGeneration=${bool[1]}
 
-    ${resp}=  Auto Invoice Generation For Service   ${s_id}    ${toggle[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Auto Invoice Generation For Service   ${s_id}    ${toggle[0]}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service By Id  ${s_id}
     Log  ${resp.json()}
