@@ -15325,7 +15325,7 @@ Get LOS Lead Financial Info
 
 
 GET LOS Lead Sales Field
-    [Arguments]     ${leadUid}  ${stageUidFinInfo}
+    [Arguments]     ${leadUid}  ${stageUid}
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/los/lead/${leadUid}/stage/${stageUid}/salesfield/data  expected_status=any
