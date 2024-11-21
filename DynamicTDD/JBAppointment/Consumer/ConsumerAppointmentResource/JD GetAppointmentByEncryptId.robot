@@ -213,22 +213,7 @@ JD-TC-GetApptByEncryptedIDconsumer-2
     Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${s_id}
     Should Be Equal As Strings  ${resp.json()['uid']}                         ${apptid1}
 
-
-
 JD-TC-GetApptByEncryptedIDconsumer-UH1
-
-    [Documentation]     Passing Consumer Appointment Encrypted ID is Empty 
-
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME10}    ${pid}  ${token1} 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200 
-
-    ${resp}=   Get Consumer Appointment By EncodedId    ${empty}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"      "${INVALID_APPOINTMENT}"
-
-JD-TC-GetApptByEncryptedIDconsumer-UH2
 
     [Documentation]     Passing Consumer Appointment Encrypted ID is Zero.
 
@@ -241,7 +226,7 @@ JD-TC-GetApptByEncryptedIDconsumer-UH2
     Should Be Equal As Strings  ${resp.status_code}  404
     Should Be Equal As Strings  "${resp.json()}"      "${APPOINTMENT_ID_NO_LONGER_ACTIVE}"
 
-JD-TC-GetApptByEncryptedIDconsumer-UH3
+JD-TC-GetApptByEncryptedIDconsumer-UH2
 
     [Documentation]     Passing Consumer Appointment id as Encrypted ID  
 
