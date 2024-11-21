@@ -511,6 +511,7 @@ REFUND_NOT_ALLOWED_ON_FAILED_PAYMENT= "Refund is not allowed on failed payment"
 REFUND_NOT_ALLOWED_ON_INVOICE= "Refund is not allowed on subscription payment"
 FUTURE_BILL_CANT_SETTLE= "Cannot settle a future check-ins bill"
 AMOUNT_IS_LESS= "Consumer cannot do a partial payment"
+CANT_ENABLE_AUTO_INVOICE_GEN = "Can not enable auto invoice generation flag because amount is 0"
 
 PAYMENT_MODE_IS_REQUIRED= "Please select one of the payment mode to continue"
 PAYMENT_STTINGS_NOT_VERIFIED="Payment settings not verified by Jaldee team. Please contact Jaldee team"

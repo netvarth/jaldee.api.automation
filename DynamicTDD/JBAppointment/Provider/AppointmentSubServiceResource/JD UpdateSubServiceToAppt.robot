@@ -535,21 +535,21 @@ JD-TC-UpdateSubServicesToAppt-UH5
 
      #.........Auto Invoice Generation...............
 
-    ${resp}=  Auto Invoice Generation For Service   ${subser_id1}    ${toggle[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Auto Invoice Generation For Service   ${subser_id1}    ${toggle[0]}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Get Service By Id  ${subser_id1}
-    Log   ${resp.content}  
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['serviceCategory']}               ${serviceCategory[0]}
-    Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[1]}
+    # ${resp}=   Get Service By Id  ${subser_id1}
+    # Log   ${resp.content}  
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['serviceCategory']}               ${serviceCategory[0]}
+    # Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[1]}
 
     ${subser_price}=   Random Int   min=0   max=0
 
     # ${resp}=  Update Service    ${subser_id1}  ${subser_name}  ${desc}   ${subser_dur}   ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[0]}  0  ${subser_price}  ${bool[1]}  ${bool[0]}    serviceCategory=${serviceCategory[0]}
-    ${resp}=  Update Service  ${subser_id1}  ${subser_name}  ${desc}  ${subser_dur}  ${bool[0]}  ${subser_price}  serviceCategory=${serviceCategory[0]}
+    ${resp}=  Update Service  ${subser_id1}  ${subser_name}  ${desc}  ${subser_dur}  ${bool[0]}  ${subser_price}  serviceCategory=${serviceCategory[0]}  automaticInvoiceGeneration=${bool[1]}
     Log   ${resp.content}  
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}    ${MINIMUM_PREPAYMENT_AMOUNT_SHOULD_BE_PROVIDED}
+    Should Be Equal As Strings  ${resp.json()}    ${CANT_ENABLE_AUTO_INVOICE_GEN}
     

@@ -132,6 +132,7 @@ JD-TC-GetAppointmentStatus-1
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${NewCustomer}=  Generate Random 555 Number
     ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -489,6 +490,7 @@ JD-TC-GetAppointmentStatus-3
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${NewCustomer}=  Generate Random 555 Number
     ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
