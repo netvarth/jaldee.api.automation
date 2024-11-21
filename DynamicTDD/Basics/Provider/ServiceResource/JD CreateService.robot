@@ -25,7 +25,6 @@ ${self}     0
 @{service_names}
 @{empty_list}
 ${zero_amt}  ${0.0}
-@{service_names}
 @{service_names1}
 
 
@@ -793,6 +792,38 @@ JD-TC-CreateService-26
     ${resp}=   Get Service By Id  ${s_id}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  consumerNoteMandatory=${bool[1]}  consumerNoteTitle=${consumerNoteTitle}   preInfoEnabled=${bool[1]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${bool[1]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
+
+
+JD-TC-CreateService-27
+    [Documentation]   Create service with automaticInvoiceGeneration true
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${desc}=   FakerLibrary.sentence
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=250
+    ${srv_duration}=   Random Int   min=10   max=20
+    # ${consumerNoteMandatory}=  Random Element  ${bool}
+    ${consumerNoteTitle}=  FakerLibrary.sentence
+    ${preInfoTitle}=  FakerLibrary.sentence   
+    ${preInfoText}=  FakerLibrary.sentence  
+    ${postInfoTitle}=  FakerLibrary.sentence  
+    ${postInfoText}=  FakerLibrary.sentence
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  automaticInvoiceGeneration=${bool[1]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Set Test Variable  ${s_id}  ${resp.json()}
+
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  automaticInvoiceGeneration=${bool[1]}
 
 
 # ................Donation................... #

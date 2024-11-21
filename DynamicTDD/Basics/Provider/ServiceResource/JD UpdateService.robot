@@ -54,7 +54,7 @@ JD-TC-UpdateService-1
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${srv_duration}  ${bool[0]}  ${Total}  ${bool[1]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Test Variable  ${s_id}  ${resp.json()} 
+    Set Suite Variable  ${s_id}  ${resp.json()} 
     
     ${resp}=   Get Service By Id  ${s_id}
     Log  ${resp.content}
@@ -69,6 +69,31 @@ JD-TC-UpdateService-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}   ${SERVICE1.1}
+
+
+JD-TC-UpdateService-2
+    [Documentation]  update service description for a service.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${s_id}   ${resp.json()[0]['id']}
+
+    ${description}=  FakerLibrary.sentence
+    ${resp}=  Update Service  ${s_id}  ${resp.json()[0]['name']}  ${description}  ${resp.json()[0]['serviceDuration']}  ${resp.json()[0]['isPrePayment']}  ${resp.json()[0]['totalAmount']}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['description']}   ${description}
+
+
+JD-TC-UpdateService-3
+    [Documentation]  update service description for a service.
 
 
 *** Comments ***
