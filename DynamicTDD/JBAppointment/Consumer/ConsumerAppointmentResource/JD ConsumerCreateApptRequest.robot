@@ -320,8 +320,8 @@ JD-TC-ConsumerCreateApptRequest-UH1
     ${coupons}=  Create List
     ${resp}=  Consumer Create Appt Service Request  ${acc_id1}  ${sid2}  ${sch_id1}  ${DAY1}  ${cons_note}  ${countryCodes[0]}  ${CUSERNAME20}  ${coupons}  ${apptfor}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.content}   "${DATE_NOT_NEEDED}"
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.content}   "${DATE_NOT_NEEDED}"
 
 
 JD-TC-ConsumerCreateApptRequest-UH2
@@ -340,8 +340,8 @@ JD-TC-ConsumerCreateApptRequest-UH2
     ${coupons}=  Create List
     ${resp}=  Consumer Create Appt Service Request  ${acc_id1}  ${sid2}  ${sch_id1}  ${EMPTY}  ${cons_note}  ${countryCodes[0]}  ${CUSERNAME20}  ${coupons}  ${apptfor}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.content}   "${TIME_NOT_NEEDED}"
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.content}   "${TIME_NOT_NEEDED}"
 
 
 JD-TC-ConsumerCreateApptRequest-UH3
