@@ -38,15 +38,15 @@ JD-TC-Schedule-1
 
     [Documentation]  Schedule workflow for pre deployment.
 
-    ${firstname}  ${lastname}  ${PUSERNAME_B}  ${LoginId}=  Provider Signup   Domain=${domain}   SubDomain=${subdomain}
-    Set Suite Variable   ${PUSERNAME_B}
-    ${num}=  find_last  ${var_file}
-    ${num}=  Evaluate   ${num}+1
-    Append To File  ${data_file}  ${LoginId} - ${PASSWORD}${\n}
-    Append To File  ${var_file}  PUSERNAME${num}=${LoginId}${\n}
-    Log    PUSERNAME${num}
+    # ${firstname}  ${lastname}  ${PUSERNAME_B}  ${LoginId}=  Provider Signup   Domain=${domain}   SubDomain=${subdomain}
+    # Set Suite Variable   ${PUSERNAME_B}
+    # ${num}=  find_last  ${var_file}
+    # ${num}=  Evaluate   ${num}+1
+    # Append To File  ${data_file}  ${LoginId} - ${PASSWORD}${\n}
+    # Append To File  ${var_file}  PUSERNAME${num}=${LoginId}${\n}
+    # Log    PUSERNAME${num}
     # ${PUSERNAME_B}=  Set Variable  ${PUSERNAME5}
-    # ${PUSERNAME_B}=  Set Variable  ${PUSERNAME11}
+    ${PUSERNAME_B}=  Set Variable  ${PUSERNAME14}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log   ${resp.json()}
@@ -83,6 +83,82 @@ JD-TC-Schedule-1
     ${resp}=  Get jp finance settings    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointments Today  apptStatus-eq=${apptStatus[1]}  apptStatus-neq=${apptStatus[6]},${apptStatus[5]},${apptStatus[4]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${prepay_appt_len}=  Get Length   ${resp.json()}
+    FOR   ${i}  IN RANGE   ${prepay_appt_len}
+
+        ${resp1}=  Appointment Action   ${apptStatus[6]}   ${resp.json()[${i}]['uid']}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        
+    END
+
+    ${resp}=  Get Appointments Today  apptStatus-eq=${apptStatus[1]}  apptStatus-neq=${apptStatus[6]},${apptStatus[5]},${apptStatus[4]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${prepay_appt_len}=  Get Length   ${resp.json()}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${prepay_appt_len}  ${self}
+    
+    ${resp}=  Get Appointments Today  apptStatus-neq=${apptStatus[6]},${apptStatus[5]},${apptStatus[4]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${today_appt_len}=  Get Length   ${resp.json()}
+    FOR   ${i}  IN RANGE   ${today_appt_len}
+
+        ${resp1}=  Appointment Action   ${apptStatus[6]}   ${resp.json()[${i}]['uid']}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        
+    END
+
+    ${resp}=  Get Appointments Today  apptStatus-neq=${apptStatus[6]},${apptStatus[5]},${apptStatus[4]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${today_appt_len}=  Get Length   ${resp.json()}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${today_appt_len}  ${self}
+
+    ${resp}=  Get Appointments Today
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${today_appt_len}=  Get Length   ${resp.json()}
+
+    ${resp}=  Get Future Appointments  apptStatus-neq=${apptStatus[6]},${apptStatus[5]},${apptStatus[4]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${future_appt_len}=  Get Length   ${resp.json()}
+    FOR   ${i}  IN RANGE   ${future_appt_len}
+
+        ${resp1}=  Appointment Action   ${apptStatus[6]}   ${resp.json()[${i}]['uid']}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        
+    END
+
+    ${resp}=  Get Future Appointments  apptStatus-neq=${apptStatus[6]},${apptStatus[5]},${apptStatus[4]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${future_appt_len}=  Get Length   ${resp.json()}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${future_appt_len}  ${self}
+
+    ${resp}=  Get Future Appointments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${future_appt_len}=  Get Length   ${resp.json()}
+    
+    ${resp}=   Get Appointments History  apptStatus-neq=${apptStatus[6]},${apptStatus[5]},${apptStatus[4]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${past_appt_len}=  Get Length   ${resp.json()}
+    FOR   ${i}  IN RANGE   ${past_appt_len}
+
+        ${resp1}=  Appointment Action   ${apptStatus[6]}   ${resp.json()[${i}]['uid']}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        
+    END
 
     # ........ Location Creation .......
 
@@ -628,4 +704,10 @@ JD-TC-Schedule-1
    
     ${resp}=  Get Report Status By Token Id  ${token_id1}  
     Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    #......... Check the Analytics..............
+
+    ${resp}=  Get Account Level Analytics Acc To config   ${DAY1}  
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
