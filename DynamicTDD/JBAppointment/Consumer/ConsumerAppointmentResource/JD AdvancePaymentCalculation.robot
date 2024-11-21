@@ -1280,7 +1280,10 @@ JD-TC-GetAppointmentAdvancePaymentDetails-7
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME4}  firstName=${fname}   lastName=${lname}
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
+        Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+        ${resp1}=  AddCustomer  ${CUSERNAME4}  firstName=${fname}   lastName=${lname}  email=${pc_emailid1}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Suite Variable  ${cid1}   ${resp1.json()}
