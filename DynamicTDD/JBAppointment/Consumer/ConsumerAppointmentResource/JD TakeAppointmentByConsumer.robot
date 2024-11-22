@@ -177,7 +177,9 @@ JD-TC-Take Appointment-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME7}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME7}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token1}  ${resp.json()['token']}
@@ -185,8 +187,6 @@ JD-TC-Take Appointment-1
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME7}    ${pid}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    
-
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
@@ -681,16 +681,17 @@ JD-TC-Take Appointment-8
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token2}  ${resp.json()['token']}
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${pid}  ${token2} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    
-
 
     ${DAY4}=   db.add_timezone_date  ${tz}   4
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY4}  ${lid}  ${s_id}
@@ -919,8 +920,11 @@ JD-TC-Take Appointment-9
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME9}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME9}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token3}  ${resp.json()['token']}
 
@@ -928,9 +932,6 @@ JD-TC-Take Appointment-9
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-
-
-
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid01}  ${DAY1}  ${p1_l1}  ${p1_s1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1021,7 +1022,9 @@ JD-TC-Take Appointment-10
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token4}  ${resp.json()['token']}
@@ -1030,9 +1033,7 @@ JD-TC-Take Appointment-10
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-
     ${cid}=  get_id  ${CUSERNAME4}   
-
 
     ${family_fname1}=  generate_firstname
     Set Suite Variable   ${family_fname1}
@@ -1159,7 +1160,9 @@ JD-TC-Take Appointment-11
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME11}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME11}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token5}  ${resp.json()['token']}
@@ -1168,8 +1171,6 @@ JD-TC-Take Appointment-11
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${cid}=  get_id  ${CUSERNAME11}   
-
-
 
     ${family_fname1}=  generate_firstname
     ${family_lname1}=  FakerLibrary.last_name
@@ -1278,7 +1279,9 @@ JD-TC-Take Appointment-12
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME22}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME22}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token5}  ${resp.json()['token']}
@@ -1287,7 +1290,6 @@ JD-TC-Take Appointment-12
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${cid}=  get_id  ${CUSERNAME22}   
-
 
     ${family_fname1}=  generate_firstname
     ${family_lname1}=  FakerLibrary.last_name
@@ -1406,7 +1408,9 @@ JD-TC-Take Appointment-13
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME13}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME13}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token6}  ${resp.json()['token']}
@@ -1415,8 +1419,6 @@ JD-TC-Take Appointment-13
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${cid}=  get_id  ${CUSERNAME13}   
-
-
 
     ${FUT_DAY}=  db.add_timezone_date  ${tz}  5 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid01}  ${FUT_DAY}  ${p1_l1}  ${p1_s2}
@@ -1643,7 +1645,9 @@ JD-TC-Take Appointment-14
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME10}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME10}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token6}  ${resp.json()['token']}
@@ -1652,7 +1656,6 @@ JD-TC-Take Appointment-14
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${cid}=  get_id  ${CUSERNAME10}   
-
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
@@ -1811,7 +1814,9 @@ JD-TC-Take Appointment-15
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME10}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME10}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token6}  ${resp.json()['token']}
@@ -2116,7 +2121,9 @@ JD-TC-Take Appointment-16
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME10}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME10}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token6}  ${resp.json()['token']}
@@ -2329,7 +2336,9 @@ JD-TC-Take Appointment-17
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME10}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME10}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token6}  ${resp.json()['token']}
@@ -2539,7 +2548,9 @@ JD-TC-Take Appointment-UH1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token7}  ${resp.json()['token']}
@@ -2658,7 +2669,9 @@ JD-TC-Take Appointment-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token7}  ${resp.json()['token']}
@@ -2765,7 +2778,9 @@ JD-TC-Take Appointment-UH3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token7}  ${resp.json()['token']}
@@ -2871,7 +2886,9 @@ JD-TC-Take Appointment-UH4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token7}  ${resp.json()['token']}
@@ -2974,7 +2991,9 @@ JD-TC-Take Appointment-UH5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token7}  ${resp.json()['token']}
@@ -3096,7 +3115,9 @@ JD-TC-Take Appointment-UH6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME16}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME16}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token1}  ${resp.json()['token']}
@@ -3234,7 +3255,9 @@ JD-TC-Take Appointment-UH7
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME16}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME16}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token1}  ${resp.json()['token']}
@@ -3420,7 +3443,9 @@ JD-TC-Take Appointment-UH8
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME15}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME15}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token1}  ${resp.json()['token']}
@@ -3617,7 +3642,9 @@ JD-TC-Take Appointment-UH11
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token1}  ${resp.json()['token']}
@@ -3884,7 +3911,9 @@ JD-TC-Take Appointment-UH12
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token7}  ${resp.json()['token']}
@@ -4126,7 +4155,9 @@ JD-TC-Take Appointment-18
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME15}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME15}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token7}  ${resp.json()['token']}
@@ -4377,7 +4408,9 @@ JD-TC-Take Appointment-19
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME1}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME1}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token7}  ${resp.json()['token']}
@@ -4542,7 +4575,9 @@ JD-TC-Take Appointment-20
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME7}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME7}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token7}  ${resp.json()['token']}
@@ -4734,13 +4769,13 @@ JD-TC-Take Appointment-21
     # Set Test Variable  ${s_id}  ${resp.json()}
 
         ${SERVICE2}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE2}
+        Append To List  ${service_names}  ${SERVICE2}
         ${desc2}=   FakerLibrary.sentence
         ${min_pre2}=   Pyfloat  right_digits=1  min_value=10  max_value=50
         # ${servicecharge2}=   Random Int  min=100  max=500
         ${servicecharge2}=   Pyfloat  right_digits=1  min_value=100  max_value=500
         ${srv_duration2}=   Random Int   min=10   max=20
-        ${resp}=  Create Service For User  ${SERVICE2}  ${desc2}  ${srv_duration2}  ${status[0]}  ${bType}  ${bool[0]}  ${notifytype[0]}  0  ${servicecharge2}  ${bool[0]}  ${bool[0]}  ${dep_id}  ${u_id}
+        ${resp}=  Create Service  ${SERVICE2}  ${desc2}  ${srv_duration2}  ${status[0]}  ${bType}  ${bool[0]}  ${notifytype[0]}  0  ${servicecharge2}  ${bool[0]}  ${bool[0]}  ${dep_id}  provider=${u_id}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable  ${s_id}  ${resp.json()}
@@ -4799,7 +4834,9 @@ JD-TC-Take Appointment-21
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME2}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME2}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token7}  ${resp.json()['token']}
@@ -5076,7 +5113,9 @@ JD-TC-Take Appointment-UH14
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME9}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME9}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token7}  ${resp.json()['token']}
@@ -5248,7 +5287,9 @@ JD-TC-Take Appointment-UH15
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME17}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME17}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token7}  ${resp.json()['token']}
@@ -5321,11 +5362,13 @@ JD-TC-Take Appointment-UH15
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-   ${resp}=    Send Otp For Login    ${CUSERNAME10}    ${pid02}
+    ${resp}=    Send Otp For Login    ${CUSERNAME10}    ${pid02}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME10}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME10}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token8}  ${resp.json()['token']}
