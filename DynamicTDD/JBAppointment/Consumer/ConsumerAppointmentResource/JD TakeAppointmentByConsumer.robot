@@ -4775,7 +4775,10 @@ JD-TC-Take Appointment-21
         # ${servicecharge2}=   Random Int  min=100  max=500
         ${servicecharge2}=   Pyfloat  right_digits=1  min_value=100  max_value=500
         ${srv_duration2}=   Random Int   min=10   max=20
-        ${resp}=  Create Service  ${SERVICE2}  ${desc2}  ${srv_duration2}  ${status[0]}  ${bType}  ${bool[0]}  ${notifytype[0]}  0  ${servicecharge2}  ${bool[0]}  ${bool[0]}  ${dep_id}  provider=${u_id}
+        # ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[1]}  minPrePaymentAmount=${min_pre}  notificationType=${notifytype[2]}  taxable=${bool[1]}  serviceType=${serviceType[1]}  #prePaymentType=${advancepaymenttype[1]}
+        # Log  ${resp.content}
+        # Should Be Equal As Strings  ${resp.status_code}  200  
+        ${resp}=  Create Service  ${SERVICE2}  ${desc2}  ${srv_duration2}   ${bool[0]}   ${servicecharge2}  ${bool[0]}   provider=${u_id}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable  ${s_id}  ${resp.json()}
