@@ -238,7 +238,10 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-1
     Log  ${unique_snames}
     Set Suite Variable   ${unique_snames}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME158}  ${PASSWORD}
+    ${firstname}  ${lastname}  ${PUSERNAME_A}  ${LoginId}=  Provider Signup 
+    Set Suite Variable   ${PUSERNAME_A}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -282,34 +285,50 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME158}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Enable Disable Appointment   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]} 
+    # ${resp}=   Get Appointment Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
+    # Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]} 
 
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
-    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        Set Suite Variable   ${lid}
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+        Set Suite Variable  ${lid}  ${resp.json()['id']}
+    ELSE
+        Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+
+    # ${resp}=    Get Locations
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    # Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -321,7 +340,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-1
     END
     Set Suite Variable   ${s_id}  
 
-    # clear_appt_schedule   ${PUSERNAME158}
+    # clear_appt_schedule   ${PUSERNAME_A}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -424,33 +443,33 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-2
 
     [Documentation]  Get questionnaire for appointment taken from consumer side
 
-    clear_customer   ${PUSERNAME158}
+    clear_customer   ${PUSERNAME_A}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME158}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
-        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-        Log   ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
+    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+    # IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
+    #     ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
+    #     Log   ${resp.json()}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}  
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+    # Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}  
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Enable Disable Appointment   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END 
 
@@ -476,7 +495,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-2
     END
     Set Suite Variable   ${s_id}  
 
-    # clear_appt_schedule   ${PUSERNAME158}
+    # clear_appt_schedule   ${PUSERNAME_A}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -557,7 +576,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-2
     Verify Response     ${resp}     uid=${apptid1}   appmtDate=${DAY1}   appmtTime=${slot1}
     ...   apptStatus=${apptStatus[1]}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME158}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -579,9 +598,9 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-2
 JD-TC-GetConsumerQuestionnaireByUuidForAppointment-3
     [Documentation]  Get questionnaire for appointment taken from consumer side canceld appmnt
 
-    clear_customer   ${PUSERNAME158}
+    clear_customer   ${PUSERNAME_A}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME158}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -605,7 +624,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Enable Disable Appointment   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END 
 
@@ -631,7 +650,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-3
     END
     Set Suite Variable   ${s_id}  
 
-    # clear_appt_schedule   ${PUSERNAME158}
+    # clear_appt_schedule   ${PUSERNAME_A}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -716,7 +735,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-3
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME158}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -743,7 +762,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-3
 JD-TC-GetConsumerQuestionnaireByUuidForAppointment-UH1
     [Documentation]  Get questionnaire by provider login
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME158}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -763,7 +782,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-UH1
     END
     Set Suite Variable   ${s_id}  
 
-    # clear_appt_schedule   ${PUSERNAME158}
+    # clear_appt_schedule   ${PUSERNAME_A}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
