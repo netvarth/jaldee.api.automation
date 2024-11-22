@@ -126,9 +126,13 @@ JD-TC-RemoveBadge-UH1
     ${badges3}=  Create Dictionary    id=${badgeid2}
     ${badges3}=  Create List   ${badges3}
 
+
+    ${BADGE_ID_NOT_FOUND}=  Format String  ${BADGE_ID_NOT_FOUND}    ${badgeid2}
+
     ${resp}=    Remove Badge  ${item}    badges=${badges3}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings   ${resp.json()}   ${BADGE_ID_NOT_FOUND}
 
 
 
@@ -145,14 +149,16 @@ JD-TC-RemoveBadge-UH2
     ${badges3}=  Create Dictionary     name=${name4}     id=${badgeid2}
     ${badges3}=  Create List   ${badges3}
 
+    ${BADGE_ID_NOT_FOUND}=  Format String  ${BADGE_ID_NOT_FOUND}    ${badgeid2}
     ${resp}=    UpdateBadge  ${item}    badges=${badges3}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings   ${resp.json()}   ${BADGE_ID_NOT_FOUND}
 
     ${resp}=    Remove Badge  ${item}    badges=${badges3}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-
+    Should Be Equal As Strings   ${resp.json()}   ${BADGE_ID_NOT_FOUND}
 
 JD-TC-RemoveBadge-UH3
 
@@ -166,14 +172,12 @@ JD-TC-RemoveBadge-UH3
     ${badges3}=  Create Dictionary     link=${name4}   
     ${badges3}=  Create List   ${badges3}
 
+    ${BADGE_ID_MUST_GREATER_THAN_ZERO}=  Format String  ${BADGE_ID_MUST_GREATER_THAN_ZERO}    0
     ${resp}=     Remove Badge  ${item}      badges=${badges3}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings   ${resp.json()}   ${BADGE_ID_MUST_GREATER_THAN_ZERO}
 
-    ${resp}=    Get Item Inventory  ${item}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}    200
-    # Should Be Equal As Strings      ${resp.json()['badges'][0]['link']}                         ${name4}
 
 
 JD-TC-RemoveBadge-UH4
