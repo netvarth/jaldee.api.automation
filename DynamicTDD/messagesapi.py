@@ -2385,6 +2385,8 @@ PURCHASE_CANT_PUSHE_TO_FINANCE_INVALID_STATUS = "You can't push to finance becau
 ALREADY_PUSHED_TO_FINANCE = "Already pushed to finance"
 ALREADY_SET_TO="Already set to {}"
 DUPLICATE_LINE_ITEMS = "Input contains duplicate {}"
+BADGE_ID_NOT_FOUND="Badge with ID {} does not found"
+BADGE_ID_MUST_GREATER_THAN_ZERO="Badge ID must be greater than 0. Invalid ID: {}"
 
 # Vendor
 INVALID_NAME="Invalid Name"
