@@ -38,7 +38,7 @@ JD-TC-FinanceWorkFlow-1
 
     [Documentation]  Basic work flow-
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME52}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -57,10 +57,10 @@ JD-TC-FinanceWorkFlow-1
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
 
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
+    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Enable Disable Department    ${toggle[0]}
     Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
     Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -278,7 +278,7 @@ JD-TC-FinanceWorkFlow-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Customer Logout   
+    ${resp}=  Consumer Logout   
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -288,14 +288,14 @@ JD-TC-FinanceWorkFlow-1
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
     Set Suite Variable    ${pcid18}   ${resp.json()['id']}
 
-    ${resp}=  Customer Logout   
+    ${resp}=  Consumer Logout   
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME52}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${HLPUSERNAME52}
+    clear_service   ${HLPUSERNAME5}
 
     ${providerConsumerIdList}=  Create List  ${pcid18}
     Set Suite Variable  ${providerConsumerIdList} 
@@ -305,8 +305,10 @@ JD-TC-FinanceWorkFlow-1
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
     ${servicecharge}=  Convert To Number  ${servicecharge}  1
+    ${precharge}=   Random Int  min=10  max=50
 
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}    department=${dep_id}
+
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}    ${bool[1]}     ${servicecharge}  ${bool[0]}   minPrePaymentAmount=${precharge}    department=${dep_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid1}  ${resp.json()} 
@@ -318,7 +320,6 @@ JD-TC-FinanceWorkFlow-1
     Should Be Equal As Strings      ${resp.json()[0]['name']}       ${SERVICE1}
     Should Be Equal As Strings      ${resp.json()[0]['description']}       ${desc}
     Should Be Equal As Strings      ${resp.json()[0]['serviceDuration']}       ${service_duration}
-    Should Be Equal As Strings      ${resp.json()[0]['bType']}       ${btype}
     Should Be Equal As Strings      ${resp.json()[0]['totalAmount']}       ${servicecharge}
     Should Be Equal As Strings      ${resp.json()[0]['status']}       ${status[0]}
     Should Be Equal As Strings      ${resp.json()[0]['taxable']}       ${bool[0]}
@@ -372,7 +373,7 @@ JD-TC-FinanceWorkFlow-1
     ${uploadedDocuments}=    Create List    ${Attachments}
 
 
-    ${resp}=  Create Expense  ${category_id3}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
+    ${resp}=  Create Expense  ${category_id3}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}     locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${expense_uid}   ${resp.json()['uid']}
@@ -463,7 +464,7 @@ JD-TC-FinanceWorkFlow-1
     Log  ${Attachments1}
     ${uploadedDocuments1}=    Create List    ${Attachments1}
 
-    ${resp}=  Create PaymentsIn   ${amount}  ${category_id4}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    ${paymentMode}    uploadedDocuments=${uploadedDocuments1}
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id4}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}   ${lid}    ${paymentMode}    uploadedDocuments=${uploadedDocuments1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable   ${payable_uid1}   ${resp.json()['uid']}
