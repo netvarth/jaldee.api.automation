@@ -45,8 +45,8 @@ JD-TC-Schedule-1
     # Append To File  ${data_file}  ${LoginId} - ${PASSWORD}${\n}
     # Append To File  ${var_file}  PUSERNAME${num}=${LoginId}${\n}
     # Log    PUSERNAME${num}
-    # ${PUSERNAME_B}=  Set Variable  ${PUSERNAME5}
-    ${PUSERNAME_B}=  Set Variable  ${PUSERNAME14}
+    ${PUSERNAME_B}=  Set Variable  ${PUSERNAME17}
+    # ${PUSERNAME_B}=  Set Variable  ${PUSERNAME14}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log   ${resp.json()}

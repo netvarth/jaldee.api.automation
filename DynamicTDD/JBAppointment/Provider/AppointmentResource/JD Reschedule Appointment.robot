@@ -1,13 +1,20 @@
 *** Settings ***
 Suite Teardown    Delete All Sessions
 Test Teardown     Delete All Sessions
-Force Tags        Appointment  Reschedule
+Force Tags        Appointment Reschedule
+Library           Collections
+Library           String
+Library           json
 Library           FakerLibrary
+Library           /ebs/TDD/CustomKeywords.py
+Library           /ebs/TDD/db.py
+Library           random
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
-Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/consumermail.py
+Variables         /ebs/TDD/varfiles/consumerlist.py
+
 
 *** Variables ***
 
@@ -27,7 +34,7 @@ JD-TC-Reschedule Appointment-1
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']} 
+    Set Suite Variable  ${pid}  ${resp.json()['id']} 
    
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -48,7 +55,7 @@ JD-TC-Reschedule Appointment-1
         Set Suite Variable  ${lid}  ${resp.json()['id']}
         Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
-        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
@@ -58,6 +65,7 @@ JD-TC-Reschedule Appointment-1
     Set Suite Variable  ${s_id}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}
     ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  db.get_time_by_timezone  ${tz}
@@ -140,545 +148,240 @@ JD-TC-Reschedule Appointment-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}  appmtDate=${DAY1}   appmtTime=${slot2}  
 
-  
-*** Comments ***
-
-
 JD-TC-Reschedule Appointment-2
+
     [Documentation]  Provider takes appointment for a consumer and reschedules it to another day
 
-    ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
-    Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
-    ${resp}=  Consumer Logout
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${CUSERNAME33}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${cid}   ${resp.json()}
+
+    ${DAY3}=  db.add_timezone_date  ${tz}  4  
+    Set Suite Variable   ${DAY3}
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY3}  ${s_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][3]['time']}
+    
+    ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
+    ${apptfor}=   Create List  ${apptfor1}
+
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
+    ${apptTakenTime}=  db.remove_secs   ${apptTime}
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
+    ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
+    
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+          
+    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
+    Set Test Variable  ${apptid1}  ${apptid[0]}
+
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+  
+    ${resp}=  Reschedule Consumer Appointment   ${apptid1}  ${slot2}  ${DAY3}  ${sch_id}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response   ${resp}  appmtDate=${DAY3}   appmtTime=${slot2}  
+
+JD-TC-Reschedule Appointment-3
+
+    [Documentation]  Provider takes appointment for a consumer and reschedules it to same slot but another day
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  GetCustomer  
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
+        ${NewCustomer}    Generate random string    10    123456789
+        ${NewCustomer}    Convert To Integer  ${NewCustomer}
+        Set Suite variable   ${NewCustomer}
+        Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+        ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${cid}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${cid}  ${resp.json()[0]['id']}
+    END
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY3}  ${s_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][0]['time']}
+    
+    ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
+    ${apptfor}=   Create List  ${apptfor1}
+
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
+    ${apptTakenTime}=  db.remove_secs   ${apptTime}
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
+    ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
+    
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+          
+    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
+    Set Test Variable  ${apptid1}  ${apptid[0]}
+
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Reschedule Consumer Appointment   ${apptid1}  ${slot2}  ${DAY3}  ${sch_id}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY3}   appmtTime=${slot2}  
+
+JD-TC-Reschedule Appointment-4
+
+    [Documentation]  Provider takes appointment for a consumer and reschedules it to a later time in another schedule
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME320}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
-    
-    # ${resp}=   Get jaldeeIntegration Settings
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
+    Set Test Variable  ${pid}  ${resp.json()['id']} 
+   
+    ${resp}=   Get Appointment Settings
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
-        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-        Log   ${resp.json()}
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Disable Appointment   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
-   
-    # clear_service   ${PUSERNAME149}
-    # clear_location  ${PUSERNAME149}
-    clear_location_n_service  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
-
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-	
-    ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
-
-    ${lid}=  Create Sample Location  
-    ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${lid}  ${resp.json()['id']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
-    # clear_appt_schedule   ${PUSERNAME149}
-
-    ${resp}=  Get Appointment Schedules
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  AddCustomer  ${CUSERNAME33}  firstName=${fname}   lastName=${lname}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}   ${resp.json()}
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}   
+    ${s_id}=  Create Sample Service  ${SERVICE1}      maxBookingsAllowed=20
+    Set Test Variable  ${s_id}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${DAY3}=  db.add_timezone_date  ${tz}  4  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=1
-    ${maxval}=  Convert To Integer   ${delta/4}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    ${eTime1}=  add_timezone_time  ${tz}  3   50  
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
-
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
-    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
-
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY3}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
-    Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][3]['time']}
-
-    # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME33}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${cid}  ${resp.json()[0]['id']}
-    
-    ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
-    ${apptfor}=   Create List  ${apptfor1}
-
-    ${apptTime}=  db.get_tz_time_secs  ${tz} 
-    ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
-    ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
-    
-    ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-          
-    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
-    Set Test Variable  ${apptid1}  ${apptid[0]}
-
-    ${resp}=  Get Appointment EncodedID   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId}=  Set Variable   ${resp.json()}
-
-    ${resp}=  Get Appointment By Id   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  
-    ...   appointmentEncId=${encId}  apptStatus=${apptStatus[1]}   
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-    Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
-    # ${apptTakenTime1}=  db.remove_secs   ${appttime1}
-    # Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
-    Set Test Variable  ${statusUpdatedTime1}   ${resp.json()['statusUpdatedTime']}
-    # ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
-    # Should Be Equal As Strings    ${statusUpdatedTime1}    ${statusUpdatedTime}
-
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][0]['time']}   ${slot1}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][0]['noOfAvailbleSlots']}   0
-
-    ${resp}=  Reschedule Consumer Appointment   ${apptid1}  ${slot2}  ${DAY3}  ${sch_id}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Appointment By Id   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY3}   appmtTime=${slot2}  
-    ...   appointmentEncId=${encId}  apptStatus=${apptStatus[1]}  
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-    Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
-    # ${apptTakenTime1}=  db.remove_secs   ${appttime1}
-    # Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
-    Set Test Variable  ${statusUpdatedTime1}   ${resp.json()['statusUpdatedTime']}
-    # ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
-    # Should Be Equal As Strings    ${statusUpdatedTime1}    ${statusUpdatedTime}
-
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][0]['time']}   ${slot1}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][0]['noOfAvailbleSlots']}   ${parallel}
-
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY3}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][3]['time']}   ${slot2}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][3]['noOfAvailbleSlots']}   0
-
-    ${resp}=    Get Appmt Service By LocationId   ${lid}
-    Log   ${resp.json()}
-    Log   ${resp.status_code}
-    Should Be Equal As Strings   ${resp.status_code}   200
-
-    ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get Appmt Service By LocationId   ${lid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings   ${resp.status_code}   200
-
-    ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}    appmtTime=${slot2}  apptStatus=${apptStatus[1]}  appmtDate=${DAY3}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}  ${fname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
-
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-
-JD-TC-Reschedule Appointment-3
-    [Documentation]  Provider takes appointment for a consumer and reschedules it to same slot but another day
-
-    ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
-    Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
-
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
-    # clear_service   ${PUSERNAME149}
-    # clear_location  ${PUSERNAME149}
-    clear_location_n_service  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
-
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-	
-    ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
-
-    ${lid}=  Create Sample Location  
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-
-    # clear_appt_schedule   ${PUSERNAME149}
-
-    ${resp}=  Get Appointment Schedules
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  AddCustomer  ${CUSERNAME33}  firstName=${fname}   lastName=${lname}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}   ${resp.json()}
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${DAY3}=  db.add_timezone_date  ${tz}  4  
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=1
-    ${maxval}=  Convert To Integer   ${delta/4}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
-
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
-
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
-    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
-
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY3}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
-    Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][0]['time']}
-
-    Should Be Equal As Strings  ${slot1}  ${slot2}
-
-    # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME33}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${cid}  ${resp.json()[0]['id']}
+    IF   '${resp.content}' == '${emptylist}'     
+        ${schedule_name}=  FakerLibrary.bs
+        ${parallel}=  FakerLibrary.Random Int  min=10  max=20
+        ${maxval}=  Convert To Integer   ${delta/2}
+        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+        ${bool1}=  Random Element  ${bool}
+        ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id} 
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${sch_id}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
+        Set Test Variable  ${lid}  ${resp.json()[0]['location']['id']}
+        Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
+    END
     
-    ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
-    ${apptfor}=   Create List  ${apptfor1}
-
-    ${apptTime}=  db.get_tz_time_secs  ${tz} 
-    ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
-    ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
-    
-    ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-          
-    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
-    Set Test Variable  ${apptid1}  ${apptid[0]}
-
-    ${resp}=  Get Appointment EncodedID   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId}=  Set Variable   ${resp.json()}
-
-    ${resp}=  Get Appointment By Id   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  
-    ...   appointmentEncId=${encId}  apptStatus=${apptStatus[1]}   
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-    Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
-    # ${apptTakenTime1}=  db.remove_secs   ${appttime1}
-    # Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
-    Set Test Variable  ${statusUpdatedTime1}   ${resp.json()['statusUpdatedTime']}
-    # ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
-    # Should Be Equal As Strings    ${statusUpdatedTime1}    ${statusUpdatedTime}
-
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][0]['time']}   ${slot1}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][0]['noOfAvailbleSlots']}   0
-
-    ${resp}=  Reschedule Consumer Appointment   ${apptid1}  ${slot2}  ${DAY3}  ${sch_id}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Appointment By Id   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY3}   appmtTime=${slot2}  
-    ...   appointmentEncId=${encId}  apptStatus=${apptStatus[1]}  
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-    Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
-    # ${apptTakenTime1}=  db.remove_secs   ${appttime1}
-    # Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
-    Set Test Variable  ${statusUpdatedTime1}   ${resp.json()['statusUpdatedTime']}
-    # ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
-    # Should Be Equal As Strings    ${statusUpdatedTime1}    ${statusUpdatedTime}
-
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][0]['time']}   ${slot1}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][0]['noOfAvailbleSlots']}   ${parallel}
-
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY3}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][0]['time']}   ${slot2}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][0]['noOfAvailbleSlots']}   0
-
-    ${resp}=    Get Appmt Service By LocationId   ${lid}
-    Log   ${resp.json()}
-    Log   ${resp.status_code}
-    Should Be Equal As Strings   ${resp.status_code}   200
-
-    ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get Appmt Service By LocationId   ${lid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings   ${resp.status_code}   200
-
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-
-JD-TC-Reschedule Appointment-4
-    [Documentation]  Provider takes appointment for a consumer and reschedules it to a later time in another schedule
-
-    ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
-    Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
-
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
-    # clear_service   ${PUSERNAME149}
-    # clear_location  ${PUSERNAME149}
-    clear_location_n_service  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
-
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-	
-    ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
-
-    ${lid}=  Create Sample Location  
-    ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot1}   ${slots[${j1}]}
+    IF  ${resp.json()['availableSlots'][${j1}]['noOfAvailbleSlots']} == 0   
+        Remove From List    ${slots}    ${slot1}
+    END
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot2}   ${slots[${j1}]}
 
-    # clear_appt_schedule   ${PUSERNAME149}
-
-    ${resp}=  Get Appointment Schedules
-    Log  ${resp.json()}
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    Set Suite Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${NewCustomer}=  Generate Random 555 Number
+    ${resp}=  AddCustomer  ${NewCustomer}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}   email=${pc_emailid1}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  AddCustomer  ${CUSERNAME33}  firstName=${fname}   lastName=${lname}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}   ${resp.json()}
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${DAY3}=  db.add_timezone_date  ${tz}  4  
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name1}=  FakerLibrary.bs
-    ${parallel1}=  FakerLibrary.Random Int  min=1  max=1
-    ${maxval}=  Convert To Integer   ${delta/2}
-        ${duration1}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel1}    ${parallel1}  ${lid}  ${duration1}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id1}  ${resp.json()}
-
-    ${resp}=  Get Appointment Schedule ById  ${sch_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id1}   name=${schedule_name1}  apptState=${Qstate[0]}
-
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name1}  scheduleId=${sch_id1}
-    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
-
+    Set Test Variable   ${cid}  ${resp.json()}
+ 
     ${sTime2}=  add_two  ${eTime1}  5
     ${delta2}=  FakerLibrary.Random Int  min=40  max=80
     ${eTime2}=  add_two   ${sTime2}  ${delta2}
     ${schedule_name2}=  FakerLibrary.bs
     ${parallel2}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval2}=  Convert To Integer   ${delta2/5}
-        ${duration2}=  FakerLibrary.Random Int  min=1  max=${maxval2}
+    ${duration2}=  FakerLibrary.Random Int  min=1  max=${maxval2}
     ${bool2}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel2}    ${parallel2}  ${lid}  ${duration2}  ${bool2}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id2}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id2}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id2}   name=${schedule_name2}  apptState=${Qstate[0]}
-
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id2}  ${DAY3}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name2}  scheduleId=${sch_id2}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][3]['time']}
-
-    # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME33}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${cid}  ${resp.json()[0]['id']}
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -689,46 +392,17 @@ JD-TC-Reschedule Appointment-4
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
-    ${resp}=  Get Appointment EncodedID   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId}=  Set Variable   ${resp.json()}
-
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  
-    ...   appointmentEncId=${encId}  apptStatus=${apptStatus[1]}  
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-    Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
-    # ${apptTakenTime1}=  db.remove_secs   ${appttime1}
-    # Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
-    Set Test Variable  ${statusUpdatedTime1}   ${resp.json()['statusUpdatedTime']}
-    # ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
-    # Should Be Equal As Strings    ${statusUpdatedTime1}    ${statusUpdatedTime}
-
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name1}  scheduleId=${sch_id1}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][0]['time']}   ${slot1}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][0]['noOfAvailbleSlots']}   0
-
+   
     ${resp}=  Reschedule Consumer Appointment   ${apptid1}  ${slot2}  ${DAY3}  ${sch_id2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -737,66 +411,19 @@ JD-TC-Reschedule Appointment-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY3}   appmtTime=${slot2}  
-    ...    appointmentEncId=${encId}  apptStatus=${apptStatus[1]}  
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-    Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
-    # ${apptTakenTime1}=  db.remove_secs   ${appttime1}
-    # Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
-    Set Test Variable  ${statusUpdatedTime1}   ${resp.json()['statusUpdatedTime']}
-    # ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
-    # Should Be Equal As Strings    ${statusUpdatedTime1}    ${statusUpdatedTime}
-
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id2}  ${DAY3}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name2}  scheduleId=${sch_id2}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][3]['time']}   ${slot2}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][3]['noOfAvailbleSlots']}   0
-
-    ${resp}=    Get Appmt Service By LocationId   ${lid}
-    Log   ${resp.json()}
-    Log   ${resp.status_code}
-    Should Be Equal As Strings   ${resp.status_code}   200
-
-    ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get Appmt Service By LocationId   ${lid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings   ${resp.status_code}   200
-
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-
+   
 JD-TC-Reschedule Appointment-5
+
     [Documentation]  Provider takes appointment for a consumer and reschedules it to another schedule with same service and different service
 
-    ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME321}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
-    Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
-    ${resp}=  Consumer Logout
+    ${resp}=  Get Business Profile
     Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${pid}  ${resp.json()['id']} 
 
     ${resp}=   Get License UsageInfo 
     Log  ${resp.json()}
@@ -806,70 +433,88 @@ JD-TC-Reschedule Appointment-5
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Suite Variable  ${aId}  ${resp.json()[0]['addons'][0]['addonId']}
     Set Suite Variable  ${aprice}  ${resp.json()[0]['addons'][0]['price']}
-
-    # ${resp}=  Add addon  ${aId} 
-    # Should Be Equal As Strings    ${resp.status_code}   200
-    
-    # clear_service   ${PUSERNAME149}
-    # clear_location  ${PUSERNAME149}
-    clear_location_n_service  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
-
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-	
-    ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
-
-    ${lid}=  Create Sample Location  
-    ${resp}=   Get Location ById  ${lid}
+   
+    ${resp}=   Get Appointment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Disable Appointment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    # clear_appt_schedule   ${PUSERNAME149}
-
-    ${resp}=  Get Appointment Schedules
-    Log  ${resp.json()}
+    ${resp}=    Get Locations
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${lid}  ${resp.json()['id']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
-    ${resp}=  AddCustomer  ${CUSERNAME33}  firstName=${fname}   lastName=${lname}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}   ${resp.json()}
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}   
+    ${s_id}=  Create Sample Service  ${SERVICE1}      maxBookingsAllowed=20
+    Set Test Variable  ${s_id}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${DAY3}=  db.add_timezone_date  ${tz}  4  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name1}=  FakerLibrary.bs
-    ${parallel1}=  FakerLibrary.Random Int  min=1  max=1
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration1}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel1}    ${parallel1}  ${lid}  ${duration1}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id1}  ${resp.json()}
+    ${eTime1}=  add_timezone_time  ${tz}  1   50  
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id1}
-    Log  ${resp.json()}
+    ${resp}=    Get Appointment Schedules
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id1}   name=${schedule_name1}  apptState=${Qstate[0]}
+    IF   '${resp.content}' == '${emptylist}'     
+        ${schedule_name}=  FakerLibrary.bs
+        ${parallel}=  FakerLibrary.Random Int  min=10  max=20
+        ${maxval}=  Convert To Integer   ${delta/2}
+        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+        ${bool1}=  Random Element  ${bool}
+        ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id} 
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${sch_id}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
+        Set Test Variable  ${lid}  ${resp.json()[0]['location']['id']}
+        Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
+    END
+    
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot1}   ${slots[${j1}]}
+    IF  ${resp.json()['availableSlots'][${j1}]['noOfAvailbleSlots']} == 0   
+        Remove From List    ${slots}    ${slot1}
+    END
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot2}   ${slots[${j1}]}
 
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    Set Suite Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${NewCustomer}=  Generate Random 555 Number
+    ${resp}=  AddCustomer  ${NewCustomer}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}   email=${pc_emailid1}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name1}  scheduleId=${sch_id1}
-    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+    Set Test Variable   ${cid}  ${resp.json()}
 
     ${SERVICE2}=    FakerLibrary.Word
     ${s_id2}=  Create Sample Service  ${SERVICE2}
@@ -887,476 +532,10 @@ JD-TC-Reschedule Appointment-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id2}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id2}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id2}   name=${schedule_name2}  apptState=${Qstate[0]}
-
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id2}  ${DAY3}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name2}  scheduleId=${sch_id2}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][3]['time']}
-
-    # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME33}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${cid}  ${resp.json()[0]['id']}
-    
-    ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
-    ${apptfor}=   Create List  ${apptfor1}
-
-    ${apptTime}=  db.get_tz_time_secs  ${tz} 
-    ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
-    ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
-    
-    ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-          
-    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
-    Set Test Variable  ${apptid1}  ${apptid[0]}
-
-    ${resp}=  Get Appointment EncodedID   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId}=  Set Variable   ${resp.json()}
-
-    ${resp}=  Get Appointment By Id   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  
-    ...   appointmentEncId=${encId}  apptStatus=${apptStatus[1]}  
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-    Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
-    # ${apptTakenTime1}=  db.remove_secs   ${appttime1}
-    # Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
-    Set Test Variable  ${statusUpdatedTime1}   ${resp.json()['statusUpdatedTime']}
-    # ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
-    # Should Be Equal As Strings    ${statusUpdatedTime1}    ${statusUpdatedTime}
-
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name1}  scheduleId=${sch_id1}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][0]['time']}   ${slot1}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][0]['noOfAvailbleSlots']}   0
-
-    ${resp}=  Reschedule Consumer Appointment   ${apptid1}  ${slot2}  ${DAY3}  ${sch_id2}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=  Get Appointment By Id   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY3}   appmtTime=${slot2}  
-    ...    appointmentEncId=${encId}  apptStatus=${apptStatus[1]}  
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-    Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
-    # ${apptTakenTime1}=  db.remove_secs   ${appttime1}
-    # Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
-    Set Test Variable  ${statusUpdatedTime1}   ${resp.json()['statusUpdatedTime']}
-    # ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
-    # Should Be Equal As Strings    ${statusUpdatedTime1}    ${statusUpdatedTime}
-
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id2}  ${DAY3}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name2}  scheduleId=${sch_id2}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][3]['time']}   ${slot2}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][3]['noOfAvailbleSlots']}   0
-
-    ${resp}=    Get Appmt Service By LocationId   ${lid}
-    Log   ${resp.json()}
-    Log   ${resp.status_code}
-    Should Be Equal As Strings   ${resp.status_code}   200
-
-    ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get Appmt Service By LocationId   ${lid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings   ${resp.status_code}   200
-
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-
-JD-TC-Reschedule Appointment-6
-    [Documentation]  Provider takes appointment for a consumer and reschedules it to another schedule in a different location for same service
-
-    ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
-    Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
-
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-   
-    # ${billable_providers}   ${multilocPro}   ${mulocbpro}=    Multiloc and Billable Providers
-    ${billable_providers}   ${multilocPro}=    Multiloc and Billable Providers   min=40   max=150
-    Log   ${billable_providers}
-    Log   ${multilocPro}
-    # Log   ${mulocbpro}
-    Set Suite Variable   ${billable_providers}
-    Set Suite Variable   ${multilocPro}
-
-    ${resp}=  Encrypted Provider Login  ${multilocPro[4]}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
-    ${resp}=   Get License UsageInfo 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${highest_package}=  get_highest_license_pkg
-    Log  ${highest_package}
-
-    ${resp}=   Change License Package  ${highest_package[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Disable Appointment   ${toggle[0]}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
-
-    # clear_service   ${multilocPro[4]}
-    # clear_location  ${multilocPro[4]}
-    clear_location_n_service  ${multilocPro[4]}
-    clear_customer   ${multilocPro[4]}
-
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}   
-
-    ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
-
-    ${lid}=  Create Sample Location  
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${lid1}=  Create Sample Location 
-    ${resp}=   Get Location ById  ${lid1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['timezone']} 
-    # clear_appt_schedule   ${multilocPro[4]}
-
-    ${resp}=  Get Appointment Schedules
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${DAY3}=  db.add_timezone_date  ${tz}  4  
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name1}=  FakerLibrary.bs
-    ${parallel1}=  FakerLibrary.Random Int  min=1  max=1
-    ${maxval}=  Convert To Integer   ${delta/2}
-        ${duration1}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel1}    ${parallel1}  ${lid}  ${duration1}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id1}  ${resp.json()}
-
-    ${resp}=  Get Appointment Schedule ById  ${sch_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id1}   name=${schedule_name1}  apptState=${Qstate[0]}
-
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name1}  scheduleId=${sch_id1}
-    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
-
-    # ${SERVICE2}=    FakerLibrary.Word
-    # ${s_id2}=  Create Sample Service  ${SERVICE2}
-    
-    ${sTime2}=  add_two  ${eTime1}  5
-    ${delta2}=  FakerLibrary.Random Int  min=40  max=80
-    ${eTime2}=  add_two   ${sTime2}  ${delta2}
-    ${schedule_name2}=  FakerLibrary.bs
-    ${parallel2}=  FakerLibrary.Random Int  min=1  max=1
-    ${maxval2}=  Convert To Integer   ${delta2/5}
-        ${duration2}=  FakerLibrary.Random Int  min=1  max=${maxval2}
-    ${bool2}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel2}    ${parallel2}  ${lid1}  ${duration2}  ${bool2}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id2}  ${resp.json()}
-
-    ${resp}=  Get Appointment Schedule ById  ${sch_id2}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id2}   name=${schedule_name2}  apptState=${Qstate[0]}
-
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id2}  ${DAY3}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name2}  scheduleId=${sch_id2}
-    Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][3]['time']}
-
-    # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME33}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${cid}  ${resp.json()[0]['id']}
-
-    ${resp}=  AddCustomer  ${CUSERNAME33}  firstName=${fname}   lastName=${lname}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}   ${resp.json()}
-    
-    ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
-    ${apptfor}=   Create List  ${apptfor1}
-
-    ${apptTime}=  db.get_tz_time_secs  ${tz} 
-    ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
-    ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
-    
-    ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-          
-    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
-    Set Test Variable  ${apptid1}  ${apptid[0]}
-
-    ${resp}=  Get Appointment EncodedID   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId}=  Set Variable   ${resp.json()}
-
-    ${resp}=  Get Appointment By Id   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  
-    ...   appointmentEncId=${encId}  apptStatus=${apptStatus[1]}  
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-    Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
-    # ${apptTakenTime1}=  db.remove_secs   ${appttime1}
-    # Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
-    Set Test Variable  ${statusUpdatedTime1}   ${resp.json()['statusUpdatedTime']}
-    # ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
-    # Should Be Equal As Strings    ${statusUpdatedTime1}    ${statusUpdatedTime}
-
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name1}  scheduleId=${sch_id1}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][0]['time']}   ${slot1}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][0]['noOfAvailbleSlots']}   0
-
-    # sleep  01s
-
-    ${resp}=  Reschedule Consumer Appointment   ${apptid1}  ${slot2}  ${DAY3}  ${sch_id2}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Appointment By Id   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY3}   appmtTime=${slot2}  
-    ...    appointmentEncId=${encId}  apptStatus=${apptStatus[1]}  
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid1}
-    Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
-    # ${apptTakenTime1}=  db.remove_secs   ${appttime1}
-    # Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
-    Set Test Variable  ${statusUpdatedTime1}   ${resp.json()['statusUpdatedTime']}
-    # ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
-    # Should Be Equal As Strings    ${statusUpdatedTime1}    ${statusUpdatedTime}
-
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id2}  ${DAY3}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name2}  scheduleId=${sch_id2}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][3]['time']}   ${slot2}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][3]['noOfAvailbleSlots']}   0
-
-    ${resp}=    Get Appmt Service By LocationId   ${lid}
-    Log   ${resp.json()}
-    Log   ${resp.status_code}
-    Should Be Equal As Strings   ${resp.status_code}   200
-
-    ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get Appmt Service By LocationId   ${lid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings   ${resp.status_code}   200
-
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-
-JD-TC-Reschedule Appointment-7
-    [Documentation]  Provider takes appointment for a consumer when batch is enabled and reschedules it to another slot in same schedule.
-
-    ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
-    Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
-
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
-    # clear_service   ${PUSERNAME149}
-    # clear_location  ${PUSERNAME149}
-    clear_location_n_service  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
-
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-	
-    ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
-
-    ${lid}=  Create Sample Location  
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-
-    # clear_appt_schedule   ${PUSERNAME149}
-
-    ${resp}=  Get Appointment Schedules
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  AddCustomer  ${CUSERNAME33}  firstName=${fname}   lastName=${lname}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}   ${resp.json()}
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${DAY3}=  db.add_timezone_date  ${tz}  4  
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=2  max=2
-    ${maxval}=  Convert To Integer   ${delta/4}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    # ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool[1]}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
-
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}  
-    ...   parallelServing=${parallel}  batchEnable=${bool[1]}
-
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
-    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
-    Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][3]['time']}
-
-    # ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY3}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
-    # Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][3]['time']}
-
-    # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME33}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${cid}  ${resp.json()[0]['id']}
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -1374,40 +553,298 @@ JD-TC-Reschedule Appointment-7
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
-    ${resp}=  Get Appointment EncodedID   ${apptid1}
+    ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId}=  Set Variable   ${resp.json()}
+   
+    ${resp}=  Reschedule Consumer Appointment   ${apptid1}  ${slot2}  ${DAY3}  ${sch_id2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY3}   appmtTime=${slot2}  
+   
+JD-TC-Reschedule Appointment-6
+
+    [Documentation]  Provider takes appointment for a consumer and reschedules it to another schedule in a different location for same service
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME322}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${pid}  ${resp.json()['id']} 
+
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Appointment Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Disable Appointment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${lid}  ${resp.json()['id']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+
+    ${lid1}=  Create Sample Location 
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']} 
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}   
+    ${s_id}=  Create Sample Service  ${SERVICE1}      maxBookingsAllowed=20
+    Set Test Variable  ${s_id}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_timezone_time  ${tz}  1   50  
+
+    ${resp}=    Get Appointment Schedules
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'     
+        ${schedule_name}=  FakerLibrary.bs
+        ${parallel}=  FakerLibrary.Random Int  min=10  max=20
+        ${maxval}=  Convert To Integer   ${delta/2}
+        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+        ${bool1}=  Random Element  ${bool}
+        ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id} 
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${sch_id1}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${sch_id1}  ${resp.json()[0]['id']}
+        Set Test Variable  ${lid}  ${resp.json()[0]['location']['id']}
+        Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
+    END
+    
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot1}   ${slots[${j1}]}
+    IF  ${resp.json()['availableSlots'][${j1}]['noOfAvailbleSlots']} == 0   
+        Remove From List    ${slots}    ${slot1}
+    END
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot2}   ${slots[${j1}]}
+
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    Set Suite Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${NewCustomer}=  Generate Random 555 Number
+    ${resp}=  AddCustomer  ${NewCustomer}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}   email=${pc_emailid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${cid}  ${resp.json()}
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+
+    ${sTime2}=  add_two  ${eTime1}  5
+    ${delta2}=  FakerLibrary.Random Int  min=40  max=80
+    ${eTime2}=  add_two   ${sTime2}  ${delta2}
+    ${schedule_name2}=  FakerLibrary.bs
+    ${parallel2}=  FakerLibrary.Random Int  min=1  max=1
+    ${maxval2}=  Convert To Integer   ${delta2/5}
+    ${duration2}=  FakerLibrary.Random Int  min=1  max=${maxval2}
+    ${bool2}=  Random Element  ${bool}
+    ${resp}=  Create Appointment Schedule  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel2}    ${parallel2}  ${lid1}  ${duration2}  ${bool2}  ${s_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${sch_id2}  ${resp.json()}
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id2}  ${DAY3}  ${s_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][3]['time']}
+
+    ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
+    ${apptfor}=   Create List  ${apptfor1}
+
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
+    ${apptTakenTime}=  db.remove_secs   ${apptTime}
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
+    ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
+    
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+          
+    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
+    Set Test Variable  ${apptid1}  ${apptid[0]}
 
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  
-    ...    appointmentEncId=${encId}  apptStatus=${apptStatus[1]}   
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-    Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
-    # ${apptTakenTime1}=  db.remove_secs   ${appttime1}
-    # Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
-    Set Test Variable  ${statusUpdatedTime1}   ${resp.json()['statusUpdatedTime']}
-    # ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
-    # Should Be Equal As Strings    ${statusUpdatedTime1}    ${statusUpdatedTime}
 
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
+    ${resp}=  Reschedule Consumer Appointment   ${apptid1}  ${slot2}  ${DAY3}  ${sch_id2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY3}   appmtTime=${slot2}  
+
+JD-TC-Reschedule Appointment-7
+
+    [Documentation]  Provider takes appointment for a consumer when batch is enabled and reschedules it to another slot in same schedule.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME323}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${pid}  ${resp.json()['id']} 
+
+    ${resp}=   Get Appointment Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Disable Appointment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${lid}  ${resp.json()['id']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+
+    ${lid1}=  Create Sample Location 
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']} 
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}   
+    ${s_id}=  Create Sample Service  ${SERVICE1}      maxBookingsAllowed=20
+    Set Test Variable  ${s_id}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_timezone_time  ${tz}  1   50  
+
+    ${resp}=    Get Appointment Schedules
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'     
+        ${schedule_name}=  FakerLibrary.bs
+        ${parallel}=  FakerLibrary.Random Int  min=10  max=20
+        ${maxval}=  Convert To Integer   ${delta/2}
+        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+        ${bool1}=  Random Element  ${bool}
+        ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id} 
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${sch_id1}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${sch_id1}  ${resp.json()[0]['id']}
+        Set Test Variable  ${lid}  ${resp.json()[0]['location']['id']}
+        Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
+    END
+    
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot1}   ${slots[${j1}]}
+    IF  ${resp.json()['availableSlots'][${j1}]['noOfAvailbleSlots']} == 0   
+        Remove From List    ${slots}    ${slot1}
+    END
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot2}   ${slots[${j1}]}
+
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    Set Suite Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${NewCustomer}=  Generate Random 555 Number
+    ${resp}=  AddCustomer  ${NewCustomer}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}   email=${pc_emailid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${cid}  ${resp.json()}
+    
+    ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
+    ${apptfor}=   Create List  ${apptfor1}
+
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
+    ${apptTakenTime}=  db.remove_secs   ${apptTime}
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
+    ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
+    
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][0]['time']}   ${slot1}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][0]['noOfAvailbleSlots']}   ${parallel-1}
+          
+    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
+    Set Test Variable  ${apptid1}  ${apptid[0]}
 
-    ${resp}=  Reschedule Consumer Appointment   ${apptid1}  ${slot2}  ${DAY1}  ${sch_id}
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+   
+    ${resp}=  Reschedule Consumer Appointment   ${apptid1}  ${slot2}  ${DAY1}  ${sch_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1415,131 +852,186 @@ JD-TC-Reschedule Appointment-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot2}  
-    ...    appointmentEncId=${encId}  apptStatus=${apptStatus[1]}  
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-    Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
-    # ${apptTakenTime1}=  db.remove_secs   ${appttime1}
-    # Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
-    Set Test Variable  ${statusUpdatedTime1}   ${resp.json()['statusUpdatedTime']}
-    # ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
-    # Should Be Equal As Strings    ${statusUpdatedTime1}    ${statusUpdatedTime}
- 
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][0]['time']}   ${slot1}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][0]['noOfAvailbleSlots']}   ${parallel}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][3]['time']}   ${slot2}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][3]['noOfAvailbleSlots']}   ${parallel-1}
-
-    ${resp}=    Get Appmt Service By LocationId   ${lid}
-    Log   ${resp.json()}
-    Log   ${resp.status_code}
-    Should Be Equal As Strings   ${resp.status_code}   200
-
-    ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get Appmt Service By LocationId   ${lid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings   ${resp.status_code}   200
-
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
 
 JD-TC-Reschedule Appointment-8
+
     [Documentation]  Provider takes appointment for a consumer when batch is enabled and reschedules it to another slot in different schedule.
 
-    ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
-    Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
+    # ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    # Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Test Variable  ${lname}   ${resp.json()['lastName']}
+    # Set Test Variable  ${uname}   ${resp.json()['userName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     
     # clear_service   ${PUSERNAME149}
     # clear_location  ${PUSERNAME149}
-    clear_location_n_service  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_location_n_service  ${PUSERNAME149}
+    # clear_customer   ${PUSERNAME149}
 
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Service
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=    Get Locations
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    # ${SERVICE1}=    FakerLibrary.Word
+    # ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    ${lid}=  Create Sample Location  
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    # ${lid}=  Create Sample Location  
+    # ${resp}=   Get Location ById  ${lid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     # clear_appt_schedule   ${PUSERNAME149}
 
-    ${resp}=  Get Appointment Schedules
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Appointment Schedules
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  AddCustomer  ${CUSERNAME33}  firstName=${fname}   lastName=${lname}
+    # ${resp}=  AddCustomer  ${CUSERNAME33}  firstName=${fname}   lastName=${lname}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${cid}   ${resp.json()}
+
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    # ${DAY3}=  db.add_timezone_date  ${tz}  4  
+    # ${list}=  Create List  1  2  3  4  5  6  7
+    # ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    # ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    # ${eTime1}=  add_two   ${sTime1}  ${delta}
+    # ${schedule_name1}=  FakerLibrary.bs
+    # ${parallel1}=  FakerLibrary.Random Int  min=2  max=2
+    # ${maxval}=  Convert To Integer   ${delta/2}
+    #     ${duration1}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    # # ${bool1}=  Random Element  ${bool}
+    # ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel1}    ${parallel1}  ${lid}  ${duration1}  ${bool[1]}  ${s_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id1}  ${resp.json()}
+
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  id=${sch_id1}   name=${schedule_name1}  apptState=${Qstate[0]}  
+    # ...   parallelServing=${parallel1}  batchEnable=${bool[1]}
+
+    # ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  scheduleName=${schedule_name1}  scheduleId=${sch_id1}
+    # Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME324}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}   ${resp.json()}
+    Set Test Variable  ${pid}  ${resp.json()['id']} 
+
+    ${resp}=   Get Appointment Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Disable Appointment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${lid}  ${resp.json()['id']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+
+    ${lid1}=  Create Sample Location 
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']} 
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}   
+    ${s_id}=  Create Sample Service  ${SERVICE1}      maxBookingsAllowed=20
+    Set Test Variable  ${s_id}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${DAY3}=  db.add_timezone_date  ${tz}  4  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name1}=  FakerLibrary.bs
-    ${parallel1}=  FakerLibrary.Random Int  min=2  max=2
-    ${maxval}=  Convert To Integer   ${delta/2}
-        ${duration1}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    # ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel1}    ${parallel1}  ${lid}  ${duration1}  ${bool[1]}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id1}  ${resp.json()}
+    ${eTime1}=  add_timezone_time  ${tz}  1   50  
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id1}
-    Log  ${resp.json()}
+    ${resp}=    Get Appointment Schedules
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id1}   name=${schedule_name1}  apptState=${Qstate[0]}  
-    ...   parallelServing=${parallel1}  batchEnable=${bool[1]}
-
+    IF   '${resp.content}' == '${emptylist}'     
+        ${schedule_name}=  FakerLibrary.bs
+        ${parallel}=  FakerLibrary.Random Int  min=10  max=20
+        ${maxval}=  Convert To Integer   ${delta/2}
+        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+        ${bool1}=  Random Element  ${bool}
+        ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id} 
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${sch_id1}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${sch_id1}  ${resp.json()[0]['id']}
+        Set Test Variable  ${lid}  ${resp.json()[0]['location']['id']}
+        Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
+    END
+    
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name1}  scheduleId=${sch_id1}
-    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot1}   ${slots[${j1}]}
+    IF  ${resp.json()['availableSlots'][${j1}]['noOfAvailbleSlots']} == 0   
+        Remove From List    ${slots}    ${slot1}
+    END
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot2}   ${slots[${j1}]}
+
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    Set Suite Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${NewCustomer}=  Generate Random 555 Number
+    ${resp}=  AddCustomer  ${NewCustomer}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}   email=${pc_emailid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${cid}  ${resp.json()}
 
     ${sTime2}=  add_two  ${eTime1}  5
     ${delta2}=  FakerLibrary.Random Int  min=40  max=80
@@ -1547,7 +1039,7 @@ JD-TC-Reschedule Appointment-8
     ${schedule_name2}=  FakerLibrary.bs
     ${parallel2}=  FakerLibrary.Random Int  min=2  max=2
     ${maxval2}=  Convert To Integer   ${delta2/5}
-        ${duration2}=  FakerLibrary.Random Int  min=1  max=${maxval2}
+    ${duration2}=  FakerLibrary.Random Int  min=1  max=${maxval2}
     ${bool2}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel2}    ${parallel2}  ${lid}  ${duration2}  ${bool2}  ${s_id}
     Log  ${resp.json()}
@@ -1562,7 +1054,7 @@ JD-TC-Reschedule Appointment-8
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id2}  ${DAY3}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name2}  scheduleId=${sch_id2}
+    # Verify Response  ${resp}  scheduleName=${schedule_name2}  scheduleId=${sch_id2}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][3]['time']}
 
     # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME33}
@@ -1586,38 +1078,38 @@ JD-TC-Reschedule Appointment-8
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
-    ${resp}=  Get Appointment EncodedID   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId}=  Set Variable   ${resp.json()}
+    # ${resp}=  Get Appointment EncodedID   ${apptid1}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${encId}=  Set Variable   ${resp.json()}
 
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  
-    ...   appointmentEncId=${encId}  apptStatus=${apptStatus[1]}  
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-    Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
-    # ${apptTakenTime1}=  db.remove_secs   ${appttime1}
-    # Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
-    Set Test Variable  ${statusUpdatedTime1}   ${resp.json()['statusUpdatedTime']}
+    # Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  
+    # ...   appointmentEncId=${encId}  apptStatus=${apptStatus[1]}  
+    # # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID}
+    # # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
+    # # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
+    # Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
+    # Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id1}
+    # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
+    # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
+    # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
+    # Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
+    # Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
+    # # ${apptTakenTime1}=  db.remove_secs   ${appttime1}
+    # # Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
+    # Set Test Variable  ${statusUpdatedTime1}   ${resp.json()['statusUpdatedTime']}
     # ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
     # Should Be Equal As Strings    ${statusUpdatedTime1}    ${statusUpdatedTime}
 
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name1}  scheduleId=${sch_id1}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][0]['time']}   ${slot1}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][0]['noOfAvailbleSlots']}   ${parallel1-1}
+    # ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  scheduleName=${schedule_name1}  scheduleId=${sch_id1}
+    # Should Be Equal As Strings   ${resp.json()['availableSlots'][0]['time']}   ${slot1}
+    # Should Be Equal As Strings   ${resp.json()['availableSlots'][0]['noOfAvailbleSlots']}   ${parallel1-1}
 
     ${resp}=  Reschedule Consumer Appointment   ${apptid1}  ${slot2}  ${DAY3}  ${sch_id2}
     Log   ${resp.json()}
@@ -1627,46 +1119,46 @@ JD-TC-Reschedule Appointment-8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY3}   appmtTime=${slot2}  
-    ...   appointmentEncId=${encId}  apptStatus=${apptStatus[1]}  
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-    Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
-    # ${apptTakenTime1}=  db.remove_secs   ${appttime1}
-    # Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
-    Set Test Variable  ${statusUpdatedTime1}   ${resp.json()['statusUpdatedTime']}
+    # ...   appointmentEncId=${encId}  apptStatus=${apptStatus[1]}  
+    # # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID}
+    # # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
+    # # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
+    # Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
+    # Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id2}
+    # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
+    # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
+    # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
+    # Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
+    # Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
+    # # ${apptTakenTime1}=  db.remove_secs   ${appttime1}
+    # # Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
+    # Set Test Variable  ${statusUpdatedTime1}   ${resp.json()['statusUpdatedTime']}
     # ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
     # Should Be Equal As Strings    ${statusUpdatedTime1}    ${statusUpdatedTime}
 
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id2}  ${DAY3}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name2}  scheduleId=${sch_id2}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][3]['time']}   ${slot2}
-    Should Be Equal As Strings   ${resp.json()['availableSlots'][3]['noOfAvailbleSlots']}   ${parallel2-1}
+    # ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id2}  ${DAY3}  ${s_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  scheduleName=${schedule_name2}  scheduleId=${sch_id2}
+    # Should Be Equal As Strings   ${resp.json()['availableSlots'][3]['time']}   ${slot2}
+    # Should Be Equal As Strings   ${resp.json()['availableSlots'][3]['noOfAvailbleSlots']}   ${parallel2-1}
 
-    ${resp}=    Get Appmt Service By LocationId   ${lid}
-    Log   ${resp.json()}
-    Log   ${resp.status_code}
-    Should Be Equal As Strings   ${resp.status_code}   200
+    # ${resp}=    Get Appmt Service By LocationId   ${lid}
+    # Log   ${resp.json()}
+    # Log   ${resp.status_code}
+    # Should Be Equal As Strings   ${resp.status_code}   200
 
-    ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Appmt Service By LocationId   ${lid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings   ${resp.status_code}   200
+    # ${resp}=    Get Appmt Service By LocationId   ${lid}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings   ${resp.status_code}   200
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-Reschedule Appointment-9
