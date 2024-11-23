@@ -147,7 +147,7 @@ JD-TC-Reschedule Appointment-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}  appmtDate=${DAY1}   appmtTime=${slot2}  
-
+*** Comments ***
 JD-TC-Reschedule Appointment-2
 
     [Documentation]  Provider takes appointment for a consumer and reschedules it to another day
