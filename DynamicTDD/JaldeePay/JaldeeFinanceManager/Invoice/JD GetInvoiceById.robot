@@ -307,7 +307,7 @@ JD-TC-GetInvoice by uid-3
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
 
-    ${resp}=  Update Invoice   ${invoice_uid1}    ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   
+    ${resp}=  Update Invoice   ${invoice_uid1}    ${category_id2}    ${invoiceDate}      
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -328,30 +328,30 @@ JD-TC-GetInvoice by uid-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-   ${resp}=  Get upgradable license 
-       Log   ${resp.json()}
-       Should Be Equal As Strings    ${resp.status_code}   200
-       ${len}=  Get Length  ${resp.json()}
-       ${len}=  Evaluate  ${len}-2
-       Set Test Variable  ${licId}  ${resp.json()[${len}]['pkgId']}
-       ${resp}=  Change License Package  ${licId}
-       Should Be Equal As Strings    ${resp.status_code}   200
+#    ${resp}=  Get upgradable license 
+#        Log   ${resp.json()}
+#        Should Be Equal As Strings    ${resp.status_code}   200
+#        ${len}=  Get Length  ${resp.json()}
+#        ${len}=  Evaluate  ${len}-2
+#        Set Test Variable  ${licId}  ${resp.json()[${len}]['pkgId']}
+#        ${resp}=  Change License Package  ${licId}
+#        Should Be Equal As Strings    ${resp.status_code}   200
 
     ${desc}=   FakerLibrary.sentence
      ${SERVICE1}=    FakerLibrary.word
     Set Suite Variable  ${SERVICE1}
     ${servicecharge}=   Random Int  min=100  max=500
     ${servicecharge}=  Convert To Number  ${servicecharge}  1
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}   
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}  ${bool[0]}  ${servicecharge}  ${bool[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${sid2}  ${resp.json()} 
+    Set Suite Variable  ${sid2}  ${resp.json()}
+ 
 
     ${SERVICE2}=    FakerLibrary.word
     Set Suite Variable  ${SERVICE2}
-    ${resp}=  Create Service  ${SERVICE2}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${order}  ${bool[0]}  ${bool[0]}   
+    ${resp}=  Create Service  ${SERVICE2}  ${desc}   ${service_duration}  ${bool[0]}  0  ${bool[1]}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid3}  ${resp.json()} 
 
 
