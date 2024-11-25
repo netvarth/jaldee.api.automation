@@ -58,45 +58,47 @@ ${coupon}          wheat
 *** Test Cases ***
 
 JD-TC-RemoveDiscountForOrder-1
-      [Documentation]   Remove Discount For Order
+    [Documentation]   Remove Discount For Order
 
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33885330
     Set Suite Variable   ${PUSERPH0}
+
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERPH0}=  Provider Signup  PhoneNumber=${PUSERPH0}
     
-    ${licid}  ${licname}=  get_highest_license_pkg
-    Log  ${licid}
-    Log  ${licname}
-    ${domresp}=  Get BusinessDomainsConf
-    Log   ${domresp.json()}
-    Should Be Equal As Strings  ${domresp.status_code}  200
-    ${dlen}=  Get Length  ${domresp.json()}
-    FOR  ${pos}  IN RANGE  ${dlen}  
-        Set Suite Variable  ${d1}  ${domresp.json()[${pos}]['domain']}
-        ${sd1}  ${check}=  Get Billable Subdomain  ${d1}  ${domresp}  ${pos}  
-        Set Suite Variable   ${sd1}
-        Exit For Loop IF     '${check}' == '${bool[1]}'
-    END
-    Log  ${d1}
-    Log  ${sd1}
+    # ${licid}  ${licname}=  get_highest_license_pkg
+    # Log  ${licid}
+    # Log  ${licname}
+    # ${domresp}=  Get BusinessDomainsConf
+    # Log   ${domresp.json()}
+    # Should Be Equal As Strings  ${domresp.status_code}  200
+    # ${dlen}=  Get Length  ${domresp.json()}
+    # FOR  ${pos}  IN RANGE  ${dlen}  
+    #     Set Suite Variable  ${d1}  ${domresp.json()[${pos}]['domain']}
+    #     ${sd1}  ${check}=  Get Billable Subdomain  ${d1}  ${domresp}  ${pos}  
+    #     Set Suite Variable   ${sd1}
+    #     Exit For Loop IF     '${check}' == '${bool[1]}'
+    # END
+    # Log  ${d1}
+    # Log  ${sd1}
 
-    ${firstname}=  FakerLibrary.first_name
-    ${lastname}=  FakerLibrary.last_name
-    ${address}=  FakerLibrary.address
-    ${dob}=  FakerLibrary.Date
-    ${gender}=    Random Element    ${Genderlist}
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd1}  ${PUSERPH0}  ${licid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${firstname}=  FakerLibrary.first_name
+    # ${lastname}=  FakerLibrary.last_name
+    # ${address}=  FakerLibrary.address
+    # ${dob}=  FakerLibrary.Date
+    # ${gender}=    Random Element    ${Genderlist}
+    # ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd1}  ${PUSERPH0}  ${licid}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Activation  ${PUSERPH0}  0
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  "${resp.json()}"    "true"
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    # ${resp}=  Account Activation  ${PUSERPH0}  0
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Should Be Equal As Strings  "${resp.json()}"    "true"
+    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
 
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
@@ -148,7 +150,6 @@ JD-TC-RemoveDiscountForOrder-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    
     IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
         ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
         Log  ${resp1.content}
@@ -160,23 +161,23 @@ JD-TC-RemoveDiscountForOrder-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
-    ${fields}=   Get subDomain level Fields  ${d1}  ${sd1}
-    Log  ${fields.json()}
-    Should Be Equal As Strings    ${fields.status_code}   200
+    # ${fields}=   Get subDomain level Fields  ${d1}  ${sd1}
+    # Log  ${fields.json()}
+    # Should Be Equal As Strings    ${fields.status_code}   200
 
-    ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
+    # ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
 
-    ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sd1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sd1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get specializations Sub Domain  ${d1}  ${sd1}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=  Get specializations Sub Domain  ${d1}  ${sd1}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${spec}=  get_Specializations  ${resp.json()}
-    ${resp}=  Update Specialization  ${spec}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${spec}=  get_Specializations  ${resp.json()}
+    # ${resp}=  Update Specialization  ${spec}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Enable Waitlist
     Log   ${resp.json()}
