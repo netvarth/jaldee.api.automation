@@ -74,7 +74,7 @@ JD-TC-Remove Service Level Discount-1
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${result}=  Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    ${result}=  Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Disable Appointment   ${toggle[0]}
     Log   ${result.json()}
     Should Be Equal As Strings  ${result.status_code}  200
     ${resp}=   Get Account Settings
@@ -306,7 +306,7 @@ JD-TC-Remove Service Level Discount-1
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
     ${servicecharge}=  Convert To Number  ${servicecharge}  1
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}   
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid1}  ${resp.json()} 
@@ -426,7 +426,7 @@ JD-TC-Remove Service Level Discount-2
     # Set Suite Variable  ${SERVICE1}
     # ${desc}=   FakerLibrary.sentence
     # ${servicecharge}=   Random Int  min=100  max=500
-    # ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}   
+    # ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}   
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${sid2}  ${resp.json()} 
@@ -532,7 +532,7 @@ JD-TC-Remove Service Level Discount-3
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
     ${servicecharge}=  Convert To Number  ${servicecharge}  1
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}   
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid2}  ${resp.json()} 
@@ -921,7 +921,7 @@ JD-TC-Remove Service Level Discount-6
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${servicecharge}=  Convert To Number  ${servicecharge}  1 
     ${srv_duration}=   Random Int   min=10   max=20
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${min_pre}  ${servicecharge}  ${bool[1]}  ${bool[0]}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}
@@ -1058,7 +1058,7 @@ JD-TC-Remove Service Level Discount-7
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${servicecharge}=  Convert To Number  ${servicecharge}  1 
     ${srv_duration}=   Random Int   min=10   max=20
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${min_pre}  ${servicecharge}  ${bool[1]}  ${bool[0]}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}
@@ -1345,7 +1345,7 @@ JD-TC-Remove Service Level Discount-UH6
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${servicecharge}=  Convert To Number  ${servicecharge}  1 
     ${srv_duration}=   Random Int   min=10   max=20
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${min_pre}  ${servicecharge}  ${bool[1]}  ${bool[0]}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}

@@ -160,7 +160,7 @@ JD-TC-ApplyProviderCouponForAppointmnet-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Enable Disable Appointment   ${toggle[0]} 
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -209,7 +209,7 @@ JD-TC-ApplyProviderCouponForAppointmnet-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[0]}   
 
-    ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
+    ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[0]}  ${boolean[0]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get jaldeeIntegration Settings
@@ -226,7 +226,7 @@ JD-TC-ApplyProviderCouponForAppointmnet-1
     ${servicecharge}=  Convert To Number  ${servicecharge}  1 
     Set Suite Variable  ${servicecharge}
     ${srv_duration}=   Random Int   min=10   max=20
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${min_pre}  ${servicecharge}  ${bool[1]}  ${bool[0]}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Suite Variable  ${s_id}  ${resp.json()}
@@ -462,7 +462,7 @@ JD-TC-ApplyProviderCouponForAppointmnet-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Enable Disable Appointment   ${toggle[0]} 
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 

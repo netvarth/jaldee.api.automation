@@ -73,7 +73,7 @@ JD-TC-Remove Item From Invoice-1
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${result}=  Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    ${result}=  Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Disable Appointment   ${toggle[0]}
     Log   ${result.json()}
     Should Be Equal As Strings  ${result.status_code}  200
     ${resp}=   Get Account Settings

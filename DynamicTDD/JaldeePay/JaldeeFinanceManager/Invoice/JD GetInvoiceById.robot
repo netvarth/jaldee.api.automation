@@ -342,7 +342,7 @@ JD-TC-GetInvoice by uid-4
     Set Suite Variable  ${SERVICE1}
     ${servicecharge}=   Random Int  min=100  max=500
     ${servicecharge}=  Convert To Number  ${servicecharge}  1
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}   
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid2}  ${resp.json()} 

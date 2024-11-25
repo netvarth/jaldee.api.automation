@@ -2397,7 +2397,7 @@ JD-TC-CreateInvoice-15
     ${serviceprice}=   Random Int  min=10  max=15
     ${serviceprice}=  Convert To Number  ${serviceprice}  1
     ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${service_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}   
-    # ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}
+    # ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid1}  ${resp.json()}
@@ -2567,7 +2567,7 @@ JD-TC-CreateInvoice-17
     ${serviceprice}=   Random Int  min=10  max=15
     ${serviceprice}=  Convert To Number  ${serviceprice}  1
     ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${service_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}   
-    # ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}
+    # ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid2}  ${resp.json()}
@@ -3569,7 +3569,7 @@ JD-TC-ApplyDiscountForOrder-21
     ${servicecharge}=  Convert To Number  ${servicecharge}  1 
     ${srv_duration}=   Random Int   min=10   max=20
     ${resp}=  Create Service  ${P1SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[1]}    minPrePaymentAmount=${min_pre}   department=${dep_id}
-    # ${resp}=  Create Service  ${SERVICE6}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${min_pre}  ${servicecharge}  ${bool[1]}  ${bool[0]}   department=${dep_id}
+    # ${resp}=  Create Service  ${SERVICE6}  ${desc}   ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}   department=${dep_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id1}  ${resp.json()}

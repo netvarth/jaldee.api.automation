@@ -39,8 +39,6 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 JD-TC-UpdateService-1
     [Documentation]  update service name for a service.
 
-    ${nonbillable_domains}=  get_nonbillable_domains
-    # ${domain}  ${subdomain_list}   Get Dictionary Items   ${nonbillable_domains}
     ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup
     Set Suite Variable  ${PUSERNAME_A}
 
@@ -120,8 +118,11 @@ JD-TC-UpdateService-4
 
     ${billable_domains}=  get_billable_domain
     Log  ${billable_domains}
-    ${random_domain} Evaluate random.choice(list(billable_domains.keys())) random 
-    ${random_subdomain} Evaluate random.choice(billable_domains[random_domain]) random
+    ${random_domain}  Evaluate  random.choice(list(billable_domains.keys())) random 
+    ${random_subdomain}  Evaluate  random.choice(billable_domains[random_domain]) random
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup  Domain=${random_domain}  SubDomain=${random_subdomain}
+    Set Suite Variable  ${PUSERNAME_A}
+    
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -164,7 +165,13 @@ JD-TC-UpdateService-5
 
 
 JD-TC-UpdateService-6
-    [Documentation]  Update service charge for a billable account.
+    [Documentation]  Update service charge for a non billable account.
+
+    ${nonbillable_domains}=  get_nonbillable_domains
+    ${random_domain}  Evaluate  random.choice(list(nonbillable_domains.keys())) random 
+    ${random_subdomain}  Evaluate  random.choice(nonbillable_domains[random_domain]) random
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup  Domain=${random_domain}  SubDomain=${random_subdomain}
+    Set Suite Variable  ${PUSERNAME_A}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
