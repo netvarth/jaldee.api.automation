@@ -43,6 +43,8 @@ Get Non Billable Subdomain
 
 
 *** Variables ***
+
+@{service_names}
 ${waitlistedby}           PROVIDER
 ${SERVICE1}               SERVICE1001
 ${SERVICE2}               SERVICE2002

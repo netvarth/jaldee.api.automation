@@ -15,6 +15,8 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
 *** Variables ***
+
+@{service_names}
 ${order}    0.0
 ${DisplayName1}   item1_DisplayName
 ${service_duration}     30
@@ -338,7 +340,7 @@ JD-TC-GetInvoice by uid-4
 #        Should Be Equal As Strings    ${resp.status_code}   200
 
     ${desc}=   FakerLibrary.sentence
-     ${SERVICE1}=    FakerLibrary.word
+     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Set Suite Variable  ${SERVICE1}
     ${servicecharge}=   Random Int  min=100  max=500
     ${servicecharge}=  Convert To Number  ${servicecharge}  1
@@ -348,7 +350,7 @@ JD-TC-GetInvoice by uid-4
     Set Suite Variable  ${sid2}  ${resp.json()}
  
 
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
     Set Suite Variable  ${SERVICE2}
     ${resp}=  Create Service  ${SERVICE2}  ${desc}   ${service_duration}  ${bool[0]}  0  ${bool[1]}
     Log  ${resp.json()}

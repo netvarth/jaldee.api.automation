@@ -17,6 +17,8 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
+@{service_names}
+
 ${gif}      /ebs/TDD/sample.gif
 ${xlsx}      /ebs/TDD/qnr.xlsx
 ${self}         0
@@ -237,7 +239,7 @@ JD-TC-Apply Service To Finance-2
     # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     # Set Suite Variable  ${CUR_DAY}
   
-    ${SERVICE3}=    FakerLibrary.word
+    ${SERVICE3}=    generate_unique_service_name  ${service_names}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500
@@ -433,7 +435,7 @@ JD-TC-Apply Services to finance-3
     # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     # clear_appt_schedule   ${PUSERPH0}
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500
@@ -638,7 +640,7 @@ JD-TC-Apply Services to finance-4
 
       ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
       Set Suite Variable  ${CUR_DAY} 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
       ${resp}=   Create Sample Service  ${SERVICE1}   automaticInvoiceGeneration=${bool[1]}
       Set Suite Variable    ${ser_id1}    ${resp}  
 
@@ -651,46 +653,46 @@ JD-TC-Apply Services to finance-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[1]}
     Set Test Variable   ${tot_amt}   ${resp.json()['totalAmount']}
-    ${SER}=    FakerLibrary.word
-      ${resp}=   Create Sample Service  ${SER}
-      Set Suite Variable    ${ser_id2}    ${resp} 
-    ${SERVICE3}=    FakerLibrary.word 
-      ${resp}=   Create Sample Service  ${SERVICE3}
-      Set Suite Variable    ${ser_id3}    ${resp}  
-      ${q_name}=    FakerLibrary.name
-      Set Suite Variable    ${q_name}
-      ${list}=  Create List   1  2  3  4  5  6  7
-      Set Suite Variable    ${list}
-      ${strt_time}=   db.add_timezone_time     ${tz}  1  00
-      Set Suite Variable    ${strt_time}
-      ${end_time}=    db.add_timezone_time     ${tz}  3  00 
-      Set Suite Variable    ${end_time}   
-      ${parallel}=   Random Int  min=1   max=1
-      Set Suite Variable   ${parallel}
-      ${capacity}=  Random Int   min=10   max=20
-      Set Suite Variable   ${capacity}
-      ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${lid}  ${ser_id1}  ${ser_id2}  ${ser_id3}
-      Log   ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${que_id1}   ${resp.json()}
-      ${desc}=   FakerLibrary.word
-      Set Suite Variable  ${desc}
-      ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid}   location=${lid}
-      Log   ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      
-      ${wid}=  Get Dictionary Values  ${resp.json()}
-      Set Test Variable  ${wid}  ${wid[0]}
-      ${resp}=  Get Waitlist By Id  ${wid} 
-      Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-    #   Verify Response  ${resp}  date=${CUR_DAY}  waitlistStatus=${wl_status[1]}  partySize=1  appxWaitingTime=0  waitlistedBy=${waitlistedby}   personsAhead=0
-      Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
-      Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id1}
-      Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
-      Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
-      Should Be Equal As Strings  ${resp.json()['paymentStatus']}         ${paymentStatus[0]}
-      Set Test Variable   ${fullAmount}  ${resp.json()['fullAmt']}   
+    ${SER}=    generate_unique_service_name  ${service_names}
+    ${resp}=   Create Sample Service  ${SER}
+    Set Suite Variable    ${ser_id2}    ${resp} 
+    ${SERVICE3}=    generate_unique_service_name  ${service_names} 
+    ${resp}=   Create Sample Service  ${SERVICE3}
+    Set Suite Variable    ${ser_id3}    ${resp}  
+    ${q_name}=    FakerLibrary.name
+    Set Suite Variable    ${q_name}
+    ${list}=  Create List   1  2  3  4  5  6  7
+    Set Suite Variable    ${list}
+    ${strt_time}=   db.add_timezone_time     ${tz}  1  00
+    Set Suite Variable    ${strt_time}
+    ${end_time}=    db.add_timezone_time     ${tz}  3  00 
+    Set Suite Variable    ${end_time}   
+    ${parallel}=   Random Int  min=1   max=1
+    Set Suite Variable   ${parallel}
+    ${capacity}=  Random Int   min=10   max=20
+    Set Suite Variable   ${capacity}
+    ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${lid}  ${ser_id1}  ${ser_id2}  ${ser_id3}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${que_id1}   ${resp.json()}
+    ${desc}=   FakerLibrary.word
+    Set Suite Variable  ${desc}
+    ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid}   location=${lid}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Test Variable  ${wid}  ${wid[0]}
+    ${resp}=  Get Waitlist By Id  ${wid} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+  #   Verify Response  ${resp}  date=${CUR_DAY}  waitlistStatus=${wl_status[1]}  partySize=1  appxWaitingTime=0  waitlistedBy=${waitlistedby}   personsAhead=0
+    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id1}
+    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
+    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
+    Should Be Equal As Strings  ${resp.json()['paymentStatus']}         ${paymentStatus[0]}
+    Set Test Variable   ${fullAmount}  ${resp.json()['fullAmt']}   
 
 
     ${resp1}=  Get Bookings Invoices  ${wid}

@@ -16,6 +16,8 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 *** Variables ***
 
+@{service_names}
+
 ${DisplayName1}   item1_DisplayName
 
 *** Test Cases ***

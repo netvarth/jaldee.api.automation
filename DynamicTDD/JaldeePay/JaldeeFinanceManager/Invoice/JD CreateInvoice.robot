@@ -18,6 +18,8 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
+@{service_names}
+
 ${self}         0
 
 ${SERVICE6}     SAMPLE1
@@ -164,7 +166,7 @@ JD-TC-CreateInvoice-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id1}   ${resp.json()}
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Set Suite Variable  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
@@ -368,7 +370,7 @@ JD-TC-CreateInvoice-4
     #    Should Be Equal As Strings    ${resp.status_code}   200
      
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
     # ${servicecharge}=    0
@@ -2390,7 +2392,7 @@ JD-TC-CreateInvoice-15
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id1}   ${resp.json()}
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Set Suite Variable  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
@@ -2560,7 +2562,7 @@ JD-TC-CreateInvoice-17
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Set Suite Variable  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500

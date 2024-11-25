@@ -18,6 +18,8 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
+@{service_names}
+
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
 ${jpgfile2}      /ebs/TDD/small.jpg
 ${gif}      /ebs/TDD/sample.gif
@@ -197,7 +199,7 @@ JD-TC-Apply Service to Finance-1
 
 
 
-     ${SERVICE1}=    FakerLibrary.word
+     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Set Suite Variable  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
@@ -225,7 +227,7 @@ JD-TC-Apply Service to Finance-1
     Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]} 
 
 
-     ${SERVICE2}=    FakerLibrary.word
+     ${SERVICE2}=    generate_unique_service_name  ${service_names}
     Set Suite Variable  ${SERVICE2}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
@@ -286,7 +288,7 @@ JD-TC-Apply Service To Finance-2
     ${displayNote}=   FakerLibrary.word
 
   
-    ${SERVICE3}=    FakerLibrary.word
+    ${SERVICE3}=    generate_unique_service_name  ${service_names}
 
     ${s_id}=  Create Sample Service  ${SERVICE3}    automaticInvoiceGeneration=${bool[1]}
     Set Test Variable   ${s_id}
@@ -481,7 +483,7 @@ JD-TC-Apply Services to Invoice-3
 
     clear_appt_schedule   ${PUSERPH0}
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500
@@ -684,7 +686,7 @@ JD-TC-Apply Services to Invoice-4
 
       ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
       Set Suite Variable  ${CUR_DAY} 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
       ${resp}=   Create Sample Service  ${SERVICE1}    automaticInvoiceGeneration=${bool[1]}
       Set Suite Variable    ${ser_id1}    ${resp}  
 
@@ -697,10 +699,10 @@ JD-TC-Apply Services to Invoice-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[1]}
     Set Test Variable   ${tot_amt}   ${resp.json()['totalAmount']}
-    ${SER}=    FakerLibrary.word
+    ${SER}=    generate_unique_service_name  ${service_names}
       ${resp}=   Create Sample Service  ${SER}
       Set Suite Variable    ${ser_id2}    ${resp} 
-    ${SERVICE3}=    FakerLibrary.word 
+    ${SERVICE3}=    generate_unique_service_name  ${service_names} 
       ${resp}=   Create Sample Service  ${SERVICE3}
       Set Suite Variable    ${ser_id3}    ${resp}  
       ${q_name}=    FakerLibrary.name
@@ -1117,7 +1119,7 @@ JD-TC-Apply Service To Finance-UH1
     # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     # Set Suite Variable  ${CUR_DAY}
   
-    ${SERVICE3}=    FakerLibrary.word
+    ${SERVICE3}=    generate_unique_service_name  ${service_names}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500
@@ -1540,7 +1542,7 @@ JD-TC-Apply Service Level Discount-UH7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${SERVICE2}=    FakerLibrary.word
+     ${SERVICE2}=    generate_unique_service_name  ${service_names}
     Set Suite Variable  ${SERVICE2}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500

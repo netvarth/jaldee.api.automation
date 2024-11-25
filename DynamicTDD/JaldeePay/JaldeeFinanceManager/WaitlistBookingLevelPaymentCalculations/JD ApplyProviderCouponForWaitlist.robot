@@ -40,6 +40,8 @@ Get Non Billable Subdomain
     RETURN  ${subdomain}  ${resp.json()['serviceBillable']}
 
 *** Variables ***
+
+@{service_names}
 ${waitlistedby}           PROVIDER
 ${SERVICE1}               SERVICE1001
 ${SERVICE2}               SERVICE2002
@@ -515,7 +517,7 @@ JD-TC-ApplyProviderCouponforwaitlist-UH6
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${SERVICE4}=   FakerLibrary.name
+    ${SERVICE4}=   generate_unique_service_name  ${service_names}
     ${description}=  FakerLibrary.sentence
     ${min_pre}=   Random Int   min=10   max=50
     ${Total}=   Random Int   min=100   max=500
@@ -576,7 +578,7 @@ JD-TC-ApplyProviderCouponforwaitlist-UH7
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-     ${SERVICE4}=   FakerLibrary.name
+    ${SERVICE4}=   generate_unique_service_name  ${service_names}
     ${description}=  FakerLibrary.sentence
     ${min_pre}=   Random Int   min=10   max=50
     ${Total}=   Random Int   min=100   max=500
@@ -644,7 +646,7 @@ JD-TC-ApplyProviderCouponforwaitlist-UH8
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-     ${SERVICE4}=   FakerLibrary.name
+     ${SERVICE4}=   generate_unique_service_name  ${service_names}
     ${description}=  FakerLibrary.sentence
     ${min_pre}=   Random Int   min=10   max=50
     ${Total}=   Random Int   min=100   max=500
@@ -783,7 +785,7 @@ JD-TC-ApplyProviderCouponforwaitlist-UH9
     ${ser_durtn}=   Random Int   min=2   max=10
     ${ser_amount}=   Random Int   min=150   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}     ${bool[1]}     ${ser_amount1}  ${bool[0]}   minPrePaymentAmount=${min_pre}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -932,7 +934,7 @@ JD-TC-ApplyProviderCouponforwaitlist-UH10
     ${ser_durtn}=   Random Int   min=2   max=10
     ${ser_amount}=   Random Int   min=150   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     ${resp}=  Create Service  ${P1SERVICE1}   ${description}   ${ser_durtn}     ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount1}  ${bool[0]}   ${bool[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  

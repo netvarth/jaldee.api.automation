@@ -28,6 +28,8 @@ Create Receivable
 
 *** Variables ***
 
+@{service_names}
+
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
 ${pngfile}      /ebs/TDD/upload.png
 ${pdffile}      /ebs/TDD/sample.pdf

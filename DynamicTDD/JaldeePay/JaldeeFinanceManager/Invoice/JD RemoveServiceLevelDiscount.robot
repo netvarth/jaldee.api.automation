@@ -17,6 +17,8 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
+@{service_names}
+
 ${service_duration}     30
 
 ${self}         0
@@ -301,7 +303,7 @@ JD-TC-Remove Service Level Discount-1
     ${invoiceId}=   FakerLibrary.word
 
 
-     ${SERVICE1}=    FakerLibrary.word
+     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Set Suite Variable  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
@@ -422,7 +424,7 @@ JD-TC-Remove Service Level Discount-2
     # ${invoiceId}=   FakerLibrary.word
 
 
-    #  ${SERVICE1}=    FakerLibrary.word
+    #  ${SERVICE1}=    generate_unique_service_name  ${service_names}
     # Set Suite Variable  ${SERVICE1}
     # ${desc}=   FakerLibrary.sentence
     # ${servicecharge}=   Random Int  min=100  max=500
@@ -527,7 +529,7 @@ JD-TC-Remove Service Level Discount-3
     ${invoiceId}=   FakerLibrary.word
 
 
-     ${SERVICE1}=    FakerLibrary.word
+     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Set Suite Variable  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
@@ -633,7 +635,7 @@ JD-TC-Remove Service Level Discount-4
     ${invoiceId}=   FakerLibrary.word
 
 
-     ${SERVICE2}=    FakerLibrary.word
+     ${SERVICE2}=    generate_unique_service_name  ${service_names}
     Set Suite Variable  ${SERVICE2}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
@@ -914,7 +916,7 @@ JD-TC-Remove Service Level Discount-6
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     clear_appt_schedule   ${PUSERPH0}
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500
@@ -1051,7 +1053,7 @@ JD-TC-Remove Service Level Discount-7
     # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     # Set Suite Variable  ${CUR_DAY}
   
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500
@@ -1338,7 +1340,7 @@ JD-TC-Remove Service Level Discount-UH6
     # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     # Set Suite Variable  ${CUR_DAY}
   
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500

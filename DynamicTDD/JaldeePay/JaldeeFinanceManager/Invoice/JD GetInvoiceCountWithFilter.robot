@@ -15,6 +15,8 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
 *** Variables ***
+
+@{service_names}
 ${service_duration}     30
 ${DisplayName1}   item1_DisplayName
 *** Test Cases ***
@@ -196,7 +198,7 @@ JD-TC-GetInvoiceCountwithFilter-2
     ${providerConsumerIdList}=  Create List  ${pcid10}  ${pcid9}
     Set Test Variable  ${providerConsumerIdList}  
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Set Suite Variable  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500

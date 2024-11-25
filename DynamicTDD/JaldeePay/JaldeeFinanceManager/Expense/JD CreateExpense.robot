@@ -15,6 +15,8 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
 *** Variables ***
+
+@{service_names}
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
 ${pdffile}      /ebs/TDD/sample.pdf
 

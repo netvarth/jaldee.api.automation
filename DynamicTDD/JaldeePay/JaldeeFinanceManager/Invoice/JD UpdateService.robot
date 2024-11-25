@@ -17,6 +17,8 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
+@{service_names}
+
 ${service_duration}     30
 @{emptylist}
 ${DisplayName1}   item1_DisplayName
@@ -202,7 +204,7 @@ JD-TC-UpdateService-1
     ${providerConsumerIdList}=  Create List  ${pcid18}
     Set Suite Variable  ${providerConsumerIdList} 
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Set Suite Variable  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
@@ -240,7 +242,7 @@ JD-TC-UpdateService-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
     Set Suite Variable  ${SERVICE2}
     ${desc1}=   FakerLibrary.sentence
     ${servicecharge1}=   Random Int  min=100  max=500

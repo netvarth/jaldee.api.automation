@@ -17,6 +17,8 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
+
+@{service_names}
 ${service_duration}     30
 @{emptylist}
 ${DisplayName1}   item1_DisplayName
@@ -127,7 +129,7 @@ JD-TC-Apply ProviderCoupon-1
     ${providerConsumerIdList}=  Create List  ${pcid18}
     Set Suite Variable  ${providerConsumerIdList} 
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Set Suite Variable  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=200  max=500
@@ -239,7 +241,7 @@ JD-TC-ProviderCouponBill-2
     ${ser_durtn1}=   Random Int   min=2   max=10
     ${ser_amount}=   Random Int   min=150   max=1000
     ${ser_amount2}=   Convert To Number   ${ser_amount}
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
     ${resp}=  Create Service  ${SERVICE2}  ${description1}   ${ser_durtn1}  ${bool[0]}  ${ser_amount2}  ${bool[1]}  department=${dep_id}
     Log  ${resp.content}
     Set Test Variable  ${sid2}  ${resp.json()}
@@ -682,7 +684,7 @@ JD-TC-ProviderCouponBill-3
     ${ser_durtn}=   Random Int   min=2   max=10
     ${ser_amount}=   Random Int   min=150   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount1}  ${bool[0]}   ${bool[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -857,7 +859,7 @@ JD-TC-ProviderCouponBill-4
     ${ser_durtn}=   Random Int   min=2   max=10
     ${ser_amount}=   Random Int   min=100   max=100
     ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount1}  ${bool[0]}   ${bool[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -995,7 +997,7 @@ JD-TC-ProviderCouponBill-5
     ${ser_durtn}=   Random Int   min=2   max=10
     ${ser_amount}=   Random Int   min=90   max=90
     ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount1}  ${bool[0]}   ${bool[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -1130,7 +1132,7 @@ JD-TC-ProviderCouponBill-6
     ${ser_durtn}=   Random Int   min=2   max=10
     ${ser_amount}=   Random Int   min=100   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount1}  ${bool[0]}   ${bool[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -1269,7 +1271,7 @@ JD-TC-ProviderCouponBill-7
     ${ser_durtn}=   Random Int   min=2   max=10
     ${ser_amount}=   Random Int   min=100   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount1}  ${bool[0]}   ${bool[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -1279,7 +1281,7 @@ JD-TC-ProviderCouponBill-7
     ${ser_durtn1}=   Random Int   min=2   max=10
     ${ser_amount}=   Random Int   min=150   max=1000
     ${ser_amount2}=   Convert To Number   ${ser_amount}
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
     ${resp}=  Create Service  ${SERVICE2}   ${description1}   ${ser_durtn1}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount2}  ${bool[0]}   ${bool[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -1477,7 +1479,7 @@ JD-TC-ProviderCouponBill-8
     ${ser_durtn}=   Random Int   min=2   max=10
     ${ser_amount}=   Random Int   min=100   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount1}  ${bool[0]}   ${bool[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -1487,7 +1489,7 @@ JD-TC-ProviderCouponBill-8
     ${ser_durtn1}=   Random Int   min=2   max=10
     ${ser_amount}=   Random Int   min=150   max=1000
     ${ser_amount2}=   Convert To Number   ${ser_amount}
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
     ${resp}=  Create Service  ${SERVICE2}   ${description1}   ${ser_durtn1}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount2}  ${bool[0]}   ${bool[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -1685,7 +1687,7 @@ JD-TC-ProviderCouponBill-9
     ${ser_durtn}=   Random Int   min=2   max=10
     ${ser_amount}=   Random Int   min=150   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount1}  ${bool[0]}   ${bool[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -1695,7 +1697,7 @@ JD-TC-ProviderCouponBill-9
     ${ser_durtn1}=   Random Int   min=2   max=10
     ${ser_amount}=   Random Int   min=150   max=1000
     ${ser_amount2}=   Convert To Number   ${ser_amount}
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
     ${resp}=  Create Service  ${SERVICE2}   ${description1}   ${ser_durtn1}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount2}  ${bool[0]}   ${bool[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -1786,73 +1788,74 @@ JD-TC-ProviderCouponBill-10
     Set Test Variable   ${sub_sector}    ${resp['subdomain']}
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+87044706
     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}   
-    ${pkg_id}=   get_highest_license_pkg
-    ${resp}=   Account SignUp  ${f_name}  ${l_name}  ${None}   ${sector}   ${sub_sector}  ${PUSERNAME_A}  ${pkg_id[0]}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${PUSERNAME_A}  0
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup without Profile  PhoneNumber=${PUSERNAME_A}  Domain=${sector}  SubDomain=${sub_sector}
+    # ${pkg_id}=   get_highest_license_pkg
+    # ${resp}=   Account SignUp  ${f_name}  ${l_name}  ${None}   ${sector}   ${sub_sector}  ${PUSERNAME_A}  ${pkg_id[0]}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Account Activation  ${PUSERNAME_A}  0
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200  
     Set Suite Variable   ${PUSERNAME_A}
 
-    ${PUSERPH1}=  Evaluate  ${PUSERNAME}+342
+    ${PUSERPH1}=  Evaluate  ${PUSERNAME_A}+342
     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH1}${\n}
 
-    ${PUSERPH2}=  Evaluate  ${PUSERNAME}+343
+    ${PUSERPH2}=  Evaluate  ${PUSERNAME_A}+343
     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
 
     ${PUSERMAIL0}=   Set Variable  ${P_Email}${PUSERNAME_A}.${test_mail}
-    ${views}=  Evaluate  random.choice($Views)  random
-    Log   ${views}
-    ${name1}=  FakerLibrary.name
-    ${name2}=  FakerLibrary.name
-    ${name3}=  FakerLibrary.name
-    ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${PUSERPH1}  ${views}
-    ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL0}  ${views}
-    ${bs}=  FakerLibrary.bs
-    ${companySuffix}=  FakerLibrary.companySuffix
-    # ${city}=   FakerLibrary.state
-    # ${latti}=  get_latitude
-    # ${longi}=  get_longitude
-    # ${postcode}=  FakerLibrary.postcode
-    # ${address}=  get_address
-    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    ${sTime}=  db.subtract_timezone_time  ${tz}  3  25
-    ${eTime}=  add_timezone_time  ${tz}  0  30   
-    ${desc}=   FakerLibrary.sentence
-    ${url}=   FakerLibrary.url
-    ${parking}   Random Element   ${parkingType}
-    ${24hours}    Random Element    ['True','False']
-    ${list}=  Create List   1  2  3  4  5  6  7
-    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
-    ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    sleep   1s
+    # ${views}=  Evaluate  random.choice($Views)  random
+    # Log   ${views}
+    # ${name1}=  FakerLibrary.name
+    # ${name2}=  FakerLibrary.name
+    # ${name3}=  FakerLibrary.name
+    # ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${PUSERPH1}  ${views}
+    # ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH2}  ${views}
+    # ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL0}  ${views}
+    # ${bs}=  FakerLibrary.bs
+    # ${companySuffix}=  FakerLibrary.companySuffix
+    # # ${city}=   FakerLibrary.state
+    # # ${latti}=  get_latitude
+    # # ${longi}=  get_longitude
+    # # ${postcode}=  FakerLibrary.postcode
+    # # ${address}=  get_address
+    # ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    # ${sTime}=  db.subtract_timezone_time  ${tz}  3  25
+    # ${eTime}=  add_timezone_time  ${tz}  0  30   
+    # ${desc}=   FakerLibrary.sentence
+    # ${url}=   FakerLibrary.url
+    # ${parking}   Random Element   ${parkingType}
+    # ${24hours}    Random Element    ['True','False']
+    # ${list}=  Create List   1  2  3  4  5  6  7
+    # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    # ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # sleep   1s
 
-    ${fields}=   Get subDomain level Fields  ${sector}  ${sub_sector}
-    Log  ${fields.json()}
-    Should Be Equal As Strings    ${fields.status_code}   200
+    # ${fields}=   Get subDomain level Fields  ${sector}  ${sub_sector}
+    # Log  ${fields.json()}
+    # Should Be Equal As Strings    ${fields.status_code}   200
 
-    ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
+    # ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
 
-    ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sub_sector}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sub_sector}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get specializations Sub Domain  ${sector}  ${sub_sector}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=  Get specializations Sub Domain  ${sector}  ${sub_sector}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${spec}=  get_Specializations  ${resp.json()}
-    ${resp}=  Update Specialization  ${spec}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${spec}=  get_Specializations  ${resp.json()}
+    # ${resp}=  Update Specialization  ${spec}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
 
     ${resp}=  Update Waitlist Settings  ${calc_mode[2]}   ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
@@ -1905,7 +1908,7 @@ JD-TC-ProviderCouponBill-10
     ${ser_durtn}=   Random Int   min=2   max=10
     ${ser_amount}=   Random Int   min=100   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount1}  ${bool[0]}   ${bool[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -2424,7 +2427,7 @@ JD-TC-ProviderCouponBill-UH1
     ${ser_durtn}=   Random Int   min=2   max=10
     ${ser_amount}=   Random Int   min=150   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount1}  ${bool[0]}   ${bool[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -2434,7 +2437,7 @@ JD-TC-ProviderCouponBill-UH1
     ${ser_durtn1}=   Random Int   min=2   max=10
     ${ser_amount}=   Random Int   min=150   max=1000
     ${ser_amount2}=   Convert To Number   ${ser_amount}
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
     ${resp}=  Create Service  ${SERVICE2}   ${description1}   ${ser_durtn1}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount2}  ${bool[0]}   ${bool[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -2561,7 +2564,7 @@ JD-TC-ProviderCouponBill-UH2
     ${ser_durtn}=   Random Int   min=2   max=10
     ${ser_amount}=   Random Int   min=150   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount1}  ${bool[0]}   ${bool[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -2703,7 +2706,7 @@ JD-TC-ProviderCouponBill-UH3
     ${ser_durtn}=   Random Int   min=2   max=10
     ${ser_amount}=   Random Int   min=150   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount1}  ${bool[0]}   ${bool[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -2851,7 +2854,7 @@ JD-TC-ProviderCouponBill-UH4
     ${ser_durtn}=   Random Int   min=2   max=10
     ${ser_amount}=   Random Int   min=150   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount1}  ${bool[0]}   ${bool[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -2978,7 +2981,7 @@ JD-TC-ProviderCouponBill-UH5
     ${ser_durtn}=   Random Int   min=2   max=10
     ${ser_amount}=   Random Int   min=150   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount1}  ${bool[0]}   ${bool[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -3104,7 +3107,7 @@ JD-TC-ProviderCouponBill-UH6
     ${ser_durtn}=   Random Int   min=2   max=10
     ${ser_amount}=   Random Int   min=150   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount1}  ${bool[0]}   ${bool[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -3241,7 +3244,7 @@ JD-TC-ProviderCouponBill-UH7
     ${ser_durtn}=   Random Int   min=2   max=10
     ${ser_amount}=   Random Int   min=150   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount1}  ${bool[0]}   ${bool[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -3396,7 +3399,7 @@ JD-TC-ProviderCouponBill-UH8
     ${ser_durtn}=   Random Int   min=2   max=10
     ${ser_amount}=   Random Int   min=150   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount1}  ${bool[0]}   ${bool[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -3406,7 +3409,7 @@ JD-TC-ProviderCouponBill-UH8
     ${ser_durtn1}=   Random Int   min=2   max=10
     ${ser_amount}=   Random Int   min=150   max=1000
     ${ser_amount2}=   Convert To Number   ${ser_amount}
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
     ${resp}=  Create Service  ${SERVICE2}   ${description1}   ${ser_durtn1}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount2}  ${bool[0]}   ${bool[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  

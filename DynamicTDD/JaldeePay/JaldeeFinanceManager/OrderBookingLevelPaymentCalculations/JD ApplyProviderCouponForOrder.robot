@@ -40,6 +40,8 @@ Get Non Billable Subdomain
     RETURN  ${subdomain}  ${resp.json()['serviceBillable']}
 
 *** Variables ***
+
+@{service_names}
 ${waitlistedby}           PROVIDER
 ${SERVICE1}               SERVICE1001
 ${SERVICE2}               SERVICE2002

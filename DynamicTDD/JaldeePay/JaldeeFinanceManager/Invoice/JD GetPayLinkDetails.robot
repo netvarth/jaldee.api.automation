@@ -16,6 +16,8 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 *** Variables ***
 
+@{service_names}
+
 @{status}    New     Pending    Assigned     Approved    Rejected
 
 

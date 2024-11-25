@@ -17,6 +17,8 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
+
+@{service_names}
 ${waitlistedby}           PROVIDER
 ${SERVICE1}               SERVICE1001
 ${SERVICE2}               SERVICE2002

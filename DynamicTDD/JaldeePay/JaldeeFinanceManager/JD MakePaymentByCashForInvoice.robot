@@ -17,6 +17,8 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 *** Variables ***
 
+@{service_names}
+
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
 ${pngfile}      /ebs/TDD/upload.png
 ${pdffile}      /ebs/TDD/sample.pdf
@@ -209,7 +211,7 @@ JD-TC-MakePaymentByCash-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id1}   ${resp.json()}
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Set Suite Variable  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500

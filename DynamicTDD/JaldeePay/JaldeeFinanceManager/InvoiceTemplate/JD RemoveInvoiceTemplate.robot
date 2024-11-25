@@ -18,6 +18,8 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
+@{service_names}
+
 @{New_status}    Status11   Status21    Status31    Status41    Status51    Status61 
 ${service_duration}     30
 ${DisplayName1}   item1_DisplayName

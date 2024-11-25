@@ -17,6 +17,8 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
+@{service_names}
+
 ${self}      0
 
 ${DisplayName1}   item1_DisplayName

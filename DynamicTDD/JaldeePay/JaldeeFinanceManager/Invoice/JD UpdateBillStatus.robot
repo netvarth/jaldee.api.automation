@@ -20,6 +20,8 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
+@{service_names}
+
 ${self}      0
 ${SERVICE1}  sampleservice11 
 ${SERVICE2}  sampleservice22

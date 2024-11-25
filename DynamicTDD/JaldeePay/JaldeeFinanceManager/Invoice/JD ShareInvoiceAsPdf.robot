@@ -16,6 +16,8 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 *** Variables ***
 
+@{service_names}
+
 
 ${service_duration}     30
 

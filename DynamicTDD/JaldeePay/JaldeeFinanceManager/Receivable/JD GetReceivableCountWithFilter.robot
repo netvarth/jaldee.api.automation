@@ -40,6 +40,8 @@ Get Receivable List with Count filter
 
 *** Variables ***
 
+@{service_names}
+
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
 ${pngfile}      /ebs/TDD/upload.png
 ${pdffile}      /ebs/TDD/sample.pdf

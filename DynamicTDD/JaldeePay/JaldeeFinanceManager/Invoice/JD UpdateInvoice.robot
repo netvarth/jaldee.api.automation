@@ -15,6 +15,8 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
 *** Variables ***
+
+@{service_names}
 ${service_duration}     30
 
 ${DisplayName1}   item1_DisplayName
@@ -191,7 +193,7 @@ JD-TC-UpdateInvoice-1
     ${quantity}=   Random Int  min=5  max=10
     ${quantity}=  Convert To Number  ${quantity}  1
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Set Suite Variable  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
@@ -325,7 +327,7 @@ JD-TC-UpdateInvoice-3
 
       ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
       Set Suite Variable  ${CUR_DAY}
-      ${SERVICE2}=    FakerLibrary.word
+      ${SERVICE2}=    generate_unique_service_name  ${service_names}
       ${resp}=   Create Sample Service  ${SERVICE2} 
       Set Suite Variable    ${ser_id1}    ${resp}
       ${q_name}=    FakerLibrary.name

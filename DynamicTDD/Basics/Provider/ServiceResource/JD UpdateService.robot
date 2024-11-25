@@ -116,11 +116,11 @@ JD-TC-UpdateService-3
 JD-TC-UpdateService-4
     [Documentation]  Update service to enable prepayment for a billable account.
 
-    ${billable_domains}=  get_billable_domain
-    Log  ${billable_domains}
-    ${random_domain}  Evaluate  random.choice(list(billable_domains.keys())) random 
-    ${random_subdomain}  Evaluate  random.choice(billable_domains[random_domain]) random
-    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup  Domain=${random_domain}  SubDomain=${random_subdomain}
+    # ${billable_domains}=  get_billable_domain
+    # Log  ${billable_domains}
+    # ${random_domain}  Evaluate  random.choice(list(billable_domains.keys())) random 
+    # ${random_subdomain}  Evaluate  random.choice(billable_domains[random_domain]) random
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup  #Domain=${random_domain}  SubDomain=${random_subdomain}
     Set Suite Variable  ${PUSERNAME_A}
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
