@@ -64,6 +64,34 @@ JD-TC-GetLosLeadSalesField-1
 
     END
 
+    ${resp}=  Enable Disable Branch  ${status[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${place}  ${resp.json()[0]['place']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+
+    ${branchCode}=    FakerLibrary.Random Number
+    ${branchName}=    FakerLibrary.name
+    Set Suite Variable  ${branchName}
+
+    ${resp}=    Create BranchMaster    ${branchCode}    ${branchName}    ${locId}    ${status[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${branchid1}  ${resp.json()['id']}
+
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
     Should Be Equal As Strings            ${resp.status_code}  200
@@ -353,7 +381,7 @@ JD-TC-GetLosLeadSalesField-1
 
     ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}  consumerEmail=${consumerEmail}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}    product=${product}  sourcingChannel=${sourcingChannel}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  ${branchid1}  product=${product}  sourcingChannel=${sourcingChannel}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${lead_uid}     ${resp.json()['uid']}
