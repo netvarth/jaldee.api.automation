@@ -57,6 +57,34 @@ JD-TC-GetLeadCountByFilter-1
 
     END
 
+    ${resp}=  Enable Disable Branch  ${status[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${place}  ${resp.json()[0]['place']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+
+    ${branchCode}=    FakerLibrary.Random Number
+    ${branchName}=    FakerLibrary.name
+    Set Suite Variable  ${branchName}
+
+    ${resp}=    Create BranchMaster    ${branchCode}    ${branchName}    ${locId}    ${status[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${branchid1}  ${resp.json()['id']}
+
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
     Should Be Equal As Strings            ${resp.status_code}  200
@@ -129,7 +157,7 @@ JD-TC-GetLeadCountByFilter-1
     ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
     ${consumerKyc}=   Create Dictionary  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}    losProduct=${losProduct}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable      ${lead_uid}      ${resp.json()['uid']}
@@ -165,7 +193,7 @@ JD-TC-GetLeadCountByFilter-1
     ${progress2}=  Create Dictionary  id=${progress_id}  name=${Pname}
     ${consumerKyc}=   Create Dictionary  consumerFirstName=${consumerFirstName2}  consumerLastName=${consumerLastName2}  dob=${dob2}  gender=${gender2}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone2}  consumerEmail=${consumerEmail2}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress11}  permanentAddress2=${permanentAddress22}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName2}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}    losProduct=${losProduct}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable      ${lead_uid2}      ${resp.json()['uid']}

@@ -58,6 +58,34 @@ JD-TC-CreateLead-1
         Should Be Equal As Strings    ${resp.status_code}   200
 
     END
+    
+    ${resp}=  Enable Disable Branch  ${status[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${place}  ${resp.json()[0]['place']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+
+    ${branchCode}=    FakerLibrary.Random Number
+    ${branchName}=    FakerLibrary.name
+    Set Suite Variable  ${branchName}
+
+    ${resp}=    Create BranchMaster    ${branchCode}    ${branchName}    ${locId}    ${status[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${branchid1}  ${resp.json()['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -140,7 +168,7 @@ JD-TC-CreateLead-1
     # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType}  nomineeName=${nomineeName}
     ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}    losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
@@ -245,7 +273,7 @@ JD-TC-CreateLead-2
     ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
     ${consumerKyc}=   Create Dictionary  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}    losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
@@ -349,7 +377,7 @@ JD-TC-CreateLead-3
     ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
     ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}   consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
@@ -446,7 +474,7 @@ JD-TC-CreateLead-4
     ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
     ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}   consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
@@ -530,7 +558,7 @@ JD-TC-CreateLead-5
     # ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
     ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}   consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}   consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}   consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
@@ -631,7 +659,7 @@ JD-TC-CreateLead-6
     ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
     ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}   consumerFirstName=${consumerFirstName1}  consumerLastName=${consumerLastName1}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
@@ -740,7 +768,7 @@ JD-TC-CreateLead-7
     ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
     ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}   consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
@@ -853,7 +881,7 @@ JD-TC-CreateLead-8
     ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
     ${consumerKyc}=   Create Dictionary  consumerId=${NONE}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
@@ -964,7 +992,7 @@ JD-TC-CreateLead-9
     # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
     ${consumerKyc}=   Create Dictionary  consumerId=${NONE}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${EMPTY}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
@@ -1067,7 +1095,7 @@ JD-TC-CreateLead-10
     # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
     ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  aadhaar=${EMPTY}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
@@ -1169,7 +1197,7 @@ JD-TC-CreateLead-11
     # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
     ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  pan=${EMPTY}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
@@ -1271,7 +1299,7 @@ JD-TC-CreateLead-12
     # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
     ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  bankAccountNo=${EMPTY}  bankIfsc=${bankIfsc}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
@@ -1373,7 +1401,7 @@ JD-TC-CreateLead-13
     # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
     ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  bankAccountNo=${bankAccountNo}  bankIfsc=${EMPTY}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
@@ -1475,7 +1503,7 @@ JD-TC-CreateLead-14
     # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
     ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  bankAccountNo=${bankAccountNo}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
@@ -1578,7 +1606,7 @@ JD-TC-CreateLead-15
     # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
     ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  permanentAddress1=${EMPTY}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
@@ -1681,7 +1709,7 @@ JD-TC-CreateLead-16
     # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
     ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  permanentAddress2=${EMPTY}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
@@ -1784,7 +1812,7 @@ JD-TC-CreateLead-17
     # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
     ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  permanentDistrict=${EMPTY}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
@@ -1899,7 +1927,7 @@ JD-TC-CreateLead-18
     # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
     ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  permanentState=${EMPTY}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
@@ -2002,7 +2030,7 @@ JD-TC-CreateLead-19
     # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
     ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  permanentPin=${EMPTY}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
@@ -2103,7 +2131,7 @@ JD-TC-CreateLead-UH1
     # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}   consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
     ${consumerKyc}=   Create Dictionary  consumerId=${NONE}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}    ${CONSUMER_FIRST_NAME_REQUIRED}
@@ -2202,7 +2230,7 @@ JD-TC-CreateLead-UH2
     ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
     ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}   consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
     
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings  ${resp.json()}  ${SESSION_EXPIRED}
@@ -2305,7 +2333,7 @@ JD-TC-CreateLead-UH2
 #     ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
 #     ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}   consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
     
-#     ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+#     ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   401
 #     Should Be Equal As Strings    ${resp.json()}    ${LOGIN_NO_ACCESS_FOR_URL}
@@ -2429,7 +2457,7 @@ JD-TC-CreateLead-UH4
     ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
     ${consumerKyc}=   Create Dictionary  consumerId=${consumerId11}   consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
     
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings    ${resp.json()}    ${LOGIN_NO_ACCESS_FOR_URL}
@@ -2537,7 +2565,7 @@ JD-TC-CreateLead-UH5
     ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
     ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}   consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
     
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings    ${resp.json()}    ${NO_PERMISSION}
@@ -2635,7 +2663,7 @@ JD-TC-CreateLead-UH6
     # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType}  nomineeName=${nomineeName}
     ${consumerKyc}=   Create Dictionary  consumerId=${invalid_cust_id}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}    ${CONSUMER_NOT_FOUND}
@@ -2731,7 +2759,7 @@ JD-TC-CreateLead-UH7
     # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType}  nomineeName=${nomineeName}
     ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${NONE}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${NONE}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}    ${CONSUMER_REQUIRED}
@@ -2827,7 +2855,7 @@ JD-TC-CreateLead-UH8
     # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType}  nomineeName=${nomineeName}
     ${consumerKyc}=   Create Dictionary  consumerId=${NONE}  consumerFirstName=${EMPTY}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}    ${CONSUMER_FIRST_NAME_REQUIRED}
@@ -2923,7 +2951,7 @@ JD-TC-CreateLead-UH9
     # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType}  nomineeName=${nomineeName}
     ${consumerKyc}=   Create Dictionary  consumerId=${NONE}  consumerFirstName=${consumerFirstName}  consumerLastName=${EMPTY}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}    ${CONSUMER_LAST_NAME_REQUIRED}
@@ -3019,7 +3047,7 @@ JD-TC-CreateLead-UH10
     # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType}  nomineeName=${nomineeName}
     ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}    ${CONSUMER_FIRST_NAME_REQUIRED}
@@ -3115,7 +3143,7 @@ JD-TC-CreateLead-UH11
     # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
     ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  nomineeType=${nomineeType[2]}  nomineeName=${EMPTY}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
@@ -3219,7 +3247,7 @@ JD-TC-CreateLead-UH12
     # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
     ${consumerKyc}=   Create Dictionary  consumerId=${NONE}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${EMPTY}  gender=${gender}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}    ${CONSUMER_DOB_REQUIRED}
@@ -3315,7 +3343,7 @@ JD-TC-CreateLead-UH13
     # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
     ${consumerKyc}=   Create Dictionary  consumerId=${NONE}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${EMPTY}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}    ${CONSUMER_PHONE_NO_REQUIRED}
@@ -3411,7 +3439,7 @@ JD-TC-CreateLead-UH14
     # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
     ${consumerKyc}=   Create Dictionary  consumerId=${NONE}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhone=${consumerPhone}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
@@ -3515,7 +3543,7 @@ JD-TC-CreateLead-UH15
     # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
     ${consumerKyc}=   Create Dictionary  consumerId=${NONE}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhone=${consumerPhone}  consumerPhoneCode=${EMPTY}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}    ${COUNTRY_CODEREQUIRED}
@@ -3647,7 +3675,7 @@ JD-TC-CreateLead_NEW-1
 
     ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}    product=${product}  sourcingChannel=${sourcingChannel}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}    product=${product}  sourcingChannel=${sourcingChannel}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
@@ -3687,7 +3715,7 @@ JD-TC-CreateLead_NEW-1
 
     ${product2}=  Create Dictionary  uid=${productuid2}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}    product=${product2}  sourcingChannel=${sourcingChannel}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}    product=${product2}  sourcingChannel=${sourcingChannel}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable      ${lead_uid2}      ${resp.json()['uid']}
