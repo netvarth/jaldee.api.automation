@@ -203,8 +203,9 @@ JD-TC-GetConsumerAppointmentById-2
     Set Suite Variable   ${f_Name1}
     ${l_Name1}=  FakerLibrary.last_name
     Set Suite Variable   ${l_Name1}
-   
-    ${resp}=  AddCustomer  ${CUSERNAME5}   firstName=${f_Name1}   lastName=${l_Name1}  countryCode=${countryCodes[1]}  
+    ${NewCustomer}=  Generate Random 555 Number
+    Set Suite Variable   ${NewCustomer}
+    ${resp}=  AddCustomer  ${NewCustomer}   firstName=${f_Name1}   lastName=${l_Name1}  countryCode=${countryCodes[1]}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -213,18 +214,18 @@ JD-TC-GetConsumerAppointmentById-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME5}    ${pid2}
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${pid2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token1}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME5}    ${pid2}  ${token1} 
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid2}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -263,7 +264,7 @@ JD-TC-GetConsumerAppointmentById-2
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}                                ${cid}
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['firstName']}                         ${f_Name1}
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['lastName']}                          ${l_Name1}
-    Should Be Equal As Strings  ${resp.json()['providerConsumer']['phoneNo']}                           ${CUSERNAME5}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['phoneNo']}                           ${NewCustomer}
     Should Be Equal As Strings  ${resp.json()['uid']}                                                   ${apptid2}
     Should Be Equal As Strings  ${resp.json()['appmtDate']}                                             ${DAY1}
     Should Be Equal As Strings  ${resp.json()['appmtTime']}                                             ${slot1} 
@@ -280,7 +281,7 @@ JD-TC-GetConsumerAppointmentById-UH1
 
 	[Documentation]  Get Consumer Appointment By Id  another consumer using AppmtId.
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME5}    ${pid2}  ${token1} 
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid2}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${pidUH1}=  get_acc_id  ${PUSERNAME15}
@@ -317,7 +318,7 @@ JD-TC-GetConsumerAppointmentById-UH4
 
 	[Documentation]  Get Consumer Appointment ById using another ConsumerLogin with Different Provider ID.
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME5}    ${pid2}  ${token1} 
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid2}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200 
     ${resp}=   Get consumer Appointment By Id   ${pid1}  ${apptid1}

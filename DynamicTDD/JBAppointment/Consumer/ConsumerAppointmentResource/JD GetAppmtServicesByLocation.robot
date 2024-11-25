@@ -431,7 +431,8 @@ JD-TC-GetAppmtServicesByLocation-5
     ${RESP}=  Enable service  ${p1_s3} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
+    ${resp}=  Consumer Logout 
+    Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-GetAppmtServicesByLocation-7
 
@@ -446,6 +447,10 @@ JD-TC-GetAppmtServicesByLocation-7
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}   200
     Should Be Equal As Strings   ${resp.json()}   []
+
+    ${resp}=    Consumer Logout 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
 JD-TC-GetAppmtServicesByLocation-8
 
@@ -536,6 +541,10 @@ JD-TC-GetAppmtServicesByLocation-9
     ${primaryMobileNo}    Generate random string    10    123456789
     ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
     ${email}=    FakerLibrary.Email
+
+    ${resp}=    Provider Logout 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
    
     ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${account_id1}
     Log   ${resp.content}
@@ -566,6 +575,10 @@ JD-TC-GetAppmtServicesByLocation-9
     Should Be Equal As Strings  ${resp.json()[0]['id']}  ${ser_id1}
     Should Be Equal As Strings  ${resp.json()[0]['name']}  ${P1SERVICE1}
 
+    ${resp}=    Consumer Logout 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
 JD-TC-GetAppmtServicesByLocation-UH1
 
     [Documentation]  Trying to Consumer get Service By LocationId, wiht an invalid location.
@@ -578,6 +591,10 @@ JD-TC-GetAppmtServicesByLocation-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}   404
     Should Be Equal As Strings  "${resp.json()}"       "${LOCATION_NOT_FOUND}"
+
+    ${resp}=    Consumer Logout 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
 JD-TC-GetAppmtServicesByLocation-UH2
 
@@ -592,7 +609,7 @@ JD-TC-GetAppmtServicesByLocation-UH2
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-   ${resp}=    ProviderConsumer Login with token   ${PCPHONENO1}    ${account_id1}  ${token1} 
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO1}    ${account_id1}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

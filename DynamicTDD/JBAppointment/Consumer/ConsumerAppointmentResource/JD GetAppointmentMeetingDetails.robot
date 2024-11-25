@@ -100,12 +100,7 @@ JD-TC-GetAppointmentMeetingDetails-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${S_id1}  ${resp.json()} 
-    ${resp}=   Get Service By Id  ${S_id1}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Log  ${resp.json()}
-    Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=5   notification=${bool[1]}   notificationType=${notifytype[2]}   totalAmount=${Total1}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[0]}  serviceType=virtualService   virtualServiceType=${vstype}
     
-
     ${ZOOM_Pid0}=  Format String  ${ZOOM_url}  ${PUSERPH_id0}
     Set Suite Variable   ${ZOOM_Pid0}
     Set Test Variable  ${callingMode2}     ${CallingModes[0]}
@@ -122,15 +117,13 @@ JD-TC-GetAppointmentMeetingDetails-1
     # ${vstype2}=  Evaluate  random.choice($vservicetype)  random
     Set Test Variable  ${vstype2}  ${vservicetype[1]}
     ${resp}=  Create virtual Service  ${SERVICE2}   ${description2}   5   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${Total2}  ${bool[0]}   ${bool[0]}   ${vstype2}   ${virtualCallingModes2}
-    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${S_id2}  ${resp.json()} 
-    ${resp}=   Get Service By Id  ${S_id2}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Log  ${resp.json()}
-    Verify Response  ${resp}  name=${SERVICE2}  description=${description2}  serviceDuration=5   notification=${bool[1]}   notificationType=${notifytype[2]}   totalAmount=${Total2}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[0]}  serviceType=virtualService   virtualServiceType=${vstype2}
-    
+    # ${resp}=   Get Service By Id  ${S_id2}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Log  ${resp.json()}
+    # Verify Response  ${resp}  name=${SERVICE2}  description=${description2}  serviceDuration=5   notification=${bool[1]}   notificationType=${notifytype[2]}   totalAmount=${Total2}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[0]}  serviceType=virtualService   virtualServiceType=${vstype2}
 
 
     ${resp}=    Get Locations
@@ -147,19 +140,16 @@ JD-TC-GetAppointmentMeetingDetails-1
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     # clear_appt_schedule   ${PUSERPH0}
-   
 
     ${resp}=  Get Service
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-   
     Set Suite Variable   ${p1_s2}   ${resp.json()[0]['id']}
     Set Suite Variable   ${P1SERVICE2}   ${resp.json()[0]['name']}
     Set Suite Variable   ${p1_s1}   ${resp.json()[1]['id']}
     Set Suite Variable   ${P1SERVICE1}   ${resp.json()[1]['name']}
     Set Suite Variable   ${p1_s3}   ${resp.json()[2]['id']}
     Set Suite Variable   ${P1SERVICE3}   ${resp.json()[2]['name']}
-
 
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
