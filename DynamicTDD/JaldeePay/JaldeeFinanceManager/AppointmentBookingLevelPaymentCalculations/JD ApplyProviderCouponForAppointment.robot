@@ -59,7 +59,7 @@ JD-TC-ApplyProviderCouponForAppointmnet-1
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33888341
     Set Suite Variable   ${PUSERPH0}
 
-    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERPH0}=  Provider Signup ${PUSERPH0}
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERPH0}=  Provider Signup  PhoneNumber=${PUSERPH0}
     
     # ${licid}  ${licname}=  get_highest_license_pkg
     # Log  ${licid}
@@ -232,7 +232,7 @@ JD-TC-ApplyProviderCouponForAppointmnet-1
     Set Suite Variable  ${s_id}  ${resp.json()}
 
 
-    clear_appt_schedule   ${PUSERPH0}
+    # clear_appt_schedule   ${PUSERPH0}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -466,8 +466,8 @@ JD-TC-ApplyProviderCouponForAppointmnet-3
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME125}
-    clear_location  ${PUSERNAME125}
+    # clear_service   ${PUSERNAME125}
+    # clear_location  ${PUSERNAME125}
     clear_customer   ${PUSERNAME125}
 
     ${resp}=   Get Service
@@ -523,7 +523,7 @@ JD-TC-ApplyProviderCouponForAppointmnet-3
     Should Be Equal As Numbers  ${resp.json()['totalAmount']}    ${servicecharge1} 
     Should Be Equal As Strings  ${resp.json()['serviceType']}    ${service_type[2]} 
     
-    clear_appt_schedule   ${PUSERNAME125}
+    # clear_appt_schedule   ${PUSERNAME125}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        

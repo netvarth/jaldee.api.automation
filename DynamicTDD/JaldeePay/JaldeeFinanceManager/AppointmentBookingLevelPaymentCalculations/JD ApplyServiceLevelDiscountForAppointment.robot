@@ -59,7 +59,7 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-1
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33888342
     Set Suite Variable   ${PUSERPH0}
 
-    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERPH0}=  Provider Signup without Profile  PhoneNumber=${PUSERPH0}
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERPH0}=  Provider Signup  PhoneNumber=${PUSERPH0}
     
     # ${licid}  ${licname}=  get_highest_license_pkg
     # Log  ${licid}
@@ -230,7 +230,7 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-1
     Set Suite Variable  ${s_id}  ${resp.json()}
 
 
-    clear_appt_schedule   ${PUSERPH0}
+    # clear_appt_schedule   ${PUSERPH0}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}

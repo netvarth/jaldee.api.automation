@@ -349,7 +349,7 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-1
     Set Suite Variable   ${c_des}  
     ${p_des}=    FakerLibrary.sentence
     Set Suite Variable   ${p_des}
-    clear_jaldeecoupon     ${cup_code}
+    # clear_jaldeecoupon     ${cup_code}
     ${resp}=  Create Jaldee Coupon  ${cup_code}  ${cup_name}  ${cup_des}  ${age_group[0]}  ${DAY1}  ${DAY2}  ${discountType[0]}  50  100  ${bool[0]}  ${bool[0]}  100  100  1000  5  2  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${c_des}  ${p_des}  ${domains}  ${sub_domains}  ALL  ${licenses}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

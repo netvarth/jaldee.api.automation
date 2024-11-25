@@ -229,7 +229,7 @@ JD-TC-RemoveServiceLevelDiscountForAppointmnet-1
     Set Suite Variable  ${s_id}  ${resp.json()}
 
 
-    clear_appt_schedule   ${PUSERPH0}
+    # clear_appt_schedule   ${PUSERPH0}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
