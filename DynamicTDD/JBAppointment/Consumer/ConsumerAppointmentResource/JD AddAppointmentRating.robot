@@ -616,6 +616,10 @@ JD-TC-AddAppointmentRating-UH2
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"      "${INVALID_RATING}"
 
+    ${resp}=  Consumer Logout 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
 JD-TC-AddAppointmentRating-UH3
 
 	[Documentation]    Rate Appointment by giving a big number for rating.
@@ -753,6 +757,10 @@ JD-TC-AddAppointmentRating-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  404
     Should Be Equal As Strings  "${resp.json()}"    "${INVALID_APPOINTMENT}"
+
+    ${resp}=  Consumer Logout 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-AddAppointmentRating-UH7
 

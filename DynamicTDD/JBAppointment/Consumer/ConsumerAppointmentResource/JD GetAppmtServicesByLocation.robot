@@ -665,13 +665,7 @@ JD-TC-GetAppmtServicesByLocation-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.json()}    
 
-    ${resp}=   Get Service By Id  ${ser_id1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
        #............provider consumer creation..........
-
-
 
     ${fname1}=  generate_firstname
     Set Suite Variable  ${fname1}
@@ -679,6 +673,10 @@ JD-TC-GetAppmtServicesByLocation-UH3
     
     ${resp}=  AddCustomer  ${CUSERNAME17}    firstName=${fname1}   lastName=${lastname1}  countryCode=${countryCodes[1]}  
     Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=   Get Service By Id  ${ser_id1}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME17}  
