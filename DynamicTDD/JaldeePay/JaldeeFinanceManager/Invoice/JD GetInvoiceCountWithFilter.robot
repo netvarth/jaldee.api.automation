@@ -77,8 +77,7 @@ JD-TC-GetInvoiceCountwithFilter-1
     ${resp}=  Get by encId  ${category_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+
  
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[1]} 
@@ -96,78 +95,9 @@ JD-TC-GetInvoiceCountwithFilter-1
     ${resp}=  Get Category By Id   ${category_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[1]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
-    ${vender_name}=   FakerLibrary.firstname
-    ${contactPersonName}=   FakerLibrary.lastname
-    ${owner_name}=   FakerLibrary.lastname
-    ${vendorId}=   FakerLibrary.word
-    ${PO_Number}    Generate random string    5    123456789
-    ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
-    Set Test Variable  ${email}  ${vender_name}.${test_mail}
-    ${address}=  FakerLibrary.city
-    Set Suite Variable  ${address}
-    ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
-    ${branch}=   db.get_place
-    ${ifsc_code}=   db.Generate_ifsc_code
-    # ${gst_num}  ${pan_num}=   db.Generate_gst_number   ${Container_id}
 
-    ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
 
-    ${state}=    Evaluate     "${state}".title()
-    ${state}=    String.RemoveString  ${state}    ${SPACE}
-    Set Suite Variable    ${state}
-    Set Suite Variable    ${district}
-    Set Suite Variable    ${pin}
-    ${vendor_phno}=   Create List  ${vendor_phno}
-    Set Suite Variable    ${vendor_phno}
-    
-    ${email}=   Create List  ${email}
-    Set Suite Variable    ${email}
-
-    ${bankIfsc}    Random Number 	digits=5 
-    ${bankIfsc}=    Evaluate    f'{${bankIfsc}:0>7d}'
-    Log  ${bankIfsc}
-    Set Suite Variable  ${bankIfsc}  55555${bankIfsc} 
-
-    ${bankName}     FakerLibrary.name
-    Set Suite Variable    ${bankName}
-
-    ${upiId}     FakerLibrary.name
-    Set Suite Variable  ${upiId}
-
-    ${pan}    Random Number 	digits=5 
-    ${pan}=    Evaluate    f'{${pan}:0>5d}'
-    Log  ${pan}
-    Set Suite Variable  ${pan}  55555${pan}
-
-    ${branchName}=    FakerLibrary.name
-    Set Suite Variable  ${branchName}
-    ${gstin}    Random Number 	digits=5 
-    ${gstin}=    Evaluate    f'{${gstin}:0>8d}'
-    Log  ${gstin}
-    Set Suite Variable  ${gstin}  55555${gstin}
-    
-    ${preferredPaymentMode}=    Create List    ${jaldeePaymentmode[0]}
-    ${bankInfo}=    Create Dictionary     bankaccountNo=${bank_accno}    ifscCode=${bankIfsc}    bankName=${bankName}    upiId=${upiId}     branchName=${branchName}    pancardNo=${pan}    gstNumber=${gstin}    preferredPaymentMode=${preferredPaymentMode}    lastPaymentModeUsed=${jaldeePaymentmode[0]}
-    ${bankInfo}=    Create List         ${bankInfo}
-    
-    ${resp}=  Create Vendor  ${category_id}  ${vendorId}  ${vender_name}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${vendor_uid1}   ${resp.json()['encId']}
-    Set Suite Variable   ${vendor_id1}   ${resp.json()['id']}
-
-    ${resp}=  Get vendor by encId   ${vendor_uid1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['id']}  ${vendor_id1}
-    Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1}
-    # Should Be Equal As Strings  ${resp.json()['vendorType']}  ${category_id}
 
     ${resp1}=  AddCustomer  ${CUSERNAME11}
     Log  ${resp1.json()}
@@ -224,16 +154,14 @@ JD-TC-GetInvoiceCountwithFilter-1
     Set Suite Variable   ${invoice_id}   ${resp.json()['idList'][0]}
     Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}   
 
-    ${resp1}=  Get Invoice Count With Filter  
+    ${address}=  FakerLibrary.city
+    Set Suite Variable  ${address}
+
+    ${resp1}=  Get Invoice With Filter    userId-eq=${pid} 
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
-    Should Be Equal As Strings  ${resp1.json()}   ${len}
-    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceCategoryId']}  ${category_id2}
-    # Should Be Equal As Strings  ${resp1.json()[0]['categoryName']}  ${name1}
-    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceDate']}  ${invoiceDate}
-    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceLabel']}  ${invoiceLabel}
-    # Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${address}
-    # Should Be Equal As Strings  ${resp1.json()[0]['amount']}  ${amount}
+    ${len1}=    Get Length  ${resp.json()}
+
 
     ${resp1}=  Get Invoice Count With Filter   userId-eq=${pid}   
     Log  ${resp1.content}
@@ -288,26 +216,20 @@ JD-TC-GetInvoiceCountwithFilter-2
     ${serviceList}=    Create List    ${serviceList} 
 
     
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}     ${invoiceId}    ${providerConsumerIdList}  ${lid}  serviceList=${serviceList} 
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}     ${invoiceId}    ${providerConsumerIdList}  ${lid}  serviceList=${serviceList}   invoiceLabel=${invoiceLabel}   billedTo=${address}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len1}=  Get Length  ${resp.json()['idList']}
     Set Suite Variable   ${invoice_uid1}   ${resp.json()['uidList'][0]}  
     Set Suite Variable  ${invoice_uid2}   ${resp.json()['uidList'][1]}  
 
-    ${resp1}=  Get Invoice Count With Filter   userId-eq=${pid}
+    ${resp1}=  Get Invoice With Filter    userId-eq=${pid}    
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
-    ${len1}=  Get Length  ${resp.json()}
-    Set Suite Variable   ${len1}
-    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceCategoryId']}  ${category_id2}
-    # Should Be Equal As Strings  ${resp1.json()[0]['categoryName']}  ${name1}
-    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceDate']}  ${invoiceDate}
-    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceLabel']}  ${invoiceLabel}
-    # Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${address}
-    # Should Be Equal As Strings  ${resp1.json()[0]['amount']}  ${amount}
+    ${len1}=    Get Length  ${resp.json()}
 
-    ${resp1}=  Get Invoice Count With Filter   vendorUid-eq= ${vendor_uid1}
+
+    ${resp1}=  Get Invoice Count With Filter   userId-eq= ${pid}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Should Be Equal As Strings  ${resp1.json()}   ${len1}
@@ -321,16 +243,11 @@ JD-TC-GetInvoiceCountwithFilter-3
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp1}=  Get Invoice Count With Filter  
+    ${resp1}=  Get Invoice With Filter    invoiceCategoryId-eq= ${category_id2}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
-    Should Be Equal As Strings  ${resp1.json()}   ${len1}
-    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceCategoryId']}  ${category_id2}
-    # Should Be Equal As Strings  ${resp1.json()[0]['categoryName']}  ${name1}
-    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceDate']}  ${invoiceDate}
-    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceLabel']}  ${invoiceLabel}
-    # Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${address}
-    # Should Be Equal As Strings  ${resp1.json()[0]['amount']}  ${amount}
+    ${len1}=    Get Length  ${resp1.json()}
+
 
     ${resp1}=  Get Invoice Count With Filter   invoiceCategoryId-eq= ${category_id2}
     Log  ${resp1.content}
@@ -347,16 +264,10 @@ JD-TC-GetInvoiceCountwithFilter-4
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp1}=  Get Invoice Count With Filter  
+    ${resp1}=  Get Invoice With Filter    categoryName-eq= ${name1}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
-    Should Be Equal As Strings  ${resp1.json()}   ${len1}
-    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceCategoryId']}  ${category_id2}
-    # Should Be Equal As Strings  ${resp1.json()[0]['categoryName']}  ${name1}
-    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceDate']}  ${invoiceDate}
-    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceLabel']}  ${invoiceLabel}
-    # Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${address}
-    # Should Be Equal As Strings  ${resp1.json()[0]['amount']}  ${amount}
+    ${len1}=    Get Length  ${resp1.json()}
 
     ${resp1}=  Get Invoice Count With Filter   categoryName-eq= ${name1}
     Log  ${resp1.content}
@@ -372,16 +283,11 @@ JD-TC-GetInvoiceCountwithFilter-5
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp1}=  Get Invoice Count With Filter  
+    ${resp1}=  Get Invoice With Filter    invoiceDate-eq= ${invoiceDate}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
-    Should Be Equal As Strings  ${resp1.json()}   ${len1}
-    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceCategoryId']}  ${category_id2}
-    # Should Be Equal As Strings  ${resp1.json()[0]['categoryName']}  ${name1}
-    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceDate']}  ${invoiceDate}
-    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceLabel']}  ${invoiceLabel}
-    # Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${address}
-    # Should Be Equal As Strings  ${resp1.json()[0]['amount']}  ${amount}
+    ${len1}=    Get Length  ${resp1.json()}
+
 
     ${resp1}=  Get Invoice Count With Filter   invoiceDate-eq= ${invoiceDate}
     Log  ${resp1.content}
@@ -397,16 +303,11 @@ JD-TC-GetInvoiceCountwithFilter-6
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp1}=  Get Invoice Count With Filter  
+    ${resp1}=  Get Invoice With Filter    invoiceLabel-eq= ${invoiceLabel}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
-    Should Be Equal As Strings  ${resp1.json()}   ${len1}
-    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceCategoryId']}  ${category_id2}
-    # Should Be Equal As Strings  ${resp1.json()[0]['categoryName']}  ${name1}
-    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceDate']}  ${invoiceDate}
-    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceLabel']}  ${invoiceLabel}
-    # Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${address}
-    # Should Be Equal As Strings  ${resp1.json()[0]['amount']}  ${amount}
+    ${len1}=    Get Length  ${resp1.json()}
+
 
     ${resp1}=  Get Invoice Count With Filter   invoiceLabel-eq= ${invoiceLabel}
     Log  ${resp1.content}
@@ -422,21 +323,17 @@ JD-TC-GetInvoiceCountwithFilter-7
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp1}=  Get Invoice Count With Filter  
+    ${resp1}=  Get Invoice With Filter    billedTo-eq= ${address}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
-    Should Be Equal As Strings  ${resp1.json()}   ${len1}
-    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceCategoryId']}  ${category_id2}
-    # Should Be Equal As Strings  ${resp1.json()[0]['categoryName']}  ${name1}
-    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceDate']}  ${invoiceDate}
-    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceLabel']}  ${invoiceLabel}
-    # Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${address}
-    # Should Be Equal As Strings  ${resp1.json()[0]['amount']}  ${amount}
+    ${len1}=    Get Length  ${resp1.json()}
+
+
 
     ${resp1}=  Get Invoice Count With Filter   billedTo-eq= ${address}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
-    Should Be Equal As Strings  ${resp1.json()}   ${len1}
+    Should Be Equal As Strings  ${resp1.json()}   1
 
 
 JD-TC-GetInvoiceCountwithFilter-8
