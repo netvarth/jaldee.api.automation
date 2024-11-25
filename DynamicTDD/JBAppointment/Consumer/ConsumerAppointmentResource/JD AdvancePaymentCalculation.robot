@@ -101,13 +101,27 @@ JD-TC-GetAppointmentAdvancePaymentDetails-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    ${loc_id1}=  Create Sample Location
-    Set Test Variable   ${loc_id1}
-
-    ${resp}=   Get Location ById  ${loc_id1}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${loc_id1}=  Create Sample Location
+        ${resp}=   Get Location ById  ${loc_id1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${loc_id1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+
+    # ${loc_id1}=  Create Sample Location
+    # Set Test Variable   ${loc_id1}
+
+    # ${resp}=   Get Location ById  ${loc_id1}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     # clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
