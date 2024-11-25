@@ -1092,6 +1092,15 @@ JD-TC-Update schedule-10
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
+
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+    ${SERVICE3}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE3}
+    
+    ${s_id1}=  Create Sample Service  ${SERVICE2}
+    ${s_id2}=  Create Sample Service  ${SERVICE3}
+
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -1114,12 +1123,6 @@ JD-TC-Update schedule-10
     Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${converted_eTime1}
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
 
-    ${SERVICE2}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE2}
-    ${SERVICE3}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE3}
-    ${s_id1}=  Create Sample Service  ${SERVICE2}
-    ${s_id2}=  Create Sample Service  ${SERVICE3}
     ${resp}=  Update Appointment Schedule  ${sch_id}  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
