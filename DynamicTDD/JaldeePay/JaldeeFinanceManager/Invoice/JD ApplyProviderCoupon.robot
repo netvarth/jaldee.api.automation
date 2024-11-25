@@ -119,13 +119,10 @@ JD-TC-Apply ProviderCoupon-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id2}   ${resp.json()}
 
-
-
     ${resp1}=  AddCustomer  ${CUSERNAME11}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Suite Variable  ${pcid18}   ${resp1.json()}
-
 
     ${providerConsumerIdList}=  Create List  ${pcid18}
     Set Suite Variable  ${providerConsumerIdList} 
@@ -164,6 +161,8 @@ JD-TC-Apply ProviderCoupon-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${couponId}  ${resp.json()}
+
+# *** COMMENTS ***
 
     ${resp}=  Get Coupon By Id  ${couponId} 
     Log  ${resp.json()}

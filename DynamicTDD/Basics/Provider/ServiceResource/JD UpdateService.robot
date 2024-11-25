@@ -39,8 +39,8 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 JD-TC-UpdateService-1
     [Documentation]  update service name for a service.
 
-    ${billable_domains}=  get_nonbillable_domains
-    ${domain}  ${subdomain_list}   Get Dictionary Items   ${nonbillable_domains}
+    ${nonbillable_domains}=  get_nonbillable_domains
+    # ${domain}  ${subdomain_list}   Get Dictionary Items   ${nonbillable_domains}
     ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup
     Set Suite Variable  ${PUSERNAME_A}
 
@@ -118,6 +118,10 @@ JD-TC-UpdateService-3
 JD-TC-UpdateService-4
     [Documentation]  Update service to enable prepayment for a billable account.
 
+    ${billable_domains}=  get_billable_domain
+    Log  ${billable_domains}
+    ${random_domain} Evaluate random.choice(list(billable_domains.keys())) random 
+    ${random_subdomain} Evaluate random.choice(billable_domains[random_domain]) random
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -159,7 +163,7 @@ JD-TC-UpdateService-5
     Should Be Equal As Strings  ${resp.json()['minPrePaymentAmount']}   ${min_pre}
 
 
-JD-TC-UpdateService-5
+JD-TC-UpdateService-6
     [Documentation]  Update service charge for a billable account.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
