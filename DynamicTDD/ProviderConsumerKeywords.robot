@@ -53,7 +53,6 @@ Verify Otp For Login
     END
 
     Check And Create YNW Session
-    # ${key}=   verify accnt  ${loginid}  ${purpose}
     ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
     ${resp}=    POST On Session    ynw    /consumer/oauth/otp/${key}/verify  headers=${headers2}  expected_status=any
     Check Deprication  ${resp}  Verify Otp For Login
@@ -729,28 +728,6 @@ Send Otp For Login
     ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
     ${resp}=    POST On Session    ynw    /consumer/oauth/identify    data=${body}  headers=${headers2}  expected_status=any
     Check Deprication  ${resp}  Send Otp For Login
-    RETURN  ${resp}
-
-Verify Otp For Login
-    [Arguments]  ${loginid}  ${purpose}    &{kwargs}
-
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        IF  '${key}' == 'JSESSIONYNW'
-            ${sessionid}=  Set Variable  ${value}
-        END
-    END
-    ${session_given}=    Get Variable Value    ${sessionid}
-    IF  '${session_given}'=='${None}'
-        ${key}=   verify accnt  ${loginid}  ${purpose}
-    ELSE
-        ${key}=   verify accnt  ${loginid}  ${purpose}  ${sessionid}
-    END
-
-    Check And Create YNW Session
-    ${key}=   verify accnt  ${loginid}  ${purpose}
-    ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
-    ${resp}=    POST On Session    ynw    /consumer/oauth/otp/${key}/verify  headers=${headers2}  expected_status=any
-    Check Deprication  ${resp}  Verify Otp For Login
     RETURN  ${resp}
 
 Customer Logout 
