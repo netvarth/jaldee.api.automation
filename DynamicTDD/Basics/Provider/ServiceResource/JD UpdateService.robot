@@ -39,6 +39,8 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 JD-TC-UpdateService-1
     [Documentation]  update service name for a service.
 
+    ${billable_domains}=  get_nonbillable_domains
+    ${domain}  ${subdomain_list}   Get Dictionary Items   ${nonbillable_domains}
     ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup
     Set Suite Variable  ${PUSERNAME_A}
 
