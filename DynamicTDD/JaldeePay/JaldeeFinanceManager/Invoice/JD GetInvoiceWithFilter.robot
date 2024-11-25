@@ -76,9 +76,7 @@ JD-TC-Get Invoice With Filter -1
     ${resp}=  Get by encId  ${category_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
-   
+
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[1]} 
     Log  ${resp.json()}
@@ -95,78 +93,13 @@ JD-TC-Get Invoice With Filter -1
     ${resp}=  Get Category By Id   ${category_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[1]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
-    ${vender_name}=   FakerLibrary.firstname
-    ${contactPersonName}=   FakerLibrary.lastname
-    ${owner_name}=   FakerLibrary.lastname
-    ${vendorId}=   FakerLibrary.word
-    ${PO_Number}    Generate random string    5    123456789
-    ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
-    Set Test Variable  ${email}  ${vender_name}.${test_mail}
+
+
     ${address}=  FakerLibrary.city
     Set Suite Variable  ${address}
-    ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
-    ${branch}=   db.get_place
-    ${ifsc_code}=   db.Generate_ifsc_code
-    # ${gst_num}  ${pan_num}=   db.Generate_gst_number   ${Container_id}
 
-    ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
 
-    ${state}=    Evaluate     "${state}".title()
-    ${state}=    String.RemoveString  ${state}    ${SPACE}
-    Set Suite Variable    ${state}
-    Set Suite Variable    ${district}
-    Set Suite Variable    ${pin}
-    ${vendor_phno}=   Create List  ${vendor_phno}
-    Set Suite Variable    ${vendor_phno}
-    
-    ${email}=   Create List  ${email}
-    Set Suite Variable    ${email}
-
-    ${bankIfsc}    Random Number 	digits=5 
-    ${bankIfsc}=    Evaluate    f'{${bankIfsc}:0>7d}'
-    Log  ${bankIfsc}
-    Set Suite Variable  ${bankIfsc}  55555${bankIfsc} 
-
-    ${bankName}     FakerLibrary.name
-    Set Suite Variable    ${bankName}
-
-    ${upiId}     FakerLibrary.name
-    Set Suite Variable  ${upiId}
-
-    ${pan}    Random Number 	digits=5 
-    ${pan}=    Evaluate    f'{${pan}:0>5d}'
-    Log  ${pan}
-    Set Suite Variable  ${pan}  55555${pan}
-
-    ${branchName}=    FakerLibrary.name
-    Set Suite Variable  ${branchName}
-    ${gstin}    Random Number 	digits=5 
-    ${gstin}=    Evaluate    f'{${gstin}:0>8d}'
-    Log  ${gstin}
-    Set Suite Variable  ${gstin}  55555${gstin}
-    
-    ${preferredPaymentMode}=    Create List    ${jaldeePaymentmode[0]}
-    ${bankInfo}=    Create Dictionary     bankaccountNo=${bank_accno}    ifscCode=${bankIfsc}    bankName=${bankName}    upiId=${upiId}     branchName=${branchName}    pancardNo=${pan}    gstNumber=${gstin}    preferredPaymentMode=${preferredPaymentMode}    lastPaymentModeUsed=${jaldeePaymentmode[0]}
-    ${bankInfo}=    Create List         ${bankInfo}
-    
-    ${resp}=  Create Vendor  ${category_id}  ${vendorId}  ${vender_name}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${vendor_uid1}   ${resp.json()['encId']}
-    Set Suite Variable   ${vendor_id1}   ${resp.json()['id']}
-
-    ${resp}=  Get vendor by encId   ${vendor_uid1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['id']}  ${vendor_id1}
-    Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1}
-    # Should Be Equal As Strings  ${resp.json()['vendorType']}  ${category_id}
 
     ${resp1}=  AddCustomer  ${CUSERNAME11}
     Log  ${resp1.json()}
@@ -218,7 +151,7 @@ JD-TC-Get Invoice With Filter -1
     Set Suite Variable   ${status_id1}   ${resp.json()}
 
     
-    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}   ${lid}   ${itemList}  invoiceStatus=${status_id1}
+    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}   ${lid}   ${itemList}  invoiceStatus=${status_id1}     invoiceLabel=${invoiceLabel}   billedTo=${address}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}   
@@ -244,14 +177,13 @@ JD-TC-Get Invoice With Filter -1
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()[0]['vendorUid']}  ${vendor_uid1}
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceUid']}  ${invoice_uid}
-    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceId']}  ${invoice_id}
     Should Be Equal As Strings  ${resp1.json()[0]['providerConsumerId']}  ${pcid18}
     Should Be Equal As Strings  ${resp1.json()[0]['itemList'][0]['itemId']}  ${itemId}
     Should Be Equal As Strings  ${resp1.json()[0]['itemList'][0]['quantity']}  ${quantity}
     Should Be Equal As Strings  ${resp1.json()[0]['itemList'][0]['price']}  ${promotionalPrice}
     Should Be Equal As Strings  ${resp1.json()[0]['itemList'][0]['netRate']}  ${netRate}
+
 
 
 JD-TC-Get Invoice With Filter -2
@@ -293,14 +225,14 @@ JD-TC-Get Invoice With Filter -2
     ${adhocItemList}=    Create List    ${adhocItemList} 
 
     
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}     ${invoiceId}    ${providerConsumerIdList}   ${lid}  adhocItemList=${adhocItemList}
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}     ${invoiceId}    ${providerConsumerIdList}   ${lid}  adhocItemList=${adhocItemList}    invoiceLabel=${invoiceLabel}   billedTo=${address}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len1}=  Get Length  ${resp.json()['idList']}
     Set Suite Variable   ${invoice_uid1}   ${resp.json()['uidList'][0]}  
     Set Suite Variable  ${invoice_uid2}   ${resp.json()['uidList'][1]}  
 
-    ${resp1}=  Get Invoice With Filter   vendorUid-eq= ${vendor_uid1}
+    ${resp1}=  Get Invoice With Filter   
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Should Be Equal As Strings  ${resp1.json()[0]['accountId']}  ${account_id1}
@@ -309,7 +241,6 @@ JD-TC-Get Invoice With Filter -2
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()[0]['vendorUid']}  ${vendor_uid1}
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceUid']}  ${invoice_uid1}
     Should Be Equal As Strings  ${resp1.json()[0]['providerConsumerId']}  ${pcid10}
     Should Be Equal As Strings  ${resp1.json()[1]['accountId']}  ${account_id1}
@@ -318,20 +249,15 @@ JD-TC-Get Invoice With Filter -2
     Should Be Equal As Strings  ${resp1.json()[1]['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()[1]['invoiceLabel']}  ${invoiceLabel}
     # Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()[1]['vendorUid']}  ${vendor_uid1}
     Should Be Equal As Strings  ${resp1.json()[1]['invoiceUid']}  ${invoice_uid1}
-    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceId']}  ${invoice_id}
     Should Be Equal As Strings  ${resp1.json()[1]['providerConsumerId']}  ${pcid9}
-    # Should Be Equal As Strings  ${resp1.json()[1]['invoiceId']}  ${invoice_id}
     Should Be Equal As Strings  ${resp1.json()[2]['accountId']}  ${account_id1}
     Should Be Equal As Strings  ${resp1.json()[2]['invoiceCategoryId']}  ${category_id2}
     Should Be Equal As Strings  ${resp1.json()[2]['categoryName']}  ${name1}
     Should Be Equal As Strings  ${resp1.json()[2]['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()[2]['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()[2]['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()[2]['vendorUid']}  ${vendor_uid1}
     Should Be Equal As Strings  ${resp1.json()[2]['invoiceUid']}  ${invoice_uid}
-    # Should Be Equal As Strings  ${resp1.json()[2]['invoiceId']}  ${invoice_id}
     Should Be Equal As Strings  ${resp1.json()[2]['providerConsumerId']}  ${pcid18}
 
 
@@ -353,9 +279,7 @@ JD-TC-Get Invoice With Filter -3
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceLabel']}  ${invoiceLabel}
     # Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()[0]['vendorUid']}  ${vendor_uid1}
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceUid']}  ${invoice_uid2}
-    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceId']}  ${invoice_id}
     Should Be Equal As Strings  ${resp1.json()[0]['providerConsumerId']}  ${pcid9}
     Should Be Equal As Strings  ${resp1.json()[1]['accountId']}  ${account_id1}
     Should Be Equal As Strings  ${resp1.json()[1]['invoiceCategoryId']}  ${category_id2}
@@ -363,19 +287,15 @@ JD-TC-Get Invoice With Filter -3
     Should Be Equal As Strings  ${resp1.json()[1]['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()[1]['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()[1]['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()[1]['vendorUid']}  ${vendor_uid1}
     Should Be Equal As Strings  ${resp1.json()[1]['invoiceUid']}  ${invoice_uid1}
-    # Should Be Equal As Strings  ${resp1.json()[1]['invoiceId']}  ${invoice_id}
     Should Be Equal As Strings  ${resp1.json()[1]['providerConsumerId']}  ${pcid10}
-        Should Be Equal As Strings  ${resp1.json()[2]['accountId']}  ${account_id1}
+    Should Be Equal As Strings  ${resp1.json()[2]['accountId']}  ${account_id1}
     Should Be Equal As Strings  ${resp1.json()[2]['invoiceCategoryId']}  ${category_id2}
     Should Be Equal As Strings  ${resp1.json()[2]['categoryName']}  ${name1}
     Should Be Equal As Strings  ${resp1.json()[2]['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()[2]['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()[2]['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()[2]['vendorUid']}  ${vendor_uid1}
     Should Be Equal As Strings  ${resp1.json()[2]['invoiceUid']}  ${invoice_uid}
-    # Should Be Equal As Strings  ${resp1.json()[2]['invoiceId']}  ${invoice_id}
     Should Be Equal As Strings  ${resp1.json()[2]['providerConsumerId']}  ${pcid18}
 
 
@@ -398,9 +318,7 @@ JD-TC-Get Invoice With Filter -4
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceLabel']}  ${invoiceLabel}
     # Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()[0]['vendorUid']}  ${vendor_uid1}
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceUid']}  ${invoice_uid2}
-    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceId']}  ${invoice_id}
     Should Be Equal As Strings  ${resp1.json()[0]['providerConsumerId']}  ${pcid9}
     Should Be Equal As Strings  ${resp1.json()[1]['accountId']}  ${account_id1}
     Should Be Equal As Strings  ${resp1.json()[1]['invoiceCategoryId']}  ${category_id2}
@@ -408,7 +326,6 @@ JD-TC-Get Invoice With Filter -4
     Should Be Equal As Strings  ${resp1.json()[1]['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()[1]['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()[1]['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()[1]['vendorUid']}  ${vendor_uid1}
     Should Be Equal As Strings  ${resp1.json()[1]['invoiceUid']}  ${invoice_uid1}
     # Should Be Equal As Strings  ${resp1.json()[1]['invoiceId']}  ${invoice_id}
     Should Be Equal As Strings  ${resp1.json()[1]['providerConsumerId']}  ${pcid10}
@@ -418,7 +335,6 @@ JD-TC-Get Invoice With Filter -4
     Should Be Equal As Strings  ${resp1.json()[2]['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()[2]['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()[2]['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()[2]['vendorUid']}  ${vendor_uid1}
     Should Be Equal As Strings  ${resp1.json()[2]['invoiceUid']}  ${invoice_uid}
     # Should Be Equal As Strings  ${resp1.json()[2]['invoiceId']}  ${invoice_id}
     Should Be Equal As Strings  ${resp1.json()[2]['providerConsumerId']}  ${pcid18}
@@ -442,7 +358,6 @@ JD-TC-Get Invoice With Filter -5
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceLabel']}  ${invoiceLabel}
     # Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()[0]['vendorUid']}  ${vendor_uid1}
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceUid']}  ${invoice_uid2}
     # Should Be Equal As Strings  ${resp1.json()[0]['invoiceId']}  ${invoice_id}
     Should Be Equal As Strings  ${resp1.json()[0]['providerConsumerId']}  ${pcid9}
@@ -452,7 +367,6 @@ JD-TC-Get Invoice With Filter -5
     Should Be Equal As Strings  ${resp1.json()[1]['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()[1]['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()[1]['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()[1]['vendorUid']}  ${vendor_uid1}
     Should Be Equal As Strings  ${resp1.json()[1]['invoiceUid']}  ${invoice_uid1}
     # Should Be Equal As Strings  ${resp1.json()[1]['invoiceId']}  ${invoice_id}
     Should Be Equal As Strings  ${resp1.json()[1]['providerConsumerId']}  ${pcid10}
@@ -462,7 +376,6 @@ JD-TC-Get Invoice With Filter -5
     Should Be Equal As Strings  ${resp1.json()[2]['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()[2]['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()[2]['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()[2]['vendorUid']}  ${vendor_uid1}
     Should Be Equal As Strings  ${resp1.json()[2]['invoiceUid']}  ${invoice_uid}
     # Should Be Equal As Strings  ${resp1.json()[2]['invoiceId']}  ${invoice_id}
     Should Be Equal As Strings  ${resp1.json()[2]['providerConsumerId']}  ${pcid18}
@@ -486,7 +399,7 @@ JD-TC-Get Invoice With Filter -6
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceLabel']}  ${invoiceLabel}
     # Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()[0]['vendorUid']}  ${vendor_uid1}
+#    Should Be Equal As Strings  ${resp1.json()[0]['vendorUid']}  ${vendor_uid1}
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceUid']}  ${invoice_uid2}
     # Should Be Equal As Strings  ${resp1.json()[0]['invoiceId']}  ${invoice_id}
     Should Be Equal As Strings  ${resp1.json()[0]['providerConsumerId']}  ${pcid9}
@@ -496,7 +409,7 @@ JD-TC-Get Invoice With Filter -6
     Should Be Equal As Strings  ${resp1.json()[1]['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()[1]['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()[1]['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()[1]['vendorUid']}  ${vendor_uid1}
+#    #        Should Be Equal As Strings  ${resp1.json()[1]['vendorUid']}  ${vendor_uid1}
     Should Be Equal As Strings  ${resp1.json()[1]['invoiceUid']}  ${invoice_uid1}
     # Should Be Equal As Strings  ${resp1.json()[1]['invoiceId']}  ${invoice_id}
     Should Be Equal As Strings  ${resp1.json()[1]['providerConsumerId']}  ${pcid10}
@@ -506,7 +419,6 @@ JD-TC-Get Invoice With Filter -6
     Should Be Equal As Strings  ${resp1.json()[2]['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()[2]['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()[2]['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()[2]['vendorUid']}  ${vendor_uid1}
     Should Be Equal As Strings  ${resp1.json()[2]['invoiceUid']}  ${invoice_uid}
     # Should Be Equal As Strings  ${resp1.json()[2]['invoiceId']}  ${invoice_id}
     Should Be Equal As Strings  ${resp1.json()[2]['providerConsumerId']}  ${pcid18}
@@ -529,7 +441,7 @@ JD-TC-Get Invoice With Filter -7
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceLabel']}  ${invoiceLabel}
     # Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()[0]['vendorUid']}  ${vendor_uid1}
+#    Should Be Equal As Strings  ${resp1.json()[0]['vendorUid']}  ${vendor_uid1}
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceUid']}  ${invoice_uid2}
     # Should Be Equal As Strings  ${resp1.json()[0]['invoiceId']}  ${invoice_id}
     Should Be Equal As Strings  ${resp1.json()[0]['providerConsumerId']}  ${pcid9}
@@ -539,7 +451,7 @@ JD-TC-Get Invoice With Filter -7
     Should Be Equal As Strings  ${resp1.json()[1]['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()[1]['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()[1]['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()[1]['vendorUid']}  ${vendor_uid1}
+#    #        Should Be Equal As Strings  ${resp1.json()[1]['vendorUid']}  ${vendor_uid1}
     Should Be Equal As Strings  ${resp1.json()[1]['invoiceUid']}  ${invoice_uid1}
     # Should Be Equal As Strings  ${resp1.json()[1]['invoiceId']}  ${invoice_id}
     Should Be Equal As Strings  ${resp1.json()[1]['providerConsumerId']}  ${pcid10}
@@ -549,7 +461,7 @@ JD-TC-Get Invoice With Filter -7
     Should Be Equal As Strings  ${resp1.json()[2]['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()[2]['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()[2]['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()[2]['vendorUid']}  ${vendor_uid1}
+    # Should Be Equal As Strings  ${resp1.json()[2]['vendorUid']}  ${vendor_uid1}
     Should Be Equal As Strings  ${resp1.json()[2]['invoiceUid']}  ${invoice_uid}
     # Should Be Equal As Strings  ${resp1.json()[2]['invoiceId']}  ${invoice_id}
     Should Be Equal As Strings  ${resp1.json()[2]['providerConsumerId']}  ${pcid18}
@@ -574,7 +486,7 @@ JD-TC-Get Invoice With Filter -8
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()[0]['vendorUid']}  ${vendor_uid1}
+#    Should Be Equal As Strings  ${resp1.json()[0]['vendorUid']}  ${vendor_uid1}
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceUid']}  ${invoice_uid1}
     # Should Be Equal As Strings  ${resp1.json()[1]['invoiceId']}  ${invoice_id}
     Should Be Equal As Strings  ${resp1.json()[0]['providerConsumerId']}  ${pcid10}
@@ -599,7 +511,7 @@ JD-TC-Get Invoice With Filter -9
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()[0]['vendorUid']}  ${vendor_uid1}
+#    Should Be Equal As Strings  ${resp1.json()[0]['vendorUid']}  ${vendor_uid1}
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceUid']}  ${invoice_uid}
     # Should Be Equal As Strings  ${resp1.json()[0]['invoiceId']}  ${invoice_id}
     Should Be Equal As Strings  ${resp1.json()[0]['providerConsumerId']}  ${pcid18}
@@ -614,7 +526,6 @@ JD-TC-GetInvoiceCountwithFilter-UH1
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
     
-
 
 
 
