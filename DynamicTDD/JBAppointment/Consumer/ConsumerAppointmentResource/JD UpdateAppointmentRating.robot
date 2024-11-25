@@ -249,10 +249,10 @@ JD-TC-UpdateAppointmentRating-1
     # Should Be Equal As Strings  ${resp.json()['rating']['stars']}  ${rating1}
     # Should Be Equal As Strings  ${resp.json()['rating']['feedback'][0]['comments']}  ${comment1}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME202}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME202}  ${PASSWORD}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${rating1} =  roundoff  ${rating1}  2
+    # ${rating1} =  roundoff  ${rating1}  2
 
     # ${resp}=  Get Business Profile
     # Log   ${resp.json()}
@@ -260,13 +260,13 @@ JD-TC-UpdateAppointmentRating-1
     # Should Be Equal As Strings  ${resp.json()['avgRating']}  ${rating1} 
 
 
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Provider Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
     ${rating12}=  Random Int  min=3   max=3
     Set Suite Variable   ${rating12}

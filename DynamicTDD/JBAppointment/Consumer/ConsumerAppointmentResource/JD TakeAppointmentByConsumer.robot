@@ -102,7 +102,7 @@ JD-TC-Take Appointment-1
         Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
-    
+
     ${pid}=  get_acc_id  ${PUSERNAME_B}
     Set Suite Variable   ${pid}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -4021,15 +4021,15 @@ JD-TC-Take Appointment-18
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
 
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${service_duration[0]}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${service_duration[0]}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}  automaticInvoiceGeneration=${bool[1]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}
 
 
-    ${resp}=  Auto Invoice Generation For Service   ${s_id}    ${toggle[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Auto Invoice Generation For Service   ${s_id}    ${toggle[0]}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     # clear_appt_schedule   ${HLPUSERNAME5}
     ${pidHL}=  get_acc_id  ${HLPUSERNAME5}
@@ -4678,77 +4678,78 @@ JD-TC-Take Appointment-21
     Set Test Variable  ${pid}  ${resp.json()['id']}
     # Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
     
-    ${resp}=  Get Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Enable Disable Department  ${toggle[0]}
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Waitlist Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # IF  ${resp.json()['filterByDept']}==${bool[0]}
+    #     ${resp}=  Enable Disable Department  ${toggle[0]}
+    #     Log  ${resp.content}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
 
-    END
+    # END
     
     # sleep  2s
-    ${dep_name1}=  FakerLibrary.bs
-    ${dep_code1}=   Random Int  min=100   max=999
-    ${dep_desc1}=   FakerLibrary.word  
-    ${resp}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${dep_id}  ${resp.json()}
+    # ${dep_name1}=  FakerLibrary.bs
+    # ${dep_code1}=   Random Int  min=100   max=999
+    # ${dep_desc1}=   FakerLibrary.word  
+    # ${resp}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${dep_id}  ${resp.json()}
 
-    ${BUSERPH0}=  Evaluate  ${PUSERNAME}+${dep_code1}
-    clear_users  ${BUSERPH0}
-    ${firstname}=  FakerLibrary.name
-    ${lastname}=  FakerLibrary.last_name
-    ${dob}=  FakerLibrary.Date
+    # ${BUSERPH0}=  Evaluate  ${PUSERNAME}+${dep_code1}
+    # clear_users  ${BUSERPH0}
+    # ${firstname}=  FakerLibrary.name
+    # ${lastname}=  FakerLibrary.last_name
+    # ${dob}=  FakerLibrary.Date
     # ${pin}=  get_pincode
 
     # ${resp}=  Get LocationsByPincode     ${pin}
-    FOR    ${i}    IN RANGE    3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${city}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
+    # FOR    ${i}    IN RANGE    3
+    #     ${pin}=  get_pincode
+    #     ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+    #     IF    '${kwstatus}' == 'FAIL'
+    #             Continue For Loop
+    #     ELSE IF    '${kwstatus}' == 'PASS'
+    #             Exit For Loop
+    #     END
+    # END
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Test Variable  ${city}   ${resp.json()[0]['PostOffice'][0]['District']}   
+    # Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
     # Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}
 
-    ${number}=  Random Int  min=1000  max=2000
-    ${whpnum}=  Evaluate  ${BUSERPH0}+${number}
-    ${number}=  Random Int  min=1000  max=2000
-    ${tlgnum}=  Evaluate  ${BUSERPH0}+${number}
+    # ${number}=  Random Int  min=1000  max=2000
+    # ${whpnum}=  Evaluate  ${BUSERPH0}+${number}
+    # ${number}=  Random Int  min=1000  max=2000
+    # ${tlgnum}=  Evaluate  ${BUSERPH0}+${number}
 
-    ${resp}=  Get User
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${iscorp_subdomains}=  get_iscorp_subdomains  1
-    Log  ${iscorp_subdomains}
-    ${length}=  Get Length  ${iscorp_subdomains}
-    FOR  ${i}  IN RANGE  ${length}
-        Set Suite Variable  ${domains}  ${iscorp_subdomains[${i}]['domain']}
-        Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[${i}]['subdomains']}
-        Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[${i}]['subdomainId']}
-        Exit For Loop IF  '${iscorp_subdomains[${i}]['subdomains']}' == '${P_Sector}'
-    END
+    # ${resp}=  Get User
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${iscorp_subdomains}=  get_iscorp_subdomains  1
+    # Log  ${iscorp_subdomains}
+    # ${length}=  Get Length  ${iscorp_subdomains}
+    # FOR  ${i}  IN RANGE  ${length}
+    #     Set Suite Variable  ${domains}  ${iscorp_subdomains[${i}]['domain']}
+    #     Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[${i}]['subdomains']}
+    #     Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[${i}]['subdomainId']}
+    #     Exit For Loop IF  '${iscorp_subdomains[${i}]['subdomains']}' == '${P_Sector}'
+    # END
 
     # ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${BUSERPH0}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${BUSERPH0}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
     
-    ${resp}=  Create User  ${firstname}  ${lastname}     ${countryCodes[0]}  ${BUSERPH0}    ${userType[0]}   dob=${dob}  gender=${Genderlist[0]}  email=${P_Email}${BUSERPH0}.${test_mail}   pincode=${pin}    deptId=${dep_id}  
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${u_id}  ${resp.json()}
+    # ${resp}=  Create User  ${firstname}  ${lastname}     ${countryCodes[0]}  ${BUSERPH0}    ${userType[0]}   dob=${dob}  gender=${Genderlist[0]}  email=${P_Email}${BUSERPH0}.${test_mail}   pincode=${pin}    deptId=${dep_id}  
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${u_id}  ${resp.json()}
 
-    
+    ${u_id} =  Create Sample User
+
     ${resp}=  Get User By Id  ${u_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -4765,7 +4766,7 @@ JD-TC-Take Appointment-21
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 	
     # ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
+    # Append To List  ${service_names}  ${SERVICE1}
     # ${description}=  FakerLibrary.sentence
     # # ${s_id}=  Create Sample Service For User  ${SERVICE1}  ${dep_id}  ${u_id}
     # ${dur}=  FakerLibrary.Random Int  min=10  max=20

@@ -57,17 +57,23 @@ JD-TC-Get All Schedule slots-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
-
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${lid}=  Create Sample Location
-    Set Suite Variable   ${lid}
-    
-    ${resp}=   Get Location ById  ${lid}
+
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${lid}  ${resp.json()['id']}
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+    
     ${pid}=  get_acc_id  ${PUSERNAME_B}
     Set Suite Variable   ${pid}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
