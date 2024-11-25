@@ -187,8 +187,8 @@ JD-TC-GetAppointmentQueueSetById-2
 
     [Documentation]    Create a Appointment QueueSet for Service ,department and appointment schedule for branch
     
-    ${PUSERNAME_M}=  Evaluate  ${PUSERNAME}+44524685
-    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_M}=  Provider Signup without Profile  PhoneNumber=${PUSERNAME_M}
+    # ${PUSERNAME_M}=  Evaluate  ${PUSERNAME}+44524685
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_M}=  Provider Signup without Profile  
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_M}  ${PASSWORD}
     Log  ${resp.json()}
@@ -206,12 +206,20 @@ JD-TC-GetAppointmentQueueSetById-2
 
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
-    ${lid1}=  Create Sample Location  
 
-    ${resp}=   Get Location ById  ${lid1}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid1}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 

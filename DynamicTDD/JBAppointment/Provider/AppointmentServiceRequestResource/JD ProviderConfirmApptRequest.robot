@@ -257,16 +257,16 @@ JD-TC-ProviderConfirmApptRequest-UH1
 
     [Documentation]   Provider create an appt request for today and confirm with another request id.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME35}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME35}  ${PASSWORD}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${apptfor1}=  Create Dictionary  id=${pcid1}  
-    ${apptfor}=   Create List  ${apptfor1}
+    # ${apptfor1}=  Create Dictionary  id=${pcid1}  
+    # ${apptfor}=   Create List  ${apptfor1}
 
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Provider Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME25}    ${acc_id1}  ${token1} 
     Log   ${resp.content}

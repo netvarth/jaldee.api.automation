@@ -613,9 +613,9 @@ JD-TC-Take Appointment-11
 
     [Documentation]  Provider takes 2 different appointments for same consumer for different services.
     
-    ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+450001445
+    # ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+450001445
       
-    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup  PhoneNumber=${PUSERNAME_A}
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup  
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME_A}
@@ -1152,7 +1152,7 @@ JD-TC-Take Appointment-14
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer   ${cid}  ${s_id1}  ${sch_id2}  ${DAY3}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    ${resp}=  Take Appointment For Consumer   ${cid}  ${s_id1}  ${sch_id2}  ${DAY3}  ${cnote}  ${apptfor}  location=${{str('${lid1}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
@@ -2022,11 +2022,25 @@ JD-TC-Take Appointment-19
     ${resp}=  Get Appointment Schedule ById  ${sch_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
+
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot1}   ${slots[${j1}]}
+    
+    # ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2934,11 +2948,19 @@ JD-TC-Take Appointment-27
     # clear_location  ${PUSERNAME_A}
     clear_customer   ${PUSERNAME_A}
 
-    ${lid}=  Create Sample Location  
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     # clear_appt_schedule   ${PUSERNAME_A}
     
@@ -3459,11 +3481,19 @@ JD-TC-Take Appointment-32
     # clear_location  ${PUSERNAME_Z}
     clear_customer   ${PUSERNAME_Z}
 
-    ${lid}=  Create Sample Location  
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     # clear_appt_schedule   ${PUSERNAME_Z}
     
@@ -3668,9 +3698,9 @@ JD-TC-Take Appointment-34
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=    Enable Disable Today Appointment By Schedule Id    ${sch_id}  ${boolean[1]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=    Enable Disable Today Appointment By Schedule Id    ${sch_id}  ${boolean[1]}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  AddCustomer  ${CUSERNAME8} 
     Log   ${resp.json()}

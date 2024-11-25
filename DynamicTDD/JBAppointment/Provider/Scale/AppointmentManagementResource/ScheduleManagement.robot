@@ -38,14 +38,14 @@ JD-TC-Schedule-1
 
     [Documentation]  Schedule workflow for pre deployment.
 
-    # ${firstname}  ${lastname}  ${PUSERNAME_B}  ${LoginId}=  Provider Signup   Domain=${domain}   SubDomain=${subdomain}
-    # Set Suite Variable   ${PUSERNAME_B}
-    # ${num}=  find_last  ${var_file}
-    # ${num}=  Evaluate   ${num}+1
-    # Append To File  ${data_file}  ${LoginId} - ${PASSWORD}${\n}
-    # Append To File  ${var_file}  PUSERNAME${num}=${LoginId}${\n}
-    # Log    PUSERNAME${num}
-    ${PUSERNAME_B}=  Set Variable  ${PUSERNAME17}
+    ${firstname}  ${lastname}  ${PUSERNAME_B}  ${LoginId}=  Provider Signup   Domain=${domain}   SubDomain=${subdomain}
+    Set Suite Variable   ${PUSERNAME_B}
+    ${num}=  find_last  ${var_file}
+    ${num}=  Evaluate   ${num}+1
+    Append To File  ${data_file}  ${LoginId} - ${PASSWORD}${\n}
+    Append To File  ${var_file}  PUSERNAME${num}=${LoginId}${\n}
+    Log    PUSERNAME${num}
+    # ${PUSERNAME_B}=  Set Variable  ${PUSERNAME17}
     # ${PUSERNAME_B}=  Set Variable  ${PUSERNAME14}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
