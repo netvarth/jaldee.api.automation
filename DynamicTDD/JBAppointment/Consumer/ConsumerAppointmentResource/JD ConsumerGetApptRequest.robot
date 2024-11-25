@@ -90,11 +90,6 @@ JD-TC-ConsumerGetApptRequest-1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
     ${resp}=    Send Otp For Login    ${CUSERNAME10}    ${acc_id1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200

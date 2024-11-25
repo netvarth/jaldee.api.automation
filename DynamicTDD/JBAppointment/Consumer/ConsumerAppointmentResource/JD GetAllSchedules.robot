@@ -73,7 +73,7 @@ JD-TC-Get All Schedule slots-1
         Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
-    
+
     ${pid}=  get_acc_id  ${PUSERNAME_B}
     Set Suite Variable   ${pid}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -150,10 +150,6 @@ JD-TC-Get All Schedule slots-1
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Suite Variable  ${cid1}  ${resp.json()[0]['id']}
 
-    ${resp}=  ProviderLogout
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${resp}=    Send Otp For Login    ${CUSERNAME7}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -229,10 +225,6 @@ JD-TC-Get All Schedule slots-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   401
     Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION}"
-
-    ${resp}=  Consumer Logout
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-Get All Schedule slots-UH2
 
@@ -350,10 +342,6 @@ JD-TC-Get All Schedule slots-3
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Suite Variable  ${cid1}  ${resp.json()[0]['id']}
-
-    ${resp}=  ProviderLogout
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Send Otp For Login    ${CUSERNAME7}    ${pid1}
     Log   ${resp.content}

@@ -157,10 +157,6 @@ JD-TC-Get Availability Of Appointment-1
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Suite Variable  ${cid1}  ${resp.json()[0]['id']}
 
-    ${resp}=  ProviderLogout
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${resp}=    Send Otp For Login    ${CUSERNAME7}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200

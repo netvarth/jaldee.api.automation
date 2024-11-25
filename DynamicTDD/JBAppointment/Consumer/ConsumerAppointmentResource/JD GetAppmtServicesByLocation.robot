@@ -224,10 +224,6 @@ JD-TC-GetAppmtServicesByLocation-1
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Suite Variable  ${cid1}  ${resp.json()[0]['id']}
 
-    ${resp}=  ProviderLogout
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${resp}=    Send Otp For Login    ${PCPHONENO1}    ${account_id1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -377,9 +373,6 @@ JD-TC-GetAppmtServicesByLocation-4
     ${RESP}=  Disable service  ${p1_s1} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogout
-    Should Be Equal As Strings  ${resp.status_code}  200
-
    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO1}    ${account_id1}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -410,9 +403,6 @@ JD-TC-GetAppmtServicesByLocation-5
     ${RESP}=  Disable service  ${p1_s3} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogout
-    Should Be Equal As Strings  ${resp.status_code}  200
-
    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO1}    ${account_id1}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -431,9 +421,6 @@ JD-TC-GetAppmtServicesByLocation-5
     ${RESP}=  Enable service  ${p1_s3} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Logout 
-    Should Be Equal As Strings  ${resp.status_code}  200
-
 JD-TC-GetAppmtServicesByLocation-7
 
     [Documentation]  Consumer get Service By LocationId, which doesn't contain any service. 
@@ -447,10 +434,6 @@ JD-TC-GetAppmtServicesByLocation-7
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}   200
     Should Be Equal As Strings   ${resp.json()}   []
-
-    ${resp}=    Consumer Logout 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
 
 JD-TC-GetAppmtServicesByLocation-8
 
@@ -542,10 +525,6 @@ JD-TC-GetAppmtServicesByLocation-9
     ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
     ${email}=    FakerLibrary.Email
 
-    ${resp}=    Provider Logout 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-   
     ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${account_id1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -556,10 +535,6 @@ JD-TC-GetAppmtServicesByLocation-9
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
-
-    ${resp}=    Consumer Logout 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${account_id1}
     Log  ${resp.json()}
@@ -575,10 +550,6 @@ JD-TC-GetAppmtServicesByLocation-9
     Should Be Equal As Strings  ${resp.json()[0]['id']}  ${ser_id1}
     Should Be Equal As Strings  ${resp.json()[0]['name']}  ${P1SERVICE1}
 
-    ${resp}=    Consumer Logout 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
 JD-TC-GetAppmtServicesByLocation-UH1
 
     [Documentation]  Trying to Consumer get Service By LocationId, wiht an invalid location.
@@ -592,10 +563,6 @@ JD-TC-GetAppmtServicesByLocation-UH1
     Should Be Equal As Strings   ${resp.status_code}   404
     Should Be Equal As Strings  "${resp.json()}"       "${LOCATION_NOT_FOUND}"
 
-    ${resp}=    Consumer Logout 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
 JD-TC-GetAppmtServicesByLocation-UH2
 
     [Documentation]  Trying to Consumer get Service By LocationId, When Location is disabled 
@@ -604,9 +571,6 @@ JD-TC-GetAppmtServicesByLocation-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Disable Location  ${p1_l2} 
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    ProviderConsumer Login with token   ${PCPHONENO1}    ${account_id1}  ${token1} 
@@ -683,10 +647,6 @@ JD-TC-GetAppmtServicesByLocation-UH3
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
-
-    ${resp}=  ProviderLogout
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Send Otp For Login    ${CUSERNAME17}    ${account_id1}
     Log   ${resp.content}
@@ -770,10 +730,6 @@ JD-TC-GetAppmtServicesByLocation-UH4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
-
-    ${resp}=    Consumer Logout 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${account_id1}
     Log  ${resp.json()}
@@ -880,10 +836,6 @@ JD-TC-GetAppmtServicesByLocation-10
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Suite Variable  ${cid1}  ${resp.json()[0]['id']}
 
-    ${resp}=  ProviderLogout
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${resp}=    Send Otp For Login    ${PCPHONENO2}    ${account_id2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -914,10 +866,6 @@ JD-TC-GetAppmtServicesByLocation-10
     ${num_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j}]}
-
-   
-    ${resp}=  Consumer Logout
-    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Appmt Service By LocationId   ${p1_l1}
     Log   ${resp.json()}

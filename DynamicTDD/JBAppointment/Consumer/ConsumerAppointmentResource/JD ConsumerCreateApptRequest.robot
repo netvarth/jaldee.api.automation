@@ -129,11 +129,6 @@ JD-TC-ConsumerCreateApptRequest-1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
     ${resp}=    Send Otp For Login    ${CUSERNAME20}    ${acc_id1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -251,10 +246,6 @@ JD-TC-ConsumerCreateApptRequest-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${acc_id1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -366,10 +357,6 @@ JD-TC-ConsumerCreateApptRequest-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
-
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${acc_id1}  ${token} 
     Log   ${resp.content}

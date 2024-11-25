@@ -141,10 +141,6 @@ JD-TC-AddAppointmentRating-1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
     ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -324,11 +320,7 @@ JD-TC-AddAppointmentRating-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${accountId}  ${resp.json()['id']}
-    
-    ${resp}=  ProviderLogout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
+   
     ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -406,11 +398,7 @@ JD-TC-AddAppointmentRating-4
     ${resp}=  Get Location By Id   ${lid} 
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${tz}  ${resp.json()['timezone']}
-    
-    ${resp}=  ProviderLogout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
+   
     ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -522,11 +510,7 @@ JD-TC-AddAppointmentRating-UH1
     ${resp}=  Get Location By Id   ${lid} 
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${tz}  ${resp.json()['timezone']}
-    
-    ${resp}=  ProviderLogout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
+   
     ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -574,11 +558,7 @@ JD-TC-AddAppointmentRating-UH2
     ${resp}=  Get Location By Id   ${lid} 
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${tz}  ${resp.json()['timezone']}
-    
-    ${resp}=  ProviderLogout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
+   
     ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -616,10 +596,6 @@ JD-TC-AddAppointmentRating-UH2
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"      "${INVALID_RATING}"
 
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
 JD-TC-AddAppointmentRating-UH3
 
 	[Documentation]    Rate Appointment by giving a big number for rating.
@@ -631,11 +607,7 @@ JD-TC-AddAppointmentRating-UH3
     ${resp}=  Get Location By Id   ${lid} 
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${tz}  ${resp.json()['timezone']}
-    
-    ${resp}=  ProviderLogout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
+   
     ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -717,10 +689,6 @@ JD-TC-AddAppointmentRating-UH5
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Suite Variable  ${cid}  ${resp.json()[0]['id']}
 
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
     ${resp}=    Send Otp For Login    ${PCPHONENO2}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -758,10 +726,6 @@ JD-TC-AddAppointmentRating-UH6
     Should Be Equal As Strings  ${resp.status_code}  404
     Should Be Equal As Strings  "${resp.json()}"    "${INVALID_APPOINTMENT}"
 
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
 JD-TC-AddAppointmentRating-UH7
 
 	[Documentation]   Rating Added By Consumer without login  
@@ -782,10 +746,6 @@ JD-TC-AddAppointmentRating-UH8
 
     ${account_id1}=  get_acc_id  ${PUSERNAME99}
 
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
     ${resp}=  Encrypted Provider Login  ${PUSERNAME99}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -801,10 +761,6 @@ JD-TC-AddAppointmentRating-UH8
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
     ${resp}=    Send Otp For Login    ${PCPHONENO2}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -816,10 +772,6 @@ JD-TC-AddAppointmentRating-UH8
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token2}  ${resp.json()['token']}
 
-    ${resp}=  ProviderLogout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${resp}=    ProviderConsumer Login with token   ${PCPHONENO2}    ${account_id}  ${token2} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200

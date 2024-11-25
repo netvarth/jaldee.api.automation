@@ -89,9 +89,6 @@ JD-TC-AppointmentCancelByConsumer-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogout
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${resp}=    Send Otp For Login    ${CUSERNAME19}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -182,10 +179,6 @@ JD-TC-AppointmentCancelByConsumer-1
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${apptid2}  ${apptid[0]}
   
-    ${resp}=  Consumer Logout
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
 JD-TC-AppointmentCancelByConsumer-2
 
     [Documentation]  Consumer Cancel an appointment for a valid another Provider.
@@ -232,9 +225,6 @@ JD-TC-AppointmentCancelByConsumer-2
    
     ${resp}=  AddCustomer  ${CUSERNAME20}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Send Otp For Login    ${CUSERNAME20}    ${pid01}
@@ -307,11 +297,7 @@ JD-TC-AppointmentCancelByConsumer-2
           
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${apptid4}  ${apptid[0]}
-  
-    ${resp}=  Consumer Logout
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
+ 
 JD-TC-AppointmentCancelByConsumer-UH1
 
     [Documentation]  Consumer Cancel an already started appointment.
@@ -321,10 +307,6 @@ JD-TC-AppointmentCancelByConsumer-UH1
 
     ${resp}=  Appointment Action   ${apptStatus[3]}   ${apptid4}
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Provider Logout
-    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${pid01}  ${token1} 

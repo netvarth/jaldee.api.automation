@@ -171,10 +171,6 @@ JD-TC-GetAppointmentAdvancePaymentDetails-1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
     ${resp}=    Send Otp For Login    ${CUSERNAME19}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -283,10 +279,6 @@ JD-TC-GetAppointmentAdvancePaymentDetails-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
-    ${resp}=  ProviderLogout
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${pid}  ${token} 
     Log   ${resp.content}
@@ -418,10 +410,6 @@ JD-TC-GetAppointmentAdvancePaymentDetails-3
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
 
-    ${resp}=  ProviderLogout
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${resp}=    Send Otp For Login    ${CUSERNAME15}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -492,10 +480,6 @@ JD-TC-GetAppointmentAdvancePaymentDetails-3
 
     ${resp}=    Get Bill By UUId  ${apptid1}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  ProviderLogout
-    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME15}    ${pid}  ${token7} 
@@ -587,10 +571,6 @@ JD-TC-GetAppointmentAdvancePaymentDetails-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
 
-    ${resp}=  ProviderLogout
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${pid}  ${token} 
     Log   ${resp.content}
@@ -644,10 +624,6 @@ JD-TC-GetAppointmentAdvancePaymentDetails-4
 
     ${resp}=    Get Bill By UUId  ${apptid1}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  ProviderLogout
-    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${pid}  ${token} 
@@ -739,10 +715,6 @@ JD-TC-GetAppointmentAdvancePaymentDetails-5
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp}=  ProviderLogout
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -795,10 +767,6 @@ JD-TC-GetAppointmentAdvancePaymentDetails-5
 
     ${resp}=    Get Bill By UUId  ${apptid1}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  ProviderLogout
-    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${pid}  ${token} 
@@ -913,9 +881,6 @@ JD-TC-GetAppointmentAdvancePaymentDetails-6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Logout
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
     
     ${cookie}  ${resp}=  Imageupload.SALogin    ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
@@ -945,9 +910,6 @@ JD-TC-GetAppointmentAdvancePaymentDetails-6
     Log  ${qns.content}
     Should Be Equal As Strings  ${qns.status_code}  200
 
-    ${resp}=  Provider Logout
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log         ${resp.content}
@@ -1032,11 +994,6 @@ JD-TC-GetAppointmentAdvancePaymentDetails-6
     Log  ${data}
     Set Suite Variable   ${data}
 
-
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
     ${resp}=    Send Otp For Login    ${CUSERNAME4}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -1113,10 +1070,6 @@ JD-TC-GetAppointmentAdvancePaymentDetails-6
 
     ${resp}=    Get Bill By UUId  ${apptid1}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  ProviderLogout
-    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME4}    ${account_id}  ${token} 
@@ -1238,9 +1191,6 @@ JD-TC-GetAppointmentAdvancePaymentDetails-7
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Logout
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
     
     ${cookie}  ${resp}=  Imageupload.SALogin    ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
@@ -1270,9 +1220,6 @@ JD-TC-GetAppointmentAdvancePaymentDetails-7
     Log  ${qns.content}
     Should Be Equal As Strings  ${qns.status_code}  200
 
-    ${resp}=  Provider Logout
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log         ${resp.content}
@@ -1350,10 +1297,6 @@ JD-TC-GetAppointmentAdvancePaymentDetails-7
     Log  ${data}
     Set Suite Variable   ${data}
 
-
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Send Otp For Login    ${CUSERNAME4}    ${account_id}
     Log   ${resp.content}
@@ -1438,10 +1381,6 @@ JD-TC-GetAppointmentAdvancePaymentDetails-7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
-    ${resp}=  ProviderLogout
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME4}    ${account_id}  ${token} 
     Log   ${resp.content}
