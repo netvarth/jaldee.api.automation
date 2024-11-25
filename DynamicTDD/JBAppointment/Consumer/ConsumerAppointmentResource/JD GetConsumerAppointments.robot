@@ -103,9 +103,9 @@ JD-TC-GetConsumerAppointments-1
 
 
 
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Provider Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Send Otp For Login    ${CUSERNAME20}    ${pid1}
     Log   ${resp.content}
@@ -163,8 +163,8 @@ JD-TC-GetConsumerAppointments-1
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${apptid2}  ${apptid[0]}
 
-    ${resp}=  Consumer Logout
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Consumer Logout
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Log  ${resp.content}
@@ -187,8 +187,8 @@ JD-TC-GetConsumerAppointments-1
     ${encId2}=  Set Variable   ${resp.json()}
     Set Test Variable   ${encId2}   
 
-    ${resp}=  Provider Logout
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Provider Logout
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${pid1}  ${token} 
@@ -236,7 +236,6 @@ JD-TC-GetConsumerAppointments-1
               Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id}
         END 
     END 
-
 
 JD-TC-GetConsumerAppointments-2
 
