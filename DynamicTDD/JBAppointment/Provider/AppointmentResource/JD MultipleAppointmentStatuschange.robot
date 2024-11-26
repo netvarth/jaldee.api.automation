@@ -213,7 +213,7 @@ JD-TC-change appointment status for multiple appointments-2
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${sTime3}=  add_timezone_time  ${tz}  3  50
+    ${sTime3}=  add_timezone_time  ${tz}  2  50
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime3}=  add_timezone_time  ${tz}  5  00 
     ${schedule_name}=  FakerLibrary.bs
