@@ -194,7 +194,8 @@ JD-TC-Get Log-2
 
     ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable    ${DAY}
-    # ${time_now}=    db.get_time_by_timezone  ${tz}  result_format=%H:%M:%S
+    ${time_now}=    db.get_tz_time_secs  ${tz}
+    # ${time_now}=    DateTime.Convert Time    ${time_now}    
     Set Test Variable    ${time_now}
 
     ${resp}=  Update Invoice   ${invoice_uid}    ${category_id2}    ${invoiceDate}   

@@ -408,9 +408,11 @@ JD-TC-Remove Item Level Discount-2
     ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     sleep  2s
     ${resp}=  Get Departments
@@ -1546,13 +1548,12 @@ JD-TC-Remove Item Level Discount-6
     Set Test Variable   ${netRate}
 
     ${resp}=  Get Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
-        Log  ${resp.json()}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-
     END
 
     ${dep_name1}=  FakerLibrary.bs
@@ -1821,9 +1822,11 @@ JD-TC-Remove Item Level Discount-3
     ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     sleep  2s
     ${resp}=  Get Departments

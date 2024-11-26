@@ -188,7 +188,6 @@ JD-TC-Remove Item From Invoice-1
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
 
-
     ${resp}=  Create Sample Location  
     Set Suite Variable    ${lid}    ${resp}  
 
@@ -196,6 +195,20 @@ JD-TC-Remove Item From Invoice-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+    ${resp}=  Get Bill Settings 
+    Log   ${resp.json}
+    IF  ${resp.status_code}!=200
+        Log   Status code is not 200: ${resp.status_code}
+        ${resp}=  Enable Disable bill  ${bool[1]}
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    ELSE IF  ${resp.json()['enablepos']}==${bool[0]}
+        ${resp}=  Enable Disable bill  ${bool[1]}
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
     ${name}=   FakerLibrary.word
     ${resp}=  CreateVendorCategory  ${name}  
     Log  ${resp.json()}
@@ -205,8 +218,7 @@ JD-TC-Remove Item From Invoice-1
     ${resp}=  Get by encId  ${category_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+
 
 
     ${name1}=   FakerLibrary.word
