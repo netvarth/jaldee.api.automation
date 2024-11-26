@@ -6232,10 +6232,10 @@ JD-TC-Take Appointment-41
 
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
-    ${s_id}=  Create Sample Service  ${SERVICE1}
-    ${resp}=  Auto Invoice Generation For Service   ${s_id}    ${toggle[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${s_id}=  Create Sample Service  ${SERVICE1}   automaticInvoiceGeneration=${bool[1]}
+    # ${resp}=  Auto Invoice Generation For Service   ${s_id}    ${toggle[0]}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     # clear_appt_schedule   ${PUSERNAME_Z}
 

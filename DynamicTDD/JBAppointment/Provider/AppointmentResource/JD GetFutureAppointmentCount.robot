@@ -455,22 +455,22 @@ JD-TC-GetFutureAppointmentCount-4
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500
     ${srv_duration}=   Random Int   min=10   max=20
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}   automaticInvoiceGeneration=${bool[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id1}  ${resp.json()}
 
     ${SERVICE2}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE2}
-    ${s_id2}=  Create Sample Service  ${SERVICE2}
+    ${s_id2}=  Create Sample Service  ${SERVICE2}   automaticInvoiceGeneration=${bool[1]}
 
-    ${resp}=  Auto Invoice Generation For Service   ${s_id1}    ${toggle[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Auto Invoice Generation For Service   ${s_id1}    ${toggle[0]}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Auto Invoice Generation For Service   ${s_id2}    ${toggle[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Auto Invoice Generation For Service   ${s_id2}    ${toggle[0]}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     # clear_appt_schedule   ${PUSERNAME179}
 

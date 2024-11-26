@@ -1801,14 +1801,21 @@ JD-TC-Block Appointment-UH8
     END
 
     # clear_location_n_service  ${PUSERNAME370}
-    clear_customer   ${PUSERNAME370}
+    # clear_customer   ${PUSERNAME370}
 
-    ${lid}=  Create Sample Location  
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
     # clear_appt_schedule   ${PUSERNAME370}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1844,7 +1851,7 @@ JD-TC-Block Appointment-UH8
     ${apptfor1}=  Create Dictionary   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${resp}=  Block Appointment For Consumer  ${s_id1}  ${sch_id}  ${DAY1}  ${apptfor}
+    ${resp}=  Block Appointment For Consumer  ${s_id1}  ${sch_id}  ${DAY1}  ${apptfor} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}    ${SERVICE_NOT_AVAILABLE_IN_SCHEDULE}
@@ -2308,13 +2315,21 @@ JD-TC-Block Appointment-UH15
     END
 
     # clear_location_n_service  ${PUSERNAME370}
-    clear_customer   ${PUSERNAME270}
+    # clear_customer   ${PUSERNAME270}
 
-    ${lid}=  Create Sample Location  
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     # clear_appt_schedule   ${PUSERNAME370}
     
