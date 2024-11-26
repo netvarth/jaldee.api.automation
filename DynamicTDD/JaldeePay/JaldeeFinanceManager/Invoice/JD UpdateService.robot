@@ -55,7 +55,7 @@ JD-TC-UpdateService-1
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
 
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable

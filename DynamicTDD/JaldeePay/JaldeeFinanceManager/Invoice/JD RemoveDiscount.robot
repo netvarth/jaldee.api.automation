@@ -44,7 +44,7 @@ JD-TC-Remove Discount-1
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
 
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
@@ -440,16 +440,45 @@ JD-TC-Remove Discount-UH4
 
 JD-TC-Remove Discount-UH5
        [Documentation]   Consumer check to delete Discount 
-       ${resp}=   ConsumerLogin  ${CUSERNAME2}  ${PASSWORD} 
-       Should Be Equal As Strings    ${resp.status_code}   200
 
-        ${privateNote}=     FakerLibrary.word
+
+    ${firstName}=  FakerLibrary.name
+    ${lastName}=  FakerLibrary.last_name
+    ${primaryMobileNo}    Generate random string    10    123456789
+    ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
+    Set Suite Variable    ${primaryMobileNo}
+    ${email}=    FakerLibrary.Email
+
+
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Consumer Logout  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${pid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200    
+   
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${cid1}    ${resp.json()['id']}
+
+    ${privateNote}=     FakerLibrary.word
     ${displayNote}=   FakerLibrary.word
 
     ${resp}=   Remove Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}
     Log  ${resp.json()}  
-       Should Be Equal As Strings  ${resp.status_code}  401
-       Should Be Equal As Strings  "${resp.json()}"   "${LOGIN_NO_ACCESS_FOR_URL}"
+    Should Be Equal As Strings  ${resp.status_code}  401
+    Should Be Equal As Strings  "${resp.json()}"   "${LOGIN_NO_ACCESS_FOR_URL}"
               
 JD-TC-Remove Discount-UH6
        [Documentation]   Without login,remove discount
@@ -482,7 +511,7 @@ JJD-TC-Remove Discount-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp}=  Update Invoice   ${invoice_uid}    ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   billStatus=${billStatus[0]} 
+    ${resp}=  Update Invoice   ${invoice_uid}    ${category_id2}    ${invoiceDate}      billStatus=${billStatus[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

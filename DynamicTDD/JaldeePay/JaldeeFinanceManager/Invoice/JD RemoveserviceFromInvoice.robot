@@ -167,7 +167,7 @@ JD-TC-Remove Service From Invoice-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -774,7 +774,7 @@ JD-TC-Remove Services to finance-4
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${resp}=  View Waitlist Settings
+      ${resp}=  Get Waitlist Settings
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}   200
 
