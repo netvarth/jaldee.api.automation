@@ -15356,6 +15356,19 @@ GET LOS Document Data
     Check Deprication  ${resp}  GET LOS Document Data
     RETURN  ${resp}
 
+Save LOS Property Info As Draft
+    [Arguments]  ${leadUid}  ${stageUid}  ${ownerFirstName}  ${ownerLastName}  ${ownerAddress}  ${propertyType}  ${surveyNo}  ${district}  ${sro}  ${taluk}  ${village}  ${natureOfDeed}
+
+    ${data}=   Create Dictionary   ownerFirstName=${ownerFirstName}  ownerLastName=${ownerLastName}  ownerAddress=${ownerAddress}  propertyType=${propertyType}  surveyNo=${surveyNo}  district=${district}  sro=${sro}  taluk=${taluk}  village=${village}  natureOfDeed=${natureOfDeed}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${leadUid}/stage/${stageUid}/propertyinfo/data  data=${data}  expected_status=any
+    Check Deprication  ${resp}  Save LOS Property Info As Draft
+    RETURN  ${resp}
+
 AddItemToInvoice
    [Arguments]  ${uuid}   ${ItemLists}  &{kwargs}
     ${ItemLists}=  Create List     ${ItemLists}
