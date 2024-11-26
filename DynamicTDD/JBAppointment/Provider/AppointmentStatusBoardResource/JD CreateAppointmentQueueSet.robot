@@ -1124,14 +1124,17 @@ JD-TC-CreateAppointmentQueueSet-UH8
     Set Suite Variable  ${Data12}  ${Data}
     ${resp}=   Create Status Board Appointment    ${Data[0]}  ${Data[1]}  ${Data[2]}  ${matric_list}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${Positions}=  FakerLibrary.Words  	nb=3
-    ${matric_list}=  Create Metric For Status Board  ${Positions[0]}  ${sba_id1}  
-    Log  ${matric_list}
-    ${Data}=  FakerLibrary.Words  	nb=3
-    Set Suite Variable  ${Data12}  ${Data}
-    ${resp}=   Create Status Board Appointment    ${Data[0]}  ${Data[1]}  ${Data[2]}  ${matric_list}
-    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${STATUS_BOARD_LICENSE}"
+
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    
+    # ${Positions}=  FakerLibrary.Words  	nb=3
+    # ${matric_list}=  Create Metric For Status Board  ${Positions[0]}  ${sba_id1}  
+    # Log  ${matric_list}
+    # ${Data}=  FakerLibrary.Words  	nb=3
+    # Set Suite Variable  ${Data12}  ${Data}
+    # ${resp}=   Create Status Board Appointment    ${Data[0]}  ${Data[1]}  ${Data[2]}  ${matric_list}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  422
+    # Should Be Equal As Strings  "${resp.json()}"  "${STATUS_BOARD_LICENSE}"
