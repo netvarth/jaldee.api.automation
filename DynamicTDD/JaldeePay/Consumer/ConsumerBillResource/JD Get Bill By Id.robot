@@ -91,9 +91,12 @@ JD-TC-Get Bill By Id-1
 
     ${resp}=  Get Bill Settings 
     Log   ${resp.json}
-
-    
-    IF  ${resp.status_code}!=200 or ${resp.json()['enablepos']}==${bool[0]}
+    IF  ${resp.status_code}!=200
+        Log   Status code is not 200: ${resp.status_code}
+        ${resp}=  Enable Disable bill  ${bool[1]}
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    ELSE IF  ${resp.json()['enablepos']}==${bool[0]}
         ${resp}=  Enable Disable bill  ${bool[1]}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200

@@ -57,10 +57,22 @@ JD-TC-Apply Service Level Discount-1
 
 
     ${resp}=  Get Bill Settings 
-    Log   ${resp.content}
-    ${resp}=  Enable Disable bill  ${bool[1]}
+    Log   ${resp.json}
+    IF  ${resp.status_code}!=200
+        Log   Status code is not 200: ${resp.status_code}
+        ${resp}=  Enable Disable bill  ${bool[1]}
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    ELSE IF  ${resp.json()['enablepos']}==${bool[0]}
+        ${resp}=  Enable Disable bill  ${bool[1]}
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=  Get Bill Settings 
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['enablepos']}    ${bool[1]}
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}

@@ -55,10 +55,22 @@ JD-TC-Get Invoice Template Using Account-1
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
     ${resp}=  Get Bill Settings 
-    Log   ${resp.content}
-    ${resp}=  Enable Disable bill  ${bool[1]}
+    Log   ${resp.json}
+    IF  ${resp.status_code}!=200
+        Log   Status code is not 200: ${resp.status_code}
+        ${resp}=  Enable Disable bill  ${bool[1]}
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    ELSE IF  ${resp.json()['enablepos']}==${bool[0]}
+        ${resp}=  Enable Disable bill  ${bool[1]}
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=  Get Bill Settings 
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['enablepos']}    ${bool[1]}
 
     ${resp}=  Create Sample Location  
     Set Suite Variable    ${lid}    ${resp}  
