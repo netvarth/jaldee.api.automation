@@ -77,14 +77,15 @@ JD-TC-ProviderGetApptRequest-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${lid}=  Create Sample Location
+        Set Suite Variable   ${lid}
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
-
-    ${resp}=   Get Location By Id   ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
@@ -224,7 +225,7 @@ JD-TC-ProviderGetApptRequest-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${cid}  ${resp.json()['providerConsumer']}
-
+  
     ${apptfor1}=  Create Dictionary  id=${self}   
     ${apptfor}=   Create List  ${apptfor1}
 
