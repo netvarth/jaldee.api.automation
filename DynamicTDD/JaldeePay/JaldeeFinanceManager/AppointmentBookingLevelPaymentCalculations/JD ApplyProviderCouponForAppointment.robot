@@ -9,6 +9,7 @@ Library           FakerLibrary
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 # Variables         /ebs/TDD/varfiles/consumermail.py
@@ -152,8 +153,8 @@ JD-TC-ApplyProviderCouponForAppointmnet-1
     # ${24hours}    Random Element    ${bool}
     # ${desc}=   FakerLibrary.sentence
     # ${url}=   FakerLibrary.url
-    # ${sTime}=  db.add_timezone_time     ${tz}  0  15
-    # ${eTime}=  db.add_timezone_time     ${tz}   0  45
+    ${sTime}=  db.add_timezone_time     ${tz}  0  15
+    ${eTime}=  db.add_timezone_time     ${tz}   0  45
     # ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
@@ -247,6 +248,8 @@ JD-TC-ApplyProviderCouponForAppointmnet-1
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}
+
     ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}
 
@@ -270,34 +273,75 @@ JD-TC-ApplyProviderCouponForAppointmnet-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID}   ${resp.json()['id']}
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Suite Variable  ${PCPHONENO}  555${PH_Number}
 
-    ${resp}=  Get Appointment Schedules Consumer  ${pid}
+    ${fname}=  generate_firstname
+    Set Suite Variable  ${fname}
+    ${lname}=  FakerLibrary.last_name
+    Set Suite Variable  ${lname}
+
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+
+    ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  email=${pc_emailid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  Send Otp For Login    ${PCPHONENO}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+    ${resp}=  Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}     JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+    
+    ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Appointment Schedule ById Consumer  ${sch_id}   ${pid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${pid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    # ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Set Test Variable   ${a${i}}  ${resp.json()[0]['availableSlots'][${i}]['time']}
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
         END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${num_slots-1}
-    Set Test Variable   ${slot1}   ${slots[${j}]}
+    Set Suite Variable   ${slot1}   ${slots[${j}]}
+
+    # ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${pid}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    # @{slots}=  Create List
+    # FOR   ${i}  IN RANGE   0   ${no_of_slots}
+    #     IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+    #         Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+    #     END
+    # END
+    # ${num_slots}=  Get Length  ${slots}
+    # ${j}=  Random Int  max=${num_slots-1}
+    # Set Test Variable   ${slot1}   ${slots[${j}]}
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -375,31 +419,24 @@ JD-TC-ApplyProviderCouponForAppointmnet-1
 JD-TC-ApplyProviderCouponForAppointmnet-2
     [Documentation]   Take Appointment for Future then apply provider coupon(ONLINE).
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Get Appointment Schedules Consumer  ${pid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get Appointment Schedule ById Consumer  ${sch_id}   ${pid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${pid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Set Test Variable   ${a${i}}  ${resp.json()[0]['availableSlots'][${i}]['time']}
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
         END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${num_slots-1}
-    Set Test Variable   ${slot1}   ${slots[${j}]}
+    Set Suite Variable   ${slot1}   ${slots[${j}]}
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -513,7 +550,7 @@ JD-TC-ApplyProviderCouponForAppointmnet-3
     ${servicecharge}=   Random Int  min=100  max=500
     ${servicecharge1}=  Convert To Number  ${servicecharge}  1
     Set Suite Variable  ${servicecharge1}
-    ${resp}=  Create Service  ${P1SERVICE1}  ${desc}   ${service_duration}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}   ${EMPTY}  ${servicecharge1}  ${bool[0]}  ${bool[0]}  
+    ${resp}=  Create Service  ${P1SERVICE1}  ${desc}   ${service_duration}     ${bool[0]}    ${servicecharge1}  ${bool[0]}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${ser_id1}  ${resp.json()}    
@@ -523,8 +560,7 @@ JD-TC-ApplyProviderCouponForAppointmnet-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['isPrePayment']}   ${bool[0]} 
     Should Be Equal As Numbers  ${resp.json()['totalAmount']}    ${servicecharge1} 
-    Should Be Equal As Strings  ${resp.json()['serviceType']}    ${service_type[2]} 
-    
+
     # clear_appt_schedule   ${PUSERNAME125}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -650,11 +686,26 @@ JD-TC-ApplyProviderCouponForAppointmnet-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id1}   name=${schedule_name}  apptState=${Qstate[0]}
 
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY2}  ${ser_id1}
-    Log  ${resp.json()}
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY2}  ${lid}  ${ser_id1}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id1}
-    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Set Test Variable   ${a${i}}  ${resp.json()[0]['availableSlots'][${i}]['time']}
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
+        END
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j}=  Random Int  max=${num_slots-1}
+    Set Suite Variable   ${slot1}   ${slots[${j}]}
+
+    # ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY2}  ${ser_id1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id1}
+    # Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
     ${resp}=  AddCustomer  ${CUSERNAME9}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
@@ -922,9 +973,9 @@ JD-TC-ApplyProviderCouponForAppointmnet-8
 JD-TC-ApplyProviderCouponForAppointmnet-5
     [Documentation]   Took one prepayment appt from consumer side and apply provider coupon.Initiated a refund from the provider side, Then check refund status.
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${consumer_id}  ${resp.json()['id']}
 
     ${resp}=  Get Appointment Schedules Consumer  ${pid}
