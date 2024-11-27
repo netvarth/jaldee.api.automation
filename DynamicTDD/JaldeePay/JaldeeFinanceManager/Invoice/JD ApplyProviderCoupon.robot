@@ -164,7 +164,7 @@ JD-TC-Apply ProviderCoupon-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${couponId}  ${resp.json()}
 
-# *** COMMENTS ***
+
 
     ${resp}=  Get Coupon By Id  ${couponId} 
     Log  ${resp.json()}
@@ -220,7 +220,7 @@ JD-TC-Apply ProviderCoupon-1
     Should Be Equal As Strings  ${resp.json()['providerCoupons'][0]['couponCode']}  ${cupn_code}
     Should Be Equal As Strings  ${resp.json()['providerCoupons'][0]['date']}  ${ST_DAY}
     Should Be Equal As Strings  ${resp.json()['providerCoupons'][0]['discount']}  ${pc_amount}
-
+# *** COMMENTS ***
 # JD-TC-Apply ProviderCoupon-2
 
 JD-TC-ProviderCouponBill-2
