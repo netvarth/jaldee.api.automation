@@ -298,7 +298,8 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{stockTransfer}                    DRAFT   DISPATCHED   RECEIVED   DECLINED   CANCELED
 @{toggleButton}                     enable  disable
 @{losProduct}                       CDL  PROPERTYLOAN  DOCTORSLOAN  TEACHERSLOAN
-@{stageType}                        NEW  FOLLOWUP  KYC  KYC_VERIFICATION  SALESFIELD  SALESFIELD_VERIFICATION  DOCUMENT  FINANCIAL_INFO  PROPERTY_INFO  BUSINESS_INFO  CREDIT_VERIFICATION  BRANCH_VERIFICATION
+@{leadstageType}                    NEW  FOLLOWUP  KYC  KYC_VERIFICATION  SALESFIELD  SALESFIELD_VERIFICATION  
+@{loanstageType}                    DOCUMENT  FINANCIAL_INFO  PROPERTY_INFO  BUSINESS_INFO  CREDIT_VERIFICATION  BRANCH_VERIFICATION
 @{pushPurchaseToFinance}            AUTOMATIC   MANUAL
 
 

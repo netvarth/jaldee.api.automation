@@ -15357,7 +15357,7 @@ GET LOS Document Data
     RETURN  ${resp}
 
 Save LOS Property Info As Draft
-    [Arguments]  ${leadUid}  ${stageUid}  ${ownerFirstName}  ${ownerLastName}  ${ownerAddress}  ${propertyType}  ${surveyNo}  ${district}  ${sro}  ${taluk}  ${village}  ${natureOfDeed}
+    [Arguments]  ${leadUid}  ${stageUid}  ${ownerFirstName}  ${ownerLastName}  ${ownerAddress}  ${propertyType}  ${surveyNo}  ${district}  ${sro}  ${taluk}  ${village}  ${natureOfDeed}  &{kwargs}
 
     ${data}=   Create Dictionary   ownerFirstName=${ownerFirstName}  ownerLastName=${ownerLastName}  ownerAddress=${ownerAddress}  propertyType=${propertyType}  surveyNo=${surveyNo}  district=${district}  sro=${sro}  taluk=${taluk}  village=${village}  natureOfDeed=${natureOfDeed}
     FOR    ${key}    ${value}    IN    &{kwargs}
@@ -15367,6 +15367,28 @@ Save LOS Property Info As Draft
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/los/lead/${leadUid}/stage/${stageUid}/propertyinfo/data  data=${data}  expected_status=any
     Check Deprication  ${resp}  Save LOS Property Info As Draft
+    RETURN  ${resp}
+
+Proceed LOS Property Info
+    [Arguments]  ${leadUid}  ${stageUid}  ${ownerFirstName}  ${ownerLastName}  ${ownerAddress}  ${propertyType}  ${surveyNo}  ${district}  ${sro}  ${taluk}  ${village}  ${natureOfDeed}  &{kwargs}
+
+    ${data}=   Create Dictionary   ownerFirstName=${ownerFirstName}  ownerLastName=${ownerLastName}  ownerAddress=${ownerAddress}  propertyType=${propertyType}  surveyNo=${surveyNo}  district=${district}  sro=${sro}  taluk=${taluk}  village=${village}  natureOfDeed=${natureOfDeed}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${leadUid}/stage/${stageUid}/propertyinfo/data/proceed  data=${data}  expected_status=any
+    Check Deprication  ${resp}  Proceed LOS Property Info
+    RETURN  ${resp}
+
+
+GET LOS Property Data
+    [Arguments]     ${leadUid}  ${stageUid}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/los/lead/${leadUid}/stage/${stageUid}/propertyinfo/data  expected_status=any
+    Check Deprication  ${resp}  GET LOS Property Data
     RETURN  ${resp}
 
 AddItemToInvoice
