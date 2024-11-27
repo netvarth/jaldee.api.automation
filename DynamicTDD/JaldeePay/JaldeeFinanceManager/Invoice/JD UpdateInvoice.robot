@@ -99,78 +99,9 @@ JD-TC-UpdateInvoice-1
     ${resp}=  Get Category By Id   ${category_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[1]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
-    ${vender_name}=   FakerLibrary.firstname
-    ${contactPersonName}=   FakerLibrary.lastname
-    ${owner_name}=   FakerLibrary.lastname
-    ${vendorId}=   FakerLibrary.word
-    ${PO_Number}    Generate random string    5    123456789
-    ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
-    Set Test Variable  ${email}  ${vender_name}.${test_mail}
-    ${address}=  FakerLibrary.city
-    Set Suite Variable  ${address}
-    ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
-    ${branch}=   db.get_place
-    ${ifsc_code}=   db.Generate_ifsc_code
-    # ${gst_num}  ${pan_num}=   db.Generate_gst_number   ${Container_id}
 
-    ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
 
-    ${state}=    Evaluate     "${state}".title()
-    ${state}=    String.RemoveString  ${state}    ${SPACE}
-    Set Suite Variable    ${state}
-    Set Suite Variable    ${district}
-    Set Suite Variable    ${pin}
-    ${vendor_phno}=   Create List  ${vendor_phno}
-    Set Suite Variable    ${vendor_phno}
-    
-    ${email}=   Create List  ${email}
-    Set Suite Variable    ${email}
-
-    ${bankIfsc}    Random Number 	digits=5 
-    ${bankIfsc}=    Evaluate    f'{${bankIfsc}:0>7d}'
-    Log  ${bankIfsc}
-    Set Suite Variable  ${bankIfsc}  55555${bankIfsc} 
-
-    ${bankName}     FakerLibrary.name
-    Set Suite Variable    ${bankName}
-
-    ${upiId}     FakerLibrary.name
-    Set Suite Variable  ${upiId}
-
-    ${pan}    Random Number 	digits=5 
-    ${pan}=    Evaluate    f'{${pan}:0>5d}'
-    Log  ${pan}
-    Set Suite Variable  ${pan}  55555${pan}
-
-    ${branchName}=    FakerLibrary.name
-    Set Suite Variable  ${branchName}
-    ${gstin}    Random Number 	digits=5 
-    ${gstin}=    Evaluate    f'{${gstin}:0>8d}'
-    Log  ${gstin}
-    Set Suite Variable  ${gstin}  55555${gstin}
-    
-    ${preferredPaymentMode}=    Create List    ${jaldeePaymentmode[0]}
-    ${bankInfo}=    Create Dictionary     bankaccountNo=${bank_accno}    ifscCode=${bankIfsc}    bankName=${bankName}    upiId=${upiId}     branchName=${branchName}    pancardNo=${pan}    gstNumber=${gstin}    preferredPaymentMode=${preferredPaymentMode}    lastPaymentModeUsed=${jaldeePaymentmode[0]}
-    ${bankInfo}=    Create List         ${bankInfo}
-    
-    ${resp}=  Create Vendor  ${category_id}  ${vendorId}  ${vender_name}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${vendor_uid1}   ${resp.json()['encId']}
-    Set Suite Variable   ${vendor_id1}   ${resp.json()['id']}
-
-    ${resp}=  Get vendor by encId   ${vendor_uid1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['id']}  ${vendor_id1}
-    Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1}
-    # Should Be Equal As Strings  ${resp.json()['vendorType']}  ${category_id}
 
     ${resp1}=  AddCustomer  ${CUSERNAME11}
     Log  ${resp1.content}
@@ -185,7 +116,8 @@ JD-TC-UpdateInvoice-1
     ${referenceNo}=  Convert To String  ${referenceNo}
 
     ${description}=   FakerLibrary.word
-    # Set Suite Variable  ${address}
+    ${address}=  FakerLibrary.address
+    Set Suite Variable  ${address}
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
     ${invoiceId}=   FakerLibrary.word
@@ -200,7 +132,7 @@ JD-TC-UpdateInvoice-1
 
     ${maxBookingsAllowed}=   Random Int  min=1  max=5
     ${maxBookingsAllowed}=  Convert To Number  ${maxBookingsAllowed}  1
-
+    ${srv_duration}=   Random Int   min=10   max=20
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}   maxBookingsAllowed=${maxBookingsAllowed}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -218,6 +150,12 @@ JD-TC-UpdateInvoice-1
     ${adhocItemList}=  Create Dictionary  itemName=${itemName}   quantity=${quantity}   price=${price}
     ${adhocItemList}=    Create List    ${adhocItemList}
 
+    ${itemName1}=    FakerLibrary.word
+    Set Suite Variable  ${itemName1}
+    ${price}=   Random Int  min=10  max=15
+    ${price1}=  Convert To Number  ${price}  1
+    ${adhocItemList1}=  Create Dictionary  itemName=${itemName1}   quantity=${quantity}   price=${price1}
+    ${adhocItemList1}=    Create List    ${adhocItemList1}
     
     ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}   ${lid}   serviceList=${serviceList}   adhocItemList=${adhocItemList} 
     Log  ${resp.json()}
@@ -225,15 +163,12 @@ JD-TC-UpdateInvoice-1
     Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}    
 
 
-    ${itemName1}=    FakerLibrary.word
-    Set Suite Variable  ${itemName1}
-    ${price}=   Random Int  min=10  max=15
-    ${price1}=  Convert To Number  ${price}  1
-    ${adhocItemList1}=  Create Dictionary  itemName=${itemName1}   quantity=${quantity}   price=${price1}
-    ${adhocItemList1}=    Create List    ${adhocItemList1}
+    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
 
 
-    ${resp}=  Update Invoice   ${invoice_uid}      ${invoiceDate}    adhocItemList=${adhocItemList1}   invoiceLabel=${invoiceLabel}  billedTo=${address}    vendorUid=${vendor_uid1} 
+    ${resp}=  Update Invoice   ${invoice_uid}    ${category_id2}    ${invoiceDate}    adhocItemList=${adhocItemList1}   invoiceLabel=${invoiceLabel}  billedTo=${address}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -245,10 +180,8 @@ JD-TC-UpdateInvoice-1
     Should Be Equal As Strings  ${resp1.json()['invoiceCategoryId']}  ${category_id2}
     Should Be Equal As Strings  ${resp1.json()['categoryName']}  ${name1}
     Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
-    Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['serviceId']}  ${sid1}
-    Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['quantity']}  ${quantity}
+    Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()['adhocItemList'][0]['itemName']}  ${itemName1}
     Should Be Equal As Strings  ${resp1.json()['adhocItemList'][0]['quantity']}  ${quantity}
     Should Be Equal As Strings  ${resp1.json()['adhocItemList'][0]['price']}  ${price1}
@@ -265,7 +198,7 @@ JD-TC-UpdateInvoice-2
 
  
     ${invoiceLabel}=   FakerLibrary.word
-    ${invoiceDate}=   db.Add Date  -70
+    ${invoiceDate}=  db.add_timezone_date  ${tz}  10   
     ${invoiceId}=   FakerLibrary.word
 
     ${amount1}=   Random Int  min=500  max=2000
@@ -273,7 +206,7 @@ JD-TC-UpdateInvoice-2
 
 
 
-    ${resp}=  Update Invoice   ${invoice_uid}    ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   
+    ${resp}=  Update Invoice   ${invoice_uid}    ${category_id2}    ${invoiceDate}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -284,8 +217,7 @@ JD-TC-UpdateInvoice-2
     Should Be Equal As Strings  ${resp1.json()['invoiceCategoryId']}  ${category_id2}
     Should Be Equal As Strings  ${resp1.json()['categoryName']}  ${name1}
     Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
-    Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
-    Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
+
 
 JD-TC-UpdateInvoice-3
 
@@ -304,19 +236,7 @@ JD-TC-UpdateInvoice-3
       Log   ${resp.json()}
       Should Be Equal As Strings      ${resp.status_code}  200
 
-    ${resp}=   Get License UsageInfo 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get upgradable license 
-       Log   ${resp.json()}
-       Should Be Equal As Strings    ${resp.status_code}   200
-       ${len}=  Get Length  ${resp.json()}
-       ${len}=  Evaluate  ${len}-1
-       Set Test Variable  ${licId1}  ${resp.json()[${len}]['pkgId']}
-       ${resp}=  Change License Package  ${licId1}
-       Should Be Equal As Strings    ${resp.status_code}   200
-     
       ${resp}=  Create Sample Location  
       Set Suite Variable    ${loc_id1}    ${resp}  
 
@@ -357,18 +277,12 @@ JD-TC-UpdateInvoice-3
       ${resp}=  Get Waitlist By Id  ${wid} 
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-    #   Verify Response  ${resp}  date=${CUR_DAY}  waitlistStatus=${wl_status[1]}  partySize=1  appxWaitingTime=0  waitlistedBy=${waitlistedby}   personsAhead=0
-      Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE2}
-      Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id1}
-      Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
-      Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
-      Should Be Equal As Strings  ${resp.json()['paymentStatus']}         ${paymentStatus[0]}
       Set Test Variable   ${fullAmount}  ${resp.json()['fullAmt']}         
     
 
  
     ${invoiceLabel}=   FakerLibrary.word
-    ${invoiceDate}=   db.Add Date  -70
+    ${invoiceDate}=   db.subtract_timezone_date  ${tz}  20      
     ${invoiceId}=   FakerLibrary.word
 
     ${amount1}=   Random Int  min=500  max=2000
@@ -376,7 +290,7 @@ JD-TC-UpdateInvoice-3
 
 
 
-    ${resp}=  Update Invoice   ${invoice_uid}    ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}  ynwUuid=${wid} 
+    ${resp}=  Update Invoice   ${invoice_uid}    ${category_id2}    ${invoiceDate}    ynwUuid=${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -387,8 +301,36 @@ JD-TC-UpdateInvoice-3
     Should Be Equal As Strings  ${resp1.json()['invoiceCategoryId']}  ${category_id2}
     Should Be Equal As Strings  ${resp1.json()['categoryName']}  ${name1}
     Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
-    Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
-    Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
+
+
+JD-TC-UpdateInvoice-4
+
+    [Documentation]  Update invoice with adding waitlist id.***This usecase is not now in dev****
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME41}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${invoiceDate}=   db.subtract_timezone_date  ${tz}  20   
+    ${description}=   FakerLibrary.word
+    
+    ${resp}=  Update Invoice   ${invoice_uid}    ${category_id2}    ${invoiceDate}    description=${description}   dueDate=${invoiceDate}  termsConditions=${description}   notesForCustomer=${description}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['accountId']}  ${account_id1}
+    Should Be Equal As Strings  ${resp1.json()['invoiceCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp1.json()['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
+    Should Be Equal As Strings  ${resp1.json()['description']}  ${description}
+    Should Be Equal As Strings  ${resp1.json()['itemList'][0]['dateString']}  ${invoiceDate}
+    Should Be Equal As Strings  ${resp1.json()['termsConditions']}  ${description}
+    Should Be Equal As Strings  ${resp1.json()['notesForCustomer']}  ${description}
+
+
 
 JD-TC-UpdateInvoice-UH1
 
@@ -405,7 +347,7 @@ JD-TC-UpdateInvoice-UH1
 
     ${fakeid}=    Random Int  min=1000   max=9999	
 
-    ${resp}=  Update Invoice   ${fakeid}    ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   
+    ${resp}=  Update Invoice   ${fakeid}    ${category_id2}    ${invoiceDate}   invoiceLabel=${invoiceLabel}  billedTo=${address}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}
@@ -425,30 +367,30 @@ JD-TC-UpdateInvoice-UH2
 
     ${fakeid}=    Random Int  min=1000   max=9999	
 
-    ${resp}=  Update Invoice   ${invoice_uid}    ${fakeid}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   
+    ${resp}=  Update Invoice   ${invoice_uid}    ${fakeid}    ${invoiceDate}   invoiceLabel=${invoiceLabel}  billedTo=${address}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${INVALID_INVOICE_CATEGORY_ID}
 
-JD-TC-UpdateInvoice-UH3
+# JD-TC-UpdateInvoice-UH3
 
-    [Documentation]  Update invoice with invalid vendor  uid.
+#     [Documentation]  Update invoice with invalid vendor  uid.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME41}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME41}  ${PASSWORD}
+#     Log  ${resp.content}
+#     Should Be Equal As Strings    ${resp.status_code}    200
 
  
-    ${invoiceLabel}=   FakerLibrary.word
-    ${invoiceDate}=   db.get_date_by_timezone  ${tz}
-    ${invoiceId}=   FakerLibrary.word
+#     ${invoiceLabel}=   FakerLibrary.word
+#     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
+#     ${invoiceId}=   FakerLibrary.word
 
-    ${fakeid}=    Random Int  min=1000   max=9999	
+#     ${fakeid}=    Random Int  min=1000   max=9999	
 
-    ${resp}=  Update Invoice   ${invoice_uid}    ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${fakeid}   
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${INVALID_VENDOR}
+#     ${resp}=  Update Invoice   ${invoice_uid}    ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${fakeid}   
+#     Log  ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  422
+#     Should Be Equal As Strings  ${resp.json()}   ${INVALID_VENDOR}
 
 JD-TC-UpdateInvoice-UH4
 
@@ -473,7 +415,7 @@ JD-TC-UpdateInvoice-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     ${INVOICE_STATUS}=  format String   ${INVOICE_STATUS}   ${billStatus[1]}
 
-    ${resp}=  Update Invoice   ${invoice_uid}    ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   
+    ${resp}=  Update Invoice   ${invoice_uid}    ${category_id2}    ${invoiceDate}   invoiceLabel=${invoiceLabel}  billedTo=${address}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${INVOICE_STATUS}

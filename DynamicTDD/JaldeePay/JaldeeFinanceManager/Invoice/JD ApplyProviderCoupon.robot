@@ -154,7 +154,7 @@ JD-TC-Apply ProviderCoupon-1
     ${min_bill_amount}=   Random Int   min=90   max=100
     ${max_disc_val}=   Random Int   min=90  max=100
     ${max_prov_use}=   Random Int   min=10   max=20
-    ${book_channel}=   Create List   ${bookingChannel[1]}
+    ${book_channel}=   Create List   ${bookingChannel[1]}  ${bookingChannel[0]}
     ${coupn_based}=  Create List   ${couponBasedOn[0]}
     ${tc}=  FakerLibrary.sentence
     ${services}=   Create list     ${sid1}    
