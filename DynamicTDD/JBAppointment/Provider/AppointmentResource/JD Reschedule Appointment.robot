@@ -1778,20 +1778,10 @@ JD-TC-Reschedule Appointment-12
 JD-TC-Reschedule Appointment-13
 
     [Documentation]  Consumer takes appointment and provider reschedules it to a later time in another schedule after changing appointment state to arrived.
-
-    # ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # Set Test Variable  ${jdconID}   ${resp.json()['id']}
-    # Set Test Variable  ${fname}   ${resp.json()['firstName']}
-    # Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    # Set Test Variable  ${uname}   ${resp.json()['userName']}
-
-    # ${resp}=  Consumer Logout
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME328}  ${PASSWORD}
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_D}=  Provider Signup
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1801,10 +1791,13 @@ JD-TC-Reschedule Appointment-13
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
     
-    # clear_service   ${PUSERNAME149}
-    # clear_location  ${PUSERNAME149}
-    # clear_location_n_service  ${PUSERNAME149}
-    # clear_customer   ${PUSERNAME149}
+    ${resp}=   Get Appointment Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Disable Appointment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END 
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1934,7 +1927,7 @@ JD-TC-Reschedule Appointment-13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME328}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1999,23 +1992,6 @@ JD-TC-Reschedule Appointment-13
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  
-    # ...   appointmentEncId=${encId1}  apptStatus=${apptStatus[2]}
-    # # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID}
-    # # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
-    # # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
-    # Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    # Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id1}
-    # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
-    # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
-    # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
-    # Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-    # Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
-    # # ${apptTakenTime1}=  db.remove_secs   ${appttime1}
-    # # Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
-    # Set Test Variable  ${statusUpdatedTime1}   ${resp.json()['statusUpdatedTime']}
-    # # ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
-    # Should Be Equal As Strings    ${statusUpdatedTime1}    ${statusUpdatedTime}
 
     ${sTime2}=  add_two  ${eTime1}  5
     ${delta2}=  FakerLibrary.Random Int  min=40  max=80
@@ -2105,22 +2081,22 @@ JD-TC-Reschedule Appointment-13
     # ${resp}=  Consumer Logout
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
-
 *** Comments ***
 JD-TC-Reschedule Appointment-14
+
     [Documentation]  Consumer takes appointment and provider reschedules it after changing appointment state to started.
 
-    ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
-    Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
+    # ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    # Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Test Variable  ${lname}   ${resp.json()['lastName']}
+    # Set Test Variable  ${uname}   ${resp.json()['userName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
