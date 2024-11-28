@@ -20,7 +20,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 @{service_names}
 
 @{status}    New     Pending    Assigned     Approved    Rejected
-@{New_status}    Proceed     Unassign    Block     Delete    Remove
+@{New_status}    Proceed     Unassign    Block     Delete    Remove     Assign 
 
 
 *** Test Cases ***
@@ -100,21 +100,21 @@ JD-TC-get Default status-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[2]} 
+    ${resp}=  Create Finance Status   ${New_status[4]}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id2}   ${resp.json()}
 
-    ${resp}=  Set default status    ${status_id2}    ${categoryType[2]} 
+    ${resp}=  Set default status    ${status_id2}    ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get default status    ${categoryType[2]} 
+    ${resp}=  Get default status    ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['id']}  ${status_id2}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[2]}
-    Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[1]}
+    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[1]}
+    Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[4]}
     Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[1]}
 
 
@@ -176,7 +176,7 @@ JD-TC-get Default status-5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Finance Status   ${New_status[4]}  ${categoryType[1]} 
+    ${resp}=  Create Finance Status   ${New_status[5]}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id2}   ${resp.json()}
@@ -190,7 +190,7 @@ JD-TC-get Default status-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['id']}  ${status_id2}
     Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[1]}
-    Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[4]}
+    Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[5]}
     Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[1]}
 
 JD-TC-get Default status-UH1

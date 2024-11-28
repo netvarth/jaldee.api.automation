@@ -11484,7 +11484,7 @@ Get default status by type
 
     [Arguments]  ${typeName}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/jp/finance/status/default/${typeName}/     expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/status/default/${typeName}     expected_status=any
     RETURN  ${resp}
 
 

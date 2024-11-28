@@ -141,15 +141,23 @@ JD-TC-EnableDisableFinanceManagerStatus-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Finance Status   ${New_status[2]}  ${categoryType[2]} 
+    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id2}   ${resp.json()}
+
+    ${resp}=  Get Finance Status By Id   ${status_id2}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Create Finance Status   ${New_status[3]}  ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id3}   ${resp.json()}
+
+    ${resp}=  Get Finance Status By Id   ${status_id3}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Enable Disable Jaldee Finance Status   ${status_id2}      ${toggle[1]}  
     Log  ${resp.json()}
