@@ -16,6 +16,7 @@ BACKUP_FILE="APreDB-$(date +"%d%b%y%H%M").sql"
 DB_BACKUP_PATH="TDD/sql-files/APreBackup"
 # DB_HOST='127.0.0.1'
 # REDIS_HOST='127.0.0.1'
+REDIS_PORT='6379'
 tddpath="TDD/${SUITE}"
 var="$(cut -d'/' -f 1 <<< ${SUITE})"
 Log_DIR="${SUITE%.*}"
@@ -317,7 +318,7 @@ populatePostalCodeTable()
 checkPincode()
 {
     pincount=$(mysql -h $DB_HOST -u ${MYSQL_USER} ${DATABASE_NAME} -se "select count(*) from postal_code_tbl;")
-    if [ ! -z ${pincount} ] && (( ${pincount}>=84629 )); then
+    if [ -n ${pincount} ] && (( ${pincount}>=84629 )); then
         echo "Pincode table count= '$pincount'. Pincode table populated."
     else
         echo "Populating pincode table encountered error. Please try populating manually using the command."
@@ -345,17 +346,30 @@ populateBankMasterTable()
 
 }
 
-execQueries() {
+executeInitialQueries() {
     INITIAL_QUERIES="sql-files/initial.sql"  # Set your initial queries file here
-    SQL_FILE=${1:-$SQL_FILE}
+    DATABASE_NAME="ynw"
 
-    # Execute INITIAL_QUERIES if it exists and is not empty
-    if [ -s TDD/$INITIAL_QUERIES ]; then
-        echo "Executing Initial Queries from TDD/$INITIAL_QUERIES."
-        mysql -f -h $DB_HOST -u ${MYSQL_USER} ${DATABASE_NAME} < TDD/$INITIAL_QUERIES
+    # Check if account_tbl is empty
+    table_count=$(mysql -h "$DB_HOST" -u "$MYSQL_USER" -D "$DATABASE_NAME" -se "SELECT COUNT(*) FROM account_tbl;")
+
+    if [ "$table_count" -eq 0 ]; then
+        echo "account_tbl is empty. Executing Initial Queries from TDD/$INITIAL_QUERIES."
+        if [ -s TDD/$INITIAL_QUERIES ]; then
+            mysql -f -h $DB_HOST -u ${MYSQL_USER} ${DATABASE_NAME} < TDD/$INITIAL_QUERIES
+            echo "Queries from TDD/$INITIAL_QUERIES have been executed."
+        else
+            echo "TDD/$INITIAL_QUERIES is empty. No initial queries to execute."
+        fi
     else
-        echo "TDD/$INITIAL_QUERIES is empty. No initial queries to execute."
+        echo "account_tbl is not empty. No action taken."
     fi
+}
+
+
+execQueries() 
+{
+    SQL_FILE=${1:-$SQL_FILE}
 
     # Execute SQL_FILE if it exists and is not empty
     if [ -s TDD/$SQL_FILE ]; then
@@ -700,6 +714,7 @@ case $ENV_KEY in
             runAPre VariablesForLocalServer.py "$tddpath"
         else 
             echo "Running APre Resource" 
+            executeInitialQueries
             runAPre VariablesForLocalServer.py "$tddpath"
             execQueries
         fi
