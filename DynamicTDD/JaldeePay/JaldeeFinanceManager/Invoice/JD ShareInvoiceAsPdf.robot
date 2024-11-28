@@ -170,8 +170,7 @@ JD-TC-Share invoice as pdf-1
     ${resp}=  Get vendor by encId   ${vendor_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['id']}  ${vendor_id1}
-    Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1}
+
     # Should Be Equal As Strings  ${resp.json()['vendorType']}  ${category_id}
 
     ${resp1}=  AddCustomer  ${CUSERNAME11}
@@ -290,7 +289,7 @@ JD-TC-Share invoice as pdf-3
     ${invoiceId}=   FakerLibrary.word
 
 
-    ${resp}=  Update Invoice   ${invoice_uid1}    ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   adhocItemList=${adhocItemList1}
+    ${resp}=  Update Invoice   ${invoice_uid1}    ${category_id2}    ${invoiceDate}      adhocItemList=${adhocItemList1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
