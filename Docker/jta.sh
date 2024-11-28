@@ -37,23 +37,24 @@ usage()
     echo -e "\n[-c | --container-count] - sets the number of parallel containers.\nExample usage: $0  --TDD -c 2"
     echo -e "\n[-i | --interactive] - enables setting the env, input location, and output location interactively. This option overrides the environment set using -env option. \nExample usage: $0 -i"
     echo -e "\n[-na | --noAPre] - sets the APre flag to false. Give this option with the -env option if you don't want to run APre. \nExample usage: $0 -env dev -na"
+    echo -e "\n[--Analytics | --analytics] - Runs Reports Resource. Example usage: $0 --Analytics"
     echo -e "\n[--APre | --apre] - Runs APre. Example usage: $0 --APre"
+    echo -e "\n[--Basics | --basics] - Runs Basic functionalities Resources like login and signup. Example usage: $0 --Basics"
+    echo -e "\n[--Communications | --communications | --comms] - Runs Jaldee Communication Resource. Example usage: $0 --Communications"
+    echo -e "\n[--JCloudAPI | --jcloudapi] - Runs Jaldee Cloud Platform API Resource. Example usage: $0 --JCloudAPI"
+    echo -e "\n[--JaldeePay | --jaldeepay] - Runs Billing and Payment resources. Example usage: $0 --JaldeePay"
+    echo -e "\n[--JBAppointment | --jbappointment] - Runs Schedule and appointment based resources. Example usage: $0 --JBAppointment"
+    echo -e "\n[--JBOrder | --jborder] - Runs Catalog and Order based resources. Example usage: $0 --JBOrder"
+    echo -e "\n[--JBQueue | --jbqueue] - Runs Queue and Waitlist based resources. Example usage: $0 --JBQueue"
+    echo -e "\n[--LendingCRM | --lendingcrm] - Runs Lending CRM (cdl and lms) resources. Example usage: $0 --LendingCRM"
+    echo -e "\n[--RBAC | --rbac] - Runs Rbac Resources. Example usage: $0 --RBAC"
+    echo -e "\n[--RemoteRuns | --remoteruns] - Runs Remote Execution Resources. Example usage: $0 --RemoteRuns"
+    echo -e "\n[--Reports | --reports] - Runs Reports Resource. Example usage: $0 --Reports"
+    echo -e "\n[--SA | --sa] - Runs SA. Example usage: $0 --SA"
     echo -e "\n[--TDD] - Runs TDD. Example usage: $0 --TDD"
     echo -e "\n[--TDDSE | --tddse] - Runs TDDSE. Example usage: $0 --TDDSE"
-    echo -e "\n[--SA | --sa] - Runs SA. Example usage: $0 --SA"
+    echo -e "\n[--TDDSoftRun | --tddsoftrun] - Runs Queue and Waitlist based resources. Example usage: $0 --TDDSoftRun"
     echo -e "\n[--Time | --time] - Runs Time. Example usage: $0 --Time"
-    echo -e "\n[--Basics | --basics] - Runs Basic functionalities Resources like login and signup. Example usage: $0 --Basics"
-    echo -e "\n[ --JBQueue | --jbqueue] - Runs Queue and Waitlist based resources. Example usage: $0 --JBQueue"
-    echo -e "\n[ --TDDSoftRun | --tddsoftrun] - Runs Queue and Waitlist based resources. Example usage: $0 --TDDSoftRun"
-    echo -e "\n[--JBAppointment | --jbappointment] - Runs Schedule and appointment based resources. Example usage: $0 --JBAppointment"
-    echo -e "\n[--JBOrder | --jborder] - Runs Catalog and Order based resources. Example usage: $0  --JBOrder"
-    echo -e "\n[--LendingCRM | --lendingcrm] - Runs Lending CRM (cdl and lms) resources. Example usage: $0 --LendingCRM"
-    echo -e "\n[--JaldeePay | --jaldeepay] - Runs Billing and Payment resources. Example usage: $0 --JaldeePay"
-    echo -e "\n[--JCloudAPI | --jcloudapi] - Runs Jaldee Cloud Platform API Resource. Example usage: $0 --JCloudAPI"
-    echo -e "\n[--Communications | --communications | --comms] - Runs Jaldee Communication Resource. Example usage: $0 --Communications"
-    echo -e "\n[--RBAC | --rbac] - Runs Rbac Resources. Example usage: $0 --RBAC"
-    echo -e "\n[--Reports | --reports] - Runs Reports Resource. Example usage: $0 --Reports"
-    echo -e "\n[--Analytics | --analytics] - Runs Reports Resource. Example usage: $0 --Analytics"
     echo -e "\n[-cpu] - Runs Basics, JBQueue, JBAppointment, JBOrder, JaldeePay, Communications, RBAC, Reports & LendingCRM. Example usage: $0 -cpu"
     echo -e "\n[-h | --help] - displays this help message."
     echo -e "\n Examples: $0 -env dev -na -c 2  ---> runs entire tdd, without provider/consumer signup(APre), in the development environment, in 2 docker containers"
@@ -861,6 +862,13 @@ while [ "$1" != "" ]; do
                 mainres="True"
                 shift
                 echo "Running Basics, Bookings, CRM, JPay, Comms, RBAC & Reports Resources."
+            ;;
+        "--RemoteRuns" | "--remoteruns")
+                suite="RemoteRuns"
+                setPaths
+                setPathVariables
+                shift
+                echo "Run RemoteRuns."
             ;;
         "--Provider" | "--provider")
                 suite="Provider"

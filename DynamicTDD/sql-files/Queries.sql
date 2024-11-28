@@ -94,4 +94,15 @@ UPDATE ynw.account_tbl SET timezone = 'Asia/Kolkata' WHERE (id = '1');
 ALTER TABLE ynw.account_info_tbl 
 CHANGE COLUMN cover cover LONGTEXT NULL DEFAULT NULL ;
 
+-- Archana 28-11-2024 --
+UPDATE `account_payment_settings_tbl` 
+SET 
+  `razorpay` = 1,
+  `razorpay_merchant_id` = '+aOM0b6Ly5MP1I22/J9W8awjLfKH/oANJUKlTE=',
+  `razorpay_merchant_key` = '+lRLfBAafMCtr4ujYl27SpRjE+1d5kyKC8kTEPLUrrA=',
+  `razorpay_verified` = 1,
+  `razorpay_webhook_merchant_key` = 'h/lRz/1/kZyR9lv2Q0j53Q=='
+WHERE `id` = 1;
+
+
 

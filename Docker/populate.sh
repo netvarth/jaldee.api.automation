@@ -28,7 +28,7 @@ BACKUP_RETAIN_DAYS=10
 BACKUP_NAME="populated${DATABASE_NAME}"
 cnffile='.my.cnf'
 DEFAULT_INPUT_PATH="$(dirname "$(pwd)")/DynamicTDD"
-defSQLFileName='Queries.sql'
+defSQLFileName='sql-files/Queries.sql'
 PROPERTY_FILE='docker-variables.log'
 PROP_KEY='inputPath'
 INPUT_PATH=`cat $PROPERTY_FILE | grep "$PROP_KEY" | cut -d'=' -f2-`
@@ -74,7 +74,7 @@ findsqlfile()
             # echo "$file"
             SQL_FILE="$file"
             
-        done < <(find "$ynwdir" -name "$1" -print0)
+        done < <(find "$ynwdir" -wholename "*/$1" -print0)
     else
         echo "Please specify a sql file as your 2nd argument."
     fi
@@ -126,7 +126,7 @@ backup()
     createconf
     # createPrePostSqlFiles
     echo -e "\nBacking up Database to - $DB_BACKUP_PATH/${BACKUP_NAME}-${TODAY}.sql"
-    mysqldump -h ${MYSQL_HOST} -P ${MYSQL_PORT} --add-drop-database --opt --databases ${DATABASE_NAME} --result-file="$DB_BACKUP_PATH/${BACKUP_FILE}"
+    time mysqldump -h ${MYSQL_HOST} -P ${MYSQL_PORT} --add-drop-database --opt --databases ${DATABASE_NAME} --result-file="$DB_BACKUP_PATH/${BACKUP_FILE}"
     # cat $DB_BACKUP_PATH/pre.sql $DB_BACKUP_PATH/$BACKUP_FILE $DB_BACKUP_PATH/post.sql > "${DB_BACKUP_PATH}/prepost-${BACKUP_FILE}"
     
     ##### Remove backups older than {BACKUP_RETAIN_DAYS} days  #####
@@ -164,7 +164,7 @@ populateBankMasterTable()
     bnkcount=$(mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} -u ${MYSQL_USER} ${DATABASE_NAME} -se "select count(*) from bank_master_tbl;")
     if [ -z ${bnkcount} ] || [[ ${bnkcount}<=1 ]]; then
         echo "bank_master_tbl count= '$bnkcount'. bank_master_tbl not populated. Populating it using ${INPUT_PATH}/$BANK_TABLE"
-        mysql -f -h ${MYSQL_HOST} -P ${MYSQL_PORT} -u ${MYSQL_USER} ${DATABASE_NAME} < ${INPUT_PATH}/$BANK_TABLE
+        time mysql -f -h ${MYSQL_HOST} -P ${MYSQL_PORT} -u ${MYSQL_USER} ${DATABASE_NAME} < ${INPUT_PATH}/$BANK_TABLE
         bnkcount=$(mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} -u ${MYSQL_USER} ${DATABASE_NAME} -se "select count(*) from bank_master_tbl;")
         if [ ! -z ${bnkcount} ] && (( ${bnkcount}>=1310 )); then
             echo "bank_master_tbl count= '$bnkcount'. bank_master_tbl populated."
@@ -248,18 +248,21 @@ fi
 # if [ "$1" != "" ]; then
 case $1 in
     "-b" | "--backup" )
-            now=$(date +"%r")
-            echo "Current time : $now"
-            populatePostalCodeTable
-            populateBankMasterTable
-            backup
-            clearTddLogs
+            echo "Current time : $(date +"%r")"
+            read -p "Would you like to proceed with creating a backup? (y/n): " confirm
+            if [ "$confirm" = "y" ]; then
+                populatePostalCodeTable
+                populateBankMasterTable
+                backup
+                clearTddLogs
+            else
+                echo "Backup operation aborted. To create a backup, rerun the script with $0 --backup and enter 'y' at the prompt."
+            fi
             shift
             ;;
     "-p" | "--populate" )
             echo "clearing Redis."
-            now=$(date +"%r")
-            echo "Current time : $now"
+            echo "Current time : $(date +"%r")"
             redis-cli -h ${REDIS_HOST} -p ${REDIS_PORT} flushall
             populate
             populatePostalCodeTable

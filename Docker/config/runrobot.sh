@@ -15,7 +15,7 @@ BANK_FILE='sql-files/bank_master_tbl.sql'
 BACKUP_FILE="APreDB-$(date +"%d%b%y%H%M").sql"
 DB_BACKUP_PATH="TDD/sql-files/APreBackup"
 # DB_HOST='127.0.0.1'
-REDIS_HOST='127.0.0.1'
+# REDIS_HOST='127.0.0.1'
 tddpath="TDD/${SUITE}"
 var="$(cut -d'/' -f 1 <<< ${SUITE})"
 Log_DIR="${SUITE%.*}"
@@ -54,11 +54,13 @@ if [[ "$(< /proc/sys/kernel/osrelease)" == *[Mm]icrosoft* ]]; then
     cat /etc/resolv.conf | grep nameserver | cut -d' ' -f 2
     # DB_HOST='host.docker.internal'
     DB_HOST="$(hostname).local"
+    REDIS_HOST="$(hostname).local"
     # sed -i /ebs/VariablesForLocalServer.py -e 's/localhost:8080/host.docker.internal:8080/g'
     sed -i /ebs/VariablesForLocalServer.py -e "s/localhost:8080/$DB_HOST:8080/g"
 else 
     echo "native Linux"
     DB_HOST='127.0.0.1'
+    REDIS_HOST='127.0.0.1'
     # DB_HOST='host.docker.internal'
 fi
 
@@ -67,6 +69,7 @@ fi
 runAPre()
 {
     echo "Running $2"
+    redis-cli -h ${REDIS_HOST} -p ${REDIS_PORT} flushall
     # mkdir -p "TDD_Output/signuplog/$Log_DIR"
     # robot --outputdir "TDD_Output/signuplog/$Log_DIR" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
     time robot --outputdir "TDD_Output/signuplog" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
@@ -201,6 +204,15 @@ runTDDSoftRun()
     pabot --processes 5 --outputdir "TDD_Output/TDDSoftRunLog" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
 }
 
+runRemoteRuns()
+{
+    echo "Running $2"
+    # mkdir -p "TDD_Output/TDDSoftRunLog/$Log_DIR"
+    # pabot --processes 5 --outputdir "TDD_Output/TDDSoftRunLog/$Log_DIR" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
+    pabot --processes 5 --outputdir "TDD_Output/RemoteRunLog" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
+}
+
+
 # runProvider()
 # {
 #     echo "Running $2"
@@ -317,16 +329,28 @@ populateBankMasterTable()
 
 }
 
-execQueries()
-{
+execQueries() {
+    INITIAL_QUERIES="sql-files/initial.sql"  # Set your initial queries file here
+    SQL_FILE=${1:-$SQL_FILE}
+
+    # Execute INITIAL_QUERIES if it exists and is not empty
+    if [ -s TDD/$INITIAL_QUERIES ]; then
+        echo "Executing Initial Queries from TDD/$INITIAL_QUERIES."
+        mysql -f -h $DB_HOST -u ${MYSQL_USER} ${DATABASE_NAME} < TDD/$INITIAL_QUERIES
+    else
+        echo "TDD/$INITIAL_QUERIES is empty. No initial queries to execute."
+    fi
+
+    # Execute SQL_FILE if it exists and is not empty
     if [ -s TDD/$SQL_FILE ]; then
-        echo "Executing Queries from DynamicTDD/$SQL_FILE."
-        # mysql -fv -h $DB_HOST -u ${MYSQL_USER} ${DATABASE_NAME} < TDD/$SQL_FILE
+        echo "Executing Queries from TDD/$SQL_FILE."
         mysql -f -h $DB_HOST -u ${MYSQL_USER} ${DATABASE_NAME} < TDD/$SQL_FILE
     else
-        echo "DynamicTDD/$SQL_FILE is empty. No queries to execute."
+        echo "TDD/$SQL_FILE is empty. No queries to execute."
     fi
 }
+
+
 
 backupDB()
 {
@@ -411,9 +435,6 @@ case $ENV_KEY in
     elif [ "${var}" == "RBAC" ]; then
         echo "Executing case *- Jenkins- RBAC"
         runRBAC VariablesForJenkins.py "$tddpath"
-    elif [ "${var}" == "TDDSoftRun" ]; then
-        echo "Executing case *- Jenkins- TDDSoftRun"
-        runTDDSoftRun VariablesForJenkins.py "$tddpath"
     elif [ "${var}" == "Reports" ]; then
         echo "Executing case *- Jenkins- Reports"
         runReports VariablesForJenkins.py "$tddpath"
@@ -441,6 +462,12 @@ case $ENV_KEY in
     elif [ "${var}" == "Partner" ]; then
         echo "Executing case *- Jenkins- Partner"
         runPartner VariablesForJenkins.py "$tddpath"
+    elif [ "${var}" == "TDDSoftRun" ]; then
+        echo "Executing case *- Jenkins- TDDSoftRun"
+        runTDDSoftRun VariablesForJenkins.py "$tddpath"
+    elif [ "${var}" == "RemoteRuns" ]; then
+        echo "Executing case *- Jenkins- RemoteRuns"
+        runRemoteRuns VariablesForJenkins.py "$tddpath"
     fi
 
     if [ "${var}" != "Time" ] && [ "$TIMEFLAG" == "True"  ] && [ -f TDD/time.txt ]; then
@@ -521,6 +548,12 @@ case $ENV_KEY in
     elif  [ "${var}" == "SA" ]; then
         echo "Executing case *- Test- SA"
         runSA VariablesForTest.py "$tddpath"
+    elif [ "${var}" == "TDDSoftRun" ]; then
+        echo "Executing case *- Test- TDDSoftRun"
+        runTDDSoftRun VariablesForTest.py "$tddpath"
+    elif  [ "${var}" == "RemoteRuns" ]; then
+        echo "Executing case *- Test- RemoteRuns"
+        runRemoteRuns VariablesForTest.py "$tddpath"
     
     fi    
     ;;
@@ -596,6 +629,13 @@ case $ENV_KEY in
     elif  [ "${var}" == "SA" ]; then
         echo "Executing case *- Scale- SA"
         runSA VariablesForScale.py "$tddpath"
+    elif [ "${var}" == "TDDSoftRun" ]; then
+        echo "Executing case *- Scale- TDDSoftRun"
+        runTDDSoftRun VariablesForScale.py "$tddpath"
+    elif  [ "${var}" == "RemoteRuns" ]; then
+        echo "Executing case *- Scale- RemoteRuns"
+        runRemoteRuns VariablesForScale.py "$tddpath"
+    
     # elif [ "${var}" == "Time" ]; then
     #     echo "Executing case *- Scale- Time"
     #     runTime VariablesForScale.py "$tddpath"
@@ -655,9 +695,6 @@ case $ENV_KEY in
     elif [ "${var}" == "JBQueue" ]; then
         echo "Executing case *- local- JBQueue"
         runJBQueue VariablesForLocalServer.py "$tddpath"
-    elif [ "${var}" == "TDDSoftRun" ]; then
-        echo "Executing case *- local- TDDSoftRun"
-        runTDDSoftRun VariablesForLocalServer.py "$tddpath"
     elif [ "${var}" == "JBAppointment" ]; then
         echo "Executing case *- local- JBAppointment"
         runJBAppointment VariablesForLocalServer.py "$tddpath"
@@ -706,6 +743,12 @@ case $ENV_KEY in
     elif [ "${var}" == "Partner" ]; then
         echo "Executing case *- local- Partner"
         runPartner VariablesForLocalServer.py "$tddpath"
+    elif [ "${var}" == "TDDSoftRun" ]; then
+        echo "Executing case *- local- TDDSoftRun"
+        runTDDSoftRun VariablesForLocalServer.py "$tddpath"
+    elif [ "${var}" == "RemoteRuns" ]; then
+        echo "Executing case *- local- RemoteRuns"
+        runRemoteRuns VariablesForLocalServer.py "$tddpath"
     fi
 
     if [ "${var}" != "Time" ] && [ "$TIMEFLAG" == "True"  ] && [ -f TDD/time.txt ]; then
