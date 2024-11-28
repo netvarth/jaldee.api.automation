@@ -54,7 +54,7 @@ JD-TC-Remove Discount-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
     
-    sleep  2s
+    #sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

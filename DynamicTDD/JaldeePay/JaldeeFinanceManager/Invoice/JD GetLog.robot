@@ -167,7 +167,7 @@ JD-TC-Get Log-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}   
 
-    sleep  02s
+    #sleep  02s
  
 
     ${resp}=  Get Invoice Log List UId   ${invoice_uid}
@@ -202,7 +202,7 @@ JD-TC-Get Log-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    sleep  02s
+    #sleep  02s
  
 
     ${resp}=  Get Invoice Log List UId   ${invoice_uid}

@@ -70,7 +70,7 @@ JD-TC-Remove Item From Invoice-1
     ${resp}=  Enable Waitlist
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    sleep   01s
+    #sleep   01s
     
     ${resp}=  Get jaldeeIntegration Settings
     Log   ${resp.json()}

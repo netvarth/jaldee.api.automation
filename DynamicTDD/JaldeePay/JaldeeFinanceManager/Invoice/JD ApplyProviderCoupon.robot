@@ -57,7 +57,7 @@ JD-TC-Apply ProviderCoupon-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
     
-    sleep  2s
+    #sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -207,7 +207,7 @@ JD-TC-Apply ProviderCoupon-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    sleep  02s
+    #sleep  02s
     ${resp}=   Apply Provider Coupon   ${invoice_uid}   ${cupn_code}
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1837,7 +1837,7 @@ JD-TC-ProviderCouponBill-10
     # ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
-    # sleep   1s
+    # #sleep   1s
 
     # ${fields}=   Get subDomain level Fields  ${sector}  ${sub_sector}
     # Log  ${fields.json()}
@@ -1864,7 +1864,7 @@ JD-TC-ProviderCouponBill-10
     ${resp}=  Enable Waitlist
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    sleep   01s
+    #sleep   01s
     ${resp}=  Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
