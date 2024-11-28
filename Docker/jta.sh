@@ -487,6 +487,32 @@ setEnvVariables ()
 
 }
 
+checkAndRunInitialQueries() 
+{
+    INITIAL_SQL="sql-files/initial.sql"
+
+    # Check if account_tbl is empty
+    table_count=$(mysql -h "$MYSQL_HOST" -u "$MYSQL_USER" -D "$DATABASE_NAME" -se "SELECT COUNT(*) FROM account_tbl;")
+
+    if [ "$table_count" -eq 0 ]; then
+        echo "account_tbl is empty. Running queries from $INITIAL_SQL."
+        mysql -h "$MYSQL_HOST" -u "$MYSQL_USER" -D "$DATABASE_NAME" < "$INITIAL_SQL"
+        echo "Queries from $INITIAL_SQL have been executed."
+    else
+        echo "account_tbl is not empty. No action taken."
+    fi
+}
+
+checkPincode()
+{
+    pincount=$(mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} -u ${MYSQL_USER} ${DATABASE_NAME} -se "select count(*) from postal_code_tbl;")
+    if [ ! -z ${pincount} ] && (( ${pincount}>=84629 )); then
+        echo "Pincode table count= '$pincount'. Pincode table populated."
+    else
+        echo "Populating pincode table encountered error. Please try populating manually using the command."
+        echo "mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} -u ${MYSQL_USER} -p ${DATABASE_NAME} < ${inputPath}/$PIN_TABLE"
+    fi
+}
 
 populatePostalCodeTable()
 {
@@ -503,16 +529,6 @@ populatePostalCodeTable()
 
 }
 
-checkPincode()
-{
-    pincount=$(mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} -u ${MYSQL_USER} ${DATABASE_NAME} -se "select count(*) from postal_code_tbl;")
-    if [ ! -z ${pincount} ] && (( ${pincount}>=84629 )); then
-        echo "Pincode table count= '$pincount'. Pincode table populated."
-    else
-        echo "Populating pincode table encountered error. Please try populating manually using the command."
-        echo "mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} -u ${MYSQL_USER} -p ${DATABASE_NAME} < ${inputPath}/$PIN_TABLE"
-    fi
-}
 
 populateBankMasterTable()
 {
@@ -566,6 +582,9 @@ dbBackup ()
         password="$MYSQL_PASSWORD"
 eof
     fi
+
+    #Run initial queries
+    checkAndRunInitialQueries
 
     #Populate the postal code table
     populatePostalCodeTable

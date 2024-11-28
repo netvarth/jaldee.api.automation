@@ -284,6 +284,22 @@ mainRun()
     
 }
 
+checkAndRunInitialQueries() {
+    INITIAL_SQL="sql-files/initial.sql"
+
+    # Check if account_tbl is empty
+    table_count=$(mysql -h "$DB_HOST" -u "$MYSQL_USER" -D "$DATABASE_NAME" -se "SELECT COUNT(*) FROM account_tbl;")
+
+    if [ "$table_count" -eq 0 ]; then
+        echo "account_tbl is empty. Running queries from $INITIAL_SQL."
+        mysql -h "$DB_HOST" -u "$MYSQL_USER" -D "$DATABASE_NAME" < "$INITIAL_SQL"
+        echo "Queries from $INITIAL_SQL have been executed."
+    else
+        echo "account_tbl is not empty. No action taken."
+    fi
+}
+
+
 populatePostalCodeTable()
 {
     pincount=$(mysql -h $DB_HOST -u ${MYSQL_USER} ${DATABASE_NAME} -se "select count(*) from postal_code_tbl;")
@@ -655,6 +671,7 @@ case $ENV_KEY in
 * )
     echo "Executing case *- local"
     # redis-cli -h $REDIS_HOST -p 6379 flushdb
+    # checkAndRunInitialQueries
     populatePostalCodeTable
     # execQueries
     # if [ "$FULL_RUN" == "True" ]; then
