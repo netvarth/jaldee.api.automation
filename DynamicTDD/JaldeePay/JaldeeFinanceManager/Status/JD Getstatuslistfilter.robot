@@ -165,6 +165,10 @@ JD-TC-GetstatusListfilter-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id2}   ${resp.json()}
 
+    ${resp}=  Get status list filter   categoryType-eq=${categoryType[1]}    account-eq=${account_id1}   name-eq=${New_status[4]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
 
     ${resp}=  Update Finance Status   ${New_status[5]}  ${categoryType[1]}   ${status_id2}
     Log  ${resp.json()}

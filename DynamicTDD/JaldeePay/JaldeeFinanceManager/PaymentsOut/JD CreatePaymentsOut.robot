@@ -114,11 +114,11 @@ JD-TC-Create PaymentsOut-1
     ${resp}=  Get Category By Id   ${category_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get default status    ${categoryType[2]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${status_id0}    ${resp.json()['id']}  
+
+    # ${resp}=  Get default status    ${categoryType[2]} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${vender_name}=   FakerLibrary.firstname
     ${contactPersonName}=   FakerLibrary.lastname

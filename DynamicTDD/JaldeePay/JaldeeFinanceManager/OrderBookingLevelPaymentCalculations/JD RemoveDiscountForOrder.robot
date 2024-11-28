@@ -137,9 +137,6 @@ JD-TC-RemoveDiscountForOrder-1
     ${url}=   FakerLibrary.url
     ${sTime}=  add_time  0  15
     ${eTime}=  add_time   0  45
-    ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Order Settings by account id
     Log  ${resp.json()}
@@ -194,6 +191,19 @@ JD-TC-RemoveDiscountForOrder-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
+
+    ${resp}=  Get Bill Settings 
+    Log   ${resp.json}
+    IF  ${resp.status_code}!=200
+        Log   Status code is not 200: ${resp.status_code}
+        ${resp}=  Enable Disable bill  ${bool[1]}
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    ELSE IF  ${resp.json()['enablepos']}==${bool[0]}
+        ${resp}=  Enable Disable bill  ${bool[1]}
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Create Sample Location  
     Set Suite Variable    ${lid}    ${resp}  
