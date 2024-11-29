@@ -72,7 +72,7 @@ JD-TC-ChangeAppointmentStatus-1
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${min_pre}  ${resp.json()['minPrePaymentAmount']}
     ELSE 
-        For  ${service}  IN  @{resp.json()}
+        FOR  ${service}  IN  @{resp.json()}
             IF   ${service['isPrePayment']} == ${bool[1]}
                 ${FOUND}  Set Variable  True
                 Set Test Variable  ${min_pre}  ${resp.json()[0]['minPrePaymentAmount']}
