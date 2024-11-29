@@ -496,7 +496,8 @@ checkAndRunInitialQueries()
 
     if [ "$table_count" -eq 0 ]; then
         echo "account_tbl is empty. Running queries from $INITIAL_SQL."
-        mysql -h "$MYSQL_HOST" -u "$MYSQL_USER" -D "$DATABASE_NAME" < "$INITIAL_SQL"
+        if [ -s "${inputPath}/$INITIAL_SQL" ]; then
+        mysql -h "$MYSQL_HOST" -u "$MYSQL_USER" -D "$DATABASE_NAME" < ${inputPath}/"$INITIAL_SQL"
         echo "Queries from $INITIAL_SQL have been executed."
     else
         echo "account_tbl is not empty. No action taken."

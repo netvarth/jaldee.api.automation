@@ -134,6 +134,18 @@ backup()
     find "$DB_BACKUP_PATH" -mindepth 1 -type f -mtime +${BACKUP_RETAIN_DAYS} -print -delete
 }
 
+
+checkPincode()
+{
+    pincount=$(mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} -u ${MYSQL_USER} ${DATABASE_NAME} -se "select count(*) from postal_code_tbl;")
+    if [ ! -z ${pincount} ] && (( ${pincount}>=84629 )); then
+        echo "postal_code_tbl count= '$pincount'. postal_code_tbl populated."
+    else
+        echo "Populating postal_code_tbl encountered error. Please try populating manually using the command."
+        echo "mysql -u root -p ${DATABASE_NAME} < ${INPUT_PATH}/$PIN_TABLE"
+    fi
+}
+
 populatePostalCodeTable()
 {
     pincount=$(mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} -u ${MYSQL_USER} ${DATABASE_NAME} -se "select count(*) from postal_code_tbl;")
@@ -146,17 +158,6 @@ populatePostalCodeTable()
         echo "Pincode table count= '$pincount'. Pincode table already populated."
     fi
 
-}
-
-checkPincode()
-{
-    pincount=$(mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} -u ${MYSQL_USER} ${DATABASE_NAME} -se "select count(*) from postal_code_tbl;")
-    if [ ! -z ${pincount} ] && (( ${pincount}>=84629 )); then
-        echo "postal_code_tbl count= '$pincount'. postal_code_tbl populated."
-    else
-        echo "Populating postal_code_tbl encountered error. Please try populating manually using the command."
-        echo "mysql -u root -p ${DATABASE_NAME} < ${INPUT_PATH}/$PIN_TABLE"
-    fi
 }
 
 populateBankMasterTable()
@@ -175,6 +176,27 @@ populateBankMasterTable()
             
     else
         echo "bank_master_tbl count= '$bnkcount'. bank_master_tbl already populated."
+    fi
+}
+
+executeInitialQueries() 
+{
+    INITIAL_QUERIES="sql-files/initial.sql"  # Set your initial queries file here
+    # DATABASE_NAME="ynw"
+
+    # Check if account_tbl is empty
+    table_count=$(mysql -h "$MYSQL_HOST" -u "$MYSQL_USER" -D "$DATABASE_NAME" -se "SELECT COUNT(*) FROM account_tbl;")
+
+    if [ "$table_count" -eq 0 ]; then
+        echo "account_tbl is empty. Executing Queries from ${INPUT_PATH}/$INITIAL_QUERIES."
+        if [ -s ${INPUT_PATH}/$INITIAL_QUERIES ]; then
+            mysql -f -h $MYSQL_HOST -u ${MYSQL_USER} ${DATABASE_NAME} < ${INPUT_PATH}/$INITIAL_QUERIES
+            echo "Queries from ${INPUT_PATH}/$INITIAL_QUERIES executed."
+        else
+            echo "${INPUT_PATH}/$INITIAL_QUERIES is empty. No initial queries to execute."
+        fi
+    else
+        echo "account_tbl is not empty. No action taken."
     fi
 }
 
@@ -251,8 +273,13 @@ case $1 in
             echo "Current time : $(date +"%r")"
             read -p "Would you like to proceed with creating a backup? (y/n): " confirm
             if [ "$confirm" = "y" ]; then
+                echo -e "\n Checking account_tbl..."
+                executeInitialQueries
+                echo -e "\n Checking Pincode table..."
                 populatePostalCodeTable
+                echo -e "\n Checking bank_master_tbl..."
                 populateBankMasterTable
+                # echo ""
                 backup
                 clearTddLogs
             else
@@ -265,8 +292,8 @@ case $1 in
             echo "Current time : $(date +"%r")"
             redis-cli -h ${REDIS_HOST} -p ${REDIS_PORT} flushall
             populate
-            populatePostalCodeTable
-            populateBankMasterTable
+            # populatePostalCodeTable
+            # populateBankMasterTable
             echo "clearing files in TDD_Logs."
             clearfiles
             shift
