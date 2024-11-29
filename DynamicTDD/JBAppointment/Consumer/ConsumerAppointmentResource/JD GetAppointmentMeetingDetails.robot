@@ -141,15 +141,15 @@ JD-TC-GetAppointmentMeetingDetails-1
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     # clear_appt_schedule   ${PUSERPH0}
 
-    ${resp}=  Get Service
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${p1_s2}   ${resp.json()[0]['id']}
-    Set Suite Variable   ${P1SERVICE2}   ${resp.json()[0]['name']}
-    Set Suite Variable   ${p1_s1}   ${resp.json()[1]['id']}
-    Set Suite Variable   ${P1SERVICE1}   ${resp.json()[1]['name']}
-    Set Suite Variable   ${p1_s3}   ${resp.json()[2]['id']}
-    Set Suite Variable   ${P1SERVICE3}   ${resp.json()[2]['name']}
+    # ${resp}=  Get Service
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${p1_s2}   ${resp.json()[0]['id']}
+    # Set Suite Variable   ${P1SERVICE2}   ${resp.json()[0]['name']}
+    # Set Suite Variable   ${p1_s1}   ${resp.json()[1]['id']}
+    # Set Suite Variable   ${P1SERVICE1}   ${resp.json()[1]['name']}
+    # Set Suite Variable   ${p1_s3}   ${resp.json()[2]['id']}
+    # Set Suite Variable   ${P1SERVICE3}   ${resp.json()[2]['name']}
 
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -329,15 +329,11 @@ JD-TC-GetAppointmentMeetingDetails-2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-
-
     ${reason}=  Random Element  ${cancelReason}
 
     ${resp}=  Appointment Action   ${apptStatus[4]}   ${apptid2}    cancelReason=${reason}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-
 
 
     ${resp}=  ProviderLogout
@@ -514,8 +510,6 @@ JD-TC-GetAppointmentMeetingDetails-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-
-
     ${cnote}=   FakerLibrary.word
     ${virtualService}=  Create Dictionary   ${CallingModes[0]}=${ZOOM_id2}
     ${resp}=  Take Appointment For Consumer  ${pcid}  ${p1_s2}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}   virtualService=${virtualService}  location=${{str('${p1_l1}')}}
@@ -534,7 +528,6 @@ JD-TC-GetAppointmentMeetingDetails-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    
     ${resp}=  Create Appointment Meeting Request   ${apptid4}   ${CallingModes[0]}   ${waitlistedby[1]}  ${waitlistedby[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -555,7 +548,6 @@ JD-TC-GetAppointmentMeetingDetails-3
     Should Be Equal As Strings  ${resp.json()['startingUl']}   ${ZOOM_id2}
     Should Be Equal As Strings  ${resp.json()['joiningUrl']}   ${ZOOM_id2}
 
-
     ${resp}=  Consumer Logout
     Should Be Equal As Strings  ${resp.status_code}  200 
 
@@ -563,13 +555,11 @@ JD-TC-GetAppointmentMeetingDetails-3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-
     ${reason}=  Random Element  ${cancelReason}
 
     ${resp}=  Appointment Action   ${apptStatus[4]}   ${apptid4}    cancelReason=${reason}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
 
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -597,8 +587,6 @@ JD-TC-GetAppointmentMeetingDetails-4
     # Set Test Variable   ${p1_s3}   ${resp.json()[2]['id']}
     # Set Test Variable   ${P1SERVICE3}   ${resp.json()[2]['name']}
 
-
-
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME16}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -611,8 +599,6 @@ JD-TC-GetAppointmentMeetingDetails-4
     ${apptfor1}=  Create Dictionary  id=${pcid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     Set Test Variable   ${apptfor} 
-
-
 
     ${cnote}=   FakerLibrary.word
     ${virtualService}=  Create Dictionary   ${CallingModes[1]}=${WHATSAPP_id2}
@@ -632,7 +618,6 @@ JD-TC-GetAppointmentMeetingDetails-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    
     ${resp}=  Create Appointment Meeting Request   ${apptid5}   ${CallingModes[1]}   ${waitlistedby[1]}  ${waitlistedby[0]} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -640,7 +625,7 @@ JD-TC-GetAppointmentMeetingDetails-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${resp}=  ProviderLogout
+    ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${accId}  ${token2} 
@@ -658,15 +643,11 @@ JD-TC-GetAppointmentMeetingDetails-4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-
     ${reason}=  Random Element  ${cancelReason}
 
     ${resp}=  Appointment Action   ${apptStatus[4]}   ${apptid5}    cancelReason=${reason}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-
-
 
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -682,6 +663,7 @@ JD-TC-GetAppointmentMeetingDetails-UH2
 
     ${accId}=  get_acc_id  ${PUSERPH0}
     Set Suite Variable  ${accId}  
+    
     # ${resp}=  Get Service
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
@@ -739,9 +721,7 @@ JD-TC-GetAppointmentMeetingDetails-UH2
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${VIRTUAL_CALLING_MODES_INVALID}"
 
-
-
-     ${resp}=  ProviderLogout
+    ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${accId}  ${token2} 
@@ -754,7 +734,6 @@ JD-TC-GetAppointmentMeetingDetails-UH2
     Should Be Equal As Strings  ${resp.json()['startingUl']}   ${ZOOM_id2}
     Should Be Equal As Strings  ${resp.json()['joiningUrl']}   ${ZOOM_id2}
 
-
     ${resp}=  Consumer Logout
     Should Be Equal As Strings  ${resp.status_code}  200 
 
@@ -762,15 +741,11 @@ JD-TC-GetAppointmentMeetingDetails-UH2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-
     ${reason}=  Random Element  ${cancelReason}
 
     ${resp}=  Appointment Action   ${apptStatus[4]}   ${apptid6}    cancelReason=${reason}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-
-
 
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -786,6 +761,7 @@ JD-TC-GetAppointmentMeetingDetails-5
 
     ${accId}=  get_acc_id  ${PUSERPH0}
     Set Suite Variable  ${accId}  ${accId} 
+
     # ${resp}=  Get Service
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
@@ -805,8 +781,6 @@ JD-TC-GetAppointmentMeetingDetails-5
     ${apptfor}=   Create List  ${apptfor1}
     Set Test Variable   ${apptfor} 
       
-
-
     ${cnote}=   FakerLibrary.word
     ${virtualService}=  Create Dictionary   ${CallingModes[0]}=${ZOOM_id2}
     ${resp}=  Take Appointment For Consumer  ${pcid}  ${p1_s2}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}   virtualService=${virtualService}  location=${{str('${p1_l1}')}}
@@ -825,8 +799,6 @@ JD-TC-GetAppointmentMeetingDetails-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    
-
     #Step_1
     ${resp}=  Create Appointment Meeting Request   ${apptid7}   ${CallingModes[0]}   ${waitlistedby[1]}  ${waitlistedby[0]} 
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -843,8 +815,7 @@ JD-TC-GetAppointmentMeetingDetails-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
-     ${resp}=  ProviderLogout
+    ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${accId}  ${token2} 
@@ -857,7 +828,6 @@ JD-TC-GetAppointmentMeetingDetails-5
     Should Be Equal As Strings  ${resp.json()['startingUl']}   ${ZOOM_id2}
     Should Be Equal As Strings  ${resp.json()['joiningUrl']}   ${ZOOM_id2}
 
-
     ${resp}=  Consumer Logout
     Should Be Equal As Strings  ${resp.status_code}  200 
 
@@ -865,16 +835,11 @@ JD-TC-GetAppointmentMeetingDetails-5
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-
-
     ${reason}=  Random Element  ${cancelReason}
 
     ${resp}=  Appointment Action   ${apptStatus[4]}   ${apptid7}    cancelReason=${reason}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-
-
 
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -902,12 +867,9 @@ JD-TC-GetAppointmentMeetingDetails-6
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-
     ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-
 
     ${resp}=  Create Appointment Meeting Request   ${apptid8}   ${CallingModes[1]}  ${waitlistedby[1]}  ${waitlistedby[0]} 
     Log  ${resp.json()}
@@ -917,8 +879,6 @@ JD-TC-GetAppointmentMeetingDetails-6
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${Initial_Mtng_Request}  "${resp.json()}"
-
-
 
     ${resp}=  Create Appointment Meeting Request   ${apptid8}   ${CallingModes[1]}  ${waitlistedby[1]}  ${waitlistedby[0]} 
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -946,15 +906,11 @@ JD-TC-GetAppointmentMeetingDetails-6
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-
     ${reason}=  Random Element  ${cancelReason}
 
     ${resp}=  Appointment Action   ${apptStatus[4]}   ${apptid8}    cancelReason=${reason}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-
-
 
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1023,7 +979,6 @@ JD-TC-GetAppointmentMeetingDetails-7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
     ${PUSERPH_id2}=  Evaluate  ${PUSERNAME}+10101
     ${ZOOM_Pid2}=  Format String  ${ZOOM_url}  ${PUSERPH_id2}
     Set Suite Variable   ${ZOOM_Pid2}
@@ -1047,20 +1002,19 @@ JD-TC-GetAppointmentMeetingDetails-7
     ${resp}=  Create virtual Service  ${SERVICE1}   ${description}   5   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[0]}   ${bool[0]}   ${vstype}   ${virtualCallingModes}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Suite Variable  ${Service_id1}  ${resp.json()} 
+    Set Suite Variable  ${p2_s1}  ${resp.json()} 
     ${resp}=   Get Service By Id  ${Service_id1}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Log  ${resp.json()}
- 
-
-    ${resp}=  Get Service
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    
+    # ${resp}=  Get Service
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
    
-    Set Suite Variable   ${p2_s1}   ${resp.json()[0]['id']}
-    Set Suite Variable   ${P2SERVICE1}   ${resp.json()[0]['name']}
-    Set Suite Variable   ${p2_s2}   ${resp.json()[1]['id']}
-    Set Suite Variable   ${P2SERVICE2}   ${resp.json()[1]['name']}
+    # Set Suite Variable   ${p2_s1}   ${resp.json()[0]['id']}
+    # Set Suite Variable   ${P2SERVICE1}   ${resp.json()[0]['name']}
+    # Set Suite Variable   ${p2_s2}   ${resp.json()[1]['id']}
+    # Set Suite Variable   ${P2SERVICE2}   ${resp.json()[1]['name']}
    
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -1082,7 +1036,7 @@ JD-TC-GetAppointmentMeetingDetails-7
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${p2_l1}  ${duration}  ${bool1}  ${p2_s1}  ${p2_s2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${p2_l1}  ${duration}  ${bool1}  ${p2_s1}  #${p2_s2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id2}  ${resp.json()}
