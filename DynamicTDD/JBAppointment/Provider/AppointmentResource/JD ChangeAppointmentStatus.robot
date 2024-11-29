@@ -75,8 +75,8 @@ JD-TC-ChangeAppointmentStatus-1
         FOR  ${service}  IN  @{resp.json()}
             IF   ${service['isPrePayment']} == ${bool[1]}
                 ${FOUND}  Set Variable  True
-                Set Test Variable  ${min_pre}  ${resp.json()[0]['minPrePaymentAmount']}
-                Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
+                Set Test Variable  ${min_pre}  ${service['minPrePaymentAmount']}
+                Set Test Variable  ${s_id}   ${service['id']}
                 BREAK
             END
         END
