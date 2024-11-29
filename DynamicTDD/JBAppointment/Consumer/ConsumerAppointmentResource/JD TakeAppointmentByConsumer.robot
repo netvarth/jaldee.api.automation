@@ -1781,7 +1781,7 @@ JD-TC-Take Appointment-15
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/5}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.content}
@@ -4470,7 +4470,7 @@ JD-TC-Take Appointment-19
     # ${country_code}    Generate random string    2    ${digits} 
     # ${country_code}    Convert To Integer  ${country_code}
     ${CUSERPH7}=  Evaluate  ${CUSERNAME1}+${PO_Number}
-    ${resp}=   Take Appointment For Provider with Phone no    ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${CUSERPH7}  ${apptfor}  
+    ${resp}=   Take Appointment For Provider with Phone no    ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${CUSERPH7}  ${apptfor}   location=${{str('${lid}')}} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           

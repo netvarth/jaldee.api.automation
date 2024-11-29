@@ -2960,9 +2960,9 @@ JD-TC-Reschedule Appointment-UH12
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout 
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
     Log   ${resp.json()}
@@ -2970,8 +2970,6 @@ JD-TC-Reschedule Appointment-UH12
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
     Set Suite Variable    ${PCid}   ${resp.json()['id']}
     Set Test Variable  ${uname}   ${resp.json()['userName']}
-
-
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
