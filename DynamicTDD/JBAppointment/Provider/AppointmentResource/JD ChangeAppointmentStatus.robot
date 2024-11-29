@@ -14,6 +14,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 ${self}     0
 @{service_names}
+${maxBookings}  20
 
 *** Test Cases ***
 
@@ -63,15 +64,9 @@ JD-TC-ChangeAppointmentStatus-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
-        ${SERVICE1}=    generate_unique_service_name  ${service_names}
-        Append To List  ${service_names}  ${SERVICE1}   
-        ${s_id}=  Create Sample Service  ${SERVICE1}  isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre}  maxBookingsAllowed=20
-        ${resp}=   Get Service By Id  ${s_id}
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${min_pre}  ${resp.json()['minPrePaymentAmount']}
+        ${FOUND}  Set Variable  False
     ELSE 
+        ${FOUND}  Set Variable  False 
         FOR  ${service}  IN  @{resp.json()}
             IF   ${service['isPrePayment']} == ${bool[1]}
                 ${FOUND}  Set Variable  True
@@ -80,16 +75,16 @@ JD-TC-ChangeAppointmentStatus-1
                 BREAK
             END
         END
-        IF   not ${FOUND}
-            ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
-            ${SERVICE1}=    generate_unique_service_name  ${service_names}
-            Append To List  ${service_names}  ${SERVICE1}
-            ${s_id}=  Create Sample Service  ${SERVICE1}   isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}  maxBookingsAllowed=20
-            ${resp}=   Get Service By Id  ${s_id}
-            Log  ${resp.json()}
-            Should Be Equal As Strings  ${resp.status_code}  200
-            Set Test Variable  ${min_pre}  ${resp.json()['minPrePaymentAmount']}
-        END
+    END
+    IF   not ${FOUND}
+        ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        Append To List  ${service_names}  ${SERVICE1}
+        ${s_id}=  Create Sample Service  ${SERVICE1}   isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}  maxBookingsAllowed=${maxBookings}
+        ${resp}=   Get Service By Id  ${s_id}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${min_pre}  ${resp.json()['minPrePaymentAmount']}
     END
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -109,13 +104,8 @@ JD-TC-ChangeAppointmentStatus-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${schedule_name}=  FakerLibrary.bs
-        ${parallel}=  FakerLibrary.Random Int  min=10  max=20
-        ${maxval}=  Convert To Integer   ${delta/2}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-        ${bool1}=  Random Element  ${bool}
-        ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-        Log  ${resp.json()}
+        ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+        Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${sch_id}  ${resp.json()}
     ELSE
@@ -127,10 +117,18 @@ JD-TC-ChangeAppointmentStatus-1
     ${resp}=   Get Service By Id  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['minPrePaymentAmount']}  ${min_pre}
-    Should Be Equal As Strings  ${resp.json()['prePaymentType']}       ${advancepaymenttype[1]}
+    IF  ${resp.json()['maxBookingsAllowed']} <= 1
+        ${resp}=  Update Service  ${s_id}  ${resp.json()['name']}  ${resp.json()['description']}  ${resp.json()['serviceDuration']}  ${resp.json()['isPrePayment']}  ${resp.json()['totalAmount']}  maxBookingsAllowed=${maxBookings}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-*** COMMENTS ***
+    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['services'][0]['maxBookingsAllowed']}  ${maxBookings}
+    
+
+# *** COMMENTS ***
   
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
