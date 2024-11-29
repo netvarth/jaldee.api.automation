@@ -39,14 +39,84 @@ JD-TC-UpdateBillStatus-1
     ${billable_providers}=    Billable Domain Providers   min=55   max=65
     Log   ${billable_providers}
     Set Suite Variable   ${billable_providers}
-    ${pro_len}=  Get Length   ${billable_providers}
-    clear_service   ${billable_providers[3]}
-    clear_location  ${billable_providers[3]}
-    ${pid}=  get_acc_id  ${billable_providers[3]}
+    # ${pro_len}=  Get Length   ${billable_providers}
+    # clear_service   ${billable_providers[3]}
+    # clear_location  ${billable_providers[3]}
+    # ${pid}=  get_acc_id  ${billable_providers[3]}
     
-    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${firstname}  ${lastname}  ${PUSERPH0}  ${LoginId}=  Provider Signup
+    Set Suite Variable  ${PUSERPH0}
+
+    ${resp}=  Enable Waitlist
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    sleep   01s
+    
+    ${resp}=  Get jaldeeIntegration Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[0]}   
+
+    ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get jaldeeIntegration Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Create Sample Location  
+    Set Suite Variable    ${lid}    ${resp}  
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
+
+    ${resp}=   Get Appointment Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Disable Appointment   ${toggle[0]}   
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${resp}=  Get Business Profile
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -95,13 +165,14 @@ JD-TC-UpdateBillStatus-1
     ${maxBookingsAllowed}=   Random Int  min=10  max=50
     ${maxBookingsAllowed}=  Convert To Number  ${maxBookingsAllowed}  1
 
-    ${s_id}=  Create Sample Service  ${SERVICE1}    automaticInvoiceGeneration=${bool[1]}   isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}
-    Set Test Variable   ${s_id}
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}   automaticInvoiceGeneration=${bool[1]}
+    ${s_id1}=  Create Sample Service  ${SERVICE1}    automaticInvoiceGeneration=${bool[1]}  
+    Set Test Variable   ${s_id1}
+    ${SERVICE4}=    generate_unique_service_name  ${service_names}
+    ${resp}=  Create Service  ${SERVICE4}  ${desc}   ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}   automaticInvoiceGeneration=${bool[1]}
     # ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${min_pre}  ${servicecharge}  ${bool[0]}  ${bool[0]}    maxBookingsAllowed=${maxBookingsAllowed}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}   200
-    # Set Test Variable  ${s_id}  ${resp.json()}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Set Test Variable  ${s_id}  ${resp.json()}
 
     # ${resp}=  Auto Invoice Generation For Service   ${s_id}    ${toggle[0]}
     # Log  ${resp.json()}
@@ -147,7 +218,7 @@ JD-TC-UpdateBillStatus-1
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}  ${s_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -226,7 +297,7 @@ JD-TC-UpdateBillStatus-1
     ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    # Set Suite Variable    ${cid1}    ${resp.json()['providerConsumer']}
+    Set Suite Variable    ${cid1}    ${resp.json()['providerConsumer']}
 
 
 
@@ -260,11 +331,15 @@ JD-TC-UpdateBillStatus-1
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${firstName}
     Set Suite Variable  ${apptid1}   
 
+    ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre}  ${purpose[0]}  ${apptid1}  ${s_id}  ${bool[0]}   ${bool[1]}  ${cid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot2}
-    ${apptfor}=   Create List  ${apptfor1}
+    ${apptfor1}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment  ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment  ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -300,6 +375,34 @@ JD-TC-UpdateBillStatus-1
     # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
     # Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
+
+   ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Set Test Variable   ${a${i}}  ${resp.json()[0]['availableSlots'][${i}]['time']}
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
+        END
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j}=  Random Int  max=${num_slots-1}
+    Set Suite Variable   ${slot3}   ${slots[${j}]}
+
+
+    ${apptfor2}=  Create Dictionary  id=${self}   apptTime=${slot3}
+    ${apptfor3}=   Create List  ${apptfor2}
+
+    ${cnote}=   FakerLibrary.name
+    ${resp}=   Customer Take Appointment  ${pid}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor3}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+          
+    ${apptid3}=  Get From Dictionary  ${resp.json()}  ${firstName}
+    Set Suite Variable  ${apptid3}   
+
     
     ${resp}=  Consumer Logout
     Log  ${resp.content}
@@ -307,8 +410,19 @@ JD-TC-UpdateBillStatus-1
 
 
 
-    ${resp}=   Encrypted Provider Login   ${billable_providers[3]}  ${PASSWORD} 
+    # ${resp}=   Encrypted Provider Login   ${billable_providers[3]}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Booking Invoices  ${apptid3}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${pid}
+    Set Suite Variable  ${invoice_uid3}   ${resp.json()[0]['invoiceUid']}
+
+    ${resp}=  Appointment Action   ${apptStatus[1]}   ${apptid1}
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Booking Invoices  ${apptid1}
@@ -341,7 +455,8 @@ JD-TC-UpdateBillStatus-2
 
     [Documentation]  Update bill status as canceled.
 
-    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -367,7 +482,8 @@ JD-TC-UpdateBillStatus-3
 
     [Documentation]  Update bill status as new from draft.(From direct finance manager dashboard through ui)
 
-    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -508,7 +624,8 @@ JD-TC-UpdateBillStatus-4
 
     [Documentation]  try to update bill status from new to cancel .
 
-    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${billStatusNote}=   FakerLibrary.word
@@ -531,7 +648,8 @@ JD-TC-UpdateBillStatus-UH1
 
     [Documentation]  try to update  settle invoice thats already settiled.
 
-    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${billStatusNote}=   FakerLibrary.word
@@ -546,7 +664,8 @@ JD-TC-UpdateBillStatus-UH2
 
     [Documentation]  try to update already cancelled invoice.
 
-    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${billStatusNote}=   FakerLibrary.word
