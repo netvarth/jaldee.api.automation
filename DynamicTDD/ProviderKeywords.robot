@@ -1492,6 +1492,19 @@ Update Appointment Schedule
     Check Deprication  ${resp}  Update Appointment Schedule
     RETURN  ${resp}
 
+Update Schedule with Services
+    [Arguments]  ${schedule_id}  ${response}  @{service_ids}
+    ${service_list}=  Create list
+    FOR  ${service}  IN  @{response.json()['services']}
+        Append To List  ${service_list} 	${service['id']}
+    END
+    Append To List  ${service_list}  @{service_ids}
+    ${resp}=  Update Appointment Schedule  ${schedule_id}  ${response.json()['name']}  ${response.json()['apptSchedule']['recurringType']}  ${response.json()['apptSchedule']['repeatIntervals']}
+    ...  ${response.json()['apptSchedule']['startDate']}  ${response.json()['apptSchedule']['terminator']['endDate']}  ${response.json()['apptSchedule']['timeSlots'][0]['sTime']}
+    ...  ${response.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${resp.json()['parallelServing']}  ${resp.json()['consumerParallelServing']}  ${resp.json()['location']['id']}  ${response.json()['timeDuration']}  ${response.json()['batchEnable']}  
+    ...  @{service_list}
+    RETURN  ${resp}
+
 Get Slot
     [Arguments]    &{kwargs}
     Check And Create YNW Session
