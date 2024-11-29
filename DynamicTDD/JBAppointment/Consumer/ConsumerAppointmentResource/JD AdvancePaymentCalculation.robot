@@ -279,6 +279,16 @@ JD-TC-GetAppointmentAdvancePaymentDetails-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=    Send Otp For Login    ${CUSERNAME19}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME19}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${pid}  ${token} 
     Log   ${resp.content}
@@ -358,7 +368,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-3
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[1]}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[1]}  automaticInvoiceGeneration=${bool[1]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.json()}
@@ -453,13 +463,11 @@ JD-TC-GetAppointmentAdvancePaymentDetails-3
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-
-    
     ${balamount}=  Evaluate  ${service_amount}-${min_pre}
     ${balamount}=  twodigitfloat  ${balamount}  
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${pid}  ${ser_id1}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}       location=${loc_id1} 
+    ${resp}=   Customer Take Appointment   ${pid}  ${ser_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${loc_id1}')}} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200    
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -469,7 +477,6 @@ JD-TC-GetAppointmentAdvancePaymentDetails-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-
     ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre}  ${purpose[0]}  ${apptid1}  ${ser_id1}  ${bool[0]}   ${bool[1]}  ${cid}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -478,24 +485,54 @@ JD-TC-GetAppointmentAdvancePaymentDetails-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=    Get Bill By UUId  ${apptid1}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Booking Invoices  ${apptid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${pid}
+    Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['billStatus']}  ${billStatus[0]}
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME15}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME15}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token7}  ${resp.json()['token']}
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME15}    ${pid}  ${token7} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-   
-    ${resp}=  Get Payment Details  account-eq=${pid}
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME15}    ${pid}
     Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME15}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token7}  ${resp.json()['token']}
+   
+    # ${resp}=  Get Payment Details  account-eq=${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+
 
 
     ${resp}=  Get consumer Appointment By Id    ${pid}  ${apptid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    
     ${resp}=  Make payment Consumer Mock  ${pid}  ${balamount}  ${purpose[1]}  ${apptid1}  ${ser_id1}  ${bool[0]}   ${bool[1]}  ${cid}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -540,7 +577,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-4
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[0]}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[0]}  automaticInvoiceGeneration=${bool[1]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.json()}
@@ -608,13 +645,11 @@ JD-TC-GetAppointmentAdvancePaymentDetails-4
     ${adv_pay_amnt}=  Evaluate  ${service_amount} * ${min_pre} / 100
     ${adv_pay_amnt}=      Convert To Number   ${adv_pay_amnt}   2
 
-
-
     ${balamount}=  Evaluate  ${service_amount}-${adv_pay_amnt}
     ${balamount}=  twodigitfloat  ${balamount}  
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${pid}  ${ser_id1}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${ser_id1}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}  location=${{str('${loc_id1}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200    
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -635,6 +670,28 @@ JD-TC-GetAppointmentAdvancePaymentDetails-4
     # ${resp}=    Get Bill By UUId  ${apptid1}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Booking Invoices  ${apptid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${pid}
+    Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['billStatus']}  ${billStatus[0]}
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME19}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME19}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${pid}  ${token} 
     Log   ${resp.content}
@@ -695,7 +752,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-5
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[0]}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[0]}  automaticInvoiceGeneration=${bool[1]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.json()}
@@ -725,6 +782,17 @@ JD-TC-GetAppointmentAdvancePaymentDetails-5
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
+    ${resp}=    Send Otp For Login    ${CUSERNAME19}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME19}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+    
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -756,7 +824,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-5
     ${balamount}=  twodigitfloat  ${balamount}  
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${pid}  ${ser_id1}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${ser_id1}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}  location=${{str('${loc_id1}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200    
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -765,7 +833,6 @@ JD-TC-GetAppointmentAdvancePaymentDetails-5
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
-
 
     ${resp}=  Make payment Consumer Mock  ${pid}  ${adv_pay_amnt}  ${purpose[0]}  ${apptid1}  ${ser_id1}  ${bool[0]}   ${bool[1]}  ${cid1}
     Log   ${resp.content}
@@ -779,6 +846,28 @@ JD-TC-GetAppointmentAdvancePaymentDetails-5
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=  Get Booking Invoices  ${apptid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${pid}
+    Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['billStatus']}  ${billStatus[0]}
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME19}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME19}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -790,7 +879,6 @@ JD-TC-GetAppointmentAdvancePaymentDetails-5
     ${resp}=  Get consumer Appointment By Id    ${pid}  ${apptid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
 
     ${cnote}=   FakerLibrary.word
     ${EMPTY_List}=  Create List
@@ -881,7 +969,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-6
     Log  ${snames}
     ${srv_val}=    Get Variable Value    ${s_id}
     
-    ${resp}=  Create Service  ${unique_snames[${i}]}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[1]}
+    ${resp}=  Create Service  ${unique_snames[${i}]}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[1]}  automaticInvoiceGeneration=${bool[1]}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_id}=  Set Variable  ${resp.json()}
 
@@ -1041,7 +1129,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-6
 
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${account_id}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${account_id}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200    
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -1081,6 +1169,28 @@ JD-TC-GetAppointmentAdvancePaymentDetails-6
     # ${resp}=    Get Bill By UUId  ${apptid1}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Booking Invoices  ${apptid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${pid}
+    Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['billStatus']}  ${billStatus[0]}
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME4}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME4}    ${account_id}  ${token} 
     Log   ${resp.content}
@@ -1191,7 +1301,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-7
     Log  ${snames}
     ${srv_val}=    Get Variable Value    ${s_id}
     
-    ${resp}=  Create Service  ${unique_snames[${i}]}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[0]}
+    ${resp}=  Create Service  ${unique_snames[${i}]}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[0]}  automaticInvoiceGeneration=${bool[1]}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_id}=  Set Variable  ${resp.json()}
 
@@ -1346,10 +1456,8 @@ JD-TC-GetAppointmentAdvancePaymentDetails-7
     ${adv_pay_amnt}=  Evaluate  ${service_amount} * ${min_pre} / 100
     ${adv_pay_amnt}=      Convert To Number   ${adv_pay_amnt}   2
 
-
-
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${account_id}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${account_id}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200    
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -1391,8 +1499,29 @@ JD-TC-GetAppointmentAdvancePaymentDetails-7
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=  Get Booking Invoices  ${apptid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${pid}
+    Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME4}    ${account_id}  ${token} 
+    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['billStatus']}  ${billStatus[0]}
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME4}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME4}    ${account_id}  ${token}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
    
