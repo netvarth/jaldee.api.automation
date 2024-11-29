@@ -59,6 +59,39 @@ JD-TC-ChangeAppointmentStatus-1
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
+    ${resp}=    Get Service   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        Append To List  ${service_names}  ${SERVICE1}   
+        ${s_id}=  Create Sample Service  ${SERVICE1}  isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre}  maxBookingsAllowed=20
+        ${resp}=   Get Service By Id  ${s_id}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${min_pre}  ${resp.json()['minPrePaymentAmount']}
+    ELSE 
+        For  ${service}  IN  @{resp.json()}
+            IF   ${service['isPrePayment']} == ${bool[1]}
+                ${FOUND}  Set Variable  True
+                Set Test Variable  ${min_pre}  ${resp.json()[0]['minPrePaymentAmount']}
+                Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
+                BREAK
+            END
+        END
+        IF    NOT    '${FOUND}' 
+            ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+            ${SERVICE1}=    generate_unique_service_name  ${service_names}
+            Append To List  ${service_names}  ${SERVICE1}
+            ${s_id}=  Create Sample Service  ${SERVICE1}   isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}  maxBookingsAllowed=20
+            ${resp}=   Get Service By Id  ${s_id}
+            Log  ${resp.json()}
+            Should Be Equal As Strings  ${resp.status_code}  200
+            Set Test Variable  ${min_pre}  ${resp.json()['minPrePaymentAmount']}
+        END
+    END
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
     ${DAY2}=  db.add_timezone_date  ${tz}  10    
@@ -76,32 +109,6 @@ JD-TC-ChangeAppointmentStatus-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp}=    Get Service   
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        IF   '${resp.content}' == '${emptylist}'
-            ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
-            ${SERVICE1}=    generate_unique_service_name  ${service_names}
-            Append To List  ${service_names}  ${SERVICE1}   
-            ${s_id}=  Create Sample Service  ${SERVICE1}  isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre}  maxBookingsAllowed=20
-            ${resp}=   Get Service By Id  ${s_id}
-            Log  ${resp.json()}
-            Should Be Equal As Strings  ${resp.status_code}  200
-            Set Test Variable  ${min_pre}  ${resp.json()['minPrePaymentAmount']}
-        ELSE IF   ${resp.json()[0]['isPrePayment']} == ${bool[0]}
-            ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
-            ${SERVICE1}=    generate_unique_service_name  ${service_names}
-            Append To List  ${service_names}  ${SERVICE1}
-            ${s_id}=  Create Sample Service  ${SERVICE1}   isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}  maxBookingsAllowed=20
-            ${resp}=   Get Service By Id  ${s_id}
-            Log  ${resp.json()}
-            Should Be Equal As Strings  ${resp.status_code}  200
-            Set Test Variable  ${min_pre}  ${resp.json()['minPrePaymentAmount']}
-        ELSE
-            Set Test Variable  ${min_pre}  ${resp.json()[0]['minPrePaymentAmount']}
-            Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
-        END
-
         ${schedule_name}=  FakerLibrary.bs
         ${parallel}=  FakerLibrary.Random Int  min=10  max=20
         ${maxval}=  Convert To Integer   ${delta/2}
@@ -116,6 +123,14 @@ JD-TC-ChangeAppointmentStatus-1
         Set Test Variable  ${lid}  ${resp.json()[0]['location']['id']}
         Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
     END
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['minPrePaymentAmount']}  ${min_pre}
+    Should Be Equal As Strings  ${resp.json()['prePaymentType']}       ${advancepaymenttype[1]}
+
+*** COMMENTS ***
   
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
