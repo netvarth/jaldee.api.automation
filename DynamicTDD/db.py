@@ -944,6 +944,7 @@ def clear_Rating(usrid):
         # cur = dbconn.cursor()
         with dbconn.cursor() as cur:
             delete_entry('wl_rating_tbl','provider',uid,cur)
+            delete_entry('appt_rating_tbl','provider',uid,cur)
             ii = cur.execute("UPDATE account_rating_tbl SET avg_rating =0, count_of_rating=0 WHERE id=%s" %  aid)
             dbconn.commit()
             # dbconn.close()
