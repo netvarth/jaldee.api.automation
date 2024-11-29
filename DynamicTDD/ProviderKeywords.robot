@@ -1495,7 +1495,8 @@ Update Appointment Schedule
 Update Schedule with Services
     [Arguments]  ${schedule_id}  ${response}  @{service_ids}
     ${service_list}=  Create list
-    FOR  ${service}  IN  @{response.json()['services']}
+    # Log  ${response}
+    FOR  ${service}  IN  @{response['services']}
         Append To List  ${service_list} 	${service['id']}
     END
     Append To List  ${service_list}  @{service_ids}
