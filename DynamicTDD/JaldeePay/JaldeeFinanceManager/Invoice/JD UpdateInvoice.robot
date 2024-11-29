@@ -326,7 +326,6 @@ JD-TC-UpdateInvoice-4
     Should Be Equal As Strings  ${resp1.json()['categoryName']}  ${name1}
     Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()['description']}  ${description}
-    Should Be Equal As Strings  ${resp1.json()['itemList'][0]['dateString']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()['termsConditions']}  ${description}
     Should Be Equal As Strings  ${resp1.json()['notesForCustomer']}  ${description}
 

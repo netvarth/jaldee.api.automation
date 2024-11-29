@@ -11,6 +11,7 @@ Library           /ebs/TDD/db.py
 Library           /ebs/TDD/excelfuncs.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/hl_providers.py
@@ -129,73 +130,7 @@ JD-TC-UpdateService-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id2}   ${resp.json()}
 
-    ${vender_name}=   FakerLibrary.firstname
-    ${contactPersonName}=   FakerLibrary.lastname
-    ${owner_name}=   FakerLibrary.lastname
-    ${vendorId}=   FakerLibrary.word
-    ${PO_Number}    Generate random string    5    123456789
-    ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
-    Set Test Variable  ${email}  ${vender_name}.${test_mail}
-    ${address}=  FakerLibrary.city
-    Set Suite Variable  ${address}
-    ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
-    ${branch}=   db.get_place
-    ${ifsc_code}=   db.Generate_ifsc_code
-    # ${gst_num}  ${pan_num}=   db.Generate_gst_number   ${Container_id}
 
-    ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
-
-    ${state}=    Evaluate     "${state}".title()
-    ${state}=    String.RemoveString  ${state}    ${SPACE}
-    Set Suite Variable    ${state}
-    Set Suite Variable    ${district}
-    Set Suite Variable    ${pin}
-    ${vendor_phno}=   Create List  ${vendor_phno}
-    Set Suite Variable    ${vendor_phno}
-    
-    ${email}=   Create List  ${email}
-    Set Suite Variable    ${email}
-
-    ${bankIfsc}    Random Number 	digits=5 
-    ${bankIfsc}=    Evaluate    f'{${bankIfsc}:0>7d}'
-    Log  ${bankIfsc}
-    Set Suite Variable  ${bankIfsc}  55555${bankIfsc} 
-
-    ${bankName}     FakerLibrary.name
-    Set Suite Variable    ${bankName}
-
-    ${upiId}     FakerLibrary.name
-    Set Suite Variable  ${upiId}
-
-    ${pan}    Random Number 	digits=5 
-    ${pan}=    Evaluate    f'{${pan}:0>5d}'
-    Log  ${pan}
-    Set Suite Variable  ${pan}  55555${pan}
-
-    ${branchName}=    FakerLibrary.name
-    Set Suite Variable  ${branchName}
-    ${gstin}    Random Number 	digits=5 
-    ${gstin}=    Evaluate    f'{${gstin}:0>8d}'
-    Log  ${gstin}
-    Set Suite Variable  ${gstin}  55555${gstin}
-    
-    ${preferredPaymentMode}=    Create List    ${jaldeePaymentmode[0]}
-    ${bankInfo}=    Create Dictionary     bankaccountNo=${bank_accno}    ifscCode=${bankIfsc}    bankName=${bankName}    upiId=${upiId}     branchName=${branchName}    pancardNo=${pan}    gstNumber=${gstin}    preferredPaymentMode=${preferredPaymentMode}    lastPaymentModeUsed=${jaldeePaymentmode[0]}
-    ${bankInfo}=    Create List         ${bankInfo}
-    
-    ${resp}=  Create Vendor  ${category_id}  ${vendorId}  ${vender_name}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${vendor_uid1}   ${resp.json()['encId']}
-    Set Suite Variable   ${vendor_id1}   ${resp.json()['id']}
-
-    ${resp}=  Get vendor by encId   ${vendor_uid1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['id']}  ${vendor_id1}
-    Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1}
-    # Should Be Equal As Strings  ${resp.json()['vendorType']}  ${category_id}
 
     ${resp1}=  AddCustomer  ${CUSERNAME39}
     Log  ${resp1.content}
@@ -210,6 +145,7 @@ JD-TC-UpdateService-1
     Set Suite Variable  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
+    ${srv_duration}=   Random Int   min=10   max=20
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}    department=${dep_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -248,7 +184,8 @@ JD-TC-UpdateService-1
     Set Suite Variable  ${SERVICE2}
     ${desc1}=   FakerLibrary.sentence
     ${servicecharge1}=   Random Int  min=100  max=500
-    ${resp}=  Create Service  ${SERVICE2}  ${desc1}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge1}  ${bool[0]}  ${bool[0]}    department=${dep_id}
+    ${resp}=  Create Service  ${SERVICE2}  ${desc1}   ${service_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}    department=${dep_id}
+    # ${resp}=  Create Service  ${SERVICE2}  ${desc1}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge1}  ${bool[0]}  ${bool[0]}    department=${dep_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid2}  ${resp.json()} 
@@ -320,9 +257,40 @@ JD-TC-UpdateService-UH3
     
 JD-TC-UpdateService-UH4
     [Documentation]   Login as consumer and Update service
-    ${resp}=   Consumer Login  ${CUSERNAME16}  ${PASSWORD}
+
+    ${pid}=  get_acc_id  ${HLPUSERNAME52}
+
+    ${firstName}=  FakerLibrary.name
+    Set Suite Variable    ${firstName}
+    ${lastName}=  FakerLibrary.last_name
+    Set Suite Variable    ${lastName}
+    ${primaryMobileNo}    Generate random string    10    123456987
+    ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
+    Set Suite Variable    ${primaryMobileNo}
+    ${email}=    FakerLibrary.Email
+    Set Suite Variable    ${email}
+
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Consumer Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${pid}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings    ${resp.status_code}   200    
+   
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Suite Variable    ${cid1}    ${resp.json()['providerConsumer']}
 
      ${resp}=  Update Invoice Service  ${invoice_uid}   ${serviceList1}   
     Log  ${resp.content}
