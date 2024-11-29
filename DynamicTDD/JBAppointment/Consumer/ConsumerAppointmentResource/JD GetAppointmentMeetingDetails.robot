@@ -1003,7 +1003,7 @@ JD-TC-GetAppointmentMeetingDetails-7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${p2_s1}  ${resp.json()} 
-    ${resp}=   Get Service By Id  ${Service_id1}
+    ${resp}=   Get Service By Id  ${p2_s1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
