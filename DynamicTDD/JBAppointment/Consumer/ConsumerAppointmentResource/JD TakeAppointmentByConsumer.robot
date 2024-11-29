@@ -4667,7 +4667,7 @@ JD-TC-Take Appointment-21
     Set Suite Variable  ${P_Sector}  ${decrypted_data['sector']}
     # Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
 
-    clear_Department    ${PUSERNAME72}
+    # clear_Department    ${PUSERNAME72}
     # clear_service   ${PUSERNAME72}
     # clear_location  ${PUSERNAME72}
     # clear_customer   ${PUSERNAME72}

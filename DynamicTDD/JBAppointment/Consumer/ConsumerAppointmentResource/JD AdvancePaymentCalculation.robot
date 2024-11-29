@@ -459,7 +459,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-3
     ${balamount}=  twodigitfloat  ${balamount}  
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${pid}  ${ser_id1}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${ser_id1}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}       location=${loc_id1} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200    
     ${apptid}=  Get Dictionary Values  ${resp.json()}
