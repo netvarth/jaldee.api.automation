@@ -2906,7 +2906,7 @@ JD-TC-Take Appointment-UH4
     Should Be Equal As Strings    ${resp.status_code}   200     
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Customer Take Appointment   ${pidUH1}  ${p1_s1}  ${sch_idUH4}  ${DAY1}  ${cnote}   ${apptfor1}
+    ${resp}=   Customer Take Appointment   ${pidUH1}  ${p1_s1}  ${sch_idUH4}  ${DAY1}  ${cnote}   ${apptfor1}   location=${p1_l1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"      "${SERVICE_NOT_AVAILABLE_IN_SCHEDULE}"

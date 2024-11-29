@@ -796,7 +796,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-6
 
     [Documentation]  Create a serviceOption with prepayment type as fixed then take a appointment and do the prepayment and verify the details.
 
-    clear Queue     ${HLPUSERNAME6}
+    # clear Queue     ${HLPUSERNAME6}
 
     ${wb}=  readWorkbook  ${xlFile}
     ${sheet1}  GetCurrentSheet   ${wb}
@@ -1105,7 +1105,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-7
 
     [Documentation]  Create a serviceOption with prepayment type as Percentage then take a appointment and do the prepayment and verify the details.
 
-    clear Queue     ${HLPUSERNAME2}
+    # clear Queue     ${HLPUSERNAME2}
 
     ${wb}=  readWorkbook  ${xlFile}
     ${sheet1}  GetCurrentSheet   ${wb}
