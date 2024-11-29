@@ -99,7 +99,7 @@ JD-TC-GetAppointmentMeetingDetails-1
     ${resp}=  Create virtual Service  ${SERVICE1}   ${description}   5   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${Total1}  ${bool[0]}   ${bool[0]}   ${vstype}   ${virtualCallingModes1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Suite Variable  ${S_id1}  ${resp.json()} 
+    Set Suite Variable  ${p1_s1}  ${resp.json()} 
     
     ${ZOOM_Pid0}=  Format String  ${ZOOM_url}  ${PUSERPH_id0}
     Set Suite Variable   ${ZOOM_Pid0}
@@ -119,7 +119,7 @@ JD-TC-GetAppointmentMeetingDetails-1
     ${resp}=  Create virtual Service  ${SERVICE2}   ${description2}   5   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${Total2}  ${bool[0]}   ${bool[0]}   ${vstype2}   ${virtualCallingModes2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Suite Variable  ${S_id2}  ${resp.json()} 
+    Set Suite Variable  ${p1_s2}  ${resp.json()} 
     # ${resp}=   Get Service By Id  ${S_id2}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Log  ${resp.json()}
@@ -437,16 +437,16 @@ JD-TC-GetAppointmentMeetingDetails-3
 
 
 
-    ${resp}=  Get Service
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Service
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
    
-    Set Test Variable   ${p1_s2}   ${resp.json()[0]['id']}
-    Set Test Variable   ${P1SERVICE2}   ${resp.json()[0]['name']}
-    Set Test Variable   ${p1_s1}   ${resp.json()[1]['id']}
-    Set Test Variable   ${P1SERVICE1}   ${resp.json()[1]['name']}
-    Set Test Variable   ${p1_s3}   ${resp.json()[2]['id']}
-    Set Test Variable   ${P1SERVICE3}   ${resp.json()[2]['name']}
+    # Set Test Variable   ${p1_s2}   ${resp.json()[0]['id']}
+    # Set Test Variable   ${P1SERVICE2}   ${resp.json()[0]['name']}
+    # Set Test Variable   ${p1_s1}   ${resp.json()[1]['id']}
+    # Set Test Variable   ${P1SERVICE1}   ${resp.json()[1]['name']}
+    # Set Test Variable   ${p1_s3}   ${resp.json()[2]['id']}
+    # Set Test Variable   ${P1SERVICE3}   ${resp.json()[2]['name']}
 
 
 
@@ -586,16 +586,16 @@ JD-TC-GetAppointmentMeetingDetails-4
 
     ${accId}=  get_acc_id  ${PUSERPH0}
     Set Suite Variable  ${accId}  ${accId} 
-    ${resp}=  Get Service
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Service
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
    
-    Set Test Variable   ${p1_s2}   ${resp.json()[0]['id']}
-    Set Test Variable   ${P1SERVICE2}   ${resp.json()[0]['name']}
-    Set Test Variable   ${p1_s1}   ${resp.json()[1]['id']}
-    Set Test Variable   ${P1SERVICE1}   ${resp.json()[1]['name']}
-    Set Test Variable   ${p1_s3}   ${resp.json()[2]['id']}
-    Set Test Variable   ${P1SERVICE3}   ${resp.json()[2]['name']}
+    # Set Test Variable   ${p1_s2}   ${resp.json()[0]['id']}
+    # Set Test Variable   ${P1SERVICE2}   ${resp.json()[0]['name']}
+    # Set Test Variable   ${p1_s1}   ${resp.json()[1]['id']}
+    # Set Test Variable   ${P1SERVICE1}   ${resp.json()[1]['name']}
+    # Set Test Variable   ${p1_s3}   ${resp.json()[2]['id']}
+    # Set Test Variable   ${P1SERVICE3}   ${resp.json()[2]['name']}
 
 
 
@@ -682,16 +682,16 @@ JD-TC-GetAppointmentMeetingDetails-UH2
 
     ${accId}=  get_acc_id  ${PUSERPH0}
     Set Suite Variable  ${accId}  
-    ${resp}=  Get Service
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Service
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
    
-    Set Test Variable   ${p1_s2}   ${resp.json()[0]['id']}
-    Set Test Variable   ${P1SERVICE2}   ${resp.json()[0]['name']}
-    Set Test Variable   ${p1_s1}   ${resp.json()[1]['id']}
-    Set Test Variable   ${P1SERVICE1}   ${resp.json()[1]['name']}
-    Set Test Variable   ${p1_s3}   ${resp.json()[2]['id']}
-    Set Test Variable   ${P1SERVICE3}   ${resp.json()[2]['name']}
+    # Set Test Variable   ${p1_s2}   ${resp.json()[0]['id']}
+    # Set Test Variable   ${P1SERVICE2}   ${resp.json()[0]['name']}
+    # Set Test Variable   ${p1_s1}   ${resp.json()[1]['id']}
+    # Set Test Variable   ${P1SERVICE1}   ${resp.json()[1]['name']}
+    # Set Test Variable   ${p1_s3}   ${resp.json()[2]['id']}
+    # Set Test Variable   ${P1SERVICE3}   ${resp.json()[2]['name']}
     
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${p1_s2}
     Log  ${resp.json()}
@@ -786,16 +786,16 @@ JD-TC-GetAppointmentMeetingDetails-5
 
     ${accId}=  get_acc_id  ${PUSERPH0}
     Set Suite Variable  ${accId}  ${accId} 
-    ${resp}=  Get Service
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Service
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
    
-    Set Test Variable   ${p1_s2}   ${resp.json()[0]['id']}
-    Set Test Variable   ${P1SERVICE2}   ${resp.json()[0]['name']}
-    Set Test Variable   ${p1_s1}   ${resp.json()[1]['id']}
-    Set Test Variable   ${P1SERVICE1}   ${resp.json()[1]['name']}
-    Set Test Variable   ${p1_s3}   ${resp.json()[2]['id']}
-    Set Test Variable   ${P1SERVICE3}   ${resp.json()[2]['name']} 
+    # Set Test Variable   ${p1_s2}   ${resp.json()[0]['id']}
+    # Set Test Variable   ${P1SERVICE2}   ${resp.json()[0]['name']}
+    # Set Test Variable   ${p1_s1}   ${resp.json()[1]['id']}
+    # Set Test Variable   ${P1SERVICE1}   ${resp.json()[1]['name']}
+    # Set Test Variable   ${p1_s3}   ${resp.json()[2]['id']}
+    # Set Test Variable   ${P1SERVICE3}   ${resp.json()[2]['name']} 
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${p1_s2}
     Log  ${resp.json()}

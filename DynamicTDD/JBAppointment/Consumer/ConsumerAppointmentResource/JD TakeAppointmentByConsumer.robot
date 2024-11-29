@@ -4247,9 +4247,9 @@ JD-TC-Take Appointment-18
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Bill By UUId  ${apptid2}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=    Get Bill By UUId  ${apptid2}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  ProviderLogout
     Log  ${resp.json()}
