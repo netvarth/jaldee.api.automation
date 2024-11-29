@@ -286,7 +286,8 @@ JD-TC-Get Availability Of Appointment-UH1
 
     ${resp}=    Get Availability Of Appointment Using Location And Service    ${lid}  ${s_id2}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  401
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings    ${resp.json()}  ${NO_PERMISSION}
 
 
 JD-TC-Get Availability Of Appointment-UH2
