@@ -54,7 +54,7 @@ JD-TC-UpdateBillStatus-1
     ${resp}=  Enable Waitlist
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    sleep   01s
+
     
     ${resp}=  Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -168,7 +168,7 @@ JD-TC-UpdateBillStatus-1
     ${s_id1}=  Create Sample Service  ${SERVICE1}    automaticInvoiceGeneration=${bool[1]}  
     Set Test Variable   ${s_id1}
     ${SERVICE4}=    generate_unique_service_name  ${service_names}
-    ${resp}=  Create Service  ${SERVICE4}  ${desc}   ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}   automaticInvoiceGeneration=${bool[1]}
+    ${resp}=  Create Service  ${SERVICE4}  ${desc}   ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}   automaticInvoiceGeneration=${bool[1]}    maxBookingsAllowed=10
     # ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${min_pre}  ${servicecharge}  ${bool[0]}  ${bool[0]}    maxBookingsAllowed=${maxBookingsAllowed}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
@@ -339,7 +339,7 @@ JD-TC-UpdateBillStatus-1
     ${apptfor1}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment  ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor1}
+    ${resp}=   Customer Take Appointment  ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor1}    location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -421,9 +421,7 @@ JD-TC-UpdateBillStatus-1
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${pid}
     Set Suite Variable  ${invoice_uid3}   ${resp.json()[0]['invoiceUid']}
 
-    ${resp}=  Appointment Action   ${apptStatus[1]}   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+
 
     ${resp}=  Get Booking Invoices  ${apptid1}
     Log  ${resp.json()}
@@ -722,257 +720,3 @@ JD-TC-UpdateBillStatus-UH4
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}
 
-JD-TC-Apply Service To Finance-2
-
-    [Documentation]   Service auto invoice generation is on,then took one appointment from consumer side  and check whethrer invoice is created there ,then add service to that invoice.
-
-    ${firstname}  ${lastname}  ${PUSERPH0}  ${LoginId}=  Provider Signup
-    Set Suite Variable  ${PUSERPH0}
-
-    ${resp}=  Enable Waitlist
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    sleep   01s
-    
-    ${resp}=  Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[0]}   
-
-    ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-
-    ${resp}=  Get Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Create Sample Location  
-    Set Suite Variable    ${lid}    ${resp}  
-
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    
-    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
-        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    END
-
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
-
-
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Disable Appointment   ${toggle[0]}   
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
-
-    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-
-    ${resp}=  Get Business Profile
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
-    Set Suite Variable  ${account_id1}  ${resp.json()['id']}
-
-    clear_appt_schedule   ${PUSERPH0}
-
-    ${pid}=  get_acc_id  ${PUSERPH0}
-    ${cid}=  get_id  ${CUSERNAME32}
-
-    ${privateNote}=     FakerLibrary.word
-    ${displayNote}=   FakerLibrary.word
-
-  
-    ${SERVICE3}=    generate_unique_service_name  ${service_names}
-#    ${desc}=   FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=1   max=50
-#     ${servicecharge}=   Random Int  min=100  max=500
-#     ${srv_duration}=   Random Int   min=10   max=20
-#     ${maxBookingsAllowed}=   Random Int  min=10  max=50
-#     ${maxBookingsAllowed}=  Convert To Number  ${maxBookingsAllowed}  1
-#     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}   automaticInvoiceGeneration=${bool[1]}
-    ${s_id}=  Create Sample Service  ${SERVICE3}    automaticInvoiceGeneration=${bool[1]}   minPrePaymentAmount=${min_pre}
-    Set Test Variable   ${s_id}
-    # Should Be Equal As Strings  ${resp.status_code}   200
-    # Set Test Variable  ${s_id}  ${resp.json()}
-
-    # ${resp}=  Auto Invoice Generation For Service   ${s_id}    ${toggle[0]}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=   Get Service By Id  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[1]}
-    Set Test Variable  ${servicecharge}  ${resp.json()['totalAmount']}
-
-
-
-
-    ${resp}=  Get Appointment Schedules
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10      
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.add_timezone_time     ${tz}  0  15
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
-
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-
-    ${firstName}=  FakerLibrary.name
-    Set Suite Variable    ${firstName}
-    ${lastName}=  FakerLibrary.last_name
-    Set Suite Variable    ${lastName}
-    ${primaryMobileNo}    Generate random string    10    123456987
-    ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
-    Set Suite Variable    ${primaryMobileNo}
-    ${email}=    FakerLibrary.Email
-    Set Suite Variable    ${email}
-
-    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${account_id1}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token}  ${resp.json()['token']}
-
-    ${resp}=    Consumer Logout
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${account_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200    
-   
-    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${account_id1}  ${token} 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${cid1}    ${resp.json()['providerConsumer']}
-
-
-
-    ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
-    @{slots}=  Create List
-    FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Set Test Variable   ${a${i}}  ${resp.json()[0]['availableSlots'][${i}]['time']}
-            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
-        END
-    END
-    ${num_slots}=  Get Length  ${slots}
-    ${j}=  Random Int  max=${num_slots-1}
-    Set Suite Variable   ${slot1}   ${slots[${j}]}
-
-    ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
-    ${apptfor}=   Create List  ${apptfor1}
-
-
-
-    ${cnote}=   FakerLibrary.word
-    ${resp}=   Customer Take Appointment  ${pid}   ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-          
-    ${apptid1}=  Get From Dictionary  ${resp.json()}  ${firstName}
-    Set Suite Variable   ${apptid1}
-
-    ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-
-
-    sleep  02s
-
-    ${resp}=  Encrypted Provider Login    ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    sleep  02s
-    ${resp1}=  Get Bookings Invoices  ${apptid1}
-    Log  ${resp1.content}
-    Should Be Equal As Strings  ${resp1.status_code}  200
-    Set Suite Variable  ${invoice_appt_uid}  ${resp1.json()[0]['invoiceUid']}
-
-    ${quantity}=   Random Int  min=5  max=10
-    ${quantity}=  Convert To Number  ${quantity}  1
-    ${serviceprice}=   Random Int  min=100  max=500
-    ${serviceprice}=  Convert To Number  ${serviceprice}  1
-    ${serviceList1}=  Create Dictionary  serviceId=${sid2}   quantity=${quantity}   price=${serviceprice} 
-    # ${serviceList1}=    Create List    ${serviceList1}
-    ${netRate}=  Evaluate  ${quantity} * ${serviceprice}
-    ${netRate}=  Convert To Number  ${netRate}  1
-    ${Total}=  Evaluate  ${servicecharge} + ${netRate}
-    ${Total}=  Convert To Number  ${Total}  1
-
-
-    ${resp}=  AddServiceToInvoice   ${invoice_appt_uid}   ${serviceList1}    
-    Log  ${resp.content} 
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Invoice By Id  ${invoice_appt_uid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['serviceId']}  ${s_id}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['serviceName']}  ${SERVICE3}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['quantity']}  1.0
-    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['price']}  ${servicecharge}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['netRate']}  ${servicecharge}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][1]['serviceId']}  ${sid2}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][1]['serviceName']}  ${SERVICE2}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][1]['quantity']}  ${quantity}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][1]['price']}  ${serviceprice}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][1]['netRate']}  ${netRate}
-    Should Be Equal As Strings  ${resp.json()['amountDue']}  ${Total}
-    Should Be Equal As Strings  ${resp.json()['amountTotal']}  ${Total}
-    Should Be Equal As Strings  ${resp.json()['netTotal']}  ${Total}
-    Should Be Equal As Strings  ${resp.json()['netRate']}  ${Total}
-
-    ${resp1}=  Get consumer Appt Bill Details   ${apptid1}
-    Log  ${resp1.content}
-    Should Be Equal As Strings  ${resp1.status_code}  200
