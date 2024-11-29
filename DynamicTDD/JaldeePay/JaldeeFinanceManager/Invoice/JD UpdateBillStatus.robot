@@ -346,6 +346,10 @@ JD-TC-UpdateBillStatus-1
     ${apptid2}=  Get From Dictionary  ${resp.json()}  ${firstName}
     Set Suite Variable  ${apptid2}   
 
+    ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre}  ${purpose[0]}  ${apptid2}  ${s_id}  ${bool[0]}   ${bool[1]}  ${cid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
