@@ -80,7 +80,7 @@ JD-TC-ChangeAppointmentStatus-1
                 BREAK
             END
         END
-        IF    NOT    '${FOUND}' 
+        IF   not ${FOUND}
             ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
             Append To List  ${service_names}  ${SERVICE1}
