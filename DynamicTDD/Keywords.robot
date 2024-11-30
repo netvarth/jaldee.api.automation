@@ -208,7 +208,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{context}                  communication   appointment   providerTask   prescription   jaldeeDrive   catalogCreation   itemCreation   order   waitlist  consumerTask   massCommunication   medicalRecord   serviceCreation   profileCreation   lead   enquiry  KYC   donation
 @{advPayBankType}           JALDEE_BANK  SP_DEFAULT  SP_SPECIFIC_PROFILE  SERVICE_SPECIFIC
 @{bankType}                 ProviderPaytm     JaldeeBank     NoBank     PrimaryBank
-@{jsonNames}                businessProfile  virtualFields  terminologies  services  donationServices  location
+@{jsonNames}                businessProfile  virtualFields  terminologies  services  donationServices  location  settings  coupon  providerCoupon  appointmentsettings  apptServices  departmentProviders  gallery
 @{catalogType}              submission  itemOrder
 @{originFrom}               Lead   Enquire  LoanApplication  Loan  Task  NONE  LOS_LOAN_APPLICATION
 @{serviceBookingType}       booking   request

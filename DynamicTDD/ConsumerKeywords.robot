@@ -1232,7 +1232,7 @@ Get Queue By Location and service
     Check Deprication  ${resp}  Get Queue By Location and service 
     RETURN  ${resp}
 
-Get Service By Location   
+Get WL Service By Location   
     [Arguments]  ${locationId}   &{kwargs}  #${timeZone}=Asia/Kolkata
     ${cons_headers}=  Create Dictionary  &{headers} 
     ${cons_params}=  Create Dictionary
@@ -1242,7 +1242,7 @@ Get Service By Location
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /consumer/waitlist/services/${locationId}   params=${cons_params}   expected_status=any   headers=${cons_headers}     
-    Check Deprication  ${resp}  Get Service By Location   
+    Check Deprication  ${resp}  Get WL Service By Location   
     RETURN  ${resp} 
 
 Get Waitlist History Consumer

@@ -3578,14 +3578,14 @@ Get OnlinePresence
     ${resp}=   GET On Session   ynw   /provider/account/settings  expected_status=any
     RETURN   ${resp}
 
-Post CustomID
+Set CustomID
     [Arguments]  ${customId}
     Check And Create YNW Session  
     ${resp}=   POST On Session   ynw   /provider/business/${customId}  expected_status=any
     RETURN   ${resp}
     
 
-Get CustomID
+Get UniqueId from AccEncID
     [Arguments]  ${customId}
     Check And Create YNW Session  
     ${resp}=   POST On Session   ynw   /provider/business/${customId}  expected_status=any

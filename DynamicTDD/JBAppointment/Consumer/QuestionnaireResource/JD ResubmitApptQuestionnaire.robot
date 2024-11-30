@@ -128,6 +128,8 @@ JD-TC-ResubmitQuestionnaireForAppointment-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
     Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
+    # Set Suite Variable  ${accEncUid}  ${resp.json()['accEncUid']}
+    Set Suite Variable  ${accUniqueId}  ${resp.json()['uniqueId']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -316,14 +318,27 @@ JD-TC-ResubmitQuestionnaireForAppointment-1
     # ${j1}=  Random Int  max=${num_slots-1}
     # Set Test Variable   ${slot1}   ${slots[${j1}]}
 
+    ${resp}=    Get Account Settings from Cache  ${accUniqueId}  ${jsonNames[5]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${parsed_data}=    Evaluate    json.loads('${resp.json()['location']}')    json
+    Log  ${parsed_data}
+    ${lid}=    Set Variable    ${parsed_data[0]['id']}
+
+    ${resp}=    Get Appmt Service By LocationId   ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings   ${resp.status_code}   200
+    ${s_id}=  Set Variable  ${resp.json()[0]['id']}
+
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    ${sch_id}=  Set Variable  ${resp.json()[0]['scheduleId']}
     ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
         IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Set Test Variable   ${a${i}}  ${resp.json()[0]['availableSlots'][${i}]['time']}
+            # Set Test Variable   ${a${i}}  ${resp.json()[0]['availableSlots'][${i}]['time']}
             Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
         END
     END
@@ -335,10 +350,10 @@ JD-TC-ResubmitQuestionnaireForAppointment-1
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    # ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment  ${account_id}   ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=   Get consumer Appointment By Id   ${account_id}  ${apptid1}

@@ -18,7 +18,9 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
-${LoginId}  5550097274
+# ${LoginId}  5550097274
+# ${PASSWORD}     Jaldee01
+${LoginId}  2220733512
 ${PASSWORD}     Jaldee01
 ${maxBookings}  20
 ${var_file}     ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py
@@ -28,10 +30,9 @@ ${bprof_file}    ${EXECDIR}/data/${ENVIRONMENT}data/${ENVIRONMENT}bprofile.txt
 *** Keywords ***
 Remove Entry From File
     [Arguments]    ${bprof_file}    ${LoginId}
-    ${status}    ${content}    =    Run Keyword And Ignore Error    Get File    ${bprof_file}
+    ${status}    ${content}=    Run Keyword And Ignore Error    Get File    ${bprof_file}
     IF    '${status}' == 'FAIL'
         Create File    ${bprof_file}    ''
-        ${content}    =    ''
     END
     ${lines}=    Split To Lines    ${content}
     ${filtered_lines}=    Evaluate    [line for line in ${lines} if not line.startswith('${LoginId}')]
@@ -49,11 +50,11 @@ Remove Entry From File
 JD-TC-UpdateBProfile
     [Documentation]  Updating Business Profile, create custom id, location, service and schedule for  ${LoginId}
 
-    ${firstname}  ${lastname}  ${PhoneNumber}  ${LoginId}=  Provider Signup without Profile
-    ${num}=  find_last  ${var_file}
-    ${num}=  Evaluate   ${num}+1
-    Append To File  ${data_file}  ${LoginId} - ${PASSWORD}${\n}
-    Append To File  ${var_file}  PUSERNAME${num}=${LoginId}${\n}
+    # ${firstname}  ${lastname}  ${PhoneNumber}  ${LoginId}=  Provider Signup without Profile
+    # ${num}=  find_last  ${var_file}
+    # ${num}=  Evaluate   ${num}+1
+    # Append To File  ${data_file}  ${LoginId} - ${PASSWORD}${\n}
+    # Append To File  ${var_file}  PUSERNAME${num}=${LoginId}${\n}
     
     ${resp}=  Encrypted Provider Login  ${LoginId}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -107,7 +108,14 @@ JD-TC-UpdateBProfile
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${account_id}  ${resp.json()['id']} 
+    ${account_id}=  Set Variable  ${resp.json()['id']}
+    ${accEncUid}=  Set Variable  ${resp.json()['accEncUid']}
+    ${accUniqueId}=  Set Variable  ${resp.json()['uniqueId']}
+
+    ${resp}=   Get UniqueId from AccEncID  ${accEncUid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  ${accUniqueId}
 
     ${resp}=  Get jaldeeIntegration Settings
     Log  ${resp.content}
@@ -126,7 +134,7 @@ JD-TC-UpdateBProfile
 
     ${custid}=  FakerLibrary.company
     ${first_word}=   Set Variable   ${custid.split()[0]}
-    ${resp}=  Post CustomID  tddtest-${first_word}
+    ${resp}=  Set CustomID  tddtest-${first_word}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -223,3 +231,34 @@ JD-TC-UpdateBProfile
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
+
+    ${resp}=    Get Account Settings from Cache  ${accUniqueId}  ${jsonNames[5]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${parsed_data}=    Evaluate    json.loads('${resp.json()['location']}')    json
+    Log  ${parsed_data}
+    ${locid}=    Set Variable    ${parsed_data[0]['id']}
+    Log    ${locid}
+    
+    ${resp}=    Get Account Settings from Cache  ${accUniqueId}  ${jsonNames[3]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Account Settings from Cache  ${accUniqueId}  ${jsonNames[10]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Appmt Service By LocationId   ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings   ${resp.status_code}   200
+    ${srv_id}=  Set Variable  ${resp.json()[0]['id']}
+
+    ${resp}=   Get Sub Domain Settings    ${domain}    ${subdomain}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${locid}  ${srv_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${sch_id}=  Set Variable  ${resp.json()[0]['scheduleId']}
+

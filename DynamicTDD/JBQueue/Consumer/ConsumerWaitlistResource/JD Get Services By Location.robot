@@ -25,7 +25,7 @@ ${service_duration}   5
 
 *** Test Cases ***
 
-JD-TC-Get Service By Location -1
+JD-TC-Get WL Service By Location -1
 
 	[Documentation]  get service  location id
 
@@ -203,7 +203,7 @@ JD-TC-Get Service By Location -1
     Should Be Equal As Strings    ${resp.status_code}   200
     
 
-    ${resp}=   Get Service By Location  ${p1_l1}
+    ${resp}=   Get WL Service By Location  ${p1_l1}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${length}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE  ${length}
@@ -218,7 +218,7 @@ JD-TC-Get Service By Location -1
     END
 
 
-JD-TC-Get Service By Location -2
+JD-TC-Get WL Service By Location -2
 
 	[Documentation]  get service  location id 
 
@@ -226,7 +226,7 @@ JD-TC-Get Service By Location -2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Get Service By Location  ${p1_l2}
+    ${resp}=  Get WL Service By Location  ${p1_l2}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${length}=  Get Length  ${resp.json()}
@@ -242,7 +242,7 @@ JD-TC-Get Service By Location -2
     END
     
 
-JD-TC-Get Service By Location -3
+JD-TC-Get WL Service By Location -3
 	[Documentation]  get service  location id 
     Comment  service Disable   
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
@@ -258,7 +258,7 @@ JD-TC-Get Service By Location -3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Get Service By Location  ${p1_l1}
+    ${resp}=  Get WL Service By Location  ${p1_l1}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()[0]['id']}  ${p1_s3}
     Should Be Equal As Strings  ${resp.json()[0]['name']}  ${P1SERVICE3}
@@ -288,7 +288,7 @@ JD-TC-Get Queue By Location and Service-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Get Service By Location  ${p1_l2}  
+    ${resp}=  Get WL Service By Location  ${p1_l2}  
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${LOCATION_DISABLED}"  
 

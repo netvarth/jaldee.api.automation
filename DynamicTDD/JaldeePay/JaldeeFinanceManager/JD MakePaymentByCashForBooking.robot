@@ -21,10 +21,10 @@ Get Billable Subdomain
     [Arguments]   ${domain}  ${jsondata}  ${posval}  
     ${length}=  Get Length  ${jsondata.json()[${posval}]['subDomains']}
     FOR  ${pos}  IN RANGE  ${length}
-            Set Suite Variable  ${subdomain}  ${jsondata.json()[${posval}]['subDomains'][${pos}]['subDomain']}
-            ${resp}=   Get Sub Domain Settings    ${domain}    ${subdomain}
-            Should Be Equal As Strings    ${resp.status_code}    200
-            Exit For Loop IF  '${resp.json()['serviceBillable']}' == '${bool[1]}'
+        Set Suite Variable  ${subdomain}  ${jsondata.json()[${posval}]['subDomains'][${pos}]['subDomain']}
+        ${resp}=   Get Sub Domain Settings    ${domain}    ${subdomain}
+        Should Be Equal As Strings    ${resp.status_code}    200
+        Exit For Loop IF  '${resp.json()['serviceBillable']}' == '${bool[1]}'
     END
     RETURN  ${subdomain}  ${resp.json()['serviceBillable']}
 

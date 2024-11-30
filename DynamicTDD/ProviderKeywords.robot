@@ -148,7 +148,6 @@ Get jaldeeIntegration Settings
     RETURN  ${resp}
 
 Add Business Logo
-
     [Arguments]    ${owner}    ${fileName}    ${fileSize}    ${action}    ${caption}    ${fileType}    ${order}  &{kwargs}
 
     ${AttachmentsUpload}=  Create List
@@ -167,7 +166,6 @@ Add Business Logo
     RETURN  ${resp}
 
 Remove Business Logo
-
     [Arguments]    ${owner}    ${fileName}    ${fileSize}    ${action}    ${caption}    ${fileType}    ${order}
 
     ${AttachmentsUpload}=  Create List
@@ -181,7 +179,6 @@ Remove Business Logo
     RETURN  ${resp}
 
 Get Business Logo
-
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/businessLogo  expected_status=any
     Check Deprication  ${resp}  Get Business Logo
@@ -261,6 +258,29 @@ Get Account Settings
     ${resp}=  GET On Session  ynw  /provider/account/settings  expected_status=any
     Check Deprication  ${resp}  Get Account Settings
     RETURN  ${resp}
+
+Get Account Settings from Cache
+# json_names- settings,coupon,providerCoupon,appointmentsettings,terminologies,location,businessProfile,virtualFields,services,apptServices,donationServices,departmentProviders,gallery
+# they should be provided as comma seperated values eg: location,services
+    [Arguments]    ${uid}  ${json_names}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/account/settings/config/${uid}/${json_names}   expected_status=any
+    Check Deprication  ${resp}  Get Account Settings from Cache
+    RETURN  ${resp}
+
+Get Domain Settings    
+    [Arguments]  ${domain}  
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /ynwConf/settings/${domain}  expected_status=any
+    Check Deprication  ${resp}  Get Domain Settings
+    RETURN  ${resp}
+    
+Get Sub Domain Settings  
+    [Arguments]  ${domain}  ${subDomain}
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /ynwConf/settings/${domain}/${subDomain}  expected_status=any
+    Check Deprication  ${resp}  Get Sub Domain Settings
+    RETURN  ${resp} 
 
 ############# Keywords for Provider signup ###############################
 
@@ -4293,20 +4313,6 @@ Get Search Labels
     ${resp}=  GET On Session  ynw  /ynwConf/searchLabels  expected_status=any
     Check Deprication  ${resp}  Get Search Labels
     RETURN  ${resp}  
-    
-Get Domain Settings    
-    [Arguments]  ${domain}  
-    Check And Create YNW Session  
-    ${resp}=  GET On Session  ynw  /ynwConf/settings/${domain}  expected_status=any
-    Check Deprication  ${resp}  Get Domain Settings
-    RETURN  ${resp}
-    
-Get Sub Domain Settings  
-    [Arguments]  ${domain}  ${subDomain}
-    Check And Create YNW Session  
-    ${resp}=  GET On Session  ynw  /ynwConf/settings/${domain}/${subDomain}  expected_status=any
-    Check Deprication  ${resp}  Get Sub Domain Settings
-    RETURN  ${resp}  
 
 Get paymentTypes
     Check And Create YNW Session  
@@ -6036,19 +6042,19 @@ Disable OnlinePresence
     Check Deprication  ${resp}  Disable OnlinePresence
     RETURN  ${resp}
 
-Post CustomID
+Set CustomID
     [Arguments]  ${customId}
     Check And Create YNW Session  
     ${resp}=   POST On Session   ynw   /provider/business/${customId}  expected_status=any
-    Check Deprication  ${resp}  Post CustomID
+    Check Deprication  ${resp}  Set CustomID
     RETURN  ${resp}
     
 
-Get CustomID
+Get UniqueId from AccEncID
     [Arguments]  ${customId}
     Check And Create YNW Session  
-    ${resp}=   POST On Session   ynw   /provider/business/${customId}  expected_status=any
-    Check Deprication  ${resp}  Get CustomID
+    ${resp}=   Get On Session   ynw   /provider/business/${customId}  expected_status=any
+    Check Deprication  ${resp}  Get UniqueId from AccEncID
     RETURN  ${resp}
 
 
@@ -10347,22 +10353,6 @@ Create Order By Provider For AuthorDemy
     ${order}=    Create Dictionary   catalog=${catalog}  orderFor=${orderfor}  consumer=${Cid}  orderItem=${orderitem}   orderNote=${orderNote}  orderDate=${orderDate}  phoneNumber=${phoneNumber}  email=${email}  countryCode=${countryCode}
     ${resp}=  OrderItemByProvider   ${Cookie}   ${order}
     Check Deprication  ${resp}  Create Order By Provider For AuthorDemy
-    RETURN  ${resp}
-
-
-# Get Account Settings from Cache
-#     [Arguments]    ${uid}  ${user_id}  ${json_names}
-#     Check And Create YNW Session
-#     ${resp}=  GET On Session  ynw  /provider/account/settings/config/${uid}/${user_id}/${json_names}   expected_status=any
-#     Check Deprication  ${resp}  Get Account Settings from Cache
-#     RETURN  ${resp}
-
-
-Get Account Settings from Cache
-    [Arguments]    ${uid}  ${json_names}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/account/settings/config/${uid}/${json_names}   expected_status=any
-    Check Deprication  ${resp}  Get Account Settings from Cache
     RETURN  ${resp}
 
 
@@ -18796,6 +18786,38 @@ Update Business Profile with schedule
     ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
     Check Deprication  ${resp}  Update Business Profile with schedule
     RETURN  ${resp}
+
+
+# Get Account Settings from Cache
+#     [Arguments]    ${uid}  ${user_id}  ${json_names}
+#     Check And Create YNW Session
+#     ${resp}=  GET On Session  ynw  /provider/account/settings/config/${uid}/${user_id}/${json_names}   expected_status=any
+#     Check Deprication  ${resp}  Get Account Settings from Cache
+#     RETURN  ${resp}
+
+
+Get Account Settings from Cache
+# json_names- settings,coupon,providerCoupon,appointmentsettings,terminologies,location,businessProfile,virtualFields,services,apptServices,donationServices,departmentProviders,gallery
+# they should be provided as comma seperated values eg: location,services
+    [Arguments]    ${uid}  ${json_names}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/account/settings/config/${uid}/${json_names}   expected_status=any
+    Check Deprication  ${resp}  Get Account Settings from Cache
+    RETURN  ${resp}
+
+Get Domain Settings    
+    [Arguments]  ${domain}  
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /ynwConf/settings/${domain}  expected_status=any
+    Check Deprication  ${resp}  Get Domain Settings
+    RETURN  ${resp}
+    
+Get Sub Domain Settings  
+    [Arguments]  ${domain}  ${subDomain}
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /ynwConf/settings/${domain}/${subDomain}  expected_status=any
+    Check Deprication  ${resp}  Get Sub Domain Settings
+    RETURN  ${resp}  
 
 
 
