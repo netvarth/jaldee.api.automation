@@ -255,11 +255,26 @@ JD-TC-SubmitQuestionnaireForAppointment-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD} 
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+    # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME11}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME11}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Appointment Schedules Consumer  ${account_id}
     Log  ${resp.content}
@@ -477,10 +492,25 @@ JD-TC-SubmitQuestionnaireForAppointment-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    # ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD} 
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+    # Set Test Variable  ${fname}   ${resp.json()['firstName']}
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME11}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME11}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Consumer View Questionnaire  ${account_id}  ${s_id}  ${self}
     Log  ${resp.content}
@@ -662,10 +692,25 @@ JD-TC-SubmitQuestionnaireForAppointment-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    # ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD} 
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+    # Set Test Variable  ${fname}   ${resp.json()['firstName']}
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME11}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME11}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Consumer View Questionnaire  ${account_id}  ${s_id}  ${self}
     Log  ${resp.content}
@@ -854,10 +899,25 @@ JD-TC-SubmitQuestionnaireForAppointment-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    # ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD} 
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+    # Set Test Variable  ${fname}   ${resp.json()['firstName']}
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME11}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME11}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Consumer View Questionnaire  ${account_id}  ${s_id}  ${self}
     Log  ${resp.content}
@@ -1026,10 +1086,25 @@ JD-TC-SubmitQuestionnaireForAppointment-5
     Should Be Equal As Strings   ${resp.json()['releasedQnr'][0]['status']}   ${QnrReleaseStatus[1]}
 
 
-    ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    # ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD} 
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+    # Set Test Variable  ${fname}   ${resp.json()['firstName']}
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME11}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME11}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Consumer Questionnaire By uuid For Appmnt    ${apptid1}   ${account_id}
     Log  ${resp.content}
@@ -1227,10 +1302,25 @@ JD-TC-SubmitQuestionnaireForAppointment-UH1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    # ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD} 
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+    # Set Test Variable  ${fname}   ${resp.json()['firstName']}
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME11}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME11}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Consumer View Questionnaire  ${account_id}  ${s_id}  ${self}
     Log  ${resp.content}
@@ -1354,11 +1444,26 @@ JD-TC-SubmitQuestionnaireForAppointment-UH2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD} 
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+    # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME11}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME11}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Appointment Schedules Consumer  ${account_id}
     Log  ${resp.content}
@@ -1517,11 +1622,26 @@ JD-TC-SubmitQuestionnaireForAppointment-UH3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD} 
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+    # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME11}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME11}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Appointment Schedules Consumer  ${account_id}
     Log  ${resp.content}
@@ -1693,11 +1813,26 @@ JD-TC-SubmitQuestionnaireForAppointment-UH4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD} 
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+    # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME11}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME11}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Appointment Schedules Consumer  ${account_id}
     Log  ${resp.content}
@@ -1853,11 +1988,26 @@ JD-TC-SubmitQuestionnaireForAppointment-UH5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD} 
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+    # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME11}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME11}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Appointment Schedules Consumer  ${account_id}
     Log  ${resp.content}
@@ -2078,11 +2228,26 @@ JD-TC-SubmitQuestionnaireForAppointment-6
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD} 
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+    # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME11}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME11}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Appointment Schedules Consumer  ${account_id}
     Log  ${resp.content}

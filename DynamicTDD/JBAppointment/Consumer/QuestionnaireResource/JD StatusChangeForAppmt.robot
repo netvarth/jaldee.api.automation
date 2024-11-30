@@ -251,11 +251,26 @@ JD-TC-StatusChangeForServiceOptionAppointment-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME14}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${CUSERNAME14}  ${PASSWORD} 
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+    # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME14}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME14}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME14}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Appointment Schedules Consumer  ${account_id}
     Log  ${resp.content}
