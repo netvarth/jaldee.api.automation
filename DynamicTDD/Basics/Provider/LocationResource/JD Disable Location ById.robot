@@ -5,8 +5,8 @@ Force Tags        Location
 Library           Collections
 Library           String
 Library           json
-Library           FakerLibrary
 Library           random
+Library           FakerLibrary
 Library           /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/Imageupload.py
 Resource          /ebs/TDD/ProviderKeywords.robot

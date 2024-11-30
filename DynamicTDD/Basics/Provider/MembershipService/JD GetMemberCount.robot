@@ -6,7 +6,6 @@ Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
-Library           /ebs/TDD/CustomKeywords.py
 Library           RequestsLibrary
 Library           OperatingSystem
 Library           /ebs/TDD/CustomKeywords.py

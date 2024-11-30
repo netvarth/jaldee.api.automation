@@ -4,7 +4,6 @@ Test Teardown     Delete All Sessions
 Force Tags        Branch Signup
 Library           Collections
 Library           OperatingSystem
-Library           /ebs/TDD/CustomKeywords.py
 Library           String
 Library           json
 Library           /ebs/TDD/db.py

@@ -2,7 +2,6 @@
 Library           Collections
 Library           String
 Library           OperatingSystem
-Library           /ebs/TDD/CustomKeywords.py
 Library           json
 Library           DateTime
 Library           db.py

@@ -7,13 +7,13 @@ Library         Collections
 Library         String
 Library         json
 Library         FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Resource        /ebs/TDD/ProviderKeywords.robot
 Resource        /ebs/TDD/ConsumerKeywords.robot
 Resource        /ebs/TDD/ProviderConsumerKeywords.robot
 Variables       /ebs/TDD/varfiles/providers.py
 Variables       /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/hl_providers.py
-Resource          /ebs/TDD/ProviderConsumerKeywords.robot
+Variables       /ebs/TDD/varfiles/hl_providers.py
 
 *** Test Cases ***
 JD-TC-GetLabelById-1
