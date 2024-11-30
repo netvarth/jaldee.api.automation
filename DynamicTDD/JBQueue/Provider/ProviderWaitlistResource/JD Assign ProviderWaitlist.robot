@@ -7,13 +7,13 @@ Library           String
 Library           json
 Library           requests
 Library           FakerLibrary
-Library         /ebs/TDD/CustomKeywords.py
+Library           /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables       /ebs/TDD/varfiles/providers.py
-Variables       /ebs/TDD/varfiles/consumerlist.py 
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 

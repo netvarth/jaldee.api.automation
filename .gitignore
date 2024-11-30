@@ -38,3 +38,4 @@ DynamicTDD/proper.json
 Docker/logs/*
 Data/TDD_Output/msgslog.txt
 DynamicTDD/TDD_Output/msgslog.txt
+.metadata/*

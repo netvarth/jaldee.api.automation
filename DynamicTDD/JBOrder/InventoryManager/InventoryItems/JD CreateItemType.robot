@@ -8,7 +8,7 @@ Library           json
 Library           DateTime
 Library           requests
 Library           FakerLibrary
-Library         /ebs/TDD/CustomKeywords.py
+Library           /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot

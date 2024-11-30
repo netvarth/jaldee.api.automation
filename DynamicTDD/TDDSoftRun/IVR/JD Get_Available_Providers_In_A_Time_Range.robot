@@ -6,7 +6,7 @@ Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
-Library         /ebs/TDD/CustomKeywords.py
+Library           /ebs/TDD/CustomKeywords.py
 Library           RequestsLibrary
 Library           OperatingSystem
 Library           /ebs/TDD/CustomKeywords.py
@@ -16,6 +16,7 @@ Library           DateTime
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables       /ebs/TDD/varfiles/providers.py
 Variables       /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/hl_providers.py

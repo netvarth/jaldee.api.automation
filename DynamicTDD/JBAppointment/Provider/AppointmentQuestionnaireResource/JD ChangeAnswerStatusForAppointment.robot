@@ -3,7 +3,7 @@ Suite Teardown    Delete All Sessions
 Test Teardown     Run Keywords  Delete All Sessions
 Force Tags        Questionnaire
 Library           FakerLibrary
-Library         /ebs/TDD/CustomKeywords.py
+Library           /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/excelfuncs.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot

@@ -3,7 +3,7 @@ Suite Teardown    Delete All Sessions
 Test Teardown     Delete All Sessions
 Force Tags        ConsumerWaitlist  ConsumerReschedule  Queue
 Library           FakerLibrary
-Library         /ebs/TDD/CustomKeywords.py
+Library           /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot

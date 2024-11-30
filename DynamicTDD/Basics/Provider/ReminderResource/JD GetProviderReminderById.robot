@@ -7,8 +7,8 @@ Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
-Library         /ebs/TDD/CustomKeywords.py
 Library           random
+Library           /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/Imageupload.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot

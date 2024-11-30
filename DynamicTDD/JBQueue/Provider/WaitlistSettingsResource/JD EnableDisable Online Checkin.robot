@@ -7,12 +7,12 @@ Library           String
 Library           json
 Library           requests
 Library           FakerLibrary
-Library         /ebs/TDD/CustomKeywords.py
+Library           /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 # Suite Setup     Run Keywords  clear_queue  ${PUSERNAME2}  AND  clear_location  ${PUSERNAME2}
 
 *** Test Cases ***

@@ -9,16 +9,16 @@ Library           json
 Library           DateTime
 Library           requests
 Library           FakerLibrary
-Library         /ebs/TDD/CustomKeywords.py
+Library           /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
-Resource          /ebs/TDD/ProviderKeywords.robot
-Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
+Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
+Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
-Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Test Cases ***
 

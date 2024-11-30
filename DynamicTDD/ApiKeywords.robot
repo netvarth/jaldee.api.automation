@@ -9,7 +9,7 @@ Library           db.py
 Resource          Keywords.robot
 Library	          Imageupload.py
 Library           FakerLibrary
-Library         /ebs/TDD/CustomKeywords.py
+Library           /ebs/TDD/CustomKeywords.py
 
 *** Variables ***
 

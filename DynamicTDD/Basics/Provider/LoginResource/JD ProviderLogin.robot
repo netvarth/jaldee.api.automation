@@ -6,7 +6,7 @@ Library           String
 Library           json
 Library           /ebs/TDD/db.py
 Library           FakerLibrary
-Library         /ebs/TDD/CustomKeywords.py
+Library           /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot

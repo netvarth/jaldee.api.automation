@@ -6,7 +6,7 @@ Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
-Library         /ebs/TDD/CustomKeywords.py
+Library           /ebs/TDD/CustomKeywords.py
 Library           random
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
@@ -118,7 +118,6 @@ JD-TC-Get Availability Of Appointment-1
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
 
     ${sTime2}=  add_timezone_time  ${tz}  1  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -287,7 +286,7 @@ JD-TC-Get Availability Of Appointment-UH1
     ${resp}=    Get Availability Of Appointment Using Location And Service    ${lid}  ${s_id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
-    Should Be Equal As Strings    ${resp.json()}  ${NO_PERMISSION}
+    Should Be Equal As Strings    ${resp.json()}  ${SESSION_EXPIRED}
 
 
 JD-TC-Get Availability Of Appointment-UH2

@@ -3,7 +3,7 @@ Suite Teardown    Delete All Sessions
 Test Teardown    Delete All Sessions
 Force Tags        Waitlist  Label
 Library           FakerLibrary
-Library         /ebs/TDD/CustomKeywords.py
+Library           /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
