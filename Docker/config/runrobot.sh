@@ -213,6 +213,13 @@ runRemoteRuns()
     pabot --processes 5 --outputdir "TDD_Output/RemoteRunLog" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
 }
 
+runTestFiles()
+{
+    echo "Running $2"
+    mkdir -p "TDD_Output/tddlog/$Log_DIR"
+    pabot --processes 5 --outputdir "TDD_Output/TestFilesLog/$Log_DIR" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
+}
+
 
 # runProvider()
 # {
@@ -498,6 +505,9 @@ case $ENV_KEY in
     elif [ "${var}" == "RemoteRuns" ]; then
         echo "Executing case *- Jenkins- RemoteRuns"
         runRemoteRuns VariablesForJenkins.py "$tddpath"
+    elif [ "${var}" == "TestFiles" ]; then
+        echo "Executing case *- Jenkins- TestFiles"
+        runTestFiles VariablesForJenkins.py "$tddpath"
     fi
 
     if [ "${var}" != "Time" ] && [ "$TIMEFLAG" == "True"  ] && [ -f TDD/time.txt ]; then
@@ -584,7 +594,9 @@ case $ENV_KEY in
     elif  [ "${var}" == "RemoteRuns" ]; then
         echo "Executing case *- Test- RemoteRuns"
         runRemoteRuns VariablesForTest.py "$tddpath"
-    
+    elif  [ "${var}" == "TestFiles" ]; then
+        echo "Executing case *- Test- TestFiles"
+        runTestFiles VariablesForTest.py "$tddpath"
     fi    
     ;;
 4 )
@@ -665,6 +677,9 @@ case $ENV_KEY in
     elif  [ "${var}" == "RemoteRuns" ]; then
         echo "Executing case *- Scale- RemoteRuns"
         runRemoteRuns VariablesForScale.py "$tddpath"
+    elif  [ "${var}" == "TestFiles" ]; then
+        echo "Executing case *- Scale- TestFiles"
+        runTestFiles VariablesForScale.py "$tddpath"
     
     # elif [ "${var}" == "Time" ]; then
     #     echo "Executing case *- Scale- Time"
@@ -781,6 +796,9 @@ case $ENV_KEY in
     elif [ "${var}" == "RemoteRuns" ]; then
         echo "Executing case *- local- RemoteRuns"
         runRemoteRuns VariablesForLocalServer.py "$tddpath"
+    elif [ "${var}" == "TestFiles" ]; then
+        echo "Executing case *- local- TestFiles"
+        runTestFiles VariablesForLocalServer.py "$tddpath"
     fi
 
     if [ "${var}" != "Time" ] && [ "$TIMEFLAG" == "True"  ] && [ -f TDD/time.txt ]; then

@@ -412,14 +412,13 @@ Provider Signup
     ${companySuffix}=  FakerLibrary.companySuffix
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ['True','False']
-    ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${name3}=  FakerLibrary.word
     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
     ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
     Set Test Variable  ${tz}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${description}=  FakerLibrary.sentence
+    ${description}=  FakerLibrary.catch_phrase
 
     ${b_loc}=  Create Dictionary  place=${city}   longitude=${longi}   lattitude=${latti}    googleMapUrl=${url}   pinCode=${postcode}  address=${address}  parkingType=${parking}  open24hours=${24hours}
     ${resp}=  Update Business Profile with kwargs   businessName=${bs}   businessUserName=${firstname}${SPACE}${lastname}   businessDesc=Description:${SPACE}${description}  shortName=${companySuffix}  baseLocation=${b_loc} 
@@ -1500,9 +1499,11 @@ Update Schedule with Services
         Append To List  ${service_list} 	${service['id']}
     END
     Append To List  ${service_list}  @{service_ids}
-    ${resp}=  Update Appointment Schedule  ${schedule_id}  ${response.json()['name']}  ${response.json()['apptSchedule']['recurringType']}  ${response.json()['apptSchedule']['repeatIntervals']}
-    ...  ${response.json()['apptSchedule']['startDate']}  ${response.json()['apptSchedule']['terminator']['endDate']}  ${response.json()['apptSchedule']['timeSlots'][0]['sTime']}
-    ...  ${response.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${resp.json()['parallelServing']}  ${resp.json()['consumerParallelServing']}  ${resp.json()['location']['id']}  ${response.json()['timeDuration']}  ${response.json()['batchEnable']}  
+    ${resp}=  Update Appointment Schedule  ${schedule_id}  ${response['name']}  ${response['apptSchedule']['recurringType']}  
+    ...  ${response['apptSchedule']['repeatIntervals']}  ${response['apptSchedule']['startDate']}  
+    ...  ${response['apptSchedule']['terminator']['endDate']}  ${response['apptSchedule']['timeSlots'][0]['sTime']}
+    ...  ${response['apptSchedule']['timeSlots'][0]['eTime']}  ${response['parallelServing']}  ${response['consumerParallelServing']}  
+    ...  ${response['location']['id']}  ${response['timeDuration']}  ${response['batchEnable']}  
     ...  @{service_list}
     RETURN  ${resp}
 

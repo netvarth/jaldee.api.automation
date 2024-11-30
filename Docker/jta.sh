@@ -282,24 +282,27 @@ readLocation ()
         setPaths
     fi
 
-    while true; do
-        read -e -p "Enter Input Location [$defaultInputPath]: " inputPath
-        inputPath="${inputPath:-$defaultInputPath}"
-        ifExists "$inputPath"
-        if [ "$?" -eq 1 ];then
-            echo "Location does not exist. Please enter an existing location."
-        else
-            break
-        fi
-    done
-
-    read -e -p "Enter Output Location [$defaultOutputPath]: " outputPath
+    inputPath="${inputPath:-$defaultInputPath}"
     outputPath="${outputPath:-$defaultOutputPath}"
-    ifExists "$outputPath"
-    if [ "$?" -eq 1 ];then
-        echo "Provided Location does not exist. Creating it."
-    fi
-    createDir $? 1 "$outputPath"
+
+    # while true; do
+    #     read -e -p "Enter Input Location [$defaultInputPath]: " inputPath
+    #     inputPath="${inputPath:-$defaultInputPath}"
+    #     ifExists "$inputPath"
+    #     if [ "$?" -eq 1 ];then
+    #         echo "Location does not exist. Please enter an existing location."
+    #     else
+    #         break
+    #     fi
+    # done
+
+    # read -e -p "Enter Output Location [$defaultOutputPath]: " outputPath
+    # outputPath="${outputPath:-$defaultOutputPath}"
+    # ifExists "$outputPath"
+    # if [ "$?" -eq 1 ];then
+    #     echo "Provided Location does not exist. Creating it."
+    # fi
+    # createDir $? 1 "$outputPath"
 
     read -e -p "Enter Number of parallel containers [$defaultParallelContainers]: " parallelContainers
     parallelContainers="${parallelContainers:-$defaultParallelContainers}"
@@ -892,6 +895,14 @@ while [ "$1" != "" ]; do
                 setPathVariables
                 shift
                 echo "Run RemoteRuns."
+            ;;
+        
+        "--TestFiles" | "--testfiles")
+                suite="TestFiles"
+                setPaths
+                setPathVariables
+                shift
+                echo "Run TestFiles."
             ;;
         "--Provider" | "--provider")
                 suite="Provider"

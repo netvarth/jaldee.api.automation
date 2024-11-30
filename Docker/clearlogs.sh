@@ -20,13 +20,10 @@ LINES=100
     if [[ -z "$tomcat_pid" ]]; then
         echo "Tomcat is not running"
         echo "-- clearing /logs" | addTimestamp
-        find $LOG_DIR/ -mindepth 1 -maxdepth 1 -not -name $LOGFILE -print -delete
-
-        echo "-- clearing /logs gz files" | addTimestamp
-        find $LOG_DIR/ -depth -type f -mtime +$days -name '*.gz' -print -delete && find $LOG_DIR/ -depth -type f -mtime $days -name '*.gz' -print -delete && find $LOG_DIR/ -empty -type d -print -delete
+        rm -rf /logs/*
 
         echo "-- clearing tomcat logs" | addTimestamp
-        find "$tomcat_log_path/" -mindepth 1 -maxdepth 1 -type f -print -delete
+        rm -rf ${tomcat_path}/logs/*
 
     else
         echo "Tomcat is running"
@@ -62,6 +59,9 @@ LINES=100
 
     # echo "-- clearing log.html from telegram desktop" | addTimestamp
     # find "${HOME}/Downloads/Telegram Desktop/" -mindepth 1 -type f -mtime $days -name log*.html -print -delete
+
+    echo "-- clearing "$(pwd)"/logs" | addTimestamp
+    rm -rf "$(pwd)"/logs/*
 
     echo "-- clearing clearlogs" | addTimestamp
     find $LOG_DIR/ -mindepth 1 -type f -mtime $days -name 'clearlogs-*.txt' -not -name $LOGFILE -print -delete
