@@ -81,7 +81,9 @@ JD-TC-Get List of Treatment Plan against a Case and Tooth-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
@@ -225,6 +227,8 @@ JD-TC-Get List of Treatment Plan against a Case and Tooth-UH4
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
     ${resp}=    Verify Otp For Login   ${primaryMobileNo}    ${OtpPurpose['Authentication']}     JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200

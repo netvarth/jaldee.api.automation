@@ -328,7 +328,9 @@ JD-TC-Remove Service From Invoice-2
 
     # ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    # ${resp}=    Verify Otp For Login   ${CUSERNAME32}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
+    # ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME32}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     # Log   ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}   200
     # Set Test Variable  ${token7}  ${resp.json()['token']}
@@ -371,7 +373,9 @@ JD-TC-Remove Service From Invoice-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
