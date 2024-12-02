@@ -518,7 +518,6 @@ JD-TC-RemoveProviderCouponForAppointmnet-3
     ${resp}=   Get Service By Id  ${ser_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
     
     # clear_appt_schedule   ${PUSERNAME125}
     

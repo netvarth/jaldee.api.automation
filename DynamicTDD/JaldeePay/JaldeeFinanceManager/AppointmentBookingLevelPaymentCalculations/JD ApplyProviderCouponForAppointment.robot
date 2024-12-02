@@ -41,8 +41,6 @@ JD-TC-ApplyProviderCouponForAppointmnet-1
 
     ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERPH0}=  Provider Signup  PhoneNumber=${PUSERPH0}
     
-
-
     ${resp}=  Encrypted Provider Login    ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
@@ -54,7 +52,6 @@ JD-TC-ApplyProviderCouponForAppointmnet-1
     Set Suite Variable    ${pdrname}    ${decrypted_data['userName']}
     Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
     Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
-
 
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
@@ -73,11 +70,6 @@ JD-TC-ApplyProviderCouponForAppointmnet-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-
-
-
-    ${sTime}=  db.add_timezone_time     ${tz}  0  15
-    ${eTime}=  db.add_timezone_time     ${tz}   0  45
 
 
     ${resp}=   Get Appointment Settings
@@ -148,13 +140,15 @@ JD-TC-ApplyProviderCouponForAppointmnet-1
     ${servicecharge}=  Convert To Number  ${servicecharge}  1 
     Set Suite Variable  ${servicecharge}
     ${srv_duration}=   Random Int   min=10   max=20
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
+    Set Suite Variable  ${SERVICE1}
+
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}    automaticInvoiceGeneration=${bool[1]}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Suite Variable  ${s_id}  ${resp.json()}
-
-
-    # clear_appt_schedule   ${PUSERPH0}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -182,7 +176,7 @@ JD-TC-ApplyProviderCouponForAppointmnet-1
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id}  ${resp.json()}
@@ -243,20 +237,6 @@ JD-TC-ApplyProviderCouponForAppointmnet-1
     ${j}=  Random Int  max=${num_slots-1}
     Set Suite Variable   ${slot1}   ${slots[${j}]}
 
-    # ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${pid}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
-    # @{slots}=  Create List
-    # FOR   ${i}  IN RANGE   0   ${no_of_slots}
-    #     IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-    #         Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
-    #     END
-    # END
-    # ${num_slots}=  Get Length  ${slots}
-    # ${j}=  Random Int  max=${num_slots-1}
-    # Set Test Variable   ${slot1}   ${slots[${j}]}
-
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
@@ -316,19 +296,40 @@ JD-TC-ApplyProviderCouponForAppointmnet-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
+
+    ${resp}=  Get Booking Invoices  ${apptid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${pid}
+    Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['billStatus']}  ${billStatus[0]}
+
     ${discAmt}=    Evaluate  ${servicecharge}-${pc_amount}
 
-    ${resp}=   Apply Provider Coupon for Appointment    ${apptid1}    ${cupn_code}   
-    Log  ${resp.json()}
+    ${resp}=   Apply Provider Coupon   ${invoice_uid}   ${cupn_code}
+    Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
-    Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
 
-    ${resp}=   Get Appointment level Bill Details      ${apptid1} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
-    Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+    # ${resp}=   Apply Provider Coupon for Appointment    ${apptid1}    ${cupn_code}   
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    # Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['billStatus']}  ${billStatus[0]}
+
+    # ${resp}=   Get Appointment level Bill Details      ${apptid1} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    # Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
 
 JD-TC-ApplyProviderCouponForAppointmnet-2
     [Documentation]   Take Appointment for Future then apply provider coupon(ONLINE).

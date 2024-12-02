@@ -177,7 +177,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${service_type[0]}'   Set Variable   ${resp.json()[${i}]['id']}
+        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
         Exit For Loop If   '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
@@ -390,7 +390,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-2
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${service_type[0]}'   Set Variable   ${resp.json()[${i}]['id']}
+        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
         Exit For Loop If   '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
@@ -578,9 +578,9 @@ JD-TC-ServiceOptionsPaymentForWaitlist-3
     ${s_len}=  Get Length  ${resp.json()}
     @{snames}=  Create List
     FOR  ${i}  IN RANGE   ${s_len}
-        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${service_type[2]}'
+        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
             ${s_id1}=  Set Variable   ${resp.json()[${i}]['id']}
-        ELSE IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${service_type[0]}'
+        ELSE IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[2]}'
             ${d_id}=  Set Variable   ${resp.json()[${i}]['id']}
         ELSE
             Append To List  ${snames}  ${resp.json()[${i}]['name']}
@@ -646,7 +646,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-3
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id1}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${service_type[0]}'   Set Variable   ${resp.json()[${i}]['id']}
+        ${s_id1}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
         Exit For Loop If   '${s_id1}' != '${None}'
     END
     Set Suite Variable   ${s_id1}  
@@ -879,9 +879,9 @@ JD-TC-ServiceOptionsPaymentForWaitlist-4
     ${s_len}=  Get Length  ${resp.json()}
     @{snames}=  Create List
     FOR  ${i}  IN RANGE   ${s_len}
-        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${service_type[2]}'
+        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
             ${s_id2}=  Set Variable   ${resp.json()[${i}]['id']}
-        ELSE IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${service_type[0]}'
+        ELSE IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[2]}'
             ${d_id}=  Set Variable   ${resp.json()[${i}]['id']}
         ELSE
             Append To List  ${snames}  ${resp.json()[${i}]['name']}
@@ -954,7 +954,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-4
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id2}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${service_type[0]}'   Set Variable   ${resp.json()[${i}]['id']}
+        ${s_id2}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
         Exit For Loop If   '${s_id2}' != '${None}'
     END
     Set Suite Variable   ${s_id2}  
@@ -1194,9 +1194,9 @@ JD-TC-ServiceOptionsPaymentForWaitlist-5
     ${s_len}=  Get Length  ${resp.json()}
     @{snames}=  Create List
     FOR  ${i}  IN RANGE   ${s_len}
-        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${service_type[2]}'
+        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
             ${s_id3}=  Set Variable   ${resp.json()[${i}]['id']}
-        ELSE IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${service_type[0]}'
+        ELSE IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[2]}'
             ${d_id}=  Set Variable   ${resp.json()[${i}]['id']}
         ELSE
             Append To List  ${snames}  ${resp.json()[${i}]['name']}
@@ -1269,7 +1269,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-5
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id3}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${service_type[0]}'   Set Variable   ${resp.json()[${i}]['id']}
+        ${s_id3}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
         Exit For Loop If   '${s_id3}' != '${None}'
     END
     Set Suite Variable   ${s_id3}  

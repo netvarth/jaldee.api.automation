@@ -288,6 +288,17 @@ JD-TC-GetConsumerAppointmentById-UH1
 
 	[Documentation]  Get Consumer Appointment By Id  another consumer using AppmtId.
 
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${pid2}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token1}  ${resp.json()['token']}
+    
     ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid2}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -325,6 +336,17 @@ JD-TC-GetConsumerAppointmentById-UH4
 
 	[Documentation]  Get Consumer Appointment ById using another ConsumerLogin with Different Provider ID.
 
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${pid2}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token1}  ${resp.json()['token']}
+    
     ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid2}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200 
@@ -336,6 +358,17 @@ JD-TC-GetConsumerAppointmentById-UH4
 JD-TC-GetConsumerAppointmentById-UH5
 
 	[Documentation]  Get Consumer Appointment By Id using another Consumer Login with Different Provider ID.
+    
+    ${resp}=    Send Otp For Login    ${CUSERNAME11}    ${pid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME11}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
     
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${pid1}  ${token} 
     Log   ${resp.content}
