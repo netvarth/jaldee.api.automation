@@ -364,7 +364,7 @@ JD-TC-Apply Service To Finance-2
     Should Be Equal As Strings            ${resp.status_code}    200
 
     sleep  02s
-    ${resp1}=  Get Bookings Invoices  ${apptid1}
+    ${resp1}=  Get Booking Invoices  ${apptid1}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Suite Variable  ${invoice_appt_uid}  ${resp1.json()[0]['invoiceUid']}
@@ -542,7 +542,7 @@ JD-TC-Apply Services to finance-3
     Should Be Equal As Strings  ${resp.json()['appmtTime']}                            ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}                       ${lid}
 
-    ${resp1}=  Get Bookings Invoices  ${apptid1}
+    ${resp1}=  Get Booking Invoices  ${apptid1}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Suite Variable  ${invoice_apptwalkin_uid}  ${resp1.json()[0]['invoiceUid']}
@@ -706,7 +706,7 @@ JD-TC-Apply Services to finance-4
     Set Test Variable   ${fullAmount}  ${resp.json()['fullAmt']}   
 
 
-    ${resp1}=  Get Bookings Invoices  ${wid}
+    ${resp1}=  Get Booking Invoices  ${wid}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Suite Variable  ${invoice_wtlistwalkin_uid}  ${resp1.json()[0]['invoiceUid']}

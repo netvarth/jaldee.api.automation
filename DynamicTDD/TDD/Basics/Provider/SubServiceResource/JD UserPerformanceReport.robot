@@ -543,7 +543,7 @@ JD-TC-UserPerformanceReport-2
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bookings Invoices  ${apptid1}
+    ${resp}=  Get Booking Invoices  ${apptid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable    ${invoice_id1}    ${resp.json()[0]['invoiceUid']}
@@ -556,7 +556,7 @@ JD-TC-UserPerformanceReport-2
     Log   ${resp.content} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bookings Invoices  ${apptid1}
+    ${resp}=  Get Booking Invoices  ${apptid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}                      ${s_id}   
@@ -3945,7 +3945,7 @@ JD-TC-UserPerformanceReport-12
 
     ${NO_INVOICE_GENERATED}=  format String   ${NO_INVOICE_GENERATED}   ${apptid1}
 
-    ${resp}=  Get Bookings Invoices  ${apptid1}
+    ${resp}=  Get Booking Invoices  ${apptid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings    ${resp.json()}    ${NO_INVOICE_GENERATED}
@@ -3958,7 +3958,7 @@ JD-TC-UserPerformanceReport-12
     Should Be Equal As Strings  ${resp.status_code}  200
 
     sleep   2s
-    ${resp}=  Get Bookings Invoices  ${apptid1}
+    ${resp}=  Get Booking Invoices  ${apptid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable    ${invoice_uid}    ${resp.json()[0]['invoiceUid']}
@@ -3987,7 +3987,7 @@ JD-TC-UserPerformanceReport-12
 
     ${total}=    Evaluate    ${subser_qnty}*${subser_price}
 
-    ${resp}=  Get Bookings Invoices  ${apptid1}
+    ${resp}=  Get Booking Invoices  ${apptid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

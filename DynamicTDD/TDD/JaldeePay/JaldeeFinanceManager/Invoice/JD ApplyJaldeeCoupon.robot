@@ -396,7 +396,7 @@ JD-TC-ApplyJaldeeCoupon-2
     Set Suite Variable  ${wid}  ${wid[0]}
 
     sleep  02s
-    ${resp1}=  Get Bookings Invoices  ${wid}
+    ${resp1}=  Get Booking Invoices  ${wid}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Suite Variable  ${invoice_appt_uid}  ${resp1.json()[0]['invoiceUid']}
@@ -504,7 +504,7 @@ JD-TC-ApplyJaldeeCoupon-3
     Set Suite Variable  ${wid}  ${wid[0]}
 
     sleep  02s
-    ${resp1}=  Get Bookings Invoices  ${wid}
+    ${resp1}=  Get Booking Invoices  ${wid}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Suite Variable  ${invoice_appt_uid}  ${resp1.json()[0]['invoiceUid']}
@@ -799,7 +799,7 @@ JD-TC-Apply ProviderCoupon-2
     Should Be Equal As Strings  ${resp.json()['service'][0]['discount'][0]['discountValue']}  ${disc_amount}  
 
     sleep  02s
-    ${resp1}=  Get Bookings Invoices  ${wid1}
+    ${resp1}=  Get Booking Invoices  ${wid1}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Suite Variable  ${invoice_waitlist_uid}  ${resp1.json()[0]['invoiceUid']}

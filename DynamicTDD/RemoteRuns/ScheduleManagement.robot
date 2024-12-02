@@ -626,7 +626,7 @@ JD-TC-Schedule-1
 
     ${NO_INVOICE_GENERATED}=  format String   ${NO_INVOICE_GENERATED}   ${apptid1}
 
-    ${resp}=  Get Bookings Invoices  ${apptid1}
+    ${resp}=  Get Booking Invoices  ${apptid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings    ${resp.json()}    ${NO_INVOICE_GENERATED}
@@ -636,7 +636,7 @@ JD-TC-Schedule-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     sleep   2s
-    ${resp}=  Get Bookings Invoices  ${apptid1}
+    ${resp}=  Get Booking Invoices  ${apptid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable    ${invoice_uid}    ${resp.json()[0]['invoiceUid']}

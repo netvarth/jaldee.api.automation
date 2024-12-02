@@ -285,7 +285,7 @@ JD-TC-InvoiceReport-1
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceId']}        ${s_id}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['serviceId']}        ${subser_id1}
    
-    ${resp}=  Get Bookings Invoices  ${apptid1}
+    ${resp}=  Get Booking Invoices  ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -536,7 +536,7 @@ JD-TC-InvoiceReport-2
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceId']}        ${s_id}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['serviceId']}        ${subser_id1}
    
-    ${resp}=  Get Bookings Invoices  ${apptid1}
+    ${resp}=  Get Booking Invoices  ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -788,7 +788,7 @@ JD-TC-InvoiceReport-UH1
     
     ${NO_INVOICE_GENERATED}=  format String   ${NO_INVOICE_GENERATED}   ${apptid1}
 
-    ${resp}=  Get Bookings Invoices  ${apptid1}
+    ${resp}=  Get Booking Invoices  ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings    ${resp.json()}    ${NO_INVOICE_GENERATED}

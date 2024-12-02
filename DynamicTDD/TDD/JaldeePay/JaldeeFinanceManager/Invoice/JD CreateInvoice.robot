@@ -901,7 +901,7 @@ JD-TC-CreateInvoice-7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp1}=  Get Bookings Invoices  ${wid1}
+    ${resp1}=  Get Booking Invoices  ${wid1}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Should Be Equal As Strings  ${resp1.json()[0]['accountId']}  ${account_id1}
@@ -1007,7 +1007,7 @@ JD-TC-CreateInvoice-8
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp1}=  Get Bookings Invoices  ${apptid1}
+    ${resp1}=  Get Booking Invoices  ${apptid1}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Should Be Equal As Strings  ${resp1.json()[0]['accountId']}  ${account_id1}
@@ -1127,7 +1127,7 @@ JD-TC-CreateInvoice-10
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp1}=  Get Bookings Invoices  ${apptid1}
+    ${resp1}=  Get Booking Invoices  ${apptid1}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
      Should Be Equal As Strings  ${resp1.json()[0]['accountId']}  ${account_id1}
@@ -1517,7 +1517,7 @@ JD-TC-CreateInvoice-11
 
     sleep   01s
     
-    ${resp}=  Get Bookings Invoices  ${cwid}
+    ${resp}=  Get Booking Invoices  ${cwid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    ${service_response_price}=  Convert To Integer  ${resp.json()[0]['serviceList'][0]['price']} 
@@ -1618,7 +1618,7 @@ JD-TC-CreateInvoice-12
     Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[1]}
 
 
-    ${resp}=  Get Bookings Invoices  ${cwid1}
+    ${resp}=  Get Booking Invoices  ${cwid1}
     Log  ${resp.content}
    ${service_response_price}=  Convert To Integer  ${resp.json()[0]['serviceList'][0]['price']} 
    ${service_response_netRate}=  Convert To Integer  ${resp.json()[0]['serviceList'][0]['netRate']} 
@@ -1705,7 +1705,7 @@ JD-TC-CreateInvoice-12
     # Should Be Equal As Strings  ${resp1.json()['amountDue']}  0
     # Should Be Equal As Strings  ${resp1.json()['billPaymentStatus']}  ${paymentStatus[2]}
 
-    ${resp}=  Get Bookings Invoices  ${cwid1}
+    ${resp}=  Get Booking Invoices  ${cwid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}  ${p1_sid1}
@@ -2071,7 +2071,7 @@ JD-TC-CreateInvoice-13
     Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[1]}
 
     sleep   01s
-    ${resp}=  Get Bookings Invoices  ${cwid3}
+    ${resp}=  Get Booking Invoices  ${cwid3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2178,7 +2178,7 @@ JD-TC-CreateInvoice-14
     sleep   02s
 
 
-    ${resp}=  Get Bookings Invoices  ${cwid4}
+    ${resp}=  Get Booking Invoices  ${cwid4}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${service_response_price}=  Convert To Integer  ${resp.json()[0]['serviceList'][0]['price']} 
@@ -2252,7 +2252,7 @@ JD-TC-CreateInvoice-14
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bookings Invoices  ${cwid4}
+    ${resp}=  Get Booking Invoices  ${cwid4}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3101,7 +3101,7 @@ JD-TC-CreateInvoice-19
     Set Suite Variable   ${balamount_appt}   
 
     sleep   01s
-    ${resp}=  Get Bookings Invoices  ${apptid1}
+    ${resp}=  Get Booking Invoices  ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}  ${p1_sid2}
@@ -3884,7 +3884,7 @@ JD-TC-ApplyDiscountForOrder-21
 
 
 
-    ${resp}=  Get Bookings Invoices  ${orderid2}
+    ${resp}=  Get Booking Invoices  ${orderid2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${invoice_uid1}  ${resp.json()[0]['invoiceUid']}
@@ -3925,7 +3925,7 @@ JD-TC-ApplyDiscountForOrder-21
 
     sleep  03s
 
-    ${resp}=  Get Bookings Invoices  ${orderid2}
+    ${resp}=  Get Booking Invoices  ${orderid2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3954,7 +3954,7 @@ JD-TC-ApplyDiscountForOrder-22
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
 
-    ${resp}=  Get Bookings Invoices  ${orderid2}
+    ${resp}=  Get Booking Invoices  ${orderid2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['billPaymentStatus']}  ${paymentStatus[2]}
@@ -4008,7 +4008,7 @@ JD-TC-ApplyDiscountForOrder-23
     Should Be Equal As Strings  ${resp.json()['homeDelivery']}            ${bool[1]} 
     Should Be Equal As Strings  ${resp.json()['storePickup']}             ${bool[0]} 
 
-    ${resp}=  Get Bookings Invoices  ${orderid3}
+    ${resp}=  Get Booking Invoices  ${orderid3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${invoice_uid2}  ${resp.json()[0]['invoiceUid']}
@@ -4040,7 +4040,7 @@ JD-TC-ApplyDiscountForOrder-23
     Should Be Equal As Strings  ${resp1.json()['amountDue']}  0
     Should Be Equal As Strings  ${resp1.json()['billPaymentStatus']}  ${paymentStatus[2]}
 
-    ${resp}=  Get Bookings Invoices  ${orderid3}
+    ${resp}=  Get Booking Invoices  ${orderid3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

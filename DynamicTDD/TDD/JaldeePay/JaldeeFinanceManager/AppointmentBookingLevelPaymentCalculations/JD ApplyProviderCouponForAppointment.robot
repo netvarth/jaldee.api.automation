@@ -769,7 +769,7 @@ JD-TC-ApplyProviderCouponForAppointmnet-6
     Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
     Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
 
-    ${resp1}=  Get Bookings Invoices  ${apptid1}
+    ${resp1}=  Get Booking Invoices  ${apptid1}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Test Variable  ${invoice_uid}  ${resp1.json()[0]['invoiceUid']}

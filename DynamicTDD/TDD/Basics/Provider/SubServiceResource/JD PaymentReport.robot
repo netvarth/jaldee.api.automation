@@ -282,7 +282,7 @@ JD-TC-PaymentReport-1
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceId']}        ${s_id}
     Should Not Contain   ${resp.json()['subServiceData']}                               ${subser_id1}
 
-    ${resp}=  Get Bookings Invoices  ${apptid1}
+    ${resp}=  Get Booking Invoices  ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable    ${invoice_id1}    ${resp.json()[0]['invoiceUid']}
@@ -312,7 +312,7 @@ JD-TC-PaymentReport-1
     Should Be Equal As Strings  ${resp.json()['netRate']}                   ${total_amt}
     Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
 
-    ${resp}=  Get Bookings Invoices  ${apptid1}
+    ${resp}=  Get Booking Invoices  ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -622,7 +622,7 @@ JD-TC-PaymentReport-2
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceId']}        ${s_id}
     Should Not Contain   ${resp.json()['subServiceData']}                               ${subser_id1}
 
-    ${resp}=  Get Bookings Invoices  ${apptid1}
+    ${resp}=  Get Booking Invoices  ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable    ${invoice_id1}    ${resp.json()[0]['invoiceUid']}
@@ -652,7 +652,7 @@ JD-TC-PaymentReport-2
     Should Be Equal As Strings  ${resp.json()['netRate']}                   ${total_amt}
     Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
 
-    ${resp}=  Get Bookings Invoices  ${apptid1}
+    ${resp}=  Get Booking Invoices  ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -950,7 +950,7 @@ JD-TC-PaymentReport-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceId']}        ${s_id}
   
-    ${resp}=  Get Bookings Invoices  ${apptid1}
+    ${resp}=  Get Booking Invoices  ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable    ${invoice_id1}    ${resp.json()[0]['invoiceUid']}
@@ -961,7 +961,7 @@ JD-TC-PaymentReport-3
     Should Be Equal As Strings  ${resp.json()['netRate']}                   ${ser_amount}
     Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
 
-    ${resp}=  Get Bookings Invoices  ${apptid1}
+    ${resp}=  Get Booking Invoices  ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1278,7 +1278,7 @@ JD-TC-PaymentReport-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceId']}        ${s_id}
   
-    ${resp}=  Get Bookings Invoices  ${apptid1}
+    ${resp}=  Get Booking Invoices  ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable    ${invoice_id1}    ${resp.json()[0]['invoiceUid']}
@@ -1289,7 +1289,7 @@ JD-TC-PaymentReport-4
     Should Be Equal As Strings  ${resp.json()['netRate']}                   ${ser_amount}
     Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
 
-    ${resp}=  Get Bookings Invoices  ${apptid1}
+    ${resp}=  Get Booking Invoices  ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1614,7 +1614,7 @@ JD-TC-PaymentReport-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceId']}        ${s_id}
   
-    ${resp}=  Get Bookings Invoices  ${apptid1}
+    ${resp}=  Get Booking Invoices  ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable    ${invoice_id1}    ${resp.json()[0]['invoiceUid']}
@@ -1625,7 +1625,7 @@ JD-TC-PaymentReport-5
     Should Be Equal As Strings  ${resp.json()['netRate']}                   ${ser_amount}
     Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
 
-    ${resp}=  Get Bookings Invoices  ${apptid1}
+    ${resp}=  Get Booking Invoices  ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1655,7 +1655,7 @@ JD-TC-PaymentReport-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=   Get Booking Invoices   ${apptid1}
+    ${resp}=   Get Consumer Booking Invoices   ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1681,7 +1681,7 @@ JD-TC-PaymentReport-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Get Booking Invoices  ${apptid1}
+    ${resp}=   Get Consumer Booking Invoices  ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

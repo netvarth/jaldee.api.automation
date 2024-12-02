@@ -417,7 +417,7 @@ JD-TC-ProviderCouponBill-2
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp1}=  Get Bookings Invoices  ${wid}
+    ${resp1}=  Get Booking Invoices  ${wid}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Suite Variable   ${invoice_uid1}   ${resp1.json()[0]['invoiceUid']} 
@@ -653,7 +653,7 @@ JD-TC-ProviderCouponBill-3
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp1}=  Get Bookings Invoices  ${apptid1}
+    ${resp1}=  Get Booking Invoices  ${apptid1}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Test Variable   ${invoice_uid2}   ${resp1.json()[0]['invoiceUid']} 

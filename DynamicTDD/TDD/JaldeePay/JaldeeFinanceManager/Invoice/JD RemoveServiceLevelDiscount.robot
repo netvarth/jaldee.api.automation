@@ -867,7 +867,7 @@ JD-TC-Remove Service Level Discount-5
     Should Be Equal As Strings            ${resp.status_code}    200
 
     sleep  02s
-    ${resp1}=  Get Bookings Invoices  ${apptid1}
+    ${resp1}=  Get Booking Invoices  ${apptid1}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
 
@@ -1010,7 +1010,7 @@ JD-TC-Remove Service Level Discount-6
     Should Be Equal As Strings  ${resp.json()['appmtTime']}                            ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}                       ${lid}
 
-    ${resp1}=  Get Bookings Invoices  ${apptid1}
+    ${resp1}=  Get Booking Invoices  ${apptid1}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Should Be Equal As Strings  ${resp1.json()[0]['netTotal']}     ${tot_amt}
@@ -1175,7 +1175,7 @@ JD-TC-Remove Service Level Discount-7
 
     sleep  02s
      ${NO_INVOICE_GENERATED}=  format String   ${NO_INVOICE_GENERATED}   ${apptid1}
-    ${resp1}=  Get Bookings Invoices  ${apptid1}
+    ${resp1}=  Get Booking Invoices  ${apptid1}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  422
     Should Be Equal As Strings  ${resp1.json()}   ${NO_INVOICE_GENERATED}
@@ -1462,7 +1462,7 @@ JD-TC-Remove Service Level Discount-UH6
 
     sleep  02s
      ${NO_INVOICE_GENERATED}=  format String   ${NO_INVOICE_GENERATED}   ${apptid1}
-    ${resp1}=  Get Bookings Invoices  ${apptid1}
+    ${resp1}=  Get Booking Invoices  ${apptid1}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  422
     Should Be Equal As Strings  ${resp1.json()}   ${NO_INVOICE_GENERATED}

@@ -535,7 +535,7 @@ JD-TC-PreDeploymentWaitlist-1
 
     ${NO_INVOICE_GENERATED}=  format String   ${NO_INVOICE_GENERATED}   ${wid}
 
-    ${resp}=  Get Bookings Invoices  ${wid}
+    ${resp}=  Get Booking Invoices  ${wid}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings    ${resp.json()}    ${NO_INVOICE_GENERATED}
@@ -545,7 +545,7 @@ JD-TC-PreDeploymentWaitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     sleep   2s
-    ${resp}=  Get Bookings Invoices  ${wid}
+    ${resp}=  Get Booking Invoices  ${wid}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable    ${invoice_uid}    ${resp.json()[0]['invoiceUid']}
@@ -591,7 +591,7 @@ JD-TC-PreDeploymentWaitlist-1
 
     ${total}=    Evaluate    ${subser_qnty}*${subser_price} + ${ser_amount1}
 
-    ${resp}=  Get Bookings Invoices  ${wid}
+    ${resp}=  Get Booking Invoices  ${wid}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -647,7 +647,7 @@ JD-TC-PreDeploymentWaitlist-1
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bookings Invoices  ${wid}
+    ${resp}=  Get Booking Invoices  ${wid}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}                                        ${account_id}

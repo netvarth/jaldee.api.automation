@@ -3421,11 +3421,11 @@ Get locations by service
     Check Deprication  ${resp}  Get locations by service
     RETURN  ${resp}
 
-Get Booking Invoices
+Get Consumer Booking Invoices
      [Arguments]      ${ynwuuid}  
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw   /consumer/jp/finance/invoice/ynwuid/${ynwuuid}    expected_status=any
-    Check Deprication  ${resp}  Get Booking Invoices
+    Check Deprication  ${resp}  Get Consumer Booking Invoices
     RETURN  ${resp}
 
 

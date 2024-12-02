@@ -410,7 +410,7 @@ JD-TC-Apply Service To Finance-2
     Should Be Equal As Strings            ${resp.status_code}    200
 
     sleep  02s
-    ${resp1}=  Get Bookings Invoices  ${apptid1}
+    ${resp1}=  Get Booking Invoices  ${apptid1}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Suite Variable  ${invoice_appt_uid}  ${resp1.json()[0]['invoiceUid']}
@@ -577,7 +577,7 @@ JD-TC-Apply Services to Invoice-3
     Should Be Equal As Strings  ${resp.json()['appmtTime']}                            ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}                       ${lid}
 
-    ${resp1}=  Get Bookings Invoices  ${apptid1}
+    ${resp1}=  Get Booking Invoices  ${apptid1}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Suite Variable  ${invoice_apptwalkin_uid}  ${resp1.json()[0]['invoiceUid']}
@@ -735,7 +735,7 @@ JD-TC-Apply Services to Invoice-4
       Set Test Variable   ${fullAmount}  ${resp.json()['fullAmt']}   
 
 
-    ${resp1}=  Get Bookings Invoices  ${wid}
+    ${resp1}=  Get Booking Invoices  ${wid}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Suite Variable  ${invoice_wtlistwalkin_uid}  ${resp1.json()[0]['invoiceUid']}
@@ -1026,7 +1026,7 @@ JD-TC-Apply Services to Invoice-5
     Should Be Equal As Strings  ${resp1.status_code}  200
 
     sleep  02s
-    ${resp}=  Get Bookings Invoices  ${cwid}
+    ${resp}=  Get Booking Invoices  ${cwid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    ${response_netRate}=  Convert To Integer  ${resp.json()[0]['netRate']}
@@ -1064,7 +1064,7 @@ JD-TC-Apply Services to Invoice-5
     ${amountDue}=  Evaluate  ${netRate}-${min_pre}
     ${amountDue}=  Convert To Number  ${amountDue}  2
 
-    ${resp}=  Get Bookings Invoices  ${cwid}
+    ${resp}=  Get Booking Invoices  ${cwid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}  ${p1_sid1}
@@ -1256,7 +1256,7 @@ JD-TC-Apply Service To Finance-UH1
 
     ${NO_INVOICE_GENERATED}=  format String   ${NO_INVOICE_GENERATED}   ${apptid1}
 #   Invoice is not generated because prepayment pending
-    ${resp1}=  Get Bookings Invoices  ${apptid1}
+    ${resp1}=  Get Booking Invoices  ${apptid1}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  422
     Should Be Equal As Strings  ${resp1.json()}   ${NO_INVOICE_GENERATED}

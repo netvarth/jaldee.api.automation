@@ -14518,11 +14518,11 @@ Create Appointment Reminder Settings
     Check Deprication  ${resp}  Create Appointment Reminder Settings
     RETURN  ${resp}
 
-Get Bookings Invoices
+Get Booking Invoices
      [Arguments]      ${ynwuuid}  
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw   /provider/jp/finance/invoice/ynwuid/${ynwuuid}    expected_status=any
-    Check Deprication  ${resp}  Get Bookings Invoices
+    Check Deprication  ${resp}  Get Booking Invoices
     RETURN  ${resp}
 
 Update Invoice Status

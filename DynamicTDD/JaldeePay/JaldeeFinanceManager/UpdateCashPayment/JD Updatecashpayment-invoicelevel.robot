@@ -691,7 +691,7 @@ JD-TC-Update cash payment- finance invoice level-3
     Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[1]}
 
     sleep   01s
-    ${resp}=  Get Bookings Invoices  ${cwid3}
+    ${resp}=  Get Booking Invoices  ${cwid3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

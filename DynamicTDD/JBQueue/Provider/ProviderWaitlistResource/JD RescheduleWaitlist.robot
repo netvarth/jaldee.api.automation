@@ -1007,7 +1007,7 @@ JD-TC-Reschedule Waitlist-5
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Test Variable   ${payref}   ${resp.json()['paymentRefId']}
 
-    ${resp}=  Get Booking Invoices  ${wid}
+    ${resp}=  Get Consumer Booking Invoices  ${wid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${pid}

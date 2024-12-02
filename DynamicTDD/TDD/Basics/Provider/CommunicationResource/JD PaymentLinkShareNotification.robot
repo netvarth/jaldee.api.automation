@@ -381,7 +381,7 @@ JD-TC-PaymentLinkShareNotification-2
     Should Be Equal As Strings    ${resp.status_code}    200
 
     sleep  2s
-    ${resp}=  Get Bookings Invoices  ${wid1}
+    ${resp}=  Get Booking Invoices  ${wid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable    ${invoice_uid}    ${resp.json()[0]['invoiceUid']}
@@ -598,7 +598,7 @@ JD-TC-PaymentLinkShareNotification-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Bookings Invoices  ${wid2}
+    ${resp}=  Get Booking Invoices  ${wid2}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable    ${invoice_uid1}    ${resp.json()[0]['invoiceUid']}
@@ -691,7 +691,7 @@ JD-TC-PaymentLinkShareNotification-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Bookings Invoices  ${walkin_appt2}
+    ${resp}=  Get Booking Invoices  ${walkin_appt2}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable    ${invoice_uid1}    ${resp.json()[0]['invoiceUid']}
