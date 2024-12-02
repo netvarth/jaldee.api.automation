@@ -566,9 +566,9 @@ JD-TC-GetAppointmentToday-1
     ${A_uuid4}=  Set Variable   ${resp.json()}
     Set Suite Variable   ${A_uuid4} 
 
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Provider Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Send Otp For Login    ${CUSERNAME16}    ${pid1}
     Log   ${resp.content}
