@@ -555,10 +555,10 @@ JD-TC-ChangeAppointmentStatus-UH1
 
     [Documentation]  change status to Started from confirmed
 
-    ${pid}=  get_acc_id  ${PUSERNAME377}
+    ${pid}=  get_acc_id  ${PUSERNAME310}
     ${cid}=  get_id  ${NewCustomer}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME310}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -660,7 +660,7 @@ JD-TC-ChangeAppointmentStatus-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME310}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

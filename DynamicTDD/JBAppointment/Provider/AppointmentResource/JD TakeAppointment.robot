@@ -3334,13 +3334,14 @@ JD-TC-Take Appointment-30
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME_Z}
     # clear_location  ${PUSERNAME_Z}
-    # clear_customer   ${PUSERNAME_Z}
+    clear_customer   ${PUSERNAME_Z}
 
+    ${locid2}=  Create Sample Location
+    
     ${resp}=   Disable Future Appointment
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${locid2}=  Create Sample Location
     ${resp}=   Get Location ById  ${locid2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
