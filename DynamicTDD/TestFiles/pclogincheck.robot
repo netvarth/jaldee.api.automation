@@ -34,11 +34,11 @@ JD-TC-GetAppointmentToday-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    # ${fname}=  generate_firstname
-    # ${lname}=  FakerLibrary.last_name
-    # ${resp}=    ProviderConsumer SignUp    ${fname}  ${lname}  ${EMPTY}  ${CUSERNAME16}  ${account_id}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}   200
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    ${resp}=    ProviderConsumer SignUp    ${fname}  ${lname}  ${EMPTY}  ${CUSERNAME16}  ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${account_id}  ${token} 
     Log   ${resp.content}

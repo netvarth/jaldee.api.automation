@@ -547,7 +547,7 @@ JD-TC-RemoveProviderCouponForAppointmnet-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['isPrePayment']}   ${bool[0]} 
     Should Be Equal As Numbers  ${resp.json()['totalAmount']}    ${servicecharge} 
-    Should Be Equal As Strings  ${resp.json()['serviceType']}    ${service_type[2]} 
+    Should Be Equal As Strings  ${resp.json()['serviceType']}    ${ServiceType[1]} 
     
     # clear_appt_schedule   ${PUSERNAME125}
     
