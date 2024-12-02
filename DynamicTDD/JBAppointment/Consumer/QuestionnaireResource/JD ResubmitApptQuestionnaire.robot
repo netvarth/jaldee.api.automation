@@ -278,6 +278,10 @@ JD-TC-ResubmitQuestionnaireForAppointment-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME9}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
     # ${resp}=    Consumer Logout 
     # Log   ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}   200
