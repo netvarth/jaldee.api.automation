@@ -157,7 +157,6 @@ JD-TC-GetApptByEncryptedIDconsumer-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_X}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -291,7 +290,9 @@ JD-TC-GetApptByEncryptedIDconsumer-3
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token1}  ${resp.json()['token']}
     
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME3}    ${pid}  ${token1} 
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    ${resp}=    ProviderConsumer SignUp    ${fname}  ${lname}  ${EMPTY}  ${CUSERNAME3}  ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200  
     
@@ -299,6 +300,6 @@ JD-TC-GetApptByEncryptedIDconsumer-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}    uid=${apptid1}   appmtDate=${DAY1}  apptStatus=${apptStatus} 
-    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['uid']}                         ${apptid1}
+    Should Be Equal As Strings  ${resp.json()['service']['name']}              ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['service']['id']}                ${s_id}
+    Should Be Equal As Strings  ${resp.json()['uid']}                          ${apptid1}
