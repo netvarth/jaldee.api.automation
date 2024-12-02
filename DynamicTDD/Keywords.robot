@@ -299,7 +299,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{toggleButton}                     enable  disable
 @{losProduct}                       CDL  PROPERTYLOAN  DOCTORSLOAN  TEACHERSLOAN
 @{leadstageType}                    NEW  FOLLOWUP  KYC  KYC_VERIFICATION  SALESFIELD  SALESFIELD_VERIFICATION  
-@{loanstageType}                    DOCUMENT  FINANCIAL_INFO  PROPERTY_INFO  BUSINESS_INFO  CREDIT_VERIFICATION  BRANCH_VERIFICATION
+@{loanstageType}                    DOCUMENT  FINANCIAL_INFO  PROPERTY_INFO  CREDIT_VERIFICATION  BRANCH_VERIFICATION  BUSINESS_INFO
 @{pushPurchaseToFinance}            AUTOMATIC   MANUAL
 
 
