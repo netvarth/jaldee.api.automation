@@ -95,8 +95,8 @@ ProviderConsumer Login with token
     ${log}=    json.dumps    ${login}
     ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=${token}
     Set To Dictionary 	${headers2} 	&{tzheaders}
-    # Check And Create YNW Session
-    Create Session    ynw    ${BASE_URL}  headers=${headers}  verify=true
+    Check And Create YNW Session
+    # Create Session    ynw    ${BASE_URL}  headers=${headers}  verify=true
     ${resp}=    POST On Session    ynw     /consumer/login   headers=${headers2}  data=${log}   expected_status=any   params=${cons_params}
     Check Deprication  ${resp}  ProviderConsumer Login with token
     RETURN  ${resp}
