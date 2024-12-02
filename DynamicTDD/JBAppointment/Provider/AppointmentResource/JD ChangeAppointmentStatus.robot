@@ -556,7 +556,7 @@ JD-TC-ChangeAppointmentStatus-UH1
     [Documentation]  change status to Started from confirmed
 
     ${pid}=  get_acc_id  ${PUSERNAME310}
-    ${cid}=  get_id  ${NewCustomer}
+    # ${cid}=  get_id  ${NewCustomer}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME310}  ${PASSWORD}
     Log   ${resp.json()}
@@ -618,9 +618,29 @@ JD-TC-ChangeAppointmentStatus-UH1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Provider Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${NewCustomer}=  Generate Random 555 Number
+    ${resp}=  AddCustomer  ${NewCustomer}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}   email=${pc_emailid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable   ${cid}  ${resp.json()}
+
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login    ${NewCustomer}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
     Log   ${resp.content}
