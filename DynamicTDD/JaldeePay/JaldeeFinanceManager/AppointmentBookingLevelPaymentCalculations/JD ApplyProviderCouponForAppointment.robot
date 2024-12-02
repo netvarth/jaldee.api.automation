@@ -63,41 +63,6 @@ JD-TC-ApplyProviderCouponForAppointmnet-1
     Set Suite Variable   ${PUSERPH0}
 
     ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERPH0}=  Provider Signup  PhoneNumber=${PUSERPH0}
-    
-    # ${licid}  ${licname}=  get_highest_license_pkg
-    # Log  ${licid}
-    # Log  ${licname}
-    # ${domresp}=  Get BusinessDomainsConf
-    # Log   ${domresp.json()}
-    # Should Be Equal As Strings  ${domresp.status_code}  200
-    # ${dlen}=  Get Length  ${domresp.json()}
-    # FOR  ${pos}  IN RANGE  ${dlen}  
-    #     Set Suite Variable  ${d1}  ${domresp.json()[${pos}]['domain']}
-    #     ${sd1}  ${check}=  Get Billable Subdomain  ${d1}  ${domresp}  ${pos}  
-    #     Set Suite Variable   ${sd1}
-    #     Exit For Loop IF     '${check}' == '${bool[1]}'
-    # END
-    # Log  ${d1}
-    # Log  ${sd1}
-
-    # ${firstname}=  FakerLibrary.first_name
-    # ${lastname}=  FakerLibrary.last_name
-    # ${address}=  FakerLibrary.address
-    # ${dob}=  FakerLibrary.Date
-    # ${gender}=    Random Element    ${Genderlist}
-    # ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd1}  ${PUSERPH0}  ${licid}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${resp}=  Account Activation  ${PUSERPH0}  0
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # Should Be Equal As Strings  "${resp.json()}"    "true"
-    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
-
-    # ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login    ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}         
@@ -110,7 +75,6 @@ JD-TC-ApplyProviderCouponForAppointmnet-1
     Set Suite Variable    ${pdrname}    ${decrypted_data['userName']}
     Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
     Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
-
 
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
@@ -130,34 +94,8 @@ JD-TC-ApplyProviderCouponForAppointmnet-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-
-    # ${DAY1}=  db.get_date_by_timezone  ${tz}
-    # ${list}=  Create List  1  2  3  4  5  6  7
-    # ${ph1}=  Evaluate  ${PUSERPH0}+15566122
-    # ${ph2}=  Evaluate  ${PUSERPH0}+25566122
-    # ${views}=  Random Element    ${Views}
-    # ${name1}=  FakerLibrary.name
-    # ${name2}=  FakerLibrary.name
-    # ${name3}=  FakerLibrary.name
-    # ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
-    # ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    # ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
-    # ${bs}=  FakerLibrary.bs
-    # ${city}=   get_place
-    # ${latti}=  get_latitude
-    # ${longi}=  get_longitude
-    # ${companySuffix}=  FakerLibrary.companySuffix
-    # ${postcode}=  FakerLibrary.postcode
-    # ${address}=  get_address
-    # ${parking}   Random Element   ${parkingType}
-    # ${24hours}    Random Element    ${bool}
-    # ${desc}=   FakerLibrary.sentence
-    # ${url}=   FakerLibrary.url
     ${sTime}=  db.add_timezone_time     ${tz}  0  15
     ${eTime}=  db.add_timezone_time     ${tz}   0  45
-    # ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -183,24 +121,6 @@ JD-TC-ApplyProviderCouponForAppointmnet-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
-
-    # ${fields}=   Get subDomain level Fields  ${d1}  ${sd1}
-    # Log  ${fields.json()}
-    # Should Be Equal As Strings    ${fields.status_code}   200
-
-    # ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
-
-    # ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sd1}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=  Get specializations Sub Domain  ${d1}  ${sd1}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-
-    # ${spec}=  get_Specializations  ${resp.json()}
-    # ${resp}=  Update Specialization  ${spec}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Enable Waitlist
     Log   ${resp.json()}
@@ -229,13 +149,15 @@ JD-TC-ApplyProviderCouponForAppointmnet-1
     ${servicecharge}=  Convert To Number  ${servicecharge}  1 
     Set Suite Variable  ${servicecharge}
     ${srv_duration}=   Random Int   min=10   max=20
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
+    Set Suite Variable  ${SERVICE1}
+
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}    automaticInvoiceGeneration=${bool[1]}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Suite Variable  ${s_id}  ${resp.json()}
-
-
-    # clear_appt_schedule   ${PUSERPH0}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -307,13 +229,6 @@ JD-TC-ApplyProviderCouponForAppointmnet-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    # ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # Set Suite Variable  ${jdconID}   ${resp.json()['id']}
-    # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
-
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -328,20 +243,6 @@ JD-TC-ApplyProviderCouponForAppointmnet-1
     ${num_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${num_slots-1}
     Set Suite Variable   ${slot1}   ${slots[${j}]}
-
-    # ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${pid}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
-    # @{slots}=  Create List
-    # FOR   ${i}  IN RANGE   0   ${no_of_slots}
-    #     IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-    #         Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
-    #     END
-    # END
-    # ${num_slots}=  Get Length  ${slots}
-    # ${j}=  Random Int  max=${num_slots-1}
-    # Set Test Variable   ${slot1}   ${slots[${j}]}
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -402,19 +303,40 @@ JD-TC-ApplyProviderCouponForAppointmnet-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
+
+    ${resp}=  Get Booking Invoices  ${apptid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${pid}
+    Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['billStatus']}  ${billStatus[0]}
+
     ${discAmt}=    Evaluate  ${servicecharge}-${pc_amount}
 
-    ${resp}=   Apply Provider Coupon for Appointment    ${apptid1}    ${cupn_code}   
-    Log  ${resp.json()}
+    ${resp}=   Apply Provider Coupon   ${invoice_uid}   ${cupn_code}
+    Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
-    Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
 
-    ${resp}=   Get Appointment level Bill Details      ${apptid1} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
-    Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+    # ${resp}=   Apply Provider Coupon for Appointment    ${apptid1}    ${cupn_code}   
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    # Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['billStatus']}  ${billStatus[0]}
+
+    # ${resp}=   Get Appointment level Bill Details      ${apptid1} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    # Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
 
 JD-TC-ApplyProviderCouponForAppointmnet-2
     [Documentation]   Take Appointment for Future then apply provider coupon(ONLINE).

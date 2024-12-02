@@ -63,41 +63,6 @@ JD-TC-RemoveServiceLevelDiscountForAppointmnet-1
     Set Suite Variable   ${PUSERPH0}
 
     ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERPH0}=  Provider Signup without Profile  PhoneNumber=${PUSERPH0}
-    
-    # ${licid}  ${licname}=  get_highest_license_pkg
-    # Log  ${licid}
-    # Log  ${licname}
-    # ${domresp}=  Get BusinessDomainsConf
-    # Log   ${domresp.json()}
-    # Should Be Equal As Strings  ${domresp.status_code}  200
-    # ${dlen}=  Get Length  ${domresp.json()}
-    # FOR  ${pos}  IN RANGE  ${dlen}  
-    #     Set Suite Variable  ${d1}  ${domresp.json()[${pos}]['domain']}
-    #     ${sd1}  ${check}=  Get Billable Subdomain  ${d1}  ${domresp}  ${pos}  
-    #     Set Suite Variable   ${sd1}
-    #     Exit For Loop IF     '${check}' == '${bool[1]}'
-    # END
-    # Log  ${d1}
-    # Log  ${sd1}
-
-    # ${firstname}=  FakerLibrary.first_name
-    # ${lastname}=  FakerLibrary.last_name
-    # ${address}=  FakerLibrary.address
-    # ${dob}=  FakerLibrary.Date
-    # ${gender}=    Random Element    ${Genderlist}
-    # ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd1}  ${PUSERPH0}  ${licid}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${resp}=  Account Activation  ${PUSERPH0}  0
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # Should Be Equal As Strings  "${resp.json()}"    "true"
-    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
-
-    # ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login    ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}         
@@ -131,31 +96,31 @@ JD-TC-RemoveServiceLevelDiscountForAppointmnet-1
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${ph1}=  Evaluate  ${PUSERPH0}+15566122
-    ${ph2}=  Evaluate  ${PUSERPH0}+25566122
-    ${views}=  Random Element    ${Views}
-    ${name1}=  FakerLibrary.name
-    ${name2}=  FakerLibrary.name
-    ${name3}=  FakerLibrary.name
-    ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
-    ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
-    ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${parking}   Random Element   ${parkingType}
-    ${24hours}    Random Element    ${bool}
-    ${desc}=   FakerLibrary.sentence
-    ${url}=   FakerLibrary.url
+    # ${ph1}=  Evaluate  ${PUSERPH0}+15566122
+    # ${ph2}=  Evaluate  ${PUSERPH0}+25566122
+    # ${views}=  Random Element    ${Views}
+    # ${name1}=  FakerLibrary.name
+    # ${name2}=  FakerLibrary.name
+    # ${name3}=  FakerLibrary.name
+    # ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
+    # ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
+    # ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
+    # ${bs}=  FakerLibrary.bs
+    # ${city}=   get_place
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${companySuffix}=  FakerLibrary.companySuffix
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    # ${parking}   Random Element   ${parkingType}
+    # ${24hours}    Random Element    ${bool}
+    # ${desc}=   FakerLibrary.sentence
+    # ${url}=   FakerLibrary.url
     ${sTime}=  db.add_timezone_time     ${tz}  0  15
     ${eTime}=  db.add_timezone_time     ${tz}   0  45
-    ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -165,12 +130,10 @@ JD-TC-RemoveServiceLevelDiscountForAppointmnet-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    
     IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
         ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
         Log  ${resp1.content}
@@ -182,42 +145,41 @@ JD-TC-RemoveServiceLevelDiscountForAppointmnet-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
-    ${fields}=   Get subDomain level Fields  ${d1}  ${sd1}
-    Log  ${fields.json()}
-    Should Be Equal As Strings    ${fields.status_code}   200
+    # ${fields}=   Get subDomain level Fields  ${d1}  ${sd1}
+    # Log  ${fields.json()}
+    # Should Be Equal As Strings    ${fields.status_code}   200
 
-    ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
+    # ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
 
-    ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sd1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sd1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get specializations Sub Domain  ${d1}  ${sd1}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=  Get specializations Sub Domain  ${d1}  ${sd1}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${spec}=  get_Specializations  ${resp.json()}
-    ${resp}=  Update Specialization  ${spec}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${spec}=  get_Specializations  ${resp.json()}
+    # ${resp}=  Update Specialization  ${spec}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Enable Waitlist
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     sleep   01s
 
-    ${resp}=  Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[0]}   
+    # ${resp}=  Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[0]}   
 
-    ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-
+    # ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -230,9 +192,6 @@ JD-TC-RemoveServiceLevelDiscountForAppointmnet-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Suite Variable  ${s_id}  ${resp.json()}
-
-
-    # clear_appt_schedule   ${PUSERPH0}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
