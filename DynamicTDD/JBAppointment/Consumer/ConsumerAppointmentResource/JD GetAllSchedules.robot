@@ -164,8 +164,6 @@ JD-TC-Get All Schedule slots-1
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME7}    ${pid}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    
-
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id2}
     Log  ${resp.content}
@@ -190,11 +188,20 @@ JD-TC-Get All Schedule slots-2
 
     [Documentation]     Consumer get all slots for a service that added in one schedule.
 
+    ${resp}=    Send Otp For Login    ${CUSERNAME7}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME7}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token1}  ${resp.json()['token']}
+    
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME7}    ${pid}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    
-
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
@@ -215,11 +222,21 @@ JD-TC-Get All Schedule slots-UH1
 
     [Documentation]     Consumer get all slots where provider d is invalid.
 
+    ${resp}=    Send Otp For Login    ${CUSERNAME7}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME7}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token1}  ${resp.json()['token']}
+    
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME7}    ${pid}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${parallel}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
@@ -240,6 +257,17 @@ JD-TC-Get All Schedule slots-UH3
 
     [Documentation]     Consumer get all slots where date is invalid.
 
+    ${resp}=    Send Otp For Login    ${CUSERNAME7}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME7}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token1}  ${resp.json()['token']}
+    
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME7}    ${pid}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -358,8 +386,6 @@ JD-TC-Get All Schedule slots-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-
-
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid1}  ${DAY1}  ${lid}  ${s_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200

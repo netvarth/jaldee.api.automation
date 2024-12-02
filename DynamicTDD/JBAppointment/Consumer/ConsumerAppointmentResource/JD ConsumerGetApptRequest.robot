@@ -106,7 +106,6 @@ JD-TC-ConsumerGetApptRequest-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${cid}  ${resp.json()['providerConsumer']}
 
-
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${acc_id1}  ${DAY1}  ${lid}  ${sid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -158,6 +157,17 @@ JD-TC-ConsumerGetApptRequest-2
 
     [Documentation]   Consumer create an appt request and verify it.
 
+    ${resp}=    Send Otp For Login    ${CUSERNAME10}    ${acc_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME10}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+    
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME10}    ${acc_id1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -205,6 +215,17 @@ JD-TC-ConsumerGetApptRequest-3
 
     [Documentation]   Consumer create an appt request for his family member and verify it.
 
+    ${resp}=    Send Otp For Login    ${CUSERNAME10}    ${acc_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME10}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+    
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME10}    ${acc_id1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200

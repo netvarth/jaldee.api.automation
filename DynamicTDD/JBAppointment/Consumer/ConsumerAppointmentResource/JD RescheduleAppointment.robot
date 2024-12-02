@@ -161,12 +161,8 @@ JD-TC-Reschedule Appointment-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -358,12 +354,8 @@ JD-TC-Reschedule Appointment-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -535,12 +527,8 @@ JD-TC-Reschedule Appointment-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -719,12 +707,8 @@ JD-TC-Reschedule Appointment-9
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -918,12 +902,8 @@ JD-TC-Reschedule Appointment-10
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -1132,12 +1112,8 @@ JD-TC-Reschedule Appointment-UH1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -1330,12 +1306,8 @@ JD-TC-Reschedule Appointment-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -1518,12 +1490,8 @@ JD-TC-Reschedule Appointment-UH3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -1716,12 +1684,8 @@ JD-TC-Reschedule Appointment-UH4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -1856,12 +1820,8 @@ JD-TC-Reschedule Appointment-UH5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -2018,12 +1978,8 @@ JD-TC-Reschedule Appointment-UH6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -2164,12 +2120,8 @@ JD-TC-Reschedule Appointment-UH7
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -2323,12 +2275,8 @@ JD-TC-Reschedule Appointment-UH8
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -2482,12 +2430,8 @@ JD-TC-Reschedule Appointment-UH9
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -2641,12 +2585,8 @@ JD-TC-Reschedule Appointment-UH10
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -2800,12 +2740,8 @@ JD-TC-Reschedule Appointment-UH11
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -2964,7 +2900,7 @@ JD-TC-Reschedule Appointment-UH12
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -3116,12 +3052,8 @@ JD-TC-Reschedule Appointment-UH13
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -3276,12 +3208,8 @@ JD-TC-Reschedule Appointment-UH14
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -3445,12 +3373,8 @@ JD-TC-Reschedule Appointment-UH15
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -3625,12 +3549,8 @@ JD-TC-Reschedule Appointment-UH16
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -3857,12 +3777,8 @@ JD-TC-Reschedule Appointment-UH17
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -4036,12 +3952,8 @@ JD-TC-Reschedule Appointment-UH20
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -4221,12 +4133,8 @@ JD-TC-Reschedule Appointment-UH21
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -4300,7 +4208,7 @@ JD-TC-Reschedule Appointment-UH21
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -4426,12 +4334,8 @@ JD-TC-Reschedule Appointment-UH22
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -4501,7 +4405,7 @@ JD-TC-Reschedule Appointment-UH22
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -4647,12 +4551,8 @@ JD-TC-Reschedule Appointment-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -5657,12 +5557,8 @@ JD-TC-Reschedule Appointment-UH18
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -5841,12 +5737,8 @@ JD-TC-Reschedule Appointment-UH19
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Consumer Logout 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -5920,7 +5812,7 @@ JD-TC-Reschedule Appointment-UH19
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${pid}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 

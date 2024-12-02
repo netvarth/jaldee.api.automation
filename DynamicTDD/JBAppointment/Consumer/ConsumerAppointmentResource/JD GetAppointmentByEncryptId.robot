@@ -187,6 +187,17 @@ JD-TC-GetApptByEncryptedIDconsumer-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=    Send Otp For Login    ${CUSERNAME10}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME10}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token1}  ${resp.json()['token']}
+    
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME10}    ${pid}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -219,7 +230,18 @@ JD-TC-GetApptByEncryptedIDconsumer-UH1
 
     [Documentation]     Passing Consumer Appointment Encrypted ID is Zero.
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME10}    ${pid}  ${token1} 
+    ${resp}=    Send Otp For Login    ${CUSERNAME10}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME10}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token1}  ${resp.json()['token']}
+    
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME10}  ${pid}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -232,6 +254,17 @@ JD-TC-GetApptByEncryptedIDconsumer-UH2
 
     [Documentation]     Passing Consumer Appointment id as Encrypted ID  
 
+    ${resp}=    Send Otp For Login    ${CUSERNAME10}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME10}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token1}  ${resp.json()['token']}
+    
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME10}    ${pid}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -241,14 +274,26 @@ JD-TC-GetApptByEncryptedIDconsumer-UH2
     Should Be Equal As Strings  ${resp.status_code}  404
     Should Be Equal As Strings  "${resp.json()}"      "${APPOINTMENT_ID_NO_LONGER_ACTIVE}"
 
-*** Comments ***
+# *** Comments ***
 
 JD-TC-GetApptByEncryptedIDconsumer-3
 
     [Documentation]    Get Consumer Appointment Encrypted ID of another consumer
 
-    ${resp}=  Consumer Login  ${CUSERNAME3}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200  
+    ${resp}=    Send Otp For Login    ${CUSERNAME3}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME3}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token1}  ${resp.json()['token']}
+    
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME3}    ${pid}  ${token1} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200  
     
     ${resp}=  Get Consumer Appointment By EncodedId     ${A_uuid1} 
     Log   ${resp.json()}

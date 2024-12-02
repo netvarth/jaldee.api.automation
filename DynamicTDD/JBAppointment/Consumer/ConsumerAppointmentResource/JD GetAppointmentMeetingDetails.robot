@@ -245,6 +245,17 @@ JD-TC-GetAppointmentMeetingDetails-1
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=    Send Otp For Login    ${CUSERNAME6}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME6}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token1}  ${resp.json()['token']}
+
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME6}    ${pid}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -276,6 +287,17 @@ JD-TC-GetAppointmentMeetingDetails-1
 JD-TC-GetAppointmentMeetingDetails-2
     [Documentation]  Create Teleservice meeting request for Appointment in Zoom (ONLINE CHECKIN)
 
+    ${resp}=    Send Otp For Login    ${CUSERNAME6}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME6}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token1}  ${resp.json()['token']}
+    
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME6}    ${pid}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -311,6 +333,17 @@ JD-TC-GetAppointmentMeetingDetails-2
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=    Send Otp For Login    ${CUSERNAME6}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME6}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token1}  ${resp.json()['token']}
+    
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME6}    ${pid}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -344,6 +377,17 @@ JD-TC-GetAppointmentMeetingDetails-UH1
     [Documentation]  Create Teleservice meeting request for Appointment  in Zoom and WhatsApp (ONLINE CHECKIN)
 
 
+    ${resp}=    Send Otp For Login    ${CUSERNAME6}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME6}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token1}  ${resp.json()['token']}
+    
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME6}    ${pid}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -537,6 +581,17 @@ JD-TC-GetAppointmentMeetingDetails-3
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=    Send Otp For Login    ${CUSERNAME16}    ${accId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME16}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token2}  ${resp.json()['token']}
+
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${accId}  ${token2} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -626,6 +681,17 @@ JD-TC-GetAppointmentMeetingDetails-4
 
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME16}    ${accId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME16}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token2}  ${resp.json()['token']}
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${accId}  ${token2} 
     Log   ${resp.content}
@@ -723,6 +789,17 @@ JD-TC-GetAppointmentMeetingDetails-UH2
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=    Send Otp For Login    ${CUSERNAME16}    ${accId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME16}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token2}  ${resp.json()['token']}
+
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${accId}  ${token2} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -816,6 +893,17 @@ JD-TC-GetAppointmentMeetingDetails-5
 
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME16}    ${accId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME16}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token2}  ${resp.json()['token']}
     
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${accId}  ${token2} 
     Log   ${resp.content}
@@ -847,6 +935,17 @@ JD-TC-GetAppointmentMeetingDetails-5
 JD-TC-GetAppointmentMeetingDetails-6
 
     [Documentation]   Create Appointment teleservice Whatsapp meeting request Which  is already created
+    
+    ${resp}=    Send Otp For Login    ${CUSERNAME16}    ${accId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME16}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token2}  ${resp.json()['token']}
     
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${accId}  ${token2} 
     Log   ${resp.content}
@@ -890,6 +989,17 @@ JD-TC-GetAppointmentMeetingDetails-6
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=    Send Otp For Login    ${CUSERNAME16}    ${accId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME16}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token2}  ${resp.json()['token']}
+    
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${accId}  ${token2} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
