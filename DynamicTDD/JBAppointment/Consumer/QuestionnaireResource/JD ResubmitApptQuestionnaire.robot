@@ -501,10 +501,18 @@ JD-TC-ResubmitQuestionnaireForAppointment-2
     #     Should Be Equal As Strings  ${resp.status_code}  200
     # END
 
+    ${schedule_services}=  Create List
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # IF   ${s_id}  
+    FOR  ${service}  IN  @@{resp.json()['services']}
+        Append To List  ${schedule_services}  ${service['id']}
+    END
+    IF   ${s_id} not in @{schedule_services}
+        ${resp}=  Update Schedule with Services  ${sch_id}  ${resp.json()[0]}  ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
     # Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
 
     ${resp}=  Get Questionnaire List By Provider   
