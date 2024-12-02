@@ -36,7 +36,7 @@ JD-TC-GetAppointmentToday-1
 
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
-    ${resp}=    ProviderConsumer SignUp    ${fname}  ${lname}  ${EMPTY}  ${CUSERNAME16}  ${account_id}
+    ${resp}=   ProviderConsumer SignUp    ${fname}  ${lname}  ${EMPTY}  ${CUSERNAME16}  ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
