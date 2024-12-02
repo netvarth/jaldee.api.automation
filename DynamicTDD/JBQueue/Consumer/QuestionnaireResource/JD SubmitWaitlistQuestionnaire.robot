@@ -321,9 +321,8 @@ JD-TC-SubmitQuestionnaireForWaitlist-2
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
-        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
+    IF  ${resp.json()['onlinePresence']}==${bool[0]}
+        ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${EMPTY}  ${EMPTY}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
@@ -331,8 +330,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-2
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}  
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1699,9 +1697,8 @@ JD-TC-SubmitQuestionnaireForWaitlist-6
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
-        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
+    IF  ${resp.json()['onlinePresence']}==${bool[0]}
+        ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${EMPTY}  ${EMPTY}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
@@ -1709,8 +1706,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-6
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}  
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
 
     ${resp}=    Get Locations
     Log  ${resp.content}

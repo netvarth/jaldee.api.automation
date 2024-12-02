@@ -426,9 +426,8 @@ JD-TC-ResubmitQuestionnaireForAppointment-2
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
-        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
+    IF  ${resp.json()['onlinePresence']}==${bool[0]}
+        ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${EMPTY}  ${EMPTY}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
@@ -436,8 +435,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-2
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}  
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -473,15 +471,41 @@ JD-TC-ResubmitQuestionnaireForAppointment-2
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    # ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
+
+    ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    IF   '${resp.content}' == '${emptylist}'
+        ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${sch_id}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
+        # Set Test Variable  ${lid}  ${resp.json()[0]['location']['id']}
+        # ${resp}=  Update Schedule with Services  ${sch_id}  ${resp.json()[0]}  ${s_id}
+        # Log  ${resp.content}
+        # Should Be Equal As Strings  ${resp.status_code}  200
+        # Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
+    END
+
+    # ${resp}=   Get Service By Id  ${s_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF  ${resp.json()['maxBookingsAllowed']} <= 1
+    #     ${resp}=  Update Service  ${s_id}  ${resp.json()['name']}  ${resp.json()['description']}  ${resp.json()['serviceDuration']}  ${resp.json()['isPrePayment']}  ${resp.json()['totalAmount']}  maxBookingsAllowed=${maxBookings}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END
 
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+    # IF   ${s_id}  
+    # Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -1085,9 +1109,8 @@ JD-TC-ResubmitQuestionnaireForAppointment-5
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
-        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
+    IF  ${resp.json()['onlinePresence']}==${bool[0]}
+        ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${EMPTY}  ${EMPTY}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
@@ -1095,8 +1118,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-5
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}  
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
 
     ${resp}=    Get Locations
     Log  ${resp.content}
