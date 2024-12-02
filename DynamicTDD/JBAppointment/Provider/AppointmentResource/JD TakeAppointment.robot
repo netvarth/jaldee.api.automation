@@ -3334,14 +3334,14 @@ JD-TC-Take Appointment-30
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME_Z}
     # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_customer   ${PUSERNAME_Z}
 
     ${resp}=   Disable Future Appointment
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${locid2}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locid2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
@@ -3363,7 +3363,7 @@ JD-TC-Take Appointment-30
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${locid2}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -3386,7 +3386,7 @@ JD-TC-Take Appointment-30
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer   ${cid}  ${s_id}  ${sch_id}  ${DAY3}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    ${resp}=  Take Appointment For Consumer   ${cid}  ${s_id}  ${sch_id}  ${DAY3}  ${cnote}  ${apptfor}  location=${{str('${locid2}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200      
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
