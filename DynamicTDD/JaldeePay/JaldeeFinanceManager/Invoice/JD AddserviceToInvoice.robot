@@ -968,7 +968,7 @@ JD-TC-Apply Services to Invoice-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid1}    ${resp.json()['providerConsumer']}
-
+    Set Suite Variable    ${cid}    ${resp.json()['id']}
 
     Set Test Variable  ${consumerEmail}  ${primaryMobileNo}.${test_mail}
 
