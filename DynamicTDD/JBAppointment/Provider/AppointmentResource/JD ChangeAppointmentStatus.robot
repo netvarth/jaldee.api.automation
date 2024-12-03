@@ -3719,7 +3719,7 @@ JD-TC-ChangeAppointmentStatus-UH17
     ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
+    IF   "'$resp.content' == '${emptylist}'' == '$emptylist'"
         ${resp}=    Get Locations
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -4121,7 +4121,8 @@ JD-TC-ChangeAppointmentStatus-UH19
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id}
+    ${DAY2}=  db.add_timezone_date  ${tz}  3   
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY2}  ${lid}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
@@ -4139,7 +4140,7 @@ JD-TC-ChangeAppointmentStatus-UH19
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY2}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           

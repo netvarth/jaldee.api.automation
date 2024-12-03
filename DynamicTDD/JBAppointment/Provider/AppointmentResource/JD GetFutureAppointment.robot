@@ -1986,7 +1986,8 @@ JD-TC-GetFutureAppointment-12
     
     ${fname2}=  generate_firstname
     ${lname2}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME21}   firstName=${fname2}   lastName=${lname2}
+    ${ProCustomer}=  Generate Random 555 Number
+    ${resp}=  AddCustomer  ${ProCustomer}   firstName=${fname2}   lastName=${lname2}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid2}   ${resp.json()}

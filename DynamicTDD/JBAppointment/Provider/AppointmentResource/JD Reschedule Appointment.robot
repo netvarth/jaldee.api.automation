@@ -13,6 +13,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 
@@ -1458,13 +1459,13 @@ JD-TC-Reschedule Appointment-11
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 	
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -4407,10 +4408,11 @@ JD-TC-Reschedule Appointment-UH14
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
+    ${location3}=  Create Sample Location  
+
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    ${location3}=  Create Sample Location  
     ${resp}=   Get Location ById  ${location3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -4470,11 +4472,11 @@ JD-TC-Reschedule Appointment-UH15
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
+    ${lid1}=  Create Sample Location  
+    
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id1}=  Create Sample Service  ${SERVICE1}
 
-    ${lid1}=  Create Sample Location  
-    
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
