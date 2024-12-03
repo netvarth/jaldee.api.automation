@@ -384,7 +384,7 @@ JD-TC-ChangeAppointmentStatus-5
     ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
+    IF   "'$resp.content' == '${emptylist}'' == '$emptylist'"
         ${resp}=    Get Locations
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -720,7 +720,7 @@ JD-TC-ChangeAppointmentStatus-6
     ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
+    IF   "'$resp.content' == '${emptylist}'' == '$emptylist'"
         ${resp}=    Get Locations
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -864,7 +864,7 @@ JD-TC-ChangeAppointmentStatus-7
     ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
+    IF   "'$resp.content' == '${emptylist}'' == '$emptylist'"
         ${resp}=    Get Locations
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -974,7 +974,7 @@ JD-TC-ChangeAppointmentStatus-UH2
     ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
+    IF   "'$resp.content' == '${emptylist}'' == '$emptylist'"
         ${resp}=    Get Locations
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -1241,7 +1241,7 @@ JD-TC-ChangeAppointmentStatus-UH3
     ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
+    IF   "'$resp.content' == '${emptylist}'' == '$emptylist'"
         ${resp}=    Get Locations
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -2106,7 +2106,7 @@ JD-TC-ChangeAppointmentStatus-UH7
     ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
+    IF   "'$resp.content' == '${emptylist}'' == '$emptylist'"
         ${resp}=    Get Locations
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
