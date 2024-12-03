@@ -111,7 +111,8 @@ JD-TC-Create PaymentsOut-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id2}   ${resp.json()}
 
-    ${resp}=  Get Category By Id   ${category_id1}
+    # ${resp}=  Get Category By Id   ${category_id2}
+    ${resp}=  Get Default Status   ${categoryType[2]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${status_id0}    ${resp.json()['id']}  
