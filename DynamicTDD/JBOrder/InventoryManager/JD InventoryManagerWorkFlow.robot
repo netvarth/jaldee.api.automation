@@ -1585,3 +1585,443 @@ JD-TC-Inventory Manager Work Flow-3
     Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${netTotal}
     Should Be Equal As Strings    ${resp.json()['amountDue']}                                      0.0
     Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       ${netTotal}
+
+JD-TC-Inventory Manager Work Flow-4
+    [Documentation]    create a sales order with inventory ON case.
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableInventory']}==${bool[1]}
+        ${resp1}=  Enable Disable Inventory  ${toggle[1]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+
+        ${resp}=  Get Account Settings
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['enableInventory']}  ${bool[0]}
+    END
+
+    IF  ${resp.json()['enableSalesOrder']}==${bool[1]}
+        ${resp1}=  Enable/Disable SalesOrder  ${toggle[1]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+
+        ${resp}=  Get Account Settings
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['enableSalesOrder']}  ${bool[0]}
+    END
+
+    ${resp}=  Get Store Type By Filter     
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # --------------------- Create Store Type from sa side -------------------------------
+    ${TypeName}=    FakerLibrary.name
+    Set Suite Variable  ${TypeName}
+    sleep  02s
+
+    ${resp}=  Create Store Type   ${TypeName}    ${storeNature[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable    ${St_Id}    ${resp.json()}
+
+    ${resp}=  Get Store Type By EncId   ${St_Id}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
+    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
+    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
+    # --------------------- ---------------------------------------------------------------
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    # ${accountId}=  get_acc_id  ${HLPUSERNAME16}
+    # Set Suite Variable    ${accountId} 
+
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
+    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
+    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${locId1}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    Set Suite Variable  ${address}
+    Set Suite Variable  ${postcode}
+    Set Suite Variable  ${city}
+
+    # ------------------------ Create Store ----------------------------------------------------------
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1} 
+
+    ${Store_Name1}=    FakerLibrary.first name
+    Set Suite Variable  ${Store_Name1}
+    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
+    Set Suite Variable  ${email_id}  ${Store_Name1}${PhoneNumber}.${test_mail}
+    ${email}=  Create List  ${email_id}
+
+    ${resp}=  Create Store   ${Store_Name1}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}   onlineOrder=${boolean[1]}    walkinOrder=${boolean[1]}   partnerOrder=${boolean[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${store_id}  ${resp.json()}
+
+    # ----------------------------------------  Create Item ---------------------------------------------
+
+    ${displayName1}=     FakerLibrary.name
+
+    ${resp}=    Create Item Inventory  ${displayName1}    isInventoryItem=${bool[1]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${item1}  ${resp.json()}
+
+# ------------------------------------------------------------------------------------------------------
+
+    # ----------------------------------------- create Inv Catalog --------------------------------------
+    ${INV_Cat_Name}=     FakerLibrary.name
+
+    ${resp}=  Create Inventory Catalog   ${INV_Cat_Name}  ${store_id}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${Catalog_EncIds}  ${resp.json()}
+# --------------------------------------------------------------------------------------------------------
+
+    # ----------------------------------------Create Inventory Catalog Item----------------------------------
+
+    ${resp}=   Create Inventory Catalog Item  ${Catalog_EncIds}   ${item1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Suite Variable   ${ic_Item_id}   ${resp.json()[0]}
+
+    # ----------------------------------------- Create itemUnits ------------------------------------------------------------------
+
+    ${unitName}=                    FakerLibrary.name
+    ${convertionQty}=               Random Int  min=1  max=20
+    Set Suite Variable              ${unitName}
+    Set Suite Variable              ${convertionQty}
+
+    ${resp}=    Create Item Unit    ${unitName}  ${convertionQty}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Suite Variable   ${iu_id}   ${resp.json()}
+
+    ${itemUnits}=   Create List     ${iu_id}
+
+    # --------------------------------------- Do the Purchase--------------------------------------------------------------
+
+    ${quantity}=                    Random Int  min=0  max=999
+    ${quantity}=                    Convert To Number  ${quantity}  1
+    Set Suite Variable  ${quantity}
+
+    ${freeQuantity}=                Random Int  min=0  max=10
+    ${freeQuantity}=                Convert To Number  ${freeQuantity}  1
+    Set Suite Variable  ${freeQuantity}
+
+    ${amount}=                      Random Int  min=1  max=999
+    ${amount}=                      Convert To Number  ${amount}  1
+    Set Suite Variable  ${amount}
+
+    ${discountPercentage}=          Random Int  min=0  max=100
+    ${discountPercentage}=          Convert To Number  ${discountPercentage}  1
+    Set Suite Variable  ${discountPercentage}
+
+    ${fixedDiscount}=               Random Int  min=0  max=200
+    ${fixedDiscount}=               Convert To Number  ${fixedDiscount}  1
+    Set Suite Variable  ${fixedDiscount}
+
+    ${totalQuantity}=   Evaluate    ${quantity} + ${freeQuantity} 
+    ${totalQuantity}=   Evaluate    ${totalQuantity} * ${convertionQty}
+    Set Suite Variable  ${totalQuantity}
+
+    ${netTotal}=        Evaluate    ${quantity} * ${amount}
+    ${discountAmount}=  Evaluate    ${netTotal} * ${discountPercentage} / 100
+    ${taxableAmount}=   Evaluate    ${netTotal} - ${discountAmount}
+    # ${cgstamount}=      Evaluate    ${taxableAmount} * ${cgst} / 100
+    # ${sgstamount}=      Evaluate    ${taxableAmount} * ${sgst} / 100
+    # ${taxAmount}=       Evaluate    ${cgstamount} + ${sgstamount}
+    # ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
+
+    ${expiryDate}=  db.add_timezone_date  ${tz}  50
+    ${convertionQty}=               Random Int  min=1  max=20
+
+    ${salesRate}=   Evaluate        ${amount} / ${convertionQty}
+    ${invoiceDate}=  db.add_timezone_date  ${tz}  1
+    ${rate}=        Evaluate        int(${salesRate})
+    ${mrp}=         Random Int      min=${rate}  max=9999
+    ${batchNo}=     Random Int      min=1  max=9999
+    ${invoiceReferenceNo}=          Random Int  min=1  max=999
+    ${purchaseNote}=                FakerLibrary.Sentence
+    ${roundOff}=                    Random Int  min=1  max=10
+
+    ${purchaseItemDtoList1}=        Create purchaseItemDtoList   ${ic_Item_id}   ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${amount}  ${EMPTY}  ${iu_id}
+    Set Suite Variable              ${purchaseItemDtoList1}
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${Catalog_EncIds}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}   200
+    Set Suite Variable              ${purchaseId}           ${resp.json()}
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                 200
+    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[0]}
+
+    # -------------------------------------------  Update Purchase Status ------------------------------------------------
+    ${resp}=    Update Purchase Status  ${PurchaseStatus[1]}  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+    ${resp}=    Update Purchase Status  ${PurchaseStatus[2]}  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+    # ---------------------------------------------------------------------------------------------------------------------
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                 200
+    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[2]}
+
+    ${resp}=  Get Inventoryitem      ${ic_Item_id}         
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    # Should Be Equal As Strings      ${resp.json()[0]['uid']}          ${purchaseId}
+    Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
+    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
+    Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
+    Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          0.0
+    Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
+    Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${totalQuantity}
+    Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${totalQuantity}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Store_Name1}
+
+    # ------------------------------------------- Check Stock ---------------------------------------------------
+    ${resp}=    Get Stock Avaliability  ${ic_Item_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    # Should Be Equal As Strings      ${resp.json()[0]['uid']}          ${purchaseId}
+    Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
+    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
+    Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
+    Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          0.0
+    Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
+    Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${totalQuantity}
+    Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${totalQuantity}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Store_Name1}
+
+# -----------------------------------------------------------------------------------
+
+    # --------------------------- Create SalesOrder Inventory Catalog-InvMgr True --------------------------
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${Store_name}=  FakerLibrary.name
+    Set Suite Variable    ${Store_name}
+    ${inv_cat_encid_List}=  Create List  ${Catalog_EncIds}
+    ${price}=    Random Int  min=2   max=40
+    ${price}=  Convert To Number  ${price}    1
+
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Store_name}  ${boolean[1]}  ${inv_cat_encid_List}    onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[1]}  storePickup=${boolean[1]}  homeDelivery=${boolean[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${inv_order_encid}  ${resp.json()}
+
+    # ------------------------------Create SalesOrder Catalog Item-invMgmt True-------------------------------
+
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${inv_order_encid}    ${boolean[1]}     ${ic_Item_id}     ${price}    ${boolean[0]}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
+
+# ----------------------------------------------------------------------------------------------------------
+
+    # ----------------------------------------- Take sales order ------------------------------------------------
+    ${Cg_encid}=  Create Dictionary   encId=${inv_order_encid}   
+    ${SO_Cata_Encid_List}=  Create List       ${Cg_encid}
+
+    ${store}=  Create Dictionary   encId=${store_id}  
+
+
+    ${quantity}=    Random Int  min=2   max=5
+    ${quantity}=  Convert To Number  ${quantity}    1
+
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
+
+    ${primaryMobileNo1}    Generate random string    10    123456789
+    Set Suite Variable  ${primaryMobileNo1}
+
+    # ${bill_Phone1}=   Create Dictionary   countryCode=${countryCodes[0]}           number=${primaryMobileNo1}
+
+    # ${contactInfo1}=   Create Dictionary    phone=${bill_Phone1}         email=${email_id}      
+    # Set Suite Variable  ${contactInfo1}
+
+    # ${homeDeliveryAddress1}=   Create Dictionary    phone=${bill_Phone1}   firstName=${firstName}      lastName=${lastName}       email=${email_id}      address=${address}    city=${city}   postalCode=${postcode}     landMark=${address}
+    # Set Suite Variable  ${homeDeliveryAddress1}
+
+    # ${billingAddress1}=   Create Dictionary    phone=${bill_Phone1}   firstName=${firstName}      lastName=${lastName}       email=${email_id}      address=${address}    city=${city}   postalCode=${postcode}     landMark=${address}
+
+    ${note}=  FakerLibrary.name
+
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${items}    store=${store}        notes=${note}      notesForCustomer=${note}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${SO_Uid}  ${resp.json()}
+
+    # ------------------------------------------- Check Stock ---------------------------------------------------
+    ${resp}=    Get Stock Avaliability  ${ic_Item_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+# -----------------------------------------------------------------------------------
+# --------------------------------------------- Update SalesOrder Status --------------------------------------------------------
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
+
+# ------------------------------------------- Check Stock ---------------------------------------------------
+    ${Available_Quantity}=   Evaluate    ${totalQuantity} - ${quantity} 
+    ${Available_Quantity}=  Convert To Number  ${Available_Quantity}    1
+
+    ${resp}=    Get Stock Avaliability  ${ic_Item_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
+    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
+    Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
+    Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          ${quantity}
+    Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
+    Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${Available_Quantity}
+    Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${Available_Quantity}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Store_Name1}
+# -----------------------------------------------------------------------------------
+
+    # --------------------------------------------- Update SalesOrder Status --------------------------------------------------------
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[2]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[2]}
+# ------------------------------------------- Check Stock ---------------------------------------------------
+    ${Available_Quantity}=   Evaluate    ${totalQuantity} - ${quantity} 
+    ${Available_Quantity}=  Convert To Number  ${Available_Quantity}    1
+
+    # ${total_Quantity}=   Evaluate    ${totalQuantity} - ${quantity} 
+    # ${total_Quantity}=  Convert To Number  ${total_Quantity}    1
+
+    ${resp}=    Get Stock Avaliability  ${ic_Item_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
+    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
+    Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${Available_Quantity}
+    Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          0.0
+    Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
+    Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${Available_Quantity}
+    Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${Available_Quantity}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Store_Name1}
+
+# ------------------------------------------------Create Sales Order Invoice----------------------------------------------
+
+    ${resp}=    Create Sales Order Invoice    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable      ${SO_Inv}    ${resp.json()}  
+# ------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------- Get Invoice By Invoice EncId -----------------------------------------------
+
+    ${netTotal}=   Evaluate    ${price} * ${quantity} 
+    ${netTotal}=  Convert To Number  ${netTotal}    1
+
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['order']['uid']}                                       ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                 ${Store_name}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${inv_order_encid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['taxTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['status']}                                      ${billStatus[0]}
+
+# ---------------------------------------------------------------------------------------------------------------
+# --------------------------------------------- Generate SO Payment Link ----------------------------------------
+    ${resp}=    Generate SO Payment Link    ${SO_Inv}   ${primaryMobileNo}   ${countryCodes[0]}   ${email_id}    ${bool[1]}    ${bool[0]}    ${bool[0]}   ${primaryMobileNo}   ${countryCodes[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+# --------------------------------------------- Share SO Invoice -----------------------------------------------
+
+    ${PO_Number}    Generate random string    5    123456789
+    ${PO_Number}=  Evaluate  ${PUSERNAME}+${PO_Number}
+
+    ${phone}=   Create Dictionary       number=${PO_Number}      countryCode=${countryCodes[0]}  
+
+    ${resp}=    Share SO Invoice    ${SO_Inv}    ${email_id}   ${boolean[1]}    ${boolean[0]}  ${boolean[0]}   ${boolean[0]}    ${html}   phone=${phone}    whatsappPhNo=${phone}      telegramPhNo=${phone}   uuid=${SO_Inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+# --------------------------------------------------------------------------------------------------------------
