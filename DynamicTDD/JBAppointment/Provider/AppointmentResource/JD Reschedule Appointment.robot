@@ -158,7 +158,8 @@ JD-TC-Reschedule Appointment-2
 
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME33}  firstName=${fname}   lastName=${lname}
+    ${NewCustomer1}=  Generate Random 555 Number
+    ${resp}=  AddCustomer  ${NewCustomer1}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
@@ -1409,9 +1410,9 @@ JD-TC-Reschedule Appointment-11
 
     [Documentation]  Consumer takes appointment and provider reschedules it after consumer makes full payment.
 
-    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_C}=  Provider Signup
+    # ${firstname}  ${lastname}  ${PhoneNumber}  ${HLPUSERNAME51}=  Provider Signup
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME51}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1574,7 +1575,7 @@ JD-TC-Reschedule Appointment-11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME51}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4316,7 +4317,7 @@ JD-TC-Reschedule Appointment-UH13
     Should Be Equal As Strings  ${resp.status_code}  200
 	
     ${lid}=  Create Sample Location  
-    
+
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
