@@ -1196,7 +1196,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-6
     Should Be Equal As Strings  ${resp1.status_code}  200
     Should Be Equal As Strings  ${resp1.json()['billStatus']}  ${billStatus[0]}
 
-    ${resp}=    Send Otp For Login    ${pro_cust2}    ${pid}
+    ${resp}=    Send Otp For Login    ${pro_cust2}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
