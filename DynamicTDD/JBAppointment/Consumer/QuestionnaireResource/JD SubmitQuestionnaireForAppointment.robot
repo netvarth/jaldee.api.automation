@@ -148,19 +148,18 @@ JD-TC-SubmitQuestionnaireForAppointment-1
     Set Suite Variable   ${unique_snames}
     ${snames_len}=  Get Length  ${unique_snames}
     FOR  ${i}  IN RANGE   ${snames_len}
-        ${kwstatus} 	${value} = 	Run Keyword And Ignore Error  List Should Contain Value  ${snames}  ${unique_snames[${i}]}
-        Log Many  ${kwstatus} 	${value}
-        Continue For Loop If  '${kwstatus}' == 'PASS'
-        &{dict}=  Create Dictionary   ${colnames[6]}=${unique_snames[${i}]}
-        ${ttype}=  getColumnValueByMultipleVals  ${sheet1}  ${colnames[1]}  &{dict}  
-        Log  ${ttype}
-        ${u_ttype}=    Remove Duplicates    ${ttype}
-        Log  ${u_ttype}
-        IF   '${QnrTransactionType[3]}' in @{u_ttype} and '${srv_val}'=='${None}'
-                ${s_id}=  Create Sample Service  ${unique_snames[${i}]}  maxBookingsAllowed=${maxBookings}
-            ELSE IF  '${QnrTransactionType[0]}' in @{u_ttype} and '${don_val}'=='${None}'
-                ${d_id}=  Create Sample Donation  ${unique_snames[${i}]}
+        IF  '${unique_snames[${i}]}' not in @{snames}
+            &{dict}=  Create Dictionary   ${colnames[6]}=${unique_snames[${i}]}
+            ${ttype}=  getColumnValueByMultipleVals  ${sheet1}  ${colnames[1]}  &{dict}  
+            Log  ${ttype}
+            ${u_ttype}=    Remove Duplicates    ${ttype}
+            Log  ${u_ttype}
+            IF  '${QnrTransactionType[3]}' in @{u_ttype}
+                ${s_id}=    Create Sample Service    ${unique_snames[${i}]}
+            ELSE IF   '${QnrTransactionType[0]}' in @{u_ttype}
+                ${d_id}=    Create Sample Donation    ${unique_snames[${i}]}
             END
+        END
     END
 
     ${resp}=  Provider Logout
@@ -2336,19 +2335,18 @@ JD-TC-SubmitQuestionnaireForAppointment-6
     Set Suite Variable   ${unique_snames}
     ${snames_len}=  Get Length  ${unique_snames}
     FOR  ${i}  IN RANGE   ${snames_len}
-        ${kwstatus} 	${value} = 	Run Keyword And Ignore Error  List Should Contain Value  ${snames}  ${unique_snames[${i}]}
-        Log Many  ${kwstatus} 	${value}
-        Continue For Loop If  '${kwstatus}' == 'PASS'
-        &{dict}=  Create Dictionary   ${colnames[6]}=${unique_snames[${i}]}
-        ${ttype}=  getColumnValueByMultipleVals  ${sheet1}  ${colnames[1]}  &{dict}  
-        Log  ${ttype}
-        ${u_ttype}=    Remove Duplicates    ${ttype}
-        Log  ${u_ttype}
-        IF   '${QnrTransactionType[3]}' in @{u_ttype} and '${srv_val}'=='${None}'
-                ${s_id}=  Create Sample Service  ${unique_snames[${i}]}  maxBookingsAllowed=10
-            ELSE IF  '${QnrTransactionType[0]}' in @{u_ttype} and '${don_val}'=='${None}'
-                ${d_id}=  Create Sample Donation  ${unique_snames[${i}]}
+        IF  '${unique_snames[${i}]}' not in @{snames}
+            &{dict}=  Create Dictionary   ${colnames[6]}=${unique_snames[${i}]}
+            ${ttype}=  getColumnValueByMultipleVals  ${sheet1}  ${colnames[1]}  &{dict}  
+            Log  ${ttype}
+            ${u_ttype}=    Remove Duplicates    ${ttype}
+            Log  ${u_ttype}
+            IF  '${QnrTransactionType[3]}' in @{u_ttype}
+                ${s_id}=    Create Sample Service    ${unique_snames[${i}]}
+            ELSE IF   '${QnrTransactionType[0]}' in @{u_ttype}
+                ${d_id}=    Create Sample Donation    ${unique_snames[${i}]}
             END
+        END
     END
 
     ${resp}=  Provider Logout
