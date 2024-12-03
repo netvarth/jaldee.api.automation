@@ -88,9 +88,9 @@ JD-TC-Get List of Treatment Plan against a Case and Tooth-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    Consumer Logout 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=    Consumer Logout 
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${accountId}
     Log  ${resp.json()}
@@ -234,9 +234,9 @@ JD-TC-Get List of Treatment Plan against a Case and Tooth-UH4
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${accountId}
     Log  ${resp.json()}

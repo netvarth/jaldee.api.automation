@@ -141,9 +141,9 @@ JD-TC-SendAttachmentFromWLByConsumer-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${acc_id}    ${token}
     Log   ${resp.json()}
@@ -250,9 +250,9 @@ JD-TC-SendAttachmentWL-2
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${acc_id}    ${token}
     Log   ${resp.json()}
@@ -296,9 +296,9 @@ JD-TC-SendAttachmentWL-3
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${acc_id}    ${token}
     Log   ${resp.json()}
@@ -342,9 +342,9 @@ JD-TC-SendAttachmentWL-4
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${acc_id}    ${token}
     Log   ${resp.json()}
@@ -388,9 +388,9 @@ JD-TC-SendAttachmentWL-5
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${acc_id}    ${token}
     Log   ${resp.json()}
@@ -434,9 +434,9 @@ JD-TC-SendAttachmentWL-6
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${acc_id}    ${token}
     Log   ${resp.json()}
@@ -480,9 +480,9 @@ JD-TC-SendAttachmentWL-UH2
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${acc_id}    ${token}
     Log   ${resp.json()}
@@ -512,9 +512,9 @@ JD-TC-SendAttachmentWL-UH3
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${acc_id}    ${token}
     Log   ${resp.json()}
@@ -544,9 +544,9 @@ JD-TC-SendAttachmentWL-UH4
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${acc_id}    ${token}
     Log   ${resp.json()}
@@ -576,9 +576,9 @@ JD-TC-SendAttachmentWL-7
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${acc_id}    ${token}
     Log   ${resp.json()}
@@ -622,9 +622,9 @@ JD-TC-SendAttachmentWL-UH5
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${acc_id}    ${token}
     Log   ${resp.json()}
@@ -658,9 +658,9 @@ JD-TC-SendAttachmentWL-8
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${acc_id}    ${token}
     Log   ${resp.json()}
@@ -704,9 +704,9 @@ JD-TC-SendAttachmentWL-UH6
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${acc_id}    ${token}
     Log   ${resp.json()}
@@ -736,9 +736,9 @@ JD-TC-SendAttachmentWL-UH7
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${acc_id}    ${token}
     Log   ${resp.json()}

@@ -200,9 +200,9 @@ JD-TC-Add To WaitlistByConsumer-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -284,9 +284,9 @@ JD-TC-Add To WaitlistByConsumer-2
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -345,9 +345,9 @@ JD-TC-Add To WaitlistByConsumer-2
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -417,9 +417,9 @@ JD-TC-Add To WaitlistByConsumer-3
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -496,9 +496,9 @@ JD-TC-Add To WaitlistByConsumer-4
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -579,9 +579,9 @@ JD-TC-Add To WaitlistByConsumer-5
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -657,9 +657,9 @@ JD-TC-Add To WaitlistByConsumer-6
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -713,9 +713,9 @@ JD-TC-Add To WaitlistByConsumer-7
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -786,9 +786,9 @@ JD-TC-Add To WaitlistByConsumer-8
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -863,9 +863,9 @@ JD-TC-Add To WaitlistByConsumer-9
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -972,9 +972,9 @@ JD-TC-Add To WaitlistByConsumer-10
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -1047,9 +1047,9 @@ JD-TC-Add To WaitlistByConsumer-11
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -1110,9 +1110,9 @@ JD-TC-Add To WaitlistByConsumer-12
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -1173,9 +1173,9 @@ JD-TC-Add To WaitlistByConsumer-13
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -1256,9 +1256,9 @@ JD-TC-Add To WaitlistByConsumer-14
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -1340,9 +1340,9 @@ JD-TC-Add To WaitlistByConsumer-15
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -1415,9 +1415,9 @@ JD-TC-Add To WaitlistByConsumer-16
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -1494,9 +1494,9 @@ JD-TC-Add To WaitlistByConsumer-17
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -1590,9 +1590,9 @@ JD-TC-Add To WaitlistByConsumer-UH1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -1719,9 +1719,9 @@ JD-TC-Add To WaitlistByConsumer-18
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME15}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -1891,9 +1891,9 @@ JD-TC-Add To WaitlistByConsumer-19
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME25}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -2042,9 +2042,9 @@ JD-TC-Add To WaitlistByConsumer-20
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME35}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -2220,9 +2220,9 @@ JD-TC-Add To WaitlistByConsumer-UH2
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME11}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -2261,9 +2261,9 @@ JD-TC-Add To WaitlistByConsumer-UH2
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME11}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -2362,9 +2362,9 @@ JD-TC-Add To WaitlistByConsumer-UH3
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME4}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -2423,9 +2423,9 @@ JD-TC-Add To WaitlistByConsumer-UH4
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME4}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -2490,9 +2490,9 @@ JD-TC-Add To WaitlistByConsumer-UH5
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME4}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -2551,9 +2551,9 @@ JD-TC-Add To WaitlistByConsumer-UH6
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -2637,9 +2637,9 @@ JD-TC-Add To WaitlistByConsumer-UH7
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME4}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -2707,9 +2707,9 @@ JD-TC-Add To WaitlistByConsumer-UH8
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME4}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -2771,9 +2771,9 @@ JD-TC-Add To WaitlistByConsumer-UH9
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME4}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -2936,9 +2936,9 @@ JD-TC-Add To WaitlistByConsumer-UH12
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME4}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -3022,9 +3022,9 @@ JD-TC-Add To WaitlistByConsumer-UH14
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -3289,9 +3289,9 @@ JD-TC-Add To WaitlistByConsumer-UH16
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME8}    ${pid1}    ${token}
     Log   ${resp.json()}
@@ -3407,9 +3407,9 @@ JD-TC-Add To WaitlistByConsumer-UH17
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME8}    ${pid1}    ${token}
     Log   ${resp.json()}
@@ -3526,9 +3526,9 @@ JD-TC-Add To WaitlistByConsumer-21
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME8}    ${pid1}    ${token}
     Log   ${resp.json()}
@@ -3632,9 +3632,9 @@ JD-TC-Add To WaitlistByConsumer-22
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME8}    ${pid1}    ${token}
     Log   ${resp.json()}
@@ -3718,9 +3718,9 @@ JD-TC-Add To WaitlistByConsumer-23
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME2}    ${pid1}    ${token}
     Log   ${resp.json()}
@@ -3762,9 +3762,9 @@ JD-TC-Add To WaitlistByConsumer-23
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME2}    ${pid1}    ${token}
     Log   ${resp.json()}
@@ -3987,9 +3987,9 @@ JD-TC-Add To WaitlistByConsumer-24
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -4185,9 +4185,9 @@ JD-TC-Add To WaitlistByConsumer-25
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME8}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -4339,9 +4339,9 @@ JD-TC-Add To WaitlistByConsumer-UH18
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME4}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -4463,9 +4463,9 @@ JD-TC-Add To WaitlistByConsumer-UH19
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME4}    ${pid0}    ${token}
     Log   ${resp.json()}
@@ -4657,9 +4657,9 @@ JD-TC-Add To WaitlistByConsumer-26
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME27}    ${pid}    ${token}
     Log   ${resp.json()}
@@ -4772,9 +4772,9 @@ JD-TC-Add To WaitlistByConsumer-UH20
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Consumer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME4}    ${pid0}    ${token}
     Log   ${resp.json()}

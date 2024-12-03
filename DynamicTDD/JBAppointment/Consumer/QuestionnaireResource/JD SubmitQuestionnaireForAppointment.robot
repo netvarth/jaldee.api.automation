@@ -54,7 +54,7 @@ Strip and split string
    RETURN  ${final_list}
 
 
-Comapre Lists without order
+Compare Lists Without Order
     [Arguments]    ${list1}  ${list2}
     ${list1_copy}   Copy List  ${list1}
     ${list2_copy}   Copy List  ${list2}
@@ -1640,18 +1640,9 @@ JD-TC-SubmitQuestionnaireForAppointment-UH2
     # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
     # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME11}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    ${CUSERNAME11}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME11}
 
-    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
-
-    ${resp}=    Verify Otp For Login    ${CUSERNAME11}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token}  ${resp.json()['token']}
-
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}  ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
@@ -1836,16 +1827,7 @@ JD-TC-SubmitQuestionnaireForAppointment-UH3
     # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
     # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME11}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
-
-    ${resp}=    Verify Otp For Login    ${CUSERNAME11}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token}  ${resp.json()['token']}
+    ${CUSERNAME11}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME11}
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
     Log   ${resp.content}
@@ -2048,16 +2030,7 @@ JD-TC-SubmitQuestionnaireForAppointment-UH4
     # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
     # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME11}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
-
-    ${resp}=    Verify Otp For Login    ${CUSERNAME11}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token}  ${resp.json()['token']}
+    ${CUSERNAME11}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME11}
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
     Log   ${resp.content}
@@ -2239,16 +2212,7 @@ JD-TC-SubmitQuestionnaireForAppointment-UH5
     # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
     # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME11}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
-
-    ${resp}=    Verify Otp For Login    ${CUSERNAME11}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token}  ${resp.json()['token']}
+    ${CUSERNAME11}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME11}
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
     Log   ${resp.content}
@@ -2493,18 +2457,19 @@ JD-TC-SubmitQuestionnaireForAppointment-6
     # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
     # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
+    # ${CUSERNAME11}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME11}
     ${resp}=    Send Otp For Login    ${CUSERNAME11}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login    ${CUSERNAME11}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME11}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token}  ${resp.json()['token']}
+    Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}  ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${fname}   ${resp.json()['firstName']}

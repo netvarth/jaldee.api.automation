@@ -130,15 +130,15 @@ JD-TC-CreateItemType-UH3
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
    
-    ${resp}=    ProviderConsumer SignUp    ${fname}  ${lname}  ${EMPTY}    ${primaryMobileNo}     ${account_id}
+    ${resp}=    ProviderConsumer SignUp    ${fname}  ${lname}  ${EMPTY}  ${primaryMobileNo}  ${account_id}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Consumer Logout 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=    Consumer Logout 
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}  ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

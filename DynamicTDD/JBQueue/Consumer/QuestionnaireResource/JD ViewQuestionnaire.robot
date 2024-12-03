@@ -51,7 +51,7 @@ Strip and split string
    RETURN  ${final_list}
 
 
-Comapre Lists without order
+Compare Lists Without Order
     [Arguments]    ${list1}  ${list2}
     ${list1_copy}   Copy List  ${list1}
     ${list2_copy}   Copy List  ${list2}
@@ -179,8 +179,8 @@ Check Questions
         ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[5]}']['maxNoOfFile']}   ${maxAnswersVal${x}}
         ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[5]}']['minSize']}   ${minVal${x}}
         ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[5]}']['maxSize']}   ${maxVal${x}}
-        ...    AND  Comapre Lists without order  ${resp.json()['labels'][${i}]['question']['${QnrProperty[5]}']['fileTypes']}   ${filetypeVal${x}}  
-        ...    AND  Comapre Lists without order  ${resp.json()['labels'][${i}]['question']['${QnrProperty[5]}']['allowedDocuments']}   ${alloweddocVal${x}}  
+        ...    AND  Compare Lists Without Order  ${resp.json()['labels'][${i}]['question']['${QnrProperty[5]}']['fileTypes']}   ${filetypeVal${x}}  
+        ...    AND  Compare Lists Without Order  ${resp.json()['labels'][${i}]['question']['${QnrProperty[5]}']['allowedDocuments']}   ${alloweddocVal${x}}  
         
         ...    ELSE IF  '${resp.json()['labels'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[4]}'
         ...    Run Keywords

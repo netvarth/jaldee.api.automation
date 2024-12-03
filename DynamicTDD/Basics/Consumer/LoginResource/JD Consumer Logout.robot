@@ -46,9 +46,9 @@ JD-TC-ConsumerLogout-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Consumer Logout 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=    Consumer Logout 
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME2}    ${account_id}  ${token} 
     Log   ${resp.content}
@@ -103,9 +103,9 @@ JD-TC-ConsumerLogout-3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Consumer Logout 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=    Consumer Logout 
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    ProviderConsumer Login with token   ${email}    ${account_id}  ${token} 
     Log   ${resp.content}

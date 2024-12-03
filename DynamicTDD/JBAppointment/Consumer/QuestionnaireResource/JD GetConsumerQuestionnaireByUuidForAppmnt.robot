@@ -55,7 +55,7 @@ Strip and split string
    RETURN  ${final_list}
 
 
-Comapre Lists without order
+Compare Lists Without Order
     [Arguments]    ${list1}  ${list2}
     ${list1_copy}   Copy List  ${list1}
     ${list2_copy}   Copy List  ${list2}
@@ -113,7 +113,7 @@ Check Questions
         ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[0]}'
             ${lv}=  Strip and split string    ${labelValuesVal[0]}  ,
         ELSE
-            ${lv}=  ${labelValuesVal[0]}
+            ${lv}=  Set Variable    ${labelValuesVal[0]}
         END
         ${type}=    Evaluate     type($lv).__name__
         IF  '${type}' == 'list' and '${FieldDTVal${i}}' == '${QnrDatatypes[0]}'
@@ -235,8 +235,8 @@ Check Questions
         # ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[5]}']['maxNoOfFile']}   ${maxAnswersVal${x}}
         # ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[5]}']['minSize']}   ${minVal${x}}
         # ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[5]}']['maxSize']}   ${maxVal${x}}
-        # ...    AND  Comapre Lists without order  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[5]}']['fileTypes']}   ${filetypeVal${x}}  
-        # ...    AND  Comapre Lists without order  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[5]}']['allowedDocuments']}   ${alloweddocVal${x}}  
+        # ...    AND  Compare Lists Without Order  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[5]}']['fileTypes']}   ${filetypeVal${x}}  
+        # ...    AND  Compare Lists Without Order  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[5]}']['allowedDocuments']}   ${alloweddocVal${x}}  
         
         # ...    ELSE IF  '${resp.json()[0]['labels'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[4]}'
         # ...    Run Keywords
@@ -920,7 +920,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${resp}=  Cancel Appointment By Consumer  ${apptid1}   ${account_id}
+    ${resp}=  Cancel Appointment By Consumer  ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
 

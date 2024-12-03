@@ -52,7 +52,7 @@ Strip and split string
    RETURN  ${final_list}
 
 
-Comapre Lists without order
+Compare Lists Without Order
     [Arguments]    ${list1}  ${list2}
     ${list1_copy}   Copy List  ${list1}
     ${list2_copy}   Copy List  ${list2}
