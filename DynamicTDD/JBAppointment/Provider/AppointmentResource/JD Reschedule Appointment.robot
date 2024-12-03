@@ -893,15 +893,16 @@ JD-TC-Reschedule Appointment-8
     END
 
     ${lid1}=  Create Sample Location 
-    ${resp}=   Get Location ById  ${lid1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['timezone']} 
 
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}   
     ${s_id}=  Create Sample Service  ${SERVICE1}      maxBookingsAllowed=20
     Set Test Variable  ${s_id}
+
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']} 
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10    
@@ -5133,7 +5134,7 @@ JD-TC-Reschedule Appointment-UH21
     Should Be Equal As Strings  ${resp.status_code}  200
 	
     ${lid}=  Create Sample Location  
-    
+
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
