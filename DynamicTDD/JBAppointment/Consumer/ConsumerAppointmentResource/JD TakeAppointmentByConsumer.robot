@@ -1544,7 +1544,7 @@ JD-TC-Take Appointment-14
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Enable Disable Appointment   ${toggle[0]} 
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -1740,7 +1740,7 @@ JD-TC-Take Appointment-15
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Enable Disable Appointment   ${toggle[0]} 
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -2033,7 +2033,7 @@ JD-TC-Take Appointment-16
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Enable Disable Appointment   ${toggle[0]} 
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -2271,7 +2271,7 @@ JD-TC-Take Appointment-17
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Enable Disable Appointment   ${toggle[0]} 
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -3769,7 +3769,7 @@ JD-TC-Take Appointment-UH12
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${resp}=  Enable Appointment
+    # ${resp}=  Enable Disable Appointment   ${toggle[0]}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # sleep   01s
@@ -3978,7 +3978,7 @@ JD-TC-Take Appointment-18
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Enable Disable Appointment   ${toggle[0]} 
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -4995,7 +4995,7 @@ JD-TC-Take Appointment-UH14
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${resp}=  Enable Appointment
+    # ${resp}=  Enable Disable Appointment   ${toggle[0]}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # sleep   01s

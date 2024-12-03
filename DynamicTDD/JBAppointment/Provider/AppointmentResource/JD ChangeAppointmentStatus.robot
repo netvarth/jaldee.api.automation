@@ -111,7 +111,7 @@ JD-TC-ChangeAppointmentStatus-1
     ELSE
         Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
         Set Test Variable  ${lid}  ${resp.json()[0]['location']['id']}
-        ${resp}=  Update Schedule with Services  ${sch_id}  ${resp.json()[0]}  ${s_id}
+        ${resp}=  Update Schedule data  ${sch_id}  ${resp.json()[0]}  ${s_id}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         # Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}

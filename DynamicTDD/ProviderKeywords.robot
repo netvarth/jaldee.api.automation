@@ -1188,6 +1188,21 @@ Change Status Of The Uploaded File
 
 ######### APPOINTMENT ###########
 
+Appointment Schedule
+    [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}  ${parallel}   ${consumerParallelServing}   ${loc}  ${timeduration}  ${batch}  @{vargs}
+    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}
+    ${location}=  Create Dictionary  id=${loc}
+    ${data}=  Create Dictionary  name=${name}  apptSchedule=${bs}   parallelServing=${parallel}    consumerParallelServing=${consumerParallelServing}  location=${location}  timeDuration=${timeduration}  batchEnable=${batch}
+    ${len}=  Get Length  ${vargs}
+    ${services}=  Create List  
+    FOR    ${index}    IN RANGE  0  ${len}
+        Exit For Loop If  ${len}==0
+    	${service}=  Create Dictionary  id=${vargs[${index}]} 
+        Append To List  ${services}  ${service}
+    END
+    Run Keyword If  ${len}>0  Set To Dictionary  ${data}  services=${services}
+    RETURN  ${data}
+
 Get Appointment Settings
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/settings/apptMgr  expected_status=any
@@ -1247,21 +1262,6 @@ Take Appointment For Consumer
     ${resp}=  POST On Session  ynw  /provider/appointment  params=${pro_params}    data=${data}  expected_status=any
     Check Deprication  ${resp}  Take Appointment For Consumer 
     RETURN  ${resp}
-
-Appointment Schedule
-    [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}  ${parallel}   ${consumerParallelServing}   ${loc}  ${timeduration}  ${batch}  @{vargs}
-    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}
-    ${location}=  Create Dictionary  id=${loc}
-    ${data}=  Create Dictionary  name=${name}  apptSchedule=${bs}   parallelServing=${parallel}    consumerParallelServing=${consumerParallelServing}  location=${location}  timeDuration=${timeduration}  batchEnable=${batch}
-    ${len}=  Get Length  ${vargs}
-    ${services}=  Create List  
-    FOR    ${index}    IN RANGE  0  ${len}
-        Exit For Loop If  ${len}==0
-    	${service}=  Create Dictionary  id=${vargs[${index}]} 
-        Append To List  ${services}  ${service}
-    END
-    Run Keyword If  ${len}>0  Set To Dictionary  ${data}  services=${services}
-    RETURN  ${data}
 
 
 Get Appoinment Service By Location   
@@ -1511,18 +1511,48 @@ Update Appointment Schedule
     Check Deprication  ${resp}  Update Appointment Schedule
     RETURN  ${resp}
 
-Update Schedule with Services
-    [Arguments]  ${schedule_id}  ${response}  @{service_ids}
+# Update Schedule with Services
+#     [Arguments]  ${schedule_id}  ${response}  @{service_ids}
+#     ${service_list}=  Create list
+#     # Log  ${response}
+#     FOR  ${service}  IN  @{response['services']}
+#         Append To List  ${service_list} 	${service['id']}
+#     END
+#     Append To List  ${service_list}  @{service_ids}
+#     ${resp}=  Update Appointment Schedule  ${schedule_id}  ${response['name']}  ${response['apptSchedule']['recurringType']}  
+#     ...  ${response['apptSchedule']['repeatIntervals']}  ${response['apptSchedule']['startDate']}  
+#     ...  ${response['apptSchedule']['terminator']['endDate']}  ${response['apptSchedule']['timeSlots'][0]['sTime']}
+#     ...  ${response['apptSchedule']['timeSlots'][0]['eTime']}  ${response['parallelServing']}  ${response['consumerParallelServing']}  
+#     ...  ${response['location']['id']}  ${response['timeDuration']}  ${response['batchEnable']}  
+#     ...  @{service_list}
+#     RETURN  ${resp}
+
+
+Update Schedule data
+    [Arguments]  ${schedule_id}  ${response}  @{service_ids}  &{kwargs}
+    
     ${service_list}=  Create list
-    # Log  ${response}
     FOR  ${service}  IN  @{response['services']}
         Append To List  ${service_list} 	${service['id']}
     END
     Append To List  ${service_list}  @{service_ids}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        IF  "${key}" == "parallelServing"
+            ${parallel}=  Set Variable  ${value}
+        ELSE
+            ${parallel}=  Set Variable  ${response['parallelServing']}
+        END
+
+        IF  "${key}" == "consumerParallelServing"
+            ${consumerParallel}=  Set Variable  ${value}
+        ELSE
+            ${consumerParallel}=  Set Variable  ${response['consumerParallelServing']}
+        END  
+    END
     ${resp}=  Update Appointment Schedule  ${schedule_id}  ${response['name']}  ${response['apptSchedule']['recurringType']}  
     ...  ${response['apptSchedule']['repeatIntervals']}  ${response['apptSchedule']['startDate']}  
     ...  ${response['apptSchedule']['terminator']['endDate']}  ${response['apptSchedule']['timeSlots'][0]['sTime']}
-    ...  ${response['apptSchedule']['timeSlots'][0]['eTime']}  ${response['parallelServing']}  ${response['consumerParallelServing']}  
+    ...  ${response['apptSchedule']['timeSlots'][0]['eTime']}  ${parallel}  ${consumerParallel}  
     ...  ${response['location']['id']}  ${response['timeDuration']}  ${response['batchEnable']}  
     ...  @{service_list}
     RETURN  ${resp}

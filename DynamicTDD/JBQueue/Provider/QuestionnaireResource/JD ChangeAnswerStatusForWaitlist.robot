@@ -214,9 +214,10 @@ JD-TC-ChangeAnsStatus-1
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings  ${qns.json()['transactionId']}  ${s_id}
 
-    ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id}  ${status[0]}  
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  '${qns.json()['status']}' == '${status[1]}' 
+        ${resp1}=   Provider Change Questionnaire Status  ${id}  ${status[0]}  
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${qns}   Get Provider Questionnaire By Id   ${id}  
     Log  ${qns.content}
@@ -378,9 +379,10 @@ JD-TC-ChangeAnsStatus-2
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings  ${qns.json()['transactionId']}  ${s_id}
 
-    ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id}  ${status[0]}  
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  '${qns.json()['status']}' == '${status[1]}' 
+        ${resp1}=   Provider Change Questionnaire Status  ${id}  ${status[0]}  
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${qns}   Get Provider Questionnaire By Id   ${id}  
     Log  ${qns.content}
@@ -635,9 +637,10 @@ JD-TC-ChangeAnsStatus-4
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings  ${qns.json()['transactionId']}  ${s_id}
 
-    ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id}  ${status[0]}  
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  '${qns.json()['status']}' == '${status[1]}' 
+        ${resp1}=   Provider Change Questionnaire Status  ${id}  ${status[0]}  
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${qns}   Get Provider Questionnaire By Id   ${id}  
     Log  ${qns.content}
@@ -819,9 +822,10 @@ JD-TC-ChangeAnsStatus-UH1
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings  ${qns.json()['transactionId']}  ${s_id}
 
-    ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id}  ${status[0]}  
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  '${qns.json()['status']}' == '${status[1]}' 
+        ${resp1}=   Provider Change Questionnaire Status  ${id}  ${status[0]}  
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${qns}   Get Provider Questionnaire By Id   ${id}  
     Log  ${qns.content}
@@ -974,9 +978,10 @@ JD-TC-ChangeAnsStatus-UH2
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings  ${qns.json()['transactionId']}  ${s_id}
 
-    ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id}  ${status[0]}  
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  '${qns.json()['status']}' == '${status[1]}' 
+        ${resp1}=   Provider Change Questionnaire Status  ${id}  ${status[0]}  
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${qns}   Get Provider Questionnaire By Id   ${id}  
     Log  ${qns.content}

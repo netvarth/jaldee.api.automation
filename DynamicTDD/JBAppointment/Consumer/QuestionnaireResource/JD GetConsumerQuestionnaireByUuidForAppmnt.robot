@@ -370,9 +370,10 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-1
     Log  ${qns.content}
     Should Be Equal As Strings  ${qns.status_code}  200
      
-    ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id}  ${status[0]}  
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  '${qns.json()['status']}' == '${status[1]}' 
+        ${resp1}=   Provider Change Questionnaire Status  ${id}  ${status[0]}  
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${qns}   Get Provider Questionnaire By Id   ${id}  
     Log  ${qns.content}
@@ -538,9 +539,10 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-2
     Should Be Equal As Strings  ${qns.status_code}  200
      
 
-    ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id}  ${status[0]}  
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  '${qns.json()['status']}' == '${status[1]}' 
+        ${resp1}=   Provider Change Questionnaire Status  ${id}  ${status[0]}  
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${qns}   Get Provider Questionnaire By Id   ${id}  
     Log  ${qns.content}
@@ -721,9 +723,10 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-3
     Should Be Equal As Strings  ${qns.status_code}  200
      
 
-    ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id}  ${status[0]}  
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  '${qns.json()['status']}' == '${status[1]}' 
+        ${resp1}=   Provider Change Questionnaire Status  ${id}  ${status[0]}  
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${qns}   Get Provider Questionnaire By Id   ${id}  
     Log  ${qns.content}

@@ -183,7 +183,7 @@ JD-TC-SubmitQuestionnaireForAppointment-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Enable Disable Appointment   ${toggle[0]} 
         Should Be Equal As Strings  ${resp.status_code}  200
     END 
 
@@ -240,9 +240,10 @@ JD-TC-SubmitQuestionnaireForAppointment-1
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings  ${qns.json()['transactionId']}  ${s_id}
 
-    ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id}  ${status[0]}  
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  '${qns.json()['status']}' == '${status[1]}' 
+        ${resp1}=   Provider Change Questionnaire Status  ${id}  ${status[0]}  
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${qns}   Get Provider Questionnaire By Id   ${id}  
     Log  ${qns.content}
@@ -372,7 +373,7 @@ JD-TC-SubmitQuestionnaireForAppointment-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Enable Disable Appointment   ${toggle[0]} 
         Should Be Equal As Strings  ${resp.status_code}  200
     END 
 
@@ -433,9 +434,10 @@ JD-TC-SubmitQuestionnaireForAppointment-2
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings  ${qns.json()['transactionId']}  ${s_id}
 
-    ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id}  ${status[0]}  
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  '${qns.json()['status']}' == '${status[1]}' 
+        ${resp1}=   Provider Change Questionnaire Status  ${id}  ${status[0]}  
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${qns}   Get Provider Questionnaire By Id   ${id}  
     Log  ${qns.content}
@@ -562,7 +564,7 @@ JD-TC-SubmitQuestionnaireForAppointment-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Enable Disable Appointment   ${toggle[0]} 
         Should Be Equal As Strings  ${resp.status_code}  200
     END 
 
@@ -619,9 +621,10 @@ JD-TC-SubmitQuestionnaireForAppointment-3
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings  ${qns.json()['transactionId']}  ${s_id}
 
-    ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id}  ${status[0]}  
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  '${qns.json()['status']}' == '${status[1]}' 
+        ${resp1}=   Provider Change Questionnaire Status  ${id}  ${status[0]}  
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${qns}   Get Provider Questionnaire By Id   ${id}  
     Log  ${qns.content}
@@ -760,7 +763,7 @@ JD-TC-SubmitQuestionnaireForAppointment-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Enable Disable Appointment   ${toggle[0]} 
         Should Be Equal As Strings  ${resp.status_code}  200
     END 
 
@@ -817,9 +820,10 @@ JD-TC-SubmitQuestionnaireForAppointment-4
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings  ${qns.json()['transactionId']}  ${s_id}
 
-    ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id}  ${status[0]}  
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  '${qns.json()['status']}' == '${status[1]}' 
+        ${resp1}=   Provider Change Questionnaire Status  ${id}  ${status[0]}  
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${qns}   Get Provider Questionnaire By Id   ${id}  
     Log  ${qns.content}
@@ -1007,9 +1011,10 @@ JD-TC-SubmitQuestionnaireForAppointment-5
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings  ${qns.json()['transactionId']}  ${s_id}
 
-    ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id1}  ${status[0]}  
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  '${qns.json()['status']}' == '${status[1]}' 
+        ${resp1}=   Provider Change Questionnaire Status  ${id1}  ${status[0]}  
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${qns}   Get Provider Questionnaire By Id   ${id1}  
     Log  ${qns.content}
@@ -1148,7 +1153,7 @@ JD-TC-SubmitQuestionnaireForAppointment-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Enable Disable Appointment   ${toggle[0]} 
         Should Be Equal As Strings  ${resp.status_code}  200
     END 
 
@@ -1205,9 +1210,10 @@ JD-TC-SubmitQuestionnaireForAppointment-UH1
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings  ${qns.json()['transactionId']}  ${s_id}
 
-    ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id}  ${status[0]}  
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  '${qns.json()['status']}' == '${status[1]}' 
+        ${resp1}=   Provider Change Questionnaire Status  ${id}  ${status[0]}  
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${qns}   Get Provider Questionnaire By Id   ${id}  
     Log  ${qns.content}
@@ -1284,7 +1290,8 @@ JD-TC-SubmitQuestionnaireForAppointment-UH1
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=    Provider Cancel Appointment  ${apptid1}  ${reason}  ${msg}  ${DAY1}
+    # ${resp}=    Provider Cancel Appointment  ${apptid1}  ${reason}  ${msg}  ${DAY1}
+    ${resp}=  Appointment Action   ${apptStatus[4]}   ${apptid1}    cancelReason=${reason}  communicationMessage=${msg}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1368,7 +1375,7 @@ JD-TC-SubmitQuestionnaireForAppointment-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Enable Disable Appointment   ${toggle[0]} 
         Should Be Equal As Strings  ${resp.status_code}  200
     END 
 
@@ -1425,9 +1432,10 @@ JD-TC-SubmitQuestionnaireForAppointment-UH2
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings  ${qns.json()['transactionId']}  ${s_id}
 
-    ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id}  ${status[0]}  
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  '${qns.json()['status']}' == '${status[1]}' 
+        ${resp1}=   Provider Change Questionnaire Status  ${id}  ${status[0]}  
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${qns}   Get Provider Questionnaire By Id   ${id}  
     Log  ${qns.content}
@@ -1546,7 +1554,7 @@ JD-TC-SubmitQuestionnaireForAppointment-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Enable Disable Appointment   ${toggle[0]} 
         Should Be Equal As Strings  ${resp.status_code}  200
     END 
 
@@ -1603,9 +1611,10 @@ JD-TC-SubmitQuestionnaireForAppointment-UH3
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings  ${qns.json()['transactionId']}  ${s_id}
 
-    ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id}  ${status[0]}  
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  '${qns.json()['status']}' == '${status[1]}' 
+        ${resp1}=   Provider Change Questionnaire Status  ${id}  ${status[0]}  
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${qns}   Get Provider Questionnaire By Id   ${id}  
     Log  ${qns.content}
@@ -1737,7 +1746,7 @@ JD-TC-SubmitQuestionnaireForAppointment-UH4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Enable Disable Appointment   ${toggle[0]} 
         Should Be Equal As Strings  ${resp.status_code}  200
     END 
 
@@ -1795,9 +1804,10 @@ JD-TC-SubmitQuestionnaireForAppointment-UH4
     Should Be Equal As Strings  ${qns.json()['transactionId']}  ${s_id}
     Set Suite Variable  ${Questionnaireid9}  ${qns.json()['questionnaireId']}
 
-    ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id}  ${status[0]}  
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  '${qns.json()['status']}' == '${status[1]}' 
+        ${resp1}=   Provider Change Questionnaire Status  ${id}  ${status[0]}  
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${qns}   Get Provider Questionnaire By Id   ${id}  
     Log  ${qns.content}
@@ -1912,7 +1922,7 @@ JD-TC-SubmitQuestionnaireForAppointment-UH5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Enable Disable Appointment   ${toggle[0]} 
         Should Be Equal As Strings  ${resp.status_code}  200
     END 
 
@@ -1969,9 +1979,10 @@ JD-TC-SubmitQuestionnaireForAppointment-UH5
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings  ${qns.json()['transactionId']}  ${s_id}
 
-    ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id}  ${status[0]}  
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  '${qns.json()['status']}' == '${status[1]}' 
+        ${resp1}=   Provider Change Questionnaire Status  ${id}  ${status[0]}  
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${qns}   Get Provider Questionnaire By Id   ${id}  
     Log  ${qns.content}
@@ -2147,7 +2158,7 @@ JD-TC-SubmitQuestionnaireForAppointment-6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Enable Disable Appointment   ${toggle[0]} 
         Should Be Equal As Strings  ${resp.status_code}  200
     END 
 
@@ -2209,9 +2220,10 @@ JD-TC-SubmitQuestionnaireForAppointment-6
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings  ${qns.json()['transactionId']}  ${s_id}
 
-    ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id}  ${status[0]}  
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  '${qns.json()['status']}' == '${status[1]}' 
+        ${resp1}=   Provider Change Questionnaire Status  ${id}  ${status[0]}  
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${qns}   Get Provider Questionnaire By Id   ${id}  
     Log  ${qns.content}
