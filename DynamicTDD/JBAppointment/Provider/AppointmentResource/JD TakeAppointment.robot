@@ -26,20 +26,12 @@ JD-TC-Take Appointment-1
 
     [Documentation]  Provider takes appointment for a provider consumer when appointment and today appointment is enabled
     
-    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_Z}=  Provider Signup  
-    Set Suite Variable      ${PUSERNAME_Z}
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_S}=  Provider Signup  
+    Set Suite Variable      ${PUSERNAME_S}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Disable Appointment   ${toggle[0]}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
 
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
@@ -114,6 +106,14 @@ JD-TC-Take Appointment-1
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
+    ${resp}=   Get Appointment Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Disable Appointment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
     ${cnote}=   FakerLibrary.word
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
@@ -141,7 +141,7 @@ JD-TC-Take Appointment-2
 
     [Documentation]  Provider takes phone in appointment for consumer
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -177,7 +177,7 @@ JD-TC-Take Appointment-3
 
     [Documentation]  Provider takes appointment for consumer's family member
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -226,7 +226,7 @@ JD-TC-Take Appointment-4
 
     [Documentation]  Provider takes appointment for consumer and consumer's family member
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -282,7 +282,7 @@ JD-TC-Take Appointment-5
 
     [Documentation]  Provider takes appointment for consumer for a future date when future appointment is enabled
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -311,7 +311,7 @@ JD-TC-Take Appointment-6
 
     [Documentation]  Provider takes appointment for consumer for same service for today and a future date
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
       
@@ -377,7 +377,7 @@ JD-TC-Take Appointment-7
 
     [Documentation]  Provider takes appointment for provider consumer for End date
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -407,7 +407,7 @@ JD-TC-Take Appointment-8
 
     [Documentation]  Provider takes appointment for same consumer for 2 different services
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -466,7 +466,7 @@ JD-TC-Take Appointment-9
 
     [Documentation]  Provider takes appointment for same consumer for a different service in future date
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
         
     ${DAY3}=  db.add_timezone_date  ${tz}  3   
@@ -514,10 +514,10 @@ JD-TC-Take Appointment-10
 
     [Documentation]  Provider takes 2 different appointments for same consumer for same service.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_service   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -533,7 +533,7 @@ JD-TC-Take Appointment-10
         Set Test Variable  ${lid}  ${resp.json()[0]['id']}
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
@@ -761,13 +761,13 @@ JD-TC-Take Appointment-12
 
     [Documentation]  Provider takes 2 different appointments for same consumer for different dates
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    # clear_location   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    # clear_location   ${PUSERNAME_S}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -782,7 +782,7 @@ JD-TC-Take Appointment-12
         Set Test Variable  ${lid}  ${resp.json()[0]['id']}
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
@@ -1046,12 +1046,15 @@ JD-TC-Take Appointment-14
     END
    
     ${lid}=  Create Sample Location
+    
+    ${lid1}=  Create Sample Location
+
+    sleep  1s
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     
-    ${lid1}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1175,12 +1178,12 @@ JD-TC-Take Appointment-15
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    # clear_location   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    # clear_location   ${PUSERNAME_S}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1196,7 +1199,7 @@ JD-TC-Take Appointment-15
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
     
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
@@ -1359,12 +1362,12 @@ JD-TC-Take Appointment-16
     # ${sTime1}=  db.get_time_by_timezone   ${tz}
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    # clear_location   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    # clear_location   ${PUSERNAME_S}
 
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -1372,7 +1375,7 @@ JD-TC-Take Appointment-16
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     # ${lid1}=  Create Sample Location
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
     
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
@@ -1454,10 +1457,6 @@ JD-TC-Take Appointment-16
     # clear_location   ${PUSERNAME350}
 
     ${lid1}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
     # clear_appt_schedule   ${PUSERNAME350}
 
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -1465,6 +1464,12 @@ JD-TC-Take Appointment-16
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
+
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
+    
     ${schedule_name2}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
@@ -1541,12 +1546,12 @@ JD-TC-Take Appointment-17
     # ${sTime1}=  db.get_time_by_timezone   ${tz}
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    # clear_location   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    # clear_location   ${PUSERNAME_S}
   
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1562,7 +1567,7 @@ JD-TC-Take Appointment-17
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END 
     # ${lid1}=  Create Sample Location
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
 
     ${resp}=    Get Service
     Log  ${resp.content}
@@ -1670,7 +1675,7 @@ JD-TC-Take Appointment-17
     ${resp}=    Get Service
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
+    IF   "'$resp.content' == '${emptylist}'' == '$emptylist'"
         ${SERVICE1}=    generate_unique_service_name  ${service_names}
         Append To List  ${service_names}  ${SERVICE1}   
         ${s_id1}=  Create Sample Service  ${SERVICE1}  
@@ -1756,12 +1761,12 @@ JD-TC-Take Appointment-18
     # ${sTime1}=  db.get_time_by_timezone   ${tz}
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    # clear_location   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    # clear_location   ${PUSERNAME_S}
 
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -1769,7 +1774,7 @@ JD-TC-Take Appointment-18
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     # ${lid1}=  Create Sample Location
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
 
     ${resp}=    Get Service
     Log  ${resp.content}
@@ -1956,12 +1961,12 @@ JD-TC-Take Appointment-19
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    # clear_location   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    # clear_location   ${PUSERNAME_S}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1977,7 +1982,7 @@ JD-TC-Take Appointment-19
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
 
     ${resp}=    Get Service
     Log  ${resp.content}
@@ -2175,13 +2180,13 @@ JD-TC-Take Appointment-20
 
     [Documentation]  Provider takes appointments for same consumer after cancelling the first appointment
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    # clear_location   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    # clear_location   ${PUSERNAME_S}
 
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -2189,7 +2194,7 @@ JD-TC-Take Appointment-20
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2298,13 +2303,13 @@ JD-TC-Take Appointment-21
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    # clear_location   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    # clear_location   ${PUSERNAME_S}
 
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -2312,7 +2317,7 @@ JD-TC-Take Appointment-21
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2380,11 +2385,11 @@ JD-TC-Take Appointment-22
 
     [Documentation]  take appointment for consumer and family member in the same time slot when parallel serving > 1
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_service   ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -2400,7 +2405,7 @@ JD-TC-Take Appointment-22
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2621,13 +2626,13 @@ JD-TC-Take Appointment-24
 
     [Documentation]  Provider takes appointment for jaldee consumer and family member when onlinePresence and walkinConsumerBecomesJdCons is enabled and checks it in consumer side
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
     
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -2638,7 +2643,7 @@ JD-TC-Take Appointment-24
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${account_id}=  get_acc_id  ${PUSERNAME_Z}
+    ${account_id}=  get_acc_id  ${PUSERNAME_S}
 
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -2646,7 +2651,7 @@ JD-TC-Take Appointment-24
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2754,13 +2759,13 @@ JD-TC-Take Appointment-25
 
     [Documentation]  Provider takes appointment for non-jaldee consumer
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -2776,7 +2781,7 @@ JD-TC-Take Appointment-25
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2831,13 +2836,13 @@ JD-TC-Take Appointment-25
 JD-TC-Take Appointment-26
     [Documentation]  Provider takes appointment for non-jaldee consumer and checks it in consumer side when walkinConsumerBecomesJdCons is enabled
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -2845,9 +2850,9 @@ JD-TC-Take Appointment-26
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    ${account_id}=  get_acc_id  ${PUSERNAME_Z}
+    ${account_id}=  get_acc_id  ${PUSERNAME_S}
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -3035,13 +3040,13 @@ JD-TC-Take Appointment-28
 
     [Documentation]   provider extends schedule end time and takes appointment for consumer for extended time slot for today and future date
    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -3056,7 +3061,7 @@ JD-TC-Take Appointment-28
         Set Test Variable  ${lid}  ${resp.json()[0]['id']}
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10    
@@ -3157,13 +3162,13 @@ JD-TC-Take Appointment-29
     [Documentation]   provider takes appointment for consumer for same time slot for today and future date.
     ...             provider extends schedule end time and takes appointment for consumer for extended time slot for today and future date
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -3180,7 +3185,7 @@ JD-TC-Take Appointment-29
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10    
@@ -3329,25 +3334,25 @@ JD-TC-Take Appointment-30
     
     [Documentation]  Provider takes appointment for consumer for a future date when future appointment is disabled
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    # clear_customer   ${PUSERNAME_S}
 
-    ${locid2}=  Create Sample Location
-    
     ${resp}=   Disable Future Appointment
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${locid2}=  Create Sample Location
 
     ${resp}=   Get Location ById  ${locid2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10       
@@ -3374,12 +3379,14 @@ JD-TC-Take Appointment-30
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  AddCustomer  ${CUSERNAME8} 
+    ${pro_cust}    Generate random string    10    123456789
+    ${pro_cust}    Convert To Integer  ${pro_cust}
+    ${resp}=  AddCustomer  ${pro_cust} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME8}
+    ${resp}=  GetCustomer  phoneNo-eq=${pro_cust}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -3401,13 +3408,13 @@ JD-TC-Take Appointment-31
 
     [Documentation]  Provider takes appointment for consumer for today when today appointment is disabled
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
     ${resp}=   Disable Today Appointment
     Log   ${resp.json()}
@@ -3427,7 +3434,7 @@ JD-TC-Take Appointment-31
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -3481,13 +3488,13 @@ JD-TC-Take Appointment-32
     [Documentation]  take appointment for today after disabling today appointment.
     ...  when disabled in account settings provider can take appointment, only consumer cannot take
    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -3503,7 +3510,7 @@ JD-TC-Take Appointment-32
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10    
@@ -3574,13 +3581,13 @@ JD-TC-Take Appointment-33
     [Documentation]  take appointment for future after disabling future appointment
     ...  when disabled in account settings provider can take appointment, only consumer cannot take
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
     ${lid}=  Create Sample Location  
     ${resp}=   Get Location ById  ${lid}
@@ -3588,7 +3595,7 @@ JD-TC-Take Appointment-33
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10    
@@ -3659,12 +3666,12 @@ JD-TC-Take Appointment-34
     [Documentation]  take appointment for today after disabling today appointment for schedule
     ...  when disabled provider can take appointment, only consumer cannot take
    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -3679,7 +3686,7 @@ JD-TC-Take Appointment-34
         Set Test Variable  ${lid}  ${resp.json()[0]['id']}
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10    
@@ -3740,13 +3747,13 @@ JD-TC-Take Appointment-34
 JD-TC-Take Appointment-35
     [Documentation]  take appointment for future after disabling future appointment
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
   
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
     ${lid}=  Create Sample Location  
     ${resp}=   Get Location ById  ${lid}
@@ -3754,7 +3761,7 @@ JD-TC-Take Appointment-35
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10    
@@ -3824,8 +3831,8 @@ JD-TC-Take Appointment-36
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
   
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
     clear_customer   ${PUSERNAME278}
 
     ${resp}=  Get Account Settings
@@ -3851,7 +3858,7 @@ JD-TC-Take Appointment-36
     Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}  maxBookingsAllowed=10
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -4003,7 +4010,7 @@ JD-TC-Take Appointment-37
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
   
-    # clear_service   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
     clear_customer   ${PUSERNAME190}
 
     ${resp}=    Get Locations
@@ -4029,7 +4036,7 @@ JD-TC-Take Appointment-37
     Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
 
     ${pan_num}=   db.Generate_pan_number
     ${ifsc_code}=   db.Generate_ifsc_code
@@ -4037,14 +4044,14 @@ JD-TC-Take Appointment-37
     ${bank_name}=  FakerLibrary.company
     ${name}=  FakerLibrary.name
     ${branch}=   db.get_place
-    ${resp}=   Update Account Payment Settings   ${bool[0]}  ${bool[0]}  ${bool[1]}  ${PUSERNAME_Z}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
+    ${resp}=   Update Account Payment Settings   ${bool[0]}  ${bool[0]}  ${bool[1]}  ${PUSERNAME_S}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  payuVerify  ${account_id}
     Log  ${resp}
 
-    ${resp}=   Update Account Payment Settings   ${bool[1]}  ${bool[0]}  ${bool[1]}  ${PUSERNAME_Z}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
+    ${resp}=   Update Account Payment Settings   ${bool[1]}  ${bool[0]}  ${bool[1]}  ${PUSERNAME_S}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -4221,13 +4228,13 @@ JD-TC-Take Appointment-38
 
     [Documentation]   Take appointment for customer without any customer details
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -4242,7 +4249,7 @@ JD-TC-Take Appointment-38
         Set Test Variable  ${lid}  ${resp.json()[0]['id']}
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -4636,7 +4643,7 @@ JD-TC-Take Appointment-UH8
 
     [Documentation]  take appointment using invalid consumer id
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4671,12 +4678,12 @@ JD-TC-Take Appointment-UH10
 
     [Documentation]  take appointment for the same service in the same time slot again
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -4692,7 +4699,7 @@ JD-TC-Take Appointment-UH10
         Set Suite Variable  ${tz1}  ${resp.json()[0]['timezone']}
     END
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
     
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -4822,12 +4829,12 @@ JD-TC-Take Appointment-UH12
 
     [Documentation]  take appointment after disabling service
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -4843,7 +4850,7 @@ JD-TC-Take Appointment-UH12
         Set Suite Variable  ${tz1}  ${resp.json()[0]['timezone']}
     END
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
    
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
@@ -4899,13 +4906,13 @@ JD-TC-Take Appointment-UH13
 
     [Documentation]  take appointment after disabling appointment schedule
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -4913,7 +4920,7 @@ JD-TC-Take Appointment-UH13
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
    
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
@@ -4956,12 +4963,12 @@ JD-TC-Take Appointment-UH14
 
     [Documentation]  take appointment for consumer and family member in the same time slot
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -4969,7 +4976,7 @@ JD-TC-Take Appointment-UH14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -5027,13 +5034,13 @@ JD-TC-Take Appointment-UH15
 
     [Documentation]  take appointment for consumer for the same service on the same date
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -5041,7 +5048,7 @@ JD-TC-Take Appointment-UH15
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -5187,11 +5194,11 @@ JD-TC-Take Appointment-UH17
 
     [Documentation]  Take appointment for a non existing schedule
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME8}
     Log   ${resp.json()}
@@ -5215,13 +5222,13 @@ JD-TC-Take Appointment-UH18
 
     [Documentation]  Provider takes appointments for same consumer after Rejecting the first appointment
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -5229,7 +5236,7 @@ JD-TC-Take Appointment-UH18
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -5295,13 +5302,13 @@ JD-TC-Take Appointment-UH19
 
     [Documentation]  Provider takes appointment for consumer for today when appointment is disabled
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -5324,7 +5331,7 @@ JD-TC-Take Appointment-UH19
         Set Test Variable  ${lid}  ${resp.json()[0]['id']}
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -5369,12 +5376,12 @@ JD-TC-Take Appointment-UH20
 
     [Documentation]  Provider takes online appointment for consumer
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -5390,7 +5397,7 @@ JD-TC-Take Appointment-UH20
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -5435,22 +5442,22 @@ JD-TC-Take Appointment-UH21
 
     [Documentation]  Provider takes appointment for jaldee consumer when online presence is disabled and checks it in consumer side
    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
-    ${account_id}=  get_acc_id  ${PUSERNAME_Z}
+    ${account_id}=  get_acc_id  ${PUSERNAME_S}
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -5538,12 +5545,12 @@ JD-TC-Take Appointment-UH21
 JD-TC-Take Appointment-UH22
     [Documentation]  take appointment for 2 different consumers in the same time slot when parallel serving is 1
    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -5551,7 +5558,7 @@ JD-TC-Take Appointment-UH22
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -5621,8 +5628,8 @@ JD-TC-Take Appointment-UH23
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
     clear_customer   ${PUSERNAME123}
  
     ${resp}=    Get Locations
@@ -5645,7 +5652,7 @@ JD-TC-Take Appointment-UH23
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
    
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
@@ -5707,13 +5714,13 @@ JD-TC-Take Appointment-UH24
 
     [Documentation]  take appointment for first time slot and reduce schedule start time, and try to take appointment for the initial first time slot.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
   
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    # clear_customer   ${PUSERNAME_S}
 
     ${lid}=  Create Sample Location  
     ${resp}=   Get Location ById  ${lid}
@@ -5721,7 +5728,7 @@ JD-TC-Take Appointment-UH24
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10    
@@ -5749,7 +5756,9 @@ JD-TC-Take Appointment-UH24
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  AddCustomer  ${CUSERNAME8}  
+    ${pro_cust}    Generate random string    10    123456789
+    ${pro_cust}    Convert To Integer  ${pro_cust}
+    ${resp}=  AddCustomer  ${pro_cust}  
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
@@ -5814,21 +5823,21 @@ JD-TC-Take Appointment-UH25
 
     [Documentation]   provider takes a future appointment for an instant appointment schedule
    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    # clear_customer   ${PUSERNAME_S}
 
-    ${lid}=  Create Sample Location  
-    ${resp}=   Get Location ById  ${lid}
+    ${locid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${locid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10   
@@ -5846,7 +5855,7 @@ JD-TC-Take Appointment-UH25
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[4]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[4]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${locid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id}  ${resp.json()}
@@ -5862,8 +5871,10 @@ JD-TC-Take Appointment-UH25
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY3}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
- 
-    ${resp}=  AddCustomer  ${CUSERNAME8} 
+    
+    ${pro_cust}    Generate random string    10    123456789
+    ${pro_cust}    Convert To Integer  ${pro_cust}
+    ${resp}=  AddCustomer  ${pro_cust} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
@@ -5872,7 +5883,7 @@ JD-TC-Take Appointment-UH25
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY3}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY3}  ${cnote}  ${apptfor}  location=${{str('${locid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${APPOINTMET_SLOT_NOT_AVAILABLE}"
@@ -5881,7 +5892,7 @@ JD-TC-Take Appointment-UH26
 
     [Documentation]  take appointment using non existant provider consumer id
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -5902,13 +5913,13 @@ JD-TC-Take Appointment-UH27
 
     [Documentation]  take appointment for a slot after creating holiday.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -5924,7 +5935,7 @@ JD-TC-Take Appointment-UH27
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -6023,22 +6034,22 @@ JD-TC-Take Appointment-UH28
 
     [Documentation]  Provider takes appointment for non-jaldee consumer and checks it in consumer side when walkinConsumerBecomesJdCons is disabled
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
-    ${account_id}=  get_acc_id  ${PUSERNAME_Z}
+    ${account_id}=  get_acc_id  ${PUSERNAME_S}
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -6125,13 +6136,13 @@ JD-TC-Take Appointment-40
 
     [Documentation]  Provider takes appointment for a valid consumer with a different phone number for notifications
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
@@ -6157,7 +6168,7 @@ JD-TC-Take Appointment-40
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
@@ -6199,12 +6210,12 @@ JD-TC-Take Appointment-41
 
     [Documentation]  Provider takes appointment for consumer's family member using family member's provider customer id
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
@@ -6238,7 +6249,7 @@ JD-TC-Take Appointment-41
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -6337,7 +6348,7 @@ JD-TC-Take Appointment-UH30
     Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -6458,12 +6469,12 @@ JD-TC-Take Appointment-42
 
     comment  giving value 3 to maxBookingsAllowed flag when creating service.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -6479,7 +6490,7 @@ JD-TC-Take Appointment-42
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END 
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
 
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
@@ -6542,12 +6553,12 @@ JD-TC-Take Appointment-UH31
 
     [Documentation]  Provider takes appointment for Two consumer for multiple slots
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -6563,7 +6574,7 @@ JD-TC-Take Appointment-UH31
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
 
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
@@ -6617,11 +6628,11 @@ JD-TC-Take Appointment-UH32
 
     [Documentation]  Provider takes appointment for consumer on slot of different schedule
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_service   ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -6701,12 +6712,12 @@ JD-TC-Take Appointment-43
     [Documentation]  create holiday for a time period in between the schedule, not the entire schedule.
     ...  take appointment for a slot during the working time.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    # clear_service   ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -6722,7 +6733,7 @@ JD-TC-Take Appointment-43
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -6813,13 +6824,13 @@ JD-TC-Take Appointment-UH33
     [Documentation]  create holiday for a time period in between the schedule, not the entire schedule.
     ...  take appointment for a slot during the non working time.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
   
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
     ${lid}=  Create Sample Location  
     ${resp}=   Get Location ById  ${lid}
@@ -6827,7 +6838,7 @@ JD-TC-Take Appointment-UH33
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -6933,12 +6944,12 @@ JD-TC-Take Appointment-44
     [Documentation]  create 2 holidays for a time period in between the schedule, not the entire schedule.
     ...  take appointment for a slot during the working time.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    # clear_service   ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -7060,13 +7071,13 @@ JD-TC-Take Appointment-41
 
     [Documentation]  Provider takes appointment for a valid consumer with an international number for notifications
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    # clear_service   ${PUSERNAME_Z}
-    # clear_location  ${PUSERNAME_Z}
-    clear_customer   ${PUSERNAME_Z}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
+    clear_customer   ${PUSERNAME_S}
   
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
@@ -7077,7 +7088,7 @@ JD-TC-Take Appointment-41
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_appt_schedule   ${PUSERNAME_Z}
+    # clear_appt_schedule   ${PUSERNAME_S}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}

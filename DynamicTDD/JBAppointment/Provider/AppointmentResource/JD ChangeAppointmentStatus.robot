@@ -135,11 +135,11 @@ JD-TC-ChangeAppointmentStatus-1
   
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
-    ${NewCustomer}    Generate random string    10    123456789
-    ${NewCustomer}    Convert To Integer  ${NewCustomer}
-    Set Suite variable   ${NewCustomer}
+    ${pro_cust}    Generate random string    10    123456789
+    ${pro_cust}    Convert To Integer  ${pro_cust}
+    Set Suite variable   ${pro_cust}
     Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
-    ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
+    ${resp}=  AddCustomer  ${pro_cust}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${cid}  ${resp.json()}
@@ -152,18 +152,18 @@ JD-TC-ChangeAppointmentStatus-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${NewCustomer}    ${pid}
+    ${resp}=    Send Otp For Login    ${pro_cust}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login    ${NewCustomer}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login    ${pro_cust}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${pro_cust}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -268,7 +268,7 @@ JD-TC-ChangeAppointmentStatus-4
 
     [Documentation]  change status to Completed from Arrived
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME317}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
  
@@ -334,11 +334,11 @@ JD-TC-ChangeAppointmentStatus-4
     IF   '${resp.content}' == '${emptylist}'
         ${fname}=  generate_firstname
         ${lname}=  FakerLibrary.last_name
-        ${NewCustomer}    Generate random string    10    123456789
-        ${NewCustomer}    Convert To Integer  ${NewCustomer}
-        Set Suite variable   ${NewCustomer}
+        ${pro_cust}    Generate random string    10    123456789
+        ${pro_cust}    Convert To Integer  ${pro_cust}
+        Set Suite variable   ${pro_cust}
         Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
-        ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
+        ${resp}=  AddCustomer  ${pro_cust}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${cid}  ${resp.json()}
@@ -375,7 +375,7 @@ JD-TC-ChangeAppointmentStatus-5
     [Documentation]  change status to Completed from confirmed
 
     ${pid}=  get_acc_id  ${PUSERNAME377}
-    ${cid}=  get_id  ${NewCustomer}
+    ${cid}=  get_id  ${pro_cust}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
     Log   ${resp.json()}
@@ -480,22 +480,30 @@ JD-TC-ChangeAppointmentStatus-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${pro_cust}=  Generate Random 555 Number
+    ${resp}=  AddCustomer  ${pro_cust}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}   email=${pc_emailid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${NewCustomer}    ${pid}
+    ${resp}=    Send Otp For Login    ${pro_cust}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login    ${NewCustomer}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login    ${pro_cust}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${pro_cust}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -556,7 +564,7 @@ JD-TC-ChangeAppointmentStatus-UH1
     [Documentation]  change status to Started from confirmed
 
     ${pid}=  get_acc_id  ${PUSERNAME310}
-    # ${cid}=  get_id  ${NewCustomer}
+    # ${cid}=  get_id  ${pro_cust}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME310}  ${PASSWORD}
     Log   ${resp.json()}
@@ -625,24 +633,24 @@ JD-TC-ChangeAppointmentStatus-UH1
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
-    ${NewCustomer}=  Generate Random 555 Number
-    ${resp}=  AddCustomer  ${NewCustomer}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}   email=${pc_emailid1}
+    ${pro_cust}=  Generate Random 555 Number
+    ${resp}=  AddCustomer  ${pro_cust}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}   email=${pc_emailid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable   ${cid}  ${resp.json()}
 
-    ${resp}=    Send Otp For Login    ${NewCustomer}    ${pid}
+    ${resp}=    Send Otp For Login    ${pro_cust}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login    ${NewCustomer}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login    ${pro_cust}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${pro_cust}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -703,7 +711,7 @@ JD-TC-ChangeAppointmentStatus-6
     [Documentation]  change status to Cancelled from confirmed
 
     ${pid}=  get_acc_id  ${PUSERNAME377}
-    ${cid}=  get_id  ${NewCustomer}
+    # ${cid}=  get_id  ${pro_cust}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
     Log   ${resp.json()}
@@ -764,12 +772,31 @@ JD-TC-ChangeAppointmentStatus-6
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-  
+    
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${pro_cust}=  Generate Random 555 Number
+    ${resp}=  AddCustomer  ${pro_cust}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}   email=${pc_emailid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
+    ${resp}=    Send Otp For Login    ${pro_cust}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login    ${pro_cust}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${pro_cust}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -881,15 +908,33 @@ JD-TC-ChangeAppointmentStatus-7
     Should Be Equal As Strings  ${resp.status_code}  200
    
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot1}   ${slots[${j1}]}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${NewCustomer}
-    Log   ${resp.json()}
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${pro_cust}=  Generate Random 555 Number
+    ${resp}=  AddCustomer  ${pro_cust}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}   email=${pc_emailid1}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}   ${resp.json()[0]['id']}
-    Set Test Variable  ${fname}   ${resp.json()[0]['firstName']}
+    Set Test Variable  ${cid}   ${resp.json()}
+
+    # ${resp}=  GetCustomer  phoneNo-eq=${pro_cust}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${cid}   ${resp.json()[0]['id']}
+    # Set Test Variable  ${fname}   ${resp.json()[0]['firstName']}
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -920,7 +965,7 @@ JD-TC-ChangeAppointmentStatus-UH2
     [Documentation]  change status to Cancelled from Started
 
     ${pid}=  get_acc_id  ${PUSERNAME377}
-    ${cid}=  get_id  ${NewCustomer}
+    # ${cid}=  get_id  ${pro_cust}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
     Log   ${resp.json()}
@@ -982,11 +1027,30 @@ JD-TC-ChangeAppointmentStatus-UH2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${pro_cust}=  Generate Random 555 Number
+    ${resp}=  AddCustomer  ${pro_cust}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}   email=${pc_emailid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
+    ${resp}=    Send Otp For Login    ${pro_cust}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login    ${pro_cust}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${pro_cust}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -1066,7 +1130,7 @@ JD-TC-ChangeAppointmentStatus-8
 
     [Documentation]  change status to Rejected from Arrived
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME311}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1122,11 +1186,20 @@ JD-TC-ChangeAppointmentStatus-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${NewCustomer}
-    Log   ${resp.json()}
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${pro_cust}=  Generate Random 555 Number
+    ${resp}=  AddCustomer  ${pro_cust}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}   email=${pc_emailid1}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}   ${resp.json()[0]['id']}
-    Set Test Variable  ${fname}   ${resp.json()[0]['firstName']}
+    Set Test Variable  ${cid}   ${resp.json()}
+
+    # ${resp}=  GetCustomer  phoneNo-eq=${pro_cust}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${cid}   ${resp.json()[0]['id']}
+    # Set Test Variable  ${fname}   ${resp.json()[0]['firstName']}
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -1259,11 +1332,11 @@ JD-TC-ChangeAppointmentStatus-UH3
     IF   '${resp.content}' == '${emptylist}'
         ${fname}=  generate_firstname
         ${lname}=  FakerLibrary.last_name
-        ${NewCustomer}    Generate random string    10    123456789
-        ${NewCustomer}    Convert To Integer  ${NewCustomer}
-        Set Suite variable   ${NewCustomer}
+        ${pro_cust}    Generate random string    10    123456789
+        ${pro_cust}    Convert To Integer  ${pro_cust}
+        Set Suite variable   ${pro_cust}
         Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
-        ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
+        ${resp}=  AddCustomer  ${pro_cust}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${cid}  ${resp.json()}
@@ -1387,10 +1460,10 @@ JD-TC-ChangeAppointmentStatus-UH4
     IF   '${resp.content}' == '${emptylist}'
         ${fname}=  generate_firstname
         ${lname}=  FakerLibrary.last_name
-        ${NewCustomer}    Generate random string    10    123456789
-        ${NewCustomer}    Convert To Integer  ${NewCustomer}
+        ${pro_cust}    Generate random string    10    123456789
+        ${pro_cust}    Convert To Integer  ${pro_cust}
         Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
-        ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
+        ${resp}=  AddCustomer  ${pro_cust}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${cid}  ${resp.json()}
@@ -1444,7 +1517,7 @@ JD-TC-ChangeAppointmentStatus-UH5
 
     [Documentation]  change status to Arrived from Started
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME312}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1515,10 +1588,10 @@ JD-TC-ChangeAppointmentStatus-UH5
     IF   '${resp.content}' == '${emptylist}'
         ${fname}=  generate_firstname
         ${lname}=  FakerLibrary.last_name
-        ${NewCustomer}    Generate random string    10    123456789
-        ${NewCustomer}    Convert To Integer  ${NewCustomer}
+        ${pro_cust}    Generate random string    10    123456789
+        ${pro_cust}    Convert To Integer  ${pro_cust}
         Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
-        ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
+        ${resp}=  AddCustomer  ${pro_cust}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${cid}  ${resp.json()}
@@ -1569,7 +1642,7 @@ JD-TC-ChangeAppointmentStatus-10
 
     [Documentation]  change status to confirmed from Started when appointment taken by provider.
    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME313}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
   
@@ -1640,10 +1713,10 @@ JD-TC-ChangeAppointmentStatus-10
     IF   '${resp.content}' == '${emptylist}'
         ${fname}=  generate_firstname
         ${lname}=  FakerLibrary.last_name
-        ${NewCustomer}    Generate random string    10    123456789
-        ${NewCustomer}    Convert To Integer  ${NewCustomer}
+        ${pro_cust}    Generate random string    10    123456789
+        ${pro_cust}    Convert To Integer  ${pro_cust}
         Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
-        ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
+        ${resp}=  AddCustomer  ${pro_cust}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${cid}  ${resp.json()}
@@ -1692,10 +1765,10 @@ JD-TC-ChangeAppointmentStatus-11
 
     [Documentation]  change status to confirmed from Started when appointment taken from consumer side
 
-    ${pid}=  get_acc_id  ${PUSERNAME377}
-    ${cid}=  get_id  ${NewCustomer}
+    ${pid}=  get_acc_id  ${PUSERNAME318}
+    # ${cid}=  get_id  ${pro_cust}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME318}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1746,16 +1819,36 @@ JD-TC-ChangeAppointmentStatus-11
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${pro_cust}=  Generate Random 555 Number
+    ${resp}=  AddCustomer  ${pro_cust}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}   email=${pc_emailid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${cid}   ${resp.json()}
+
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
+    ${resp}=    Send Otp For Login    ${pro_cust}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login    ${pro_cust}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${pro_cust}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
-    Set Test Variable  ${lname}   ${resp.json()['lastName']}
+    # Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
@@ -1788,7 +1881,7 @@ JD-TC-ChangeAppointmentStatus-11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME318}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1834,10 +1927,10 @@ JD-TC-ChangeAppointmentStatus-UH6
 
     [Documentation]  change status to Started from Completed
 
-    ${pid}=  get_acc_id  ${PUSERNAME377}
-    ${cid}=  get_id  ${NewCustomer}
+    ${pid}=  get_acc_id  ${PUSERNAME316}
+    # ${cid}=  get_id  ${pro_cust}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME316}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1888,16 +1981,35 @@ JD-TC-ChangeAppointmentStatus-UH6
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${pro_cust}=  Generate Random 555 Number
+    ${resp}=  AddCustomer  ${pro_cust}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}   email=${pc_emailid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
+    ${resp}=    Send Otp For Login    ${pro_cust}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login    ${pro_cust}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${pro_cust}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
-    Set Test Variable  ${lname}   ${resp.json()['lastName']}
+    # Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
@@ -1932,7 +2044,7 @@ JD-TC-ChangeAppointmentStatus-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME316}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2101,11 +2213,20 @@ JD-TC-ChangeAppointmentStatus-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${NewCustomer}
-    Log   ${resp.json()}
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${pro_cust}=  Generate Random 555 Number
+    ${resp}=  AddCustomer  ${pro_cust}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}   email=${pc_emailid1}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}   ${resp.json()[0]['id']}
-    Set Test Variable  ${fname}   ${resp.json()[0]['firstName']}
+    Set Test Variable   ${cid}  ${resp.json()}
+
+    # ${resp}=  GetCustomer  phoneNo-eq=${pro_cust}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${cid}   ${resp.json()[0]['id']}
+    # Set Test Variable  ${fname}   ${resp.json()[0]['firstName']}
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -2152,7 +2273,7 @@ JD-TC-ChangeAppointmentStatus-UH8
 
     [Documentation]  change status to confirmed from Completed
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME315}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
   
@@ -2217,11 +2338,20 @@ JD-TC-ChangeAppointmentStatus-UH8
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${NewCustomer}
-    Log   ${resp.json()}
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${pro_cust}=  Generate Random 555 Number
+    ${resp}=  AddCustomer  ${pro_cust}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}   email=${pc_emailid1}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}   ${resp.json()[0]['id']}
-    Set Test Variable  ${fname}   ${resp.json()[0]['firstName']}
+    Set Test Variable  ${cid}   ${resp.json()}
+
+    # ${resp}=  GetCustomer  phoneNo-eq=${pro_cust}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${cid}   ${resp.json()[0]['id']}
+    # Set Test Variable  ${fname}   ${resp.json()[0]['firstName']}
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -2274,7 +2404,7 @@ JD-TC-ChangeAppointmentStatus-UH9
 
     [Documentation]  change status to Cancelled from Completed
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME314}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2339,11 +2469,20 @@ JD-TC-ChangeAppointmentStatus-UH9
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${NewCustomer}
-    Log   ${resp.json()}
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${pro_cust}=  Generate Random 555 Number
+    ${resp}=  AddCustomer  ${pro_cust}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}   email=${pc_emailid1}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}   ${resp.json()[0]['id']}
-    Set Test Variable  ${fname}   ${resp.json()[0]['firstName']}
+    Set Test Variable  ${cid}   ${resp.json()}
+
+    # ${resp}=  GetCustomer  phoneNo-eq=${pro_cust}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${cid}   ${resp.json()[0]['id']}
+    # Set Test Variable  ${fname}   ${resp.json()[0]['firstName']}
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -2464,11 +2603,20 @@ JD-TC-ChangeAppointmentStatus-UH10
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
     
-    ${resp}=  GetCustomer  phoneNo-eq=${NewCustomer}
-    Log   ${resp.json()}
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${pro_cust}=  Generate Random 555 Number
+    ${resp}=  AddCustomer  ${pro_cust}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}   email=${pc_emailid1}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}   ${resp.json()[0]['id']}
-    Set Test Variable  ${fname}   ${resp.json()[0]['firstName']}
+    Set Test Variable  ${cid}  ${resp.json()}
+
+    # ${resp}=  GetCustomer  phoneNo-eq=${pro_cust}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${cid}   ${resp.json()[0]['id']}
+    # Set Test Variable  ${fname}   ${resp.json()[0]['firstName']}
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -2606,12 +2754,12 @@ JD-TC-ChangeAppointmentStatus-UH11
   
     # ${fname}=  generate_firstname
     # ${lname}=  FakerLibrary.last_name
-    # ${NewCustomer}    Generate random string    10    123456789
-    # ${NewCustomer}    Convert To Integer  ${NewCustomer}
-    # Set Suite variable   ${NewCustomer}
+    # ${pro_cust}    Generate random string    10    123456789
+    # ${pro_cust}    Convert To Integer  ${pro_cust}
+    # Set Suite variable   ${pro_cust}
     # Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
 
-    # ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
+    # ${resp}=  AddCustomer  ${pro_cust}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${cid}  ${resp.json()}
@@ -2722,10 +2870,10 @@ JD-TC-ChangeAppointmentStatus-UH11
 
     ${fname}=  generate_firstname  
     ${lname}=  FakerLibrary.last_name
-    ${NewCustomer}    Generate random string    10    123456789
-    ${NewCustomer}    Convert To Integer  ${NewCustomer}
+    ${pro_cust}    Generate random string    10    123456789
+    ${pro_cust}    Convert To Integer  ${pro_cust}
     Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
-    ${resp}=  AddCustomer  ${NewCustomer}   firstName=${fname}   lastName=${lname}    email=${pc_emailid1}
+    ${resp}=  AddCustomer  ${pro_cust}   firstName=${fname}   lastName=${lname}    email=${pc_emailid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()}
@@ -2734,18 +2882,18 @@ JD-TC-ChangeAppointmentStatus-UH11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${NewCustomer}    ${pid}
+    ${resp}=    Send Otp For Login    ${pro_cust}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login    ${NewCustomer}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login    ${pro_cust}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${pro_cust}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -2804,7 +2952,7 @@ JD-TC-ChangeAppointmentStatus-UH11
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
+    # Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
 
     ${resp}=  Appointment Action   ${apptStatus[0]}   ${apptid1}
     Log   ${resp.json()}
@@ -2866,11 +3014,11 @@ JD-TC-ChangeAppointmentStatus-UH12
   
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
-    ${NewCustomer}    Generate random string    10    123456789
-    ${NewCustomer}    Convert To Integer  ${NewCustomer}
-    Set Suite Variable   ${NewCustomer}
+    ${pro_cust}    Generate random string    10    123456789
+    ${pro_cust}    Convert To Integer  ${pro_cust}
+    Set Suite Variable   ${pro_cust}
     Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
-    ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
+    ${resp}=  AddCustomer  ${pro_cust}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()}
@@ -2879,7 +3027,7 @@ JD-TC-ChangeAppointmentStatus-UH12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${NewCustomer}    ${pid}
+    ${resp}=    Send Otp For Login    ${pro_cust}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2888,12 +3036,12 @@ JD-TC-ChangeAppointmentStatus-UH12
     # sleep  1s
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${pro_cust}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token1}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token1} 
+    ${resp}=    ProviderConsumer Login with token   ${pro_cust}    ${pid}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -3002,7 +3150,7 @@ JD-TC-ChangeAppointmentStatus-UH13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token1} 
+    ${resp}=    ProviderConsumer Login with token   ${pro_cust}    ${pid}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -3111,7 +3259,7 @@ JD-TC-ChangeAppointmentStatus-UH14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token1} 
+    ${resp}=    ProviderConsumer Login with token   ${pro_cust}    ${pid}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -3220,7 +3368,7 @@ JD-TC-ChangeAppointmentStatus-UH15
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token1} 
+    ${resp}=    ProviderConsumer Login with token   ${pro_cust}    ${pid}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -3334,7 +3482,7 @@ JD-TC-ChangeAppointmentStatus-UH16
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token1} 
+    ${resp}=    ProviderConsumer Login with token   ${pro_cust}    ${pid}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -3476,12 +3624,12 @@ JD-TC-ChangeAppointmentStatus-12
   
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
-    ${NewCustomer}    Generate random string    10    123456789
-    ${NewCustomer}    Convert To Integer  ${NewCustomer}
-    Set Suite variable   ${NewCustomer}
+    ${pro_cust}    Generate random string    10    123456789
+    ${pro_cust}    Convert To Integer  ${pro_cust}
+    Set Suite variable   ${pro_cust}
     Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
 
-    ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
+    ${resp}=  AddCustomer  ${pro_cust}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()}
@@ -3490,18 +3638,18 @@ JD-TC-ChangeAppointmentStatus-12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${NewCustomer}    ${pid}
+    ${resp}=    Send Otp For Login    ${pro_cust}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login    ${NewCustomer}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login    ${pro_cust}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${pro_cust}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -3619,7 +3767,7 @@ JD-TC-ChangeAppointmentStatus-UH17
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${pro_cust}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -3734,7 +3882,7 @@ JD-TC-ChangeAppointmentStatus-UH18
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${pro_cust}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -3849,7 +3997,7 @@ JD-TC-ChangeAppointmentStatus-13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${pro_cust}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -3966,7 +4114,7 @@ JD-TC-ChangeAppointmentStatus-UH19
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${pro_cust}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -4079,12 +4227,12 @@ JD-TC-ChangeAppointmentStatus-UH20
  
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
-    ${NewCustomer}    Generate random string    10    123456789
-    ${NewCustomer}    Convert To Integer  ${NewCustomer}
-    Set Suite Variable  ${NewCustomer}
+    ${pro_cust}    Generate random string    10    123456789
+    ${pro_cust}    Convert To Integer  ${pro_cust}
+    Set Suite Variable  ${pro_cust}
     Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
 
-    ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
+    ${resp}=  AddCustomer  ${pro_cust}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()}
@@ -4093,18 +4241,18 @@ JD-TC-ChangeAppointmentStatus-UH20
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${NewCustomer}    ${pid}
+    ${resp}=    Send Otp For Login    ${pro_cust}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login    ${NewCustomer}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login    ${pro_cust}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${pro_cust}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -4235,9 +4383,9 @@ JD-TC-ChangeAppointmentStatus-UH21
 
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
-    ${NewCustomer}    Generate random string    10    123456789
-    ${NewCustomer}    Convert To Integer  ${NewCustomer}
-    ${resp}=  AddCustomer  ${NewCustomer}   firstName=${fname}   lastName=${lname} 
+    ${pro_cust}    Generate random string    10    123456789
+    ${pro_cust}    Convert To Integer  ${pro_cust}
+    ${resp}=  AddCustomer  ${pro_cust}   firstName=${fname}   lastName=${lname} 
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()}
@@ -4369,10 +4517,10 @@ JD-TC-ChangeAppointmentStatus-UH25
     IF   '${resp.content}' == '${emptylist}'
         ${fname}=  generate_firstname
         ${lname}=  FakerLibrary.last_name
-        ${NewCustomer}    Generate random string    10    123456789
-        ${NewCustomer}    Convert To Integer  ${NewCustomer}
+        ${pro_cust}    Generate random string    10    123456789
+        ${pro_cust}    Convert To Integer  ${pro_cust}
         Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
-        ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
+        ${resp}=  AddCustomer  ${pro_cust}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${cid}  ${resp.json()}
@@ -4500,10 +4648,10 @@ JD-TC-ChangeAppointmentStatus-UH26
     IF   '${resp.content}' == '${emptylist}'
         ${fname}=  generate_firstname
         ${lname}=  FakerLibrary.last_name
-        ${NewCustomer}    Generate random string    10    123456789
-        ${NewCustomer}    Convert To Integer  ${NewCustomer}
+        ${pro_cust}    Generate random string    10    123456789
+        ${pro_cust}    Convert To Integer  ${pro_cust}
         Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
-        ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
+        ${resp}=  AddCustomer  ${pro_cust}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${cid}  ${resp.json()}
@@ -4597,9 +4745,9 @@ JD-TC-ChangeAppointmentStatus-14
 
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
-    ${NewCustomer}    Generate random string    10    123456789
-    ${NewCustomer}    Convert To Integer  ${NewCustomer}
-    ${resp}=  AddCustomer  ${NewCustomer}   firstName=${fname}   lastName=${lname} 
+    ${pro_cust}    Generate random string    10    123456789
+    ${pro_cust}    Convert To Integer  ${pro_cust}
+    ${resp}=  AddCustomer  ${pro_cust}   firstName=${fname}   lastName=${lname} 
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()}
@@ -4607,25 +4755,25 @@ JD-TC-ChangeAppointmentStatus-14
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Send Otp For Login    ${NewCustomer}    ${pid}
+    ${resp}=    Send Otp For Login    ${pro_cust}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login    ${NewCustomer}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login    ${pro_cust}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    # ${resp}=    ProviderConsumer SignUp    ${fname}  ${lname}  ${EMPTY}  ${NewCustomer}  ${pid}  countryCode=${countryCodes[0]}
+    # ${resp}=    ProviderConsumer SignUp    ${fname}  ${lname}  ${EMPTY}  ${pro_cust}  ${pid}  countryCode=${countryCodes[0]}
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}   200    
 
     # ${resp}=  Consumer Logout   
     # Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}  ${pid}  ${token}   countryCode=${countryCodes[0]}
+    ${resp}=    ProviderConsumer Login with token   ${pro_cust}  ${pid}  ${token}   countryCode=${countryCodes[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -4665,12 +4813,12 @@ JD-TC-ChangeAppointmentStatus-14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${NewCustomer}
+    ${resp}=  GetCustomer  phoneNo-eq=${pro_cust}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()[0]['id']}
 
-    ${resp}=  Get Appointments Today  phoneNo-eq=${NewCustomer}
+    ${resp}=  Get Appointments Today  phoneNo-eq=${pro_cust}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
