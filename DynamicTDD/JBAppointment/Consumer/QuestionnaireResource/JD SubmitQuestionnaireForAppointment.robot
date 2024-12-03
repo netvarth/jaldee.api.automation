@@ -32,6 +32,7 @@ ${self}      0
 ${mp4mime}   video/mp4
 ${avimime}   video/avi
 ${mp3mime}   audio/mpeg
+${maxBookings}  20
 
 
 
@@ -155,8 +156,11 @@ JD-TC-SubmitQuestionnaireForAppointment-1
         Log  ${ttype}
         ${u_ttype}=    Remove Duplicates    ${ttype}
         Log  ${u_ttype}
-        ${s_id}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[3]}' in @{u_ttype}  Create Sample Service  ${unique_snames[${i}]}
-        ${d_id}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[0]}' in @{u_ttype}   Create Sample Donation  ${unique_snames[${i}]}
+        IF   '${QnrTransactionType[3]}' in @{u_ttype} and '${srv_val}'=='${None}'
+                ${s_id}=  Create Sample Service  ${unique_snames[${i}]}  maxBookingsAllowed=${maxBookings}
+            ELSE IF  '${QnrTransactionType[0]}' in @{u_ttype} and '${don_val}'=='${None}'
+                ${d_id}=  Create Sample Donation  ${unique_snames[${i}]}
+            END
     END
 
     ${resp}=  Provider Logout
@@ -212,6 +216,14 @@ JD-TC-SubmitQuestionnaireForAppointment-1
     END
     Set Suite Variable   ${s_id}  
 
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['maxBookingsAllowed']} <= 1
+        ${resp}=  Update Service  ${s_id}  ${resp.json()['name']}  ${resp.json()['description']}  ${resp.json()['serviceDuration']}  ${resp.json()['isPrePayment']}  ${resp.json()['totalAmount']}  maxBookingsAllowed=${maxBookings}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
     # clear_appt_schedule   ${PUSERNAME18}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -225,6 +237,11 @@ JD-TC-SubmitQuestionnaireForAppointment-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+
+    ${parallel}=  FakerLibrary.Random Int  min=5  max=10
+    ${resp}=  Update Schedule data  ${sch_id}  ${resp.json()}  parallelServing=${parallel}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -2327,8 +2344,11 @@ JD-TC-SubmitQuestionnaireForAppointment-6
         Log  ${ttype}
         ${u_ttype}=    Remove Duplicates    ${ttype}
         Log  ${u_ttype}
-        ${s_id}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[3]}' in @{u_ttype}  Create Sample Service  ${unique_snames[${i}]}
-        ${d_id}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[0]}' in @{u_ttype}   Create Sample Donation  ${unique_snames[${i}]}
+        IF   '${QnrTransactionType[3]}' in @{u_ttype} and '${srv_val}'=='${None}'
+                ${s_id}=  Create Sample Service  ${unique_snames[${i}]}  maxBookingsAllowed=10
+            ELSE IF  '${QnrTransactionType[0]}' in @{u_ttype} and '${don_val}'=='${None}'
+                ${d_id}=  Create Sample Donation  ${unique_snames[${i}]}
+            END
     END
 
     ${resp}=  Provider Logout

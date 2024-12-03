@@ -144,8 +144,11 @@ JD-TC-ResubmitQuestionnaireForWaitlist-1
         Log  ${ttype}
         ${u_ttype}=    Remove Duplicates    ${ttype}
         Log  ${u_ttype}
-        ${s_id}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[3]}' in @{u_ttype}  Create Sample Service  ${unique_snames[${i}]}
-        ${d_id}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[0]}' in @{u_ttype}   Create Sample Donation  ${unique_snames[${i}]}
+        IF   '${QnrTransactionType[3]}' in @{u_ttype} and '${srv_val}'=='${None}'
+                ${s_id}=  Create Sample Service  ${unique_snames[${i}]}  maxBookingsAllowed=10
+            ELSE IF  '${QnrTransactionType[0]}' in @{u_ttype} and '${don_val}'=='${None}'
+                ${d_id}=  Create Sample Donation  ${unique_snames[${i}]}
+            END
     END
 
     ${resp}=  Provider Logout
@@ -1523,8 +1526,11 @@ JD-TC-ResubmitQuestionnaireForWaitlist-6
         Log  ${ttype}
         ${u_ttype}=    Remove Duplicates    ${ttype}
         Log  ${u_ttype}
-        ${s_id}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[3]}' in @{u_ttype}  Create Sample Service  ${unique_snames[${i}]}
-        ${d_id}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[0]}' in @{u_ttype}   Create Sample Donation  ${unique_snames[${i}]}
+        IF   '${QnrTransactionType[3]}' in @{u_ttype} and '${srv_val}'=='${None}'
+                ${s_id}=  Create Sample Service  ${unique_snames[${i}]}  maxBookingsAllowed=10
+            ELSE IF  '${QnrTransactionType[0]}' in @{u_ttype} and '${don_val}'=='${None}'
+                ${d_id}=  Create Sample Donation  ${unique_snames[${i}]}
+            END
     END
 
     ${resp}=  Provider Logout
