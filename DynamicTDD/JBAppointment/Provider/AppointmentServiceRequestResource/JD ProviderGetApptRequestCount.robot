@@ -139,6 +139,8 @@ JD-TC-ProviderGetApptRequestCount-1
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
         ${resp1}=  AddCustomer  ${CUSERNAME23}  
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
@@ -206,6 +208,8 @@ JD-TC-ProviderGetApptRequestCount-2
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
         ${resp1}=  AddCustomer  ${CUSERNAME4}  
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200

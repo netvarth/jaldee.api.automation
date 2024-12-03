@@ -61,10 +61,11 @@ Comapre Lists without order
     Sort List  ${list1_copy}
     Sort List  ${list2_copy}
 
-    ${status} 	${value} = 	Run Keyword And Ignore Error  Lists Should Be Equal  ${list1_copy}  ${list2_copy}
-    Log Many  ${status} 	${value}
-    ${val}=  Run Keyword If   '${status}' == 'FAIL'  Set Variable  ${bool[0]}
-    ...  ELSE	 Set Variable    ${bool[1]}
+    IF    ${list1_copy} == ${list2_copy}
+        ${val}=    Set Variable    ${bool[1]}
+    ELSE
+        ${val}=    Set Variable    ${bool[0]}
+    END
     RETURN  ${val}
 
 
@@ -203,9 +204,11 @@ JD-TC-SubmitQuestionnaireForAppointment-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
 
@@ -262,39 +265,29 @@ JD-TC-SubmitQuestionnaireForAppointment-1
     # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
     # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME11}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
-
-    ${resp}=    Verify Otp For Login    ${CUSERNAME11}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token}  ${resp.json()['token']}
+   ${CUSERNAME11}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME11}
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${resp}=  Get Appointment Schedules Consumer  ${account_id}
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()[0]['id']}   ${sch_id}
-
-    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${account_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${sch_id}=  Set Variable  ${resp.json()[0]['scheduleId']}
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            # Set Test Variable   ${a${i}}  ${resp.json()[0]['availableSlots'][${i}]['time']}
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
         END
     END
     ${num_slots}=  Get Length  ${slots}
-    ${j1}=  Random Int  max=${num_slots-1}
-    Set Test Variable   ${slot1}   ${slots[${j1}]}
+    ${j}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot1}   ${slots[${j}]}
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -327,9 +320,13 @@ JD-TC-SubmitQuestionnaireForAppointment-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME11}   ${PASSWORD}
+    # ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME11}   ${PASSWORD}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings   ${resp.status_code}    200
+
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME11}    ${account_id}    ${token}
     Log  ${resp.content}
-    Should Be Equal As Strings   ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Imageupload.CApptQAnsUpload   ${cookie}  ${account_id}   ${apptid1}   ${data}  ${pdffile}  ${jpgfile}
     Log  ${resp.content}
@@ -393,9 +390,11 @@ JD-TC-SubmitQuestionnaireForAppointment-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
 
@@ -403,15 +402,30 @@ JD-TC-SubmitQuestionnaireForAppointment-2
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    IF   '${resp.content}' == '${emptylist}'
+        ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${sch_id}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
+    END
 
+    ${schedule_services}=  Create List
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+    FOR  ${service}  IN  @{resp.json()['services']}
+        Append To List  ${schedule_services}  ${service['id']}
+    END
+    IF   ${s_id} not in @{schedule_services}
+        ${resp}=  Update Schedule data  ${sch_id}  ${resp.json()[0]}  ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -461,10 +475,24 @@ JD-TC-SubmitQuestionnaireForAppointment-2
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
 
-    ${resp}=  AddCustomer  ${CUSERNAME11}   firstName=${fname}   lastName=${lname}
+    # ${resp}=  AddCustomer  ${CUSERNAME11}   firstName=${fname}   lastName=${lname}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${cid}  ${resp.json()}
+
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME11}  
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${cid}  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
+        ${resp1}=  AddCustomer  ${CUSERNAME11}  firstName=${fname}   lastName=${lname}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Suite Variable  ${cid}   ${resp1.json()}
+    ELSE
+        Set Suite Variable  ${cid}  ${resp.json()[0]['id']}
+    END
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -527,9 +555,13 @@ JD-TC-SubmitQuestionnaireForAppointment-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME11}   ${PASSWORD}
+    # ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME11}   ${PASSWORD}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings   ${resp.status_code}    200
+
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME11}    ${account_id}    ${token}
     Log  ${resp.content}
-    Should Be Equal As Strings   ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Imageupload.CApptQAnsUpload   ${cookie}  ${account_id}   ${apptid1}   ${data}  ${pdffile}  ${jpgfile}
     Log  ${resp.content}
@@ -584,9 +616,11 @@ JD-TC-SubmitQuestionnaireForAppointment-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
 
@@ -594,15 +628,30 @@ JD-TC-SubmitQuestionnaireForAppointment-3
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    IF   '${resp.content}' == '${emptylist}'
+        ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${sch_id}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
+    END
 
+    ${schedule_services}=  Create List
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+    FOR  ${service}  IN  @{resp.json()['services']}
+        Append To List  ${schedule_services}  ${service['id']}
+    END
+    IF   ${s_id} not in @{schedule_services}
+        ${resp}=  Update Schedule data  ${sch_id}  ${resp.json()[0]}  ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -648,10 +697,24 @@ JD-TC-SubmitQuestionnaireForAppointment-3
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
 
-    ${resp}=  AddCustomer  ${CUSERNAME11}   firstName=${fname}   lastName=${lname}
+    # ${resp}=  AddCustomer  ${CUSERNAME11}   firstName=${fname}   lastName=${lname}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${cid}  ${resp.json()}
+
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME11}  
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${cid}  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
+        ${resp1}=  AddCustomer  ${CUSERNAME11}  firstName=${fname}   lastName=${lname}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Suite Variable  ${cid}   ${resp1.json()}
+    ELSE
+        Set Suite Variable  ${cid}  ${resp.json()[0]['id']}
+    END
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -726,9 +789,13 @@ JD-TC-SubmitQuestionnaireForAppointment-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME11}   ${PASSWORD}
+    # ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME11}   ${PASSWORD}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings   ${resp.status_code}    200
+
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME11}    ${account_id}    ${token}
     Log  ${resp.content}
-    Should Be Equal As Strings   ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Imageupload.CApptQAnsUpload   ${cookie}  ${account_id}   ${apptid1}   ${data}  ${pdffile}  ${jpgfile}
     Log  ${resp.content}
@@ -783,9 +850,11 @@ JD-TC-SubmitQuestionnaireForAppointment-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
 
@@ -793,15 +862,30 @@ JD-TC-SubmitQuestionnaireForAppointment-4
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    IF   '${resp.content}' == '${emptylist}'
+        ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${sch_id}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
+    END
 
+    ${schedule_services}=  Create List
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+    FOR  ${service}  IN  @{resp.json()['services']}
+        Append To List  ${schedule_services}  ${service['id']}
+    END
+    IF   ${s_id} not in @{schedule_services}
+        ${resp}=  Update Schedule data  ${sch_id}  ${resp.json()[0]}  ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -847,10 +931,24 @@ JD-TC-SubmitQuestionnaireForAppointment-4
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
 
-    ${resp}=  AddCustomer  ${CUSERNAME11}   firstName=${fname}   lastName=${lname}
+    # ${resp}=  AddCustomer  ${CUSERNAME11}   firstName=${fname}   lastName=${lname}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${cid}  ${resp.json()}
+
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME11}  
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${cid}  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
+        ${resp1}=  AddCustomer  ${CUSERNAME11}  firstName=${fname}   lastName=${lname}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Suite Variable  ${cid}   ${resp1.json()}
+    ELSE
+        Set Suite Variable  ${cid}  ${resp.json()[0]['id']}
+    END
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -934,9 +1032,12 @@ JD-TC-SubmitQuestionnaireForAppointment-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME11}   ${PASSWORD}
+    # ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME11}   ${PASSWORD}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings   ${resp.status_code}    200
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME11}    ${account_id}    ${token}
     Log  ${resp.content}
-    Should Be Equal As Strings   ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Imageupload.CApptQAnsUpload   ${cookie}  ${account_id}   ${apptid1}   ${data}  ${pdffile}  ${jpgfile}
     Log  ${resp.content}
@@ -985,9 +1086,11 @@ JD-TC-SubmitQuestionnaireForAppointment-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
 
@@ -1023,15 +1126,30 @@ JD-TC-SubmitQuestionnaireForAppointment-5
     Set Suite Variable  ${Questionnaireid5}  ${qns.json()['questionnaireId']}
    
     # clear_appt_schedule   ${PUSERNAME18}
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    IF   '${resp.content}' == '${emptylist}'
+        ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${sch_id}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
+    END
 
+    ${schedule_services}=  Create List
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+    FOR  ${service}  IN  @{resp.json()['services']}
+        Append To List  ${schedule_services}  ${service['id']}
+    END
+    IF   ${s_id} not in @{schedule_services}
+        ${resp}=  Update Schedule data  ${sch_id}  ${resp.json()[0]}  ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.content}
@@ -1048,10 +1166,24 @@ JD-TC-SubmitQuestionnaireForAppointment-5
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
 
-    ${resp}=  AddCustomer  ${CUSERNAME8} 
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}   ${resp.json()}
+    # ${resp}=  AddCustomer  ${CUSERNAME8} 
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${cid}   ${resp.json()}
+
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME8}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
+        ${resp1}=  AddCustomer  ${CUSERNAME8}  
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Suite Variable  ${cid}   ${resp1.json()}
+    ELSE
+        Set Suite Variable  ${cid}  ${resp.json()[0]['id']}
+    END
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -1092,18 +1224,18 @@ JD-TC-SubmitQuestionnaireForAppointment-5
     # Should Be Equal As Strings  ${resp.status_code}  200 
     # Set Test Variable  ${fname}   ${resp.json()['firstName']}
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME11}    ${account_id}
+    ${resp}=    Send Otp For Login    ${CUSERNAME8}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login    ${CUSERNAME11}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login    ${CUSERNAME8}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1121,9 +1253,12 @@ JD-TC-SubmitQuestionnaireForAppointment-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME8}   ${PASSWORD}
+    # ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME8}   ${PASSWORD}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings   ${resp.status_code}    200
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME8}    ${account_id}    ${token}
     Log  ${resp.content}
-    Should Be Equal As Strings   ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Imageupload.CApptQAnsUpload   ${cookie}  ${account_id}   ${apptid1}   ${data}  ${pdffile}
     Log  ${resp.content}
@@ -1173,9 +1308,11 @@ JD-TC-SubmitQuestionnaireForAppointment-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
 
@@ -1183,15 +1320,30 @@ JD-TC-SubmitQuestionnaireForAppointment-UH1
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    IF   '${resp.content}' == '${emptylist}'
+        ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${sch_id}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
+    END
 
+    ${schedule_services}=  Create List
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+    FOR  ${service}  IN  @{resp.json()['services']}
+        Append To List  ${schedule_services}  ${service['id']}
+    END
+    IF   ${s_id} not in @{schedule_services}
+        ${resp}=  Update Schedule data  ${sch_id}  ${resp.json()[0]}  ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -1237,10 +1389,24 @@ JD-TC-SubmitQuestionnaireForAppointment-UH1
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
 
-    ${resp}=  AddCustomer  ${CUSERNAME11}   firstName=${fname}   lastName=${lname}
+    # ${resp}=  AddCustomer  ${CUSERNAME11}   firstName=${fname}   lastName=${lname}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${cid}  ${resp.json()}
+
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME11}  
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${cid}  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
+        ${resp1}=  AddCustomer  ${CUSERNAME11}  firstName=${fname}   lastName=${lname}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Suite Variable  ${cid}   ${resp1.json()}
+    ELSE
+        Set Suite Variable  ${cid}  ${resp.json()[0]['id']}
+    END
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -1338,9 +1504,12 @@ JD-TC-SubmitQuestionnaireForAppointment-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME11}   ${PASSWORD}
+    # ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME11}   ${PASSWORD}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings   ${resp.status_code}    200
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME11}    ${account_id}    ${token}
     Log  ${resp.content}
-    Should Be Equal As Strings   ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Imageupload.CApptQAnsUpload   ${cookie}  ${account_id}   ${apptid1}   ${data}  ${pdffile}  ${jpgfile}
     Log  ${resp.content}
@@ -1395,9 +1564,11 @@ JD-TC-SubmitQuestionnaireForAppointment-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
 
@@ -1405,15 +1576,30 @@ JD-TC-SubmitQuestionnaireForAppointment-UH2
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    IF   '${resp.content}' == '${emptylist}'
+        ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${sch_id}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
+    END
 
+    ${schedule_services}=  Create List
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+    FOR  ${service}  IN  @{resp.json()['services']}
+        Append To List  ${schedule_services}  ${service['id']}
+    END
+    IF   ${s_id} not in @{schedule_services}
+        ${resp}=  Update Schedule data  ${sch_id}  ${resp.json()[0]}  ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -1468,25 +1654,24 @@ JD-TC-SubmitQuestionnaireForAppointment-UH2
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${resp}=  Get Appointment Schedules Consumer  ${account_id}
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()[0]['id']}   ${sch_id}
-
-    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${account_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${sch_id}=  Set Variable  ${resp.json()[0]['scheduleId']}
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            # Set Test Variable   ${a${i}}  ${resp.json()[0]['availableSlots'][${i}]['time']}
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
         END
     END
     ${num_slots}=  Get Length  ${slots}
-    ${j1}=  Random Int  max=${num_slots-1}
-    Set Test Variable   ${slot1}   ${slots[${j1}]}
+    ${j}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot1}   ${slots[${j}]}
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -1495,7 +1680,6 @@ JD-TC-SubmitQuestionnaireForAppointment-UH2
     ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=   Get consumer Appointment By Id   ${account_id}  ${apptid1}
@@ -1513,13 +1697,15 @@ JD-TC-SubmitQuestionnaireForAppointment-UH2
     Log  ${fudata}
     ${data}=  db.QuestionnaireAnswers   ${resp.json()}   ${self}   &{fudata}
     Log  ${data}
-    # ${resp}=  Consumer Validate Questionnaire  ${account_id}  ${data}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
+    
 
-    ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME11}   ${PASSWORD}
+    # ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME11}   ${PASSWORD}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings   ${resp.status_code}    200
+
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME11}    ${account_id}    ${token}
     Log  ${resp.content}
-    Should Be Equal As Strings   ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Imageupload.CApptQAnsUpload   ${cookie}  ${account_id}   ${apptid1}   ${data}  ${pdffile}  ${jpgfile}
     Log  ${resp.content}
@@ -1574,9 +1760,11 @@ JD-TC-SubmitQuestionnaireForAppointment-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
 
@@ -1584,15 +1772,30 @@ JD-TC-SubmitQuestionnaireForAppointment-UH3
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    IF   '${resp.content}' == '${emptylist}'
+        ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${sch_id}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
+    END
 
+    ${schedule_services}=  Create List
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+    FOR  ${service}  IN  @{resp.json()['services']}
+        Append To List  ${schedule_services}  ${service['id']}
+    END
+    IF   ${s_id} not in @{schedule_services}
+        ${resp}=  Update Schedule data  ${sch_id}  ${resp.json()[0]}  ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -1647,25 +1850,24 @@ JD-TC-SubmitQuestionnaireForAppointment-UH3
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${resp}=  Get Appointment Schedules Consumer  ${account_id}
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()[0]['id']}   ${sch_id}
-
-    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${account_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${sch_id}=  Set Variable  ${resp.json()[0]['scheduleId']}
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            # Set Test Variable   ${a${i}}  ${resp.json()[0]['availableSlots'][${i}]['time']}
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
         END
     END
     ${num_slots}=  Get Length  ${slots}
-    ${j1}=  Random Int  max=${num_slots-1}
-    Set Test Variable   ${slot1}   ${slots[${j1}]}
+    ${j}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot1}   ${slots[${j}]}
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -1709,9 +1911,13 @@ JD-TC-SubmitQuestionnaireForAppointment-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME11}   ${PASSWORD}
+    # ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME11}   ${PASSWORD}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings   ${resp.status_code}    200
+
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME11}    ${account_id}    ${token}
     Log  ${resp.content}
-    Should Be Equal As Strings   ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Imageupload.CApptQAnsUpload   ${cookie}  ${account_id}   ${apptid1}   ${modifieddata}  ${pdffile}  ${jpgfile}
     Log  ${resp.content}
@@ -1766,9 +1972,11 @@ JD-TC-SubmitQuestionnaireForAppointment-UH4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
 
@@ -1776,15 +1984,30 @@ JD-TC-SubmitQuestionnaireForAppointment-UH4
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    IF   '${resp.content}' == '${emptylist}'
+        ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${sch_id}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
+    END
 
+    ${schedule_services}=  Create List
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+    FOR  ${service}  IN  @{resp.json()['services']}
+        Append To List  ${schedule_services}  ${service['id']}
+    END
+    IF   ${s_id} not in @{schedule_services}
+        ${resp}=  Update Schedule data  ${sch_id}  ${resp.json()[0]}  ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -1839,25 +2062,24 @@ JD-TC-SubmitQuestionnaireForAppointment-UH4
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${resp}=  Get Appointment Schedules Consumer  ${account_id}
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()[0]['id']}   ${sch_id}
-
-    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${account_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${sch_id}=  Set Variable  ${resp.json()[0]['scheduleId']}
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            # Set Test Variable   ${a${i}}  ${resp.json()[0]['availableSlots'][${i}]['time']}
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
         END
     END
     ${num_slots}=  Get Length  ${slots}
-    ${j1}=  Random Int  max=${num_slots-1}
-    Set Test Variable   ${slot1}   ${slots[${j1}]}
+    ${j}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot1}   ${slots[${j}]}
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -1866,7 +2088,6 @@ JD-TC-SubmitQuestionnaireForAppointment-UH4
     ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=   Get consumer Appointment By Id   ${account_id}  ${apptid1}
@@ -1942,9 +2163,11 @@ JD-TC-SubmitQuestionnaireForAppointment-UH5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
 
@@ -1952,15 +2175,30 @@ JD-TC-SubmitQuestionnaireForAppointment-UH5
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    IF   '${resp.content}' == '${emptylist}'
+        ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${sch_id}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
+    END
 
+    ${schedule_services}=  Create List
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+    FOR  ${service}  IN  @{resp.json()['services']}
+        Append To List  ${schedule_services}  ${service['id']}
+    END
+    IF   ${s_id} not in @{schedule_services}
+        ${resp}=  Update Schedule data  ${sch_id}  ${resp.json()[0]}  ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -2015,25 +2253,24 @@ JD-TC-SubmitQuestionnaireForAppointment-UH5
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${resp}=  Get Appointment Schedules Consumer  ${account_id}
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()[0]['id']}   ${sch_id}
-
-    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${account_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${sch_id}=  Set Variable  ${resp.json()[0]['scheduleId']}
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            # Set Test Variable   ${a${i}}  ${resp.json()[0]['availableSlots'][${i}]['time']}
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
         END
     END
     ${num_slots}=  Get Length  ${slots}
-    ${j1}=  Random Int  max=${num_slots-1}
-    Set Test Variable   ${slot1}   ${slots[${j1}]}
+    ${j}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot1}   ${slots[${j}]}
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -2042,7 +2279,6 @@ JD-TC-SubmitQuestionnaireForAppointment-UH5
     ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=   Get consumer Appointment By Id   ${account_id}  ${apptid1}
@@ -2064,9 +2300,7 @@ JD-TC-SubmitQuestionnaireForAppointment-UH5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME11}   ${PASSWORD}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings   ${resp.status_code}    200
+    
     ${cookie_val}   Generate_random_value  size=32  chars=string.digits
     ${cookie}   Create Dictionary  JSESSIONYNW=${cookie_val}
 
@@ -2178,9 +2412,11 @@ JD-TC-SubmitQuestionnaireForAppointment-6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
 
@@ -2188,15 +2424,30 @@ JD-TC-SubmitQuestionnaireForAppointment-6
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    IF   '${resp.content}' == '${emptylist}'
+        ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${sch_id}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
+    END
 
+    ${schedule_services}=  Create List
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+    FOR  ${service}  IN  @{resp.json()['services']}
+        Append To List  ${schedule_services}  ${service['id']}
+    END
+    IF   ${s_id} not in @{schedule_services}
+        ${resp}=  Update Schedule data  ${sch_id}  ${resp.json()[0]}  ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -2256,25 +2507,43 @@ JD-TC-SubmitQuestionnaireForAppointment-6
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${resp}=  Get Appointment Schedules Consumer  ${account_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()[0]['id']}   ${sch_id}
+    # ${resp}=  Get Appointment Schedules Consumer  ${account_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Should Be Equal As Strings  ${resp.json()[0]['id']}   ${sch_id}
 
-    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${account_id}
+    # ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${account_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    # @{slots}=  Create List
+    # FOR   ${i}  IN RANGE   0   ${no_of_slots}
+    #     IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+    #         Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+    #     END
+    # END
+    # ${num_slots}=  Get Length  ${slots}
+    # ${j1}=  Random Int  max=${num_slots-1}
+    # Set Test Variable   ${slot1}   ${slots[${j1}]}
+
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${sch_id}=  Set Variable  ${resp.json()[0]['scheduleId']}
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            # Set Test Variable   ${a${i}}  ${resp.json()[0]['availableSlots'][${i}]['time']}
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
         END
     END
     ${num_slots}=  Get Length  ${slots}
-    ${j1}=  Random Int  max=${num_slots-1}
-    Set Test Variable   ${slot1}   ${slots[${j1}]}
+    ${j}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot1}   ${slots[${j}]}
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -2283,7 +2552,6 @@ JD-TC-SubmitQuestionnaireForAppointment-6
     ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=   Get consumer Appointment By Id   ${account_id}  ${apptid1}
@@ -2308,9 +2576,13 @@ JD-TC-SubmitQuestionnaireForAppointment-6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME11}   ${PASSWORD}
+    # ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME11}   ${PASSWORD}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings   ${resp.status_code}    200
+
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME11}    ${account_id}    ${token}
     Log  ${resp.content}
-    Should Be Equal As Strings   ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Imageupload.CApptQAnsUpload   ${cookie}  ${account_id}   ${apptid1}   ${data}  ${pdffile}  ${jpgfile}  ${mp4file}  ${mp3file}
     Log  ${resp.content}
@@ -2330,20 +2602,20 @@ JD-TC-SubmitQuestionnaireForAppointment-6
 
         Continue For Loop If  '${resp.json()['questionnaire']['questionAnswers'][${i}]['question']['fieldDataType']}' != '${QnrDatatypes[5]}'
 
-        Run Keyword If  '${resp.json()['questionnaire']['questionAnswers'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[5]}' and '${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['answer']['${QnrDatatypes[5]}'][0]['status']}' == '${QnrStatus[0]}'
-        ...    Run Keywords
-        ...    Run Keyword And Continue On Failure  Set Test Variable  ${fileid${j}}  ${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['answer']['${QnrDatatypes[5]}'][0]['uid']}
-        ...    AND  Run Keyword And Continue On Failure  Set Test Variable  ${lblname${j}}  ${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['labelName']}
-        # ...    AND  Run Keyword And Continue On Failure  Consumer Change Answer Status for Appointment  ${lblname${j}}  ${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['labelName']}
-        ${resp1}=   Run Keyword If  '${resp.json()['questionnaire']['questionAnswers'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[5]}' and '${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['answer']['${QnrDatatypes[5]}'][0]['status']}' == '${QnrStatus[0]}'
-        ...   Consumer Change Answer Status for Appointment  ${account_id}  ${apptid1}  ${fileid${j}}  ${lblname${j}}
-        Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.content}
-        Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
-        
-        
-        ${j}=  Set variable if  '${resp.json()['questionnaire']['questionAnswers'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[5]}' and '${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['answer']['${QnrDatatypes[5]}'][0]['status']}' == '${QnrStatus[0]}'
-        ...   ${j+1}    ${j}
-        
+        IF  '${resp.json()["questionnaire"]["questionAnswers"][${i}]["question"]["fieldDataType"]}' == '${QnrDatatypes[5]}' and '${resp.json()["questionnaire"]["questionAnswers"][${i}]["answerLine"]["answer"]["${QnrDatatypes[5]}"][0]["status"]}' == '${QnrStatus[0]}'
+            Set Test Variable    ${fileid${j}}    ${resp.json()["questionnaire"]["questionAnswers"][${i}]["answerLine"]["answer"]["${QnrDatatypes[5]}"][0]["uid"]}
+            Set Test Variable    ${lblname${j}}    ${resp.json()["questionnaire"]["questionAnswers"][${i}]["answerLine"]["labelName"]}
+            ${resp1}=    Consumer Change Answer Status for Appointment    ${account_id}    ${apptid1}    ${fileid${j}}    ${lblname${j}}
+            Log    ${resp1.content}
+            Should Be Equal As Strings    ${resp1.status_code}    200
+        END
+
+        IF    '${resp.json()["questionnaire"]["questionAnswers"][${i}]["question"]["fieldDataType"]}' == '${QnrDatatypes[5]}' and '${resp.json()["questionnaire"]["questionAnswers"][${i}]["answerLine"]["answer"]["${QnrDatatypes[5]}"][0]["status"]}' == '${QnrStatus[0]}'
+            ${j}=    Set Variable    ${j+1}
+        ELSE
+            ${j}=    Set Variable    ${j}
+        END
+
     END
     
     Check Answers   ${resp}  ${data}

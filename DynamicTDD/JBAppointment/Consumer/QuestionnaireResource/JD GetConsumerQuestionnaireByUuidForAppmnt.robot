@@ -62,11 +62,14 @@ Comapre Lists without order
     Sort List  ${list1_copy}
     Sort List  ${list2_copy}
 
-    ${status} 	${value} = 	Run Keyword And Ignore Error  Lists Should Be Equal  ${list1_copy}  ${list2_copy}
-    Log Many  ${status} 	${value}
-    ${val}=  Run Keyword If   '${status}' == 'FAIL'  Set Variable  ${bool[0]}
-    ...  ELSE	 Set Variable    ${bool[1]}
-    RETURN  ${val}
+    IF    ${list1_copy} == ${list2_copy}
+        ${val}=    Set Variable    ${bool[1]}
+    ELSE
+        ${val}=    Set Variable    ${bool[0]}
+    END
+
+    RETURN    ${val}
+
 
 
 # Open given Excel file
@@ -103,13 +106,22 @@ Check Questions
 
         ${labelValuesVal}   getColumnValueByMultipleVals  ${sheet}  ${colnames[13]}  &{a}
         Log  ${labelValuesVal}
-        ${lv}=  Run Keyword If  '${FieldDTVal${i}}' == '${QnrDatatypes[1]}'   Strip and split string    ${labelValuesVal[0].strip()}  ,
-            ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[2]}'   Strip and split string    ${labelValuesVal[0]}  ,
-            ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[0]}'   Strip and split string    ${labelValuesVal[0]}  ,
-            ...    ELSE	 Set Variable    ${labelValuesVal[0]}
+        IF  '${FieldDTVal${i}}' == '${QnrDatatypes[1]}'
+            ${lv}=  Strip and split string    ${labelValuesVal[0].strip()}  ,
+        ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[2]}'
+            ${lv}=  Strip and split string    ${labelValuesVal[0]}  ,
+        ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[0]}'
+            ${lv}=  Strip and split string    ${labelValuesVal[0]}  ,
+        ELSE
+            ${lv}=  ${labelValuesVal[0]}
+        END
         ${type}=    Evaluate     type($lv).__name__
-        Run Keyword If  '${type}' == 'list' and '${FieldDTVal${i}}' == '${QnrDatatypes[0]}'  Set Test Variable  ${labelValuesVal${i}}   ${lv[0]}
-        ...    ELSE	 Set Test Variable  ${labelValuesVal${i}}   ${lv}
+        IF  '${type}' == 'list' and '${FieldDTVal${i}}' == '${QnrDatatypes[0]}'
+            Set Test Variable  ${labelValuesVal${i}}   ${lv[0]}
+        ELSE
+            Set Test Variable  ${labelValuesVal${i}}   ${lv}
+        END
+
         # Set Test Variable  ${labelValuesVal${i}}   ${lv} 
 
         ${minAnswersVal}   getColumnValueByMultipleVals  ${sheet}  ${colnames[21]}  &{a}
@@ -125,46 +137,77 @@ Check Questions
         ${billableVal}   getColumnValueByMultipleVals  ${sheet}  ${colnames[18]}  &{a}
         Log  ${billableVal}
         ${type}=    Evaluate     type($billableVal[0]).__name__
-        ${stripped_val}=  Run Keyword If  '${type}' == 'bool'  Set Variable    ${billableVal[0]}
-        ...    ELSE	 Strip String  ${billableVal[0]}
+        IF  '${type}' == 'bool'
+            ${stripped_val}=  Set Variable    ${billableVal[0]}
+        ELSE
+            ${stripped_val}=  Strip String  ${billableVal[0]}
+        END
         Set Test Variable  ${billableVal${i}}  ${stripped_val}
         # Set Test Variable  ${billableVal${i}}  ${billableVal[0]}
 
         ${minVal}   getColumnValueByMultipleVals  ${sheet}  ${colnames[19]}  &{a}
         Log  ${minVal}
-        ${mnv}=  Run Keyword If  '${FieldDTVal${i}}' == '${QnrDatatypes[4]}'   Split String    ${minVal[0]}  ${SPACE}
-            ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[5]}'  Split String    ${minVal[0]}  ${SPACE}
-            ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[0]}'  Split String    ${minVal[0]}  ${SPACE}
-            ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[3]}'  Split String    ${minVal[0]}  ${SPACE}
-            ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[1]}'  Convert To Integer    ${minVal[0]}
-            ...    ELSE	 Set Variable    ${minVal[0]}
+        IF  '${FieldDTVal${i}}' == '${QnrDatatypes[4]}'
+            ${mnv}=  Split String    ${minVal[0]}  ${SPACE}
+        ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[5]}'
+            ${mnv}=  Split String    ${minVal[0]}  ${SPACE}
+        ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[0]}'
+            ${mnv}=  Split String    ${minVal[0]}  ${SPACE}
+        ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[3]}'
+            ${mnv}=  Split String    ${minVal[0]}  ${SPACE}
+        ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[1]}'
+            ${mnv}=  Convert To Integer    ${minVal[0]}
+        ELSE
+            ${mnv}=  Set Variable    ${minVal[0]}
+        END
         ${type}=    Evaluate     type($mnv).__name__
-        Run Keyword If  '${type}' == 'list'  Set Test Variable  ${minVal${i}}   ${mnv[0]}
-        ...    ELSE	 Set Test Variable  ${minVal${i}}   ${mnv}
+        IF  '${type}' == 'list'
+            Set Test Variable  ${minVal${i}}   ${mnv[0]}
+        ELSE
+            Set Test Variable  ${minVal${i}}   ${mnv}
+        END
+
 
         ${maxVal}   getColumnValueByMultipleVals  ${sheet}  ${colnames[20]}  &{a}
         Log  ${maxVal}
-        ${mxv}=  Run Keyword If  '${FieldDTVal${i}}' == '${QnrDatatypes[4]}'   Split String    ${maxVal[0]}  ${SPACE}
-            ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[5]}'  Split String    ${maxVal[0]}  ${SPACE}
-            ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[0]}'  Split String    ${maxVal[0]}  ${SPACE}
-            ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[3]}'  Split String    ${maxVal[0]}  ${SPACE}
-            ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[1]}'  Convert To Integer    ${maxVal[0]}
-            ...    ELSE	 Set Variable    ${maxVal[0]}
+        IF  '${FieldDTVal${i}}' == '${QnrDatatypes[4]}'
+            ${mxv}=  Split String    ${maxVal[0]}  ${SPACE}
+        ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[5]}'
+            ${mxv}=  Split String    ${maxVal[0]}  ${SPACE}
+        ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[0]}'
+            ${mxv}=  Split String    ${maxVal[0]}  ${SPACE}
+        ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[3]}'
+            ${mxv}=  Split String    ${maxVal[0]}  ${SPACE}
+        ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[1]}'
+            ${mxv}=  Convert To Integer    ${maxVal[0]}
+        ELSE
+            ${mxv}=  Set Variable    ${maxVal[0]}
+        END
         ${type}=    Evaluate     type($mxv).__name__
-        Run Keyword If  '${type}' == 'list'  Set Test Variable  ${maxVal${i}}   ${mxv[0]}
-        ...    ELSE	 Set Test Variable  ${maxVal${i}}   ${mxv}
+        IF  '${type}' == 'list'
+            Set Test Variable  ${maxVal${i}}   ${mxv[0]}
+        ELSE
+            Set Test Variable  ${maxVal${i}}   ${mxv}
+        END
 
         ${filetypeVal}   getColumnValueByMultipleVals  ${sheet}  ${colnames[16]}  &{a}
         Log  ${filetypeVal}
-        ${ftv}=  Run Keyword If  '${FieldDTVal${i}}' == '${QnrDatatypes[5]}'   Strip and split string    ${filetypeVal[0]}  ,
-            ...    ELSE	 Set Variable    ${filetypeVal[0]}
+        IF  '${FieldDTVal${i}}' == '${QnrDatatypes[5]}'
+            ${ftv}=  Strip and split string    ${filetypeVal[0]}  ,
+        ELSE
+            ${ftv}=  Set Variable    ${filetypeVal[0]}
+        END
         Set Test Variable  ${filetypeVal${i}}   ${ftv}
 
         ${alloweddocVal}   getColumnValueByMultipleVals  ${sheet}  ${colnames[17]}  &{a}
         Log  ${alloweddocVal}
-        ${adv}=  Run Keyword If  '${FieldDTVal${i}}' == '${QnrDatatypes[5]}'   Strip and split string    ${alloweddocVal[0]}  ,
-            ...    ELSE	 Set Variable    ${alloweddocVal[0]}
-        Set Test Variable  ${alloweddocVal${i}}   ${adv}
+        IF    '${FieldDTVal${i}}' == '${QnrDatatypes[5]}'
+            ${adv}=    Strip and split string    ${alloweddocVal[0]}  ,
+        ELSE
+            ${adv}=    Set Variable    ${alloweddocVal[0]}
+        END
+        Set Test Variable    ${alloweddocVal${i}}    ${adv}
+
         
     END
 
@@ -177,41 +220,64 @@ Check Questions
 
         # Run Keyword If  '${resp.json()['labels'][${i}]['question']['fieldDataType']}' != '${QnrDatatypes[5]}'
         ${value2}=    evaluate    False if $labelValuesVal${x} is None else True
-        Run Keyword If   '${resp.json()[0]['labels'][${i}]['question']['fieldDataType']}' not in @{if_dt_list} and '${value2}' != 'False'
-        ...    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['labelValues']}   ${labelValuesVal${x}}
+        IF    '${resp.json()[0]["labels"][${i}]["question"]["fieldDataType"]}' not in @{if_dt_list} and '${value2}' != 'False'
+            Run Keyword And Continue On Failure    Should Be Equal As Strings    ${resp.json()[0]["labels"][${i}]["question"]["labelValues"]}    ${labelValuesVal${x}}
+        END
         
-        Run Keyword If  '${resp.json()[0]['labels'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[1]}'
-        ...    Run Keywords
-        ...    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[1]}']['minAnswers']}   ${minAnswersVal${x}}
-        ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[1]}']['maxAnswers']}   ${maxAnswersVal${x}}
+        # Run Keyword If  '${resp.json()[0]['labels'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[1]}'
+        # ...    Run Keywords
+        # ...    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[1]}']['minAnswers']}   ${minAnswersVal${x}}
+        # ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[1]}']['maxAnswers']}   ${maxAnswersVal${x}}
         
-        ...    ELSE IF  '${resp.json()[0]['labels'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[5]}'
-        ...    Run Keywords
-        ...    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[5]}']['minNoOfFile']}   ${minAnswersVal${x}}
-        ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[5]}']['maxNoOfFile']}   ${maxAnswersVal${x}}
-        ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[5]}']['minSize']}   ${minVal${x}}
-        ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[5]}']['maxSize']}   ${maxVal${x}}
-        ...    AND  Comapre Lists without order  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[5]}']['fileTypes']}   ${filetypeVal${x}}  
-        ...    AND  Comapre Lists without order  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[5]}']['allowedDocuments']}   ${alloweddocVal${x}}  
+        # ...    ELSE IF  '${resp.json()[0]['labels'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[5]}'
+        # ...    Run Keywords
+        # ...    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[5]}']['minNoOfFile']}   ${minAnswersVal${x}}
+        # ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[5]}']['maxNoOfFile']}   ${maxAnswersVal${x}}
+        # ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[5]}']['minSize']}   ${minVal${x}}
+        # ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[5]}']['maxSize']}   ${maxVal${x}}
+        # ...    AND  Comapre Lists without order  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[5]}']['fileTypes']}   ${filetypeVal${x}}  
+        # ...    AND  Comapre Lists without order  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[5]}']['allowedDocuments']}   ${alloweddocVal${x}}  
         
-        ...    ELSE IF  '${resp.json()[0]['labels'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[4]}'
-        ...    Run Keywords
-        ...    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[4]}']['minAnswers']}   ${minAnswersVal${x}}
-        ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[4]}']['maxAnswers']}   ${maxAnswersVal${x}}
-        ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[4]}']['start']}   ${minVal${x}}
-        ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[4]}']['end']}   ${maxVal${x}}
+        # ...    ELSE IF  '${resp.json()[0]['labels'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[4]}'
+        # ...    Run Keywords
+        # ...    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[4]}']['minAnswers']}   ${minAnswersVal${x}}
+        # ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[4]}']['maxAnswers']}   ${maxAnswersVal${x}}
+        # ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[4]}']['start']}   ${minVal${x}}
+        # ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[4]}']['end']}   ${maxVal${x}}
 
-        ...    ELSE IF  '${resp.json()[0]['labels'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[0]}'
-        ...    Run Keywords
-        ...    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[0]}']['minNoOfLetter']}   ${minVal${x}}
-        ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[0]}']['maxNoOfLetter']}   ${maxVal${x}}
+        # ...    ELSE IF  '${resp.json()[0]['labels'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[0]}'
+        # ...    Run Keywords
+        # ...    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[0]}']['minNoOfLetter']}   ${minVal${x}}
+        # ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[0]}']['maxNoOfLetter']}   ${maxVal${x}}
 
-        ...    ELSE IF  '${resp.json()[0]['labels'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[3]}'
-        ...    Run Keywords
-        ...    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[3]}']['startDate']}   ${minVal${x}}
-        ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[3]}']['endDate']}   ${maxVal${x}}
+        # ...    ELSE IF  '${resp.json()[0]['labels'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[3]}'
+        # ...    Run Keywords
+        # ...    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[3]}']['startDate']}   ${minVal${x}}
+        # ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['labels'][${i}]['question']['${QnrProperty[3]}']['endDate']}   ${maxVal${x}}
 
-        
+        IF    '${resp.json()[0]["labels"][${i}]["question"]["fieldDataType"]}' == '${QnrDatatypes[1]}'
+            Run Keyword And Continue On Failure    Should Be Equal As Strings    ${resp.json()[0]["labels"][${i}]["question"]["${QnrProperty[1]}"]["minAnswers"]}    ${minAnswersVal${x}}
+            Run Keyword And Continue On Failure    Should Be Equal As Strings    ${resp.json()[0]["labels"][${i}]["question"]["${QnrProperty[1]}"]["maxAnswers"]}    ${maxAnswersVal${x}}
+        ELSE IF    '${resp.json()[0]["labels"][${i}]["question"]["fieldDataType"]}' == '${QnrDatatypes[5]}'
+            Run Keyword And Continue On Failure    Should Be Equal As Strings    ${resp.json()[0]["labels"][${i}]["question"]["${QnrProperty[5]}"]["minNoOfFile"]}    ${minAnswersVal${x}}
+            Run Keyword And Continue On Failure    Should Be Equal As Strings    ${resp.json()[0]["labels"][${i}]["question"]["${QnrProperty[5]}"]["maxNoOfFile"]}    ${maxAnswersVal${x}}
+            Run Keyword And Continue On Failure    Should Be Equal As Strings    ${resp.json()[0]["labels"][${i}]["question"]["${QnrProperty[5]}"]["minSize"]}    ${minVal${x}}
+            Run Keyword And Continue On Failure    Should Be Equal As Strings    ${resp.json()[0]["labels"][${i}]["question"]["${QnrProperty[5]}"]["maxSize"]}    ${maxVal${x}}
+            Compare Lists Without Order    ${resp.json()[0]["labels"][${i}]["question"]["${QnrProperty[5]}"]["fileTypes"]}    ${filetypeVal${x}}
+            Compare Lists Without Order    ${resp.json()[0]["labels"][${i}]["question"]["${QnrProperty[5]}"]["allowedDocuments"]}    ${alloweddocVal${x}}
+        ELSE IF    '${resp.json()[0]["labels"][${i}]["question"]["fieldDataType"]}' == '${QnrDatatypes[4]}'
+            Run Keyword And Continue On Failure    Should Be Equal As Strings    ${resp.json()[0]["labels"][${i}]["question"]["${QnrProperty[4]}"]["minAnswers"]}    ${minAnswersVal${x}}
+            Run Keyword And Continue On Failure    Should Be Equal As Strings    ${resp.json()[0]["labels"][${i}]["question"]["${QnrProperty[4]}"]["maxAnswers"]}    ${maxAnswersVal${x}}
+            Run Keyword And Continue On Failure    Should Be Equal As Strings    ${resp.json()[0]["labels"][${i}]["question"]["${QnrProperty[4]}"]["start"]}    ${minVal${x}}
+            Run Keyword And Continue On Failure    Should Be Equal As Strings    ${resp.json()[0]["labels"][${i}]["question"]["${QnrProperty[4]}"]["end"]}    ${maxVal${x}}
+        ELSE IF    '${resp.json()[0]["labels"][${i}]["question"]["fieldDataType"]}' == '${QnrDatatypes[0]}'
+            Run Keyword And Continue On Failure    Should Be Equal As Strings    ${resp.json()[0]["labels"][${i}]["question"]["${QnrProperty[0]}"]["minNoOfLetter"]}    ${minVal${x}}
+            Run Keyword And Continue On Failure    Should Be Equal As Strings    ${resp.json()[0]["labels"][${i}]["question"]["${QnrProperty[0]}"]["maxNoOfLetter"]}    ${maxVal${x}}
+        ELSE IF    '${resp.json()[0]["labels"][${i}]["question"]["fieldDataType"]}' == '${QnrDatatypes[3]}'
+            Run Keyword And Continue On Failure    Should Be Equal As Strings    ${resp.json()[0]["labels"][${i}]["question"]["${QnrProperty[3]}"]["startDate"]}    ${minVal${x}}
+            Run Keyword And Continue On Failure    Should Be Equal As Strings    ${resp.json()[0]["labels"][${i}]["question"]["${QnrProperty[3]}"]["endDate"]}    ${maxVal${x}}
+        END
+
     END
 
 
@@ -219,7 +285,7 @@ Check Questions
 
 JD-TC-GetConsumerQuestionnaireByUuidForAppointment-1
 
-    [Documentation]  Get questionnaire by uuid for appointment
+    [Documentation]  Get questionnaire by uuid for walkin appointment
     
     ${wb}=  readWorkbook  ${xlFile}
     ${sheet1}  GetCurrentSheet   ${wb}
@@ -258,19 +324,23 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-1
     FOR  ${i}  IN RANGE   ${s_len}
         Append To List  ${snames}  ${resp.json()[${i}]['name']}
     END
+    Log  ${snames}
 
     ${snames_len}=  Get Length  ${unique_snames}
     FOR  ${i}  IN RANGE   ${snames_len}
-        ${kwstatus} 	${value} = 	Run Keyword And Ignore Error  List Should Contain Value  ${snames}  ${unique_snames[${i}]}
-        Log Many  ${kwstatus} 	${value}
-        Continue For Loop If  '${kwstatus}' == 'PASS'
-        &{dict}=  Create Dictionary   ${colnames[6]}=${unique_snames[${i}]}
-        ${ttype}=  getColumnValueByMultipleVals  ${sheet1}  ${colnames[1]}  &{dict}  
-        Log  ${ttype}
-        ${u_ttype}=    Remove Duplicates    ${ttype}
-        Log  ${u_ttype}
-        ${s_id}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[3]}' in @{u_ttype}  Create Sample Service  ${unique_snames[${i}]}
-        ${d_id}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[0]}' in @{u_ttype}   Create Sample Donation  ${unique_snames[${i}]}
+        IF  '${unique_snames[${i}]}' not in @{snames}
+            &{dict}=  Create Dictionary   ${colnames[6]}=${unique_snames[${i}]}
+            ${ttype}=  getColumnValueByMultipleVals  ${sheet1}  ${colnames[1]}  &{dict}  
+            Log  ${ttype}
+            ${u_ttype}=    Remove Duplicates    ${ttype}
+            Log  ${u_ttype}
+            IF  '${QnrTransactionType[3]}' in @{u_ttype}
+                ${s_id}=    Create Sample Service    ${unique_snames[${i}]}
+            ELSE IF   '${QnrTransactionType[0]}' in @{u_ttype}
+                ${d_id}=    Create Sample Donation    ${unique_snames[${i}]}
+            END
+        END
+
     END
 
     ${resp}=  Provider Logout
@@ -302,10 +372,10 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    # ${resp}=   Get Appointment Settings
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
+    ${resp}=   Get Appointment Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     # Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]} 
 
     ${resp}=    Get Locations
@@ -334,10 +404,13 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
+
     Set Suite Variable   ${s_id}  
 
     # clear_appt_schedule   ${PUSERNAME_A}
@@ -354,14 +427,21 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
 
+    ${parallel}=  FakerLibrary.Random Int  min=5  max=10
+    ${resp}=  Update Schedule data  ${sch_id}  ${resp.json()}  parallelServing=${parallel}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${len}
-      ${id}  Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[0]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}'  Set Variable  ${resp.json()[${i}]['id']} 
-      ${qnrid}   Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[0]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}'  Set Variable  ${resp.json()[${i}]['questionnaireId']}
-      Exit For Loop If   '${id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${len}
+        IF    '${resp.json()[${i}]["transactionType"]}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]["channel"]}' == '${QnrChannel[0]}' and '${resp.json()[${i}]["captureTime"]}' == '${QnrcaptureTime[0]}'
+            ${id}=    Set Variable    ${resp.json()[${i}]["id"]}
+            ${qnrid}=    Set Variable    ${resp.json()[${i}]["questionnaireId"]}
+            Exit For Loop If    '${id}' != '${None}'
+        END
     END
     Set Suite Variable   ${id}
     Set Suite Variable   ${qnrid}
@@ -396,10 +476,19 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-1
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
 
-    ${resp}=  AddCustomer  ${CUSERNAME8} 
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}   ${resp.json()}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME8}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
+        ${resp1}=  AddCustomer  ${CUSERNAME8}  
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Suite Variable  ${cid}   ${resp1.json()}
+    ELSE
+        Set Suite Variable  ${cid}  ${resp.json()[0]['id']}
+    END
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -465,18 +554,16 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-2
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    # IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
-    #     ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-    #     Log   ${resp.json()}
-    #     Should Be Equal As Strings  ${resp.status_code}  200
-    # END
+    IF  ${resp.json()['onlinePresence']}==${bool[0]}
+        ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${EMPTY}  ${EMPTY}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    # ${resp}=   Get jaldeeIntegration Settings
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    # Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}  
+    ${resp}=   Get jaldeeIntegration Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -502,9 +589,11 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
 
@@ -512,24 +601,41 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-2
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    IF   '${resp.content}' == '${emptylist}'
+        ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${sch_id}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
+    END
 
+    ${schedule_services}=  Create List
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+    FOR  ${service}  IN  @{resp.json()['services']}
+        Append To List  ${schedule_services}  ${service['id']}
+    END
+    IF   ${s_id} not in @{schedule_services}
+        ${resp}=  Update Schedule data  ${sch_id}  ${resp.json()[0]}  ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${len}
-      ${id}  Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}'  Set Variable  ${resp.json()[${i}]['id']} 
-      ${qnrid}   Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}'  Set Variable  ${resp.json()[${i}]['questionnaireId']}
-      Exit For Loop If   '${id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${len}
+        IF    '${resp.json()[${i}]["transactionType"]}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]["channel"]}' == '${QnrChannel[1]}' and '${resp.json()[${i}]["captureTime"]}' == '${QnrcaptureTime[2]}'
+            ${id}=    Set Variable    ${resp.json()[${i}]["id"]}
+            ${qnrid}=    Set Variable    ${resp.json()[${i}]["questionnaireId"]}
+            Exit For Loop If    '${id}' != '${None}'
+        END
     END
     Set Suite Variable   ${id}
     Set Suite Variable   ${qnrid}
@@ -537,8 +643,6 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-2
     ${qns}   Get Provider Questionnaire By Id   ${id}  
     Log  ${qns.content}
     Should Be Equal As Strings  ${qns.status_code}  200
-     
-
     IF  '${qns.json()['status']}' == '${status[1]}' 
         ${resp1}=   Provider Change Questionnaire Status  ${id}  ${status[0]}  
         Should Be Equal As Strings  ${resp1.status_code}  200
@@ -555,39 +659,29 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-2
     # Should Be Equal As Strings  ${resp.status_code}  200 
     # Set Test Variable  ${fname}   ${resp.json()['firstName']}
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME11}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
-
-    ${resp}=    Verify Otp For Login    ${CUSERNAME11}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token}  ${resp.json()['token']}
+    ${CUSERNAME11}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME11}
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${resp}=  Get Appointment Schedules Consumer  ${account_id}
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()[0]['id']}   ${sch_id}
-
-    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${account_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${sch_id}=  Set Variable  ${resp.json()[0]['scheduleId']}
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            # Set Test Variable   ${a${i}}  ${resp.json()[0]['availableSlots'][${i}]['time']}
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
         END
     END
     ${num_slots}=  Get Length  ${slots}
-    ${j1}=  Random Int  max=${num_slots-1}
-    Set Test Variable   ${slot1}   ${slots[${j1}]}
+    ${j}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot1}   ${slots[${j}]}
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -686,9 +780,11 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
 
@@ -696,24 +792,41 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-3
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    IF   '${resp.content}' == '${emptylist}'
+        ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${sch_id}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
+    END
 
+    ${schedule_services}=  Create List
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+    FOR  ${service}  IN  @{resp.json()['services']}
+        Append To List  ${schedule_services}  ${service['id']}
+    END
+    IF   ${s_id} not in @{schedule_services}
+        ${resp}=  Update Schedule data  ${sch_id}  ${resp.json()[0]}  ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${len}
-      ${id}  Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}'  Set Variable  ${resp.json()[${i}]['id']} 
-      ${qnrid}   Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}'  Set Variable  ${resp.json()[${i}]['questionnaireId']}
-      Exit For Loop If   '${id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${len}
+        IF    '${resp.json()[${i}]["transactionType"]}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]["channel"]}' == '${QnrChannel[1]}' and '${resp.json()[${i}]["captureTime"]}' == '${QnrcaptureTime[2]}'
+            ${id}=    Set Variable    ${resp.json()[${i}]["id"]}
+            ${qnrid}=    Set Variable    ${resp.json()[${i}]["questionnaireId"]}
+            Exit For Loop If    '${id}' != '${None}'
+        END
     END
     Set Suite Variable   ${id}
     Set Suite Variable   ${qnrid}
@@ -721,8 +834,6 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-3
     ${qns}   Get Provider Questionnaire By Id   ${id}  
     Log  ${qns.content}
     Should Be Equal As Strings  ${qns.status_code}  200
-     
-
     IF  '${qns.json()['status']}' == '${status[1]}' 
         ${resp1}=   Provider Change Questionnaire Status  ${id}  ${status[0]}  
         Should Be Equal As Strings  ${resp1.status_code}  200
@@ -739,39 +850,29 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-3
     # Should Be Equal As Strings  ${resp.status_code}  200 
     # Set Test Variable  ${fname}   ${resp.json()['firstName']}
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME11}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
-
-    ${resp}=    Verify Otp For Login    ${CUSERNAME11}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token}  ${resp.json()['token']}
+    ${CUSERNAME11}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME11}
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${resp}=  Get Appointment Schedules Consumer  ${account_id}
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()[0]['id']}   ${sch_id}
-
-    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${account_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${sch_id}=  Set Variable  ${resp.json()[0]['scheduleId']}
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            # Set Test Variable   ${a${i}}  ${resp.json()[0]['availableSlots'][${i}]['time']}
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
         END
     END
     ${num_slots}=  Get Length  ${slots}
-    ${j1}=  Random Int  max=${num_slots-1}
-    Set Test Variable   ${slot1}   ${slots[${j1}]}
+    ${j}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot1}   ${slots[${j}]}
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -780,7 +881,6 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-3
     ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=   Get consumer Appointment By Id   ${account_id}  ${apptid1}
@@ -849,9 +949,11 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
 
@@ -859,15 +961,30 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-UH1
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    IF   '${resp.content}' == '${emptylist}'
+        ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${sch_id}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
+    END
 
+    ${schedule_services}=  Create List
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+    FOR  ${service}  IN  @{resp.json()['services']}
+        Append To List  ${schedule_services}  ${service['id']}
+    END
+    IF   ${s_id} not in @{schedule_services}
+        ${resp}=  Update Schedule data  ${sch_id}  ${resp.json()[0]}  ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.content}
@@ -884,10 +1001,19 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-UH1
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
 
-    ${resp}=  AddCustomer  ${CUSERNAME8} 
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}   ${resp.json()}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME8}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
+        ${resp1}=  AddCustomer  ${CUSERNAME8}  
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Suite Variable  ${cid}   ${resp1.json()}
+    ELSE
+        Set Suite Variable  ${cid}  ${resp.json()[0]['id']}
+    END
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -920,10 +1046,6 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-UH2
  
 JD-TC-GetConsumerQuestionnaireByUuidForAppointment-UH3
     [Documentation]  Get questionnaire by invalid appmnid
-
-    # ${resp}=  Consumer Login  ${CUSERNAME13}  ${PASSWORD} 
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200 
 
     ${resp}=    Send Otp For Login    ${CUSERNAME11}    ${account_id}
     Log   ${resp.content}

@@ -173,9 +173,11 @@ JD-TC-SubmitQuestionnaireForWaitlist-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}
 
@@ -183,6 +185,8 @@ JD-TC-SubmitQuestionnaireForWaitlist-1
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
         ${resp1}=  AddCustomer  ${CUSERNAME1}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
@@ -291,9 +295,11 @@ JD-TC-SubmitQuestionnaireForWaitlist-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
 
@@ -442,9 +448,11 @@ JD-TC-SubmitQuestionnaireForWaitlist-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
 
@@ -602,9 +610,11 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
 
@@ -740,9 +750,11 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
 
@@ -870,9 +882,11 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
 
@@ -1079,9 +1093,11 @@ JD-TC-SubmitQuestionnaireForWaitlist-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}
 
@@ -1222,9 +1238,11 @@ JD-TC-SubmitQuestionnaireForWaitlist-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
 
@@ -1275,9 +1293,11 @@ JD-TC-SubmitQuestionnaireForWaitlist-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}
 
@@ -1285,6 +1305,8 @@ JD-TC-SubmitQuestionnaireForWaitlist-5
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
         ${resp1}=  AddCustomer  ${CUSERNAME13}  
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
@@ -1384,9 +1406,11 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
 

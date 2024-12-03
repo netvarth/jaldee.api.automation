@@ -58,10 +58,11 @@ Comapre Lists without order
     Sort List  ${list1_copy}
     Sort List  ${list2_copy}
 
-    ${status} 	${value} = 	Run Keyword And Ignore Error  Lists Should Be Equal  ${list1_copy}  ${list2_copy}
-    Log Many  ${status} 	${value}
-    ${val}=  Run Keyword If   '${status}' == 'FAIL'  Set Variable  ${bool[0]}
-    ...  ELSE	 Set Variable    ${bool[1]}
+    IF    ${list1_copy} == ${list2_copy}
+        ${val}=    Set Variable    ${bool[1]}
+    ELSE
+        ${val}=    Set Variable    ${bool[0]}
+    END
     RETURN  ${val}
 
 
@@ -325,9 +326,11 @@ JD-TC-GetQuestionnaireforConsumer-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
 
     ${fname}=  generate_firstname
@@ -506,9 +509,11 @@ JD-TC-GetQuestionnaireforConsumer-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable    ${s_id} 
     
@@ -621,9 +626,11 @@ JD-TC-GetQuestionnaireforConsumer-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
 
     ${fname}=  generate_firstname
@@ -705,9 +712,11 @@ JD-TC-GetQuestionnaireforConsumer-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
 
     ${fname}=  generate_firstname

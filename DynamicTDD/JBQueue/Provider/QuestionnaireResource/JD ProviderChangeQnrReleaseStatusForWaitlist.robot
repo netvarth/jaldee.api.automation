@@ -60,10 +60,11 @@ Comapre Lists without order
     Sort List  ${list1_copy}
     Sort List  ${list2_copy}
 
-    ${status} 	${value} = 	Run Keyword And Ignore Error  Lists Should Be Equal  ${list1_copy}  ${list2_copy}
-    Log Many  ${status} 	${value}
-    ${val}=  Run Keyword If   '${status}' == 'FAIL'  Set Variable  ${bool[0]}
-    ...  ELSE	 Set Variable    ${bool[1]}
+    IF    ${list1_copy} == ${list2_copy}
+        ${val}=    Set Variable    ${bool[1]}
+    ELSE
+        ${val}=    Set Variable    ${bool[0]}
+    END
     RETURN  ${val}
 
 
@@ -197,9 +198,11 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
 
@@ -340,9 +343,11 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
 
@@ -481,9 +486,11 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
 
@@ -495,10 +502,12 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${len}
-      ${id}  Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}'  Set Variable  ${resp.json()[${i}]['id']} 
-      ${qnrid}   Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}'  Set Variable  ${resp.json()[${i}]['questionnaireId']}
-      Exit For Loop If   '${id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${len}
+        IF    '${resp.json()[${i}]["transactionType"]}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]["channel"]}' == '${QnrChannel[1]}' and '${resp.json()[${i}]["captureTime"]}' == '${QnrcaptureTime[2]}'
+            ${id}=    Set Variable    ${resp.json()[${i}]["id"]}
+            ${qnrid}=    Set Variable    ${resp.json()[${i}]["questionnaireId"]}
+            Exit For Loop If    '${id}' != '${None}'
+        END
     END
     Set Suite Variable   ${id}
     Set Suite Variable   ${qnrid}
@@ -668,9 +677,11 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
 
@@ -682,10 +693,12 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${len}
-      ${id}  Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}'  Set Variable  ${resp.json()[${i}]['id']} 
-      ${qnrid}   Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}'  Set Variable  ${resp.json()[${i}]['questionnaireId']}
-      Exit For Loop If   '${id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${len}
+        IF    '${resp.json()[${i}]["transactionType"]}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]["channel"]}' == '${QnrChannel[1]}' and '${resp.json()[${i}]["captureTime"]}' == '${QnrcaptureTime[2]}'
+            ${id}=    Set Variable    ${resp.json()[${i}]["id"]}
+            ${qnrid}=    Set Variable    ${resp.json()[${i}]["questionnaireId"]}
+            Exit For Loop If    '${id}' != '${None}'
+        END
     END
     Set Suite Variable   ${id}
     Set Suite Variable   ${qnrid}
@@ -853,9 +866,11 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
 
@@ -1048,9 +1063,11 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
 
@@ -1062,10 +1079,12 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${len}
-      ${id}  Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}'  Set Variable  ${resp.json()[${i}]['id']} 
-      ${qnrid}   Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}'  Set Variable  ${resp.json()[${i}]['questionnaireId']}
-      Exit For Loop If   '${id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${len}
+        IF    '${resp.json()[${i}]["transactionType"]}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]["channel"]}' == '${QnrChannel[1]}' and '${resp.json()[${i}]["captureTime"]}' == '${QnrcaptureTime[2]}'
+            ${id}=    Set Variable    ${resp.json()[${i}]["id"]}
+            ${qnrid}=    Set Variable    ${resp.json()[${i}]["questionnaireId"]}
+            Exit For Loop If    '${id}' != '${None}'
+        END
     END
     Set Suite Variable   ${id}
     Set Suite Variable   ${qnrid}

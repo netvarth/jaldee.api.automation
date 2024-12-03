@@ -1739,11 +1739,14 @@ JD-TC-AdvancePaymentcalculation-20
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${len}
-      ${id}  Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}'  Set Variable  ${resp.json()[${i}]['id']} 
-      ${qnrid}   Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}'  Set Variable  ${resp.json()[${i}]['questionnaireId']}
-      Exit For Loop If   '${id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${len}
+        IF    '${resp.json()[${i}]["transactionType"]}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]["channel"]}' == '${QnrChannel[1]}' and '${resp.json()[${i}]["captureTime"]}' == '${QnrcaptureTime[2]}'
+            ${id}=    Set Variable    ${resp.json()[${i}]["id"]}
+            ${qnrid}=    Set Variable    ${resp.json()[${i}]["questionnaireId"]}
+            Exit For Loop If    '${id}' != '${None}'
+        END
     END
+
     Set Suite Variable   ${id}
     Set Suite Variable   ${qnrid}
 
@@ -1756,15 +1759,18 @@ JD-TC-AdvancePaymentcalculation-20
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
-    Log         ${resp.content}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Superadmin Change Questionnaire Status  ${id}  ${status[0]}  ${account_id}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF    '${qns.json()["status"]}' == '${status[1]}'
+        ${resp1}=    Superadmin Change Questionnaire Status    ${id}    ${status[0]}    ${account_id}
+        Log    ${resp1.json()}
+        Should Be Equal As Strings    ${resp1.status_code}    200
+    END
+
 
     ${resp}=    SuperAdmin Logout
-    Log         ${resp.content}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -1782,6 +1788,8 @@ JD-TC-AdvancePaymentcalculation-20
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
         ${resp1}=  AddCustomer  ${CUSERNAME4}  firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
@@ -2031,10 +2039,12 @@ JD-TC-AdvancePaymentcalculation-21
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${len}
-      ${id}  Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}'  Set Variable  ${resp.json()[${i}]['id']} 
-      ${qnrid}   Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}'  Set Variable  ${resp.json()[${i}]['questionnaireId']}
-      Exit For Loop If   '${id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${len}
+        IF    '${resp.json()[${i}]["transactionType"]}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]["channel"]}' == '${QnrChannel[1]}' and '${resp.json()[${i}]["captureTime"]}' == '${QnrcaptureTime[2]}'
+            ${id}=    Set Variable    ${resp.json()[${i}]["id"]}
+            ${qnrid}=    Set Variable    ${resp.json()[${i}]["questionnaireId"]}
+            Exit For Loop If    '${id}' != '${None}'
+        END
     END
     Set Suite Variable   ${id}
     Set Suite Variable   ${qnrid}
@@ -2048,15 +2058,17 @@ JD-TC-AdvancePaymentcalculation-21
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
-    Log         ${resp.content}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Superadmin Change Questionnaire Status  ${id}  ${status[0]}  ${account_id}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF    '${qns.json()["status"]}' == '${status[1]}'
+        ${resp1}=    Superadmin Change Questionnaire Status    ${id}    ${status[0]}    ${account_id}
+        Log    ${resp1.json()}
+        Should Be Equal As Strings    ${resp1.status_code}    200
+    END
 
     ${resp}=    SuperAdmin Logout
-    Log         ${resp.content}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -2073,6 +2085,8 @@ JD-TC-AdvancePaymentcalculation-21
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
         ${resp1}=  AddCustomer  ${CUSERNAME4}  firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
@@ -2324,10 +2338,12 @@ JD-TC-AdvancePaymentcalculation-22
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${len}
-      ${id}  Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}'  Set Variable  ${resp.json()[${i}]['id']} 
-      ${qnrid}   Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}'  Set Variable  ${resp.json()[${i}]['questionnaireId']}
-      Exit For Loop If   '${id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${len}
+        IF    '${resp.json()[${i}]["transactionType"]}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]["channel"]}' == '${QnrChannel[1]}' and '${resp.json()[${i}]["captureTime"]}' == '${QnrcaptureTime[2]}'
+            ${id}=    Set Variable    ${resp.json()[${i}]["id"]}
+            ${qnrid}=    Set Variable    ${resp.json()[${i}]["questionnaireId"]}
+            Exit For Loop If    '${id}' != '${None}'
+        END
     END
     Set Suite Variable   ${id}
     Set Suite Variable   ${qnrid}
@@ -2341,15 +2357,17 @@ JD-TC-AdvancePaymentcalculation-22
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
-    Log         ${resp.content}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Superadmin Change Questionnaire Status  ${id}  ${status[0]}  ${account_id}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF    '${qns.json()["status"]}' == '${status[1]}'
+        ${resp1}=    Superadmin Change Questionnaire Status    ${id}    ${status[0]}    ${account_id}
+        Log    ${resp1.json()}
+        Should Be Equal As Strings    ${resp1.status_code}    200
+    END
 
     ${resp}=    SuperAdmin Logout
-    Log         ${resp.content}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
@@ -2366,6 +2384,8 @@ JD-TC-AdvancePaymentcalculation-22
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
         ${resp1}=  AddCustomer  ${CUSERNAME4}  firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
@@ -2649,10 +2669,12 @@ JD-TC-AdvancePaymentcalculation-23
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${len}
-      ${id}  Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}'  Set Variable  ${resp.json()[${i}]['id']} 
-      ${qnrid}   Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}'  Set Variable  ${resp.json()[${i}]['questionnaireId']}
-      Exit For Loop If   '${id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${len}
+        IF    '${resp.json()[${i}]["transactionType"]}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]["channel"]}' == '${QnrChannel[1]}' and '${resp.json()[${i}]["captureTime"]}' == '${QnrcaptureTime[2]}'
+            ${id}=    Set Variable    ${resp.json()[${i}]["id"]}
+            ${qnrid}=    Set Variable    ${resp.json()[${i}]["questionnaireId"]}
+            Exit For Loop If    '${id}' != '${None}'
+        END
     END
     Set Suite Variable   ${id}
     Set Suite Variable   ${qnrid}
@@ -2666,15 +2688,17 @@ JD-TC-AdvancePaymentcalculation-23
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
-    Log         ${resp.content}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Superadmin Change Questionnaire Status  ${id}  ${status[0]}  ${account_id}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF    '${qns.json()["status"]}' == '${status[1]}'
+        ${resp1}=    Superadmin Change Questionnaire Status    ${id}    ${status[0]}    ${account_id}
+        Log    ${resp1.json()}
+        Should Be Equal As Strings    ${resp1.status_code}    200
+    END
 
     ${resp}=    SuperAdmin Logout
-    Log         ${resp.content}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -2691,6 +2715,8 @@ JD-TC-AdvancePaymentcalculation-23
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
         ${resp1}=  AddCustomer  ${CUSERNAME4}  firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200

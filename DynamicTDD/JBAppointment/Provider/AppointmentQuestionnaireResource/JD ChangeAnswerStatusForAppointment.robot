@@ -280,6 +280,8 @@ JD-TC-ChangeAnsStatusForAppt-1
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
         ${resp1}=  AddCustomer  ${CUSERNAME13}  
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
@@ -686,6 +688,8 @@ JD-TC-ChangeAnsStatusForAppt-4
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
         ${resp1}=  AddCustomer  ${CUSERNAME13}  firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
@@ -865,6 +869,8 @@ JD-TC-ChangeAnsStatusForAppt-5
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
         ${resp1}=  AddCustomer  ${CUSERNAME13}  firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
@@ -1015,6 +1021,8 @@ JD-TC-ChangeAnsStatusForAppt-UH1
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
         ${resp1}=  AddCustomer  ${CUSERNAME13}  firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
@@ -1162,6 +1170,8 @@ JD-TC-ChangeAnsStatusForAppt-UH2
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
         ${resp1}=  AddCustomer  ${CUSERNAME13}  firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
@@ -1317,6 +1327,8 @@ JD-TC-ChangeAnsStatusForAppt-UH3
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
         ${resp1}=  AddCustomer  ${CUSERNAME13}  firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
@@ -1467,6 +1479,8 @@ JD-TC-ChangeAnsStatusForAppt-UH4
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
         ${resp1}=  AddCustomer  ${CUSERNAME13}  firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
@@ -1618,6 +1632,8 @@ JD-TC-ChangeAnsStatusForAppt-UH5
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
         ${resp1}=  AddCustomer  ${CUSERNAME13}  firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
@@ -1787,12 +1803,12 @@ JD-TC-ChangeAnsStatusForAppt-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${fname}=  generate_firstname
-    ${lname}=  FakerLibrary.last_name
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME13}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
         ${resp1}=  AddCustomer  ${CUSERNAME13}  firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
@@ -2139,6 +2155,8 @@ JD-TC-ChangeAnsStatusForAppt-6
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
         ${resp1}=  AddCustomer  ${CUSERNAME13}  firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200

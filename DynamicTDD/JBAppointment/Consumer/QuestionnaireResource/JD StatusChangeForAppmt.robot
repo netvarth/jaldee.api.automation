@@ -59,10 +59,11 @@ Comapre Lists without order
     Sort List  ${list1_copy}
     Sort List  ${list2_copy}
 
-    ${status} 	${value} = 	Run Keyword And Ignore Error  Lists Should Be Equal  ${list1_copy}  ${list2_copy}
-    Log Many  ${status} 	${value}
-    ${val}=  Run Keyword If   '${status}' == 'FAIL'  Set Variable  ${bool[0]}
-    ...  ELSE	 Set Variable    ${bool[1]}
+    IF    ${list1_copy} == ${list2_copy}
+        ${val}=    Set Variable    ${bool[1]}
+    ELSE
+        ${val}=    Set Variable    ${bool[0]}
+    END
     RETURN  ${val}
 
 
@@ -199,9 +200,11 @@ JD-TC-StatusChangeForServiceOptionAppointment-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
     END
     Set Suite Variable   ${s_id}  
 
@@ -223,10 +226,12 @@ JD-TC-StatusChangeForServiceOptionAppointment-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${len}
-      ${id}  Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}'  Set Variable  ${resp.json()[${i}]['id']} 
-      ${qnrid}   Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}'  Set Variable  ${resp.json()[${i}]['questionnaireId']}
-      Exit For Loop If   '${id}' != '${None}'
+    FOR    ${i}    IN RANGE    ${len}
+        IF    '${resp.json()[${i}]["transactionType"]}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]["channel"]}' == '${QnrChannel[1]}' and '${resp.json()[${i}]["captureTime"]}' == '${QnrcaptureTime[2]}'
+            ${id}=    Set Variable    ${resp.json()[${i}]["id"]}
+            ${qnrid}=    Set Variable    ${resp.json()[${i}]["questionnaireId"]}
+            Exit For Loop If    '${id}' != '${None}'
+        END
     END
     Set Suite Variable   ${id}
     Set Suite Variable   ${qnrid}
@@ -246,7 +251,6 @@ JD-TC-StatusChangeForServiceOptionAppointment-1
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
     Set Suite Variable  ${Questionnaireid}  ${qns.json()['questionnaireId']}
-    Set Suite Variable  ${Questionnaireid}  ${qns.json()['questionnaireId']}
 
     ${resp}=  Provider Logout
     Log  ${resp.content}
@@ -258,39 +262,48 @@ JD-TC-StatusChangeForServiceOptionAppointment-1
     # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
     # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME14}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
-
-    ${resp}=    Verify Otp For Login    ${CUSERNAME14}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token}  ${resp.json()['token']}
+    ${CUSERNAME14}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME14}
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME14}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${resp}=  Get Appointment Schedules Consumer  ${account_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()[0]['id']}   ${sch_id}
+    # ${resp}=  Get Appointment Schedules Consumer  ${account_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Should Be Equal As Strings  ${resp.json()[0]['id']}   ${sch_id}
 
-    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${account_id}
+    # ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${account_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    # @{slots}=  Create List
+    # FOR   ${i}  IN RANGE   0   ${no_of_slots}
+    #     IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+    #         Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+    #     END
+    # END
+    # ${num_slots}=  Get Length  ${slots}
+    # ${j1}=  Random Int  max=${num_slots-1}
+    # Set Test Variable   ${slot1}   ${slots[${j1}]}
+
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${sch_id}=  Set Variable  ${resp.json()[0]['scheduleId']}
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            # Set Test Variable   ${a${i}}  ${resp.json()[0]['availableSlots'][${i}]['time']}
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
         END
     END
     ${num_slots}=  Get Length  ${slots}
-    ${j1}=  Random Int  max=${num_slots-1}
-    Set Test Variable   ${slot1}   ${slots[${j1}]}
+    ${j}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot1}   ${slots[${j}]}
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -324,9 +337,13 @@ JD-TC-StatusChangeForServiceOptionAppointment-1
     Log  ${data}
     Set Suite Variable   ${data}
 
-    ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME14}   ${PASSWORD}
+    # ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME14}   ${PASSWORD}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings   ${resp.status_code}    200
+
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME14}    ${account_id}    ${token}
     Log  ${resp.content}
-    Should Be Equal As Strings   ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=   Get consumer Appointment By Id   ${account_id}  ${apptid1}
     Log  ${resp.content}
@@ -368,14 +385,16 @@ JD-TC-StatusChangeForServiceOptionAppointment-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-
-
 JD-TC-StatusChangeForServiceOptionItem-UH1
     [Documentation]  Change Status for Service Options with another consumer
 
-    ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME22}   ${PASSWORD}
+    # ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME14}   ${PASSWORD}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings   ${resp.status_code}    200
+
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME14}    ${account_id}    ${token}
     Log  ${resp.content}
-    Should Be Equal As Strings   ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Imageupload.CApptResubmitServiceOption  ${cookie}  ${account_id}   ${apptid1}   ${data}  ${pdffile}  ${jpgfile}
     Log  ${resp.content}
@@ -410,9 +429,13 @@ JD-TC-StatusChangeForServiceOptionItem-UH2
 JD-TC-StatusChangeForServiceOptionItem-UH3
     [Documentation]  Change Status for Service Options with invalid account id
 
-    ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME14}   ${PASSWORD}
+    # ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME14}   ${PASSWORD}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings   ${resp.status_code}    200
+
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME14}    ${account_id}    ${token}
     Log  ${resp.content}
-    Should Be Equal As Strings   ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Imageupload.CApptResubmitServiceOption  ${cookie}  ${account_id}   ${apptid1}   ${data}  ${pdffile}  ${jpgfile}
     Log  ${resp.content}

@@ -7897,12 +7897,13 @@ JD-TC-Update schedule-44
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
   
-    ${fname}=  generate_firstname
-    ${lname}=  FakerLibrary.last_name
+    
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME8}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
         ${resp1}=  AddCustomer  ${CUSERNAME8}    firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
@@ -8107,12 +8108,13 @@ JD-TC-Update schedule-45
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
 
-    ${fname}=  generate_firstname
-    ${lname}=  FakerLibrary.last_name
+    
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME8}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
         ${resp1}=  AddCustomer  ${CUSERNAME8}    firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
