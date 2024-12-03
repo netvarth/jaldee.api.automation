@@ -1046,12 +1046,15 @@ JD-TC-Take Appointment-14
     END
    
     ${lid}=  Create Sample Location
+    
+    ${lid1}=  Create Sample Location
+
+    sleep  1s
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     
-    ${lid1}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1454,10 +1457,6 @@ JD-TC-Take Appointment-16
     # clear_location   ${PUSERNAME350}
 
     ${lid1}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
     # clear_appt_schedule   ${PUSERNAME350}
 
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -1465,6 +1464,12 @@ JD-TC-Take Appointment-16
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
+
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
+    
     ${schedule_name2}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
