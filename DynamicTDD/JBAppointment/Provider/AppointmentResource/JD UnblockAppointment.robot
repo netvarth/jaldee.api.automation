@@ -30,6 +30,9 @@ JD-TC-Unblock Appointment-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${loid}=  Create Sample Location  
+    Set Suite Variable  ${loid}
+    
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -42,8 +45,7 @@ JD-TC-Unblock Appointment-1
     # clear_location  ${PUSERNAME57}
     clear_customer   ${PUSERNAME57}
 
-    ${lid}=  Create Sample Location  
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=   Get Location ById  ${loid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
@@ -65,7 +67,7 @@ JD-TC-Unblock Appointment-1
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${loid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -104,7 +106,7 @@ JD-TC-Unblock Appointment-1
     ...    appmtTime=${slot1}  apptStatus=${apptStatus[9]}  appmtDate=${DAY1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
+    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${loid}
 
     ${resp}=  Unblock Appointment Slot   ${apptid1}
     Log  ${resp.json()}
@@ -124,23 +126,23 @@ JD-TC-Unblock Appointment-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Disable Appointment   ${toggle[0]}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
+    # ${resp}=   Get Appointment Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF  ${resp.json()['enableAppt']}==${bool[0]}   
+    #     ${resp}=   Enable Disable Appointment   ${toggle[0]}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END
 
     # clear_service   ${PUSERNAME57}
     # clear_location  ${PUSERNAME57}
     clear_customer   ${PUSERNAME57}
 
-    ${lid}=  Create Sample Location  
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    # ${lid}=  Create Sample Location  
+    # ${resp}=   Get Location ById  ${lid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     # clear_appt_schedule   ${PUSERNAME57}
     
@@ -159,7 +161,7 @@ JD-TC-Unblock Appointment-UH1
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${loid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -196,7 +198,7 @@ JD-TC-Unblock Appointment-UH1
     ...    appmtTime=${slot1}  apptStatus=${apptStatus[9]}  appmtDate=${DAY1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
+    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${loid}
 
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
@@ -233,23 +235,23 @@ JD-TC-Unblock Appointment-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Disable Appointment   ${toggle[0]}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
+    # ${resp}=   Get Appointment Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF  ${resp.json()['enableAppt']}==${bool[0]}   
+    #     ${resp}=   Enable Disable Appointment   ${toggle[0]}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END
 
     # clear_service   ${PUSERNAME57}
     # clear_location  ${PUSERNAME57}
     clear_customer   ${PUSERNAME57}
 
-    ${lid}=  Create Sample Location  
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    # ${lid}=  Create Sample Location  
+    # ${resp}=   Get Location ById  ${lid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     # clear_appt_schedule   ${PUSERNAME57}
     
@@ -268,7 +270,7 @@ JD-TC-Unblock Appointment-UH2
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${loid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -305,7 +307,7 @@ JD-TC-Unblock Appointment-UH2
     ...    appmtTime=${slot1}  apptStatus=${apptStatus[9]}  appmtDate=${DAY1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
+    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${loid}
 
     ${resp}=  Unblock Appointment Slot   ${apptid1}
     Log  ${resp.json()}
