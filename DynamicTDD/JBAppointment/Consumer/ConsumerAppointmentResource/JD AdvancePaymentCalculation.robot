@@ -485,6 +485,8 @@ JD-TC-GetAppointmentAdvancePaymentDetails-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    sleep  01s
+
     ${resp}=  Get Booking Invoices  ${apptid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -673,6 +675,8 @@ JD-TC-GetAppointmentAdvancePaymentDetails-4
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
+    sleep  01s
+
     ${resp}=  Get Booking Invoices  ${apptid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -847,6 +851,8 @@ JD-TC-GetAppointmentAdvancePaymentDetails-5
     # ${resp}=    Get Bill By UUId  ${apptid1}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
+
+    sleep  01s
 
     ${resp}=  Get Booking Invoices  ${apptid1}
     Log  ${resp.json()}
@@ -1171,6 +1177,8 @@ JD-TC-GetAppointmentAdvancePaymentDetails-6
     # ${resp}=    Get Bill By UUId  ${apptid1}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
+
+    sleep  01s
 
     ${resp}=  Get Booking Invoices  ${apptid1}
     Log  ${resp.json()}
@@ -1500,6 +1508,8 @@ JD-TC-GetAppointmentAdvancePaymentDetails-7
     # ${resp}=    Get Bill By UUId  ${apptid1}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
+
+    sleep  01s
 
     ${resp}=  Get Booking Invoices  ${apptid1}
     Log  ${resp.json()}
