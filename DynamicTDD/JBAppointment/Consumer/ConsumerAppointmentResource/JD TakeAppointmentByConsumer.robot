@@ -379,14 +379,31 @@ JD-TC-Take Appointment-UH13
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${apptid3}  ${apptid[0]}
           
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Set Test Variable   ${a${i}}  ${resp.json()[0]['availableSlots'][${i}]['time']}
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
+        END
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot4}   ${slots[${j}]}
 
+    ${apptfor1}=  Create Dictionary  id=${cidfor}   apptTime=${slot4}   firstName=${family_fname}
+    ${apptfor2}=   Create List  ${apptfor1}
+    
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
     
-    ${resp}=   Customer Take Appointment  ${pid}   ${s_id2}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    ${resp}=   Customer Take Appointment  ${pid}   ${s_id2}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor2}  location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  "${resp.json()}"      "${WAITLIST_CUSTOMER_ALREADY_IN}"
@@ -953,7 +970,7 @@ JD-TC-Take Appointment-9
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Customer Take Appointment   ${pid01}  ${p1_s1}  ${sch_id11}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid01}  ${p1_s1}  ${sch_id11}  ${DAY1}  ${cnote}   ${apptfor}   location=${{str('${p1_l1}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -981,7 +998,7 @@ JD-TC-Take Appointment-9
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Customer Take Appointment   ${pid01}  ${p1_s2}  ${sch_id21}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid01}  ${p1_s2}  ${sch_id21}  ${DAY1}  ${cnote}   ${apptfor}    location=${{str('${p1_l2}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -1073,7 +1090,7 @@ JD-TC-Take Appointment-10
     ${apptfor}=   Create List  ${apptfor1}
   
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Customer Take Appointment   ${pid01}  ${p1_s1}  ${sch_id11}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid01}  ${p1_s1}  ${sch_id11}  ${DAY1}  ${cnote}   ${apptfor}   location=${{str('${p1_l1}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -1115,7 +1132,7 @@ JD-TC-Take Appointment-10
     ${apptfor2}=   Create List  ${apptfor2}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Customer Take Appointment   ${pid01}  ${p1_s2}  ${sch_id21}  ${DAY1}  ${cnote}   ${apptfor2}
+    ${resp}=   Customer Take Appointment   ${pid01}  ${p1_s2}  ${sch_id21}  ${DAY1}  ${cnote}   ${apptfor2}    location=${{str('${p1_l2}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -1207,7 +1224,7 @@ JD-TC-Take Appointment-11
     ${apptfor}=   Create List  ${apptfor1}
   
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Customer Take Appointment   ${pid01}  ${p1_s2}  ${sch_id11}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid01}  ${p1_s2}  ${sch_id11}  ${DAY1}  ${cnote}   ${apptfor}   location=${{str('${p1_l1}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -1234,7 +1251,7 @@ JD-TC-Take Appointment-11
     ${apptfor2}=   Create List  ${apptfor2}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Customer Take Appointment   ${pid01}  ${p1_s2}  ${sch_id21}  ${DAY1}  ${cnote}   ${apptfor2}
+    ${resp}=   Customer Take Appointment   ${pid01}  ${p1_s2}  ${sch_id21}  ${DAY1}  ${cnote}   ${apptfor2}    location=${{str('${p1_l2}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -1328,7 +1345,7 @@ JD-TC-Take Appointment-12
     
  
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Customer Take Appointment   ${pid01}  ${p1_s2}  ${sch_id21}  ${FUT_DAY}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid01}  ${p1_s2}  ${sch_id21}  ${FUT_DAY}  ${cnote}   ${apptfor}    location=${{str('${p1_l2}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -1357,7 +1374,7 @@ JD-TC-Take Appointment-12
     
  
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Customer Take Appointment   ${pid01}  ${p1_s2}  ${sch_id21}  ${FUT_DAY1}  ${cnote}   ${apptfor2}
+    ${resp}=   Customer Take Appointment   ${pid01}  ${p1_s2}  ${sch_id21}  ${FUT_DAY1}  ${cnote}   ${apptfor2}    location=${{str('${p1_l2}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -1458,7 +1475,7 @@ JD-TC-Take Appointment-13
     
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Customer Take Appointment   ${pid01}  ${p1_s2}  ${sch_id11}  ${FUT_DAY}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid01}  ${p1_s2}  ${sch_id11}  ${FUT_DAY}  ${cnote}   ${apptfor}    location=${{str('${p1_l1}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -1511,7 +1528,7 @@ JD-TC-Take Appointment-13
     
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Customer Take Appointment   ${pid01}  ${p1_s2}  ${sch_id11}  ${FUT_DAY}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid01}  ${p1_s2}  ${sch_id11}  ${FUT_DAY}  ${cnote}   ${apptfor}   location=${{str('${p1_l1}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -1550,13 +1567,15 @@ JD-TC-Take Appointment-14
 
     ${lid}=  Create Sample Location
 
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=1   max=50
+
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    ${desc}=   FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=1   max=50
+
     ${servicecharge}=   Random Int  min=100  max=500
     ${srv_duration1}=   Random Int   min=10   max=20
     ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration1}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}
@@ -1680,7 +1699,8 @@ JD-TC-Take Appointment-14
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${{str('${lid}')}}
+    Log  ${resp.content}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -1705,7 +1725,7 @@ JD-TC-Take Appointment-14
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}   location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -1906,7 +1926,7 @@ JD-TC-Take Appointment-15
     ${apptfor}=   Create List  ${apptfor1}  ${apptfor2}  ${apptfor3}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -1964,7 +1984,7 @@ JD-TC-Take Appointment-15
     ${apptfor}=   Create List    ${apptfor2}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -2198,7 +2218,7 @@ JD-TC-Take Appointment-16
     ${apptfor}=   Create List  ${apptfor1}  ${apptfor2}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -2221,7 +2241,7 @@ JD-TC-Take Appointment-16
     ${apptfor}=   Create List  ${apptfor1}  ${apptfor2}    ${apptfor3}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -2403,7 +2423,7 @@ JD-TC-Take Appointment-17
     ${apptfor}=   Create List  ${apptfor1}  ${apptfor2}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -2424,7 +2444,7 @@ JD-TC-Take Appointment-17
     ${apptfor}=   Create List  ${apptfor2}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     

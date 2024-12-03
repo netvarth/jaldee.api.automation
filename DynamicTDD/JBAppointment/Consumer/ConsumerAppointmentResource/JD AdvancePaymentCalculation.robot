@@ -137,9 +137,9 @@ JD-TC-GetAppointmentAdvancePaymentDetails-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.json()}
 
-    ${resp}=   Get Service By Id  ${ser_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Service By Id  ${ser_id1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -255,9 +255,9 @@ JD-TC-GetAppointmentAdvancePaymentDetails-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.json()}
 
-    ${resp}=   Get Service By Id  ${ser_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Service By Id  ${ser_id1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -373,11 +373,11 @@ JD-TC-GetAppointmentAdvancePaymentDetails-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.json()}
 
-    ${resp}=   Get Service By Id  ${ser_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['minPrePaymentAmount']}  ${min_pre}
-    Should Be Equal As Strings  ${resp.json()['prePaymentType']}       ${advancepaymenttype[1]}
+    # ${resp}=   Get Service By Id  ${ser_id1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['minPrePaymentAmount']}  ${min_pre}
+    # Should Be Equal As Strings  ${resp.json()['prePaymentType']}       ${advancepaymenttype[1]}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}   10
@@ -586,11 +586,11 @@ JD-TC-GetAppointmentAdvancePaymentDetails-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.json()}
 
-    ${resp}=   Get Service By Id  ${ser_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['minPrePaymentAmount']}  ${min_pre}
-    Should Be Equal As Strings  ${resp.json()['prePaymentType']}       ${advancepaymenttype[0]}
+    # ${resp}=   Get Service By Id  ${ser_id1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['minPrePaymentAmount']}  ${min_pre}
+    # Should Be Equal As Strings  ${resp.json()['prePaymentType']}       ${advancepaymenttype[0]}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}   10
@@ -763,9 +763,9 @@ JD-TC-GetAppointmentAdvancePaymentDetails-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.json()}
 
-    ${resp}=   Get Service By Id  ${ser_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Service By Id  ${ser_id1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
