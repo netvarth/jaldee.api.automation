@@ -3083,7 +3083,7 @@ Check Location Exists
     Should Be Equal As Strings  ${resp.status_code}  200
     ${loc_length}=  Get Length  ${resp.json()}
     FOR   ${i}  IN RANGE   ${loc_length}
-        IF  '${resp.json()[${i}]['place']}' == '${city}'
+        IF  "${resp.json()[${i}]['place']}" == "${city}"
             Return From Keyword    True
         ELSE
             Return From Keyword    False

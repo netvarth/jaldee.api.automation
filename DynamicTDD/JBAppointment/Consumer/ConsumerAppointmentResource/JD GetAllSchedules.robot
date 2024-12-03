@@ -33,7 +33,7 @@ JD-TC-Get All Schedule slots-1
     ${firstname}  ${lastname}  ${PUSERNAME_B}  ${LoginId}=  Provider Signup
     Set Suite Variable  ${PUSERNAME_B}
 
-    sleep   02s
+    # sleep   02s
 
     ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
     Log   ${resp.json()}

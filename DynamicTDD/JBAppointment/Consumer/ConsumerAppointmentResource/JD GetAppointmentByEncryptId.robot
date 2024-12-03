@@ -40,10 +40,10 @@ JD-TC-GetApptByEncryptedIDconsumer-1
     END
 
     ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[0]}  ${boolean[0]}
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get jaldeeIntegration Settings
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
@@ -161,18 +161,18 @@ JD-TC-GetApptByEncryptedIDconsumer-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment EncodedID    ${apptid1}
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${A_uuid1}=  Set Variable   ${resp.json()}
     Set Suite Variable    ${A_uuid1}
 
     ${resp}=  Get consumer Appointment By Id  ${pid}  ${apptid1} 
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}   appointmentEncId=${A_uuid1}
 
     ${resp}=  Get Appointment By EncodedId    ${A_uuid1}
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     Should Be Equal As Strings  ${resp.json()['uid']}                 ${apptid1}
@@ -202,7 +202,7 @@ JD-TC-GetApptByEncryptedIDconsumer-1
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=   Get Consumer Appointment By EncodedId   ${A_uuid1}
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['uid']}                 ${apptid1}
     Should Be Equal As Strings  ${resp.json()['appmtDate']}                 ${DAY1}
@@ -216,7 +216,7 @@ JD-TC-GetApptByEncryptedIDconsumer-2
     [Documentation]   Consumer without login Get Appointment Encrypted ID.
 
     ${resp}=   Get Consumer Appointment By EncodedId   ${A_uuid1}
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['uid']}                 ${apptid1}
     Should Be Equal As Strings  ${resp.json()['appmtDate']}                 ${DAY1}
@@ -245,7 +245,7 @@ JD-TC-GetApptByEncryptedIDconsumer-UH1
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=   Get Consumer Appointment By EncodedId    0
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  404
     Should Be Equal As Strings  "${resp.json()}"      "${APPOINTMENT_ID_NO_LONGER_ACTIVE}"
 
@@ -269,7 +269,7 @@ JD-TC-GetApptByEncryptedIDconsumer-UH2
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=   Get Consumer Appointment By EncodedId    ${apptid1}
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  404
     Should Be Equal As Strings  "${resp.json()}"      "${APPOINTMENT_ID_NO_LONGER_ACTIVE}"
 
@@ -279,29 +279,14 @@ JD-TC-GetApptByEncryptedIDconsumer-3
 
     [Documentation]    Get Consumer Appointment Encrypted ID of another consumer
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME3}    ${pid}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    ${CUSERNAME3}  ${token}  Create Sample Customer  ${pid}  primaryMobileNo=${CUSERNAME3}
 
-    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
-
-    ${resp}=    Verify Otp For Login    ${CUSERNAME3}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token1}  ${resp.json()['token']}
-    
-    ${fname}=  generate_firstname
-    ${lname}=  FakerLibrary.last_name
-    ${resp}=    ProviderConsumer SignUp    ${fname}  ${lname}  ${EMPTY}  ${CUSERNAME3}  ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200 
-
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME3}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME3}  ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200 
     
     ${resp}=  Get Consumer Appointment By EncodedId     ${A_uuid1} 
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}    uid=${apptid1}   appmtDate=${DAY1}  apptStatus=${apptStatus} 
     Should Be Equal As Strings  ${resp.json()['service']['name']}              ${SERVICE1}
