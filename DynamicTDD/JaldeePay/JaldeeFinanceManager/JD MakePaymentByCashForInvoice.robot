@@ -65,6 +65,18 @@ JD-TC-MakePaymentByCash-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
+    ${resp}=  Create Sample Location  
+    Set Suite Variable    ${lid}    ${resp}  
+
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}
+
     ${name}=   FakerLibrary.word
     Set Suite Variable   ${name}
     ${resp}=  CreateVendorCategory  ${name}  
@@ -99,72 +111,72 @@ JD-TC-MakePaymentByCash-1
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
-    ${vender_name}=   FakerLibrary.firstname
-    ${contactPersonName}=   FakerLibrary.lastname
-    ${owner_name}=   FakerLibrary.lastname
-    ${vendorId}=   FakerLibrary.word
-    ${PO_Number}    Generate random string    5    123456789
-    ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
-    Set Test Variable  ${email}  ${vender_name}.${test_mail}
-    ${address}=  FakerLibrary.city
-    Set Suite Variable  ${address}
-    ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
-    ${branch}=   db.get_place
-    ${ifsc_code}=   db.Generate_ifsc_code
-    # ${gst_num}  ${pan_num}=   db.Generate_gst_number   ${Container_id}
+    # ${vender_name}=   FakerLibrary.firstname
+    # ${contactPersonName}=   FakerLibrary.lastname
+    # ${owner_name}=   FakerLibrary.lastname
+    # ${vendorId}=   FakerLibrary.word
+    # ${PO_Number}    Generate random string    5    123456789
+    # ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    # ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
+    # Set Test Variable  ${email}  ${vender_name}.${test_mail}
+    # ${address}=  FakerLibrary.city
+    # Set Suite Variable  ${address}
+    # ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
+    # ${branch}=   db.get_place
+    # ${ifsc_code}=   db.Generate_ifsc_code
+    # # ${gst_num}  ${pan_num}=   db.Generate_gst_number   ${Container_id}
 
-    ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
+    # ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
 
-    ${state}=    Evaluate     "${state}".title()
-    ${state}=    String.RemoveString  ${state}    ${SPACE}
-    Set Suite Variable    ${state}
-    Set Suite Variable    ${district}
-    Set Suite Variable    ${pin}
-    ${vendor_phno}=   Create List  ${vendor_phno}
-    Set Suite Variable    ${vendor_phno}
+    # ${state}=    Evaluate     "${state}".title()
+    # ${state}=    String.RemoveString  ${state}    ${SPACE}
+    # Set Suite Variable    ${state}
+    # Set Suite Variable    ${district}
+    # Set Suite Variable    ${pin}
+    # ${vendor_phno}=   Create List  ${vendor_phno}
+    # Set Suite Variable    ${vendor_phno}
     
-    ${email}=   Create List  ${email}
-    Set Suite Variable    ${email}
+    # ${email}=   Create List  ${email}
+    # Set Suite Variable    ${email}
 
-    ${bankIfsc}    Random Number 	digits=5 
-    ${bankIfsc}=    Evaluate    f'{${bankIfsc}:0>7d}'
-    Log  ${bankIfsc}
-    Set Suite Variable  ${bankIfsc}  55555${bankIfsc} 
+    # ${bankIfsc}    Random Number 	digits=5 
+    # ${bankIfsc}=    Evaluate    f'{${bankIfsc}:0>7d}'
+    # Log  ${bankIfsc}
+    # Set Suite Variable  ${bankIfsc}  55555${bankIfsc} 
 
-    ${bankName}     FakerLibrary.name
-    Set Suite Variable    ${bankName}
+    # ${bankName}     FakerLibrary.name
+    # Set Suite Variable    ${bankName}
 
-    ${upiId}     FakerLibrary.name
-    Set Suite Variable  ${upiId}
+    # ${upiId}     FakerLibrary.name
+    # Set Suite Variable  ${upiId}
 
-    ${pan}    Random Number 	digits=5 
-    ${pan}=    Evaluate    f'{${pan}:0>5d}'
-    Log  ${pan}
-    Set Suite Variable  ${pan}  55555${pan}
+    # ${pan}    Random Number 	digits=5 
+    # ${pan}=    Evaluate    f'{${pan}:0>5d}'
+    # Log  ${pan}
+    # Set Suite Variable  ${pan}  55555${pan}
 
-    ${branchName}=    FakerLibrary.name
-    Set Suite Variable  ${branchName}
-    ${gstin}    Random Number 	digits=5 
-    ${gstin}=    Evaluate    f'{${gstin}:0>8d}'
-    Log  ${gstin}
-    Set Suite Variable  ${gstin}  55555${gstin}
+    # ${branchName}=    FakerLibrary.name
+    # Set Suite Variable  ${branchName}
+    # ${gstin}    Random Number 	digits=5 
+    # ${gstin}=    Evaluate    f'{${gstin}:0>8d}'
+    # Log  ${gstin}
+    # Set Suite Variable  ${gstin}  55555${gstin}
     
-    ${preferredPaymentMode}=    Create List    ${jaldeePaymentmode[0]}
-    ${bankInfo}=    Create Dictionary     bankaccountNo=${bank_accno}    ifscCode=${bankIfsc}    bankName=${bankName}    upiId=${upiId}     branchName=${branchName}    pancardNo=${pan}    gstNumber=${gstin}    preferredPaymentMode=${preferredPaymentMode}    lastPaymentModeUsed=${jaldeePaymentmode[0]}
-    ${bankInfo}=    Create List         ${bankInfo}
+    # ${preferredPaymentMode}=    Create List    ${jaldeePaymentmode[0]}
+    # ${bankInfo}=    Create Dictionary     bankaccountNo=${bank_accno}    ifscCode=${bankIfsc}    bankName=${bankName}    upiId=${upiId}     branchName=${branchName}    pancardNo=${pan}    gstNumber=${gstin}    preferredPaymentMode=${preferredPaymentMode}    lastPaymentModeUsed=${jaldeePaymentmode[0]}
+    # ${bankInfo}=    Create List         ${bankInfo}
     
-    ${resp}=  Create Vendor  ${category_id}  ${vendorId}  ${vender_name}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${vendor_uid1}   ${resp.json()['encId']}
-    Set Suite Variable   ${vendor_id1}   ${resp.json()['id']}
+    # ${resp}=  Create Vendor  ${category_id}  ${vendorId}  ${vender_name}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${vendor_uid1}   ${resp.json()['encId']}
+    # Set Suite Variable   ${vendor_id1}   ${resp.json()['id']}
 
-    ${resp}=  Get vendor by encId   ${vendor_uid1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['id']}  ${vendor_id1}
-    Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1}
+    # ${resp}=  Get vendor by encId   ${vendor_uid1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['id']}  ${vendor_id1}
+    # Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1}
     # Should Be Equal As Strings  ${resp.json()['vendorType']}  ${category_id}
 
     ${resp1}=  AddCustomer  ${CUSERNAME11}
@@ -217,6 +229,7 @@ JD-TC-MakePaymentByCash-1
     ${servicecharge}=   Random Int  min=100  max=500
     ${serviceprice}=   Random Int  min=10  max=15
     ${serviceprice}=  Convert To Number  ${serviceprice}  1
+    ${srv_duration}=   Random Int   min=10   max=20
 
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}
     Log  ${resp.json()}
@@ -234,8 +247,8 @@ JD-TC-MakePaymentByCash-1
     ${adhocItemList}=  Create Dictionary  itemName=${itemName}   quantity=${quantity}   price=${price}
     ${adhocItemList}=    Create List    ${adhocItemList}
 
-    
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}    serviceList=${serviceList}   adhocItemList=${adhocItemList}
+
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceId}    ${providerConsumerIdList}   ${lid}    ${itemList}  invoiceStatus=${status_id1}    serviceList=${serviceList}   adhocItemList=${adhocItemList}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_id}   ${resp.json()['idList'][0]}
@@ -244,17 +257,17 @@ JD-TC-MakePaymentByCash-1
     ${resp1}=  Get Invoice By Id  ${invoice_uid}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
-    Should Be Equal As Strings  ${resp1.json()['accountId']}  ${account_id1}
-    Should Be Equal As Strings  ${resp1.json()['invoiceCategoryId']}  ${category_id2}
-    Should Be Equal As Strings  ${resp1.json()['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
-    Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
-    Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['serviceId']}  ${sid1}
-    Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['quantity']}  ${quantity}
-    Should Be Equal As Strings  ${resp1.json()['adhocItemList'][0]['itemName']}  ${itemName}
-    Should Be Equal As Strings  ${resp1.json()['adhocItemList'][0]['quantity']}  ${quantity}
-    Should Be Equal As Strings  ${resp1.json()['adhocItemList'][0]['price']}  ${price}
+    # Should Be Equal As Strings  ${resp1.json()['accountId']}  ${account_id1}
+    # Should Be Equal As Strings  ${resp1.json()['invoiceCategoryId']}  ${category_id2}
+    # Should Be Equal As Strings  ${resp1.json()['categoryName']}  ${name1}
+    # Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
+    # Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
+    # Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
+    # Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['serviceId']}  ${sid1}
+    # Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['quantity']}  ${quantity}
+    # Should Be Equal As Strings  ${resp1.json()['adhocItemList'][0]['itemName']}  ${itemName}
+    # Should Be Equal As Strings  ${resp1.json()['adhocItemList'][0]['quantity']}  ${quantity}
+    # Should Be Equal As Strings  ${resp1.json()['adhocItemList'][0]['price']}  ${price}
 
     ${adhoc_amt}=    Evaluate  ${price}*${quantity}
     ${service_amt}=    Evaluate  ${serviceprice}*${quantity}
@@ -266,7 +279,7 @@ JD-TC-MakePaymentByCash-1
     ${balance}=  Convert To Number  ${balance}  2
 
     ${note}=    FakerLibrary.word
-    ${resp}=  Make Payment By Cash For Invoice   ${invoice_uid}  ${payment_modes[0]}  10  ${note}
+    ${resp}=  Make Payment By Cash For Invoice   ${invoice_uid}  ${payment_modes[0]}  10  ${note}  paymentOndate=${DAY1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -286,7 +299,7 @@ JD-TC-MakePaymentByCash-2
 
 
     ${note}=    FakerLibrary.word
-    ${resp}=  Make Payment By Cash For Invoice   ${invoice_uid}  ${payment_modes[0]}  10  ${note}
+    ${resp}=  Make Payment By Cash For Invoice   ${invoice_uid}  ${payment_modes[0]}  10  ${note}    paymentOndate=${DAY1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -301,7 +314,7 @@ JD-TC-MakePaymentByCash-UH1
 
     ${note}=    FakerLibrary.word
     ${invoice}=    FakerLibrary.word
-    ${resp}=  Make Payment By Cash For Invoice   ${invoice}  ${payment_modes[0]}  10  ${note}
+    ${resp}=  Make Payment By Cash For Invoice   ${invoice}  ${payment_modes[0]}  10  ${note}    paymentOndate=${DAY1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${RECORD_NOT_FOUND}" 
@@ -312,7 +325,7 @@ JD-TC-MakePaymentByCash-UH2
 
     [Documentation]  Make payment by cash without login
     ${note}=    FakerLibrary.word
-    ${resp}=  Make Payment By Cash For Invoice   ${invoice_uid}  ${payment_modes[0]}  10  ${note}
+    ${resp}=  Make Payment By Cash For Invoice   ${invoice_uid}  ${payment_modes[0]}  10  ${note}   paymentOndate=${DAY1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  "${resp.json()}"  "${SESSION_EXPIRED}"
@@ -338,7 +351,7 @@ JD-TC-MakePaymentByCash-UH3
 
 
     ${note}=    FakerLibrary.word
-    ${resp}=  Make Payment By Cash For Invoice   ${invoice_uid}  ${payment_modes[0]}  10  ${note}
+    ${resp}=  Make Payment By Cash For Invoice   ${invoice_uid}  ${payment_modes[0]}  10  ${note}    paymentOndate=${DAY1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION}" 

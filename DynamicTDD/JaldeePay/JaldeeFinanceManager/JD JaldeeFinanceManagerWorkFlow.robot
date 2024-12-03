@@ -539,6 +539,6 @@ JD-TC-FinanceWorkFlow-1
     Should Be Equal As Strings  ${resp.json()['paymentsInOutUid']}  ${payable_uid1}
     Should Be Equal As Strings  ${resp.json()['isPaymentsIn']}  ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['payInOutStateList'][0]['date']}  ${receivedDate}
-    Should Be Equal As Strings  ${resp.json()['payInOutStateList'][0]['time']}  ${time_now}
     Should Be Equal As Strings  ${resp.json()['payInOutStateList'][0]['userType']}  ${userType[0]}
     Should Be Equal As Strings  ${resp.json()['payInOutStateList'][0]['localUserId']}  ${pid}
+    Should Be Equal As Strings  ${resp.json()['payInOutStateList'][0]['time']}  ${time_now}

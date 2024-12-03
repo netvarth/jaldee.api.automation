@@ -16,30 +16,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 # Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
-*** Keywords ***
-Get Billable Subdomain
-    [Arguments]   ${domain}  ${jsondata}  ${posval}  
-    ${length}=  Get Length  ${jsondata.json()[${posval}]['subDomains']}
-    FOR  ${pos}  IN RANGE  ${length}
-        Set Suite Variable  ${subdomain}  ${jsondata.json()[${posval}]['subDomains'][${pos}]['subDomain']}
-        ${resp}=   Get Sub Domain Settings    ${domain}    ${subdomain}
-        Should Be Equal As Strings    ${resp.status_code}    200
-        Exit For Loop IF  '${resp.json()['serviceBillable']}' == '${bool[1]}'
-    END
-    RETURN  ${subdomain}  ${resp.json()['serviceBillable']}
 
-
-
-Get Non Billable Subdomain
-    [Arguments]   ${domain}  ${jsondata}  ${posval}  
-    ${length}=  Get Length  ${jsondata.json()[${posval}]['subDomains']}
-    FOR  ${pos}  IN RANGE  ${length}
-            Set Test Variable  ${subdomain}  ${jsondata.json()[${posval}]['subDomains'][${pos}]['subDomain']}
-            ${resp}=   Get Sub Domain Settings    ${domain}    ${subdomain}
-            Should Be Equal As Strings    ${resp.status_code}    200
-            Exit For Loop IF  '${resp.json()['serviceBillable']}' == '${bool[0]}'
-    END
-    RETURN  ${subdomain}  ${resp.json()['serviceBillable']}
 
 *** Variables ***
 
@@ -62,40 +39,7 @@ JD-TC-MakePaymentByCashForBooking-1
     Set Suite Variable   ${PUSERPH0}
     ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERPH0}=  Provider Signup without Profile  PhoneNumber=${PUSERPH0}
     
-    # ${licid}  ${licname}=  get_highest_license_pkg
-    # Log  ${licid}
-    # Log  ${licname}
-    # ${domresp}=  Get BusinessDomainsConf
-    # Log   ${domresp.json()}
-    # Should Be Equal As Strings  ${domresp.status_code}  200
-    # ${dlen}=  Get Length  ${domresp.json()}
-    # FOR  ${pos}  IN RANGE  ${dlen}  
-    #     Set Suite Variable  ${d1}  ${domresp.json()[${pos}]['domain']}
-    #     ${sd1}  ${check}=  Get Billable Subdomain  ${d1}  ${domresp}  ${pos}  
-    #     Set Suite Variable   ${sd1}
-    #     Exit For Loop IF     '${check}' == '${bool[1]}'
-    # END
-    # Log  ${d1}
-    # Log  ${sd1}
 
-    # ${firstname}=  FakerLibrary.first_name
-    # ${lastname}=  FakerLibrary.last_name
-    # ${address}=  FakerLibrary.address
-    # ${dob}=  FakerLibrary.Date
-    # ${gender}=    Random Element    ${Genderlist}
-    # ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd1}  ${PUSERPH0}  ${licid}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${resp}=  Account Activation  ${PUSERPH0}  0
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # Should Be Equal As Strings  "${resp.json()}"    "true"
-    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
-
-    # ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
@@ -120,7 +64,7 @@ JD-TC-MakePaymentByCashForBooking-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
