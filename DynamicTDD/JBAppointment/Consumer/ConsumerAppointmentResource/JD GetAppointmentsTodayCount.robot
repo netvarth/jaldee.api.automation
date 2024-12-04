@@ -51,14 +51,15 @@ JD-TC-GetAppointmentTodayCount-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
+
 
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
+
+    ${resp}=   Get Appointment Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
 
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}

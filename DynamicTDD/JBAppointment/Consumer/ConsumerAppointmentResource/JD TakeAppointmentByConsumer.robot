@@ -2703,7 +2703,7 @@ JD-TC-Take Appointment-UH2
     Should Be Equal As Strings    ${resp.status_code}   200  
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Customer Take Appointment   ${pidUH1}  ${p1_s2}  ${sch_idUH2}  ${DAY1}  ${cnote}   ${apptfor1}
+    ${resp}=   Customer Take Appointment   ${pidUH1}  ${p1_s2}  ${sch_idUH2}  ${DAY1}  ${cnote}   ${apptfor1}   location=${{str('${p1_l1}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"      "${SERVICE_NOT_AVAILABLE_IN_SCHEDULE}"
@@ -2812,7 +2812,7 @@ JD-TC-Take Appointment-UH3
     Should Be Equal As Strings    ${resp.status_code}   200     
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Customer Take Appointment   ${pidUH1}  ${p1_s1}  ${sch_idUH3}  ${DAY1}  ${cnote}   ${apptfor1}
+    ${resp}=   Customer Take Appointment   ${pidUH1}  ${p1_s1}  ${sch_idUH3}  ${DAY1}  ${cnote}   ${apptfor1}   location=${{str('${p1_l1}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  424
     Should Be Equal As Strings  "${resp.json()}"      "${APPOINTMET_SLOT_NOT_AVAILABLE}"
@@ -2920,7 +2920,7 @@ JD-TC-Take Appointment-UH4
     Should Be Equal As Strings    ${resp.status_code}   200     
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Customer Take Appointment   ${pidUH1}  ${p1_s1}  ${sch_idUH4}  ${DAY1}  ${cnote}   ${apptfor1}   location=${p1_l1}
+    ${resp}=   Customer Take Appointment   ${pidUH1}  ${p1_s1}  ${sch_idUH4}  ${DAY1}  ${cnote}   ${apptfor1}   location=${{str('${p1_l1}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"      "${SERVICE_NOT_AVAILABLE_IN_SCHEDULE}"
@@ -3025,7 +3025,7 @@ JD-TC-Take Appointment-UH5
     Should Be Equal As Strings    ${resp.status_code}   200    
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Customer Take Appointment   ${pidUH5}  ${s_id}  ${sch_idUH5}  ${DAY1}  ${cnote}   ${apptfor1}
+    ${resp}=   Customer Take Appointment   ${pidUH5}  ${s_id}  ${sch_idUH5}  ${DAY1}  ${cnote}   ${apptfor1}   location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"      "${SCHEDULE_DISABLED}"
@@ -3968,7 +3968,7 @@ JD-TC-Take Appointment-UH12
     ${DAYUH12}=  db.add_timezone_date  ${tz}  ${daygap}
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Customer Take Appointment   ${pid_12}  ${p1_s1}  ${sch_id1}  ${DAYUH12}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid_12}  ${p1_s1}  ${sch_id1}  ${DAYUH12}  ${cnote}   ${apptfor}   location=${{str('${p1_l1}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${APPOINTMET_SLOT_NOT_AVAILABLE}" 
@@ -4233,7 +4233,7 @@ JD-TC-Take Appointment-18
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${pidHL}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pidHL}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}   location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid2}=  Get From Dictionary  ${resp.json()}  ${fname}
@@ -4634,7 +4634,7 @@ JD-TC-Take Appointment-20
     ${cid}=  get_id  ${CUSERNAME7}   
     Set Test Variable   ${cid}
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -5171,7 +5171,7 @@ JD-TC-Take Appointment-UH14
     ${cid}=  get_id  ${CUSERNAME9}   
     Set Suite Variable   ${cid}
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}   location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -5210,7 +5210,7 @@ JD-TC-Take Appointment-UH14
     Should Be Equal As Strings  ${resp.status_code}  200 
 
     
-    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}   location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"      "${WAITLIST_CUSTOMER_ALREADY_IN}"
@@ -5360,7 +5360,7 @@ JD-TC-Take Appointment-UH15
 
     ${DAY3}=  db.add_timezone_date  ${tz}  5  
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Customer Take Appointment   ${pid02}  ${p1_s2}  ${sch_id21}  ${DAY3}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid02}  ${p1_s2}  ${sch_id21}  ${DAY3}  ${cnote}   ${apptfor}   location=${{str('${p1_l1}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -5425,7 +5425,7 @@ JD-TC-Take Appointment-UH15
 
     ${DAY3}=  db.add_timezone_date  ${tz}  5  
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Customer Take Appointment   ${pid02}  ${p1_s2}  ${sch_id21}  ${DAY3}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid02}  ${p1_s2}  ${sch_id21}  ${DAY3}  ${cnote}   ${apptfor}   location=${{str('${p1_l1}')}}
     Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.status_code}  424
