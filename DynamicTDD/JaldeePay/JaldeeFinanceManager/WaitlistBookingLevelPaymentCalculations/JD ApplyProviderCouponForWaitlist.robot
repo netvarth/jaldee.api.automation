@@ -559,7 +559,7 @@ JD-TC-ApplyProviderCouponforwaitlist-UH6
     ${book_channel}=   Create List   ${bookingChannel[1]}    ${bookingChannel[0]}
     ${coupn_based}=  Create List   ${couponBasedOn[0]}
     ${tc}=  FakerLibrary.sentence
-    ${services}=   Create list      ${sid2}
+    ${services}=   Create list      ${sid}
     ${resp}=  Create Provider Coupon   ${coupon}  ${desc}  ${pc_amount}  ${calctype[1]}  ${cupn_code1}  ${recurringtype[1]}  ${list}  ${sTime}  ${eTime}  ${ST_DAY}  ${EN_DAY}  ${EMPTY}  ${bool[0]}  ${min_bill_amount}  ${max_disc_val}  ${bool[1]}  ${max_prov_use}  ${book_channel}  ${coupn_based}  ${tc}  services=${services}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
