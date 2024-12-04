@@ -2652,6 +2652,11 @@ JD-TC-Take Appointment-24
     ${account_id}=  get_acc_id  ${HLPUSERNAME53}
 
     ${lid}=  Create Sample Location
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${s_id}=  Create Sample Service  ${SERVICE1}
+    
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2665,9 +2670,7 @@ JD-TC-Take Appointment-24
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
