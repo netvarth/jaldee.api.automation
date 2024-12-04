@@ -1136,9 +1136,10 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-UH3
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME18}    ${account_id}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${cid}  ${resp.json()['providerConsumer']}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=  Add To Waitlist Consumers  ${account_id}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${account_id}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
           

@@ -115,8 +115,14 @@ JD-TC-Disable Service-UH5
 
 
     [Documentation]  Disable a service using consumer login
-    ${resp}=  ConsumerLogin  ${CUSERNAME7}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  ConsumerLogin  ${CUSERNAME7}  ${PASSWORD}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${CUSERNAME7}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME7}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME7}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
     ${resp}=  Disable service  ${sid} 
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}    ${LOGIN_NO_ACCESS_FOR_URL}
@@ -150,8 +156,8 @@ JD-TC-Disable Service-UH6
     
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  ConsumerLogin  ${CUSERNAME7}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  ConsumerLogin  ${CUSERNAME7}  ${PASSWORD}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     # ${cid}=  get_id  ${CUSERNAME7}
     # ${Familymember_ph}=  Evaluate  ${PUSERNAME0}+500000
     # ${f_name}=   generate_firstname
@@ -162,8 +168,25 @@ JD-TC-Disable Service-UH6
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${mem_id}  ${resp.json()}
     # ${list}=  Create List   1  2  3  4  5  6  7
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME7}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME7}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${tokenss}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME7}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${cid}  ${resp.json()['providerConsumer']}
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${resp}=  Add To Waitlist Consumers  ${pid}  ${qid}  ${DAY1}  ${s_id}  i need  False  0
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${qid}  ${DAY1}  ${s_id}  i need  False  0
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Consumer Logout
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -216,12 +239,18 @@ JD-TC-Disable Service-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${qid1}  ${resp.json()}
 
-    ${resp}=  ConsumerLogin  ${CUSERNAME8}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  ConsumerLogin  ${CUSERNAME8}  ${PASSWORD}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${CUSERNAME8}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME8}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${cid}  ${resp.json()['providerConsumer']}
 
     ${cid}=  get_id  ${CUSERNAME8} 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${resp}=  Add To Waitlist Consumers  ${pid}  ${qid1}  ${DAY1}  ${sid2}  i need  False  0
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${qid1}  ${DAY1}  ${sid2}  i need  False  0
     Should Be Equal As Strings  ${resp.status_code}  200
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid1}  ${wid[0]}
@@ -243,8 +272,8 @@ JD-TC-Disable Service-UH7
 JD-TC-Disable Service-UH8
 
     [Documentation]   Disable a service which in an active checkin(status=arrived)
-    ${resp}=  ConsumerLogin  ${CUSERNAME9}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  ConsumerLogin  ${CUSERNAME9}  ${PASSWORD}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME78}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200

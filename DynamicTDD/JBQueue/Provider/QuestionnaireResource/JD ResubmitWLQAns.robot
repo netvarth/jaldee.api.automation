@@ -562,9 +562,10 @@ JD-TC-ResubmitQuestionnaireForWaitlist-3
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${fname}   ${resp.json()['firstName']}
     Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+    Set Test Variable  ${cid}  ${resp.json()['providerConsumer']}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=  Add To Waitlist Consumers  ${account_id}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${account_id}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
           

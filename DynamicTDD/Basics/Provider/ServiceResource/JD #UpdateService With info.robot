@@ -63,6 +63,8 @@ JD-TC-Update Service With info-1-Service_type
         ${resp}=  Encrypted Provider Login  ${PUSERNAME121}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
+
+*** COMMENTS ***
         
         # clear_service      ${resp}
         ${description}=  FakerLibrary.sentence
