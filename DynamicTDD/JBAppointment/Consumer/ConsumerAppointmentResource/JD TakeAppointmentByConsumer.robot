@@ -4790,7 +4790,7 @@ JD-TC-Take Appointment-21
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${s_id}  ${resp.json()}
-
+    ${user_id}=  Create Dictionary   id=${u_id}
         ${SERVICE2}=    generate_unique_service_name  ${service_names}
         Append To List  ${service_names}  ${SERVICE2}
         ${desc2}=   FakerLibrary.sentence
@@ -4801,7 +4801,7 @@ JD-TC-Take Appointment-21
         # ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[1]}  minPrePaymentAmount=${min_pre}  notificationType=${notifytype[2]}  taxable=${bool[1]}  serviceType=${serviceType[1]}  #prePaymentType=${advancepaymenttype[1]}
         # Log  ${resp.content}
         # Should Be Equal As Strings  ${resp.status_code}  200  
-        ${resp}=  Create Service  ${SERVICE2}  ${desc2}  ${srv_duration2}   ${bool[0]}   ${servicecharge2}  ${bool[0]}   provider=${u_id}
+        ${resp}=  Create Service  ${SERVICE2}  ${desc2}  ${srv_duration2}   ${bool[0]}   ${servicecharge2}  ${bool[0]}   provider=${user_id}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable  ${s_id}  ${resp.json()}
@@ -4829,7 +4829,7 @@ JD-TC-Take Appointment-21
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Create Appointment Schedule    ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}  provider=${u_id}
+    ${resp}=  Create Appointment Schedule    ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}  provider=${user_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id}  ${resp.json()}
