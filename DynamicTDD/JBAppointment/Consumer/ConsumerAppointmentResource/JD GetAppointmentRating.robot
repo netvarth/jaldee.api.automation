@@ -357,16 +357,16 @@ JD-TC-GetAppointmentRating-3
 
     [Documentation]  Get Appointment Rating filter by rating.  
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME201}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
-    # clear_queue    ${PUSERNAME101}
-    # clear_service  ${PUSERNAME101}
-    clear_rating    ${PUSERNAME101}
+    # clear_queue    ${PUSERNAME201}
+    # clear_service  ${PUSERNAME201}
+    clear_rating    ${PUSERNAME201}
     
     ${resp}=   Get License UsageInfo 
     Log  ${resp.json()}
@@ -381,14 +381,14 @@ JD-TC-GetAppointmentRating-3
         Should Be Equal As Strings    ${resp.status_code}   200
     END
  
-    ${account_id1}=  get_acc_id  ${PUSERNAME101}
+    ${account_id1}=  get_acc_id  ${PUSERNAME201}
     Set Suite Variable  ${account_id1} 
     
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid1}  ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
-    # clear_appt_schedule   ${PUSERNAME101}
+    # clear_appt_schedule   ${PUSERNAME201}
 
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
@@ -594,7 +594,7 @@ JD-TC-GetAppointmentRating-4
 
     [Documentation]  Get Appointment Rating filter by service.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME201}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Location By Id   ${lid1} 

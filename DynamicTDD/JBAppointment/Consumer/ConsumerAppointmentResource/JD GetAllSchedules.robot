@@ -282,7 +282,7 @@ JD-TC-Get All Schedule slots-3
     [Documentation]  Assingn appointment to user and then it again assign to another user
 
     
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME52}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -290,12 +290,12 @@ JD-TC-Get All Schedule slots-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # clear_service   ${HLPUSERNAME1}
-    # clear_appt_schedule   ${HLPUSERNAME1}
-    clear_customer   ${HLPUSERNAME1}
+    # clear_service   ${HLPUSERNAME52}
+    # clear_appt_schedule   ${HLPUSERNAME52}
+    clear_customer   ${HLPUSERNAME52}
     reset_user_metric  ${pid}
 
-    ${pid1}=  get_acc_id  ${HLPUSERNAME1}
+    ${pid1}=  get_acc_id  ${HLPUSERNAME52}
     Set Suite Variable   ${pid1}
 
     ${resp}=   Get License UsageInfo 

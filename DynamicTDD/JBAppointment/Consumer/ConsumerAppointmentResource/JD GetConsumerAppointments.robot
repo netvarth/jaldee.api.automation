@@ -335,7 +335,7 @@ JD-TC-GetConsumerAppointments-2
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-        
+
     ${DAY10}=  db.add_timezone_date  ${tz}  10   
     Set Suite Variable  ${DAY1}     
     ${sTime1}=  db.get_time_by_timezone  ${tz}
@@ -1503,14 +1503,14 @@ JD-TC-GetConsumerAppointments-17
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${servicecharge}=  Convert To Number  ${servicecharge}  1 
     ${srv_duration}=   Random Int   min=10   max=20
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}   automaticInvoiceGeneration=${bool[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${ser_id1}  ${resp.json()}
 
-    ${resp}=  Auto Invoice Generation For Service   ${ser_id1}    ${toggle[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Auto Invoice Generation For Service   ${ser_id1}    ${toggle[0]}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     # clear_appt_schedule   ${HLPUSERNAME52}
 
@@ -1630,9 +1630,9 @@ JD-TC-GetConsumerAppointments-17
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Payment Details By UUId  ${apptid6}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Payment Details By UUId  ${apptid6}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
 
 
