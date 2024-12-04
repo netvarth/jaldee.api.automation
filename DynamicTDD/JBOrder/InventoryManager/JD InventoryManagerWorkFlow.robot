@@ -1587,7 +1587,7 @@ JD-TC-Inventory Manager Work Flow-3
     Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       ${netTotal}
 
 JD-TC-Inventory Manager Work Flow-4
-    [Documentation]    create a sales order with inventory ON case.
+    [Documentation]    create a sales order with inventory OFF case.
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -1649,34 +1649,12 @@ JD-TC-Inventory Manager Work Flow-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${accountId}=  get_acc_id  ${HLPUSERNAME16}
-    # Set Suite Variable    ${accountId} 
-
     ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
-
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${locId1}=  Create Sample Location
-        ${resp}=   Get Location ById  ${locId1}
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ELSE
-        Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
-    END
-
-    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    Set Suite Variable  ${address}
-    Set Suite Variable  ${postcode}
-    Set Suite Variable  ${city}
 
     # ------------------------ Create Store ----------------------------------------------------------
 

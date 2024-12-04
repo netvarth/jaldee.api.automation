@@ -1760,3 +1760,9 @@ Get Sales Order Invoice By Id
     ${resp}=  GET On Session  ynw  /provider/so/invoice/${invoiceuid}   expected_status=any
     RETURN  ${resp} 
 
+Activate Holiday
+    [Arguments]  ${status}  ${holidayId}  
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/settings/nonBusinessDays/holiday/mark/${status}/${holidayId}   expected_status=any
+    Check Deprication  ${resp}  Activate Holiday
+    RETURN  ${resp}
