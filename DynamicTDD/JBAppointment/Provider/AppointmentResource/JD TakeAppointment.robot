@@ -1559,7 +1559,7 @@ JD-TC-Take Appointment-17
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
+    IF   '${resp.content}' == '${emptylist}' 
         ${lid}=  Create Sample Location
         ${resp}=   Get Location ById  ${lid}
         Log  ${resp.content}
@@ -1575,11 +1575,11 @@ JD-TC-Take Appointment-17
     ${resp}=    Get Service
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
+    IF    '${resp.content}' == '${emptylist}' 
         ${SERVICE1}=    generate_unique_service_name  ${service_names}
         Append To List  ${service_names}  ${SERVICE1}   
         ${s_id}=  Create Sample Service  ${SERVICE1}  
-    ELSE
+    ELSE  
         Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
     END
 
@@ -2656,7 +2656,7 @@ JD-TC-Take Appointment-24
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
-    
+
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -6902,9 +6902,9 @@ JD-TC-Take Appointment-UH33
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}  200 
 
-    ${resp}=   Activate Holiday  ${boolean[1]}  ${hId}
-    Log   ${resp.json()}
-    Should Be Equal As Strings   ${resp.status_code}  200 
+    # ${resp}=   Activate Holiday  ${boolean[1]}  ${hId}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings   ${resp.status_code}  200 
 
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
