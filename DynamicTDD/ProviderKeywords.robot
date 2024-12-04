@@ -8306,13 +8306,6 @@ Create Holiday
     Check Deprication  ${resp}  Create Holiday
     RETURN  ${resp}
 
-Activate Holiday
-    [Arguments]  ${status}  ${holidayId}  
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/settings/nonBusinessDays/holiday/mark/${status}/${holidayId}   expected_status=any
-    Check Deprication  ${resp}  Activate Holiday
-    RETURN  ${resp}
-
 Get Holiday By Id
     [Arguments]  ${holidayId}  
     Check And Create YNW Session
