@@ -277,7 +277,7 @@ JD-TC-GetAppointmentTodayCount-1
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${pid1}  ${s_id1}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid1}  ${s_id1}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor}   location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -331,7 +331,7 @@ JD-TC-GetAppointmentTodayCount-1
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${pid1}  ${s_id2}  ${sch_id2}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid1}  ${s_id2}  ${sch_id2}  ${DAY1}  ${cnote}   ${apptfor}   location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -379,7 +379,7 @@ JD-TC-GetAppointmentTodayCount-1
     ${apptfor}=   Create List  ${apptfor}
    
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${pid1}  ${s_id2}  ${sch_id3}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid1}  ${s_id2}  ${sch_id3}  ${DAY1}  ${cnote}   ${apptfor}   location=${{str('${lid1}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -392,7 +392,7 @@ JD-TC-GetAppointmentTodayCount-1
     ${DAY5}=  db.add_timezone_date  ${tz}   5
     Set Suite Variable   ${DAY5}
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${pid1}  ${s_id2}  ${sch_id3}  ${DAY5}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid1}  ${s_id2}  ${sch_id3}  ${DAY5}  ${cnote}   ${apptfor}    location=${{str('${lid1}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}

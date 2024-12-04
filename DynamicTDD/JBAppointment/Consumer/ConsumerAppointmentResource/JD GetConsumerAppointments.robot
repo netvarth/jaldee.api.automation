@@ -144,7 +144,7 @@ JD-TC-GetConsumerAppointments-1
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${pid1}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid1}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -156,7 +156,7 @@ JD-TC-GetConsumerAppointments-1
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${pid1}  ${s_id}  ${sch_id}  ${DAY2}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid1}  ${s_id}  ${sch_id}  ${DAY2}  ${cnote}   ${apptfor}    location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -447,7 +447,7 @@ JD-TC-GetConsumerAppointments-2
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${account_id}  ${s_id1}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${account_id}  ${s_id1}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor}   location=${{str('${lid1}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -459,7 +459,7 @@ JD-TC-GetConsumerAppointments-2
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${account_id}  ${s_id1}  ${sch_id1}  ${DAY2}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${account_id}  ${s_id1}  ${sch_id1}  ${DAY2}  ${cnote}   ${apptfor}    location=${{str('${lid1}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -596,7 +596,7 @@ JD-TC-GetConsumerAppointments-3
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${account_id}  ${s_id2}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${account_id}  ${s_id2}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           

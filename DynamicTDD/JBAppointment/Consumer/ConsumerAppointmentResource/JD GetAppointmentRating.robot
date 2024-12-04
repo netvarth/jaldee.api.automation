@@ -567,7 +567,7 @@ JD-TC-GetAppointmentRating-3
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${account_id1}  ${ser_id3}  ${schedule_id1}  ${DAY2}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${account_id1}  ${ser_id3}  ${schedule_id1}  ${DAY2}  ${cnote}   ${apptfor}   location=${{str('${lid1}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
