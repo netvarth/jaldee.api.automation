@@ -49,6 +49,36 @@ Get Billable Subdomain
 
 *** Test Cases ***
 
+
+
+JD-TC-Take Appointment-21
+
+    [Documentation]  Consumer takes appointment for a user
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME72}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${u_id} =  Create Sample User
+
+    ${resp}=  Get User By Id  ${u_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+   
+    ${user_id}=  Create Dictionary   id=${u_id}
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+    ${desc2}=   FakerLibrary.sentence
+    ${min_pre2}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${servicecharge2}=   Pyfloat  right_digits=1  min_value=100  max_value=500
+    ${srv_duration2}=   Random Int   min=10   max=20
+    ${resp}=  Create Service  ${SERVICE2}  ${desc2}  ${srv_duration2}   ${bool[0]}   ${servicecharge2}  ${bool[0]}   provider=${user_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${s_id}  ${resp.json()}
+
+
+*** Comments ***
 JD-TC-Take Appointment-1
 
     [Documentation]  Consumer takes appointment for a valid Provider
