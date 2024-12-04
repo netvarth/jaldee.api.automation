@@ -1051,7 +1051,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-6
     # ${lastname}=  FakerLibrary.last_name
     ${pro_cust2}=  Generate Random 555 Number
     Set Suite Variable  ${pro_cust2}
-    Set Test Variable  ${consumerEmail}  ${pro_cust2}${fname}.${test_mail}
+    # Set Test Variable  ${consumerEmail}  ${pro_cust2}${fname}.${test_mail}
    
     # ${resp}=  AddCustomer  ${pro_cust2}    firstName=${fname}   lastName=${lastname}  countryCode=${countryCodes[1]}    email=${consumerEmail}
     # Log   ${resp.content}
@@ -1064,6 +1064,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-6
     IF   '${resp.content}' == '${emptylist}'
         ${fname}=  generate_firstname
         ${lname}=  FakerLibrary.last_name
+        Set Test Variable  ${consumerEmail}  ${pro_cust2}${fname}.${test_mail}
         ${resp1}=  AddCustomer  ${pro_cust2}  firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}    email=${consumerEmail}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
