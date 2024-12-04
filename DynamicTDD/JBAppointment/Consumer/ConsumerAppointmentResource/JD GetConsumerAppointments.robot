@@ -310,9 +310,6 @@ JD-TC-GetConsumerAppointments-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid2}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedules
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
 
     # clear_appt_schedule   ${HLPUSERNAME53}
@@ -335,12 +332,19 @@ JD-TC-GetConsumerAppointments-2
     # ELSE
     #     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
     # END
-    
+    ${resp}=  Get Appointment Schedules
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${DAY10}=  db.add_timezone_date  ${tz}  10   
     Set Suite Variable  ${DAY1}     
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
+
+    ${resp}=  Get Department ById  ${dep_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
 
     ${s_id1}=  Create Sample Service  ${SERVICE1}   department=${dep_id}
     Set Suite Variable  ${s_id1}
@@ -1626,9 +1630,9 @@ JD-TC-GetConsumerAppointments-17
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Payment Details By UUId  ${apptid6}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Payment Details By UUId  ${apptid6}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
 
 

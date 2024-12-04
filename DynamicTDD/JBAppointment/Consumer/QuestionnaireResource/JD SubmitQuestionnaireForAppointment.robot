@@ -238,7 +238,7 @@ JD-TC-SubmitQuestionnaireForAppointment-1
     Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
 
     ${parallel}=  FakerLibrary.Random Int  min=5  max=10
-    ${resp}=  Update Schedule data  ${sch_id}  ${resp.json()}  parallelServing=${parallel}
+    ${resp}=  Update Schedule data  ${sch_id}  ${resp.json()}  parallelServing=${parallel}  consumerParallelServing=${parallel}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1667,7 +1667,8 @@ JD-TC-SubmitQuestionnaireForAppointment-UH2
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${sch_id}=  Set Variable  ${resp.json()[0]['scheduleId']}
+    # ${sch_id}=  Set Variable  ${resp.json()[0]['scheduleId']}
+    Should Be Equal As Strings  ${resp.json()[0]['scheduleId']}  ${sch_id}
     ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
@@ -1854,7 +1855,8 @@ JD-TC-SubmitQuestionnaireForAppointment-UH3
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${sch_id}=  Set Variable  ${resp.json()[0]['scheduleId']}
+    # ${sch_id}=  Set Variable  ${resp.json()[0]['scheduleId']}
+    Should Be Equal As Strings  ${resp.json()[0]['scheduleId']}  ${sch_id}
     ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
@@ -2057,7 +2059,8 @@ JD-TC-SubmitQuestionnaireForAppointment-UH4
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${sch_id}=  Set Variable  ${resp.json()[0]['scheduleId']}
+    # ${sch_id}=  Set Variable  ${resp.json()[0]['scheduleId']}
+    Should Be Equal As Strings  ${resp.json()[0]['scheduleId']}  ${sch_id}
     ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
