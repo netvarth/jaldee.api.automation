@@ -602,9 +602,7 @@ JD-TC-GetAppointmentStatus-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -624,8 +622,13 @@ JD-TC-GetAppointmentStatus-4
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+    END
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -639,7 +642,7 @@ JD-TC-GetAppointmentStatus-4
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${lid}=  Create Sample Location
+    # ${lid}=  Create Sample Location
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -729,9 +732,7 @@ JD-TC-GetAppointmentStatus-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -750,8 +751,13 @@ JD-TC-GetAppointmentStatus-5
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+    END
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -764,7 +770,7 @@ JD-TC-GetAppointmentStatus-5
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${lid}=  Create Sample Location
+    # ${lid}=  Create Sample Location
     ${s_id}=  Create Sample Service  ${SERVICE3}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10

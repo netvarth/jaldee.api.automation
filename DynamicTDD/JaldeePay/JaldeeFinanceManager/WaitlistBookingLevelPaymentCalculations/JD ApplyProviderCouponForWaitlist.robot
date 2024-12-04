@@ -541,6 +541,31 @@ JD-TC-ApplyProviderCouponforwaitlist-UH6
     Set Test Variable  ${sid2}  ${resp.json()}
 
 
+    ${coupon}=    FakerLibrary.word
+    ${desc}=  FakerLibrary.Sentence   nb_words=2
+    ${pc_amount}=   Random Int   min=10  max=50
+    ${pc_amount}=  Convert To Number  ${pc_amount}  1
+    Set Test Variable  ${pc_amount}
+    ${cupn_code1}=   FakerLibrary.word
+    Set Test Variable  ${cupn_code1}
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime}=  subtract_time  0  15
+    ${eTime}=  db.add_timezone_time     ${tz}   0  45
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
+    ${min_bill_amount}=   Random Int   min=90   max=100
+    ${max_disc_val}=   Random Int   min=90  max=100
+    ${max_prov_use}=   Random Int   min=10   max=20
+    ${book_channel}=   Create List   ${bookingChannel[1]}    ${bookingChannel[0]}
+    ${coupn_based}=  Create List   ${couponBasedOn[0]}
+    ${tc}=  FakerLibrary.sentence
+    ${services}=   Create list      ${sid2}
+    ${resp}=  Create Provider Coupon   ${coupon}  ${desc}  ${pc_amount}  ${calctype[1]}  ${cupn_code1}  ${recurringtype[1]}  ${list}  ${sTime}  ${eTime}  ${ST_DAY}  ${EN_DAY}  ${EMPTY}  ${bool[0]}  ${min_bill_amount}  ${max_disc_val}  ${bool[1]}  ${max_prov_use}  ${book_channel}  ${coupn_based}  ${tc}  services=${services}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${couponId}  ${resp.json()}
+
+
     ${q_name}=    FakerLibrary.name
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
@@ -578,7 +603,7 @@ JD-TC-ApplyProviderCouponforwaitlist-UH6
 
     ${netRate}=    Evaluate  ${fullAmount}-${pc_amount}
 
-    ${resp}=   Apply Provider Coupon for waitlist    ${wid}    ${cupn_code}   
+    ${resp}=   Apply Provider Coupon for waitlist    ${wid}    ${cupn_code1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${COUPON_NOT_APPLICABLE_SERVICE}"
