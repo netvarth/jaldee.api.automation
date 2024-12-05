@@ -2110,13 +2110,6 @@ JD-TC-AddSubServicesToAppt-12
     Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}   department=${dep_id}
    
-    ${resp}=   Get Service By Id  ${s_id}
-    Log   ${resp.json()}  
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${ser_dur}      ${resp.json()['serviceDuration']}
-    Set Test Variable   ${ser_amount}   ${resp.json()['totalAmount']}
-    Should Be Equal As Strings  ${resp.json()['serviceCategory']}       ${serviceCategory[1]}
-
     ##....subservice creation..........
 
     ${desc}=  FakerLibrary.sentence
@@ -2131,6 +2124,13 @@ JD-TC-AddSubServicesToAppt-12
     Log   ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${subser_id1}  ${resp.json()}
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log   ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${ser_dur}      ${resp.json()['serviceDuration']}
+    Set Test Variable   ${ser_amount}   ${resp.json()['totalAmount']}
+    Should Be Equal As Strings  ${resp.json()['serviceCategory']}       ${serviceCategory[1]}
 
     ${resp}=   Get Service By Id  ${subser_id1}
     Log   ${resp.json()}  
