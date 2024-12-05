@@ -1031,6 +1031,12 @@ JD-TC-ChangeAppointmentStatus-UH2
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${parallel}=  FakerLibrary.Random Int  min=20  max=25
+    ${resp}=  Update Appointment Schedule  ${sch_id}  ${resp.json()['name']}  ${resp.json()['apptSchedule']['recurringType']}  ${resp.json()['apptSchedule']['repeatIntervals']}
+    ...  ${resp.json()['apptSchedule']['startDate']}  ${resp.json()['apptSchedule']['terminator']['endDate']}  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}
+    ...  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${parallel}  ${parallel}  ${lid}  ${resp.json()['timeDuration']}  ${bool[1]}  ${s_id} 
+    Should Be Equal As Strings  ${resp.status_code}  200
     
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name

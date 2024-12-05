@@ -347,8 +347,8 @@ JD-TC-GetAppointmentServicesByLocation-UH3
     Should Be Equal As Strings   ${resp.status_code}   422
     Should Be Equal As Strings   ${resp.json()}       ${LOCATION_DISABLED}
 
-    # ${RESP}=  Enable Location  ${p1_l2} 
-    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Enable Location  ${p1_l2} 
+    Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-GetAppointmentServicesByLocation-UH4
 

@@ -350,6 +350,10 @@ JD-TC-GetApptScheduleWithLocationServiceDate-UH4
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${LOCATION_DISABLED}
 
+    ${resp}=  Enable Location  ${lid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
 JD-TC-GetApptScheduleWithLocationServiceDate-UH5
 
     [Documentation]   get the schedule without login.

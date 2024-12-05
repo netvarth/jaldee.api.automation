@@ -4838,6 +4838,10 @@ JD-TC-Take Appointment-UH11
     ${resp}=  Get Appointment Schedule ById  ${sch_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Enable Location  ${lid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
   
 JD-TC-Take Appointment-UH12
 
@@ -5729,6 +5733,10 @@ JD-TC-Take Appointment-UH23
 
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Enable Location  ${lid1}
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
 JD-TC-Take Appointment-UH24
