@@ -1766,3 +1766,30 @@ Activate Holiday
     ${resp}=  PUT On Session  ynw  /provider/settings/nonBusinessDays/holiday/mark/${status}/${holidayId}   expected_status=any
     Check Deprication  ${resp}  Activate Holiday
     RETURN  ${resp}
+
+
+Create virtual Service
+    [Arguments]  ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}   ${virtualServiceType}  ${virtualCallingModes}  &{kwargs}
+    ${items}=  Get Dictionary items  ${kwargs}
+    ${data}=  Create Dictionary  name=${name}  description=${desc}  serviceDuration=${durtn}  notification=${notfcn}  notificationType=${notiTp}  minPrePaymentAmount=${minPrePaymentAmount}   totalAmount=${totalAmount}   status=${status}  bType=${btype}  isPrePayment=${isPrePayment}  taxable=${taxable}   serviceType=virtualService   virtualServiceType=${virtualServiceType}  virtualCallingModes=${virtualCallingModes}
+    FOR  ${key}  ${value}  IN  @{items}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session  
+    ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
+    Check Deprication  ${resp}  Create virtual Service
+    RETURN  ${resp}
+
+Create Virtual Service For User
+    [Arguments]  ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}   ${virtualServiceType}  ${virtualCallingModes}   ${depid}   ${u_id}  &{kwargs}
+    ${user_id}=  Create Dictionary  id=${u_id}
+    ${data}=  Create Dictionary  name=${name}  description=${desc}  serviceDuration=${durtn}  notification=${notfcn}  notificationType=${notiTp}  minPrePaymentAmount=${minPrePaymentAmount}   totalAmount=${totalAmount}   status=${status}  bType=${btype}  isPrePayment=${isPrePayment}  taxable=${taxable}   serviceType=virtualService   virtualServiceType=${virtualServiceType}  virtualCallingModes=${virtualCallingModes}   department=${depid}   provider=${user_id}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session  
+    ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
+    Check Deprication  ${resp}  Create Virtual Service For User
+    RETURN  ${resp}
