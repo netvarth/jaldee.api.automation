@@ -26,6 +26,7 @@ ${ZOOM_url}    https://zoom.us/j/{}?pwd=THVLcTBZa2lESFZQbU9DQTQrWUxWZz09
 ${self}     0
 @{service_names}
 
+@{service_duration}  10  20  30   40   50
 &{Emptydict}
 
 
@@ -90,15 +91,20 @@ JD-TC-GetAppointmentMeetingDetails-1
     ${virtualCallingModes1}=  Create List  ${VScallingMode1}
     ${Total1}=   Random Int   min=100   max=500
     ${Total1}=  Convert To Number  ${Total1}  1
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
     ${description}=    FakerLibrary.word
     # ${vstype}=  Evaluate  random.choice($vservicetype)  random
     Set Test Variable  ${vstype}  ${vservicetype[0]}
-    ${resp}=  Create virtual Service  ${SERVICE1}   ${description}   5   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${Total1}  ${bool[0]}   ${bool[0]}   ${vstype}   ${virtualCallingModes1}
-    Log  ${resp.json()}
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total1}  ${bool[0]}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes1}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${p1_s1}  ${resp.json()} 
+    # ${resp}=  Create virtual Service  ${SERVICE1}   ${description}   5   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${Total1}  ${bool[0]}   ${bool[0]}   ${vstype}   ${virtualCallingModes1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+    # Set Suite Variable  ${p1_s1}  ${resp.json()} 
     
     ${ZOOM_Pid0}=  Format String  ${ZOOM_url}  ${PUSERPH_id0}
     Set Suite Variable   ${ZOOM_Pid0}
@@ -110,15 +116,20 @@ JD-TC-GetAppointmentMeetingDetails-1
     ${virtualCallingModes2}=  Create List  ${VScallingMode1}
     ${Total2}=   Random Int   min=100   max=500
     ${Total2}=  Convert To Number  ${Total2}  1
-    ${SERVICE2}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE2}
     ${description2}=    FakerLibrary.word
     # ${vstype2}=  Evaluate  random.choice($vservicetype)  random
     Set Test Variable  ${vstype2}  ${vservicetype[1]}
-    ${resp}=  Create virtual Service  ${SERVICE2}   ${description2}   5   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${Total2}  ${bool[0]}   ${bool[0]}   ${vstype2}   ${virtualCallingModes2}
-    Log  ${resp.json()}
+
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+    ${resp}=  Create Service  ${SERVICE2}  ${description2}  ${service_duration[1]}  ${bool[0]}  ${Total2}  ${bool[0]}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype2}  virtualCallingModes=${virtualCallingModes2}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${p1_s2}  ${resp.json()} 
+    # ${resp}=  Create virtual Service  ${SERVICE2}   ${description2}   5   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${Total2}  ${bool[0]}   ${bool[0]}   ${vstype2}   ${virtualCallingModes2}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+    # Set Suite Variable  ${p1_s2}  ${resp.json()} 
     # ${resp}=   Get Service By Id  ${S_id2}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Log  ${resp.json()}
@@ -1108,10 +1119,15 @@ JD-TC-GetAppointmentMeetingDetails-7
     ${description}=    FakerLibrary.word
     # ${vstype}=  Evaluate  random.choice($vservicetype)  random
     Set Test Variable  ${vstype}  ${vservicetype[1]}
-    ${resp}=  Create virtual Service  ${SERVICE1}   ${description}   5   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[0]}   ${bool[0]}   ${vstype}   ${virtualCallingModes}
-    Log  ${resp.json()}
+
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${p2_s1}  ${resp.json()} 
+    # ${resp}=  Create virtual Service  ${SERVICE1}   ${description}   5   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[0]}   ${bool[0]}   ${vstype}   ${virtualCallingModes}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+    # Set Suite Variable  ${p2_s1}  ${resp.json()} 
     ${resp}=   Get Service By Id  ${p2_s1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1165,6 +1181,7 @@ JD-TC-GetAppointmentMeetingDetails-7
     # Set Suite Variable  ${l_Name0}   ${resp.json()['userProfile']['lastName']}
     
     ${fname}=  generate_firstname
+    Set Suite Variable  ${fname}
     ${lname}=  FakerLibrary.last_name
     ${NewCustomer}=  Generate Random 555 Number
     ${resp}=  AddCustomer  ${NewCustomer}    firstName=${fname}   lastName=${lname}
@@ -1188,9 +1205,9 @@ JD-TC-GetAppointmentMeetingDetails-7
     ${resp}=  Take Appointment For Consumer  ${pcid0}  ${p2_s1}  ${sch_id2}  ${DAY1}  ${cnote}  ${apptfor}   virtualService=${virtualService}  location=${{str('${p2_l1}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
-    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
-    Set Test Variable  ${apptid9}  ${apptid[0]}
+    ${apptid9}=  Get From Dictionary  ${resp.json()}  ${fname}
+    # ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
+    # Set Test Variable  ${apptid9}  ${apptid[0]}
 
     ${resp}=  Get Appointment EncodedID   ${apptid9}
     Log   ${resp.json()}
