@@ -511,7 +511,7 @@ JD-TC-GetAppointmentToday-5
 
     [Documentation]  takes an online appointment for today for a service with prepayment then do the pre payment , and it should in today appointment with status as confirmed.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME201}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -521,7 +521,7 @@ JD-TC-GetAppointmentToday-5
     Set Test Variable  ${firstname}   ${decrypted_data['firstName']}
     Set Test Variable  ${lastname}   ${decrypted_data['lastName']}
 
-    Set Test Variable  ${email_id}  ${PUSERNAME101}.${P_EMAIL}.${test_mail}
+    Set Test Variable  ${email_id}  ${PUSERNAME201}.${P_EMAIL}.${test_mail}
     ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -546,7 +546,7 @@ JD-TC-GetAppointmentToday-5
     Should Be Equal As Strings  ${resp.status_code}  200
 
     # clear_service   ${PUSERNAME100}
-    clear_customer   ${PUSERNAME101} 
+    clear_customer   ${PUSERNAME201} 
     # clear_appt_schedule   ${PUSERNAME100}
 
     ${description}=  FakerLibrary.sentence
@@ -685,7 +685,7 @@ JD-TC-GetAppointmentToday-5
     Should Be Equal As Strings    ${resp.status_code}    200
     
     sleep  2s
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME201}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
