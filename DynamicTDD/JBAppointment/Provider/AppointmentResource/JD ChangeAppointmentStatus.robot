@@ -128,7 +128,12 @@ JD-TC-ChangeAppointmentStatus-1
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['services'][0]['maxBookingsAllowed']}  ${maxBookings}
+    FOR  ${service}  IN  @{resp.json()['services']}
+        IF   ${service['id']} == ${s_id}
+            Should Be Equal As Strings  ${service['maxBookingsAllowed']}  ${maxBookings}
+        END
+    END
+    
     
 
 # *** COMMENTS ***
