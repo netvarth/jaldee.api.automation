@@ -1536,17 +1536,15 @@ Update Schedule data
         Append To List  ${service_list} 	${service['id']}
     END
     Append To List  ${service_list}  @{service_ids}
+    ${parallel}=  Set Variable  ${response['parallelServing']}
+    ${consumerParallel}=  Set Variable  ${response['consumerParallelServing']}
     FOR    ${key}    ${value}    IN    &{kwargs}
         IF  "${key}" == "parallelServing"
             ${parallel}=  Set Variable  ${value}
-        ELSE
-            ${parallel}=  Set Variable  ${response['parallelServing']}
         END
 
         IF  "${key}" == "consumerParallelServing"
             ${consumerParallel}=  Set Variable  ${value}
-        ELSE
-            ${consumerParallel}=  Set Variable  ${response['consumerParallelServing']}
         END  
     END
     ${resp}=  Update Appointment Schedule  ${schedule_id}  ${response['name']}  ${response['apptSchedule']['recurringType']}  
