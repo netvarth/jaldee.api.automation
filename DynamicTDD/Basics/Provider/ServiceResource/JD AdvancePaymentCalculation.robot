@@ -467,6 +467,8 @@ JD-TC-AdvancePaymentcalculation-9
 
     ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}   
     Should Be Equal As Strings  ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${name}  ${decrypted_data['userName']}
     
     ${resp}=  Get Business Profile
@@ -475,7 +477,7 @@ JD-TC-AdvancePaymentcalculation-9
     Set Test Variable  ${account_id}  ${resp.json()['id']}
 
     ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
@@ -486,7 +488,7 @@ JD-TC-AdvancePaymentcalculation-9
 
     ${GST_num}  ${pan_num}=   db.Generate_gst_number   ${Container_id}
     ${resp}=  Update Tax Percentage  ${gstpercentage[3]}  ${GST_num}   nameAsInGst=${name}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Tax Percentage
@@ -494,7 +496,7 @@ JD-TC-AdvancePaymentcalculation-9
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableTax']}==${bool[0]}
         ${resp}=  Enable Tax
-        Log  ${resp.json()}
+        Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}   200
     END
 
@@ -504,7 +506,7 @@ JD-TC-AdvancePaymentcalculation-9
     Should Be Equal As Strings  ${resp.json()['enableTax']}  ${bool[1]}
 
     ${resp}=  Get Account Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${loc_id1}=  Create Sample Location
@@ -532,24 +534,28 @@ JD-TC-AdvancePaymentcalculation-9
     END
 
     # clear_service  ${PUSERPH0} 
-    ${ser_durtn}=   Random Int   min=2   max=10
-    ${min_pre}=   Random Int   min=40   max=50
-    ${min_pre}=  Convert To Number  ${min_pre}  0
-    ${service_amount}=   Random Int   min=100   max=500
-    ${service_amount}=  Convert To Number  ${service_amount}  0
+    # ${ser_durtn}=   Random Int   min=2   max=10
+    # ${min_pre}=   Random Int   min=40   max=50
+    # ${min_pre}=  Convert To Number  ${min_pre}  0
+    # ${service_amount}=   Random Int   min=100   max=500
+    # ${service_amount}=  Convert To Number  ${service_amount}  0
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
-    ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[1]}  minPrePaymentAmount=${min_pre}  taxable=${bool[1]}  prePaymentType=${advancepaymenttype[1]}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${ser_id1}  ${resp.json()}
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=40  max_value=50
+    # ${desc}=   FakerLibrary.sentence
+    # ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[1]}  minPrePaymentAmount=${min_pre}  taxable=${bool[1]}  prePaymentType=${advancepaymenttype[1]}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${ser_id1}  ${resp.json()}
+
+    ${ser_id1}=  Create Sample Service   ${SERVICE1}  isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}  taxable=${bool[1]}  prePaymentType=${advancepaymenttype[1]}  maxBookingsAllowed=10  automaticInvoiceGeneration=${bool[1]}
 
     ${resp}=   Get Service By Id  ${ser_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['minPrePaymentAmount']}  ${min_pre}
     Should Be Equal As Strings  ${resp.json()['prePaymentType']}       ${advancepaymenttype[1]}
+    Set Test Variable  ${service_amount}  ${resp.json()['totalAmount']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}   10
@@ -634,13 +640,19 @@ JD-TC-AdvancePaymentcalculation-9
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
+    ${totalTaxAmount}=  Evaluate  ${service_amount} * ${gstpercentage[3]} / 100
+    ${nettotal}=  Evaluate  ${service_amount} + ${totalTaxAmount}
+    ${nettotal}=  roundoff  ${nettotal}
+    ${totalTaxAmount}=  roundoff  ${totalTaxAmount}
+    
     ${cnote}=   FakerLibrary.word
     ${EMPTY_List}=  Create List
     ${resp}=   Appointment AdvancePayment Details   ${account_id}  ${ser_id1}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}  ${EMPTY_List}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['netTotal']}                              ${service_amount}
-    Should Be Equal As Strings  ${resp.json()['amountRequiredNow']}                     ${min_pre}
+    Should Be Equal As Strings  ${resp.json()['netTotal']}            ${nettotal}
+    Should Be Equal As Strings  ${resp.json()['amountRequiredNow']}   ${min_pre}
+    Should Be Equal As Strings  ${resp.json()['netTaxAmount']}        ${totalTaxAmount}
    
 JD-TC-AdvancePaymentcalculation-10
 
@@ -915,13 +927,19 @@ JD-TC-AdvancePaymentcalculation-14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${account_id}  ${resp.json()['id']}
 
-    # ${loc_id1}=  Create Sample Location
-    # Set Test Variable   ${loc_id1}
+    ${resp}=   Get jaldeeIntegration Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['onlinePresence']}==${bool[1]}
+        ${resp}=  Set jaldeeIntegration Settings    ${bool[1]}  ${EMPTY}  ${EMPTY}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    # ${resp}=   Get Location ById  ${loc_id1}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ${resp}=   Get jaldeeIntegration Settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1062,7 +1080,7 @@ JD-TC-AdvancePaymentcalculation-14
     # Should Be Equal As Numbers  ${resp.json()['amountDue']}   ${balamount} 
 
     ${resp}=  Get Consumer Booking Invoices  ${cwid}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${account_id}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
@@ -1254,7 +1272,7 @@ JD-TC-AdvancePaymentcalculation-15
     # Should Be Equal As Numbers  ${resp.json()['amountDue']}   ${balamount} 
 
     ${resp}=  Get Consumer Booking Invoices  ${cwid}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${account_id}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
@@ -1474,7 +1492,7 @@ JD-TC-AdvancePaymentcalculation-16
     # Should Be Equal As Numbers  ${resp.json()['amountDue']}   ${balamount} 
 
     ${resp}=  Get Consumer Booking Invoices  ${apptid1}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${account_id}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
@@ -1699,7 +1717,7 @@ JD-TC-AdvancePaymentcalculation-17
     # Should Be Equal As Numbers  ${resp.json()['amountDue']}   ${balamount} 
 
     ${resp}=  Get Consumer Booking Invoices  ${apptid1}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${account_id}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
@@ -1924,7 +1942,7 @@ JD-TC-AdvancePaymentcalculation-18
     # Should Be Equal As Numbers  ${resp.json()['amountDue']}   ${balamount} 
 
     ${resp}=  Get Consumer Booking Invoices  ${apptid1}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${account_id}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
@@ -2104,7 +2122,7 @@ JD-TC-AdvancePaymentcalculation-19
     # Should Be Equal As Numbers  ${resp.json()['amountDue']}   ${balamount} 
 
     ${resp}=  Get Consumer Booking Invoices  ${cwid}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${account_id}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
@@ -2450,7 +2468,7 @@ JD-TC-AdvancePaymentcalculation-20
     # Should Be Equal As Numbers  ${resp.json()['amountDue']}   ${balamount}
 
     ${resp}=  Get Consumer Booking Invoices  ${cwid}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${account_id}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
@@ -2805,7 +2823,7 @@ JD-TC-AdvancePaymentcalculation-21
     # Should Be Equal As Numbers  ${resp.json()['amountDue']}   ${balamount} 
 
     ${resp}=  Get Consumer Booking Invoices  ${cwid}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${account_id}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
@@ -3190,7 +3208,7 @@ JD-TC-AdvancePaymentcalculation-22
     # Should Be Equal As Numbers  ${resp.json()['amountDue']}   ${balamount} 
 
     ${resp}=  Get Consumer Booking Invoices  ${apptid1}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${account_id}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
@@ -3576,7 +3594,7 @@ JD-TC-AdvancePaymentcalculation-23
     # Should Be Equal As Numbers  ${resp.json()['amountDue']}   ${balamount} 
 
     ${resp}=  Get Consumer Booking Invoices  ${apptid1}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${account_id}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}

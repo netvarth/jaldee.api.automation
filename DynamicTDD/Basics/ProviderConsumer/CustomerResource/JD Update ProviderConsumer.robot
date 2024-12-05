@@ -120,12 +120,10 @@ JD-TC-UpdateProviderConsumer-2
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF  '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[0]}'
-        ${resp1}=   Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    ELSE IF    '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[1]}'
-        ${resp1}=   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[0]}
-        Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  ${resp.json()['onlinePresence']}==${bool[1]}
+        ${resp}=  Set jaldeeIntegration Settings    ${bool[1]}  ${EMPTY}  ${EMPTY}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
     END
 
     ${resp}=   Get jaldeeIntegration Settings

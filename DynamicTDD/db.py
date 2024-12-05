@@ -2457,21 +2457,31 @@ def clear_consumer_notification_settings (usrid):
             dbconn.close()
 
 
-def roundoff(num, precision=2):
-    # val=Decimal(str(num)).quantize(Decimal(10)**-precision, rounding=ROUND_HALF_UP)
-    # Convert num to a Decimal object with precise string representation
-    num_decimal = Decimal(str(num))
+# def roundoff(num, precision=2):
+#     # val=Decimal(str(num)).quantize(Decimal(10)**-precision, rounding=ROUND_HALF_UP)
+#     # Convert num to a Decimal object with precise string representation
+#     num_decimal = Decimal(str(num))
     
-    # Define the quantization factor using Decimal
-    quantize_factor = Decimal('10') ** -precision
+#     # Define the quantization factor using Decimal
+#     quantize_factor = Decimal('10') ** -precision
     
-    # Quantize with specified precision and rounding mode
-    val = num_decimal.quantize(quantize_factor, rounding=ROUND_HALF_UP)
-    print('roundedval=',val)
+#     # Quantize with specified precision and rounding mode
+#     val = num_decimal.quantize(quantize_factor, rounding=ROUND_HALF_UP)
+#     print('roundedval=',val)
     
-    # Convert back to float if necessary
-    val_float = float(val)
-    return val_float
+#     # Convert back to float if necessary
+#     val_float = float(val)
+#     return val_float
+
+def roundoff(number, precision=2):
+    # Multiply by 10 raised to the power of decimal_places, add 0.5, then use int() for rounding
+    # This rounds to the specified decimal places using "round half up" strategy
+    factor = 10 ** precision
+    rounded_number = int(number * factor + 0.5) / factor
+    return rounded_number
+
+
+
     
 
 
