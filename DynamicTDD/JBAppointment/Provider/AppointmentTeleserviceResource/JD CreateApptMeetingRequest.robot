@@ -23,7 +23,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 ${ZOOM_url}    https://zoom.us/j/{}?pwd=THVLcTBZa2lESFZQbU9DQTQrWUxWZz09
 ${GoogleMeet_url}    https://meet.google.com/gif-pqrs-abc
 
-
+@{service_duration}  10  20  30   40   50
 ${self}     0
 @{service_names}
 
@@ -138,10 +138,13 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-1
     ${description}=    FakerLibrary.word
     # ${vstype}=  Evaluate  random.choice($vservicetype)  random
     Set Test Variable  ${vstype}  ${vservicetype[0]}
-    ${resp}=  Create virtual Service  ${SERVICE1}   ${description}   5   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${Total1}  ${bool[0]}   ${bool[0]}   ${vstype}   ${virtualCallingModes1}
-    Log  ${resp.json()}
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total1}  ${bool[0]}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes1}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Suite Variable  ${S_id1}  ${resp.json()} 
+    Set Suite Variable  ${p1_s1}  ${resp.json()} 
 
     ${ZOOM_Pid0}=  Format String  ${ZOOM_url}  ${PUSERPH_id0}
     Set Suite Variable   ${ZOOM_Pid0}
@@ -158,10 +161,13 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-1
     ${description2}=    FakerLibrary.word
     # ${vstype2}=  Evaluate  random.choice($vservicetype)  random
     Set Test Variable  ${vstype2}  ${vservicetype[1]}
-    ${resp}=  Create virtual Service  ${SERVICE2}   ${description2}   5   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${Total2}  ${bool[0]}   ${bool[0]}   ${vstype2}   ${virtualCallingModes2}
-    Log  ${resp.json()}
+
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+    ${resp}=  Create Service  ${SERVICE2}  ${description2}  ${service_duration[1]}  ${bool[0]}  ${Total2}  ${bool[0]}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype2}  virtualCallingModes=${virtualCallingModes2}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Suite Variable  ${S_id2}  ${resp.json()} 
+    Set Suite Variable  ${p1_s2}  ${resp.json()} 
 
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -179,16 +185,16 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-1
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     # clear_appt_schedule   ${PUSERPH0}
    
-    ${resp}=  Get Service
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Service
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
    
-    Set Suite Variable   ${p1_s2}   ${resp.json()[0]['id']}
-    Set Suite Variable   ${P1SERVICE2}   ${resp.json()[0]['name']}
-    Set Suite Variable   ${p1_s1}   ${resp.json()[1]['id']}
-    Set Suite Variable   ${P1SERVICE1}   ${resp.json()[1]['name']}
-    Set Suite Variable   ${p1_s3}   ${resp.json()[2]['id']}
-    Set Suite Variable   ${P1SERVICE3}   ${resp.json()[2]['name']}
+    # Set Suite Variable   ${p1_s2}   ${resp.json()[0]['id']}
+    # Set Suite Variable   ${P1SERVICE2}   ${resp.json()[0]['name']}
+    # Set Suite Variable   ${p1_s1}   ${resp.json()[1]['id']}
+    # Set Suite Variable   ${P1SERVICE1}   ${resp.json()[1]['name']}
+    # Set Suite Variable   ${p1_s3}   ${resp.json()[2]['id']}
+    # Set Suite Variable   ${P1SERVICE3}   ${resp.json()[2]['name']}
 
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -376,16 +382,16 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_customer   ${PUSERPH0}
-    ${resp}=  Get Service
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Service
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
    
-    Set Test Variable   ${p1_s2}   ${resp.json()[0]['id']}
-    Set Test Variable   ${P1SERVICE2}   ${resp.json()[0]['name']}
-    Set Test Variable   ${p1_s1}   ${resp.json()[1]['id']}
-    Set Test Variable   ${P1SERVICE1}   ${resp.json()[1]['name']}
-    Set Test Variable   ${p1_s3}   ${resp.json()[2]['id']}
-    Set Test Variable   ${P1SERVICE3}   ${resp.json()[2]['name']}
+    # Set Test Variable   ${p1_s2}   ${resp.json()[0]['id']}
+    # Set Test Variable   ${P1SERVICE2}   ${resp.json()[0]['name']}
+    # Set Test Variable   ${p1_s1}   ${resp.json()[1]['id']}
+    # Set Test Variable   ${P1SERVICE1}   ${resp.json()[1]['name']}
+    # Set Test Variable   ${p1_s3}   ${resp.json()[2]['id']}
+    # Set Test Variable   ${P1SERVICE3}   ${resp.json()[2]['name']}
 
     ${resp}=  AddCustomer  ${CUSERNAME6}
     Log   ${resp.json()}
@@ -447,16 +453,16 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Service
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Service
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
    
-    Set Test Variable   ${p1_s2}   ${resp.json()[0]['id']}
-    Set Test Variable   ${P1SERVICE2}   ${resp.json()[0]['name']}
-    Set Test Variable   ${p1_s1}   ${resp.json()[1]['id']}
-    Set Test Variable   ${P1SERVICE1}   ${resp.json()[1]['name']}
-    Set Test Variable   ${p1_s3}   ${resp.json()[2]['id']}
-    Set Test Variable   ${P1SERVICE3}   ${resp.json()[2]['name']}
+    # Set Test Variable   ${p1_s2}   ${resp.json()[0]['id']}
+    # Set Test Variable   ${P1SERVICE2}   ${resp.json()[0]['name']}
+    # Set Test Variable   ${p1_s1}   ${resp.json()[1]['id']}
+    # Set Test Variable   ${P1SERVICE1}   ${resp.json()[1]['name']}
+    # Set Test Variable   ${p1_s3}   ${resp.json()[2]['id']}
+    # Set Test Variable   ${P1SERVICE3}   ${resp.json()[2]['name']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
@@ -495,17 +501,17 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-UH2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    Set Suite Variable  ${accId}  ${accId} 
-    ${resp}=  Get Service
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${accId}  ${accId} 
+    # ${resp}=  Get Service
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
    
-    Set Test Variable   ${p1_s2}   ${resp.json()[0]['id']}
-    Set Test Variable   ${P1SERVICE2}   ${resp.json()[0]['name']}
-    Set Test Variable   ${p1_s1}   ${resp.json()[1]['id']}
-    Set Test Variable   ${P1SERVICE1}   ${resp.json()[1]['name']}
-    Set Test Variable   ${p1_s3}   ${resp.json()[2]['id']}
-    Set Test Variable   ${P1SERVICE3}   ${resp.json()[2]['name']}
+    # Set Test Variable   ${p1_s2}   ${resp.json()[0]['id']}
+    # Set Test Variable   ${P1SERVICE2}   ${resp.json()[0]['name']}
+    # Set Test Variable   ${p1_s1}   ${resp.json()[1]['id']}
+    # Set Test Variable   ${P1SERVICE1}   ${resp.json()[1]['name']}
+    # Set Test Variable   ${p1_s3}   ${resp.json()[2]['id']}
+    # Set Test Variable   ${P1SERVICE3}   ${resp.json()[2]['name']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
@@ -554,16 +560,16 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Service
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Service
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
    
-    Set Test Variable   ${p1_s2}   ${resp.json()[0]['id']}
-    Set Test Variable   ${P1SERVICE2}   ${resp.json()[0]['name']}
-    Set Test Variable   ${p1_s1}   ${resp.json()[1]['id']}
-    Set Test Variable   ${P1SERVICE1}   ${resp.json()[1]['name']}
-    Set Test Variable   ${p1_s3}   ${resp.json()[2]['id']}
-    Set Test Variable   ${P1SERVICE3}   ${resp.json()[2]['name']} 
+    # Set Test Variable   ${p1_s2}   ${resp.json()[0]['id']}
+    # Set Test Variable   ${P1SERVICE2}   ${resp.json()[0]['name']}
+    # Set Test Variable   ${p1_s1}   ${resp.json()[1]['id']}
+    # Set Test Variable   ${P1SERVICE1}   ${resp.json()[1]['name']}
+    # Set Test Variable   ${p1_s3}   ${resp.json()[2]['id']}
+    # Set Test Variable   ${P1SERVICE3}   ${resp.json()[2]['name']} 
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
@@ -812,12 +818,12 @@ JD-TC-TeleserviceAppointment-(Non billable Subdomain)-7
     ${description}=    FakerLibrary.word
     # ${vstype}=  Evaluate  random.choice($vservicetype)  random
     Set Test Variable  ${vstype}  ${vservicetype[1]}
-    ${resp}=  Create virtual Service  ${SERVICE1}   ${description}   5   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[0]}   ${bool[0]}   ${vstype}   ${virtualCallingModes}
-    Log  ${resp.json()}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Suite Variable  ${Service_id1}  ${resp.json()} 
+    Set Suite Variable  ${p2_s1}  ${resp.json()} 
 
-    ${resp}=   Get Service By Id  ${Service_id1}
+    ${resp}=   Get Service By Id  ${p2_s1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
@@ -831,24 +837,24 @@ JD-TC-TeleserviceAppointment-(Non billable Subdomain)-7
     ${description2}=    FakerLibrary.word
     # ${vstype}=  Evaluate  random.choice($vservicetype)  random
     Set Test Variable  ${vstype}  ${vservicetype[1]}
-    ${resp}=  Create virtual Service  ${SERVICE2}   ${description2}   5   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[0]}   ${bool[0]}   ${vstype}   ${virtualCallingModes2}
-    Log  ${resp.json()}
+    ${resp}=  Create Service  ${SERVICE2}  ${description2}  ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes2}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Suite Variable  ${Service_id2}  ${resp.json()} 
+    Set Suite Variable  ${p2_s0}  ${resp.json()} 
 
-    ${resp}=   Get Service By Id  ${Service_id2}
+    ${resp}=   Get Service By Id  ${p2_s0}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Get Service
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${p2_s0}   ${resp.json()[0]['id']}
-    Set Suite Variable   ${P2SERVICE0}   ${resp.json()[0]['name']}
-    Set Suite Variable   ${p2_s1}   ${resp.json()[1]['id']}
-    Set Suite Variable   ${P2SERVICE1}   ${resp.json()[1]['name']}
-    Set Suite Variable   ${p2_s2}   ${resp.json()[2]['id']}
-    Set Suite Variable   ${P2SERVICE2}   ${resp.json()[2]['name']}
+    # ${resp}=  Get Service
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${p2_s0}   ${resp.json()[0]['id']}
+    # Set Suite Variable   ${P2SERVICE0}   ${resp.json()[0]['name']}
+    # Set Suite Variable   ${p2_s1}   ${resp.json()[1]['id']}
+    # Set Suite Variable   ${P2SERVICE1}   ${resp.json()[1]['name']}
+    # Set Suite Variable   ${p2_s2}   ${resp.json()[2]['id']}
+    # Set Suite Variable   ${P2SERVICE2}   ${resp.json()[2]['name']}
 
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -872,7 +878,8 @@ JD-TC-TeleserviceAppointment-(Non billable Subdomain)-7
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${p2_l1}  ${duration}  ${bool1}  ${p2_s0}  ${p2_s1}  ${p2_s2}
+    
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${p2_l1}  ${duration}  ${bool1}  ${p2_s0}  ${p2_s1} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id2}  ${resp.json()}
@@ -890,7 +897,10 @@ JD-TC-TeleserviceAppointment-(Non billable Subdomain)-7
     # ${apptfor}=   Create List  ${apptfor1}
     # Set Suite Variable   ${apptfor}
 
-    ${resp}=  AddCustomer  ${CUSERNAME0}
+    ${fname}=  generate_firstname
+    Set Suite Variable  ${fname}
+    ${lname}=  FakerLibrary.last_name 
+    ${resp}=  AddCustomer  ${CUSERNAME0}   firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pcid0}  ${resp.json()}
@@ -898,7 +908,7 @@ JD-TC-TeleserviceAppointment-(Non billable Subdomain)-7
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME0}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable  ${pc_id0}  ${resp.json()[0]['id']}
+    # Set Test Variable  ${pc_id0}  ${resp.json()[0]['id']}
     ${jdconID0}=  get_id  ${CUSERNAME0} 
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id2}  ${DAY1}  ${p2_s1}
@@ -916,9 +926,10 @@ JD-TC-TeleserviceAppointment-(Non billable Subdomain)-7
     ${resp}=  Take Appointment For Consumer  ${pcid0}  ${p2_s1}  ${sch_id2}  ${DAY1}  ${cnote}   ${apptfor}   virtualService=${virtualService}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
-    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
-    Set Test Variable  ${apptid9}  ${apptid[0]}
+    ${apptid9}=  Get From Dictionary  ${resp.json()}  ${fname}
+
+    # ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
+    # Set Test Variable  ${apptid9}  ${apptid[0]}
 
     ${resp}=  Get Appointment EncodedID   ${apptid9}
     Log   ${resp.json()}
@@ -969,9 +980,10 @@ JD-TC-TeleserviceAppointment-(Non billable Subdomain)-UH7
     ${resp}=  Take Appointment For Consumer  ${pcid0}  ${p2_s0}  ${sch_id2}  ${DAY1}  ${cnote}   ${apptfor}   virtualService=${virtualService}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
-    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
-    Set Test Variable  ${apptid9}  ${apptid[0]}
+    ${apptid9}=  Get From Dictionary  ${resp.json()}  ${fname}
+
+    # ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
+    # Set Test Variable  ${apptid9}  ${apptid[0]}
 
     ${resp}=  Get Appointment EncodedID   ${apptid9}
     Log   ${resp.json()}
