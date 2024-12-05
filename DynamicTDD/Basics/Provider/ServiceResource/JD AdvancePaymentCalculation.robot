@@ -930,7 +930,7 @@ JD-TC-AdvancePaymentcalculation-14
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['onlinePresence']}==${bool[1]}
+    IF  ${resp.json()['onlinePresence']}==${bool[0]}
         ${resp}=  Set jaldeeIntegration Settings    ${bool[1]}  ${EMPTY}  ${EMPTY}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
