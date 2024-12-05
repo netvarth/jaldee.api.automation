@@ -1599,6 +1599,25 @@ JD-TC-GetAppointmentAdvancePaymentDetails-8
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
 
+    ${GST_num}  ${pan_num}=   db.Generate_gst_number   ${Container_id}
+    ${resp}=  Update Tax Percentage  ${gstpercentage[3]}  ${GST_num}   nameAsInGst=${name}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get Tax Percentage
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enableTax']}==${bool[0]}
+        ${resp}=  Enable Tax
+        Log  ${resp.json()}
+        Should Be Equal As Strings    ${resp.status_code}   200
+    END
+
+    ${resp}=  Get Tax Percentage
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableTax']}  ${bool[1]}
+
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200

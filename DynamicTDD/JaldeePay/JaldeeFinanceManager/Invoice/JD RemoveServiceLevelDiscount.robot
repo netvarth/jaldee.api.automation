@@ -260,17 +260,17 @@ JD-TC-Remove Service Level Discount-2
     ${displayNote}=   FakerLibrary.word
 
 
-        ${gstper}=  Random Element  ${gstpercentage}
-        ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
-        ${resp}=  Update Tax Percentage  ${gstper}  ${GST_num}
-        Should Be Equal As Strings    ${resp.status_code}   200
-        ${resp}=  Enable Tax
-        Log  ${resp.content}
-        Should Be Equal As Strings    ${resp.status_code}   200
-        ${resp}=  Get Tax Percentage
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200  
-        Set Suite Variable  ${tax_per}  ${resp.json()['taxPercentage']}
+    ${gstper}=  Random Element  ${gstpercentage}
+    ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
+    ${resp}=  Update Tax Percentage  ${gstper}  ${GST_num}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${resp}=  Enable Tax
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${resp}=  Get Tax Percentage
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200  
+    Set Suite Variable  ${tax_per}  ${resp.json()['taxPercentage']}
 
     # ${referenceNo}=   Random Int  min=5  max=200
     # ${referenceNo}=  Convert To String  ${referenceNo}
@@ -365,17 +365,17 @@ JD-TC-Remove Service Level Discount-3
     ${displayNote}=   FakerLibrary.word
 
 
-        ${gstper}=  Random Element  ${gstpercentage}
-        ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
-        ${resp}=  Update Tax Percentage  ${gstper}  ${GST_num}
-        Should Be Equal As Strings    ${resp.status_code}   200
-        ${resp}=  Enable Tax
-        Log  ${resp.content}
-        Should Be Equal As Strings    ${resp.status_code}   200
-        ${resp}=  Get Tax Percentage
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200  
-        Set Suite Variable  ${tax_per}  ${resp.json()['taxPercentage']}
+    ${gstper}=  Random Element  ${gstpercentage}
+    ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
+    ${resp}=  Update Tax Percentage  ${gstper}  ${GST_num}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${resp}=  Enable Tax
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${resp}=  Get Tax Percentage
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200  
+    Set Suite Variable  ${tax_per}  ${resp.json()['taxPercentage']}
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -472,17 +472,17 @@ JD-TC-Remove Service Level Discount-4
     ${displayNote}=   FakerLibrary.word
 
 
-        ${gstper}=  Random Element  ${gstpercentage}
-        ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
-        ${resp}=  Update Tax Percentage  ${gstper}  ${GST_num}
-        Should Be Equal As Strings    ${resp.status_code}   200
-        ${resp}=  Enable Tax
-        Log  ${resp.content}
-        Should Be Equal As Strings    ${resp.status_code}   200
-        ${resp}=  Get Tax Percentage
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200  
-        Set Suite Variable  ${tax_per}  ${resp.json()['taxPercentage']}
+    ${gstper}=  Random Element  ${gstpercentage}
+    ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
+    ${resp}=  Update Tax Percentage  ${gstper}  ${GST_num}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${resp}=  Enable Tax
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${resp}=  Get Tax Percentage
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200  
+    Set Suite Variable  ${tax_per}  ${resp.json()['taxPercentage']}
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}

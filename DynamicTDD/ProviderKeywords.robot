@@ -1949,7 +1949,7 @@ Create Prescription
     END
     ${data}=    Create Dictionary    providerConsumerId=${providerConsumerId}    doctorId=${userId}    html=${html}    mrPrescriptions=${mrPrescriptions}    
     Check And Create YNW Session
-     FOR    ${key}    ${value}    IN    &{kwargs}
+    FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
     END
     ${data}=  json.dumps  ${data}
@@ -2553,6 +2553,37 @@ Get Vendor List with Count filter
     RETURN  ${resp}
 
 ######### FINANCE  ############
+
+Update Tax Percentage
+    [Arguments]  ${taxPercentage}  ${gstNumber}  &{kwargs}
+    ${data}=  Create Dictionary  taxPercentage=${taxPercentage}  gstNumber=${gstNumber}  
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw  /provider/payment/tax   data=${data}  expected_status=any
+    Check Deprication  ${resp}  Update Tax Percentage
+    RETURN  ${resp}
+
+Get Tax Percentage
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw  /provider/payment/tax  expected_status=any
+    Check Deprication  ${resp}  Get Tax Percentage
+    RETURN  ${resp}  
+
+Enable Tax
+    Check And Create YNW Session
+    ${resp}=    POST On Session    ynw  /provider/payment/tax/enable  expected_status=any
+    Check Deprication  ${resp}  Enable Tax
+    RETURN  ${resp}
+
+Disable Tax
+    Check And Create YNW Session
+    ${resp}=    POST On Session    ynw  /provider/payment/tax/disable   expected_status=any
+    Check Deprication  ${resp}  Disable Tax
+    RETURN  ${resp}
+
 
 Get jp finance settings
  
@@ -3818,18 +3849,7 @@ Get Coupon By Id
     ${resp}=  GET On Session  ynw  /provider/bill/coupons/${couponId}   expected_status=any
     Check Deprication  ${resp}  Get Coupon By Id
     RETURN  ${resp}
-
-Enable Tax
-    Check And Create YNW Session
-    ${resp}=    POST On Session    ynw  /provider/payment/tax/enable  expected_status=any
-    Check Deprication  ${resp}  Get Coupon By Id
-    RETURN  ${resp}
-
-Disable Tax
-    Check And Create YNW Session
-    ${resp}=    POST On Session    ynw  /provider/payment/tax/disable   expected_status=any
-    Check Deprication  ${resp}  Disable Tax
-    RETURN  ${resp} 
+ 
 
 Enable Disable Virtual Service
    [Arguments]  ${status}  
@@ -4979,20 +4999,7 @@ Make Payment
     Check Deprication  ${resp}  Make Payment
     RETURN  ${resp}
     
-Update Tax Percentage
-    [Arguments]  ${taxPercentage}  ${gstNumber}  
-    ${data}=  Create Dictionary  taxPercentage=${taxPercentage}  gstNumber=${gstNumber}  
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw  /provider/payment/tax   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Update Tax Percentage
-    RETURN  ${resp}
-
-Get Tax Percentage
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw  /provider/payment/tax  expected_status=any
-    Check Deprication  ${resp}  Get Tax Percentage
-    RETURN  ${resp}   
+ 
 
 Get Adword Count
     Check And Create YNW Session
