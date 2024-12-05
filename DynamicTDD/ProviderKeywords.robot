@@ -1162,6 +1162,18 @@ Get Queue ById
     Check Deprication  ${resp}  Get Queue ById
     RETURN  ${resp}
 
+Enable Waitlist
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/account/settings/waitlist/Enable  expected_status=any
+    Check Deprication  ${resp}  Enable Waitlist
+    RETURN  ${resp}
+
+Disable Waitlist
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/account/settings/waitlist/Disable   expected_status=any
+    Check Deprication  ${resp}  Disable Waitlist
+    RETURN  ${resp}
+
 ######### FILE SHARE ############
 
 upload file to temporary location
@@ -4366,20 +4378,6 @@ Get Privacy Setting
     ${resp}=  GET On Session  ynw   /provider/privacySettings  expected_status=any
     Check Deprication  ${resp}  Get Privacy Setting
     RETURN  ${resp}
-           
-Enable Waitlist
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/account/settings/waitlist/Enable  expected_status=any
-    Check Deprication  ${resp}  Enable Waitlist
-    RETURN  ${resp}
-
-Disable Waitlist
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/account/settings/waitlist/Disable   expected_status=any
-    Check Deprication  ${resp}  Disable Waitlist
-    RETURN  ${resp}
-
-
 
 Add To Waitlist with mode
     [Arguments]   ${waitlistMode}  ${consid}  ${service_id}  ${qid}  ${date}  ${consumerNote}  ${ignorePrePayment}   @{fids}  &{kwargs}

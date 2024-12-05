@@ -1000,9 +1000,18 @@ JD-TC-TeleserviceWaitlist-(Non billable Subdomain)-7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Enable Waitlist
-    Log   ${resp.json()}
+    ${resp}=  Get Waitlist Settings
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enabledWaitlist']}==${bool[0]}   
+        ${resp}=   Enable Waitlist
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=  Get Waitlist Settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}   ${bool[1]}
     sleep   01s
 
     # ${resp}=  Enable Disable Virtual Service  Enable

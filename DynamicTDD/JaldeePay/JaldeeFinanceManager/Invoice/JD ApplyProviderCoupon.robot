@@ -1863,9 +1863,18 @@ JD-TC-ProviderCouponBill-10
     ${resp}=  Update Waitlist Settings  ${calc_mode[2]}   ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Enable Waitlist
-    Log   ${resp.json()}
+    ${resp}=  Get Waitlist Settings
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enabledWaitlist']}==${bool[0]}   
+        ${resp}=   Enable Waitlist
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=  Get Waitlist Settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}   ${bool[1]}
     #sleep   01s
     ${resp}=  Get jaldeeIntegration Settings
     Log   ${resp.json()}

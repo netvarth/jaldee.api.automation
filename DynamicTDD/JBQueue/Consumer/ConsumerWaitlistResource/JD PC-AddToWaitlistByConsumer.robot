@@ -92,72 +92,103 @@ JD-TC-Add To WaitlistByConsumer-1
         Set Suite Variable  ${cid5}  ${resp.json()[0]['id']}
     END
 
-    ${resp}=  Enable Waitlist
-    Log   ${resp.json()}
+    ${resp}=  Get Waitlist Settings
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enabledWaitlist']}==${bool[0]}   
+        ${resp}=   Enable Waitlist
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=  Get Waitlist Settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}   ${bool[1]}
+
     sleep   01s
 
     ${turn_arnd_time}=   Random Int  min=2   max=10
     Set Suite Variable   ${turn_arnd_time}
- 
-    ${resp}=  Get Waitlist Settings
-    Log   ${resp.json()}   
-    Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Get jaldeeIntegration Settings
-    Log   ${resp.json()}
+    ${resp}=   Get jaldeeIntegration Settings
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[0]}   
-    ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Get jaldeeIntegration Settings
-    Log   ${resp.json()}
+    IF  ${resp.json()['onlinePresence']}==${bool[0]}
+        ${resp}=  Set jaldeeIntegration Settings    ${bool[1]}  ${EMPTY}  ${EMPTY}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=   Get jaldeeIntegration Settings
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}   
     
 
     ${pid0}=  get_acc_id  ${PUSERPH0}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    Set Suite Variable  ${tz}
-    ${parking}    Random Element     ${parkingType} 
-    ${24hours}    Random Element    ['True','False']
-    ${list}=  Create List  1  2  3  4  5  6  7 
-    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    Set Suite Variable  ${tz}
-    ${DAY}=  get_date_by_timezone  ${tz}
-    ${sTime}=  db.get_time_by_timezone  ${tz}
-    ${eTime}=  add_timezone_time  ${tz}  0  15  
-    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${postcode}  ${address}
+
+    # ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    # ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    # Set Suite Variable  ${tz}
+    # ${parking}    Random Element     ${parkingType} 
+    # ${24hours}    Random Element    ['True','False']
+    # ${list}=  Create List  1  2  3  4  5  6  7 
+    # ${DAY}=  get_date_by_timezone  ${tz}
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    # ${eTime}=  add_timezone_time  ${tz}  0  15  
+    # ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${postcode}  ${address}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${p1_l1}  ${resp.json()}
+
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${p1_l1}  ${resp.json()}
+    IF   '${resp.content}' == '${emptylist}'
+        ${loc_id1}=  Create Sample Location
+        Set Suite Variable   ${loc_id1}
+        ${resp}=   Get Location ById  ${loc_id1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+        Set Suite Variable  ${p1_l1}  ${resp.json()['id']}
+    ELSE
+        Set Suite Variable  ${p1_l1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     ${words}=    FakerLibrary.Words    nb=${10}
     ${unique_words}=    Remove Duplicates    ${words}
     
-    ${P1SERVICE1}=  Set Variable  ${unique_words[0]}
+    ${P1SERVICE1}=  generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P1SERVICE1}
     Set Suite Variable   ${P1SERVICE1}
-    ${desc}=   FakerLibrary.sentence
-    ${servicecharge}=   Random Int  min=100  max=500
-    ${resp}=  Create Service  ${P1SERVICE1}  ${desc}   ${service_duration[0]}  ${bool[0]}    ${servicecharge}    ${bool[0]}  
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${p1_s1}  ${resp.json()}
+    ${p1_s1}=  Create Sample Service  ${P1SERVICE1}
+    Set Suite Variable  ${p1_s1}
+    # ${P1SERVICE1}=  Set Variable  ${unique_words[0]}
+    # ${desc}=   FakerLibrary.sentence
+    # ${servicecharge}=   Random Int  min=100  max=500
+    # ${resp}=  Create Service  ${P1SERVICE1}  ${desc}   ${service_duration[0]}  ${bool[0]}    ${servicecharge}    ${bool[0]}  
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${p1_s1}  ${resp.json()}
     
     # ${P1SERVICE2}=    generate_unique_service_name  ${service_names}
+    # Append To List  ${service_names}  ${P1SERVICE2}
+    # ${P1SERVICE2}=  Set Variable  ${unique_words[1]}
+    # Set Suite Variable   ${P1SERVICE2}
+    # ${desc}=   FakerLibrary.sentence
+    # Set Suite Variable  ${desc}
+    # ${servicecharge}=   Random Int  min=100  max=500
+    # ${resp}=  Create Service  ${P1SERVICE2}  ${desc}   ${service_duration[0]}  ${bool[0]}    ${servicecharge}    ${bool[0]}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${p1_s2}  ${resp.json()}
+    ${P1SERVICE2}=  generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${P1SERVICE2}
-    ${P1SERVICE2}=  Set Variable  ${unique_words[1]}
     Set Suite Variable   ${P1SERVICE2}
-    ${desc}=   FakerLibrary.sentence
-    Set Suite Variable  ${desc}
-    ${servicecharge}=   Random Int  min=100  max=500
-    ${resp}=  Create Service  ${P1SERVICE2}  ${desc}   ${service_duration[0]}  ${bool[0]}    ${servicecharge}    ${bool[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${p1_s2}  ${resp.json()}
+    ${p1_s1}=  Create Sample Service  ${P1SERVICE2}
+    Set Suite Variable  ${p1_s2}
 
     # ${sTime1}=  db.get_time_by_timezone   ${tz}
     # ${eTime1}=  add_timezone_time  ${tz}  1  30  
@@ -3170,18 +3201,29 @@ JD-TC-Add To WaitlistByConsumer-UH16
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Enable Waitlist
-    Log   ${resp.json()}
+    ${resp}=  Get Waitlist Settings
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Get jaldeeIntegration Settings
-    Log   ${resp.json()}
+    IF  ${resp.json()['enabledWaitlist']}==${bool[0]}   
+        ${resp}=   Enable Waitlist
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=  Get Waitlist Settings
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[0]}   
-    ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[0]}  ${boolean[0]}
-    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}   ${bool[1]}
+    ${resp}=   Get jaldeeIntegration Settings
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Get jaldeeIntegration Settings
-    Log   ${resp.json()}
+    IF  ${resp.json()['onlinePresence']}==${bool[0]}
+        ${resp}=  Set jaldeeIntegration Settings    ${bool[1]}  ${EMPTY}  ${EMPTY}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=   Get jaldeeIntegration Settings
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]} 
 
@@ -3906,19 +3948,30 @@ JD-TC-Add To WaitlistByConsumer-24
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.json()[0]['prefix']}  logo
 
-    ${resp}=  Enable Waitlist
-    Log   ${resp.json()}
+    ${resp}=  Get Waitlist Settings
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enabledWaitlist']}==${bool[0]}   
+        ${resp}=   Enable Waitlist
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=  Get Waitlist Settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}   ${bool[1]}
     sleep   01s
-    ${resp}=  Get jaldeeIntegration Settings
-    Log   ${resp.json()}
+    ${resp}=   Get jaldeeIntegration Settings
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[0]}   
-    ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[0]}  ${boolean[0]}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Get jaldeeIntegration Settings
-    Log   ${resp.json()}
+    IF  ${resp.json()['onlinePresence']}==${bool[0]}
+        ${resp}=  Set jaldeeIntegration Settings    ${bool[1]}  ${EMPTY}  ${EMPTY}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=   Get jaldeeIntegration Settings
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
 
@@ -4744,26 +4797,24 @@ JD-TC-Add To WaitlistByConsumer-UH20
     Set Suite Variable   ${p1_q1}  ${resp.json()}
 
     ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['onlinePresence']}==${bool[0]}
+        ${resp}=  Set jaldeeIntegration Settings    ${bool[1]}  ${EMPTY}  ${EMPTY}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=   Get jaldeeIntegration Settings
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[0]}
-
-
-    ${resp}=  Set jaldeeIntegration Settings    ${boolean[0]}  ${boolean[1]}  ${boolean[0]}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=  Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[0]}
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
     
-     ${resp}=    Send Otp For Login    ${CUSERNAME4}    ${pid0}
+    ${resp}=    Send Otp For Login    ${CUSERNAME4}    ${pid0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   

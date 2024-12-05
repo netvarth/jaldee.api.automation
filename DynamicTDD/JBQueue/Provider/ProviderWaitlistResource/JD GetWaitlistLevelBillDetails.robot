@@ -106,9 +106,18 @@ JD-TC-ApplyJaldeeCouponforwaitlist-1
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
 
-    ${resp}=  Enable Waitlist
-    Log   ${resp.json()}
+    ${resp}=  Get Waitlist Settings
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enabledWaitlist']}==${bool[0]}   
+        ${resp}=   Enable Waitlist
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=  Get Waitlist Settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}   ${bool[1]}
 
       ${resp}=  Get Waitlist Settings
       Log   ${resp.json()}
