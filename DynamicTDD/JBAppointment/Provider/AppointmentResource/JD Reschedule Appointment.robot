@@ -2014,14 +2014,6 @@ JD-TC-Reschedule Appointment-14
     ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-	
     ${lid}=  Create Sample Location  
 
     ${SERVICE1}=    FakerLibrary.Word
@@ -2032,6 +2024,15 @@ JD-TC-Reschedule Appointment-14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
+    ${resp}=   Get Service
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Locations
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+	
+    sleep  1s
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${DAY3}=  db.add_timezone_date  ${tz}  4  

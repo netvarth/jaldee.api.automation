@@ -18,6 +18,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 ${self}     0
 @{service_names}
+@{service_duration}  10  20  30   40   50
 
 *** Test Cases ***
 
@@ -283,9 +284,12 @@ JD-TC-Block Appointment-4
     Append To List  ${service_names}  ${SERVICE1}  
     ${description}=    FakerLibrary.word
     Set Test Variable  ${vstype}  ${vservicetype[0]}
-    ${resp}=  Create virtual Service  ${SERVICE1}   ${description}   5   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${Total1}  ${bool[0]}   ${bool[0]}   ${vstype}   ${virtualCallingModes1}
-    Log  ${resp.json()}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}   serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes1}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
+    # ${resp}=  Create virtual Service  ${SERVICE1}   ${description}   5   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${Total1}  ${bool[0]}   ${bool[0]}   ${vstype}   ${virtualCallingModes1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${vs_id1}  ${resp.json()}
     
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
