@@ -337,13 +337,13 @@ JD-TC-GetAppointmentAttachment-4
 
     [Documentation]   Add appointment attachment as jpeg file.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     # clear_service   ${PUSERNAME130}
     # clear_location  ${PUSERNAME130}
-    clear_customer   ${PUSERNAME130}
+    clear_customer   ${PUSERNAME129}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -437,13 +437,13 @@ JD-TC-GetAppointmentAttachment-5
 
     [Documentation]   Add appointment attachment without caption.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME128}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     # clear_service   ${PUSERNAME130}
     # clear_location  ${PUSERNAME130}
-    clear_customer   ${PUSERNAME130}
+    clear_customer   ${PUSERNAME128}
 
     ${lid}=  Create Sample Location  
     ${resp}=   Get Location ById  ${lid}
@@ -527,13 +527,13 @@ JD-TC-GetAppointmentAttachment-6
 
     [Documentation]   Add appointment attachment as gif file.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME127}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     # clear_service   ${PUSERNAME130}
     # clear_location  ${PUSERNAME130}
-    clear_customer   ${PUSERNAME130}
+    clear_customer   ${PUSERNAME127}
 
     ${resp}=    Get Locations
     Log  ${resp.content}

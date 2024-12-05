@@ -1338,6 +1338,8 @@ LABEL_ALREADY_ADDED= "Label {} already added in this item"
 LABEL_ALREADY_ADDED_IN_ORDER= "Label {} already added in this order"
 CANNOT_EDIT_RESOURCEREQUIRED="Cannot edit resource required.Because the schedule does not contain enough resource available"
 APPOINTMENT_DELAY_MISSING= "Appointment delay missing"
+APPT_NOT_TAKEN = "Appointment not be permitted at this time"
+
 #Commenting messages starts here
 
 # MassCommunication_push= "Message regarding an appointment for [consumer name]: [message]."

@@ -5438,7 +5438,127 @@ JD-TC-Take Appointment-UH15
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200 
     # Verify Response             ${resp}     uid=${apptid1}   appmtDate=${DAY3}   appmtTime=${slot1}
-  
+
+
+JD-TC-Take Appointment-UH16
+
+    [Documentation]   Consumer tries to take an appointment when online presence disabled.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Set jaldeeIntegration Settings    ${boolean[0]}  ${boolean[1]}  ${boolean[0]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get jaldeeIntegration Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[0]}
+
+    ${resp}=  Get Business Profile
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']} 
+
+    ${lid}=  Create Sample Location
+    
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${s_id}=  Create Sample Service  ${SERVICE1}  maxBookingsAllowed=10
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+    # clear_appt_schedule   ${HLPUSERNAME42}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${delta}=  FakerLibrary.Random Int  min=12  max=60
+    ${eTime1}=  add_two   ${sTime1}  ${delta}
+    ${schedule_name}=  FakerLibrary.bs
+    ${parallel}=  FakerLibrary.Random Int  min=1  max=1
+    ${maxval}=  Convert To Integer   ${delta/4}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${bool1}=  Random Element  ${bool}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${sch_id}  ${resp.json()}
+
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable  ${PCPHONENO}  555${PH_Number}
+
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${PCPHONENO}      firstName=${fname}   lastName=${lname}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+      
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${cid}  ${resp.json()[0]['id']}
+   
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login    ${PCPHONENO}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    Set Test Variable  ${lname}   ${resp.json()['lastName']}
+
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
+        END
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j}=  Random Int  max=${num_slots-1}
+    Set Suite Variable   ${slot1}   ${slots[${j}]}
+    
+    ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
+    ${apptfor}=   Create List  ${apptfor1}
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=   Customer Take Appointment  ${account_id}   ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}   location=${{str('${lid}')}}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${APPT_NOT_TAKEN}
+
+    ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${EMPTY}  ${boolean[0]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get jaldeeIntegration Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[0]}
+
 *** Comments ***
 
 JD-TC-Take Appointment-22
