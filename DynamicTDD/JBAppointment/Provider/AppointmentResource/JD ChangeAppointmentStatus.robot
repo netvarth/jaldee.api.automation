@@ -3122,16 +3122,6 @@ JD-TC-ChangeAppointmentStatus-UH13
             Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
         END
 
-        ${resp}=    Get Service
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        IF   '${resp.content}' == '${emptylist}'
-            ${SERVICE1}=    generate_unique_service_name  ${service_names}
-            Append To List  ${service_names}  ${SERVICE1}   
-            ${s_id}=  Create Sample Service  ${SERVICE1}  
-        ELSE
-            Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
-        END
         ${schedule_name}=  FakerLibrary.bs
         ${parallel}=  FakerLibrary.Random Int  min=3  max=10
         ${maxval}=  Convert To Integer   ${delta/2}
@@ -3145,6 +3135,25 @@ JD-TC-ChangeAppointmentStatus-UH13
         Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
         Set Test Variable  ${lid}  ${resp.json()[0]['location']['id']}
         Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
+    END
+
+    ${resp}=    Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        Append To List  ${service_names}  ${SERVICE1}   
+        ${s_id}=  Create Sample Service  ${SERVICE1}  
+    ELSE
+        Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
+    END
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['maxBookingsAllowed']} <= 1
+        ${resp}=  Update Service  ${s_id}  ${resp.json()['name']}  ${resp.json()['description']}  ${resp.json()['serviceDuration']}  ${resp.json()['isPrePayment']}  ${resp.json()['totalAmount']}  maxBookingsAllowed=${maxBookings}
+        Should Be Equal As Strings  ${resp.status_code}  200
     END
 
     ${resp}=  Get Appointment Schedule ById  ${sch_id}

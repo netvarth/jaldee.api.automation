@@ -57,10 +57,6 @@ JD-TC-ProviderConfirmApptRequest-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid1}  ${resp.json()}
 
-    ${resp}=   Get Service By Id  ${sid1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${SERVICE2}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE2}
     ${service_duration}=   Random Int   min=5   max=10
@@ -74,10 +70,13 @@ JD-TC-ProviderConfirmApptRequest-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid2}  ${resp.json()}
 
-    ${resp}=   Get Service By Id  ${sid2}
+    ${resp}=   Get Service By Id  ${sid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=   Get Service By Id  ${sid2}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Locations
     Log  ${resp.content}

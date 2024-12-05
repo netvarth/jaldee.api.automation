@@ -577,7 +577,7 @@ JD-TC-GetConsumerAppointments-3
     Should Be Equal As Strings    ${resp.status_code}   200
 
 
-    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid1}  ${s_id1}
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid1}  ${s_id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
@@ -596,7 +596,7 @@ JD-TC-GetConsumerAppointments-3
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${account_id}  ${s_id2}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor}    
+    ${resp}=   Customer Take Appointment   ${account_id}  ${s_id2}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor}    location=${{str('${lid1}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           

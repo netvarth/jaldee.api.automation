@@ -1792,7 +1792,7 @@ JD-TC-AddSubServicesToAppt-11
 
     [Documentation]  Create multiple sub services and add that subservice to an appointment(walkin)
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME165}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1872,12 +1872,6 @@ JD-TC-AddSubServicesToAppt-11
     Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}   
    
-    ${resp}=   Get Service By Id  ${s_id}
-    Log   ${resp.json()}  
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${ser_dur}      ${resp.json()['serviceDuration']}
-    Set Test Variable   ${ser_amount}   ${resp.json()['totalAmount']}
-    
     ##....subservice creation..........
 
     ${desc}=  FakerLibrary.sentence
@@ -1907,6 +1901,12 @@ JD-TC-AddSubServicesToAppt-11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${subser_id2}  ${resp.json()}
 
+    ${resp}=   Get Service By Id  ${s_id}
+    Log   ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${ser_dur}      ${resp.json()['serviceDuration']}
+    Set Test Variable   ${ser_amount}   ${resp.json()['totalAmount']}
+    
     ${resp}=   Get Service By Id  ${subser_id2}
     Log   ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
