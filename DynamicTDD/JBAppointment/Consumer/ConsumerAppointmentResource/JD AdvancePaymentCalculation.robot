@@ -1668,7 +1668,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-8
     ${resp}=    Verify Otp For Login   ${pro_cust2}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${tokenss}  ${resp.json()['token']}
+    Set Test Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=    ProviderConsumer Login with token   ${pro_cust2}    ${account_id}  ${token} 
     Log   ${resp.content}
