@@ -1397,6 +1397,8 @@ JD-TC-GetConsumerAppointments-15
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Contain  ${resp.text}  ${apptStatus[5]}
 
+    ${resp}=  Enable Disable Department  ${toggle[1]}
+
 
     ${resp}=  Provider Logout
     Log  ${resp.content}
@@ -1444,6 +1446,9 @@ JD-TC-GetConsumerAppointments-15
         END
     
     END 
+
+
+
 
 JD-TC-GetConsumerAppointments-16
 
@@ -1604,7 +1609,7 @@ JD-TC-GetConsumerAppointments-17
     ${DAY6}=  db.add_timezone_date  ${tz}   6
     Set Suite Variable   ${DAY6}
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${prov_id}  ${ser_id1}  ${schedule_id1}  ${DAY6}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${prov_id}  ${ser_id1}  ${schedule_id1}  ${DAY6}  ${cnote}   ${apptfor}     location=${{str('${loc_id1}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid6}=  Get From Dictionary  ${resp.json()}  ${fname}
