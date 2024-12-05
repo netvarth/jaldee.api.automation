@@ -715,38 +715,6 @@ JD-TC-GetAppointmentStatus-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    # ${resp}=   Get Service
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=    Get Locations
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=   Get Appointment Settings
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # IF  ${resp.json()['enableAppt']}==${bool[0]}   
-    #     ${resp}=   Enable Disable Appointment   ${toggle[0]}
-    #     Should Be Equal As Strings  ${resp.status_code}  200
-    # END
-
-    # clear_service   ${PUSERNAME183}
-    # clear_location  ${PUSERNAME183}
-    # clear_appt_schedule   ${PUSERNAME183}
-
-    # ${resp}=   Get Service
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=    Get Locations
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200   
-
-    # ${resp}=   Get Appointment Settings
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -779,57 +747,28 @@ JD-TC-GetAppointmentStatus-5
     IF   '${resp.content}' == '${emptylist}'
         ${SERVICE1}=    generate_unique_service_name  ${service_names}
         Append To List  ${service_names}  ${SERVICE1}   
-        ${s_id}=  Create Sample Service  ${SERVICE1}  
+        ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=20
+    ELSE IF   ${resp.json()[0]['maxBookingsAllowed']} <= 1
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        Append To List  ${service_names}  ${SERVICE1}   
+        ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=20
     ELSE
         Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
     END
 
-    sleep  1s
-    ${resp}=   Get Service By Id  ${s_id}
+    ${schedule_name}=  FakerLibrary.bs
+    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    ${maxval}=  Convert To Integer   ${delta/2}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${bool1}=  Random Element  ${bool}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['maxBookingsAllowed']} <= 1
-        ${resp}=  Update Service  ${s_id}  ${resp.json()['name']}  ${resp.json()['description']}  ${resp.json()['serviceDuration']}  ${resp.json()['isPrePayment']}  ${resp.json()['totalAmount']}  maxBookingsAllowed=${maxBookings}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
+    Set Test Variable  ${sch_id}  ${resp.json()}
 
-    # ${schedule_name}=  FakerLibrary.bs
-    # ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    # ${maxval}=  Convert To Integer   ${delta/2}
-    # ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    # ${bool1}=  Random Element  ${bool}
-    # ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${sch_id}  ${resp.json()}
-
-    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-  
-    # ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
-
-    ${resp}=    Get Appointment Schedules
-    Log  ${resp.content}
+    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'       
-        ${schedule_name}=  FakerLibrary.bs
-        ${parallel}=  FakerLibrary.Random Int  min=10  max=20
-        ${maxval}=  Convert To Integer   ${delta/2}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-        ${bool1}=  Random Element  ${bool}
-        ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}  ${s_id1}  ${s_id2}
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${sch_id}  ${resp.json()}
-    ELSE
-        Set Suite Variable  ${sch_id}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${lid}  ${resp.json()[0]['location']['id']}
-        Set Suite Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
-    END
     
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.content}
