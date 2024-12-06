@@ -719,7 +719,7 @@ JD-TC-Schedule-1
         # ${Total}=  Evaluate  ${servicenetRate} + ${servicenetRate2}
 
         
-        ${resp}=  Create Invoice   ${category_id}    ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}   ${lid}   serviceList=${serviceList}        ynwUuid=${wapptid1}
+        ${resp}=  Create Invoice   ${category_id}    ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}   ${lid}   serviceList=${serviceList}  ynwUuid=${wapptid1}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}  
@@ -1290,8 +1290,8 @@ JD-TC-Schedule-1
         Set Suite Variable   ${discountprice}
         ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
         Log  ${resp.json()}
-        Set Suite Variable   ${discountId}   ${resp.json()}   
         Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable   ${discountId}   ${resp.json()}   
 
         ${resp}=   Get Discounts 
         Log  ${resp.json()}

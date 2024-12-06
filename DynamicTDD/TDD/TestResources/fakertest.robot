@@ -11,7 +11,30 @@ Library           /ebs/TDD/CustomKeywords.py
 @{service_names}
 
 *** Test Cases ***
-Creating Service Names -1
+Extract UUID Part
+    # ${first_part}=    Evaluate    FakerLibrary.Get Faker Data  uuid4 | split('-')[0]
+    # Log    ${first_part}
+
+    ${invoiceId}=  FakerLibrary.iana_id
+
+    ${uuid}=    Evaluate    str(__import__('uuid').uuid4())
+    ${first_part}=    Evaluate    '${uuid}'.split('-')[0]
+    Log    ${first_part}
+
+    ${first_part}=    Evaluate    str(__import__('uuid').uuid4()).split('-')[0]
+    Log    ${first_part}
+
+
+
+
+# Creating Service Names -1
+
+    # ${first_part}=  Evaluate  '${FakerLibrary.Uuid4}'.split('-')[0]
+    # ${first_part}=  Evaluate  FakerLibrary.Uuid4().split('-')[0]
+
+
+
+*** COMMENTS ***
 
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
