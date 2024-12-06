@@ -595,11 +595,11 @@ JD-TC-GetFutureAppointment-4
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}   
-    ${s_id1}=  Create Sample Service  ${SERVICE1}  isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre}  maxBookingsAllowed=10 
+    ${s_id1}=  Create Sample Service  ${SERVICE1}  isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre}  maxBookingsAllowed=10  automaticInvoiceGeneration=${bool[1]}
    
     ${SERVICE2}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE2}
-    ${s_id2}=  Create Sample Service  ${SERVICE2}
+    ${s_id2}=  Create Sample Service  ${SERVICE2}   automaticInvoiceGeneration=${bool[1]}
 
     ${resp}=   Get Service By Id  ${s_id1}
     Log  ${resp.json()}
@@ -614,14 +614,6 @@ JD-TC-GetFutureAppointment-4
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
-
-    ${resp}=  Auto Invoice Generation For Service   ${s_id1}    ${toggle[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Auto Invoice Generation For Service   ${s_id2}    ${toggle[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -1311,13 +1303,6 @@ JD-TC-GetFutureAppointment-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()}
     
-    ${fname2}=  generate_firstname
-    ${lname2}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME21}   firstName=${fname2}   lastName=${lname2}
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid2}   ${resp.json()}
-    
     ${apptfor1}=  Create Dictionary  id=${cid1}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
@@ -1332,6 +1317,13 @@ JD-TC-GetFutureAppointment-8
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${fname2}=  generate_firstname
+    ${lname2}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${CUSERNAME21}   firstName=${fname2}   lastName=${lname2}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${cid2}   ${resp.json()}
    
     ${apptfor2}=  Create Dictionary  id=${cid2}   apptTime=${slot2}
     ${apptfor}=   Create List  ${apptfor2}
@@ -2154,13 +2146,6 @@ JD-TC-GetFutureAppointment-13
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()}
     
-    ${fname2}=  generate_firstname
-    ${lname2}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME21}   firstName=${fname2}   lastName=${lname2}
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid2}   ${resp.json()}
-    
     ${apptfor1}=  Create Dictionary  id=${cid1}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
@@ -2174,10 +2159,13 @@ JD-TC-GetFutureAppointment-13
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${fname2}=  generate_firstname
+    ${lname2}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${CUSERNAME21}   firstName=${fname2}   lastName=${lname2}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${cid2}   ${resp.json()}
 
     ${resp}=    Send Otp For Login    ${CUSERNAME21}    ${pid}
     Log   ${resp.content}

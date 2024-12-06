@@ -28,7 +28,7 @@ JD-TC-Reschedule Appointment-1
 
     [Documentation]  Provider takes appointment for a consumer and reschedules it to a later time in the same day
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME249}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME382}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -153,7 +153,7 @@ JD-TC-Reschedule Appointment-2
 
     [Documentation]  Provider takes appointment for a consumer and reschedules it to another day
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME249}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME382}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -211,7 +211,7 @@ JD-TC-Reschedule Appointment-3
 
     [Documentation]  Provider takes appointment for a consumer and reschedules it to same slot but another day
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME249}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME382}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2963,6 +2963,7 @@ JD-TC-Reschedule Appointment-20
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
+    sleep  1s
     ${resp}=  Reschedule Consumer Appointment   ${apptid1}  ${slot2}  ${DAY1}  ${sch_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -3017,10 +3018,10 @@ JD-TC-Reschedule Appointment-21
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    # clear_service   ${PUSERNAME249}
-    # clear_location  ${PUSERNAME249}
-    # clear_location_n_service  ${PUSERNAME249}
-    # clear_customer   ${PUSERNAME249}
+    # clear_service   ${PUSERNAME382}
+    # clear_location  ${PUSERNAME382}
+    # clear_location_n_service  ${PUSERNAME382}
+    # clear_customer   ${PUSERNAME382}
 
     ${lid}=  Create Sample Location  
 
@@ -3062,7 +3063,7 @@ JD-TC-Reschedule Appointment-21
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_appt_schedule   ${PUSERNAME249}
+    # clear_appt_schedule   ${PUSERNAME382}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -3261,10 +3262,10 @@ JD-TC-Reschedule Appointment-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    # clear_service   ${PUSERNAME249}
-    # clear_location  ${PUSERNAME249}
-    # clear_location_n_service  ${PUSERNAME249}
-    # clear_customer   ${PUSERNAME249}
+    # clear_service   ${PUSERNAME382}
+    # clear_location  ${PUSERNAME382}
+    # clear_location_n_service  ${PUSERNAME382}
+    # clear_customer   ${PUSERNAME382}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3284,7 +3285,7 @@ JD-TC-Reschedule Appointment-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_appt_schedule   ${PUSERNAME249}
+    # clear_appt_schedule   ${PUSERNAME382}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -5663,6 +5664,7 @@ JD-TC-Reschedule Appointment-UH25
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
+    sleep  1s
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

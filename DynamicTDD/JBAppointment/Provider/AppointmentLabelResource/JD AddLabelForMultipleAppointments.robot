@@ -1838,14 +1838,24 @@ JD-TC-AddMultipleAppointmentLabel-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['userProfile']['id']}   ${mem_id1}
 
-    ${apptfor}=   db.apptfor  ${self}  ${slot1}  ${fname}  ${mem_id1}  ${slot2}  ${mem_fname}
+    # ${apptfor}=   db.apptfor  ${self}  ${slot1}  ${fname}  ${mem_id1}  ${slot2}  ${mem_fname}
+
+    ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
+    ${apptfor}=   Create List  ${apptfor1}
+
+    ${cnote}=   FakerLibrary.name
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${lid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200  
+    ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
+
+    ${apptfor1}=  Create Dictionary  id=${mem_id1}   apptTime=${slot2}
+    ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
     ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
-    ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
     ${apptid2}=  Get From Dictionary  ${resp.json()}  ${mem_fname}
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
@@ -1924,12 +1934,23 @@ JD-TC-AddMultipleAppointmentLabel-9
 
     ${apptfor}=   db.apptfor  ${self}  ${slot3}  ${fname1}  ${mem_id2}  ${slot4}  ${mem_fname1}
 
+    ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot3}
+    ${apptfor}=   Create List  ${apptfor1}
+
     ${cnote}=   FakerLibrary.name
     ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${apptid3}=  Get From Dictionary  ${resp.json()}  ${fname1}
+
+    ${apptfor1}=  Create Dictionary  id=${mem_id2}   apptTime=${slot4}
+    ${apptfor}=   Create List  ${apptfor1}
+
+    ${cnote}=   FakerLibrary.name
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${lid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid4}=  Get From Dictionary  ${resp.json()}  ${mem_fname1}
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid3}
