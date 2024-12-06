@@ -121,7 +121,7 @@ JD-TC-GetQuestionnaireByUuidForAppointment-1
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME332}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME381}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -172,7 +172,7 @@ JD-TC-GetQuestionnaireByUuidForAppointment-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME332}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME381}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -202,7 +202,7 @@ JD-TC-GetQuestionnaireByUuidForAppointment-1
     END
     Set Suite Variable   ${s_id}  
 
-    # clear_appt_schedule   ${PUSERNAME332}
+    # clear_appt_schedule   ${PUSERNAME381}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable    ${DAY1}
@@ -297,13 +297,13 @@ JD-TC-GetQuestionnaireByUuidForAppointment-2
 
     [Documentation]  Resubmit questionnaire for appointment after starting appointment
 
-    # clear_customer   ${PUSERNAME332}
+    # clear_customer   ${PUSERNAME381}
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME332}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME381}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_appt_schedule   ${PUSERNAME332}
+    # clear_appt_schedule   ${PUSERNAME381}
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.content}
@@ -375,7 +375,7 @@ JD-TC-GetQuestionnaireByUuidForAppointment-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME332}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME381}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
@@ -392,9 +392,9 @@ JD-TC-GetQuestionnaireByUuidForAppointment-3
 
     [Documentation]  Resubmit questionnaire for appointment after completing appointment
 
-    # clear_customer   ${PUSERNAME332}
+    # clear_customer   ${PUSERNAME381}
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME332}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME381}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -477,9 +477,9 @@ JD-TC-GetQuestionnaireByUuidForAppointment-4
 
     [Documentation]  Resubmit questionnaire for appointment after completing appointment
 
-    # clear_customer   ${PUSERNAME332}
+    # clear_customer   ${PUSERNAME381}
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME332}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME381}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

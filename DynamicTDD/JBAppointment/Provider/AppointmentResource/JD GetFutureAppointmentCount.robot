@@ -2216,13 +2216,6 @@ JD-TC-GetFutureAppointmentCount-14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()}
     
-    ${fname2}=  generate_firstname
-    ${lname2}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME21}   firstName=${fname2}   lastName=${lname2}
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid2}   ${resp.json()}
-    
     ${apptfor1}=  Create Dictionary  id=${cid1}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
@@ -2236,6 +2229,13 @@ JD-TC-GetFutureAppointmentCount-14
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${fname2}=  generate_firstname
+    ${lname2}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${CUSERNAME21}   firstName=${fname2}   lastName=${lname2}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${cid2}   ${resp.json()}
    
     ${apptfor2}=  Create Dictionary  id=${cid2}   apptTime=${slot2}
     ${apptfor}=   Create List  ${apptfor2}
@@ -2361,13 +2361,6 @@ JD-TC-GetFutureAppointmentCount-15
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()}
 
-    ${fname2}=  generate_firstname
-    ${lname2}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME18}  firstName=${fname2}   lastName=${lname2}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid2}   ${resp.json()}
-    
     ${apptfor1}=  Create Dictionary  id=${cid1}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
@@ -2382,6 +2375,13 @@ JD-TC-GetFutureAppointmentCount-15
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${fname2}=  generate_firstname
+    ${lname2}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${CUSERNAME18}  firstName=${fname2}   lastName=${lname2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${cid2}   ${resp.json()}
     
     ${apptfor2}=  Create Dictionary  id=${cid2}   apptTime=${slot2}
     ${apptfor}=   Create List  ${apptfor2}
@@ -2826,7 +2826,7 @@ JD-TC-GetFutureAppointmentCount-18
     ELSE
         Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
         Set Test Variable  ${lid}  ${resp.json()[0]['location']['id']}
-        Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
+        Set Test Variable  ${s_id1}  ${resp.json()[0]['services'][0]['id']}
     END
    
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY3}  ${s_id1}
@@ -2924,7 +2924,7 @@ JD-TC-GetFutureAppointmentCount-18
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY3}  ${cnote}   ${apptfor}    location=${lid}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id1}  ${sch_id}  ${DAY3}  ${cnote}   ${apptfor}    location=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
     

@@ -6552,7 +6552,9 @@ JD-TC-Take Appointment-42
 
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME8}      firstName=${fname}   lastName=${lname}
+    ${pro_cust}    Generate random string    10    123456789
+    ${pro_cust}    Convert To Integer  ${pro_cust}
+    ${resp}=  AddCustomer  ${pro_cust}      firstName=${fname}   lastName=${lname}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}

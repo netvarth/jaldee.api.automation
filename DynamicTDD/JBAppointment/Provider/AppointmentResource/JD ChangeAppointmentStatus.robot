@@ -3267,22 +3267,11 @@ JD-TC-ChangeAppointmentStatus-UH14
 
     [Documentation]  Change status to prepaymentpending from confirmed.
    
-    ${pid}=  get_acc_id  ${PUSERNAME376}
+    ${pid}=  get_acc_id  ${PUSERNAME379}
  
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME376}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME379}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get Service
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    FOR    ${srv_json}    IN   @{resp.json()}
-        IF   '${srv_json['status']}' == '${status[0]}' 
-            ${resp}=  Disable service  ${srv_json['id']}
-            Log  ${resp.content}
-            Should Be Equal As Strings  ${resp.status_code}  200
-        END
-    END
 
     ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
@@ -3302,13 +3291,14 @@ JD-TC-ChangeAppointmentStatus-UH14
             Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
         END
 
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        Append To List  ${service_names}  ${SERVICE1}   
+
         ${resp}=    Get Service
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
-            ${SERVICE1}=    generate_unique_service_name  ${service_names}
-            Append To List  ${service_names}  ${SERVICE1}   
-            ${s_id}=  Create Sample Service  ${SERVICE1}  
+            ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
         END
@@ -3327,13 +3317,39 @@ JD-TC-ChangeAppointmentStatus-UH14
         Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
     END
 
+    ${ser_durtn}=   Random Int   min=2   max=10
+    ${service_amount}=   Random Int   min=100   max=500
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    ${desc}=   FakerLibrary.sentence
+    ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}  ${ser_durtn}  ${bool[0]}  ${service_amount}   maxBookingsAllowed=10
+    Log  ${resp.content}   
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-   
-    ${resp}=  Provider Logout
+    
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    ${pro_cust}    Generate random string    10    123456789
+    ${pro_cust}    Convert To Integer  ${pro_cust}
+    Set Suite Variable  ${pro_cust}
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${resp}=  AddCustomer  ${pro_cust}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
     Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${cid}  ${resp.json()}
+
+    ${resp}=    Send Otp For Login    ${pro_cust}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${pro_cust}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token1}  ${resp.json()['token']}
 
     ${resp}=    ProviderConsumer Login with token   ${pro_cust}    ${pid}  ${token1} 
     Log   ${resp.content}
@@ -3374,7 +3390,7 @@ JD-TC-ChangeAppointmentStatus-UH14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME376}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME379}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3387,9 +3403,9 @@ JD-TC-ChangeAppointmentStatus-UH15
 
     [Documentation]  Change status to prepaymentpending from Cancelled.
 
-    ${pid}=  get_acc_id  ${PUSERNAME376}
+    ${pid}=  get_acc_id  ${PUSERNAME379}
   
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME376}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME379}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3440,9 +3456,16 @@ JD-TC-ChangeAppointmentStatus-UH15
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=    Send Otp For Login    ${pro_cust}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${pro_cust}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token1}  ${resp.json()['token']}
 
     ${resp}=    ProviderConsumer Login with token   ${pro_cust}    ${pid}  ${token1} 
     Log   ${resp.content}
@@ -3483,7 +3506,7 @@ JD-TC-ChangeAppointmentStatus-UH15
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME376}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME379}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3501,9 +3524,9 @@ JD-TC-ChangeAppointmentStatus-UH16
 
     [Documentation]  Change status to prepaymentpending from Rejected.
 
-    ${pid}=  get_acc_id  ${PUSERNAME376}
+    ${pid}=  get_acc_id  ${PUSERNAME379}
    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME376}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME379}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3554,9 +3577,16 @@ JD-TC-ChangeAppointmentStatus-UH16
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=    Send Otp For Login    ${pro_cust}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${pro_cust}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token1}  ${resp.json()['token']}
 
     ${resp}=    ProviderConsumer Login with token   ${pro_cust}    ${pid}  ${token1} 
     Log   ${resp.content}
@@ -3597,7 +3627,7 @@ JD-TC-ChangeAppointmentStatus-UH16
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME376}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME379}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
