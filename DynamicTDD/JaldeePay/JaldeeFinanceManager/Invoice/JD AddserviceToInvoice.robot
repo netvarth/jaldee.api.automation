@@ -654,13 +654,13 @@ JD-TC-Apply Services to Invoice-4
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${resp}=  Get Waitlist Settings
-      Log   ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}   200
+    ${resp}=  Get Waitlist Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}   200
 
-      ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
-      Log    ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
+    Log    ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}

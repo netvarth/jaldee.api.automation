@@ -742,13 +742,13 @@ JD-TC-Remove Services to finance-4
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${resp}=  Get Waitlist Settings
-      Log   ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}   200
+    ${resp}=  Get Waitlist Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}   200
 
-      ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
-      Log    ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
+    Log    ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
@@ -766,14 +766,14 @@ JD-TC-Remove Services to finance-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
-      ${resp}=  AddCustomer  ${CUSERNAME1}
-      Log   ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${cid}  ${resp.json()}
+    ${resp}=  AddCustomer  ${CUSERNAME1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${cid}  ${resp.json()}
 
-      ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME1}
-      Log   ${resp.json()}
-      Should Be Equal As Strings      ${resp.status_code}  200
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
      
 
     # ${resp}=  Create Sample Location  
@@ -784,11 +784,11 @@ JD-TC-Remove Services to finance-4
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-      ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
-      Set Suite Variable  ${CUR_DAY} 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${CUR_DAY} 
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
-      ${resp}=   Create Sample Service  ${SERVICE1}   automaticInvoiceGeneration=${bool[1]}
-      Set Suite Variable    ${ser_id1}    ${resp}  
+    ${resp}=   Create Sample Service  ${SERVICE1}   automaticInvoiceGeneration=${bool[1]}
+    Set Suite Variable    ${ser_id1}    ${resp}  
 
     # ${resp}=  Auto Invoice Generation For Service   ${ser_id1}    ${toggle[0]}
     # Log  ${resp.json()}
