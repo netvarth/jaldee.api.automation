@@ -2924,9 +2924,9 @@ JD-TC-GetFutureAppointmentCount-18
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id1}  ${sch_id}  ${DAY3}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY3}  ${cnote}   ${apptfor}    location=${lid}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  200  
     
     ${apptid2}=  Get From Dictionary  ${resp.json()}  ${fname2}
 

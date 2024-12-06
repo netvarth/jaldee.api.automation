@@ -1324,10 +1324,9 @@ JD-TC-Reschedule Appointment-10
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}   location=${lid} 
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${lid}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-          
+    Should Be Equal As Strings  ${resp.status_code}  200  
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
@@ -1558,9 +1557,9 @@ JD-TC-Reschedule Appointment-11
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${lid}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  200  
           
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
@@ -1737,9 +1736,9 @@ JD-TC-Reschedule Appointment-12
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${location1}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  200  
           
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
@@ -1916,9 +1915,9 @@ JD-TC-Reschedule Appointment-13
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor}   location=${lid} 
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor}    location=${lid}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  200  
           
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
@@ -2104,9 +2103,9 @@ JD-TC-Reschedule Appointment-14
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor}    location=${lid}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  200  
           
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
@@ -2290,9 +2289,9 @@ JD-TC-Reschedule Appointment-15
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor}   location=${lid}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor}    location=${lid}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  200  
           
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
@@ -5400,9 +5399,9 @@ JD-TC-Reschedule Appointment-UH23
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${lid}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  200  
           
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
@@ -5569,9 +5568,9 @@ JD-TC-Reschedule Appointment-UH24
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}  location=${lid} 
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${lid}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  200  
           
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
@@ -5740,9 +5739,9 @@ JD-TC-Reschedule Appointment-UH25
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${lid}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  200  
           
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
@@ -5942,9 +5941,9 @@ JD-TC-Reschedule Appointment-UH26
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${lid}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  200  
           
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
@@ -5961,9 +5960,9 @@ JD-TC-Reschedule Appointment-UH26
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${lid}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  200  
           
     ${apptid2}=  Get From Dictionary  ${resp.json()}  ${fname}
 
@@ -6356,9 +6355,9 @@ JD-TC-Reschedule Appointment-UH29
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${lid}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  200  
           
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
@@ -6556,9 +6555,9 @@ JD-TC-Reschedule Appointment-UH30
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${lid}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  200  
           
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
@@ -6764,9 +6763,9 @@ JD-TC-Reschedule Appointment-UH31
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${lid}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  200  
           
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 

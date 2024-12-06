@@ -583,8 +583,8 @@ JD-TC-ResubmitQuestionnaireForAppointment-2
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
-    Log  ${resp.content}
+    ${resp}=   Customer Take Appointment   ${account_id}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${lid}
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}

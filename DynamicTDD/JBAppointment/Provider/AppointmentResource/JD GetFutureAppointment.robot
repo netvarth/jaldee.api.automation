@@ -200,7 +200,7 @@ JD-TC-GetFutureAppointment-1
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id1}  ${DAY4}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id1}  ${DAY4}  ${cnote}   ${apptfor}    location=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid2}=  Get From Dictionary  ${resp.json()}  ${fname2}
@@ -344,7 +344,7 @@ JD-TC-GetFutureAppointment-2
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id2}  ${DAY4}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id2}  ${DAY4}  ${cnote}   ${apptfor}    location=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid4}=  Get From Dictionary  ${resp.json()}  ${fname2}
@@ -501,9 +501,9 @@ JD-TC-GetFutureAppointment-3
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY3}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY3}  ${cnote}   ${apptfor}    location=${lid}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200       
+    Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
@@ -699,9 +699,9 @@ JD-TC-GetFutureAppointment-4
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id1}  ${sch_id}  ${DAY3}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id1}  ${sch_id}  ${DAY3}  ${cnote}   ${apptfor}    location=${lid}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  200  
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
@@ -897,9 +897,9 @@ JD-TC-GetFutureAppointment-5
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id1}  ${DAY4}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id1}  ${DAY4}  ${cnote}   ${apptfor}    location=${lid}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  200  
     ${apptid2}=  Get From Dictionary  ${resp.json()}  ${fname2}
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid2}
@@ -2217,9 +2217,9 @@ JD-TC-GetFutureAppointment-13
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id1}  ${sch_id}  ${DAY3}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id1}  ${sch_id}  ${DAY3}  ${cnote}   ${apptfor}    location=${lid}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  200  
     
     ${apptid2}=  Get From Dictionary  ${resp.json()}  ${fname2}
 
@@ -3105,9 +3105,9 @@ JD-TC-GetFutureAppointment-18
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id1}  ${sch_id}  ${DAY3}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id1}  ${sch_id}  ${DAY3}  ${cnote}   ${apptfor}    location=${lid}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  200  
     
     ${apptid2}=  Get From Dictionary  ${resp.json()}  ${fname2}
 

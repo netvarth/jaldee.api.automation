@@ -8371,10 +8371,9 @@ JD-TC-Update schedule-UH30
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    
-    ${cnote}=   FakerLibrary.word
-    ${resp}=   Take Appointment For Provider   ${pid01}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
-    Log  ${resp.content}
+    ${cnote}=   FakerLibrary.name
+    ${resp}=   Customer Take Appointment   ${pid01}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${lid}
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
     ${apptid}=  Get Dictionary Values  ${resp.json()}

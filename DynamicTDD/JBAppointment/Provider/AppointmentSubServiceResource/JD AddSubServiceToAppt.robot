@@ -304,8 +304,8 @@ JD-TC-AddSubServicesToAppt-2
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id}  ${sch_id}  ${DAY2}  ${cnote}   ${apptfor}
-    Log  ${resp.content}
+    ${resp}=   Customer Take Appointment   ${account_id}  ${s_id}  ${sch_id}  ${DAY2}  ${cnote}   ${apptfor}    location=${lid}
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${apptid2}  ${apptid[0]}
@@ -1137,8 +1137,8 @@ JD-TC-AddSubServicesToAppt-6
 
     ${cid}=  get_id  ${CUSERNAME12}   
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id}  ${sch_id}  ${DAY2}  ${cnote}   ${apptfor}
-    Log  ${resp.content}
+    ${resp}=   Customer Take Appointment   ${account_id}  ${s_id}  ${sch_id}  ${DAY2}  ${cnote}   ${apptfor}    location=${locId}
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${apptid3}  ${apptid[0]}
@@ -2207,8 +2207,8 @@ JD-TC-AddSubServicesToAppt-12
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
-    Log  ${resp.content}
+    ${resp}=   Customer Take Appointment   ${account_id}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${locId}
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${apptid2}  ${apptid[0]}
