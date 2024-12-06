@@ -15,8 +15,8 @@ Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
-Variables       /ebs/TDD/varfiles/providers.py
-Variables       /ebs/TDD/varfiles/consumerlist.py 
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
@@ -578,7 +578,6 @@ JD-TC-AdvancePaymentcalculation-9
     Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
 
     ${resp}=  ProviderLogout
-    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
@@ -734,7 +733,6 @@ JD-TC-AdvancePaymentcalculation-10
     Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
 
     ${resp}=  ProviderLogout
-    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
@@ -1054,9 +1052,19 @@ JD-TC-AdvancePaymentcalculation-14
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Bill By UUId  ${cwid}
+    # ${resp}=    Get Bill By UUId  ${cwid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Create Invoice for Booking   ${invoicebooking[1]}   ${cwid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp}=  Get Booking Invoices  ${cwid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid1}   ${resp.json()[0]['invoiceUid']} 
 
     # ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
     # Log  ${resp.content}
@@ -1328,6 +1336,19 @@ JD-TC-AdvancePaymentcalculation-16
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${account_id}  ${resp.json()['id']}
 
+    ${resp}=   Get Appointment Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Disable Appointment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=   Get Account Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['appointment']}   ${bool[1]}
+
     # ${loc_id1}=  Create Sample Location
     # Set Test Variable   ${loc_id1}
 
@@ -1393,7 +1414,6 @@ JD-TC-AdvancePaymentcalculation-16
     Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
 
     ${resp}=  ProviderLogout
-    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
@@ -1615,7 +1635,6 @@ JD-TC-AdvancePaymentcalculation-17
     Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
 
     ${resp}=  ProviderLogout
-    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
@@ -1840,7 +1859,6 @@ JD-TC-AdvancePaymentcalculation-18
     Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
 
     ${resp}=  ProviderLogout
-    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
@@ -3076,7 +3094,6 @@ JD-TC-AdvancePaymentcalculation-22
     Set Suite Variable   ${data}
 
     ${resp}=  ProviderLogout
-    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${resp}=  Consumer Login  ${CUSERNAME4}  ${PASSWORD}
@@ -3450,7 +3467,6 @@ JD-TC-AdvancePaymentcalculation-23
     Set Suite Variable   ${data}
 
     ${resp}=  ProviderLogout
-    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${resp}=  Consumer Login  ${CUSERNAME4}  ${PASSWORD}
