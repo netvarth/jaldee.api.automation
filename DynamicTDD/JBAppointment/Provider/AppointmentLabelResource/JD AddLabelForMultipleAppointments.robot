@@ -1723,23 +1723,28 @@ JD-TC-AddMultipleAppointmentLabel-9
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
             Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre}  maxBookingsAllowed=10
-            ${resp}=   Get Service By Id  ${s_id}
-            Log  ${resp.json()}
-            Should Be Equal As Strings  ${resp.status_code}  200
-            Set Test Variable  ${min_pre}  ${resp.json()['minPrePaymentAmount']}
+            # ${resp}=   Get Service By Id  ${s_id}
+            # Log  ${resp.json()}
+            # Should Be Equal As Strings  ${resp.status_code}  200
+            # Set Test Variable  ${min_pre}  ${resp.json()['minPrePaymentAmount']}
         ELSE IF   ${resp.json()[0]['isPrePayment']} == ${bool[0]}
             ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
             Append To List  ${service_names}  ${SERVICE1}
             ${s_id}=  Create Sample Service  ${SERVICE1}   isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}  maxBookingsAllowed=10
-            ${resp}=   Get Service By Id  ${s_id}
-            Log  ${resp.json()}
-            Should Be Equal As Strings  ${resp.status_code}  200
-            Set Test Variable  ${min_pre}  ${resp.json()['minPrePaymentAmount']}
+            # ${resp}=   Get Service By Id  ${s_id}
+            # Log  ${resp.json()}
+            # Should Be Equal As Strings  ${resp.status_code}  200
+            # Set Test Variable  ${min_pre}  ${resp.json()['minPrePaymentAmount']}
         ELSE
             Set Test Variable  ${min_pre}  ${resp.json()[0]['minPrePaymentAmount']}
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
         END
+
+        ${resp}=   Get Service By Id  ${s_id}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${min_pre}  ${resp.json()['minPrePaymentAmount']}
 
         ${schedule_name}=  FakerLibrary.bs
         ${parallel}=  FakerLibrary.Random Int  min=3  max=10

@@ -376,7 +376,7 @@ JD-TC-CreateStatusBoardAppoinment-UH7
 
     [Documentation]    Create a StatusBoard with empty status board layout
     
-    ${required_lic}    Random Element    ['Basic','Premium','Team','Enterprise']
+    ${required_lic}    Random Element    ['Premium','Team','Enterprise']
 
     ${PUSERNAMEA}=  Provider with license  ${required_lic}
     

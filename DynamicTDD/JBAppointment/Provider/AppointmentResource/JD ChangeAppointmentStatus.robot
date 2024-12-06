@@ -3273,6 +3273,17 @@ JD-TC-ChangeAppointmentStatus-UH14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=    Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    FOR    ${srv_json}    IN   @{resp.json()}
+        IF   '${srv_json['status']}' == '${status[0]}' 
+            ${resp}=  Disable service  ${srv_json['id']}
+            Log  ${resp.content}
+            Should Be Equal As Strings  ${resp.status_code}  200
+        END
+    END
+
     ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200

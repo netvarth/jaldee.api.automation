@@ -35,6 +35,28 @@ JD-TC-GetSlots By Date-1
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    FOR     ${loc_json}    IN   @{resp.json()}
+        IF   '${loc_json['status']}' == '${status[0]}' and '${loc_json['baseLocation']}' == '${bool[0]}'
+            ${resp}=  Disable Location  ${loc_json['id']}
+            Log  ${resp.content}
+            Should Be Equal As Strings  ${resp.status_code}  200
+        END
+    END
+
+    ${resp}=    Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    FOR    ${srv_json}    IN   @{resp.json()}
+        IF   '${srv_json['status']}' == '${status[0]}' 
+            ${resp}=  Disable service  ${srv_json['id']}
+            Log  ${resp.content}
+            Should Be Equal As Strings  ${resp.status_code}  200
+        END
+    END
+    
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${lid}=  Create Sample Location
         ${resp}=   Get Location ById  ${lid}

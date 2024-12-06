@@ -304,10 +304,10 @@ JD-TC-AddSubServicesToAppt-2
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${account_id}  ${s_id}  ${sch_id}  ${DAY2}  ${cnote}   ${apptfor}    location=${lid}
+    ${resp}=   Customer Take Appointment   ${account_id}  ${s_id}  ${sch_id}  ${DAY2}  ${cnote}   ${apptfor}    location=${locId}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${apptid}=  Get Dictionary Values  ${resp.json()}
+    ${apptid}=  Get Dictionary Values  ${resp.json()}   
     Set Suite Variable  ${apptid2}  ${apptid[0]}
 
     ${resp}=   Get consumer Appointment By Id   ${account_id}  ${apptid2}
@@ -2072,7 +2072,7 @@ JD-TC-AddSubServicesToAppt-12
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Test Variable   ${locId}
-
+        sleep  1s
         ${resp}=   Get Location ById  ${locId}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
