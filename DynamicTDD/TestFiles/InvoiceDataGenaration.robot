@@ -1,6 +1,6 @@
 *** Settings ***
-# Suite Teardown    Delete All Sessions
-# Test Teardown     Delete All Sessions
+Suite Teardown    Delete All Sessions
+Test Teardown     Delete All Sessions
 Force Tags        Appointment
 Library           Collections
 Library           String
@@ -384,6 +384,7 @@ JD-TC-Schedule-1
     END
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY3}=  db.add_timezone_date  ${tz}  2  
     ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  db.get_time_by_timezone  ${tz}
@@ -468,7 +469,7 @@ JD-TC-Schedule-1
     Set Suite Variable   ${invoiceId}
 
 
-    # .......... Add Customer ..........
+    # .......... Take appointent for service with zero amount..........
     FOR   ${i}  IN RANGE   200
         ${PO_Number}    Generate random string    5    0123456789
         ${PO_Number}    Convert To Integer  ${PO_Number}
@@ -555,7 +556,7 @@ JD-TC-Schedule-1
         END
     END
     ${slots_len}=  Get Length  ${slots}
-
+#---------------------------------Take appt for service with zero amount and make payment for that invoice######################33333333333
 
     FOR   ${i}  IN RANGE   200
         ${PO_Number}    Generate random string    5    0123456789
@@ -655,7 +656,7 @@ JD-TC-Schedule-1
         END
     END
     ${slots_len}=  Get Length  ${slots}
-#-------------------------Takr appt for one service-Add sub service in that appt and also that sub service to a  user**************************
+#-------------------------Take appt for one service-Add sub service in that appt and also that sub service to a  user**************************
     FOR   ${i}  IN RANGE   200
         ${PO_Number}    Generate random string    5    0123456789
         ${PO_Number}    Convert To Integer  ${PO_Number}
@@ -729,3 +730,471 @@ JD-TC-Schedule-1
 
 
     END
+
+###################################-Take appt for future####################################################333
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY3}  ${s_id2}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
+    # Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    ${slots}=  Create List
+    FOR   ${i}  IN RANGE   ${no_of_slots}
+        ${available_slots_cnt}=  Set Variable  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']}
+        FOR   ${j}  IN RANGE   ${available_slots_cnt}
+            Append To List  ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${slots_len}=  Get Length  ${slots}
+
+
+    ${name1}=   FakerLibrary.word
+    ${resp}=  Create Category   ${name1}  ${categoryType[3]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${category_id}   ${resp.json()}
+
+
+    ${invoiceDate}=   db.get_date_by_timezone  ${tz}
+    Set Suite Variable   ${invoiceDate}
+
+    ${invoiceId}=   FakerLibrary.word
+    Set Suite Variable   ${invoiceId}
+
+
+    # .......... Take appointent for service with zero amount(Future)..........
+    FOR   ${i}  IN RANGE   200
+        ${PO_Number}    Generate random string    5    0123456789
+        ${PO_Number}    Convert To Integer  ${PO_Number}
+        ${CUSERPH}=  Evaluate  ${CUSERNAME}+${PO_Number}
+        Set Test Variable  ${CUSERPH${i}}  ${CUSERPH}
+        ${resp}=  GetCustomer  phoneNo-eq=${CUSERPH${i}}  
+        Log  ${resp.content}
+        Should Be Equal As Strings      ${resp.status_code}  200
+        IF   '${resp.content}' == '${emptylist}'
+            ${firstname}=  FakerLibrary.name
+            ${lastname}=  FakerLibrary.last_name
+            ${resp1}=  AddCustomer  ${CUSERPH${i}}   firstName=${firstname}   lastName=${lastname}  countryCode=${countryCodes[1]}
+            Log  ${resp1.content}
+            Should Be Equal As Strings  ${resp1.status_code}  200
+            Set Test Variable  ${cid${i}}  ${resp1.json()}
+        ELSE
+            Set Suite Variable  ${cid${i}}  ${resp.json()[0]['id']}
+            Set Suite Variable  ${firstname}  ${resp.json()[0]['firstName']}
+        END
+
+        ${resp}=  GetCustomer  phoneNo-eq=${CUSERPH${i}}  
+        Log  ${resp.content}
+        Should Be Equal As Strings      ${resp.status_code}  200
+
+        # ......... Take walkin appointments for all services .........
+
+        ${apptfor1}=  Create Dictionary  id=${cid${i}}   apptTime=${slots[${i}]}
+        ${apptfor}=   Create List  ${apptfor1}
+
+        ${cnote}=   FakerLibrary.word
+        ${resp}=  Take Appointment For Consumer  ${cid${i}}  ${s_id2}  ${sch_id}  ${DAY3}  ${cnote}  ${apptfor}  location=${{str('${lid}')}} 
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
+        Set Test Variable  ${wapptid1}  ${apptid[0]}
+
+        ${resp}=  Get Appointment By Id   ${wapptid1}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+        ${providerConsumerIdList}=  Create List  ${cid${i}}
+        Set Test Variable  ${providerConsumerIdList}   
+        
+        ${quantity}=   Random Int  min=5  max=10
+        ${quantity}=  Convert To Number  ${quantity}  1
+        ${servicecharge}=   Random Int  min=5  max=10
+
+
+
+        ${serviceList}=  Create Dictionary  serviceId=${s_id1}   quantity=${quantity} 
+        ${serviceList1}=  Create Dictionary  serviceId=${s_id2}   quantity=${quantity}    price=${servicecharge}
+        #  price=${servicecharge}
+        ${serviceList}=    Create List    ${serviceList}   ${serviceList1}
+        Set Test Variable   ${serviceList}
+
+        ${servicenetRate}=  Evaluate  ${quantity} * 100
+        ${servicenetRate2}=  Evaluate  ${quantity} * ${servicecharge}
+        ${Total}=  Evaluate  ${servicenetRate} + ${servicenetRate2}
+
+        
+        ${resp}=  Create Invoice   ${category_id}    ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}   ${lid}   serviceList=${serviceList}        ynwUuid=${wapptid1}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}  
+
+        ${resp1}=  Get Invoice By Id  ${invoice_uid}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+
+
+    END
+
+##########################################Make payment-Future###################################################################
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY3}  ${s_id2}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
+    # Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    ${slots}=  Create List
+    FOR   ${i}  IN RANGE   ${no_of_slots}
+        ${available_slots_cnt}=  Set Variable  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']}
+        FOR   ${j}  IN RANGE   ${available_slots_cnt}
+            Append To List  ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${slots_len}=  Get Length  ${slots}
+#---------------------------------Take appt for service with zero amount and make payment for that invoice######################33333333333
+
+    FOR   ${i}  IN RANGE   200
+        ${PO_Number}    Generate random string    5    0123456789
+        ${PO_Number}    Convert To Integer  ${PO_Number}
+        ${CUSERPH}=  Evaluate  ${CUSERNAME}+${PO_Number}
+        Set Test Variable  ${CUSERPH${i}}  ${CUSERPH}
+        ${resp}=  GetCustomer  phoneNo-eq=${CUSERPH${i}}  
+        Log  ${resp.content}
+        Should Be Equal As Strings      ${resp.status_code}  200
+        IF   '${resp.content}' == '${emptylist}'
+            ${firstname}=  FakerLibrary.name
+            ${lastname}=  FakerLibrary.last_name
+            ${resp1}=  AddCustomer  ${CUSERPH${i}}   firstName=${firstname}   lastName=${lastname}  countryCode=${countryCodes[1]}
+            Log  ${resp1.content}
+            Should Be Equal As Strings  ${resp1.status_code}  200
+            Set Test Variable  ${cid${i}}  ${resp1.json()}
+        ELSE
+            Set Suite Variable  ${cid${i}}  ${resp.json()[0]['id']}
+            Set Suite Variable  ${firstname}  ${resp.json()[0]['firstName']}
+        END
+
+        ${resp}=  GetCustomer  phoneNo-eq=${CUSERPH${i}}  
+        Log  ${resp.content}
+        Should Be Equal As Strings      ${resp.status_code}  200
+
+        # ......... Take walkin appointments for all services .........
+
+        ${apptfor1}=  Create Dictionary  id=${cid${i}}   apptTime=${slots[${i}]}
+        ${apptfor}=   Create List  ${apptfor1}
+
+        ${cnote}=   FakerLibrary.word
+        ${resp}=  Take Appointment For Consumer  ${cid${i}}  ${s_id2}  ${sch_id}  ${DAY3}  ${cnote}  ${apptfor}  location=${{str('${lid}')}} 
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
+        Set Test Variable  ${wapptid1}  ${apptid[0]}
+
+        ${resp}=  Get Appointment By Id   ${wapptid1}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable   ${fullAmount}  ${resp.json()['fullAmount']}         
+
+        # ${resp}=  Get Booking Invoices  ${wapptid1}
+        # Log   ${resp.content}
+        # Should Be Equal As Strings  ${resp.status_code}  200
+
+
+        ${providerConsumerIdList}=  Create List  ${cid${i}}
+        Set Test Variable  ${providerConsumerIdList}   
+        
+        
+        # ${servicenetRate}=  Convert To Number  ${servicenetRate}   2
+        # Set Test Variable   ${servicenetRate}
+
+        
+        ${resp}=  Create Invoice   ${category_id}    ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}   ${lid}   serviceList=${serviceList}        ynwUuid=${wapptid1}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}  
+
+
+        ${resp1}=  Get Invoice By Id  ${invoice_uid}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+
+        # ${note}=    FakerLibrary.word
+        # # Set Suite Variable  ${note}   
+        # ${resp}=  Make Payment By Cash   ${wapptid1}  ${payment_modes[0]}  ${fullAmount}  ${note}
+        # Log  ${resp.json()}
+        # Should Be Equal As Strings  ${resp.status_code}  200
+
+        ${note}=    FakerLibrary.word
+        ${resp}=  Make Payment By Cash For Invoice   ${invoice_uid}  ${payment_modes[0]}  ${Total}  ${note}  paymentOndate=${DAY1}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+#######################################Sub service-Assign user to invoice##########################################3
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY3}  ${s_id2}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
+    # Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    ${slots}=  Create List
+    FOR   ${i}  IN RANGE   ${no_of_slots}
+        ${available_slots_cnt}=  Set Variable  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']}
+        FOR   ${j}  IN RANGE   ${available_slots_cnt}
+            Append To List  ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${slots_len}=  Get Length  ${slots}
+#-------------------------Take appt for one service-Add sub service in that appt and also that sub service to a  user**************************
+    FOR   ${i}  IN RANGE   200
+        ${PO_Number}    Generate random string    5    0123456789
+        ${PO_Number}    Convert To Integer  ${PO_Number}
+        ${CUSERPH}=  Evaluate  ${CUSERNAME}+${PO_Number}
+        Set Test Variable  ${CUSERPH${i}}  ${CUSERPH}
+        ${resp}=  GetCustomer  phoneNo-eq=${CUSERPH${i}}  
+        Log  ${resp.content}
+        Should Be Equal As Strings      ${resp.status_code}  200
+        IF   '${resp.content}' == '${emptylist}'
+            ${firstname}=  FakerLibrary.name
+            ${lastname}=  FakerLibrary.last_name
+            ${resp1}=  AddCustomer  ${CUSERPH${i}}   firstName=${firstname}   lastName=${lastname}  countryCode=${countryCodes[1]}
+            Log  ${resp1.content}
+            Should Be Equal As Strings  ${resp1.status_code}  200
+            Set Test Variable  ${cid${i}}  ${resp1.json()}
+        ELSE
+            Set Suite Variable  ${cid${i}}  ${resp.json()[0]['id']}
+            Set Suite Variable  ${firstname}  ${resp.json()[0]['firstName']}
+        END
+
+        ${resp}=  GetCustomer  phoneNo-eq=${CUSERPH${i}}  
+        Log  ${resp.content}
+        Should Be Equal As Strings      ${resp.status_code}  200
+
+        # ......... Take walkin appointments for all services .........
+
+        ${apptfor1}=  Create Dictionary  id=${cid${i}}   apptTime=${slots[${i}]}
+        ${apptfor}=   Create List  ${apptfor1}
+
+        ${cnote}=   FakerLibrary.word
+        ${resp}=  Take Appointment For Consumer  ${cid${i}}  ${s_id2}  ${sch_id}  ${DAY3}  ${cnote}  ${apptfor}  location=${{str('${lid}')}} 
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
+        Set Test Variable  ${wapptid1}  ${apptid[0]}
+
+        ${resp}=  Get Appointment By Id   ${wapptid1}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+        ${providerConsumerIdList}=  Create List  ${cid${i}}
+        Set Test Variable  ${providerConsumerIdList}   
+        
+        ${quantity}=   Random Int  min=5  max=10
+        ${quantity}=  Convert To Number  ${quantity}  1
+        ${servicecharge}=   Random Int  min=5  max=10
+
+
+
+        ${serviceList}=  Create Dictionary  serviceId=${s_id1}   quantity=${quantity} 
+        ${serviceList1}=  Create Dictionary  serviceId=${s_id2}   quantity=${quantity}    price=${servicecharge}
+        ${assigneeUsers}=  Create List  ${user1_id}
+        ${serviceList2}=  Create Dictionary  serviceId=${subser_id1}   quantity=${quantity}    price=${servicecharge}   assigneeUsers=${assigneeUsers}
+        #  price=${servicecharge}
+        ${serviceList}=    Create List    ${serviceList}   ${serviceList1}    ${serviceList2}
+        Set Test Variable   ${serviceList}
+
+        # ${servicenetRate}=  Evaluate  ${quantity} * 100
+        # ${servicenetRate2}=  Evaluate  ${quantity} * ${servicecharge}
+        # ${Total}=  Evaluate  ${servicenetRate} + ${servicenetRate2}
+
+        
+        ${resp}=  Create Invoice   ${category_id}    ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}   ${lid}   serviceList=${serviceList}        ynwUuid=${wapptid1}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}  
+
+        ${resp1}=  Get Invoice By Id  ${invoice_uid}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+
+
+    END
+
+
+#######################################Sub service-Add to invoice ##########################################3
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id2}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
+    # Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    ${slots}=  Create List
+    FOR   ${i}  IN RANGE   ${no_of_slots}
+        ${available_slots_cnt}=  Set Variable  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']}
+        FOR   ${j}  IN RANGE   ${available_slots_cnt}
+            Append To List  ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${slots_len}=  Get Length  ${slots}
+#-------------------------Take appt for one service-Add sub service in that appt and also that sub service to a  user**************************
+    FOR   ${i}  IN RANGE   200
+        ${PO_Number}    Generate random string    5    0123456789
+        ${PO_Number}    Convert To Integer  ${PO_Number}
+        ${CUSERPH}=  Evaluate  ${CUSERNAME}+${PO_Number}
+        Set Test Variable  ${CUSERPH${i}}  ${CUSERPH}
+        ${resp}=  GetCustomer  phoneNo-eq=${CUSERPH${i}}  
+        Log  ${resp.content}
+        Should Be Equal As Strings      ${resp.status_code}  200
+        IF   '${resp.content}' == '${emptylist}'
+            ${firstname}=  FakerLibrary.name
+            ${lastname}=  FakerLibrary.last_name
+            ${resp1}=  AddCustomer  ${CUSERPH${i}}   firstName=${firstname}   lastName=${lastname}  countryCode=${countryCodes[1]}
+            Log  ${resp1.content}
+            Should Be Equal As Strings  ${resp1.status_code}  200
+            Set Test Variable  ${cid${i}}  ${resp1.json()}
+        ELSE
+            Set Suite Variable  ${cid${i}}  ${resp.json()[0]['id']}
+            Set Suite Variable  ${firstname}  ${resp.json()[0]['firstName']}
+        END
+
+        ${resp}=  GetCustomer  phoneNo-eq=${CUSERPH${i}}  
+        Log  ${resp.content}
+        Should Be Equal As Strings      ${resp.status_code}  200
+
+        # ......... Take walkin appointments for all services .........
+
+        ${apptfor1}=  Create Dictionary  id=${cid${i}}   apptTime=${slots[${i}]}
+        ${apptfor}=   Create List  ${apptfor1}
+
+        ${cnote}=   FakerLibrary.word
+        ${resp}=  Take Appointment For Consumer  ${cid${i}}  ${s_id2}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}} 
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
+        Set Test Variable  ${wapptid1}  ${apptid[0]}
+
+        ${resp}=  Get Appointment By Id   ${wapptid1}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+        ${providerConsumerIdList}=  Create List  ${cid${i}}
+        Set Test Variable  ${providerConsumerIdList}   
+        
+        ${quantity}=   Random Int  min=5  max=10
+        ${quantity}=  Convert To Number  ${quantity}  1
+        ${servicecharge}=   Random Int  min=5  max=10
+
+
+
+        ${serviceList}=  Create Dictionary  serviceId=${s_id1}   quantity=${quantity} 
+        ${serviceList1}=  Create Dictionary  serviceId=${s_id2}   quantity=${quantity}    price=${servicecharge}
+        ${serviceList2}=  Create Dictionary  serviceId=${subser_id1}   quantity=${quantity}    price=${servicecharge}  
+        #  price=${servicecharge}
+        ${serviceList}=    Create List    ${serviceList}   ${serviceList1}    ${serviceList2}
+        Set Test Variable   ${serviceList}
+
+        # ${servicenetRate}=  Evaluate  ${quantity} * 100
+        # ${servicenetRate2}=  Evaluate  ${quantity} * ${servicecharge}
+        # ${Total}=  Evaluate  ${servicenetRate} + ${servicenetRate2}
+
+        
+        ${resp}=  Create Invoice   ${category_id}    ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}   ${lid}   serviceList=${serviceList}        ynwUuid=${wapptid1}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}  
+
+        ${resp1}=  Get Invoice By Id  ${invoice_uid}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+
+
+    END
+    ${DAY4}=  db.add_timezone_date  ${tz}  3  
+#######################################Sub service-Add to invoice(Future) ##########################################3
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY4}  ${s_id2}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
+    # Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    ${slots}=  Create List
+    FOR   ${i}  IN RANGE   ${no_of_slots}
+        ${available_slots_cnt}=  Set Variable  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']}
+        FOR   ${j}  IN RANGE   ${available_slots_cnt}
+            Append To List  ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${slots_len}=  Get Length  ${slots}
+#-------------------------Take appt for one service-Add sub service in that appt and also that sub service to a  user**************************
+    FOR   ${i}  IN RANGE   200
+        ${PO_Number}    Generate random string    5    0123456789
+        ${PO_Number}    Convert To Integer  ${PO_Number}
+        ${CUSERPH}=  Evaluate  ${CUSERNAME}+${PO_Number}
+        Set Test Variable  ${CUSERPH${i}}  ${CUSERPH}
+        ${resp}=  GetCustomer  phoneNo-eq=${CUSERPH${i}}  
+        Log  ${resp.content}
+        Should Be Equal As Strings      ${resp.status_code}  200
+        IF   '${resp.content}' == '${emptylist}'
+            ${firstname}=  FakerLibrary.name
+            ${lastname}=  FakerLibrary.last_name
+            ${resp1}=  AddCustomer  ${CUSERPH${i}}   firstName=${firstname}   lastName=${lastname}  countryCode=${countryCodes[1]}
+            Log  ${resp1.content}
+            Should Be Equal As Strings  ${resp1.status_code}  200
+            Set Test Variable  ${cid${i}}  ${resp1.json()}
+        ELSE
+            Set Suite Variable  ${cid${i}}  ${resp.json()[0]['id']}
+            Set Suite Variable  ${firstname}  ${resp.json()[0]['firstName']}
+        END
+
+        ${resp}=  GetCustomer  phoneNo-eq=${CUSERPH${i}}  
+        Log  ${resp.content}
+        Should Be Equal As Strings      ${resp.status_code}  200
+
+        # ......... Take walkin appointments for all services .........
+
+        ${apptfor1}=  Create Dictionary  id=${cid${i}}   apptTime=${slots[${i}]}
+        ${apptfor}=   Create List  ${apptfor1}
+
+        ${cnote}=   FakerLibrary.word
+        ${resp}=  Take Appointment For Consumer  ${cid${i}}  ${s_id2}  ${sch_id}  ${DAY4}  ${cnote}  ${apptfor}  location=${{str('${lid}')}} 
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
+        Set Test Variable  ${wapptid1}  ${apptid[0]}
+
+        ${resp}=  Get Appointment By Id   ${wapptid1}
+        Log   ${resp.json()}6
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+        ${providerConsumerIdList}=  Create List  ${cid${i}}
+        Set Test Variable  ${providerConsumerIdList}   
+        
+        ${quantity}=   Random Int  min=5  max=10
+        ${quantity}=  Convert To Number  ${quantity}  1
+        ${servicecharge}=   Random Int  min=5  max=10
+
+
+
+        ${serviceList}=  Create Dictionary  serviceId=${s_id1}   quantity=${quantity} 
+        ${serviceList1}=  Create Dictionary  serviceId=${s_id2}   quantity=${quantity}    price=${servicecharge}
+        ${serviceList2}=  Create Dictionary  serviceId=${subser_id1}   quantity=${quantity}    price=${servicecharge}  
+        #  price=${servicecharge}
+        ${serviceList}=    Create List    ${serviceList}   ${serviceList1}    ${serviceList2}
+        Set Test Variable   ${serviceList}
+
+        # ${servicenetRate}=  Evaluate  ${quantity} * 100
+        # ${servicenetRate2}=  Evaluate  ${quantity} * ${servicecharge}
+        # ${Total}=  Evaluate  ${servicenetRate} + ${servicenetRate2}
+
+        
+        ${resp}=  Create Invoice   ${category_id}    ${invoiceDate}      ${invoiceId}    ${providerConsumerIdList}   ${lid}   serviceList=${serviceList}        ynwUuid=${wapptid1}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}  
+
+        ${resp1}=  Get Invoice By Id  ${invoice_uid}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+
+
+    END
+
+
