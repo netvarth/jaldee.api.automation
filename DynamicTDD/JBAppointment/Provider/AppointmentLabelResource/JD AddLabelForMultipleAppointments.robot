@@ -1836,7 +1836,7 @@ JD-TC-AddMultipleAppointmentLabel-9
     ${apptfor}=   db.apptfor  ${self}  ${slot1}  ${fname}  ${mem_id1}  ${slot2}  ${mem_fname}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -1920,7 +1920,7 @@ JD-TC-AddMultipleAppointmentLabel-9
     ${apptfor}=   db.apptfor  ${self}  ${slot3}  ${fname1}  ${mem_id2}  ${slot4}  ${mem_fname1}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -2160,7 +2160,7 @@ JD-TC-AddMultipleAppointmentLabel-10
     ${apptfor}=   db.apptfor  ${self}  ${slot2}  ${fname}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
