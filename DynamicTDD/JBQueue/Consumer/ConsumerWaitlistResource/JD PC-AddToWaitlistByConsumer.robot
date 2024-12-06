@@ -163,7 +163,7 @@ JD-TC-Add To WaitlistByConsumer-1
     ${P1SERVICE1}=  generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${P1SERVICE1}
     Set Suite Variable   ${P1SERVICE1}
-    ${p1_s1}=  Create Sample Service  ${P1SERVICE1}
+    ${p1_s1}=  Create Sample Service  ${P1SERVICE1}     maxBookingsAllowed=40
     Set Suite Variable  ${p1_s1}
     # ${P1SERVICE1}=  Set Variable  ${unique_words[0]}
     # ${desc}=   FakerLibrary.sentence
@@ -187,11 +187,11 @@ JD-TC-Add To WaitlistByConsumer-1
     ${P1SERVICE2}=  generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${P1SERVICE2}
     Set Suite Variable   ${P1SERVICE2}
-    ${p1_s2}=  Create Sample Service  ${P1SERVICE2}
+    ${p1_s2}=  Create Sample Service  ${P1SERVICE2}     maxBookingsAllowed=40
     Set Suite Variable  ${p1_s2}
 
-    # ${sTime1}=  db.get_time_by_timezone   ${tz}
-    # ${eTime1}=  add_timezone_time  ${tz}  1  30  
+    ${list}=  Create List  1  2  3  4  5  6  7 
+    ${DAY}=  get_date_by_timezone  ${tz} 
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${eTime1}=  add_timezone_time  ${tz}  1  30  
     # ${p1queue1}=    FakerLibrary.word
@@ -225,8 +225,10 @@ JD-TC-Add To WaitlistByConsumer-1
     ${resp}=    Send Otp For Login    ${CUSERNAME5}    ${pid0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login  ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -278,7 +280,7 @@ JD-TC-Add To WaitlistByConsumer-1
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid0}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}           
@@ -290,7 +292,7 @@ JD-TC-Add To WaitlistByConsumer-1
 JD-TC-Add To WaitlistByConsumer-2
 	[Documentation]  Provider removes consumer waitlisted for a service and consumer joins the waitlist of the same service and another service of same queue
     
-    clear waitlist   ${PUSERPH0}
+    # clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME5}
 
@@ -309,8 +311,10 @@ JD-TC-Add To WaitlistByConsumer-2
     ${resp}=    Send Otp For Login    ${CUSERNAME5}    ${pid0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login  ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -343,7 +347,7 @@ JD-TC-Add To WaitlistByConsumer-2
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid0}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1   waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}     waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -360,7 +364,7 @@ JD-TC-Add To WaitlistByConsumer-2
 
     ${msg}=   FakerLibrary.word
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=  Waitlist Action Cancel  ${wid1}  ${waitlist_cancl_reasn[4]}   ${msg}
+    ${resp}=  Waitlist Action   ${waitlist_actions[2]}  ${wid1}  cancelReason=${waitlist_cancl_reasn[4]}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
   
@@ -370,8 +374,10 @@ JD-TC-Add To WaitlistByConsumer-2
     ${resp}=    Send Otp For Login    ${CUSERNAME5}    ${pid0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login  ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -403,7 +409,7 @@ JD-TC-Add To WaitlistByConsumer-2
     ${resp}=  Get consumer Waitlist By Id  ${wid1}  ${pid0}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -423,7 +429,7 @@ JD-TC-Add To WaitlistByConsumer-2
     ${resp}=  Get consumer Waitlist By Id   ${wid2}  ${pid0}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=1
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE2}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s2}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -436,12 +442,14 @@ JD-TC-Add To WaitlistByConsumer-3
 
 	[Documentation]  consumer cancels the waitlist then consumer gets waitlisted for the same service again
 
-    clear waitlist   ${PUSERPH0}
+    # # clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME5}
     ${resp}=    Send Otp For Login    ${CUSERNAME5}    ${pid0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
     ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
@@ -477,7 +485,7 @@ JD-TC-Add To WaitlistByConsumer-3
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid0}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -500,7 +508,7 @@ JD-TC-Add To WaitlistByConsumer-3
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid0}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -514,15 +522,17 @@ JD-TC-Add To WaitlistByConsumer-3
 
 JD-TC-Add To WaitlistByConsumer-4
 	[Documentation]  A Consumer Added To Waitlist for same service in diffrent queue
-    clear waitlist   ${PUSERPH0}
+    # # clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME5}
 
     ${resp}=    Send Otp For Login    ${CUSERNAME5}    ${pid0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login  ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -556,7 +566,7 @@ JD-TC-Add To WaitlistByConsumer-4
 
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid0}  
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -576,7 +586,7 @@ JD-TC-Add To WaitlistByConsumer-4
     ${resp}=  Get consumer Waitlist By Id   ${wid2}  ${pid0}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -598,12 +608,14 @@ JD-TC-Add To WaitlistByConsumer-4
 
 JD-TC-Add To WaitlistByConsumer-5
 	[Documentation]  Consumer Added To Waitlist for diffrent services of diffrent Queue   
-    clear waitlist   ${PUSERPH0}
+    # clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME5}
     ${resp}=    Send Otp For Login    ${CUSERNAME5}    ${pid0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+  
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
     ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
@@ -640,7 +652,7 @@ JD-TC-Add To WaitlistByConsumer-5
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid0}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -660,7 +672,7 @@ JD-TC-Add To WaitlistByConsumer-5
     ${resp}=  Get consumer Waitlist By Id   ${wid2}  ${pid0}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE2}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s2}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -673,7 +685,7 @@ JD-TC-Add To WaitlistByConsumer-5
 
 JD-TC-Add To WaitlistByConsumer-6
     [Documentation]  Add Consumer To future waitlist 
-    clear waitlist   ${PUSERPH0}
+    # clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME5}
     # ${TOMORROW}=  db.add_timezone_date  ${tz}  3  
@@ -682,6 +694,8 @@ JD-TC-Add To WaitlistByConsumer-6
     ${resp}=    Send Otp For Login    ${CUSERNAME5}    ${pid0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+  
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
     ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
@@ -714,7 +728,7 @@ JD-TC-Add To WaitlistByConsumer-6
     ${resp}=  Get consumer Waitlist By Id   ${wid2}  ${pid0}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -728,7 +742,7 @@ JD-TC-Add To WaitlistByConsumer-6
 
 JD-TC-Add To WaitlistByConsumer-7
     [Documentation]  Add  Consumer To waitlist for another service in same queue
-    clear waitlist   ${PUSERPH0}
+    # clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME5}
     # ${DAY}=  db.get_date_by_timezone  ${tz}
@@ -738,6 +752,8 @@ JD-TC-Add To WaitlistByConsumer-7
      ${resp}=    Send Otp For Login    ${CUSERNAME5}    ${pid0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+  
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
     ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
@@ -771,7 +787,7 @@ JD-TC-Add To WaitlistByConsumer-7
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid0}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -789,7 +805,7 @@ JD-TC-Add To WaitlistByConsumer-7
     ${resp}=  Get consumer Waitlist By Id   ${wid2}  ${pid0}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=1
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE2}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s2}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -803,7 +819,7 @@ JD-TC-Add To WaitlistByConsumer-7
 
 JD-TC-Add To WaitlistByConsumer-8
     [Documentation]  Add Consumer to Future waitlist of two queues for same service
-    clear waitlist   ${PUSERPH0}
+    # clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME5}
     # ${TOMORROW}=  db.add_timezone_date  ${tz}  3  
@@ -811,6 +827,8 @@ JD-TC-Add To WaitlistByConsumer-8
      ${resp}=    Send Otp For Login    ${CUSERNAME5}    ${pid0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+  
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
     ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
@@ -844,7 +862,7 @@ JD-TC-Add To WaitlistByConsumer-8
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid0}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -865,7 +883,7 @@ JD-TC-Add To WaitlistByConsumer-8
     ${resp}=  Get consumer Waitlist By Id   ${wid2}  ${pid0}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -879,7 +897,7 @@ JD-TC-Add To WaitlistByConsumer-8
 
 JD-TC-Add To WaitlistByConsumer-9
     [Documentation]   future waitlist consumer waitlisted in diffrent service in diffrent queue
-    clear waitlist   ${PUSERPH0}
+    # clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME5}
     # ${TOMORROW}=  db.add_timezone_date  ${tz}  3  
@@ -888,6 +906,8 @@ JD-TC-Add To WaitlistByConsumer-9
      ${resp}=    Send Otp For Login    ${CUSERNAME5}    ${pid0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+  
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
     ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
@@ -921,7 +941,7 @@ JD-TC-Add To WaitlistByConsumer-9
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid0}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -940,7 +960,7 @@ JD-TC-Add To WaitlistByConsumer-9
     ${resp}=  Get consumer Waitlist By Id   ${wid2}  ${pid0}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE2}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s2}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -953,7 +973,7 @@ JD-TC-Add To WaitlistByConsumer-9
 
 JD-TC-Add To WaitlistByConsumer-10
     [Documentation]  provider have two location add , consumer waitlist same service in different Location
-    clear waitlist   ${PUSERPH0}
+    # clear waitlist   ${PUSERPH0}
     # clear_queue  ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME5}
@@ -975,6 +995,8 @@ JD-TC-Add To WaitlistByConsumer-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+
+    ${p1_l2}=  Create Sample Location
     Set Suite Variable   ${p1_l2}   ${resp.json()[1]['id']}
 
     ${p1queue2}=    FakerLibrary.word
@@ -997,6 +1019,8 @@ JD-TC-Add To WaitlistByConsumer-10
      ${resp}=    Send Otp For Login    ${CUSERNAME5}    ${pid0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+  
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
     ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
@@ -1030,7 +1054,7 @@ JD-TC-Add To WaitlistByConsumer-10
     ${resp}=  Get consumer Waitlist By Id   ${wid2}  ${pid0}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE2}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s2}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -1049,7 +1073,7 @@ JD-TC-Add To WaitlistByConsumer-10
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid0}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE2}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s2}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -1063,7 +1087,7 @@ JD-TC-Add To WaitlistByConsumer-10
 
 JD-TC-Add To WaitlistByConsumer-11
     [Documentation]  waitlist for Family Members
-    clear waitlist   ${PUSERPH0}
+    # clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME5}
     # ${DAY}=  db.get_date_by_timezone  ${tz}
@@ -1072,6 +1096,8 @@ JD-TC-Add To WaitlistByConsumer-11
      ${resp}=    Send Otp For Login    ${CUSERNAME5}    ${pid0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+  
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
     ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
@@ -1115,7 +1141,7 @@ JD-TC-Add To WaitlistByConsumer-11
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid0}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -1126,7 +1152,7 @@ JD-TC-Add To WaitlistByConsumer-11
 
 JD-TC-Add To WaitlistByConsumer-12
     [Documentation]  Future waitlist add family member
-    clear waitlist   ${PUSERPH0}
+    # clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME5}
     # ${TOMORROW}=  db.add_timezone_date  ${tz}  3  
@@ -1135,6 +1161,8 @@ JD-TC-Add To WaitlistByConsumer-12
     ${resp}=    Send Otp For Login    ${CUSERNAME5}    ${pid0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+  
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
     ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
@@ -1178,7 +1206,7 @@ JD-TC-Add To WaitlistByConsumer-12
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid0}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE2}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s2}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -1189,7 +1217,7 @@ JD-TC-Add To WaitlistByConsumer-12
 
 JD-TC-Add To WaitlistByConsumer-13
     [Documentation]  same family member add to waitlist  diffrent service  same queue
-    clear waitlist   ${PUSERPH0}
+    # clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME5}
     # ${DAY}=  db.get_date_by_timezone  ${tz}
@@ -1198,6 +1226,8 @@ JD-TC-Add To WaitlistByConsumer-13
      ${resp}=    Send Otp For Login    ${CUSERNAME5}    ${pid0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+  
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
     ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
@@ -1241,7 +1271,7 @@ JD-TC-Add To WaitlistByConsumer-13
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid0}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -1261,7 +1291,7 @@ JD-TC-Add To WaitlistByConsumer-13
     ${resp}=  Get consumer Waitlist By Id  ${wid1}  ${pid0}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=1
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE2}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s2}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -1272,7 +1302,7 @@ JD-TC-Add To WaitlistByConsumer-13
     
 JD-TC-Add To WaitlistByConsumer-14
     [Documentation]  same family member add to waitlist  same service  diffrent queue
-    clear waitlist   ${PUSERPH0}
+    # clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME5}
     # ${DAY}=  db.get_date_by_timezone  ${tz}
@@ -1281,6 +1311,8 @@ JD-TC-Add To WaitlistByConsumer-14
      ${resp}=    Send Otp For Login    ${CUSERNAME5}    ${pid0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+  
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
     ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
@@ -1324,7 +1356,7 @@ JD-TC-Add To WaitlistByConsumer-14
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid0}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -1343,7 +1375,7 @@ JD-TC-Add To WaitlistByConsumer-14
     ${resp}=  Get consumer Waitlist By Id  ${wid1}  ${pid0}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -1356,7 +1388,7 @@ JD-TC-Add To WaitlistByConsumer-14
 
 JD-TC-Add To WaitlistByConsumer-15
     [Documentation]  Consumer future waitlist  diffrent location , same service ,same provider
-    clear waitlist   ${PUSERPH0}
+    # clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME5}
     # ${TOMORROW}=  db.add_timezone_date  ${tz}  3  
@@ -1365,6 +1397,8 @@ JD-TC-Add To WaitlistByConsumer-15
      ${resp}=    Send Otp For Login    ${CUSERNAME5}    ${pid0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+  
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
     ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
@@ -1398,7 +1432,7 @@ JD-TC-Add To WaitlistByConsumer-15
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid0}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -1418,7 +1452,7 @@ JD-TC-Add To WaitlistByConsumer-15
     ${resp}=  Get consumer Waitlist By Id   ${wid2}  ${pid0}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -1431,7 +1465,7 @@ JD-TC-Add To WaitlistByConsumer-15
 
 JD-TC-Add To WaitlistByConsumer-16
     [Documentation]  Consumer future waitlist remove himself and again add for same service
-    clear waitlist   ${PUSERPH0}
+    # clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME5}
     # ${TOMORROW}=  db.add_timezone_date  ${tz}  3  
@@ -1440,6 +1474,8 @@ JD-TC-Add To WaitlistByConsumer-16
      ${resp}=    Send Otp For Login    ${CUSERNAME5}    ${pid0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+  
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
     ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
@@ -1473,7 +1509,7 @@ JD-TC-Add To WaitlistByConsumer-16
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid0}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}  partySize=1   waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}     waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -1497,7 +1533,7 @@ JD-TC-Add To WaitlistByConsumer-16
     ${resp}=  Get consumer Waitlist By Id   ${widcalcel}  ${pid0}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -1510,7 +1546,7 @@ JD-TC-Add To WaitlistByConsumer-16
 
 JD-TC-Add To WaitlistByConsumer-17
     [Documentation]  Consumer future waitlist remove by provider and again add same service
-    clear waitlist   ${PUSERPH0}
+    # clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME5}
     # ${TOMORROW}=  db.add_timezone_date  ${tz}  3  
@@ -1519,6 +1555,8 @@ JD-TC-Add To WaitlistByConsumer-17
      ${resp}=    Send Otp For Login    ${CUSERNAME5}    ${pid0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+  
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
     ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
@@ -1553,7 +1591,7 @@ JD-TC-Add To WaitlistByConsumer-17
     ${resp}=  Get consumer Waitlist By Id   ${wid25}  ${pid0}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -1570,7 +1608,7 @@ JD-TC-Add To WaitlistByConsumer-17
 
     ${msg}=   FakerLibrary.word
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=  Waitlist Action Cancel  ${wid25}  ${waitlist_cancl_reasn[4]}   ${msg}
+    ${resp}=  Waitlist Action  ${waitlist_actions[2]}  ${wid25}  cancelReason=${waitlist_cancl_reasn[4]}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -1594,7 +1632,7 @@ JD-TC-Add To WaitlistByConsumer-17
     ${resp}=  Get consumer Waitlist By Id   ${wid26}  ${pid0}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -1608,13 +1646,15 @@ JD-TC-Add To WaitlistByConsumer-17
 
 JD-TC-Add To WaitlistByConsumer-UH1
 	[Documentation]  Add To Waitlist By Consumer for the Same Services Two Times
-    clear waitlist   ${PUSERPH0}
+    # clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME5}
 
      ${resp}=    Send Otp For Login    ${CUSERNAME5}    ${pid0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+  
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
     ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
@@ -1651,7 +1691,7 @@ JD-TC-Add To WaitlistByConsumer-UH1
     ${resp}=  Get consumer Waitlist By Id   ${wid55}  ${pid0}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -1680,7 +1720,7 @@ JD-TC-Add To WaitlistByConsumer-18
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid0}=  get_acc_id  ${PUSERPH0}
-    clear waitlist   ${PUSERPH0}
+    # clear waitlist   ${PUSERPH0}
     clear_customer   ${PUSERPH0}
     
     ${resp}=  Get Account Settings
@@ -1744,6 +1784,8 @@ JD-TC-Add To WaitlistByConsumer-18
      ${resp}=    Send Otp For Login    ${CUSERNAME15}    ${pid0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+  
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
     ${resp}=    Verify Otp For Login   ${CUSERNAME15}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
@@ -1876,7 +1918,7 @@ JD-TC-Add To WaitlistByConsumer-19
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid0}=  get_acc_id  ${PUSERPH0}
-    clear waitlist   ${PUSERPH0}
+    # clear waitlist   ${PUSERPH0}
     clear_customer   ${PUSERPH0}
 
     ${desc}=   FakerLibrary.sentence
@@ -1916,6 +1958,8 @@ JD-TC-Add To WaitlistByConsumer-19
      ${resp}=    Send Otp For Login    ${CUSERNAME25}    ${pid0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+  
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
     ${resp}=    Verify Otp For Login   ${CUSERNAME25}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
@@ -2033,7 +2077,7 @@ JD-TC-Add To WaitlistByConsumer-20
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid0}=  get_acc_id  ${PUSERPH0}
-    clear waitlist   ${PUSERPH0}
+    # clear waitlist   ${PUSERPH0}
 
     ${desc}=   FakerLibrary.sentence
     # ${DAY}=  db.get_date_by_timezone  ${tz}
@@ -2067,6 +2111,8 @@ JD-TC-Add To WaitlistByConsumer-20
      ${resp}=    Send Otp For Login    ${CUSERNAME35}    ${pid0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+  
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
     ${resp}=    Verify Otp For Login   ${CUSERNAME35}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
@@ -2195,7 +2241,7 @@ JD-TC-Add To WaitlistByConsumer-20
 
 JD-TC-Add To WaitlistByConsumer-UH2
     [Documentation]  waitlist  maximum capacity and check
-    # clear waitlist   ${PUSERPH0}
+    # # clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}    
 
     ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
@@ -2224,6 +2270,7 @@ JD-TC-Add To WaitlistByConsumer-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+    ${p1_l2}=  Create Sample Location
     Set Test Variable   ${p1_l2}   ${resp.json()[1]['id']}
 
     ${p1queue1}=    FakerLibrary.word
@@ -2245,6 +2292,8 @@ JD-TC-Add To WaitlistByConsumer-UH2
      ${resp}=    Send Otp For Login    ${CUSERNAME11}    ${pid0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+  
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
     ${resp}=    Verify Otp For Login   ${CUSERNAME11}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
@@ -2287,6 +2336,8 @@ JD-TC-Add To WaitlistByConsumer-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+  
     ${resp}=    Verify Otp For Login   ${CUSERNAME11}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -2310,7 +2361,7 @@ JD-TC-Add To WaitlistByConsumer-UH2
     ${resp}=  Get consumer Waitlist By Id   ${wid5}  ${pid0}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -2335,7 +2386,7 @@ JD-TC-Add To WaitlistByConsumer-UH2
 
 JD-TC-Add To WaitlistByConsumer-UH3
 	[Documentation]  Add To Waitlist By Consumer Queue Disabled  
-    clear waitlist   ${PUSERPH0}
+    # clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME4}
     
@@ -2388,6 +2439,8 @@ JD-TC-Add To WaitlistByConsumer-UH3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+  
     ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -2419,7 +2472,7 @@ JD-TC-Add To WaitlistByConsumer-UH3
 
 JD-TC-Add To WaitlistByConsumer-UH4
 	[Documentation]  Add To Waitlist By Consumer ,provider  disable online Checkin  
-    clear waitlist   ${PUSERPH0}
+    # clear waitlist   ${PUSERPH0}
    clear Customer  ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME4}
@@ -2448,6 +2501,8 @@ JD-TC-Add To WaitlistByConsumer-UH4
      ${resp}=    Send Otp For Login    ${CUSERNAME4}    ${pid0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+  
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
     ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
@@ -2483,7 +2538,7 @@ JD-TC-Add To WaitlistByConsumer-UH4
     
 JD-TC-Add To WaitlistByConsumer-UH5 
 	[Documentation]  Add To Waitlist By Consumer ,provider  disable Waitlist 
-    clear waitlist   ${PUSERPH0}
+    # clear waitlist   ${PUSERPH0}
    clear Customer  ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME4}
@@ -2516,6 +2571,8 @@ JD-TC-Add To WaitlistByConsumer-UH5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+  
     ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -2546,7 +2603,7 @@ JD-TC-Add To WaitlistByConsumer-UH5
 
 JD-TC-Add To WaitlistByConsumer-UH6
 	[Documentation]  Add To Waitlist By Consumer ,provider  disable Disable Future Checkin
-    clear waitlist   ${PUSERPH0}
+    # clear waitlist   ${PUSERPH0}
    clear Customer  ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME5}
@@ -2576,6 +2633,8 @@ JD-TC-Add To WaitlistByConsumer-UH6
      ${resp}=    Send Otp For Login    ${CUSERNAME5}    ${pid0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+  
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
     ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
@@ -2607,7 +2666,7 @@ JD-TC-Add To WaitlistByConsumer-UH6
            
 JD-TC-Add To WaitlistByConsumer-UH7
 	[Documentation]  Add To Waitlist By Consumer ,service and queue are diffrent
-    clear waitlist   ${PUSERPH0}
+    # clear waitlist   ${PUSERPH0}
    clear Customer  ${PUSERPH0}
     # clear_queue    ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
@@ -2663,6 +2722,8 @@ JD-TC-Add To WaitlistByConsumer-UH7
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+  
     ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -2691,7 +2752,7 @@ JD-TC-Add To WaitlistByConsumer-UH7
 
 JD-TC-Add To WaitlistByConsumer-UH8
 	[Documentation]  Add To Waitlist By Consumer ,provider in holiday
-    clear waitlist   ${PUSERPH0}
+    # clear waitlist   ${PUSERPH0}
    clear Customer  ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME4}
@@ -2733,6 +2794,8 @@ JD-TC-Add To WaitlistByConsumer-UH8
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+  
     ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -2770,7 +2833,7 @@ JD-TC-Add To WaitlistByConsumer-UH8
     
 JD-TC-Add To WaitlistByConsumer-UH9
 	[Documentation]  Add To Waitlist By Consumer service DISABLED 
-    clear waitlist   ${PUSERPH0}
+    # clear waitlist   ${PUSERPH0}
    clear Customer  ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME4}
@@ -2796,6 +2859,8 @@ JD-TC-Add To WaitlistByConsumer-UH9
      ${resp}=    Send Otp For Login    ${CUSERNAME4}    ${pid0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+  
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
     ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
@@ -2834,7 +2899,7 @@ JD-TC-Add To WaitlistByConsumer-UH9
 
 # 	[Documentation]  invalid provider
 
-#     clear waitlist   ${PUSERPH0}
+#     # clear waitlist   ${PUSERPH0}
 #    clear Customer  ${PUSERPH0}
 #    ${pid0}=  get_acc_id  ${PUSERPH0}
 #     ${cid}=  get_id  ${CUSERNAME4}
@@ -2857,7 +2922,9 @@ JD-TC-Add To WaitlistByConsumer-UH9
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
   
-#     ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+#      ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 #     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -2886,7 +2953,7 @@ JD-TC-Add To WaitlistByConsumer-UH9
    
 JD-TC-Add To WaitlistByConsumer-UH11    
     [Documentation]   Add To Waitlist without login
-    # # ${resp}=   Run Keywords   clear_queue  ${PUSERPH0}  AND  clear waitlist   ${PUSERPH0}
+    # # ${resp}=   Run Keywords   clear_queue  ${PUSERPH0}  AND  # clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
    clear Customer  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME4}
@@ -2908,7 +2975,7 @@ JD-TC-Add To WaitlistByConsumer-UH11
 
 JD-TC-Add To WaitlistByConsumer-UH12
     [Documentation]  Add To Waitlist By Consumer Location Disabled  
-    clear waitlist   ${PUSERPH0}
+    # clear waitlist   ${PUSERPH0}
    clear Customer  ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME4}
@@ -2962,6 +3029,8 @@ JD-TC-Add To WaitlistByConsumer-UH12
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+  
     ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -2997,7 +3066,7 @@ JD-TC-Add To WaitlistByConsumer-UH12
 
 JD-TC-Add To WaitlistByConsumer-UH14   
     [Documentation]   Add to waitlist After Business time
-    # ${resp}=   Run Keywords   clear_queue  ${PUSERPH0}  AND  clear waitlist   ${PUSERPH0}
+    # ${resp}=   Run Keywords   clear_queue  ${PUSERPH0}  AND  # clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME5}
    clear Customer  ${PUSERPH0}
@@ -3048,6 +3117,8 @@ JD-TC-Add To WaitlistByConsumer-UH14
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+  
     ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -3091,7 +3162,7 @@ JD-TC-Add To WaitlistByConsumer-UH16
     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH3}${\n}
     Set Suite Variable   ${PUSERPH3}
     
-    # Run Keywords  clear_queue  ${PUSERPH3}   AND  clear_location  ${PUSERPH3}   AND   clear_service   ${PUSERPH3}  AND  clear waitlist   ${PUSERPH3}
+    # Run Keywords  clear_queue  ${PUSERPH3}   AND  clear_location  ${PUSERPH3}   AND   clear_service   ${PUSERPH3}  AND  # clear waitlist   ${PUSERPH3}
 
     ${licid}  ${licname}=  get_highest_license_pkg
     
@@ -3326,6 +3397,8 @@ JD-TC-Add To WaitlistByConsumer-UH16
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+  
     ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -3371,7 +3444,7 @@ JD-TC-Add To WaitlistByConsumer-UH16
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid1}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}      waitlistedBy=PROVIDER_CONSUMER
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P2SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p2_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -3394,7 +3467,7 @@ JD-TC-Add To WaitlistByConsumer-UH16
 
 JD-TC-Add To WaitlistByConsumer-UH17
 	[Documentation]  the consumer add to waitlist for a service with prepayment  , try to change prepaymentPending to STARTED 
-    # ${resp}=   Run Keywords   clear_queue  ${PUSERPH3}  AND  clear waitlist   ${PUSERPH3}
+    # ${resp}=   Run Keywords   clear_queue  ${PUSERPH3}  AND  # clear waitlist   ${PUSERPH3}
     ${pid1}=  get_acc_id  ${PUSERPH3}
     ${cid}=  get_id  ${CUSERNAME5}
     # ${DAY}=  db.get_date_by_timezone  ${tz}
@@ -3444,6 +3517,8 @@ JD-TC-Add To WaitlistByConsumer-UH17
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+  
     ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -3475,7 +3550,7 @@ JD-TC-Add To WaitlistByConsumer-UH17
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid1}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}  partySize=1  appxWaitingTime=0  waitlistedBy=PROVIDER_CONSUMER  
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}    appxWaitingTime=0  waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P2SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p2_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -3513,7 +3588,7 @@ JD-TC-Add To WaitlistByConsumer-UH17
 JD-TC-Add To WaitlistByConsumer-21
 	[Documentation]  the consumer add to waitlist for a service with prepayment  , try to change prepaymentPending to checkedIn 
     # ${resp}=   Run Keywords   clear_queue  ${PUSERPH3}  
-    # AND  clear waitlist   ${PUSERPH3}
+    # AND  # clear waitlist   ${PUSERPH3}
     ${pid1}=  get_acc_id  ${PUSERPH3}
     ${cid}=  get_id  ${CUSERNAME5}
     # ${DAY}=  db.get_date_by_timezone  ${tz}
@@ -3563,6 +3638,8 @@ JD-TC-Add To WaitlistByConsumer-21
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+  
     ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -3596,7 +3673,7 @@ JD-TC-Add To WaitlistByConsumer-21
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid1}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}      waitlistedBy=PROVIDER_CONSUMER
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P2SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p2_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -3620,7 +3697,7 @@ JD-TC-Add To WaitlistByConsumer-21
 JD-TC-Add To WaitlistByConsumer-22
 	[Documentation]  checking the waitlistStatus of a consumer 
     # ${resp}=   Run Keywords   clear_queue  ${PUSERPH3}  
-    # AND  clear waitlist   ${PUSERPH3}
+    # AND  # clear waitlist   ${PUSERPH3}
     ${pid1}=  get_acc_id  ${PUSERPH3}
     ${cid}=  get_id  ${CUSERNAME8}
    clear Customer  ${PUSERPH3}
@@ -3669,6 +3746,8 @@ JD-TC-Add To WaitlistByConsumer-22
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+  
     ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -3706,7 +3785,7 @@ JD-TC-Add To WaitlistByConsumer-22
 JD-TC-Add To WaitlistByConsumer-23
 	[Documentation]  the consumer add to waitlist for a service with prepayment , try to change prepaymentPending to Cancel 
     # ${resp}=   Run Keywords   clear_queue  ${PUSERPH3}  
-    # AND  clear waitlist   ${PUSERPH3}
+    # AND  # clear waitlist   ${PUSERPH3}
     ${pid1}=  get_acc_id  ${PUSERPH3}
     ${cid}=  get_id  ${CUSERNAME2}
     
@@ -3755,6 +3834,8 @@ JD-TC-Add To WaitlistByConsumer-23
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+  
     ${resp}=    Verify Otp For Login   ${CUSERNAME2}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -3799,6 +3880,8 @@ JD-TC-Add To WaitlistByConsumer-23
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+  
     ${resp}=    Verify Otp For Login   ${CUSERNAME2}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -3822,7 +3905,7 @@ JD-TC-Add To WaitlistByConsumer-23
     ${resp}=  Get consumer Waitlist By Id   ${wid2}  ${pid1}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}      waitlistedBy=PROVIDER_CONSUMER
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P2SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p2_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -3838,7 +3921,7 @@ JD-TC-Add To WaitlistByConsumer-23
     
     ${msg}=   FakerLibrary.word
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=  Waitlist Action Cancel  ${wid2}  ${waitlist_cancl_reasn[4]}   ${msg}
+    ${resp}=  Waitlist Action    ${waitlist_actions[2]}  ${wid2}  cancelReason=${waitlist_cancl_reasn[4]}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -4035,6 +4118,8 @@ JD-TC-Add To WaitlistByConsumer-24
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+  
     ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -4093,7 +4178,7 @@ JD-TC-Add To WaitlistByConsumer-24
     ${resp}=  Get consumer Waitlist By Id   ${cwid}  ${pid0}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=PROVIDER_CONSUMER  
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${ps1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -4104,7 +4189,7 @@ JD-TC-Add To WaitlistByConsumer-24
     ${resp}=  Get consumer Waitlist By Id   ${cwidfam}  ${pid0}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1   waitlistedBy=PROVIDER_CONSUMER  
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}     waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${ps1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -4138,7 +4223,7 @@ JD-TC-Add To WaitlistByConsumer-25
     
     [Documentation]  Add to waitlist a consumer and familymember with prepayment
 
-    clear waitlist   ${PUSERPH8}
+    # clear waitlist   ${PUSERPH8}
     ${pid0}=  get_acc_id  ${PUSERPH8}
     ${cid}=  get_id  ${CUSERNAME8}
     
@@ -4233,6 +4318,8 @@ JD-TC-Add To WaitlistByConsumer-25
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+  
     ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -4288,7 +4375,7 @@ JD-TC-Add To WaitlistByConsumer-25
     ${resp}=  Get consumer Waitlist By Id   ${cwid}  ${pid0}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}  partySize=1  appxWaitingTime=0  waitlistedBy=PROVIDER_CONSUMER  
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}    appxWaitingTime=0  waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P2SERVICE2}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${ps2}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -4298,7 +4385,7 @@ JD-TC-Add To WaitlistByConsumer-25
     ${resp}=  Get consumer Waitlist By Id   ${cwidfam}  ${pid0}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}  partySize=1  appxWaitingTime=12  waitlistedBy=PROVIDER_CONSUMER  
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}    appxWaitingTime=12  waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P2SERVICE2}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${ps2}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
@@ -4337,7 +4424,7 @@ JD-TC-Add To WaitlistByConsumer-UH18
     Comment  add to waitlist w2  same service again
     Comment  change waitlist status  from canceled to checkedIn
     # ${resp}=   Run Keywords   clear_queue  ${PUSERPH0}  
-    # AND  clear waitlist   ${PUSERPH0}
+    # AND  # clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME4}
 
@@ -4387,6 +4474,8 @@ JD-TC-Add To WaitlistByConsumer-UH18
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+  
     ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -4418,7 +4507,7 @@ JD-TC-Add To WaitlistByConsumer-UH18
     ${resp}=  Get consumer Waitlist By Id   ${uuid}  ${pid0}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${TODAY}  waitlistStatus=${wl_status[0]}  partySize=1  waitlistedBy=PROVIDER_CONSUMER   
+    Verify Response  ${resp}  date=${TODAY}  waitlistStatus=${wl_status[0]}    waitlistedBy=PROVIDER_CONSUMER   
 
     ${resp}=  Cancel Waitlist  ${uuid}  ${pid0}
     Log  ${resp.content}
@@ -4427,7 +4516,7 @@ JD-TC-Add To WaitlistByConsumer-UH18
     ${resp}=  Get consumer Waitlist By Id   ${uuid}  ${pid0}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${TODAY}  waitlistStatus=${wl_status[4]}  partySize=1  waitlistedBy=PROVIDER_CONSUMER   
+    Verify Response  ${resp}  date=${TODAY}  waitlistStatus=${wl_status[4]}    waitlistedBy=PROVIDER_CONSUMER   
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid0}  ${p1_q1}  ${TODAY}  ${p1_s1}  ${cnote}  ${bool[0]}  ${self}
@@ -4440,7 +4529,7 @@ JD-TC-Add To WaitlistByConsumer-UH18
     ${resp}=  Get consumer Waitlist By Id   ${uuid1}  ${pid0}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${TODAY}  waitlistStatus=${wl_status[0]}  partySize=1  waitlistedBy=PROVIDER_CONSUMER    
+    Verify Response  ${resp}  date=${TODAY}  waitlistStatus=${wl_status[0]}    waitlistedBy=PROVIDER_CONSUMER    
 
     ${resp}=  Consumer Logout       
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -4461,7 +4550,7 @@ JD-TC-Add To WaitlistByConsumer-UH19
     Comment  add to waitlist w2 for future same service again
     Comment  change waitlist status  from canceled to checkin
     # ${resp}=   Run Keywords   clear_queue  ${PUSERPH0}  
-    # AND  clear waitlist   ${PUSERPH0}
+    # AND  # clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME4}
     # ${TOMORROW}=  db.add_timezone_date  ${tz}  3  
@@ -4511,6 +4600,8 @@ JD-TC-Add To WaitlistByConsumer-UH19
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+  
     ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -4542,7 +4633,7 @@ JD-TC-Add To WaitlistByConsumer-UH19
     ${resp}=  Get consumer Waitlist By Id   ${uuid}  ${pid0}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}  partySize=1  waitlistedBy=PROVIDER_CONSUMER   
+    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}    waitlistedBy=PROVIDER_CONSUMER   
 
     ${resp}=  Cancel Waitlist  ${uuid}  ${pid0}
     Log  ${resp.content}
@@ -4551,7 +4642,7 @@ JD-TC-Add To WaitlistByConsumer-UH19
     ${resp}=  Get consumer Waitlist By Id   ${uuid}  ${pid0}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[4]}  partySize=1  waitlistedBy=PROVIDER_CONSUMER   
+    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[4]}    waitlistedBy=PROVIDER_CONSUMER   
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid0}  ${p1_q1}  ${TOMORROW}  ${p1_s1}  ${cnote}  ${bool[0]}  ${self}
@@ -4564,7 +4655,7 @@ JD-TC-Add To WaitlistByConsumer-UH19
     ${resp}=  Get consumer Waitlist By Id   ${uuid1}  ${pid0}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}  partySize=1  waitlistedBy=PROVIDER_CONSUMER    
+    Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}    waitlistedBy=PROVIDER_CONSUMER    
 
     ${resp}=  Consumer Logout       
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -4705,6 +4796,8 @@ JD-TC-Add To WaitlistByConsumer-26
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+  
     ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -4750,7 +4843,7 @@ JD-TC-Add To WaitlistByConsumer-26
     
 JD-TC-Add To WaitlistByConsumer-UH20
     [Documentation]  Add To Waitlist By Consumer where online presence is false
-    clear waitlist   ${PUSERNAME214}
+    # clear waitlist   ${PUSERNAME214}
     ${pid0}=  get_acc_id  ${PUSERNAME214}
     ${cid}=  get_id  ${PUSERNAME214}
 
@@ -4818,6 +4911,8 @@ JD-TC-Add To WaitlistByConsumer-UH20
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+  
     ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -4852,7 +4947,7 @@ JD-TC-Add To WaitlistByConsumer-18
     [Documentation]  provider login as consumer and waitlist
 
     # ${resp}=   Run Keywords  clear_queue  ${PUSERNAME1}   AND  clear_location  ${PUSERNAME1}
-    # ${resp}=   Run Keywords   clear_queue  ${PUSERPH0}  AND  clear waitlist   ${PUSERPH0}
+    # ${resp}=   Run Keywords   clear_queue  ${PUSERPH0}  AND  # clear waitlist   ${PUSERPH0}
     # clear_location   ${PUSERPH0}
     # clear_location    ${PUSERNAME1}
     ${pid0}=  get_acc_id  ${PUSERPH0}
@@ -4921,7 +5016,7 @@ JD-TC-Add To WaitlistByConsumer-18
     ${resp}=  Get consumer Waitlist By Id  ${wid1}  ${pid0}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1  appxWaitingTime=0  waitlistedBy=PROVIDER_CONSUMER    personsAhead=0
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}    appxWaitingTime=0  waitlistedBy=PROVIDER_CONSUMER    
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid1}
