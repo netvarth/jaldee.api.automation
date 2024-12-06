@@ -997,7 +997,7 @@ JD-TC-Add To WaitlistByConsumer-10
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${p1_l2}=  Create Sample Location
-    Set Suite Variable   ${p1_l2}   ${resp.json()[1]['id']}
+    Set Suite Variable   ${p1_l2}   
 
     ${p1queue2}=    FakerLibrary.word
     # ${DAY}=  db.get_date_by_timezone  ${tz}
@@ -1060,8 +1060,6 @@ JD-TC-Add To WaitlistByConsumer-10
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id1}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}
-    
-    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_l2}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid0}   ${p1_q3}  ${DAY}  ${p1_s2}  ${cnote}  ${bool[0]}  ${self}
@@ -1381,10 +1379,7 @@ JD-TC-Add To WaitlistByConsumer-14
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}   ${cidfor}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q2}  
-    
-    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_l2}    
-
-
+    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_l1}    
 
 JD-TC-Add To WaitlistByConsumer-15
     [Documentation]  Consumer future waitlist  diffrent location , same service ,same provider
@@ -1813,7 +1808,7 @@ JD-TC-Add To WaitlistByConsumer-18
     # ${DAY}=  db.get_date_by_timezone  ${tz}
     ${DAY}=  get_date_by_timezone  ${tz}  
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${pid0}  ${qid1}  ${DAY}  ${Sid1_s1}  ${cnote}  ${bool[0]}  ${self} 
+    ${resp}=  Add To Waitlist Consumers   ${cid15}  ${pid0}  ${qid1}  ${DAY}  ${Sid1_s1}  ${cnote}  ${bool[0]}  ${self} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -1850,7 +1845,7 @@ JD-TC-Add To WaitlistByConsumer-18
     Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_l2}
 
   
-    ${resp}=  Add To Waitlist Consumers  ${pid0}   ${qid1}  ${DAY}  ${Sid1_s1}  ${cnote}  ${bool[0]}  ${self}      
+    ${resp}=  Add To Waitlist Consumers     ${cid15}  ${pid0}   ${qid1}  ${DAY}  ${Sid1_s1}  ${cnote}  ${bool[0]}  ${self}      
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -1881,7 +1876,7 @@ JD-TC-Add To WaitlistByConsumer-18
     Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_l2}
 
 
-    ${resp}=  Add To Waitlist Consumers  ${pid0}   ${qid1}  ${DAY}  ${Sid1_s1}  ${cnote}  ${bool[0]}  ${self}      
+    ${resp}=  Add To Waitlist Consumers     ${cid15}  ${pid0}   ${qid1}  ${DAY}  ${Sid1_s1}  ${cnote}  ${bool[0]}  ${self}      
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -2146,7 +2141,7 @@ JD-TC-Add To WaitlistByConsumer-20
     # ${DAY}=  db.get_date_by_timezone  ${tz}
     ${DAY}=  get_date_by_timezone  ${tz}  
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${pid0}  ${qid1}  ${DAY}  ${Sid1_s1}  ${cnote}  ${bool[0]}  ${cidfor_c2} 
+    ${resp}=  Add To Waitlist Consumers     ${cid35}  ${pid0}  ${qid1}  ${DAY}  ${Sid1_s1}  ${cnote}  ${bool[0]}  ${cidfor_c2} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -2180,7 +2175,7 @@ JD-TC-Add To WaitlistByConsumer-20
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${qid1}
 
   
-    ${resp}=  Add To Waitlist Consumers  ${pid0}   ${qid1}  ${DAY}  ${Sid1_s1}  ${cnote}  ${bool[0]}  ${self}      
+    ${resp}=  Add To Waitlist Consumers     ${cid35}  ${pid0}   ${qid1}  ${DAY}  ${Sid1_s1}  ${cnote}  ${bool[0]}  ${self}      
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -2198,7 +2193,7 @@ JD-TC-Add To WaitlistByConsumer-20
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${qid1}
     
 
-    ${resp}=  Add To Waitlist Consumers  ${pid0}   ${qid1}  ${DAY}  ${Sid1_s1}  ${cnote}  ${bool[0]}  ${cidfor_c2}      
+    ${resp}=  Add To Waitlist Consumers     ${cid35}  ${pid0}   ${qid1}  ${DAY}  ${Sid1_s1}  ${cnote}  ${bool[0]}  ${cidfor_c2}      
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -2271,7 +2266,7 @@ JD-TC-Add To WaitlistByConsumer-UH2
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     ${p1_l2}=  Create Sample Location
-    Set Test Variable   ${p1_l2}   ${resp.json()[1]['id']}
+    Set Test Variable   ${p1_l2}   
 
     ${p1queue1}=    FakerLibrary.word
     # ${DAY}=  db.get_date_by_timezone  ${tz}
@@ -2412,7 +2407,7 @@ JD-TC-Add To WaitlistByConsumer-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
-    Set Test Variable   ${p1_l2}   ${resp.json()[1]['id']}
+
 
     ${p1queue1}=    FakerLibrary.word
     # ${DAY}=  db.get_date_by_timezone  ${tz}
@@ -3001,7 +2996,7 @@ JD-TC-Add To WaitlistByConsumer-UH12
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
-    Set Test Variable   ${p1_l2}   ${resp.json()[1]['id']}
+
 
     ${p1queue1}=    FakerLibrary.word
     # ${DAY}=  db.get_date_by_timezone  ${tz}
@@ -3093,7 +3088,7 @@ JD-TC-Add To WaitlistByConsumer-UH14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
-    Set Test Variable   ${p1_l2}   ${resp.json()[1]['id']}
+    # Set Test Variable   ${p1_l2}   ${resp.json()[1]['id']}
 
     ${p1queue1}=    FakerLibrary.word
     # ${DAY}=  db.get_date_by_timezone  ${tz}
@@ -3158,42 +3153,10 @@ JD-TC-Add To WaitlistByConsumer-UH14
 JD-TC-Add To WaitlistByConsumer-UH16
 	[Documentation]  Add consumer to waitlist for a service with prepayment and try to change prepayment status from prepaymentPending to arrived.   
 
-    ${PUSERPH3}=  Evaluate  ${PUSERNAME}+100100304
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH3}${\n}
-    Set Suite Variable   ${PUSERPH3}
-    
-    # Run Keywords  clear_queue  ${PUSERPH3}   AND  clear_location  ${PUSERPH3}   AND   clear_service   ${PUSERPH3}  AND  # clear waitlist   ${PUSERPH3}
 
-    ${licid}  ${licname}=  get_highest_license_pkg
-    
-    ${domresp}=  Get BusinessDomainsConf
-    Log   ${domresp.json()}
-    Should Be Equal As Strings  ${domresp.status_code}  200
-    ${dlen}=  Get Length  ${domresp.json()}
-    FOR  ${pos}  IN RANGE  ${dlen}  
-        Set Test Variable  ${d2}  ${domresp.json()[${pos}]['domain']}
-        ${sd2}  ${check}=  Get Billable Subdomain  ${d2}  ${domresp}  ${pos}  
-        Set Test Variable   ${sd2}
-        Exit For Loop IF     '${check}' == 'True'
-    END
-   
+    ${firstname}  ${lastname}  ${PUSERPH3}  ${LoginId}=  Provider Signup
+    Set Suite Variable  ${PUSERPH3}
 
-    ${firstname}=  generate_firstname
-    ${lastname}=  FakerLibrary.last_name
-    ${address}=  FakerLibrary.address
-    ${dob}=  FakerLibrary.Date
-    ${gender}    Random Element    ${Genderlist}
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d2}  ${sd2}  ${PUSERPH3}    ${licid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    202
-
-    ${resp}=  Account Activation  ${PUSERPH3}  0
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Account Set Credential  ${PUSERPH3}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH3}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD}
     # Log   ${resp.json()}
@@ -3202,75 +3165,6 @@ JD-TC-Add To WaitlistByConsumer-UH16
     Log  ${decrypted_data}
     Set Test Variable  ${pid}  ${decrypted_data['id']}
     # Set Test Variable  ${pid}  ${resp.json()['id']}
-
-    # ${DAY}=  db.get_date_by_timezone  ${tz}
-    ${DAY}=  get_date_by_timezone  ${tz}
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${PUSERPH4}=  Evaluate  ${PUSERNAME}+100100305
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH4}${\n}
-    ${PUSERPH5}=  Evaluate  ${PUSERNAME}+100100306
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH5}${\n}
-    ${PUSERMAIL3}=   Set Variable  ${P_Email}ph303.${test_mail}
-    ${views}=  Evaluate  random.choice($Views)  random
-    ${name1}=  FakerLibrary.name
-    ${name2}=  FakerLibrary.name
-    ${name3}=  FakerLibrary.name
-    ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${PUSERPH4}  ${views}
-    ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH5}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL3}  ${views}
-    ${bs}=  FakerLibrary.bs
-    ${companySuffix}=  FakerLibrary.companySuffix
-    # ${city}=   FakerLibrary.state
-    # ${latti}=  get_latitude
-    # ${longi}=  get_longitude
-    # ${postcode}=  FakerLibrary.postcode
-    # ${address}=  get_address
-    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    Set Suite Variable  ${tz}
-    # ${sTime}=  db.get_time_by_timezone   ${tz}
-    ${sTime}=  db.get_time_by_timezone  ${tz}
-    ${eTime}=  add_timezone_time  ${tz}  0  15  
-    ${desc}=   FakerLibrary.sentence
-    ${url}=   FakerLibrary.url
-    ${parking}   Random Element   ${parkingType}
-    ${24hours}    Random Element    ['True','False']
-    ${resp}=  Update Business Profile With Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    sleep   01s
-
-    ${resp}=  Get Business Profile
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${fields}=   Get subDomain level Fields  ${dom}  ${sub_dom}
-    Log  ${fields.json()}
-    Should Be Equal As Strings    ${fields.status_code}   200
-
-    ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
-
-    ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sub_dom}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get specializations Sub Domain  ${domain}  ${subdomain}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable    ${spec1}     ${resp.json()[0]['displayName']}   
-    Set Test Variable    ${spec2}     ${resp.json()[1]['displayName']}   
-
-    ${spec}=  Create List    ${spec1}   ${spec2}
-
-    ${resp}=  Update Business Profile with kwargs  specialization=${spec}  
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH3}.${test_mail}
-
-    ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Waitlist Settings
     Log   ${resp.content}
@@ -3724,7 +3618,7 @@ JD-TC-Add To WaitlistByConsumer-22
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p2_l1}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
-    Set Test Variable   ${p2_l2}   ${resp.json()[1]['id']}
+    # Set Test Variable   ${p2_l2}   ${resp.json()[1]['id']}
 
     # ${DAY}=  db.get_date_by_timezone  ${tz}
     ${DAY}=  get_date_by_timezone  ${tz}
@@ -3811,7 +3705,7 @@ JD-TC-Add To WaitlistByConsumer-23
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p2_l1}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
-    Set Test Variable   ${p2_l2}   ${resp.json()[1]['id']}
+    # Set Test Variable   ${p2_l2}   ${resp.json()[1]['id']}
 
     # ${DAY}=  db.get_date_by_timezone  ${tz}
     ${DAY}=  get_date_by_timezone  ${tz}
@@ -3929,32 +3823,9 @@ JD-TC-Add To WaitlistByConsumer-23
 JD-TC-Add To WaitlistByConsumer-24
     
     [Documentation]  Add to waitlist a consumer and familymember
-    ${PUSERPH8}=  Evaluate  ${PUSERNAME}+100100302
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH8}${\n}
+
+    ${firstname}  ${lastname}  ${PUSERPH8}  ${LoginId}=  Provider Signup
     Set Suite Variable   ${PUSERPH8}
-    
-    ${max_party}=  get_maxpartysize_subdomain
-    Log    ${max_party}
-    Set Suite Variable  ${d1}  ${max_party['domain']}
-    Set Suite Variable  ${sd1}  ${max_party['subdomain']}
-
-    ${pkg_id}=   get_highest_license_pkg
-
-    ${firstname}=  generate_firstname
-    ${lastname}=  FakerLibrary.last_name
-    ${address}=  FakerLibrary.address
-    ${dob}=  FakerLibrary.Date
-    ${gender}    Random Element    ${Genderlist}
-
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd1}  ${PUSERPH8}    ${pkg_id[0]}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${PUSERPH8}  0
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERPH8}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH8}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${PUSERPH8}  ${PASSWORD}
     # Log   ${resp.json()}
@@ -3963,73 +3834,6 @@ JD-TC-Add To WaitlistByConsumer-24
     Log  ${decrypted_data}
     Set Test Variable  ${pid}  ${decrypted_data['id']}
     # Set Test Variable  ${pid}  ${resp.json()['id']}
-    
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${PUSERPH4}=  Evaluate  ${PUSERNAME}+305
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH4}${\n}
-    ${PUSERPH5}=  Evaluate  ${PUSERNAME}+306
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH5}${\n}
-    ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH4}.${test_mail}
-    ${views}=  Evaluate  random.choice($Views)  random
-    ${name1}=  FakerLibrary.name
-    ${name2}=  FakerLibrary.name
-    ${name3}=  FakerLibrary.name
-    ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${PUSERPH4}  ${views}
-    ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH5}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL3}  ${views}
-    ${bs}=  FakerLibrary.bs
-    ${companySuffix}=  FakerLibrary.companySuffix
-    # ${city}=   get_place
-    # ${latti}=  get_latitude
-    # ${longi}=  get_longitude
-    # ${postcode}=  FakerLibrary.postcode
-    # ${address}=  get_address
-    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    Set Suite Variable  ${tz}
-    # ${DAY}=  db.get_date_by_timezone  ${tz}
-    ${DAY}=  get_date_by_timezone  ${tz}
-    Set Suite Variable  ${DAY}
-    # ${sTime}=  db.get_time_by_timezone   ${tz}
-    # ${eTime}=  add_timezone_time  ${tz}  4  15  
-    ${sTime}=  db.get_time_by_timezone  ${tz}
-    ${eTime}=  add_timezone_time  ${tz}  4  15  
-    ${desc}=   FakerLibrary.sentence
-    ${url}=   FakerLibrary.url
-    ${parking}   Random Element   ${parkingType}
-    ${resp}=  Update Business Profile with schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${lid}  ${resp.json()['baseLocation']['id']}
-    # Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
-
-    ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
-    Log    ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${fields}=   Get subDomain level Fields  ${d1}  ${sd1}
-    Should Be Equal As Strings    ${fields.status_code}   200
-    ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
-    ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sd1}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Get specializations Sub Domain  ${d1}  ${sd1}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${spec}=  get_Specializations  ${resp.json()}
-    ${resp}=  Update Specialization  ${spec}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH8}.${test_mail}
-
-    ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${resp}=  pyproviderlogin  ${PUSERPH8}  ${PASSWORD}
-    # Should Be Equal As Strings  ${resp}  200      
-    # @{resp}=  uploadLogoImages
-    # Should Be Equal As Strings  ${resp[1]}  200
-    # ${resp}=  Get GalleryOrlogo image  logo
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()[0]['prefix']}  logo
 
     ${resp}=  Get Waitlist Settings
     Log   ${resp.content}
@@ -4449,7 +4253,7 @@ JD-TC-Add To WaitlistByConsumer-UH18
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
-    Set Test Variable   ${p1_l2}   ${resp.json()[1]['id']}
+    # Set Test Variable   ${p1_l2}   ${resp.json()[1]['id']}
 
     # ${TODAY}=  db.get_date_by_timezone  ${tz}
     ${TODAY}=  get_date_by_timezone   ${tz}
@@ -4577,7 +4381,7 @@ JD-TC-Add To WaitlistByConsumer-UH19
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
-    Set Test Variable   ${p1_l2}   ${resp.json()[1]['id']}
+    # Set Test Variable   ${p1_l2}   ${resp.json()[1]['id']}
 
     # ${sTime1}=  add_timezone_time  ${tz}  0  30  
     # ${eTime1}=  add_timezone_time  ${tz}  1  00  
