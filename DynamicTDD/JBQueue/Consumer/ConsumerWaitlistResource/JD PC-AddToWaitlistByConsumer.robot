@@ -187,7 +187,7 @@ JD-TC-Add To WaitlistByConsumer-1
     ${P1SERVICE2}=  generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${P1SERVICE2}
     Set Suite Variable   ${P1SERVICE2}
-    ${p1_s1}=  Create Sample Service  ${P1SERVICE2}
+    ${p1_s2}=  Create Sample Service  ${P1SERVICE2}
     Set Suite Variable  ${p1_s2}
 
     # ${sTime1}=  db.get_time_by_timezone   ${tz}
