@@ -1103,7 +1103,7 @@ JD-TC-ChangeAppointmentStatus-UH2
         ${no_of_slots}=  Get Length  ${resp.json()[1]['availableSlots']}
         @{slots}=  Create List
         FOR   ${i}  IN RANGE   0   ${no_of_slots}
-            IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            IF  ${resp.json()[1]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
                 Append To List   ${slots}  ${resp.json()[1]['availableSlots'][${i}]['time']}
             END
         END
