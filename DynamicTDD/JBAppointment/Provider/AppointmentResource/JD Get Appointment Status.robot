@@ -12,6 +12,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
 
@@ -566,7 +567,7 @@ JD-TC-GetAppointmentStatus-4
 
     [Documentation]  Check status Arrived when provider takes appointment for consumer
   
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -586,10 +587,10 @@ JD-TC-GetAppointmentStatus-4
     #     Should Be Equal As Strings  ${resp.status_code}  200
     # END
 
-    # clear_service   ${PUSERNAME183}
-    # clear_location  ${PUSERNAME183}
-    # clear_appt_schedule   ${PUSERNAME183}
-    clear_customer   ${PUSERNAME183}
+    # clear_service   ${HLPUSERNAME28}
+    # clear_location  ${HLPUSERNAME28}
+    # clear_appt_schedule   ${HLPUSERNAME28}
+    clear_customer   ${HLPUSERNAME28}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -711,7 +712,7 @@ JD-TC-GetAppointmentStatus-5
 
     [Documentation]  Check status Started
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -842,7 +843,7 @@ JD-TC-GetAppointmentStatus-6
 
     [Documentation]  Check status Cancelled
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -878,7 +879,7 @@ JD-TC-GetAppointmentStatus-7
 
     [Documentation]  Check status Rejected
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -923,7 +924,7 @@ JD-TC-GetAppointmentStatus-8
 
     [Documentation]  Check status Completed
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -976,13 +977,13 @@ JD-TC-GetAppointmentStatus-9
 
     [Documentation]  Check status failed
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME183}
-    # clear_location  ${PUSERNAME183}
-    # clear_appt_schedule   ${PUSERNAME183}
+    # clear_service   ${HLPUSERNAME28}
+    # clear_location  ${HLPUSERNAME28}
+    # clear_appt_schedule   ${HLPUSERNAME28}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1113,7 +1114,7 @@ JD-TC-GetAppointmentStatus-UH1
 
 JD-TC-GetAppointmentStatus-UH2
     [Documentation]  Check status of invalid appointment id
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

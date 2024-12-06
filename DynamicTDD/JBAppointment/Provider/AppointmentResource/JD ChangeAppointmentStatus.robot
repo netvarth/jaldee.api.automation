@@ -1071,18 +1071,47 @@ JD-TC-ChangeAppointmentStatus-UH2
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable   ${slot1}   ${resp.json()[0]['availableSlots'][0]['time']}
-    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
-    @{slots}=  Create List
-    FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
+    # ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
+    # @{slots}=  Create List
+    # FOR   ${i}  IN RANGE   0   ${no_of_slots}
+    #     IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+    #         Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
+    #     END
+    # END
+    # ${num_slots}=  Get Length  ${slots}
+    # ${j}=  Random Int  max=${num_slots-1}
+    # Set Test Variable   ${slot1}   ${slots[${j}]}
+
+
+
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF   ${resp.json()[0]['scheduleId']} == ${sch_id}
+        ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
+        @{slots}=  Create List
+        FOR   ${i}  IN RANGE   0   ${no_of_slots}
+            IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+                Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
+            END
         END
+        ${num_slots}=  Get Length  ${slots}
+        ${j}=  Random Int  max=${num_slots-1}
+        Set Test Variable   ${slot1}   ${slots[${j}]}
+    ELSE IF   ${resp.json()[1]['scheduleId']} == ${sch_id}
+        ${no_of_slots}=  Get Length  ${resp.json()[1]['availableSlots']}
+        @{slots}=  Create List
+        FOR   ${i}  IN RANGE   0   ${no_of_slots}
+            IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+                Append To List   ${slots}  ${resp.json()[1]['availableSlots'][${i}]['time']}
+            END
+        END
+        ${num_slots}=  Get Length  ${slots}
+        ${j}=  Random Int  max=${num_slots-1}
+        Set Test Variable   ${slot1}   ${slots[${j}]}
     END
-    ${num_slots}=  Get Length  ${slots}
-    ${j}=  Random Int  max=${num_slots-1}
-    Set Test Variable   ${slot1}   ${slots[${j}]}
- 
+
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
