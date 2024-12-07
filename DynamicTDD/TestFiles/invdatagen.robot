@@ -27,8 +27,8 @@ ${PASSWORD}      Jaldee12
 # ${LoginId}       5554343565
 # ${PASSWORD}      Pooja$health3
 
-# ${loop_count}   200
-${loop_count}   1
+${loop_count}   200
+# ${loop_count}   1
 ${maxBookings}  20
 ${max_days}   30
 
@@ -396,9 +396,9 @@ JD-TC-Appointment-1
         Should Be Equal As Strings  ${resp.status_code}  200
 
         #-------------------------6th Appointment-Take appointments for past dates- Nested FOR LOOP -------------------------------
-        FOR  ${i}  IN RANGE   ${max_days}
+        FOR  ${j}  IN RANGE   ${max_days}
 
-            ${DAY2}=  db.subtract_timezone_date  ${tz}   ${i+1}
+            ${DAY2}=  db.subtract_timezone_date  ${tz}   ${j+1}
 
             ${slot}=  Get Random Slot  ${sch_id}  ${DAY2}  ${s_id2}
 
@@ -421,11 +421,11 @@ JD-TC-Appointment-1
             ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=250
             ${serviceList1}=  Create Dictionary  serviceId=${s_id1}   quantity=${quantity} 
             ${serviceList2}=  Create Dictionary  serviceId=${s_id2}   quantity=${quantity}    price=${servicecharge}
-            IF    ${i} % 3 == 0
+            IF    ${j} % 3 == 0
                 ${subservicecharge}=   Pyfloat  right_digits=1  min_value=50  max_value=100
                 ${serviceList3}=  Create Dictionary  serviceId=${s_id3}   quantity=${quantity}    price=${subservicecharge}
                 ${serviceList}=    Create List    ${serviceList1}   ${serviceList2}  ${serviceList3}
-            ELSE IF    ${i} % 4 == 0
+            ELSE IF    ${j} % 4 == 0
                 ${user_id}=  Evaluate  random.choice($user_list)  random
                 ${assigneeUsers}=  Create List  ${user_id}
                 ${subservicecharge}=   Pyfloat  right_digits=1  min_value=50  max_value=100
@@ -443,7 +443,7 @@ JD-TC-Appointment-1
             Set Suite Variable   ${invoice_uid6}   ${resp.json()['uidList'][0]}  
 
             ${random_days}=   Evaluate  random.sample(range(int(${max_days})), int(${max_days}/2))  random
-            IF  ${i} in @{random_days}
+            IF  ${j} in @{random_days}
                 ${privateNote}=     FakerLibrary.word
                 ${displayNote}=   FakerLibrary.word
                 ${resp}=  Apply Service Level Discount   ${invoice_uid6}   ${discountId}  ${discountprice}  ${privateNote}  ${displayNote}  ${s_id2}
@@ -457,9 +457,9 @@ JD-TC-Appointment-1
         END
 
     #-------------------------7th Appointment-Take appointments for future- Nested FOR LOOP -------------------------------
-        FOR  ${i}  IN RANGE   ${max_days}
+        FOR  ${j}  IN RANGE   ${max_days}
 
-            ${DAY2}=  db.add_timezone_date  ${tz}   ${i+1}
+            ${DAY2}=  db.add_timezone_date  ${tz}   ${j+1}
 
             ${slot}=  Get Random Slot  ${sch_id}  ${DAY2}  ${s_id2}
 
@@ -482,11 +482,11 @@ JD-TC-Appointment-1
             ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=250
             ${serviceList1}=  Create Dictionary  serviceId=${s_id1}   quantity=${quantity} 
             ${serviceList2}=  Create Dictionary  serviceId=${s_id2}   quantity=${quantity}    price=${servicecharge}
-            IF    ${i} % 3 == 0
+            IF    ${j} % 3 == 0
                 ${subservicecharge}=   Pyfloat  right_digits=1  min_value=50  max_value=100
                 ${serviceList3}=  Create Dictionary  serviceId=${s_id3}   quantity=${quantity}    price=${subservicecharge}
                 ${serviceList}=    Create List    ${serviceList1}   ${serviceList2}  ${serviceList3}
-            ELSE IF    ${i} % 4 == 0
+            ELSE IF    ${j} % 4 == 0
                 ${user_id}=  Evaluate  random.choice($user_list)  random
                 ${assigneeUsers}=  Create List  ${user_id}
                 ${subservicecharge}=   Pyfloat  right_digits=1  min_value=50  max_value=100
@@ -504,7 +504,7 @@ JD-TC-Appointment-1
             Set Suite Variable   ${invoice_uid7}   ${resp.json()['uidList'][0]}  
 
             ${random_days}=   Evaluate  random.sample(range(int(${max_days})), int(${max_days}/2))  random
-            IF  ${i} in @{random_days}
+            IF  ${j} in @{random_days}
                 ${privateNote}=     FakerLibrary.word
                 ${displayNote}=   FakerLibrary.word
                 ${resp}=  Apply Service Level Discount   ${invoice_uid7}   ${discountId}  ${discountprice}  ${privateNote}  ${displayNote}  ${s_id2}
