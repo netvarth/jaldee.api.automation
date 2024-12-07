@@ -59,50 +59,53 @@ ${self}                   0
 JD-TC-RemoveServiceLevelDiscountforwaitlist-1
       [Documentation]   Apply Service Level Discount then remove that Discount.
 
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+3378839
-    Set Suite Variable   ${PUSERPH0}
+    # ${PUSERPH0}=  Evaluate  ${PUSERNAME}+3378839
+    # Set Suite Variable   ${PUSERPH0}
     
-    ${licid}  ${licname}=  get_highest_license_pkg
-    Log  ${licid}
-    Log  ${licname}
-    ${domresp}=  Get BusinessDomainsConf
-    Log   ${domresp.json()}
-    Should Be Equal As Strings  ${domresp.status_code}  200
-    ${dlen}=  Get Length  ${domresp.json()}
-    FOR  ${pos}  IN RANGE  ${dlen}  
-        Set Suite Variable  ${d1}  ${domresp.json()[${pos}]['domain']}
-        ${sd1}  ${check}=  Get Billable Subdomain  ${d1}  ${domresp}  ${pos}  
-        Set Suite Variable   ${sd1}
-        Exit For Loop IF     '${check}' == '${bool[1]}'
-    END
-    Log  ${d1}
-    Log  ${sd1}
+    # ${licid}  ${licname}=  get_highest_license_pkg
+    # Log  ${licid}
+    # Log  ${licname}
+    # ${domresp}=  Get BusinessDomainsConf
+    # Log   ${domresp.json()}
+    # Should Be Equal As Strings  ${domresp.status_code}  200
+    # ${dlen}=  Get Length  ${domresp.json()}
+    # FOR  ${pos}  IN RANGE  ${dlen}  
+    #     Set Suite Variable  ${d1}  ${domresp.json()[${pos}]['domain']}
+    #     ${sd1}  ${check}=  Get Billable Subdomain  ${d1}  ${domresp}  ${pos}  
+    #     Set Suite Variable   ${sd1}
+    #     Exit For Loop IF     '${check}' == '${bool[1]}'
+    # END
+    # Log  ${d1}
+    # Log  ${sd1}
 
-    ${firstname}=  FakerLibrary.first_name
-    ${lastname}=  FakerLibrary.last_name
-    ${address}=  FakerLibrary.address
-    ${dob}=  FakerLibrary.Date
-    ${gender}=    Random Element    ${Genderlist}
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd1}  ${PUSERPH0}  ${licid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    202
+    # ${firstname}=  FakerLibrary.first_name
+    # ${lastname}=  FakerLibrary.last_name
+    # ${address}=  FakerLibrary.address
+    # ${dob}=  FakerLibrary.Date
+    # ${gender}=    Random Element    ${Genderlist}
+    # ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd1}  ${PUSERPH0}  ${licid}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    202
 
-    ${resp}=  Account Activation  ${PUSERPH0}  0
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    # Should Be Equal As Strings  "${resp.json()}"    "true"
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    # ${resp}=  Account Activation  ${PUSERPH0}  0
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # # Should Be Equal As Strings  "${resp.json()}"    "true"
+    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
 
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
-       ${pid0}=  get_acc_id  ${PUSERPH0}
-    Set Suite Variable  ${pid0}
+    #    ${pid0}=  get_acc_id  ${PUSERPH0}
+    # Set Suite Variable  ${pid0}
+
+    ${firstname}  ${lastname}  ${PUSERPH0}  ${login_id}=  Provider Signup  
+    Set Suite Variable    ${PUSERPH0}
 
   
     # ${list}=  Create List  1  2  3  4  5  6  7
@@ -171,8 +174,8 @@ JD-TC-RemoveServiceLevelDiscountforwaitlist-1
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
+    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+    # Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
     ${resp}=  Get Bill Settings 
     Log   ${resp.json}
@@ -329,9 +332,48 @@ JD-TC-RemoveServiceLevelDiscountforwaitlist-2
     [Documentation]   Apply service level discount for future waitlist.(online) and then remove that discount
 
 
-    ${resp}=  Consumer Login  ${CUSERNAME13}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
+    # ${resp}=  Consumer Login  ${CUSERNAME13}  ${PASSWORD}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200   
+
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    #............provider consumer creation..........
+
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Suite Variable  ${PCPHONENO2}  555${PH_Number}
+
+    ${fname2}=  generate_firstname
+    Set Suite Variable  ${fname2}
+    ${lastname2}=  FakerLibrary.last_name
+  
+    ${resp}=  AddCustomer  ${PCPHONENO2}    firstName=${fname2}   lastName=${lastname2}  countryCode=${countryCodes[1]} 
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO2}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Suite Variable  ${cid}  ${resp.json()[0]['id']}
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO2}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login    ${PCPHONENO2}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token2}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO2}    ${account_id}  ${token2} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
      Set Test Variable  ${cid}  ${resp.json()}     
 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}

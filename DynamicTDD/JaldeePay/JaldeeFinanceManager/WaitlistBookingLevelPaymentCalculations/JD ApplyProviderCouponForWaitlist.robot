@@ -895,9 +895,10 @@ JD-TC-ApplyProviderCouponforwaitlist-UH9
 
     Should Be Equal As Strings  ${resp.json()['netTotal']}         ${ser_amount1}
     Should Be Equal As Strings  ${resp.json()['amountDue']}        ${ser_amount1}   
-    Should Be Equal As Strings  ${resp.json()['netRate']}          ${ser_amount1}   
-    
-    ${resp}=   Apply Provider Coupon for waitlist    ${wid}    ${coupon_id1}   
+    Should Be Equal As Strings  ${resp.json()['netRate']}          ${ser_amount1}  
+
+    ${resp}=   Apply Provider Coupon for waitlist    ${wid}    ${cupn_code}       
+    # ${resp}=   Apply Provider Coupon for waitlist    ${wid}    ${coupon_id1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${COUPON_NOT_APPLICABLE_NOW}"

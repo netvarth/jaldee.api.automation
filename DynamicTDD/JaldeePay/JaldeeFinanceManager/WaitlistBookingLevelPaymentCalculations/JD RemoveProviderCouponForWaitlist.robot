@@ -282,7 +282,7 @@ JD-TC-RemoveProviderCouponforwaitlist-UH1
     ${Total}=   Random Int   min=100   max=500
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${Total}=  Convert To Number  ${Total}  1
-    ${resp}=  Create Service  ${SERVICE2}   ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[1]} 
+    ${resp}=  Create Service  ${SERVICE2}  ${description}   ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[1]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sid}  ${resp.json()}   
 
