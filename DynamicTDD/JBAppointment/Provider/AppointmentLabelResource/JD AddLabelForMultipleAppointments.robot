@@ -1294,7 +1294,7 @@ JD-TC-AddMultipleAppointmentLabel-6
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid2}  ${s_id}  ${sch_id2}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    ${resp}=  Take Appointment For Consumer  ${cid2}  ${s_id}  ${sch_id2}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid1}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -1665,7 +1665,7 @@ JD-TC-AddMultipleAppointmentLabel-9
 
     [Documentation]  Add label to appointment taken from consumer side
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -1695,8 +1695,6 @@ JD-TC-AddMultipleAppointmentLabel-9
         
     # clear_appt_schedule   ${PUSERNAME65}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    
     ${resp}=    Get Locations
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -1711,6 +1709,13 @@ JD-TC-AddMultipleAppointmentLabel-9
             Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
         END
 
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  20    
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_timezone_time  ${tz}  2   50  
+    
     ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1782,6 +1787,8 @@ JD-TC-AddMultipleAppointmentLabel-9
 
     ${pid}=  get_acc_id  ${PUSERNAME64}
 
+    ${NewCustomer}    Generate random string    10    123456789
+    ${NewCustomer}    Convert To Integer  ${NewCustomer}
     ${fname}=  generate_firstname    
     ${lname}=  FakerLibrary.last_name
     Set Suite Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
@@ -1828,18 +1835,16 @@ JD-TC-AddMultipleAppointmentLabel-9
     ${mem_lname}=   FakerLibrary.last_name
     ${dob}=      FakerLibrary.date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMember   ${mem_fname}  ${mem_lname}  ${dob}  ${gender}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200  
-    Set Test Variable   ${mem_id1}   ${resp.json()}
 
-    ${resp}=  ListFamilyMember
+    ${resp}=  Add FamilyMember For ProviderConsumer     ${mem_fname}  ${mem_lname}  ${dob}  ${gender} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200    
+    Set Test Variable   ${mem_id1}   ${resp.json()}
+    
+    ${resp}=  Get FamilyMember
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['userProfile']['id']}   ${mem_id1}
-
-    # ${apptfor}=   db.apptfor  ${self}  ${slot1}  ${fname}  ${mem_id1}  ${slot2}  ${mem_fname}
-
+   
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
@@ -1922,16 +1927,16 @@ JD-TC-AddMultipleAppointmentLabel-9
     ${mem_lname1}=   FakerLibrary.last_name
     ${dob1}=      FakerLibrary.date
     ${gender1}    Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMember   ${mem_fname1}  ${mem_lname1}  ${dob1}  ${gender1}
+
+    ${resp}=  Add FamilyMember For ProviderConsumer     ${mem_fname1}  ${mem_lname1}  ${dob1}  ${gender1} 
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200  
+    Should Be Equal As Strings  ${resp.status_code}  200    
     Set Test Variable   ${mem_id2}   ${resp.json()}
 
-    ${resp}=  ListFamilyMember
+    ${resp}=  Get FamilyMember
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['userProfile']['id']}   ${mem_id2}
-
+   
     ${apptfor}=   db.apptfor  ${self}  ${slot3}  ${fname1}  ${mem_id2}  ${slot4}  ${mem_fname1}
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot3}

@@ -331,7 +331,8 @@ JD-TC-AssignproviderAppointment-3
 
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
-  
+    ${NewCustomer}    Generate random string    10    123456789
+    ${NewCustomer}    Convert To Integer  ${NewCustomer}
     ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

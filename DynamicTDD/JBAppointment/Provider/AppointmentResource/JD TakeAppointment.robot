@@ -1549,7 +1549,7 @@ JD-TC-Take Appointment-17
     # ${sTime1}=  db.get_time_by_timezone   ${tz}
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME350}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${HLPUSERNAME42}
@@ -1663,7 +1663,7 @@ JD-TC-Take Appointment-17
     ${resp}=   Get Service
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
+    
     ${resp}=    Get Locations
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

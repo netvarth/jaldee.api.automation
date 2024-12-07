@@ -220,11 +220,11 @@ Get ProviderConsumer
 
 
 Add FamilyMember For ProviderConsumer
-    [Arguments]   ${firstname}   ${lastname}  ${dob}  ${gender}  ${primarynum}  &{kwargs}
+    [Arguments]   ${firstname}   ${lastname}  ${dob}  ${gender}   &{kwargs}
     Check And Create YNW Session
 
-    ${userProfile}=  Create Dictionary    firstName=${firstname}   lastName=${lastname}   dob=${dob}   gender=${gender}   primaryMobileNo=${primarynum}   
-    ${data}=   Create Dictionary    userProfile=${userProfile}
+    ${data}=  Create Dictionary    firstName=${firstname}   lastName=${lastname}   dob=${dob}   gender=${gender}     
+    # ${data}=   Create Dictionary    userProfile=${userProfile}
     ${whatsApp}=  Create Dictionary
     ${telegram}=  Create Dictionary
     FOR    ${key}    ${value}    IN    &{kwargs}
@@ -247,7 +247,7 @@ Add FamilyMember For ProviderConsumer
         END
 
     END
-    ${resp}=  POST On Session  ynw   /consumer/familyMember   json=${data}    expected_status=any
+    ${resp}=  POST On Session  ynw   /spconsumer/familyMember   json=${data}    expected_status=any
     Check Deprication  ${resp}  Add FamilyMember For ProviderConsumer
     RETURN  ${resp}
 

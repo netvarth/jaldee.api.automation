@@ -3320,7 +3320,6 @@ JD-TC-ChangeAppointmentStatus-UH14
 
     ${ser_durtn}=   Random Int   min=2   max=10
     ${service_amount}=   Random Int   min=100   max=500
-    ${SERVICE2}=    generate_unique_service_name  ${service_names}
     ${desc}=   FakerLibrary.sentence
     ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}  ${ser_durtn}  ${bool[0]}  ${service_amount}   maxBookingsAllowed=10
     Log  ${resp.content}   
