@@ -54,6 +54,9 @@ JD-TC-Update cash payment- finance invoice level-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
 
+    ${resp}=  Create Sample Location  
+    Set Suite Variable    ${lid}    ${resp} 
+
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -66,8 +69,15 @@ JD-TC-Update cash payment- finance invoice level-1
     
     END
 
-    ${resp}=  Create Sample Location  
-    Set Suite Variable    ${lid}    ${resp} 
+
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
@@ -219,7 +229,7 @@ JD-TC-Update cash payment- finance invoice level-1
     ${balance}=  Convert To Number  ${balance}  2
 
     ${note}=    FakerLibrary.word
-    ${resp}=  Make Payment By Cash For Invoice   ${invoice_uid}  ${payment_modes[0]}  10  ${note}
+    ${resp}=  Make Payment By Cash For Invoice   ${invoice_uid}  ${payment_modes[0]}  10  ${note}   paymentOndate=${DAY1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -230,7 +240,7 @@ JD-TC-Update cash payment- finance invoice level-1
     Set Suite Variable   ${paymentRefId}  ${resp.json()[0]['paymentRefId']} 
 
 
-    ${resp}=  Update cash payment- finance invoice level   ${invoice_uid}  ${payment_modes[0]}  25  ${note}  ${paymentRefId}
+    ${resp}=  Update cash payment- finance invoice level   ${invoice_uid}  ${payment_modes[0]}  25  ${note}  ${paymentRefId}   paymentOndate=${DAY1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -260,7 +270,7 @@ JD-TC-Update cash payment- finance invoice level-2
 
 
     ${note}=    FakerLibrary.word
-    ${resp}=  Update cash payment- finance invoice level   ${invoice_uid}  ${payment_modes[0]}  30  ${note}  ${paymentRefId}
+    ${resp}=  Update cash payment- finance invoice level   ${invoice_uid}  ${payment_modes[0]}  30  ${note}  ${paymentRefId}   paymentOndate=${DAY1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -275,7 +285,7 @@ JD-TC-Update cash payment- finance invoice level-UH1
 
     ${note}=    FakerLibrary.word
     ${invoice}=    FakerLibrary.RandomNumber
-    ${resp}=  Update cash payment- finance invoice level   ${invoice}  ${payment_modes[0]}  30  ${note}  ${paymentRefId}
+    ${resp}=  Update cash payment- finance invoice level   ${invoice}  ${payment_modes[0]}  30  ${note}  ${paymentRefId}   paymentOndate=${DAY1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${RECORD_NOT_FOUND}" 
@@ -286,7 +296,7 @@ JD-TC-Update cash payment- finance invoice level-UH2
 
     [Documentation]  Make payment by cash without login
     ${note}=    FakerLibrary.word
-    ${resp}=  Update cash payment- finance invoice level   ${invoice_uid}  ${payment_modes[0]}  30  ${note}  ${paymentRefId}
+    ${resp}=  Update cash payment- finance invoice level   ${invoice_uid}  ${payment_modes[0]}  30  ${note}  ${paymentRefId}   paymentOndate=${DAY1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  "${resp.json()}"  "${SESSION_EXPIRED}"
@@ -312,7 +322,7 @@ JD-TC-Update cash payment- finance invoice level-UH3
 
 
     ${note}=    FakerLibrary.word
-    ${resp}=  Update cash payment- finance invoice level   ${invoice_uid}  ${payment_modes[0]}  30  ${note}  ${paymentRefId}
+    ${resp}=  Update cash payment- finance invoice level   ${invoice_uid}  ${payment_modes[0]}  30  ${note}  ${paymentRefId}   paymentOndate=${DAY1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION}" 
@@ -502,6 +512,14 @@ JD-TC-Update cash payment- finance invoice level-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_lid}  ${resp.json()[0]['id']} 
 
+    ${resp}=   Get Location ById  ${p1_lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Test Variable  ${DAY1}
+
     ${min_pre1}=   Random Int   min=40   max=50
     ${Tot}=   Random Int   min=100   max=300
     ${min_pre1}=   Convert To Integer  ${min_pre1}  
@@ -677,7 +695,7 @@ JD-TC-Update cash payment- finance invoice level-3
     Should Be Equal As Strings   ${response_amountTotal}  ${Tot2}
 
     ${note}=    FakerLibrary.word
-    ${resp}=  Make Payment By Cash For Invoice   ${invoice_wtlistonline_uid2}  ${payment_modes[0]}  ${balamount}  ${note}
+    ${resp}=  Make Payment By Cash For Invoice   ${invoice_wtlistonline_uid2}  ${payment_modes[0]}  ${balamount}  ${note}    paymentOndate=${DAY1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -688,7 +706,7 @@ JD-TC-Update cash payment- finance invoice level-3
     Set Suite Variable   ${paymentRefId}  ${resp.json()[0]['paymentRefId']} 
 
 
-    ${resp}=  Update cash payment- finance invoice level   ${invoice_wtlistonline_uid2}  ${payment_modes[0]}  100  ${note}  ${paymentRefId}
+    ${resp}=  Update cash payment- finance invoice level   ${invoice_wtlistonline_uid2}  ${payment_modes[0]}  100  ${note}  ${paymentRefId}   paymentOndate=${DAY1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

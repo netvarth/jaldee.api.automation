@@ -149,7 +149,7 @@ JD-TC-Appointment-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${category_id}  ${resp.json()[0]['id']}
-*** Comments ***
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=  Get Bill Settings 
