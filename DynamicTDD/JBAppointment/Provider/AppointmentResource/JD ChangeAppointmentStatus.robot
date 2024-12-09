@@ -3274,6 +3274,9 @@ JD-TC-ChangeAppointmentStatus-UH14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}   
+
     ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -3291,9 +3294,6 @@ JD-TC-ChangeAppointmentStatus-UH14
             Set Test Variable  ${lid}  ${resp.json()[0]['id']}
             Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
         END
-
-        ${SERVICE1}=    generate_unique_service_name  ${service_names}
-        Append To List  ${service_names}  ${SERVICE1}   
 
         ${resp}=    Get Service
         Log  ${resp.content}

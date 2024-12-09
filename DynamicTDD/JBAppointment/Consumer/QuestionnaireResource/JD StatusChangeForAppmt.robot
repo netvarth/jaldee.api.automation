@@ -266,6 +266,17 @@ JD-TC-StatusChangeForServiceOptionAppointment-1
 
     ${CUSERNAME14}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME14}
 
+    ${resp}=    Send Otp For Login    ${CUSERNAME14}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login    ${CUSERNAME14}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME14}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
