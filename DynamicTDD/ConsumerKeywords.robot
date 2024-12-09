@@ -1459,7 +1459,7 @@ check start status
     ${resp}=    GET On Session   ynw  /consumer/waitlist/status/mytracking/${waitlist_id}   params=${cons_params}  expected_status=any   headers=${cons_headers}  
     Check Deprication  ${resp}  check start status
     RETURN  ${resp}
-
+   
 Get All Schedule Slots By Date Location and Service
     [Arguments]  ${acct_id}  ${date}  ${locationId}  ${serviceId}  &{kwargs}  #${timeZone}=Asia/Kolkata
     ${cons_headers}=  Create Dictionary  &{headers} 
@@ -1470,7 +1470,6 @@ Get All Schedule Slots By Date Location and Service
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/appointment/schedule/date/${date}/location/${locationId}/service/${serviceId}    params=${cons_params}   expected_status=any   headers=${cons_headers}
-    Check Deprication  ${resp}  Get All Schedule Slots By Date Location and Service
     RETURN  ${resp}
 
 Get Next Available Appointment Time
@@ -3956,4 +3955,18 @@ Get Family Member By Id
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/familyMember/details/${memberId}   expected_status=any   
     Check Deprication  ${resp}  Get Family Member By Id
+    RETURN  ${resp}
+
+
+Get All Schedule Slots By Date Location and Service
+    [Arguments]  ${acct_id}  ${date}  ${locationId}  ${serviceId}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_headers}=  Create Dictionary  &{headers} 
+    ${cons_params}=  Create Dictionary  account=${acct_id}
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${cons_params}   &{locparam}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/appointment/schedule/date/${date}/location/${locationId}/service/${serviceId}    params=${cons_params}   expected_status=any   headers=${cons_headers}
+    Check Deprication  ${resp}  Get All Schedule Slots By Date Location and Service
     RETURN  ${resp}

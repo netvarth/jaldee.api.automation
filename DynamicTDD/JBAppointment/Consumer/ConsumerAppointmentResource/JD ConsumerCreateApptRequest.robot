@@ -320,11 +320,7 @@ JD-TC-ConsumerCreateApptRequest-5
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
 
-
-    ${primnum}                    FakerLibrary.Numerify   text=%%%%%%%%%%
-    ${address}                    FakerLibrary.address
-
-    ${resp}=    Create Family Member   ${family_fname2}  ${family_lname2}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+    ${resp}=    Add FamilyMember For ProviderConsumer   ${family_fname2}  ${family_lname2}  ${dob}  ${gender}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${cidfor2}   ${resp.json()}

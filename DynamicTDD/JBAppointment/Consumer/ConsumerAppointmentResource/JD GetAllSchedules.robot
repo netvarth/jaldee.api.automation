@@ -23,7 +23,6 @@ ${self}     0
 ${countryCode}   +91
 
 
-
 *** Test Cases ***
 
 JD-TC-Get All Schedule slots-1
@@ -165,7 +164,7 @@ JD-TC-Get All Schedule slots-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id2}
+    ${resp}=    Get All Schedule Slots By Date Location and Service   ${DAY1}  ${lid}  ${s_id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${no_of_schedules}=  Get Length  ${resp.json()}
@@ -183,7 +182,7 @@ JD-TC-Get All Schedule slots-1
 
         END
     END
-
+*** Comments ***
 JD-TC-Get All Schedule slots-2
 
     [Documentation]     Consumer get all slots for a service that added in one schedule.

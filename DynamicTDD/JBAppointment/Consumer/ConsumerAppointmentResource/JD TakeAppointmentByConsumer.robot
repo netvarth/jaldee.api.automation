@@ -283,12 +283,10 @@ JD-TC-Take Appointment-3
     Set Suite Variable   ${family_lname}
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${primnum}                    FakerLibrary.Numerify   text=%%%%%%%%%%
-    ${address}                    FakerLibrary.address
+    # ${primnum}                    FakerLibrary.Numerify   text=%%%%%%%%%%
+    # ${address}                    FakerLibrary.address
 
-
-
-    ${resp}=    Create Family Member   ${family_fname}  ${family_lname}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+    ${resp}=    Add FamilyMember For ProviderConsumer   ${family_fname}  ${family_lname}  ${dob}  ${gender} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable   ${memb_id}  ${resp.json()}
@@ -344,10 +342,7 @@ JD-TC-Take Appointment-UH13
     # Should Be Equal As Strings  ${resp.status_code}  200  
     # Set Test Variable  ${cidfor}   ${resp.json()}
 
-    ${primnum}  FakerLibrary.Numerify   text=%%%%%%%%%%
-    ${address}  FakerLibrary.address
-
-    ${resp}=    Create Family Member       ${family_fname1}  ${family_lname1}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+    ${resp}=    Add FamilyMember For ProviderConsumer       ${family_fname1}  ${family_lname1}  ${dob}  ${gender}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${cidfor}   ${resp.json()}
@@ -478,10 +473,7 @@ JD-TC-Take Appointment-5
     # Should Be Equal As Strings  ${resp.status_code}  200  
     # Set Suite Variable  ${cidfor2}   ${resp.json()}
 
-    ${primnum}  FakerLibrary.Numerify   text=%%%%%%%%%%
-    ${address}  FakerLibrary.address
-
-    ${resp}=    Create Family Member       ${family_fname2}  ${family_lname2}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+    ${resp}=    Add FamilyMember For ProviderConsumer       ${family_fname2}  ${family_lname2}  ${dob}  ${gender}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${cidfor2}   ${resp.json()}
@@ -622,16 +614,11 @@ JD-TC-Take Appointment-7
     ${family_lname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${primnum}                    FakerLibrary.Numerify   text=%%%%%%%%%%
-    ${address}                    FakerLibrary.address
-
-    ${resp}=    Create Family Member   ${family_fname}  ${family_lname}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+   
+    ${resp}=    Add FamilyMember For ProviderConsumer   ${family_fname}  ${family_lname}  ${dob}  ${gender}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${cidfor}   ${resp.json()}
-
-
-
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
@@ -1060,16 +1047,11 @@ JD-TC-Take Appointment-10
     Set Suite Variable   ${family_lname1}
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${primnum}                    FakerLibrary.Numerify   text=%%%%%%%%%%
-    ${address}                    FakerLibrary.address
-
-
-
-    ${resp}=    Create Family Member   ${family_fname1}  ${family_lname1}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+   
+    ${resp}=    Add FamilyMember For ProviderConsumer   ${family_fname1}  ${family_lname1}  ${dob}  ${gender}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${cidfor}   ${resp.json()}
-
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid01}  ${DAY1}  ${p1_l1}  ${p1_s1}
     Log  ${resp.content}
@@ -1195,15 +1177,11 @@ JD-TC-Take Appointment-11
     ${family_lname1}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${primnum}                    FakerLibrary.Numerify   text=%%%%%%%%%%
-    ${address}                    FakerLibrary.address
-
-    ${resp}=    Create Family Member   ${family_fname1}  ${family_lname1}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+ 
+    ${resp}=    Add FamilyMember For ProviderConsumer   ${family_fname1}  ${family_lname1}  ${dob}  ${gender}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${cidfor}   ${resp.json()}
-
-
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid01}  ${DAY1}  ${p1_l1}  ${p1_s1}
     Log  ${resp.content}
@@ -1314,15 +1292,11 @@ JD-TC-Take Appointment-12
     ${family_lname1}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${primnum}                    FakerLibrary.Numerify   text=%%%%%%%%%%
-    ${address}                    FakerLibrary.address
-
-    ${resp}=    Create Family Member   ${family_fname1}  ${family_lname1}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+  
+    ${resp}=    Add FamilyMember For ProviderConsumer   ${family_fname1}  ${family_lname1}  ${dob}  ${gender}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${cidfor}   ${resp.json()}
-
-
 
     ${FUT_DAY}=  db.add_timezone_date  ${tz}  4 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid01}  ${FUT_DAY}  ${p1_l2}  ${p1_s2}
@@ -1846,9 +1820,9 @@ JD-TC-Take Appointment-15
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME10}    ${pid}  ${token6} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${cid}=  get_id  ${CUSERNAME10}   
+    # ${cid}=  get_id  ${CUSERNAME10}   
 
-    ${resp}=  ListFamilyMember
+    ${resp}=  Get Family Members  ${cid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1865,31 +1839,25 @@ JD-TC-Take Appointment-15
     ${mem_lname1}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${primnum}                    FakerLibrary.Numerify   text=%%%%%%%%%%
-    ${address}                    FakerLibrary.address
-
-
-
-    ${resp}=    Create Family Member   ${mem_fname1}  ${mem_lname1}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+    
+    ${resp}=    Add FamilyMember For ProviderConsumer   ${mem_fname1}  ${mem_lname1}  ${dob}  ${gender}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${fmem1}  ${resp.json()}
 
-
     ${mem_fname2}=  generate_firstname
     ${mem_lname2}=  FakerLibrary.last_name
 
-    ${resp}=    Create Family Member   ${mem_fname2}  ${mem_lname2}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+    ${resp}=    Add FamilyMember For ProviderConsumer   ${mem_fname2}  ${mem_lname2}  ${dob}  ${gender}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200 
     Set Test Variable  ${fmem2}   ${resp.json()}
 
-    ${resp}=  ListFamilyMember
+    ${resp}=  Get Family Members  ${cid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Verify Response List  ${resp}  0  user=${fmem1}  parent=${jdconID}
     # Verify Response List  ${resp}  1  user=${fmem2}  parent=${jdconID}
-
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
@@ -2128,7 +2096,6 @@ JD-TC-Take Appointment-16
     ${resp}=  AddCustomer  ${CUSERNAME10}    firstName=${f_Name}   lastName=${l_Name}  countryCode=${countryCodes[1]}   email=${consumerEmail}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME10}  
     Log  ${resp.content}
@@ -2154,45 +2121,34 @@ JD-TC-Take Appointment-16
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-
-    ${id}=  get_id  ${CUSERNAME10}
-    clear_FamilyMember  ${id}
+    # ${id}=  get_id  ${CUSERNAME10}
+    # clear_FamilyMember  ${id}
     
-    ${resp}=  ListFamilyMember
+    ${resp}=  Get Family Members  ${cid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-
 
     ${mem_fname1}=  generate_firstname
     ${mem_lname1}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${primnum}                    FakerLibrary.Numerify   text=%%%%%%%%%%
-    ${address}                    FakerLibrary.address
-
-
-
-    ${resp}=    Create Family Member   ${mem_fname1}  ${mem_lname1}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+  
+    ${resp}=    Add FamilyMember For ProviderConsumer   ${mem_fname1}  ${mem_lname1}  ${dob}  ${gender}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${fmem1}  ${resp.json()}
 
-
     ${mem_fname2}=  generate_firstname
     ${mem_lname2}=  FakerLibrary.last_name
 
-    ${resp}=    Create Family Member   ${mem_fname2}  ${mem_lname2}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+    ${resp}=    Add FamilyMember For ProviderConsumer   ${mem_fname2}  ${mem_lname2}  ${dob}  ${gender}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200 
     Set Test Variable  ${fmem2}   ${resp.json()}
 
-    ${resp}=  ListFamilyMember
+    ${resp}=  Get Family Members  ${cid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-
- 
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
@@ -2369,13 +2325,10 @@ JD-TC-Take Appointment-17
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+    # ${id}=  get_id  ${CUSERNAME10}
+    # clear_FamilyMember  ${id}
 
-    ${id}=  get_id  ${CUSERNAME10}
-    clear_FamilyMember  ${id}
-
-
-    
-    ${resp}=  ListFamilyMember
+    ${resp}=  Get Family Members  ${cid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2383,23 +2336,16 @@ JD-TC-Take Appointment-17
     ${mem_lname1}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${primnum}                    FakerLibrary.Numerify   text=%%%%%%%%%%
-    ${address}                    FakerLibrary.address
-
-
-
-    ${resp}=    Create Family Member   ${mem_fname1}  ${mem_lname1}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+   
+    ${resp}=    Add FamilyMember For ProviderConsumer   ${mem_fname1}  ${mem_lname1}  ${dob}  ${gender}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${fmem1}  ${resp.json()}
 
-
-
-    ${resp}=  ListFamilyMember
+    ${resp}=  Get Family Members  ${cid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Verify Response List  ${resp}  0  user=${fmem1}  parent=${jdconID}
-
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
@@ -3154,12 +3100,8 @@ JD-TC-Take Appointment-UH6
     Set Suite Variable   ${family_lname}
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${primnum}                    FakerLibrary.Numerify   text=%%%%%%%%%%
-    ${address}                    FakerLibrary.address
-
-
-
-    ${resp}=    Create Family Member   ${family_fname}  ${family_lname}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+    
+    ${resp}=    Add FamilyMember For ProviderConsumer   ${family_fname}  ${family_lname}  ${dob}  ${gender}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${cidfor}  ${resp.json()}
@@ -3303,12 +3245,8 @@ JD-TC-Take Appointment-UH7
     Set Suite Variable   ${family_lname}
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${primnum}                    FakerLibrary.Numerify   text=%%%%%%%%%%
-    ${address}                    FakerLibrary.address
 
-
-
-    ${resp}=    Create Family Member   ${family_fname}  ${family_lname}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+    ${resp}=    Add FamilyMember For ProviderConsumer   ${family_fname}  ${family_lname}  ${dob}  ${gender}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${cidfor}  ${resp.json()}
@@ -3491,12 +3429,8 @@ JD-TC-Take Appointment-UH8
     Set Suite Variable   ${family_lname}
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${primnum}                    FakerLibrary.Numerify   text=%%%%%%%%%%
-    ${address}                    FakerLibrary.address
-
-
-
-    ${resp}=    Create Family Member   ${family_fname}  ${family_lname}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+  
+    ${resp}=    Add FamilyMember For ProviderConsumer   ${family_fname}  ${family_lname}  ${dob}  ${gender} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${cidfor}  ${resp.json()}
@@ -3950,12 +3884,8 @@ JD-TC-Take Appointment-UH12
     Set Test Variable   ${family_lname}
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${primnum}                    FakerLibrary.Numerify   text=%%%%%%%%%%
-    ${address}                    FakerLibrary.address
-
-
-
-    ${resp}=    Create Family Member   ${family_fname}  ${family_lname}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+   
+    ${resp}=    Add FamilyMember For ProviderConsumer   ${family_fname}  ${family_lname}  ${dob}  ${gender}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${cidfor}   ${resp.json()}
@@ -5550,6 +5480,10 @@ JD-TC-Take Appointment-UH16
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${APPT_NOT_TAKEN}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${EMPTY}  ${boolean[0]}
     Log   ${resp.json()}

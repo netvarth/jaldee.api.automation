@@ -349,7 +349,7 @@ JD-TC-GetAppointmentToday-1
     ${resp}=  Get Family Members   ${cid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-     
+
     # ${resp}=  Get Appointment Schedules Consumer  ${pid1}
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200

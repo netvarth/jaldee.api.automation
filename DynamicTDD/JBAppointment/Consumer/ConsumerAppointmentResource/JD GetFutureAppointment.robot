@@ -380,16 +380,15 @@ JD-TC-GetFutureAppointment-1
     # Should Be Equal As Strings  ${resp.status_code}  200  
     # Set Suite Variable  ${cidfor2}   ${resp.json()}
 
-    ${primnum}  FakerLibrary.Numerify   text=%%%%%%%%%%
-    ${address}  FakerLibrary.address
+    # ${primnum}  FakerLibrary.Numerify   text=%%%%%%%%%%
+    # ${address}  FakerLibrary.address
 
-    ${resp}=    Create Family Member       ${family_fname2}  ${family_lname2}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+    ${resp}=   Add FamilyMember For ProviderConsumer    ${family_fname2}  ${family_lname2}  ${dob}  ${gender}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${cidfor2}   ${resp.json()}
     
-
-    ${resp}=  ListFamilyMember
+    ${resp}=  Get Family Members   ${cid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
      
@@ -464,15 +463,15 @@ JD-TC-GetFutureAppointment-1
     # Should Be Equal As Strings  ${resp.status_code}  200  
     # Set Suite Variable  ${cidfor3}   ${resp.json()}
 
-    ${primnum}  FakerLibrary.Numerify   text=%%%%%%%%%%
-    ${address}  FakerLibrary.address
+    # ${primnum}  FakerLibrary.Numerify   text=%%%%%%%%%%
+    # ${address}  FakerLibrary.address
 
-    ${resp}=    Create Family Member       ${family_fname3}  ${family_lname3}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+    ${resp}=    Add FamilyMember For ProviderConsumer    ${family_fname3}  ${family_lname3}  ${dob}  ${gender} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${cidfor3}   ${resp.json()}
 
-    ${resp}=  ListFamilyMember
+    ${resp}=  Get Family Members   ${cid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

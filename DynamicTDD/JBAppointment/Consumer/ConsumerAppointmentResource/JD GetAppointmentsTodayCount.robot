@@ -298,19 +298,17 @@ JD-TC-GetAppointmentTodayCount-1
     # Should Be Equal As Strings  ${resp.status_code}  200  
     # Set Suite Variable  ${cidfor2}   ${resp.json()}
 
-    ${primnum}  FakerLibrary.Numerify   text=%%%%%%%%%%
-    ${address}  FakerLibrary.address
+    # ${primnum}  FakerLibrary.Numerify   text=%%%%%%%%%%
+    # ${address}  FakerLibrary.address
 
-    ${resp}=    Create Family Member       ${family_fname2}  ${family_lname2}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+    ${resp}=    Add FamilyMember For ProviderConsumer    ${family_fname2}  ${family_lname2}  ${dob}  ${gender} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${cidfor2}   ${resp.json()}
 
-    ${resp}=  ListFamilyMember
+    ${resp}=  Get Family Members  ${cid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-     
-
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid1}  ${DAY1}  ${lid}  ${s_id2}
     Log  ${resp.content}
@@ -348,16 +346,14 @@ JD-TC-GetAppointmentTodayCount-1
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
 
-    ${resp}=    Create Family Member       ${family_fname3}  ${family_lname3}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+    ${resp}=    Add FamilyMember For ProviderConsumer    ${family_fname3}  ${family_lname3}  ${dob}  ${gender}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${cidfor3}   ${resp.json()}
 
-    ${resp}=  ListFamilyMember
+    ${resp}=  Get Family Members   ${cid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid1}  ${DAY1}  ${lid1}  ${s_id2}
     Log  ${resp.content}

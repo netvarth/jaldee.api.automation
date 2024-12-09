@@ -674,41 +674,41 @@ JD-TC-Reschedule Appointment-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
 
-
-
-   ${fname}=   generate_firstname
+    ${NewCustomer}    Generate random string    10    123456789
+    ${NewCustomer}    Convert To Integer  ${NewCustomer}
+    ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
     ${permanentAddress1}=  FakerLibrary.address
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${CUSERNAME23}${fname}.${test_mail}
-
-    ${resp}=  AddCustomer  ${CUSERNAME23}  firstName=${fname}   lastName=${lname}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
+    Set Test Variable  ${consumerEmail}  ${C_Email}${NewCustomer}${fname}.${test_mail}
+    
+    ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${ageyrs}  ${agemonths}=  db.calculate_age_years_months     ${dob}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME23}
+    ${resp}=  GetCustomer  phoneNo-eq=${NewCustomer}
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
     ${fullName}   Set Variable    ${fname} ${lname}
     Set Test Variable  ${fullName}
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME23}    ${pid}
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login    ${CUSERNAME23}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login    ${NewCustomer}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}  ${pid}  ${token}
+    ${resp}=    ProviderConsumer Login with token    ${NewCustomer}  ${pid}  ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -725,19 +725,18 @@ JD-TC-Reschedule Appointment-9
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${primnum}                    FakerLibrary.Numerify   text=%%%%%%%%%%
-    ${address}                    FakerLibrary.address
+    # ${primnum}                    FakerLibrary.Numerify   text=%%%%%%%%%%
+    # ${address}                    FakerLibrary.address
 
-    ${resp}=    Create Family Member   ${mem_fname}  ${mem_lname}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+    ${resp}=   Add FamilyMember For ProviderConsumer  ${mem_fname}  ${mem_lname}  ${dob}  ${gender}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${mem_id}  ${resp.json()}
-    sleep   02s
-    ${resp}=  ListFamilyMember
+   
+    ${resp}=  Get Family Members   ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.json()[0]['userProfile']['id']}   ${mem_id}
-
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
@@ -870,8 +869,7 @@ JD-TC-Reschedule Appointment-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
 
-
-   ${fname}=   generate_firstname
+    ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -910,7 +908,7 @@ JD-TC-Reschedule Appointment-10
     Set Suite Variable    ${PCid}   ${resp.json()['id']}
     Set Test Variable  ${uname}   ${resp.json()['userName']}
 
-    clear_FamilyMember  ${cid}
+    # clear_FamilyMember  ${cid}
 
     ${mem_fname}=   generate_firstname
     ${mem_lname}=   FakerLibrary.last_name
@@ -922,20 +920,19 @@ JD-TC-Reschedule Appointment-10
     # Set Test Variable  ${mem_id}  ${resp.json()}
 
 
-    ${primnum}                    FakerLibrary.Numerify   text=%%%%%%%%%%
-    ${address}                    FakerLibrary.address
+    # ${primnum}                    FakerLibrary.Numerify   text=%%%%%%%%%%
+    # ${address}                    FakerLibrary.address
 
-    ${resp}=    Create Family Member   ${mem_fname}  ${mem_lname}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+    ${resp}=    Add FamilyMember For ProviderConsumer   ${mem_fname}  ${mem_lname}  ${dob}  ${gender}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${mem_id}  ${resp.json()}
-    sleep   02s
+    # sleep   02s
 
-    ${resp}=  ListFamilyMember
+    ${resp}=  Get Family Members  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.json()[0]['userProfile']['id']}   ${mem_id}
-
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
@@ -954,9 +951,6 @@ JD-TC-Reschedule Appointment-10
     Set Test Variable   ${slot2}   ${random slots[1]}
 
     clear_FamilyMember  ${cid}
-
-
-
 
     ${apptfor}=   db.apptfor  ${self}  ${slot1}  ${fname}  ${mem_id}  ${slot2}  ${mem_fname}
 

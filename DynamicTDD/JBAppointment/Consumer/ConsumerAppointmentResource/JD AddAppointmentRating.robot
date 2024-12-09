@@ -352,10 +352,8 @@ JD-TC-AddAppointmentRating-3
     ${family_lname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${primnum}  FakerLibrary.Numerify   text=%%%%%%%%%%
-    ${address}  FakerLibrary.address
-
-    ${resp}=    Create Family Member       ${family_fname}  ${family_lname}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+    
+    ${resp}=    Add FamilyMember For ProviderConsumer     ${family_fname}  ${family_lname}  ${dob}  ${gender}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${cidfor}   ${resp.json()}

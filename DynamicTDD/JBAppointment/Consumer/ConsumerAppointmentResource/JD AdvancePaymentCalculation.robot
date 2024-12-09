@@ -1583,6 +1583,10 @@ JD-TC-GetAppointmentAdvancePaymentDetails-8
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}   
     Should Be Equal As Strings  ${resp.status_code}   200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${name}  ${decrypted_data['userName']}
     
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -1711,10 +1715,16 @@ JD-TC-GetAppointmentAdvancePaymentDetails-8
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
+    ${totalTaxAmount}=  Evaluate  ${service_amount} * ${gstpercentage[3]} / 100
+    ${nettotal}=  Evaluate  ${service_amount} + ${totalTaxAmount}
+    ${nettotal}=  roundoff  ${nettotal}
+    ${totalTaxAmount}=  roundoff  ${totalTaxAmount}
+
     ${cnote}=   FakerLibrary.word
     ${EMPTY_List}=  Create List
     ${resp}=   Appointment AdvancePayment Details   ${account_id}  ${ser_id1}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}  ${EMPTY_List}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['netTotal']}                              ${service_amount}
+    Should Be Equal As Strings  ${resp.json()['netTotal']}                              ${nettotal}
     Should Be Equal As Strings  ${resp.json()['amountRequiredNow']}                     ${min_pre}
+    Should Be Equal As Strings  ${resp.json()['netTaxAmount']}        ${totalTaxAmount}
