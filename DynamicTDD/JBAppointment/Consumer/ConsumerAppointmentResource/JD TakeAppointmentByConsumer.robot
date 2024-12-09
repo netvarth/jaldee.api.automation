@@ -5491,7 +5491,7 @@ JD-TC-Take Appointment-UH16
     ${resp}=  Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
 *** Comments ***
 
