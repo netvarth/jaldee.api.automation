@@ -21,15 +21,15 @@ ${self}     0
 @{service_names}
 ${var_file}      ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py
 ${data_file}     ${EXECDIR}/data/${ENVIRONMENT}data/${ENVIRONMENT}phnumbers.txt
-${LoginId}       ${PUSERNAME2}
-${PASSWORD}      Jaldee12
+# ${LoginId}       ${PUSERNAME2}
+# ${PASSWORD}      Jaldee12
 
-# ${LoginId}       5554343565
-# ${PASSWORD}      Pooja$health3
+${LoginId}       5554343565
+${PASSWORD}      Pooja$health3
 
 ${loop_count}   200
 # ${loop_count}   1
-${maxBookings}  20
+${maxBookings}  200
 ${max_days}   30
 
 *** KEYWORDS ***
@@ -76,21 +76,21 @@ JD-TC-Appointment-1
     Should Be Equal As Strings  ${resp.status_code}  200
     FOR    ${service}    IN    @{resp.json()}
         # Registration service
-        IF    '${service['serviceCategory']}' == 'MainService' and ${service['totalAmount']} > 0 and 'provider' not in ${service}
+        IF    '${service['serviceCategory']}' == 'MainService' and ${service['totalAmount']} > 0 and 'provider' not in ${service} and '${service['status']}' == 'ACTIVE'
             Log    ${service['name']}
             ${s_id1}=    Get Variable Value    ${s_id1}    NONE
             IF    '${s_id1}' == 'NONE'
                 Set Test Variable    ${s_id1}    ${service['id']}
             END
         # Appointment service
-        ELSE IF    '${service['serviceCategory']}' == 'MainService' and ${service['totalAmount']} == 0 and 'provider' not in ${service}
+        ELSE IF    '${service['serviceCategory']}' == 'MainService' and ${service['totalAmount']} == 0 and 'provider' not in ${service} and '${service['status']}' == 'ACTIVE'
             Log    ${service['name']}
             ${s_id2}=    Get Variable Value    ${s_id2}    NONE
             IF    '${s_id2}' == 'NONE'
                 Set Test Variable    ${s_id2}    ${service['id']}
             END
         # SubService
-        ELSE IF    '${service['serviceCategory']}' == 'SubService'
+        ELSE IF    '${service['serviceCategory']}' == 'SubService' and '${service['status']}' == 'ACTIVE'
             Log    ${service['name']}
             ${s_id3}=    Get Variable Value    ${s_id3}    NONE
             IF    '${s_id3}' == 'NONE'
@@ -104,8 +104,9 @@ JD-TC-Appointment-1
     ${resp}=   Get Service By Id  ${s_id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    ${desc1}=   FakerLibrary.sentence
     IF  ${resp.json()['maxBookingsAllowed']} <= 1
-        ${resp}=  Update Service  ${s_id2}  ${resp.json()['name']}  ${resp.json()['description']}  ${resp.json()['serviceDuration']}  ${resp.json()['isPrePayment']}  ${resp.json()['totalAmount']}  maxBookingsAllowed=${maxBookings}
+        ${resp}=  Update Service  ${s_id2}  ${resp.json()['name']}  ${resp.json()['description']}  ${resp.json()['serviceDuration']}  ${resp.json()['isPrePayment']}  ${resp.json()['totalAmount']}  maxBookingsAllowed=${maxBookings}   department=${resp.json()['department']}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
