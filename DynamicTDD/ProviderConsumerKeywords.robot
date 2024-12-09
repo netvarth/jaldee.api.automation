@@ -218,39 +218,6 @@ Get ProviderConsumer
     Check Deprication  ${resp}  Get ProviderConsumer
     RETURN  ${resp}
 
-
-Add FamilyMember For ProviderConsumer
-    [Arguments]   ${firstname}   ${lastname}  ${dob}  ${gender}   &{kwargs}
-    Check And Create YNW Session
-
-    ${data}=  Create Dictionary    firstName=${firstname}   lastName=${lastname}   dob=${dob}   gender=${gender}     
-    # ${data}=   Create Dictionary    userProfile=${userProfile}
-    ${whatsApp}=  Create Dictionary
-    ${telegram}=  Create Dictionary
-    FOR    ${key}    ${value}    IN    &{kwargs}
-        IF  "${key}" == "whatsAppNum"
-            Set To Dictionary 	${whatsApp} 	number=${value}
-        ELSE IF  "${key}" == "whatsAppCC"
-            Set To Dictionary 	${whatsApp} 	countryCode=${value}
-        ELSE IF  "${key}" == "telegramNum"
-            Set To Dictionary 	${telegram} 	countryCode=${value}
-        ELSE IF  "${key}" == "telegramCC"
-            Set To Dictionary 	${telegram} 	countryCode=${value}
-        ELSE
-            Set To Dictionary 	${data} 	${key}=${value}
-        END
-        IF  ${whatsApp} != &{EMPTY}
-            Set To Dictionary 	${data} 	whatsAppNum=${whatsApp}
-        END
-        IF  ${telegram} != &{EMPTY}
-            Set To Dictionary 	${data} 	telegramNum=${telegram}
-        END
-
-    END
-    ${resp}=  POST On Session  ynw   /spconsumer/familyMember   json=${data}    expected_status=any
-    Check Deprication  ${resp}  Add FamilyMember For ProviderConsumer
-    RETURN  ${resp}
-
 # Add FamilyMember For ProviderConsumer
 #     [Arguments]                   ${firstname}   ${lastname}   ${dob}   ${gender}   ${email}   ${city}   ${state}   ${address}   ${primarynum}   ${alternativenum}   ${countrycode}   ${countryCodet}   ${numbert}   ${countryCodew}   ${numberw}
 #     Check And Create YNW Session
@@ -260,12 +227,6 @@ Add FamilyMember For ProviderConsumer
 #     ${data}=                      Create Dictionary    userProfile=${userProfile}
 #     ${resp}=                      POST On Session  ynw   /spconsumer/familyMember    json=${data}    expected_status=any
 #     RETURN                      ${resp}
-
-Get FamilyMember
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw    /spconsumer/familyMember     expected_status=any
-    Check Deprication  ${resp}  Get FamilyMember
-    RETURN  ${resp}
 
 Delete ProCons FamilyMember
     [Arguments]  ${Famid}
@@ -848,5 +809,42 @@ GetOrder using uid
     RETURN  ${resp}
 
 
+Add FamilyMember For ProviderConsumer
+    [Arguments]   ${firstname}   ${lastname}  ${dob}  ${gender}   &{kwargs}
+    Check And Create YNW Session
+
+    ${data}=  Create Dictionary    firstName=${firstname}   lastName=${lastname}   dob=${dob}   gender=${gender}     
+    # ${data}=   Create Dictionary    userProfile=${userProfile}
+    ${whatsApp}=  Create Dictionary
+    ${telegram}=  Create Dictionary
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        IF  "${key}" == "whatsAppNum"
+            Set To Dictionary 	${whatsApp} 	number=${value}
+        ELSE IF  "${key}" == "whatsAppCC"
+            Set To Dictionary 	${whatsApp} 	countryCode=${value}
+        ELSE IF  "${key}" == "telegramNum"
+            Set To Dictionary 	${telegram} 	countryCode=${value}
+        ELSE IF  "${key}" == "telegramCC"
+            Set To Dictionary 	${telegram} 	countryCode=${value}
+        ELSE
+            Set To Dictionary 	${data} 	${key}=${value}
+        END
+        IF  ${whatsApp} != &{EMPTY}
+            Set To Dictionary 	${data} 	whatsAppNum=${whatsApp}
+        END
+        IF  ${telegram} != &{EMPTY}
+            Set To Dictionary 	${data} 	telegramNum=${telegram}
+        END
+
+    END
+    ${resp}=  POST On Session  ynw   /consumer/familyMember   json=${data}    expected_status=any
+    Check Deprication  ${resp}  Add FamilyMember For ProviderConsumer
+    RETURN  ${resp}
+
+Get FamilyMember
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw    /spconsumer/familyMember     expected_status=any
+    Check Deprication  ${resp}  Get FamilyMember
+    RETURN  ${resp}
 
 

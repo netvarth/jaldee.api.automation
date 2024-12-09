@@ -3764,55 +3764,6 @@ Get ProviderConsumer FamilyMember
     Check Deprication  ${resp}  Get ProviderConsumer FamilyMember
     RETURN  ${resp}
 
-
-Create Family Member   
-    [Arguments]  ${firstName}  ${lastName}  ${dob}  ${gender}   ${phoneNo}  ${countryCode}  ${address}  &{kwargs}
-
-    ${data}=  Create Dictionary  firstName=${firstName}  lastName=${lastName}  dob=${dob}   gender=${gender}  phoneNo=${phoneNo}  countryCode=${countryCode}    address=${address}
-    FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary   ${data}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /consumer/family/member   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Create Family Member 
-    RETURN  ${resp}
-
-Update Family Members
-    [Arguments]   ${id}  ${parent}  ${firstName}  ${lastName}  ${dob}  ${gender}   ${phoneNo}  ${countryCode}  ${address}  &{kwargs}
-
-    ${data}=  Create Dictionary   id=${id}  parent=${parent}  firstName=${firstName}  lastName=${lastName}  dob=${dob}   gender=${gender}  phoneNo=${phoneNo}  countryCode=${countryCode}    address=${address}
-    FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary   ${data}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /consumer/family/member   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Update Family Members
-    RETURN  ${resp}
-
-Get Family Members
-    [Arguments]  ${consumerId}  
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/family/member/${consumerId}   expected_status=any   
-    Check Deprication  ${resp}  Get Family Members
-    RETURN  ${resp}
-
-Delete Family Members
-    [Arguments]  ${memberId}  ${consumerId} 
-    Check And Create YNW Session
-    ${resp}=    DELETE On Session    ynw    /consumer/family/member/${memberId}/${consumerId}        expected_status=any
-    Check Deprication  ${resp}  Delete Family Members
-    RETURN  ${resp}
-
-Get Family Member By Id
-    [Arguments]  ${memberId}  
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/family/member/details/${memberId}   expected_status=any   
-    Check Deprication  ${resp}  Get Family Member By Id
-    RETURN  ${resp}
-
-
 Customer Take Appointment
     [Arguments]    ${accountId}  ${service_id}  ${schedule_id}  ${appmtDate}  ${consumerNote}  ${appmtFor}  &{kwargs}
     ${cons_headers}=  Create Dictionary  &{headers} 
@@ -3855,6 +3806,67 @@ SO Payment Via Link
     RETURN  ${resp} 
 
 
+#......... Family Memeber URLs.................
+
+
+Add FamilyMember For ProviderConsumer
+    [Arguments]   ${firstname}   ${lastname}  ${dob}  ${gender}   &{kwargs}
+    Check And Create YNW Session
+
+    ${data}=  Create Dictionary    firstName=${firstname}   lastName=${lastname}   dob=${dob}   gender=${gender}     
+    # ${data}=   Create Dictionary    userProfile=${userProfile}
+    ${whatsApp}=  Create Dictionary
+    ${telegram}=  Create Dictionary
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        IF  "${key}" == "whatsAppNum"
+            Set To Dictionary 	${whatsApp} 	number=${value}
+        ELSE IF  "${key}" == "whatsAppCC"
+            Set To Dictionary 	${whatsApp} 	countryCode=${value}
+        ELSE IF  "${key}" == "telegramNum"
+            Set To Dictionary 	${telegram} 	countryCode=${value}
+        ELSE IF  "${key}" == "telegramCC"
+            Set To Dictionary 	${telegram} 	countryCode=${value}
+        ELSE
+            Set To Dictionary 	${data} 	${key}=${value}
+        END
+        IF  ${whatsApp} != &{EMPTY}
+            Set To Dictionary 	${data} 	whatsAppNum=${whatsApp}
+        END
+        IF  ${telegram} != &{EMPTY}
+            Set To Dictionary 	${data} 	telegramNum=${telegram}
+        END
+
+    END
+    ${resp}=  POST On Session  ynw   /consumer/familyMember   json=${data}    expected_status=any
+    Check Deprication  ${resp}  Add FamilyMember For ProviderConsumer
+    RETURN  ${resp}
+
+Update Family Members
+    [Arguments]   ${id}  ${parent}  ${firstName}  ${lastName}  ${dob}  ${gender}   ${phoneNo}  ${countryCode}  ${address}  &{kwargs}
+
+    ${data}=  Create Dictionary   id=${id}  parent=${parent}  firstName=${firstName}  lastName=${lastName}  dob=${dob}   gender=${gender}  phoneNo=${phoneNo}  countryCode=${countryCode}    address=${address}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /consumer/familyMember   data=${data}  expected_status=any
+    Check Deprication  ${resp}  Update Family Members
+    RETURN  ${resp}
+
+Get Family Members
+    [Arguments]  ${consumerId}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/familyMember/${consumerId}   expected_status=any   
+    Check Deprication  ${resp}  Get Family Members
+    RETURN  ${resp}
+
+Delete Family Members
+    [Arguments]  ${memberId}  ${consumerId} 
+    Check And Create YNW Session
+    ${resp}=    DELETE On Session    ynw    /consumer/familyMember/${memberId}/${consumerId}        expected_status=any
+    Check Deprication  ${resp}  Delete Family Members
+    RETURN  ${resp}
 
 
 
@@ -3896,4 +3908,52 @@ Get coupon list by service and location id for waitlist
     [Arguments]   ${serviceId}    ${locationId}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /consumer/waitlist/service/${serviceId}/location/${locationId}/coupons  expected_status=any
+    RETURN  ${resp}
+
+
+Create Family Member   
+    [Arguments]  ${firstName}  ${lastName}  ${dob}  ${gender}   ${phoneNo}  ${countryCode}  ${address}  &{kwargs}
+
+    ${data}=  Create Dictionary  firstName=${firstName}  lastName=${lastName}  dob=${dob}   gender=${gender}  phoneNo=${phoneNo}  countryCode=${countryCode}    address=${address}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /consumer/familyMember   data=${data}  expected_status=any
+    Check Deprication  ${resp}  Create Family Member 
+    RETURN  ${resp}
+
+Update Family Members
+    [Arguments]   ${id}  ${parent}  ${firstName}  ${lastName}  ${dob}  ${gender}   ${phoneNo}  ${countryCode}  ${address}  &{kwargs}
+
+    ${data}=  Create Dictionary   id=${id}  parent=${parent}  firstName=${firstName}  lastName=${lastName}  dob=${dob}   gender=${gender}  phoneNo=${phoneNo}  countryCode=${countryCode}    address=${address}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /consumer/familyMember   data=${data}  expected_status=any
+    Check Deprication  ${resp}  Update Family Members
+    RETURN  ${resp}
+
+Get Family Members
+    [Arguments]  ${consumerId}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/familyMember/${consumerId}   expected_status=any   
+    Check Deprication  ${resp}  Get Family Members
+    RETURN  ${resp}
+
+Delete Family Members
+    [Arguments]  ${memberId}  ${consumerId} 
+    Check And Create YNW Session
+    ${resp}=    DELETE On Session    ynw    /consumer/familyMember/${memberId}/${consumerId}        expected_status=any
+    Check Deprication  ${resp}  Delete Family Members
+    RETURN  ${resp}
+
+Get Family Member By Id
+    [Arguments]  ${memberId}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/familyMember/details/${memberId}   expected_status=any   
+    Check Deprication  ${resp}  Get Family Member By Id
     RETURN  ${resp}
