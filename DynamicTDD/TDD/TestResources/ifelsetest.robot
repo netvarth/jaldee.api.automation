@@ -41,6 +41,16 @@ ${word3}        python
 
 *** Keywords ***
 
+check kwargs
+    [Arguments]   &{kwargs}
+    IF  servicecharge in &{kwargs.keys()} 
+        Log  servicecharge Exists
+    ELSE
+        Log  servicecharge doesn't exist
+    END
+
+*** Comments ***
+
 Login
     [Arguments]    ${usname}  ${passwrd}  &{kwargs}
     ${login}=    Create Dictionary    loginId=${usname}  password=${passwrd}
@@ -48,8 +58,6 @@ Login
     ${log}=    json.dumps    ${login}
     Create Session    ynw    ${BASE_URL}  headers=${headers}  verify=true
     RETURN  ${log}
-
-*** Comments ***
 
 check kwargs
     [Arguments]   &{kwargs}
@@ -84,12 +92,20 @@ check kwargs
 *** Test Cases ***  
 Testing kwargs
 
-    ${data}=  Login  2220700852  Jaldee12  countryCode=+91
-    Log   ${data}
+    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    ${firstname}=  FakerLibrary.name
+    ${lastname}=  FakerLibrary.last_name
+    check kwargs  parallelServing=${parallel}  firstName=${firstname}   lastName=${lastname}  maxBookingsAllowed=400  
+    check kwargs  parallelServing=${parallel}  firstName=${firstname}   lastName=${lastname}  maxBookingsAllowed=400  servicecharge=100
+
+    
 
 *** Comments ***
 
 checking if variable is empty
+
+    ${data}=  Login  2220700852  Jaldee12  countryCode=+91
+    Log   ${data}
 
     Set Test Variable  ${token}   Some Token
     Run Keyword And Continue On Failure  check kwargs   Authorization=${token}

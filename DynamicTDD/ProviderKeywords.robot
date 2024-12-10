@@ -734,7 +734,7 @@ Create Sample Service
     #...  Create Sample Service with Prepayment
     #...  Create Sample Service with Prepayment For User   
     #...  Create Sample Service For User
-    [Arguments]  ${Service_name}    ${isPrePayment}=${bool[0]}  ${notification}=${bool[0]}  &{kwargs}
+    [Arguments]  ${Service_name}  ${isPrePayment}=${bool[0]}  ${notification}=${bool[0]}  &{kwargs}
     ${desc}=   FakerLibrary.sentence
     ${srv_duration}=   Random Int   min=2   max=2
     ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=250
@@ -5169,19 +5169,7 @@ Create Department
     Check Deprication  ${resp}  Create Department
     RETURN  ${resp}
 
-Disable Department
-   [Arguments]  ${depid} 
-   Check And Create YNW Session
-   ${resp}=  PUT On Session  ynw  /provider/departments/${depid}/disable  expected_status=any
-   Check Deprication  ${resp}  Disable Department
-    RETURN  ${resp}
 
-Enable Department
-   [Arguments]  ${depid} 
-   Check And Create YNW Session
-   ${resp}=  PUT On Session  ynw  /provider/departments/${depid}/enable  expected_status=any
-   Check Deprication  ${resp}  Enable Department
-    RETURN  ${resp} 
    
 Create Department With ServiceName
     [Arguments]  ${dep_name}  ${dep_code}  ${dep_desc}  @{vargs}
@@ -18816,6 +18804,20 @@ Get Sub Domain Settings
     ${resp}=  GET On Session  ynw  /ynwConf/settings/${domain}/${subDomain}  expected_status=any
     Check Deprication  ${resp}  Get Sub Domain Settings
     RETURN  ${resp}  
+
+Disable Department
+   [Arguments]  ${depid} 
+   Check And Create YNW Session
+   ${resp}=  PUT On Session  ynw  /provider/departments/${depid}/disable  expected_status=any
+   Check Deprication  ${resp}  Disable Department
+    RETURN  ${resp}
+
+Enable Department
+   [Arguments]  ${depid} 
+   Check And Create YNW Session
+   ${resp}=  PUT On Session  ynw  /provider/departments/${depid}/enable  expected_status=any
+   Check Deprication  ${resp}  Enable Department
+    RETURN  ${resp} 
 
 
 

@@ -244,9 +244,9 @@ JD-TC-Apply Discount-1
     ${discountValue1}=  Convert To Number  ${discountValue1}  1
 
     ${resp}=   Apply Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}
-    Log  ${resp.json()}
-    Set Suite Variable   ${discountId1}   ${resp.json()}   
+    Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${discountId1}   ${resp.json()}  
 
     ${resp}=  Get Invoice By Id  ${invoice_uid}
     Log  ${resp.content}

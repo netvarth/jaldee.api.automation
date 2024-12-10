@@ -33,6 +33,7 @@ from dateutil import tz
 import re
 from decimal import Decimal, ROUND_HALF_UP
 import CustomKeywords
+from dateutil.relativedelta import relativedelta
 
 
 if os.environ['SYSTEM_ENV'] == 'Microsoft WSL':
@@ -406,7 +407,13 @@ def select_specific_entry_2Fields(table,sfield,field1,value1,field2,value2,cur):
 
 def update_entry(table,field,value,wfield,wid,cur):
     try:
-        cur.execute("UPDATE %s SET %s=%s WHERE %s='%s';" % (table,field,value,wfield,wid))
+        update_stmt = f"UPDATE {table} SET {field}='{value}' WHERE {wfield}='{wid}'"
+        print(update_stmt)
+        cur.execute(update_stmt)
+        # cur.execute("UPDATE %s SET %s=%s WHERE %s='%s';" % (table,field,value,wfield,wid))
+        # update_stmt = f"UPDATE {table} SET {field}=%s WHERE {wfield}=%s"
+        # print(update_stmt)
+        # cur.execute(update_stmt, (value, wid))
         print(field, 'updated with ', value, ' in', table)
     except Exception as e:
         print ("Exception:", e)
@@ -6675,6 +6682,41 @@ def GetFromDict(key,**kwargs):
         return key_value_pair, kwargs
 
     
+def adjust_schedule_date(input_string, months, sch_id):
+    # Split the input string to extract the date part
+    parts = input_string.split('/')
+    print(parts)
+    date_part = parts[2]
+    
+    # Convert the date part to a datetime object
+    original_date =  datetime.datetime.strptime(date_part, '%Y-%m-%d %H:%M:%S')
+    print(original_date)
+    
+    # Adjust the date by the number of months
+    adjusted_date = original_date + relativedelta(months=int(months))
+    print(adjusted_date)
+    
+    # Convert the adjusted date back to the string format
+    parts[2] = adjusted_date.strftime('%Y-%m-%d %H:%M:%S')
+    print(parts[2])
+    
+    # Reconstruct the input string with the adjusted date
+    adjusted_string = '/'.join(parts)
+    print(adjusted_string)
 
+    dbconn = connect_db(db_host, db_user, db_passwd, db)
+    try :
+        # cur = dbconn.cursor()
+        with dbconn.cursor() as cur:
+            update_entry('appt_schedule_tbl','schedule_time',adjusted_string,'id',sch_id,cur)
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        return 0
+    finally:
+        if dbconn is not None:
+            dbconn.close()
+    
+    return adjusted_string
 
     
