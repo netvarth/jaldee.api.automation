@@ -285,8 +285,8 @@ JD-TC-Update cash payment- finance invoice level-UH1
 
 
     ${note}=    FakerLibrary.word
-    ${invoice}=    FakerLibrary.RandomNumber
-    ${resp}=  Update cash payment- finance invoice level   ${invoice}  ${payment_modes[0]}  30  ${note}  ${paymentRefId}   paymentOndate=${DAY1}
+    # ${invoice}=    FakerLibrary.RandomNumber
+    ${resp}=  Update cash payment- finance invoice level   ${note}  ${payment_modes[0]}  30  ${note}  ${paymentRefId}   paymentOndate=${DAY1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${RECORD_NOT_FOUND}" 
