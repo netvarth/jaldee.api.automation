@@ -137,7 +137,7 @@ JD-TC-Get waitlist Today count-1
     Set Suite Variable   ${lastname}
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMember   ${firstname}  ${lastname}  ${dob}  ${gender}
+    ${resp}=  Add FamilyMember For ProviderConsumer   ${firstname}  ${lastname}  ${dob}  ${gender}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Suite Variable  ${f1}   ${resp.json()}
@@ -314,9 +314,13 @@ JD-TC-Get waitlist Today count-16
     
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${desc}=  FakerLibrary.word
-    ${resp}=  Waitlist Action Cancel  ${uuid2}  ${waitlist_cancl_reasn[4]}  ${desc}
+    
+    ${msg}=   FakerLibrary.word
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    ${resp}=  Waitlist Action   ${waitlist_actions[2]}  ${uuid2}  cancelReason=${waitlist_cancl_reasn[4]}   
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
+
     ${resp}=  Get Waitlist By Id  ${uuid2}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  waitlistStatus=${wl_status[4]}

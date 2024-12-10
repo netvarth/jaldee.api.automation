@@ -176,7 +176,7 @@ JD-TC-Get Future Waitlist Consumer-1
     Set Suite Variable   ${lastname}
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMember   ${firstname}  ${lastname}  ${dob}  ${gender}
+    ${resp}=  Add FamilyMember For ProviderConsumer   ${firstname}  ${lastname}  ${dob}  ${gender}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${f1}   ${resp.json()}
@@ -193,11 +193,11 @@ JD-TC-Get Future Waitlist Consumer-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME204}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${msg}=  Fakerlibrary.word
+    ${msg}=   FakerLibrary.word
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=  Waitlist Action Cancel  ${uuid1}  ${waitlist_cancl_reasn[4]}  ${msg}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Waitlist Action   ${waitlist_actions[2]}  ${uuid1}  cancelReason=${waitlist_cancl_reasn[4]}   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
     
 JD-TC-Get Future Waitlist Consumer-2
 	[Documentation]   Get Filter Future waitlist by service id

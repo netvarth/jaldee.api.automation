@@ -170,7 +170,7 @@ JD-TC-Get Future Waitlist Count-1
     Set Suite Variable   ${lastname}
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMember   ${firstname}  ${lastname}  ${dob}  ${gender}
+    ${resp}=  Add FamilyMember For ProviderConsumer   ${firstname}  ${lastname}  ${dob}  ${gender}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${f1}   ${resp.json()}

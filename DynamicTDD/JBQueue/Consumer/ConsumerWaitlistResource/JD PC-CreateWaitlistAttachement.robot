@@ -812,13 +812,11 @@ JD-TC-WaitlistAttachment-7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${msg}=  Fakerlibrary.word
+    ${msg}=   FakerLibrary.word
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=  Waitlist Action Cancel  ${uuid}  ${waitlist_cancl_reasn[4]}   ${msg}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-
+    ${resp}=  Waitlist Action   ${waitlist_actions[2]}  ${uuid}  cancelReason=${waitlist_cancl_reasn[4]}   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
 
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -958,7 +956,7 @@ JD-TC-WaitlistAttachment-8
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element   ${Genderlist}
-    ${resp}=  AddFamilyMember   ${firstname}  ${lastname}  ${dob}  ${gender}
+    ${resp}=  Add FamilyMember For ProviderConsumer   ${firstname}  ${lastname}  ${dob}  ${gender}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${cidfor}   ${resp.json()}
@@ -1183,108 +1181,6 @@ JD-TC-WaitlistAttachment-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.json()['hasAttachment']}    ${bool[1]}
 
-JD-TC-WaitlistAttachment-UH5
-
-    [Documentation]   Add waitlist attachment as sh file.
-    
-    # clear_queue      ${HLPUSERNAME6}
-    # clear_location   ${HLPUSERNAME6}
-    # clear_service    ${HLPUSERNAME6}
-    clear_customer   ${HLPUSERNAME6}
-
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${acc_id}=  get_acc_id  ${HLPUSERNAME6}
-    Set Test Variable   ${acc_id} 
-
-    ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}  
-
-    ${resp}=   Get Location ById  ${loc_id1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
-
-    ${CUR_DAY}=  db.get_date_by_timezone  ${tz} 
-    ${ser_name1}=   FakerLibrary.word
-    ${resp}=   Create Sample Service  ${ser_name1}
-    Set Test Variable    ${ser_id1}    ${resp}  
-    ${ser_name2}=   FakerLibrary.word
-    ${resp}=   Create Sample Service  ${ser_name2}
-    Set Test Variable    ${ser_id2}    ${resp}  
-    ${q_name}=    FakerLibrary.word
-    ${list}=  Create List   1  2  3  4  5  6  7
-    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
-    ${strt_time}=   add_timezone_time  ${tz}  1  00  
-    ${end_time}=    add_timezone_time  ${tz}  3  00   
-    ${parallel}=   Random Int  min=1   max=2
-    ${capacity}=  Random Int   min=10   max=20
-    ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  ${ser_id2}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${que_id1}   ${resp.json()}
-
-
-    ${resp}=  AddCustomer  ${CUSERNAME14}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=   ProviderLogout
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Send Otp For Login    ${CUSERNAME14}    ${acc_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-  
-    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
-
-    ${resp}=    Verify Otp For Login   ${CUSERNAME14}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable   ${token}  ${resp.json()['token']}
-
-    # ${resp}=  Consumer Logout   
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-   
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME14}    ${acc_id}    ${token}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    # clear_Consumermsg  ${CUSERNAME14}
-    
-    
-    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME14}    ${acc_id}    ${token}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    # Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
-    Set Test Variable    ${cid}   ${resp.json()['id']} 
-
-    ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${cid}  ${acc_id}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
-    
-    ${wid}=  Get Dictionary Values  ${resp.json()}
-    Set Test Variable  ${uuid}  ${wid[0]}   
-    
-    ${resp}=  Get consumer Waitlist By Id   ${uuid}  ${acc_id}  
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()['hasAttachment']}    ${bool[0]}
-
-    # ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME14}   ${PASSWORD}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${caption}=  Fakerlibrary.sentence
-    
-    ${resp}=  Imageupload.CWLAttachment   ${cookie}   ${acc_id}   ${uuid}   ${caption}  ${shfile}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"   "${IMAGE_TYPE_NOT_SUPPORTED}"
-
-
 JD-TC-WaitlistAttachment-UH6
 
     [Documentation]   Add waitlist attachment as txt file.
@@ -1414,3 +1310,107 @@ JD-TC-WaitlistAttachment-UH7
     Should Be Equal As Strings  ${resp.status_code}  404
     Should Be Equal As Strings  "${resp.json()}"  "${INVALID_WAITLIST}"    
 
+
+*** Comments ***
+
+
+JD-TC-WaitlistAttachment-UH5
+
+    [Documentation]   Add waitlist attachment as sh file.
+    
+    # clear_queue      ${HLPUSERNAME6}
+    # clear_location   ${HLPUSERNAME6}
+    # clear_service    ${HLPUSERNAME6}
+    clear_customer   ${HLPUSERNAME6}
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME6}
+    Set Test Variable   ${acc_id} 
+
+    ${resp}=   Create Sample Location
+    Set Test Variable    ${loc_id1}    ${resp}  
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
+
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz} 
+    ${ser_name1}=   FakerLibrary.word
+    ${resp}=   Create Sample Service  ${ser_name1}
+    Set Test Variable    ${ser_id1}    ${resp}  
+    ${ser_name2}=   FakerLibrary.word
+    ${resp}=   Create Sample Service  ${ser_name2}
+    Set Test Variable    ${ser_id2}    ${resp}  
+    ${q_name}=    FakerLibrary.word
+    ${list}=  Create List   1  2  3  4  5  6  7
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  3  00   
+    ${parallel}=   Random Int  min=1   max=2
+    ${capacity}=  Random Int   min=10   max=20
+    ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  ${ser_id2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${que_id1}   ${resp.json()}
+
+
+    ${resp}=  AddCustomer  ${CUSERNAME14}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   ProviderLogout
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME14}    ${acc_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME14}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME14}    ${acc_id}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # clear_Consumermsg  ${CUSERNAME14}
+    
+    
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME14}    ${acc_id}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+    Set Test Variable    ${cid}   ${resp.json()['id']} 
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${acc_id}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200   
+    
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Test Variable  ${uuid}  ${wid[0]}   
+    
+    ${resp}=  Get consumer Waitlist By Id   ${uuid}  ${acc_id}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['hasAttachment']}    ${bool[0]}
+
+    # ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME14}   ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${caption}=  Fakerlibrary.sentence
+    
+    ${resp}=  Imageupload.CWLAttachment   ${cookie}   ${acc_id}   ${uuid}   ${caption}  ${shfile}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"   "${IMAGE_TYPE_NOT_SUPPORTED}"

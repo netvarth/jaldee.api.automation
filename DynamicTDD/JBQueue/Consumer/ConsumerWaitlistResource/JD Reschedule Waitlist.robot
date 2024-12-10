@@ -63,7 +63,7 @@ JD-TC-Reschedule Waitlist-1
     ${resp}=   Get Service By Id   ${s_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
+    Set Test Variable   ${duration}   ${resp.json()['serviceDuration']}
 
     ${lid}=  Create Sample Location  
     ${resp}=   Get Location ById  ${lid}
