@@ -937,7 +937,7 @@ Add To Waitlist Consumers
     Set To Dictionary  ${cons_headers}   &{tzheaders}
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    POST On Session  ynw  /consumer/waitlist   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}    
+    ${resp}=    POST On Session  ynw  /consumer/waitlist/add   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}    
     Check Deprication  ${resp}  Add To Waitlist Consumers
     RETURN  ${resp}
 
@@ -3957,7 +3957,7 @@ ListFamilyMember
     Check Deprication  ${resp}  ListFamilyMember
     RETURN  ${resp}
 
-    
+
 Get All Schedule Slots By Date Location and Service
     [Arguments]  ${acct_id}  ${date}  ${locationId}  ${serviceId}  &{kwargs}  #${timeZone}=Asia/Kolkata
     ${cons_headers}=  Create Dictionary  &{headers} 

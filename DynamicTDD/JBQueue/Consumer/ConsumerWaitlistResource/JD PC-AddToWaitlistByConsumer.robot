@@ -240,7 +240,6 @@ JD-TC-Add To WaitlistByConsumer-1
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable   ${cid}  ${resp.json()['providerConsumer']}
     clear_Consumermsg  ${CUSERNAME5}
     
     # ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME5}    ${pid0}    ${token}
@@ -250,29 +249,6 @@ JD-TC-Add To WaitlistByConsumer-1
     # Set Test Variable    ${cid}   ${resp.json()['id']} 
     
     # ${cid}=  get_id  ${CUSERNAME5} 
-
-    ${firstname}=  FakerLibrary.name
-    ${lastname}=  FakerLibrary.last_name
-    ${dob}=  FakerLibrary.Date
-    ${gender}    Random Element    ${Genderlist}
-
-    ${resp}=  Add FamilyMember For ProviderConsumer     ${firstname}  ${lastname}  ${dob}  ${gender} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200    
-    # ${resp}=  Add FamilyMember For ProviderConsumer   ${firstname}  ${lastname}  ${dob}  ${gender}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200  
-    Set Test Variable  ${cidfor}   ${resp.json()}
-
-    ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid0}  ${p1_q1}  ${DAY}  ${p1_s1}  ${cnote}  ${bool[0]}  ${cidfor}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    
-
-
-
-*** Comments ***
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid5}  ${pid0}  ${p1_q1}  ${DAY}  ${p1_s1}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.content}
