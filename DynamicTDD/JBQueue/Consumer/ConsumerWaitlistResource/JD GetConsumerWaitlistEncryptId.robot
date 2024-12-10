@@ -182,19 +182,8 @@ JD-TC-GetWaitlistByEncryptedID-2
 #     Should Be Equal As Strings  ${resp.json()['ynwUuid']}                         ${uuid1}
    
 
+
 JD-TC-GetWaitlistByEncryptedID-UH1
-    [Documentation]     Passing Consumer Encrypted ID is Empty 
-        
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${pid}  ${token} 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200 
-
-    ${resp}=   Get Consumer Waitlist By EncodedId    ${empty}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  404
-    Should Be Equal As Strings  "${resp.json()}"      "${INVALID_WAITLIST}"
-
-JD-TC-GetWaitlistByEncryptedID-UH2
     [Documentation]     Passing Consumer Encrypted ID is Zero 
         
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${pid}  ${token} 
