@@ -31,7 +31,7 @@ JD-TC-Get Batches using Salesordercatalog-1
 
     [Documentation]  Get Batch details using Salesordercatalog item encid
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -112,7 +112,7 @@ JD-TC-Get Batches using Salesordercatalog-1
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable     ${itemjrx}   ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
