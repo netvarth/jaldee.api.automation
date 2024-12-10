@@ -630,58 +630,6 @@ Verify Consumer Profile
         Should Be Equal As Strings  ${resp.json()['userProfile']['${key}']}  ${value}
     END
 
-
-Familymember Creation
-    [Arguments]   ${firstname}  ${lastname}  ${dob}  ${gender}
-    ${up}=  Create Dictionary  firstName=${firstname}  lastName=${lastname}  dob=${dob}  gender=${gender}
-    ${data}=  Create Dictionary   userProfile=${up}
-    ${data}=  json.dumps  ${data}
-    RETURN  ${data}
-
-
-AddFamilyMember
-    [Arguments]   ${firstname}  ${lastname}  ${dob}  ${gender}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${data}=  Familymember Creation   ${firstname}  ${lastname}  ${dob}  ${gender}
-    ${cons_headers}=  Create Dictionary  &{headers} 
-    ${cons_params}=  Create Dictionary
-    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
-    Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${cons_params}   &{locparam}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /consumer/familyMember   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    Check Deprication  ${resp}  AddFamilyMember
-    RETURN  ${resp}
-
-
-DeleteFamilyMember
-    [Arguments]  ${id}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${cons_headers}=  Create Dictionary  &{headers} 
-    ${cons_params}=  Create Dictionary
-    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
-    Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${cons_params}   &{locparam}
-    Check And Create YNW Session
-    ${resp}=    DELETE On Session  ynw  /consumer/familyMember/${id}   params=${cons_params}   expected_status=any   headers=${cons_headers}
-    Check Deprication  ${resp}  DeleteFamilyMember
-    RETURN  ${resp}
-
-
-ListFamilyMember
-    [Arguments]    &{kwargs}
-    ${cons_headers}=  Create Dictionary  &{headers} 
-    ${cons_params}=  Create Dictionary
-    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
-    Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${kwargs}   &{locparam}
-    Check And Create YNW Session
-    ${resp}=  GET On Session   ynw   /consumer/familyMember   params=${kwargs}   expected_status=any   headers=${cons_headers}
-    Check Deprication  ${resp}  ListFamilyMember
-    RETURN  ${resp}
-
-
 ConsumerFamilyMember Waitlist
     [Arguments]    ${service_id}  ${partySize}  ${consumerNote}  ${mem_id}
     ${service}=     Create Dictionary    id=${service_id}
@@ -3959,6 +3907,57 @@ Get Family Member By Id
     RETURN  ${resp}
 
 
+Familymember Creation
+    [Arguments]   ${firstname}  ${lastname}  ${dob}  ${gender}
+    ${up}=  Create Dictionary  firstName=${firstname}  lastName=${lastname}  dob=${dob}  gender=${gender}
+    ${data}=  Create Dictionary   userProfile=${up}
+    ${data}=  json.dumps  ${data}
+    RETURN  ${data}
+
+
+AddFamilyMember
+    [Arguments]   ${firstname}  ${lastname}  ${dob}  ${gender}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${data}=  Familymember Creation   ${firstname}  ${lastname}  ${dob}  ${gender}
+    ${cons_headers}=  Create Dictionary  &{headers} 
+    ${cons_params}=  Create Dictionary
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${cons_params}   &{locparam}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /consumer/familyMember   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
+    Check Deprication  ${resp}  AddFamilyMember
+    RETURN  ${resp}
+
+
+DeleteFamilyMember
+    [Arguments]  ${id}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_headers}=  Create Dictionary  &{headers} 
+    ${cons_params}=  Create Dictionary
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${cons_params}   &{locparam}
+    Check And Create YNW Session
+    ${resp}=    DELETE On Session  ynw  /consumer/familyMember/${id}   params=${cons_params}   expected_status=any   headers=${cons_headers}
+    Check Deprication  ${resp}  DeleteFamilyMember
+    RETURN  ${resp}
+
+
+ListFamilyMember
+    [Arguments]    &{kwargs}
+    ${cons_headers}=  Create Dictionary  &{headers} 
+    ${cons_params}=  Create Dictionary
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${kwargs}   &{locparam}
+    Check And Create YNW Session
+    ${resp}=  GET On Session   ynw   /consumer/familyMember   params=${kwargs}   expected_status=any   headers=${cons_headers}
+    Check Deprication  ${resp}  ListFamilyMember
+    RETURN  ${resp}
+
+    
 Get All Schedule Slots By Date Location and Service
     [Arguments]  ${acct_id}  ${date}  ${locationId}  ${serviceId}  &{kwargs}  #${timeZone}=Asia/Kolkata
     ${cons_headers}=  Create Dictionary  &{headers} 
