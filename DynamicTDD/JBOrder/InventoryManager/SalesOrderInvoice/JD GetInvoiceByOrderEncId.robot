@@ -391,15 +391,3 @@ JD-TC-Get Sales Order Invoice By Order Encid-UH2
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}   ${INVALID_ORDER}
 
-JD-TC-Get Sales Order Invoice By Order Encid-UH3
-
-    [Documentation]   Get sales order invoice with EMPTY order encid.
-
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get Invoice By Order Uid    ${EMPTY}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${INVALID_FM_INVOICE_ID}

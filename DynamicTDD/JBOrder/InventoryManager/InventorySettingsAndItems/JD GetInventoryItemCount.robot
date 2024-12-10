@@ -438,7 +438,7 @@ JD-TC-Get Inventory Item Count-1
     # ....Get Item Details from Inventory catalog ..........................................................
 
 
-    ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}
+    ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}    ${amount}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}                     200
 

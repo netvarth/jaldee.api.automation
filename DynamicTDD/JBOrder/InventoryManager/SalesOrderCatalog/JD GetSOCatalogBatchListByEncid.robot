@@ -427,7 +427,7 @@ JD-TC-Get list by item encId-1
     Set Suite Variable              ${taxAmount}
     Set Suite Variable              ${netRate}
 
-    ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}
+    ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}    ${amount}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}                     200
   
