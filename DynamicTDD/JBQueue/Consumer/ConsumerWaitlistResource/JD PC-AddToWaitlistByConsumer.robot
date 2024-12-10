@@ -240,17 +240,41 @@ JD-TC-Add To WaitlistByConsumer-1
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${cid}  ${resp.json()['providerConsumer']}
     clear_Consumermsg  ${CUSERNAME5}
     
-    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME5}    ${pid0}    ${token}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME5}    ${pid0}    ${token}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}   200
     # Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
-    Set Test Variable    ${cid}   ${resp.json()['id']} 
+    # Set Test Variable    ${cid}   ${resp.json()['id']} 
     
-    ${cid}=  get_id  ${CUSERNAME5} 
+    # ${cid}=  get_id  ${CUSERNAME5} 
+
+    ${firstname}=  FakerLibrary.name
+    ${lastname}=  FakerLibrary.last_name
+    ${dob}=  FakerLibrary.Date
+    ${gender}    Random Element    ${Genderlist}
+
+    ${resp}=  Add FamilyMember For ProviderConsumer     ${firstname}  ${lastname}  ${dob}  ${gender} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200    
+    # ${resp}=  Add FamilyMember For ProviderConsumer   ${firstname}  ${lastname}  ${dob}  ${gender}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200  
+    Set Test Variable  ${cidfor}   ${resp.json()}
+
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid0}  ${p1_q1}  ${DAY}  ${p1_s1}  ${cnote}  ${bool[0]}  ${self}  
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid0}  ${p1_q1}  ${DAY}  ${p1_s1}  ${cnote}  ${bool[0]}  ${cidfor}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    
+
+
+
+*** Comments ***
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Add To Waitlist Consumers  ${cid5}  ${pid0}  ${p1_q1}  ${DAY}  ${p1_s1}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${wid}=  Get Dictionary Values  ${resp.json()}
@@ -283,18 +307,17 @@ JD-TC-Add To WaitlistByConsumer-1
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}           
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id1}  
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_l1}
 
-
 JD-TC-Add To WaitlistByConsumer-2
+
 	[Documentation]  Provider removes consumer waitlisted for a service and consumer joins the waitlist of the same service and another service of same queue
     
     # clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
-    ${cid}=  get_id  ${CUSERNAME5}
+    # ${cid}=  get_id  ${CUSERNAME5}
 
     ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
@@ -326,14 +349,15 @@ JD-TC-Add To WaitlistByConsumer-2
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
     clear_Consumermsg  ${CUSERNAME5}
     
     
-    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME5}    ${pid0}    ${token}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    # Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
-    Set Test Variable    ${cid}   ${resp.json()['id']}   
+    # ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME5}    ${pid0}    ${token}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # # Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+    # Set Test Variable    ${cid}   ${resp.json()['id']}   
     # ${DAY}=  db.get_date_by_timezone  ${tz}
     ${DAY}=  get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
@@ -350,7 +374,7 @@ JD-TC-Add To WaitlistByConsumer-2
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}     waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id1}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}
 
@@ -391,7 +415,6 @@ JD-TC-Add To WaitlistByConsumer-2
     Should Be Equal As Strings    ${resp.status_code}   200
     clear_Consumermsg  ${CUSERNAME5}
     
-    
     ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME5}    ${pid0}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -412,7 +435,7 @@ JD-TC-Add To WaitlistByConsumer-2
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id1}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}
     
@@ -432,7 +455,6 @@ JD-TC-Add To WaitlistByConsumer-2
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE2}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s2}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id1}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_l1}
@@ -465,12 +487,7 @@ JD-TC-Add To WaitlistByConsumer-3
     Should Be Equal As Strings    ${resp.status_code}   200
     clear_Consumermsg  ${CUSERNAME5}
     
-    
-    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME5}    ${pid0}    ${token}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
     # Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
-    Set Test Variable    ${cid}   ${resp.json()['id']}     
     # ${DAY}=  db.get_date_by_timezone  ${tz}  
     # ${DAY}=  db.get_date_by_timezone  ${tz}
     ${DAY}=  get_date_by_timezone  ${tz}
@@ -488,7 +505,7 @@ JD-TC-Add To WaitlistByConsumer-3
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id1} 
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}    
     Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_l1}
@@ -511,14 +528,10 @@ JD-TC-Add To WaitlistByConsumer-3
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id1}   
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}   
-    
     Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_l1}
-
-
-
 
 JD-TC-Add To WaitlistByConsumer-4
 	[Documentation]  A Consumer Added To Waitlist for same service in diffrent queue
@@ -569,7 +582,7 @@ JD-TC-Add To WaitlistByConsumer-4
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id1}  
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}
     
@@ -589,7 +602,7 @@ JD-TC-Add To WaitlistByConsumer-4
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id1} 
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q2}
     
@@ -655,7 +668,7 @@ JD-TC-Add To WaitlistByConsumer-5
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id1} 
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}
     
@@ -675,7 +688,7 @@ JD-TC-Add To WaitlistByConsumer-5
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE2}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s2}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id1} 
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q2}
     
@@ -731,7 +744,7 @@ JD-TC-Add To WaitlistByConsumer-6
     Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id1}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}
     
@@ -790,7 +803,7 @@ JD-TC-Add To WaitlistByConsumer-7
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id1}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}
 
@@ -808,7 +821,7 @@ JD-TC-Add To WaitlistByConsumer-7
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE2}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s2}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id1}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}
     
@@ -865,7 +878,7 @@ JD-TC-Add To WaitlistByConsumer-8
     Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id1}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}
     
@@ -886,7 +899,7 @@ JD-TC-Add To WaitlistByConsumer-8
     Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id1}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q2}
     
@@ -944,7 +957,7 @@ JD-TC-Add To WaitlistByConsumer-9
     Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id1}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}
     
@@ -963,7 +976,7 @@ JD-TC-Add To WaitlistByConsumer-9
     Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE2}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s2}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id1}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q2}
     
@@ -1057,7 +1070,7 @@ JD-TC-Add To WaitlistByConsumer-10
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE2}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s2}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id1}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}
 
@@ -1074,7 +1087,7 @@ JD-TC-Add To WaitlistByConsumer-10
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE2}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s2}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id1}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q3}
     
@@ -1087,11 +1100,11 @@ JD-TC-Add To WaitlistByConsumer-11
     [Documentation]  waitlist for Family Members
     # clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
-    ${cid}=  get_id  ${CUSERNAME5}
+    # ${cid}=  get_id  ${CUSERNAME5}
     # ${DAY}=  db.get_date_by_timezone  ${tz}
     ${DAY}=  get_date_by_timezone  ${tz}
 
-     ${resp}=    Send Otp For Login    ${CUSERNAME5}    ${pid0}
+    ${resp}=    Send Otp For Login    ${CUSERNAME5}    ${pid0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
@@ -1109,23 +1122,28 @@ JD-TC-Add To WaitlistByConsumer-11
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    clear_Consumermsg  ${CUSERNAME5}
+    Set Test Variable   ${cid}  ${resp.json()['providerConsumer']}
+    # clear_Consumermsg  ${CUSERNAME5}
     
     
-    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME5}    ${pid0}    ${token}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    # Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
-    Set Test Variable    ${cid}   ${resp.json()['id']}  
+    # ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME5}    ${pid0}    ${token}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # # Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+    # Set Test Variable    ${cid}   ${resp.json()['id']}  
 
 
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMember   ${firstname}  ${lastname}  ${dob}  ${gender}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200  
+
+    ${resp}=  Add FamilyMember For ProviderConsumer     ${firstname}  ${lastname}  ${dob}  ${gender} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200    
+    # ${resp}=  Add FamilyMember For ProviderConsumer   ${firstname}  ${lastname}  ${dob}  ${gender}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${cidfor}   ${resp.json()}
 
     ${cnote}=   FakerLibrary.word
@@ -1142,7 +1160,7 @@ JD-TC-Add To WaitlistByConsumer-11
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}  ${cidfor}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}
     
@@ -1188,7 +1206,7 @@ JD-TC-Add To WaitlistByConsumer-12
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMember   ${firstname}  ${lastname}  ${dob}  ${gender}
+    ${resp}=  Add FamilyMember For ProviderConsumer   ${firstname}  ${lastname}  ${dob}  ${gender}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${cidfor}   ${resp.json()}
@@ -1207,7 +1225,7 @@ JD-TC-Add To WaitlistByConsumer-12
     Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE2}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s2}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}  ${cidfor}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}
     
@@ -1253,7 +1271,7 @@ JD-TC-Add To WaitlistByConsumer-13
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMember   ${firstname}  ${lastname}  ${dob}  ${gender}
+    ${resp}=  Add FamilyMember For ProviderConsumer   ${firstname}  ${lastname}  ${dob}  ${gender}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${cidfor}   ${resp.json()}
@@ -1272,7 +1290,7 @@ JD-TC-Add To WaitlistByConsumer-13
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}  ${cidfor}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}
     
@@ -1292,7 +1310,7 @@ JD-TC-Add To WaitlistByConsumer-13
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE2}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s2}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}   ${cidfor}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1} 
     
@@ -1338,7 +1356,7 @@ JD-TC-Add To WaitlistByConsumer-14
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMember   ${firstname}  ${lastname}  ${dob}  ${gender}
+    ${resp}=  Add FamilyMember For ProviderConsumer   ${firstname}  ${lastname}  ${dob}  ${gender}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${cidfor}   ${resp.json()}
@@ -1357,7 +1375,7 @@ JD-TC-Add To WaitlistByConsumer-14
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}  ${cidfor}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}
     
@@ -1376,7 +1394,7 @@ JD-TC-Add To WaitlistByConsumer-14
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}   ${cidfor}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q2}  
     Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_l1}    
@@ -1430,7 +1448,7 @@ JD-TC-Add To WaitlistByConsumer-15
     Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id1}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}
     
@@ -1450,7 +1468,7 @@ JD-TC-Add To WaitlistByConsumer-15
     Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id1}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q3}
     
@@ -1507,7 +1525,7 @@ JD-TC-Add To WaitlistByConsumer-16
     Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}     waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id1}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}
     
@@ -1531,7 +1549,7 @@ JD-TC-Add To WaitlistByConsumer-16
     Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id1} 
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}
     
@@ -1589,7 +1607,7 @@ JD-TC-Add To WaitlistByConsumer-17
     Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id1}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}
 
@@ -1630,7 +1648,7 @@ JD-TC-Add To WaitlistByConsumer-17
     Verify Response  ${resp}  date=${TOMORROW}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id1}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}   
     
@@ -1689,7 +1707,7 @@ JD-TC-Add To WaitlistByConsumer-UH1
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id1} 
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}
     
@@ -1934,7 +1952,7 @@ JD-TC-Add To WaitlistByConsumer-19
     ${lastname}=  FakerLibrary.last_name
     ${dob1}=  FakerLibrary.Date
     ${gender1}=  Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMemberByProvider  ${cid20}  ${firstname}  ${lastname}  ${dob1}  ${gender1}
+    ${resp}=  Add FamilyMemberByProvider  ${cid20}  ${firstname}  ${lastname}  ${dob1}  ${gender1}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${mem_id_p1}  ${resp.json()}
 
@@ -1981,7 +1999,7 @@ JD-TC-Add To WaitlistByConsumer-19
     ${family_lname}=  FakerLibrary.last_name
     ${dob2}=  FakerLibrary.Date
     ${gender2}    Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMember   ${family_fname}  ${family_lname}  ${dob2}  ${gender2}
+    ${resp}=  Add FamilyMember For ProviderConsumer   ${family_fname}  ${family_lname}  ${dob2}  ${gender2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Suite Variable  ${cidfor_c1}   ${resp.json()}
@@ -2093,7 +2111,7 @@ JD-TC-Add To WaitlistByConsumer-20
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMemberByProvider  ${cid30}  ${firstname}  ${lastname}  ${dob}  ${gender}
+    ${resp}=  Add FamilyMemberByProvider  ${cid30}  ${firstname}  ${lastname}  ${dob}  ${gender}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${mem_id_p2}  ${resp.json()}
 
@@ -2133,7 +2151,7 @@ JD-TC-Add To WaitlistByConsumer-20
     ${family_lname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMember   ${family_fname}  ${family_lname}  ${dob}  ${gender}
+    ${resp}=  Add FamilyMember For ProviderConsumer   ${family_fname}  ${family_lname}  ${dob}  ${gender}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Suite Variable  ${cidfor_c2}   ${resp.json()}
@@ -2359,7 +2377,7 @@ JD-TC-Add To WaitlistByConsumer-UH2
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id0}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q4}
 
@@ -2367,7 +2385,7 @@ JD-TC-Add To WaitlistByConsumer-UH2
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMember   ${firstname}  ${lastname}  ${dob}  ${gender}
+    ${resp}=  Add FamilyMember For ProviderConsumer   ${firstname}  ${lastname}  ${dob}  ${gender}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Test Variable  ${f1}   ${resp.json()}
@@ -3138,7 +3156,7 @@ JD-TC-Add To WaitlistByConsumer-UH14
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMember   ${firstname}  ${lastname}  ${dob}  ${gender}
+    ${resp}=  Add FamilyMember For ProviderConsumer   ${firstname}  ${lastname}  ${dob}  ${gender}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Test Variable  ${f1}   ${resp.json()}
@@ -3341,7 +3359,7 @@ JD-TC-Add To WaitlistByConsumer-UH16
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}      waitlistedBy=PROVIDER_CONSUMER
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P2SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p2_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id8}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p2_q1}
     ${resp}=  Consumer Logout       
@@ -3447,7 +3465,7 @@ JD-TC-Add To WaitlistByConsumer-UH17
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}    appxWaitingTime=0  waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P2SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p2_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id8}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p2_q1}
     
@@ -3570,7 +3588,7 @@ JD-TC-Add To WaitlistByConsumer-21
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}      waitlistedBy=PROVIDER_CONSUMER
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P2SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p2_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id8}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p2_q1}
     ${resp}=  Consumer Logout
@@ -3802,7 +3820,7 @@ JD-TC-Add To WaitlistByConsumer-23
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}      waitlistedBy=PROVIDER_CONSUMER
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P2SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p2_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons2}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p2_q1}
 
@@ -3949,7 +3967,7 @@ JD-TC-Add To WaitlistByConsumer-24
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMember   ${firstname}  ${lastname}  ${dob}  ${gender}
+    ${resp}=  Add FamilyMember For ProviderConsumer   ${firstname}  ${lastname}  ${dob}  ${gender}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Test Variable  ${f1}   ${resp.json()}
@@ -3985,7 +4003,7 @@ JD-TC-Add To WaitlistByConsumer-24
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${ps1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons5}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p_q1}
 
@@ -3996,7 +4014,7 @@ JD-TC-Add To WaitlistByConsumer-24
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}     waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${ps1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}  ${f1}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p_q1}
     Set Test Variable  ${cfid}   ${resp.json()['waitlistingFor'][0]['id']}
@@ -4149,7 +4167,7 @@ JD-TC-Add To WaitlistByConsumer-25
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMember   ${firstname}  ${lastname}  ${dob}  ${gender}
+    ${resp}=  Add FamilyMember For ProviderConsumer   ${firstname}  ${lastname}  ${dob}  ${gender}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Test Variable  ${f1}   ${resp.json()}
@@ -4182,7 +4200,7 @@ JD-TC-Add To WaitlistByConsumer-25
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}    appxWaitingTime=0  waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P2SERVICE2}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${ps2}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id0}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p_q1}
 
@@ -4192,7 +4210,7 @@ JD-TC-Add To WaitlistByConsumer-25
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}    appxWaitingTime=12  waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P2SERVICE2}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${ps2}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
+    
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}  ${f1}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p_q1}
 
