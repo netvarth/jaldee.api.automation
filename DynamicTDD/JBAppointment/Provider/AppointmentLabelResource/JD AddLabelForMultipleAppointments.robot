@@ -1795,6 +1795,7 @@ JD-TC-AddMultipleAppointmentLabel-9
     ${resp}=  AddCustomer  ${NewCustomer}   firstName=${fname}   lastName=${lname}  email=${pc_emailid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${cid}  ${resp.json()}
    
     ${resp}=  Provider Logout
     Log   ${resp.json()}
@@ -1841,7 +1842,7 @@ JD-TC-AddMultipleAppointmentLabel-9
     Should Be Equal As Strings  ${resp.status_code}  200    
     Set Test Variable   ${mem_id1}   ${resp.json()}
     
-    ${resp}=  Get FamilyMember
+    ${resp}=  Get Family Members   ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    

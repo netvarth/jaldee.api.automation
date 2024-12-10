@@ -252,6 +252,10 @@ JD-TC-UpdateAppointmentQueueSet-2
     # clear_location  ${PUSERNAMEA}
     clear_Addon  ${PUSERNAMEA}
 
+    ${resp}=  Enable Disable Department  ${toggle[1]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE1}

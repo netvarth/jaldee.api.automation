@@ -33,8 +33,12 @@ JD-TC-GetAppointmenStatusBoardSetById-1
     # clear_service   ${HLPUSERNAME40}
     # clear_location  ${HLPUSERNAME40}
     clear_Addon  ${HLPUSERNAME40}
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}   
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
+    
     ${lid1}=  Create Sample Location  
 
     ${resp}=   Get Location ById  ${lid1}
