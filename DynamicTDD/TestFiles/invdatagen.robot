@@ -24,8 +24,11 @@ ${data_file}     ${EXECDIR}/data/${ENVIRONMENT}data/${ENVIRONMENT}phnumbers.txt
 # ${LoginId}       ${PUSERNAME2}
 # ${PASSWORD}      Jaldee12
 
-${LoginId}       5554343565
-${PASSWORD}      Pooja$health3
+# ${LoginId}       5554343565
+# ${PASSWORD}      Pooja$health3
+
+${LoginId}       5557411478
+${PASSWORD}      Jaldee01
 
 ${loop_count}   200
 # ${loop_count}   1
@@ -76,28 +79,32 @@ JD-TC-Appointment-1
     Should Be Equal As Strings  ${resp.status_code}  200
     FOR    ${service}    IN    @{resp.json()}
         # Registration service
-        IF    '${service['serviceCategory']}' == 'MainService' and ${service['totalAmount']} > 0 and 'provider' not in ${service} and '${service['status']}' == 'ACTIVE'
-            Log    ${service['name']}
-            ${s_id1}=    Get Variable Value    ${s_id1}    NONE
-            IF    '${s_id1}' == 'NONE'
-                Set Test Variable    ${s_id1}    ${service['id']}
-            END
-        # Appointment service
-        ELSE IF    '${service['serviceCategory']}' == 'MainService' and ${service['totalAmount']} == 0 and 'provider' not in ${service} and '${service['status']}' == 'ACTIVE'
-            Log    ${service['name']}
-            ${s_id2}=    Get Variable Value    ${s_id2}    NONE
-            IF    '${s_id2}' == 'NONE'
-                Set Test Variable    ${s_id2}    ${service['id']}
-            END
-        # SubService
-        ELSE IF    '${service['serviceCategory']}' == 'SubService' and '${service['status']}' == 'ACTIVE'
-            Log    ${service['name']}
-            ${s_id3}=    Get Variable Value    ${s_id3}    NONE
-            IF    '${s_id3}' == 'NONE'
-                Set Test Variable    ${s_id3}    ${service['id']}
-            END
-        END
+        Run Keyword If    '${service['id']}' == '43482'    Set Test Variable    ${s_id1}    ${service['id']}
+        Run Keyword If    '${service['id']}' == '43483'    Set Test Variable    ${s_id2}    ${service['id']}
+        Run Keyword If    '${service['id']}' == '43484'    Set Test Variable    ${s_id3}    ${service['id']}
     END
+        # IF    '${service['serviceCategory']}' == 'MainService' and ${service['totalAmount']} > 0 and 'provider' not in ${service} and '${service['status']}' == 'ACTIVE'
+        #     Log    ${service['name']}
+        #     ${s_id1}=    Get Variable Value    ${s_id1}    NONE
+        #     IF    '${s_id1}' == 'NONE'
+        #         Set Test Variable    ${s_id1}    ${service['id']}
+        #     END
+        # # Appointment service
+        # ELSE IF    '${service['serviceCategory']}' == 'MainService' and ${service['totalAmount']} == 0 and 'provider' not in ${service} and '${service['status']}' == 'ACTIVE'
+        #     Log    ${service['name']}
+        #     ${s_id2}=    Get Variable Value    ${s_id2}    NONE
+        #     IF    '${s_id2}' == 'NONE'
+        #         Set Test Variable    ${s_id2}    ${service['id']}
+        #     END
+        # # SubService
+        # ELSE IF    '${service['serviceCategory']}' == 'SubService' and '${service['status']}' == 'ACTIVE'
+        #     Log    ${service['name']}
+        #     ${s_id3}=    Get Variable Value    ${s_id3}    NONE
+        #     IF    '${s_id3}' == 'NONE'
+        #         Set Test Variable    ${s_id3}    ${service['id']}
+        #     END
+        # END
+    # END
 
     Log Many  ${s_id1}  ${s_id2}  ${s_id3}
 
@@ -142,7 +149,7 @@ JD-TC-Appointment-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${category_id}  ${resp.json()[0]['id']}
-
+*** Comments ***
     ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=  Get Bill Settings 
