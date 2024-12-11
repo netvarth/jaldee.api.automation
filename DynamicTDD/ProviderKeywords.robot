@@ -1174,6 +1174,16 @@ Disable Waitlist
     Check Deprication  ${resp}  Disable Waitlist
     RETURN  ${resp}
 
+Make Available
+   [Arguments]  ${name}   ${rt}   ${ri}   ${sDate}   ${eDate}   ${stime}   ${etime}  ${loc}  ${id}
+   ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${EMPTY}  ${stime}  ${etime}
+   ${provider}=  Create Dictionary  id=${id}
+   ${data}=  Create Dictionary  name=${name}  queueSchedule=${bs}  location=${loc}  provider=${provider}
+   ${data}=  json.dumps  ${data}
+   Check And Create YNW Session
+   ${resp}=  PUT On Session  ynw  /provider/waitlist/queues/available  data=${data}  expected_status=any
+   RETURN  ${resp}
+
 ######### FILE SHARE ############
 
 upload file to temporary location
