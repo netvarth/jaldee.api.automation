@@ -165,19 +165,6 @@ JD-TC-Appointment-1
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
 
-    ${resp}=  Get Bill Settings 
-    Log   ${resp.json}
-    IF  ${resp.status_code}!=200
-        Log   Status code is not 200: ${resp.status_code}
-        ${resp}=  Enable Disable bill  ${bool[1]}
-        Log   ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    ELSE IF  ${resp.json()['enablepos']}==${bool[0]}
-        ${resp}=  Enable Disable bill  ${bool[1]}
-        Log   ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
-
     # ${discountprice}=     Pyfloat  right_digits=1  min_value=50  max_value=99
     # ${discount_name}=     Set Variable  Rs ${discountprice} Off
     # ${desc}=   FakerLibrary.word

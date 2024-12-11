@@ -61,7 +61,7 @@ Enable Department
     END
     Log  ${dep_id}
 
-RETURN  ${dep_id}
+    RETURN  ${dep_id}
 
 
 Create Services
@@ -126,7 +126,7 @@ JD-TC-Basic-1
 
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -135,7 +135,7 @@ JD-TC-Basic-1
     Set Test Variable  ${pdrname}  ${decrypted_data['userName']}
 
     ${resp}=  Get Business Profile
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${account_id}  ${resp.json()['id']} 
 
@@ -285,13 +285,14 @@ JD-TC-Basic-1
     
     #.................Create User.........................
 
-    ${user1}=  Create Sample User 
-    Set suite Variable                    ${user1}
+    # ${user1}=  Create Sample User
+    ${user1}=  Create Sample User  deptId=${dep_id}
+    Set suite Variable  ${user1}
     
-    ${resp}=  Get User By Id            ${user1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}  200
-    Set Suite Variable  ${user1_id}     ${resp.json()['id']}
+    ${resp}=  Get User By Id  ${user1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${user1_id}  ${resp.json()['id']}
 
     ${name1}=   FakerLibrary.word
     ${resp}=  Create Category   ${name1}  ${categoryType[3]} 
@@ -346,6 +347,19 @@ JD-TC-Basic-1
     Set Test Variable  ${timespecString}  ${resp.json()['apptSchedule']['timespecString']}
 
     # resetsystem_time
+
+    ${resp}=  Get Bill Settings 
+    Log   ${resp.json}
+    IF  ${resp.status_code}!=200
+        Log   Status code is not 200: ${resp.status_code}
+        ${resp}=  Enable Disable bill  ${bool[1]}
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    ELSE IF  ${resp.json()['enablepos']}==${bool[0]}
+        ${resp}=  Enable Disable bill  ${bool[1]}
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${discountprice}=     Pyfloat  right_digits=1  min_value=50  max_value=99
     ${discount_name}=     Set Variable  Rs ${discountprice} Off
