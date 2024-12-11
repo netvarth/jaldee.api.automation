@@ -158,7 +158,7 @@ JD-TC-Communication Between Consumer and Provider-1
     ${msg}=  Fakerlibrary.sentence
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
-    ${resp}=  Imageupload.ConsWLCommunication   ${cookie}  ${wid}  ${pid0}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${jpgfile}
+    ${resp}=  Consumer WLCommunication   ${cookie}  ${wid}  ${pid0}  ${msg}  ${messageType[0]}  ${caption}  
     Log  ${resp}
     Should Be Equal As Strings  ${resp.status_code}  200
 

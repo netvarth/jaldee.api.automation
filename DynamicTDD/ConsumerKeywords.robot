@@ -3816,7 +3816,18 @@ Delete Family Members
     Check Deprication  ${resp}  Delete Family Members
     RETURN  ${resp}
 
+Consumer WLCommunication
+    [Arguments]     ${uuid}  ${accId}  ${msg}  ${type}  ${caption}  &{kwargs}
 
+    ${data}=  Create Dictionary   msg=${msg}  messageType=${type}  captions=${caption}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /consumer/waitlist/communicate/${uuid}?account=${accid}  data=${data}  expected_status=any
+    Check Deprication  ${resp}  Consumer WLCommunication
+    RETURN  ${resp}
 
 *** Comments ***
 
