@@ -752,7 +752,7 @@ JD-TC-Reschedule Waitlist-5
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -936,7 +936,7 @@ JD-TC-Reschedule Waitlist-6
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_provider_msgs  ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     
@@ -1285,7 +1285,7 @@ JD-TC-Reschedule Waitlist-8
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -1485,7 +1485,7 @@ JD-TC-Reschedule Waitlist-9
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -1689,7 +1689,7 @@ JD-TC-Reschedule Waitlist-10
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -1890,7 +1890,7 @@ JD-TC-Reschedule Waitlist-11
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -2096,7 +2096,7 @@ JD-TC-Reschedule Waitlist-12
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -2290,7 +2290,7 @@ JD-TC-Reschedule Waitlist-13
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -2447,7 +2447,7 @@ JD-TC-Reschedule Waitlist-14
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -2629,7 +2629,7 @@ JD-TC-Reschedule Waitlist-15
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -2802,7 +2802,7 @@ JD-TC-Reschedule Waitlist-16
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -2958,7 +2958,7 @@ JD-TC-Reschedule Waitlist-UH1
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -3095,7 +3095,7 @@ JD-TC-Reschedule Waitlist-UH2
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -3244,7 +3244,7 @@ JD-TC-Reschedule Waitlist-UH3
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -3380,7 +3380,7 @@ JD-TC-Reschedule Waitlist-UH4
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -3516,7 +3516,7 @@ JD-TC-Reschedule Waitlist-UH5
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -3652,7 +3652,7 @@ JD-TC-Reschedule Waitlist-UH6
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -3941,7 +3941,7 @@ JD-TC-Reschedule Waitlist-UH8
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -4131,7 +4131,7 @@ JD-TC-Reschedule Waitlist-UH9
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -4330,7 +4330,7 @@ JD-TC-Reschedule Waitlist-UH10
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -4478,7 +4478,7 @@ JD-TC-Reschedule Waitlist-UH11
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -4657,7 +4657,7 @@ JD-TC-Reschedule Waitlist-UH12
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -4837,7 +4837,7 @@ JD-TC-Reschedule Waitlist-UH13
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -5009,7 +5009,7 @@ JD-TC-Reschedule Waitlist-UH14
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -5176,7 +5176,7 @@ JD-TC-Reschedule Waitlist-UH15
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -5348,7 +5348,7 @@ JD-TC-Reschedule Waitlist-UH16
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -5601,7 +5601,7 @@ JD-TC-Reschedule Waitlist-UH17
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -5753,7 +5753,7 @@ JD-TC-Reschedule Waitlist-UH19
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -5904,7 +5904,7 @@ JD-TC-Reschedule Waitlist-UH20
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -6056,7 +6056,7 @@ JD-TC-Reschedule Waitlist-UH21
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -6203,7 +6203,7 @@ JD-TC-Reschedule Waitlist-UH22
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -6324,7 +6324,7 @@ JD-TC-Reschedule Waitlist-UH23
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -6502,7 +6502,7 @@ JD-TC-Reschedule Waitlist-UH24
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME7}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -6661,7 +6661,7 @@ JD-TC-Reschedule Waitlist-UH25
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -6863,7 +6863,7 @@ JD-TC-Reschedule Waitlist-UH30
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -7003,7 +7003,7 @@ JD-TC-Reschedule Waitlist-UH31
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
+    # clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 

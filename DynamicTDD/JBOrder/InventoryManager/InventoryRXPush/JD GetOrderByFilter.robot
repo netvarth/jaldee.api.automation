@@ -346,7 +346,7 @@ JD-TC-GetOrderByFilter-1
     ${purchaseNote}=                FakerLibrary.Sentence
     ${roundOff}=                    Random Int  min=1  max=10
 
-    ${purchaseItemDtoList1}=        Create purchaseItemDtoList   ${ic_Item_id}   ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}   ${iu_id}
+    ${purchaseItemDtoList1}=        Create purchaseItemDtoList   ${ic_Item_id}   ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${amount}  ${batchNo}   ${iu_id}
     Set Suite Variable              ${purchaseItemDtoList1}
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${Catalog_EncIds}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
@@ -464,17 +464,17 @@ JD-TC-GetOrderByFilter-1
     Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
 
     ${frequency}=       Random Int  min=26  max=30
-    ${dosage}=          Random Int  min=1  max=3000
+    ${dos}=          Random Int  min=1  max=3
     ${description}=     FakerLibrary.sentence
     ${remark}=          FakerLibrary.sentence
-    ${dos}=             Evaluate    float(${dosage})
+    # ${dos}=             Evaluate    float(${dosage})
     Set Suite Variable      ${frequency}
-    Set Suite Variable      ${dosage}
+    # Set Suite Variable      ${dosage}
     Set Suite Variable      ${description}
     Set Suite Variable      ${remark}
     Set Suite Variable      ${dos}
 
-    ${resp}=    Create Frequency  ${frequency}  ${dosage}  description=${description}  remark=${remark}
+    ${resp}=    Create Frequency  ${frequency}  ${dos}  description=${description}  remark=${remark}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
     Set Suite Variable              ${frequency_id}         ${resp.json()}
@@ -516,7 +516,7 @@ JD-TC-GetOrderByFilter-1
     Set Suite Variable      ${duration1}
     Set Suite Variable      ${quantity1}
 
-    ${resp}=    RX Create Prescription  ${cid}  ${doc1}  ${displayName1}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}
+    ${resp}=    RX Create Prescription  ${cid}  ${doc1}  ${displayName1}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}    itemDosage=${dos}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
     Set Suite Variable              ${prescription_id}      ${resp.json()}
@@ -535,7 +535,7 @@ JD-TC-GetOrderByFilter-1
     Set Suite Variable      ${duration2}
     Set Suite Variable      ${quantity2}
 
-    ${resp}=    RX Create Prescription Item  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
+    ${resp}=    RX Create Prescription Item  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}     itemDosage=${dos}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
     Set Suite Variable              ${pitm_id}      ${resp.json()}
@@ -547,7 +547,7 @@ JD-TC-GetOrderByFilter-1
 
     ${itemqty}=    Evaluate   ${dos} * ${duration2}
 
-    ${resp}=    Get RX Prescription Item Qnty By EncId  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
+    ${resp}=    Get RX Prescription Item Qnty By EncId  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}   itemDosage=${dos}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
     Should Be Equal As Strings      ${resp.json()}          ${itemqty}
