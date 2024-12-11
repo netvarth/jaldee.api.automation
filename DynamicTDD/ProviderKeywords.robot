@@ -717,9 +717,9 @@ Get User By Id
 
 Create Service
     # kwargs available : sortOrder,
-    [Arguments]  ${name}  ${desc}  ${durtn}  ${isPrePayment}  ${totalAmount}  ${notfcn}  &{kwargs}
+    [Arguments]  ${name}  ${desc}  ${durtn}  ${isPrePayment}  ${serviceCharge}  ${notfcn}  &{kwargs}
     # ${items}=  Get Dictionary items  ${kwargs}
-    ${data}=  Create Dictionary  name=${name}  description=${desc}  serviceDuration=${durtn}  isPrePayment=${isPrePayment}  totalAmount=${totalAmount}  notification=${notfcn}  
+    ${data}=  Create Dictionary  name=${name}  description=${desc}  serviceDuration=${durtn}  isPrePayment=${isPrePayment}  totalAmount=${serviceCharge}  notification=${notfcn}  
     # FOR  ${key}  ${value}  IN  &{kwargs}
     #     Set To Dictionary  ${data}   ${key}=${value}
     # END

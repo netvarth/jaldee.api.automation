@@ -36,7 +36,7 @@ Remove Entry From Var File
     END
 
     ${updated_content}=    Catenate    SEPARATOR=\n    @{lines}
-    Create File    ${var_file}    ${updated_content}
+    Create File    ${var_file}    ${updated_content}\n
     # Create File   ${new_file}   ${updated_content}
 
 # *** COMMENTS ***
@@ -57,5 +57,5 @@ Remove Entry From Data File
     END
 
     ${updated_content}=    Catenate    SEPARATOR=\n    @{lines}
-    Create File    ${data_file}    ${updated_content}
+    Create File    ${data_file}    ${updated_content}\n
     # Create File   ${new_file}   ${updated_content}

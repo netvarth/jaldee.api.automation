@@ -59,6 +59,7 @@ Enable Department
     ELSE
             Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
     END
+    Log  ${dep_id}
 
 RETURN  ${dep_id}
 
