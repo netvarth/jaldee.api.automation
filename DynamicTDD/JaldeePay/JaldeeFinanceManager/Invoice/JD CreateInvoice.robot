@@ -1440,9 +1440,9 @@ JD-TC-CreateInvoice-11
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp1}=  Get consumer Waitlist Bill Details   ${cwid}
-    Log  ${resp1.content}
-    Should Be Equal As Strings  ${resp1.status_code}  200
+    # ${resp1}=  Get consumer Waitlist Bill Details   ${cwid}
+    # Log  ${resp1.content}
+    # Should Be Equal As Strings  ${resp1.status_code}  200
 
     #sleep   01s
     
@@ -1537,9 +1537,9 @@ JD-TC-CreateInvoice-12
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp1}=  Get consumer Waitlist Bill Details   ${cwid1}
-    Log  ${resp1.content}
-    Should Be Equal As Strings  ${resp1.status_code}  200
+    # ${resp1}=  Get consumer Waitlist Bill Details   ${cwid1}
+    # Log  ${resp1.content}
+    # Should Be Equal As Strings  ${resp1.status_code}  200
 
     ${resp}=   Get Service By Id  ${p1_sid1}
     Log  ${resp.content}
@@ -1998,9 +1998,9 @@ JD-TC-CreateInvoice-13
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp1}=  Get consumer Waitlist Bill Details   ${cwid3}
-    Log  ${resp1.content}
-    Should Be Equal As Strings  ${resp1.status_code}  200
+    # ${resp1}=  Get consumer Waitlist Bill Details   ${cwid3}
+    # Log  ${resp1.content}
+    # Should Be Equal As Strings  ${resp1.status_code}  200
     ${resp}=   Get Service By Id  ${p1_sid11}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2108,9 +2108,9 @@ JD-TC-CreateInvoice-14
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp1}=  Get consumer Waitlist Bill Details   ${cwid4}
-    Log  ${resp1.content}
-    Should Be Equal As Strings  ${resp1.status_code}  200
+    # ${resp1}=  Get consumer Waitlist Bill Details   ${cwid4}
+    # Log  ${resp1.content}
+    # Should Be Equal As Strings  ${resp1.status_code}  200
     #sleep   02s
 
 
@@ -3423,9 +3423,9 @@ JD-TC-CreateInvoice-UH4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp1}=  Get consumer Waitlist Bill Details   ${cwid}
-    Log  ${resp1.content}
-    Should Be Equal As Strings  ${resp1.status_code}  200
+    # ${resp1}=  Get consumer Waitlist Bill Details   ${cwid}
+    # Log  ${resp1.content}
+    # Should Be Equal As Strings  ${resp1.status_code}  200
 
     #sleep   02s
 

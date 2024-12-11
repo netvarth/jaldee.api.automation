@@ -86,7 +86,7 @@ ${bType}                  Waitlist
 @{CallingModes}             Zoom   WhatsApp   Phone   GoogleMeet  VideoCall
 @{apptStatus}               prepaymentPending  Confirmed  Arrived  Started  Cancelled  Rejected  Completed  failed  calling  blocked  Rescheduled  Requested  RequestRejected
 @{cancelReason}             noshowup  blocked  closingSoon  tooFull  self  prePaymentPending  QueueDisabled  holiday
-@{waitlistedby}             CONSUMER  PROVIDER
+@{waitlistedby}             CONSUMER  PROVIDER  PROVIDER_CONSUMER
 @{waitlistMode}             WALK_IN_CHECKIN   ONLINE_CHECKIN   PHONE_CHECKIN   WHATSAPP_CHECKIN  TELEGRAM_CHECKIN
 @{appointmentMode}          WALK_IN_APPOINTMENT  PHONE_IN_APPOINTMENT  ONLINE_APPOINTMENT   TELEGRAM_APPOINTMENT
 @{reason}                   Holiday  QueueFull  ScheduleFull

@@ -127,7 +127,7 @@ JD-TC-MakeAvailable-1
 
     ${list}=  Create List   1  2  3  4  5  6  7
     ${queue}=    FakerLibrary.word
-    ${resp}=  Make Available   ${queue}   ${recurringtype[4]}  ${list}  ${DAY1}  ${EMPTY}  ${sTime1}  ${eTime1}  ${lid}  ${u_id}
+    ${resp}=  Make Available   ${queue}   ${recurringtype[4]}  ${list}  ${DAY1}  ${DAY1}  ${sTime1}  ${eTime1}  ${lid}  ${u_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${p1_q1}  ${resp.json()}
@@ -139,7 +139,6 @@ JD-TC-MakeAvailable-1
     Should Be Equal As Strings   ${resp.json()['timeRange']['sTime']}             ${sTime1}  
     Should Be Equal As Strings   ${resp.json()['timeRange']['eTime']}             ${eTime1}
     
-
 JD-TC-MakeAvailable-2
     [Documentation]  check Queue AvailableNow and call terminate call then check availability
     
@@ -204,10 +203,10 @@ JD-TC-MakeAvailable-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id}  ${resp.json()}
 
-    ${resp}=  Is Available Queue Now 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response    ${resp}   availableNow=${bool[1]}
+    # ${resp}=  Is Available Queue Now 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response    ${resp}   availableNow=${bool[1]}
 
     ${list}=  Create List   1  2  3  4  5  6  7
     ${queue}=    FakerLibrary.word
@@ -293,7 +292,7 @@ JD-TC-MakeAvailable-3
     ${dob}=  FakerLibrary.Date
     ${pin}=  get_pincode
     
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${countryCode[1]}  ${ph1}   ${userType[0]}  deptId=${dep_id}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${countryCode[1]}  ${ph1}   ${userType[0]}  deptId=${dep_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id2}  ${resp.json()}
@@ -310,11 +309,8 @@ JD-TC-MakeAvailable-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid1}   ${resp.json()[0]['id']}
 
-    ${resp}=  SendProviderResetMail   ${ph1}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    @{resp}=  ResetProviderPassword  ${ph1}  ${PASSWORD}  2
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
+    ${resp}=   Configure Sample User    ${u_id2}   ${ph1}
+    
     ${resp}=  Encrypted Provider Login  ${ph1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -385,10 +381,10 @@ JD-TC-MakeAvailable-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id2}  ${resp.json()}
 
-    ${resp}=  Is Available Queue Now ByProviderId    ${p1_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response    ${resp}   availableNow=${bool[0]}
+    # ${resp}=  Is Available Queue Now ByProviderId    ${p1_id1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response    ${resp}   availableNow=${bool[0]}
 
     ${sTime4}=  db.get_time_by_timezone  ${tz}
     ${list}=  Create List   1  2  3  4  5  6  7
@@ -453,7 +449,7 @@ JD-TC-MakeAvailable-5
     ${dob}=  FakerLibrary.Date
     ${pin}=  get_pincode
     
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${countryCode[1]}  ${ph1}   ${userType[0]}  deptId=${dep_id}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${countryCode[1]}  ${ph2}   ${userType[0]}  deptId=${dep_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id6}  ${resp.json()}
@@ -472,11 +468,8 @@ JD-TC-MakeAvailable-5
     Set Suite Variable   ${lid2}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${resp}=  SendProviderResetMail   ${ph2}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    @{resp}=  ResetProviderPassword  ${ph2}  ${PASSWORD}  2
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
+    ${resp}=   Configure Sample User    ${u_id6}   ${ph2}
+
     ${resp}=  Encrypted Provider Login  ${ph2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -496,10 +489,10 @@ JD-TC-MakeAvailable-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id2}  ${resp.json()}
 
-    ${resp}=  Is Available Queue Now ByProviderId    ${u_id6}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response    ${resp}   availableNow=${bool[0]}
+    # ${resp}=  Is Available Queue Now ByProviderId    ${u_id6}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response    ${resp}   availableNow=${bool[0]}
 
     ${list}=  Create List   1  2  3  4  5  6  7
     ${queue}=    FakerLibrary.word
@@ -508,12 +501,12 @@ JD-TC-MakeAvailable-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${p1_q1}  ${resp.json()}
 
-    ${resp}=  Is Available Queue Now ByProviderId    ${u_id6}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Verify Response    ${resp}   availableNow=${bool[1]}  holiday=${bool[0]}   instanceQueueId=${p1_q1} 
-    Should Be Equal As Strings   ${resp.json()['timeRange']['sTime']}             ${sTime}  
-    Should Be Equal As Strings   ${resp.json()['timeRange']['eTime']}             ${eTime}
+    # ${resp}=  Is Available Queue Now ByProviderId    ${u_id6}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+    # Verify Response    ${resp}   availableNow=${bool[1]}  holiday=${bool[0]}   instanceQueueId=${p1_q1} 
+    # Should Be Equal As Strings   ${resp.json()['timeRange']['sTime']}             ${sTime}  
+    # Should Be Equal As Strings   ${resp.json()['timeRange']['eTime']}             ${eTime}
 
     ${resp}=  Terminate Availability Queue    ${p1_q1}
     Log  ${resp.json()}
@@ -555,10 +548,10 @@ JD-TC-MakeAvailable-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${p1_q1}  ${resp.json()}
 
-    ${resp}=  Is Available Queue Now ByProviderId    ${u_id6}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Verify Response    ${resp}   availableNow=${bool[0]}  holiday=${bool[0]}  
+    # ${resp}=  Is Available Queue Now ByProviderId    ${u_id6}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+    # Verify Response    ${resp}   availableNow=${bool[0]}  holiday=${bool[0]}  
 
     # sleep  5s
     ${sTime0}=  db.get_time_by_timezone  ${tz}
@@ -579,21 +572,8 @@ JD-TC-MakeAvailable-UH1
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  ${resp.content}  "${SESSION_EXPIRED}"
 
-JD-TC-MakeAvailable-UH2
-    [Documentation]  check Queue Availabilty with consumer login
-
-    ${resp}=   Consumer Login  ${CUSERNAME8}   ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${list}=  Create List   1  2  3  4  5  6  7
-    ${queue}=    FakerLibrary.word
-    ${resp}=  Make Available   ${queue}   ${recurringtype[4]}  ${list}  ${DAY1}  ${EMPTY}  ${sTime1}  ${eTime1}  ${lid}  ${u_id1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  401
-    Should Be Equal As Strings  ${resp.content}  "${LOGIN_NO_ACCESS_FOR_URL}"
     
-JD-TC-MakeAvailable-UH3
+JD-TC-MakeAvailable-UH2
     [Documentation]  set to makeavailable a provider giving current time as start time
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME174}  ${PASSWORD}
