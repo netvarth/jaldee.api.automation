@@ -26,6 +26,7 @@ ${subdomain}    dentists
 @{service_duration}  10  20  30   40   50
 ${SERVICE1}   Registration
 # ${SERVICE2}   Registration
+${maxBookings}  400
 
 ${var_file}               ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py
 ${data_file}              ${EXECDIR}/data/${ENVIRONMENT}data/${ENVIRONMENT}phnumbers.txt
@@ -61,6 +62,50 @@ Enable Department
 
 RETURN  ${dep_id}
 
+
+Create Services
+
+    # ---------------Create Service without Prepayment-Registration fee.--------------
+
+    ${s_id1}=  Create Sample Service  ${SERVICE1}  totalAmount=100  maxBookingsAllowed=${maxBookings}
+
+
+    #----------------------Service with zero service charge------------------
+
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+    ${s_id2}=  Create Sample Service  ${SERVICE2}  totalAmount=0  maxBookingsAllowed=${maxBookings}
+
+    #----------------------subservice creation----------------------
+
+    ${subser_name}=    generate_service_name
+    Append To List  ${service_names}  ${subser_name}
+    ${subser_id1}=  Create Sample Service  ${subser_name}  maxBookingsAllowed=${maxBookings}  serviceCategory=${serviceCategory[0]}
+
+    RETURN  ${s_id1}  ${s_id2}  ${subser_id1}
+
+
+
+Create services with department
+    [Arguments]   ${dep_id}
+
+    # ---------------Create Service without Prepayment-Registration fee.--------------
+
+    ${s_id1}=  Create Sample Service  ${SERVICE1}  totalAmount=100  maxBookingsAllowed=${maxBookings}  department=${dep_id}
+
+    #----------------------Service with zero service charge------------------
+
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
+    ${s_id2}=  Create Sample Service  ${SERVICE2}  totalAmount=0  maxBookingsAllowed=${maxBookings}  department=${dep_id}
+
+    #----------------------subservice creation----------------------
+
+    ${subser_name}=    generate_service_name
+    Append To List  ${service_names}  ${subser_name}
+    ${subser_id1}=  Create Sample Service  ${subser_name}  maxBookingsAllowed=${maxBookings}  serviceCategory=${serviceCategory[0]}  department=${dep_id}
+
+    RETURN  ${s_id1}  ${s_id2}  ${subser_id1}
 
 
 
@@ -193,22 +238,6 @@ JD-TC-Basic-1
 
     # ........ Location Creation .......
 
-    # ${resp}=    Get Locations
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # FOR     ${loc_json}    IN   @{resp.json()}
-    #     IF   '${loc_json['status']}' == '${status[0]}' and '${loc_json['baseLocation']}' == '${bool[0]}'
-    #         ${resp}=  Disable Location  ${loc_json['id']}
-    #         Log  ${resp.content}
-    #         Should Be Equal As Strings  ${resp.status_code}  200
-    #     END
-    # END
-
-    # ${lid}=  Create Sample Location
-    # ${resp}=   Get Location ById  ${lid}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -226,7 +255,7 @@ JD-TC-Basic-1
 
     # .................... Enable Department .....................
 
-    # ${dep_id}=  Enable Department 
+    ${dep_id}=  Enable Department 
 
     # ........ Service Creations ............
 
@@ -241,43 +270,8 @@ JD-TC-Basic-1
         END
     END
 
-    #  1. Create Service without Prepayment-Registration fee.
-
-    ${ser_durtn}=   Random Int   min=2   max=2
-    ${desc}=   FakerLibrary.sentence
-    # ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    # Append To List  ${service_names}  ${SERVICE1}
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[0]}  100  ${bool[0]}    maxBookingsAllowed=400
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${s_id1}  ${resp.json()}
-
-
-    #----------------------Service with zero service charge------------------
-
-
-    ${SERVICE2}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE2}
-    ${desc1}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${SERVICE2}  ${desc1}   ${ser_durtn}  ${bool[0]}  0  ${bool[0]}     maxBookingsAllowed=400
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${s_id2}  ${resp.json()}
-
-    ##....subservice creation..........
-
-    ${desc}=  FakerLibrary.sentence
-    ${subser_dur}=   Random Int   min=5   max=10
-    ${subser_price}=   Random Int   min=100   max=500
-    ${subser_price}=  Convert To Number  ${subser_price}  1
-    Set Suite Variable   ${subser_price}
-    ${subser_name}=    generate_service_name
-    Set Suite Variable   ${subser_name}
-
-    ${resp}=  Create Service    ${subser_name}  ${desc}   ${subser_dur}  ${bool[0]}  ${subser_price}  ${bool[0]}   serviceCategory=${serviceCategory[0]}
-    Log   ${resp.json()}  
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${subser_id1}  ${resp.json()}
+    # ${s_id1}  ${s_id2}  ${subser_id1}=   Create Services
+    ${s_id1}  ${s_id2}  ${subser_id1}=   Create services with department  ${dep_id}
     
 
 

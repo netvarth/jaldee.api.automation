@@ -720,9 +720,10 @@ Create Service
     [Arguments]  ${name}  ${desc}  ${durtn}  ${isPrePayment}  ${totalAmount}  ${notfcn}  &{kwargs}
     # ${items}=  Get Dictionary items  ${kwargs}
     ${data}=  Create Dictionary  name=${name}  description=${desc}  serviceDuration=${durtn}  isPrePayment=${isPrePayment}  totalAmount=${totalAmount}  notification=${notfcn}  
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
+    # FOR  ${key}  ${value}  IN  &{kwargs}
+    #     Set To Dictionary  ${data}   ${key}=${value}
+    # END
+    Set To Dictionary  ${data}  &{kwargs}
     Log  ${data}
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session  
@@ -735,18 +736,9 @@ Create Sample Service
     #...  Create Sample Service with Prepayment For User   
     #...  Create Sample Service For User
     [Arguments]  ${Service_name}  ${isPrePayment}=${bool[0]}  ${notification}=${bool[0]}  &{kwargs}
-    ${has_key}=  Evaluate  'totalAmount' in ${kwargs}
-    IF  ${has_key}
-        ${servicecharge}=    Set Variable  ${kwargs['totalAmount']}
-        Remove From Dictionary 	${kwargs}  totalAmount
-        Log  ${kwargs}
-    ELSE
-        ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=250
-    END
-    
     ${desc}=   FakerLibrary.sentence
     ${srv_duration}=   Random Int   min=2   max=2
-    
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=500
     ${resp}=  Create Service  ${Service_name}  ${desc}   ${srv_duration}  ${isPrePayment}  ${servicecharge}  ${notification}  &{kwargs}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -757,7 +749,7 @@ Get Service Count
     [Arguments]  &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/services/count  params=${param}  expected_status=any
-    Check Deprication  ${resp}  Create Sample Service
+    Check Deprication  ${resp}  Get Service Count
     RETURN  ${resp}
 
 Get Service

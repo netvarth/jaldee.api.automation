@@ -12,6 +12,7 @@ Library     DateTime
 # Library    FakerLibrary    locale=en_IN
 # Library   FakerLibrary   WITH NAME   faker
 Library     /ebs/TDD/db.py
+Library     /ebs/TDD/CustomKeywords.py
 # Library     if.py
 # Resource    /ebs/TDD/ProviderKeywords.robot
 # Resource    /ebs/TDD/ConsumerKeywords.robot
@@ -33,6 +34,7 @@ ${word3}        python
 @{cancelReason}             noshowup  blocked  closingSoon  tooFull  self  prePaymentPending  QueueDisabled  holiday
 @{PO_Number}   ${56}  ${0586185393}
 &{headers}                Content-Type=application/json
+@{service_names}
 
 # [LOWER] 	Lowercase ASCII characters from 'a' to 'z'.
 # [UPPER] 	Uppercase ASCII characters from 'A' to 'Z'.
@@ -43,20 +45,33 @@ ${word3}        python
 
 check kwargs
     [Arguments]   &{kwargs}
-    ${has_key}=  Evaluate  'totalAmount' in ${kwargs}
-    # IF  ${has_key}
-    #     Log  servicecharge Exists
-    # ELSE
-    #     Log  servicecharge doesn't exist
-    # END
+    # ${has_key}=  Evaluate  'totalAmount' in ${kwargs}
+    # # IF  ${has_key}
+    # #     Log  servicecharge Exists
+    # # ELSE
+    # #     Log  servicecharge doesn't exist
+    # # END
 
-    IF  ${has_key}
-        ${servicecharge}=    Set Variable  ${kwargs['totalAmount']}
-        Remove From Dictionary 	${kwargs}  totalAmount
-        Log  ${kwargs}
-    ELSE
-        ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=250
-    END
+    # IF  ${has_key}
+    #     ${servicecharge}=    Set Variable  ${kwargs['totalAmount']}
+    #     Remove From Dictionary 	${kwargs}  totalAmount
+    #     Log  ${kwargs}
+    # ELSE
+    #     ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=250
+    # END
+    ${description}=  FakerLibrary.sentence
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
+    ${duration}=  Random Int  min=1   max=5
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${data}=  Create Dictionary  name=${SERVICE1}  description=${description}  serviceDuration=${duration}  isPrePayment=False  totalAmount=${Total}  notification=False 
+    # FOR  ${key}  ${value}  IN  &{kwargs}
+    #     Set To Dictionary  ${data}   ${key}=${value}
+    # END
+    Set To Dictionary  ${data}  &{kwargs}
+    Log  ${data}
+    ${data}=    json.dumps    ${data}
 
 *** Comments ***
 
