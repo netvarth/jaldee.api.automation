@@ -226,7 +226,7 @@ JD-TC-Basic-1
 
     # .................... Enable Department .....................
 
-    ${dep_id}=  Enable Department 
+    # ${dep_id}=  Enable Department 
 
     # ........ Service Creations ............
 

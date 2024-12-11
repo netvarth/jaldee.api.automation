@@ -43,7 +43,8 @@ ${word3}        python
 
 check kwargs
     [Arguments]   &{kwargs}
-    IF  servicecharge in &{kwargs.keys()} 
+    ${has_key}=  Evaluate  'servicecharge' in ${kwargs}
+    IF  ${has_key}
         Log  servicecharge Exists
     ELSE
         Log  servicecharge doesn't exist

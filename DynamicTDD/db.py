@@ -33,7 +33,7 @@ from dateutil import tz
 import re
 from decimal import Decimal, ROUND_HALF_UP
 import CustomKeywords
-from dateutil.relativedelta import relativedelta
+# from dateutil.relativedelta import relativedelta
 
 
 if os.environ['SYSTEM_ENV'] == 'Microsoft WSL':
@@ -6693,7 +6693,7 @@ def adjust_schedule_date(input_string, months, sch_id):
     print(original_date)
     
     # Adjust the date by the number of months
-    adjusted_date = original_date + relativedelta(months=int(months))
+    adjusted_date = original_date + relativedelta.relativedelta(months=int(months))
     print(adjusted_date)
     
     # Convert the adjusted date back to the string format
