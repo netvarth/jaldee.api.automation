@@ -62,7 +62,7 @@ JD-TC-GetServiceId-2
         ${description}=  FakerLibrary.sentence
         ${time}=  FakerLibrary.pyfloat   left_digits=2   right_digits=2   positive=True
       
-        ${resp}=  Create Service  ${SERVICE1}  ${description}   {service_duration[1]}  ${bool[0]}  ${EMPTY}  ${bool[0]}
+        ${resp}=  Create Service  ${SERVICE1}  ${description}   ${service_duration[1]}  ${bool[0]}  ${EMPTY}  ${bool[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp}=   Get Service By Id  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200

@@ -47,20 +47,20 @@ JD-TC-GetServices-1
     # clear_service       ${HLPUSERNAME7}  
 
 
-    ${resp}=  Create Service  ${SERVICE1}  ${description}   {service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre} 
+    ${resp}=  Create Service  ${SERVICE1}  ${description}   ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre} 
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${id1}  ${resp.json()}
-    ${resp}=  Create Service  ${SERVICE2}  ${description}   {service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre} 
+    ${resp}=  Create Service  ${SERVICE2}  ${description}   ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre} 
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${id2}  ${resp.json()}
-    ${resp}=  Create Service  ${SERVICE3}     ${description}   {service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre} 
+    ${resp}=  Create Service  ${SERVICE3}     ${description}   ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre} 
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${id3}  ${resp.json()}
-    ${resp}=  Create Service  ${SERVICE4}    ${description}   {service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
+    ${resp}=  Create Service  ${SERVICE4}    ${description}   ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
     Set Suite Variable  ${id4}  ${resp.json()}
     ${resp}=  Disable service  ${id4}  
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Create Service  ${SERVICE5}    ${description}   {service_duration[1]}  ${bool[1]}  ${Total}  ${bool[1]}  minPrePaymentAmount=${min_pre}  notificationType=${notifytype[1]}
+    ${resp}=  Create Service  ${SERVICE5}    ${description}   ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[1]}  minPrePaymentAmount=${min_pre}  notificationType=${notifytype[1]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${id5}  ${resp.json()}
     ${resp}=  Disable service  ${id5}  
@@ -151,7 +151,7 @@ JD-TC-GetServices-7
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Create Service  ${SERVICE6}  ${description}   {service_duration[1]}  ${bool[1]}  ${Total}  ${bool[1]}  minPrePaymentAmount=${min_pre}  notificationType=${notifytype[1]}
+    ${resp}=  Create Service  ${SERVICE6}  ${description}   ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[1]}  minPrePaymentAmount=${min_pre}  notificationType=${notifytype[1]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${id6}  ${resp.json()}
     ${resp}=   Get Service By Id  ${id6}

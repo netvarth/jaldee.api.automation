@@ -39,7 +39,7 @@ JD-TC-Delete Service Image-1
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${Total}=  Convert To Number  ${Total}  1
     # clear_service       ${PUSERNAME120}
-    ${resp}=  Create Service  ${SERVICE1}  ${description}   {service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}   ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200   
     Set Suite Variable  ${id}  ${resp.json()}   
