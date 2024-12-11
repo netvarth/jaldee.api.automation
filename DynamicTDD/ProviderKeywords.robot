@@ -17338,10 +17338,13 @@ RX Push Prescription By EncId
 
 RX Create Prescription Item
 
-    [Arguments]  ${medicineName}  ${duration}  ${quantity}  ${description}  ${spItemCode}  ${dosage}  ${frequency_id}  ${prescriptioinUid}
+    [Arguments]  ${medicineName}  ${duration}  ${quantity}  ${description}  ${spItemCode}  ${dosage}  ${frequency_id}  ${prescriptioinUid}    &{kwargs}
 
     ${frequency}=   Create Dictionary  id=${frequency_id}
     ${data}=  Create Dictionary  medicineName=${medicineName}  duration=${duration}  quantity=${quantity}  description=${description}  spItemCode=${spItemCode}  dosage=${dosage}  frequency=${frequency}  prescriptioinUid=${prescriptioinUid}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/medicalrecord/prescription/item   data=${data}  expected_status=any
@@ -17388,10 +17391,13 @@ Get RX Prescription By filter
 
 Get RX Prescription Item Qnty By EncId
 
-    [Arguments]  ${medicineName}  ${duration}  ${quantity}  ${description}  ${spItemCode}  ${dosage}  ${frequency_id}  ${prescriptioinUid}
+    [Arguments]  ${medicineName}  ${duration}  ${quantity}  ${description}  ${spItemCode}  ${dosage}  ${frequency_id}  ${prescriptioinUid}   &{kwargs}
 
     ${frequency}=   Create Dictionary  id=${frequency_id}
     ${data}=  Create Dictionary  medicineName=${medicineName}  duration=${duration}  quantity=${quantity}  description=${description}  spItemCode=${spItemCode}  dosage=${dosage}  frequency=${frequency}  prescriptioinUid=${prescriptioinUid}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/medicalrecord/prescription/item/quantity   data=${data}  expected_status=any
