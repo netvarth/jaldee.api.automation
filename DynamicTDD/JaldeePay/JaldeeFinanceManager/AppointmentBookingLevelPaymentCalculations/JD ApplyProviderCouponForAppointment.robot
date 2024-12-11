@@ -52,6 +52,8 @@ JD-TC-ApplyProviderCouponForAppointmnet-1
     Set Suite Variable    ${pdrname}    ${decrypted_data['userName']}
     Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
     Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
+    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    Set Suite Variable  ${lic_name}  ${decrypted_data['accountLicenseDetails']['accountLicense']['name']}
 
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
@@ -163,6 +165,19 @@ JD-TC-ApplyProviderCouponForAppointmnet-1
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${pkg_id}=   get_highest_license_pkg
+    Log   ${pkg_id}
+    Set Suite Variable  ${pkgId}   ${pkg_id[0]}
+
+    IF  '${lic_id}' != '${pkgId}'
+        ${resp}=  Change License Package  ${pkgId}
+        Should Be Equal As Strings    ${resp.status_code}   200
+    END
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -352,6 +367,8 @@ JD-TC-ApplyProviderCouponForAppointmnet-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+
+    
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -412,11 +429,28 @@ JD-TC-ApplyProviderCouponForAppointmnet-3
     ${resp}=  Encrypted Provider Login  ${PUSERNAME125}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    Set Test Variable  ${lic_name}  ${decrypted_data['accountLicenseDetails']['accountLicense']['name']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
+
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${pkg_id}=   get_highest_license_pkg
+    Log   ${pkg_id}
+    Set Test Variable  ${pkgId}   ${pkg_id[0]}
+
+    IF  '${lic_id}' != '${pkgId}'
+        ${resp}=  Change License Package  ${pkgId}
+        Should Be Equal As Strings    ${resp.status_code}   200
+    END
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -523,7 +557,7 @@ JD-TC-ApplyProviderCouponForAppointmnet-3
     Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id1}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  AddCustomer  ${CUSERNAME8}  firstName=${fname}   lastName=${lname}
+    ${resp}=  AddCustomer  ${CUSERNAME9}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
@@ -637,7 +671,7 @@ JD-TC-ApplyProviderCouponForAppointmnet-4
     # Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id1}
     # Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  AddCustomer  ${CUSERNAME9}  firstName=${fname}   lastName=${lname}
+    ${resp}=  AddCustomer  ${CUSERNAME21}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
@@ -938,7 +972,7 @@ JD-TC-ApplyProviderCouponForAppointmnet-5
     ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${consumer_id}  ${resp.json()['id']}
+    Set Suite Variable  ${consumer_id}  ${resp.json()['providerConsumer']}
 
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id}
@@ -993,6 +1027,11 @@ JD-TC-ApplyProviderCouponForAppointmnet-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
     Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
 
     ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${pid}  ${token} 
     Log   ${resp.content}

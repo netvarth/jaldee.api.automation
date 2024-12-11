@@ -450,12 +450,25 @@ JD-TC-RemoveProviderCouponForAppointmnet-3
     ${resp}=  Encrypted Provider Login  ${PUSERNAME125}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear Customer  ${PUSERNAME125}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    Set Suite Variable  ${lic_name}  ${decrypted_data['accountLicenseDetails']['accountLicense']['name']}
+    # clear Customer  ${PUSERNAME125}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${account_id1}  ${resp.json()['id']}
+
+    ${pkg_id}=   get_highest_license_pkg
+    Log   ${pkg_id}
+    Set Test Variable  ${pkgId}   ${pkg_id[0]}
+
+    IF  '${lic_id}' != '${pkgId}'
+        ${resp}=  Change License Package  ${pkgId}
+        Should Be Equal As Strings    ${resp.status_code}   200
+    END
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -672,7 +685,7 @@ JD-TC-RemoveProviderCouponForAppointmnet-4
     Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  AddCustomer  ${CUSERNAME9}  firstName=${fname}   lastName=${lname}
+    ${resp}=  AddCustomer  ${CUSERNAME25}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
