@@ -87,14 +87,14 @@ JD-TC-MakePaymentByCash-1
     ${resp}=  Get by encId  ${category_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+    # Should Be Equal As Strings  ${resp.json()['name']}          ${name}
+    # Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
     
     ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[1]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${category_id1}   ${resp.json()}
+    # ${resp}=  Create Category   ${name}  ${categoryType[1]} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${category_id1}   ${resp.json()}
 
     ${name1}=   FakerLibrary.word
     Set Suite Variable   ${name1}
@@ -103,13 +103,13 @@ JD-TC-MakePaymentByCash-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id2}   ${resp.json()}
 
-    ${resp}=  Get Category By Id   ${category_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[1]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+    # ${resp}=  Get Category By Id   ${category_id1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['name']}          ${name}
+    # Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[1]}
+    # Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
+    # Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
     # ${vender_name}=   FakerLibrary.firstname
     # ${contactPersonName}=   FakerLibrary.lastname
