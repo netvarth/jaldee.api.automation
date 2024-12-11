@@ -43,11 +43,19 @@ ${word3}        python
 
 check kwargs
     [Arguments]   &{kwargs}
-    ${has_key}=  Evaluate  'servicecharge' in ${kwargs}
+    ${has_key}=  Evaluate  'totalAmount' in ${kwargs}
+    # IF  ${has_key}
+    #     Log  servicecharge Exists
+    # ELSE
+    #     Log  servicecharge doesn't exist
+    # END
+
     IF  ${has_key}
-        Log  servicecharge Exists
+        ${servicecharge}=    Set Variable  ${kwargs['totalAmount']}
+        Remove From Dictionary 	${kwargs}  totalAmount
+        Log  ${kwargs}
     ELSE
-        Log  servicecharge doesn't exist
+        ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=250
     END
 
 *** Comments ***
@@ -97,7 +105,7 @@ Testing kwargs
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     check kwargs  parallelServing=${parallel}  firstName=${firstname}   lastName=${lastname}  maxBookingsAllowed=400  
-    check kwargs  parallelServing=${parallel}  firstName=${firstname}   lastName=${lastname}  maxBookingsAllowed=400  servicecharge=100
+    check kwargs  parallelServing=${parallel}  firstName=${firstname}   lastName=${lastname}  maxBookingsAllowed=400  totalAmount=100
 
     
 

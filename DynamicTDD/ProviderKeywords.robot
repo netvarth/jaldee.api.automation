@@ -735,9 +735,18 @@ Create Sample Service
     #...  Create Sample Service with Prepayment For User   
     #...  Create Sample Service For User
     [Arguments]  ${Service_name}  ${isPrePayment}=${bool[0]}  ${notification}=${bool[0]}  &{kwargs}
+    ${has_key}=  Evaluate  'totalAmount' in ${kwargs}
+    IF  ${has_key}
+        ${servicecharge}=    Set Variable  ${kwargs['totalAmount']}
+        Remove From Dictionary 	${kwargs}  totalAmount
+        Log  ${kwargs}
+    ELSE
+        ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=250
+    END
+    
     ${desc}=   FakerLibrary.sentence
     ${srv_duration}=   Random Int   min=2   max=2
-    ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=250
+    
     ${resp}=  Create Service  ${Service_name}  ${desc}   ${srv_duration}  ${isPrePayment}  ${servicecharge}  ${notification}  &{kwargs}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
