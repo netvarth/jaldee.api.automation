@@ -13143,7 +13143,7 @@ Get Invoice With Filter
 
     [Arguments]   &{param}  
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/jp/finance/invoice/    params=${param}    expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/invoice    params=${param}    expected_status=any
     Check Deprication  ${resp}  Get Invoice With Filter
     RETURN  ${resp}
 
