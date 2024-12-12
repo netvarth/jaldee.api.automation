@@ -83,7 +83,7 @@ JD-TC-Get Department ById-1
 JD-TC-Get Department ById-2
     [Documentation]  Provider Create department using Service names then Get Department ById
 
-    clear_service   ${PUSERNAME_K}
+    # clear_service   ${PUSERNAME_K}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dep_name2}=  FakerLibrary.bs

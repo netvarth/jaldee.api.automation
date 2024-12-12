@@ -199,7 +199,7 @@ JD-TC-ServiceCreationByUserLogin-4
           Run Keyword If  "${pkgId}"=="${licId}"  Exit For Loop
      END
 
-     clear_service   ${PUSERNAME28}
+     # clear_service   ${PUSERNAME28}
 
      ${resp}=  View Waitlist Settings
      Should Be Equal As Strings  ${resp.status_code}  200

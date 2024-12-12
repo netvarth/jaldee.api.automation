@@ -26,7 +26,7 @@ JD-TC-Get Waitist Rating-1
 
     [Documentation]  Get waitlist Rating Filter Using Input  
     Comment   a provider Waitlisted consumer gives Rating 
-    # [setup]  Run Keywords  clear_queue  ${PUSERNAME106}  AND   clear_service   ${PUSERNAME106}  AND  clear waitlist   ${PUSERNAME106}
+    # [setup]  Run Keywords  clear_queue  ${PUSERNAME106}  AND   # clear_service   ${PUSERNAME106}  AND  clear waitlist   ${PUSERNAME106}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME106}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200

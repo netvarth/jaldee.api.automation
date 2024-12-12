@@ -1891,8 +1891,8 @@ JD-TC-CreateUser-UH16
         END
     END
 
-    clear_queue      ${HLPUSERNAME18}
-    clear_service    ${HLPUSERNAME18}
+    # clear_queue      ${HLPUSERNAME18}
+    # clear_service    ${HLPUSERNAME18}
     clear_customer   ${HLPUSERNAME18}
 
     ${pid}=  get_acc_id  ${HLPUSERNAME18}
@@ -1991,8 +1991,8 @@ JD-TC-CreateUser-16
         END
     END
 
-    clear_queue      ${HLPUSERNAME18}
-    clear_service    ${HLPUSERNAME18}
+    # clear_queue      ${HLPUSERNAME18}
+    # clear_service    ${HLPUSERNAME18}
     clear_customer   ${HLPUSERNAME18}
 
     ${pid}=  get_acc_id  ${HLPUSERNAME18}
@@ -2118,8 +2118,8 @@ JD-TC-CreateUser-UH13
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Test Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${HLPUSERNAME18}
-    clear_service    ${HLPUSERNAME18}
+    # clear_queue      ${HLPUSERNAME18}
+    # clear_service    ${HLPUSERNAME18}
     clear_customer   ${HLPUSERNAME18}
 
     ${pid}=  get_acc_id  ${HLPUSERNAME18}
@@ -2191,8 +2191,8 @@ JD-TC-CreateUser-UH14
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Test Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${HLPUSERNAME18}
-    clear_service    ${HLPUSERNAME18}
+    # clear_queue      ${HLPUSERNAME18}
+    # clear_service    ${HLPUSERNAME18}
     clear_customer   ${HLPUSERNAME18}
 
     ${pid}=  get_acc_id  ${HLPUSERNAME18}

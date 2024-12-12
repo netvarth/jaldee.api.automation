@@ -26,9 +26,9 @@ JD-TC-AssignBussinessLocationsToUser-1
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     
-    clear_queue      ${HLPUSERNAME17}
-    clear_location   ${HLPUSERNAME17}
-    clear_service    ${HLPUSERNAME17}
+    # clear_queue      ${HLPUSERNAME17}
+    # clear_location   ${HLPUSERNAME17}
+    # clear_service    ${HLPUSERNAME17}
     clear_customer   ${HLPUSERNAME17}
 
     IF  ${decrypted_data['enableRbac']}==${bool[1]}

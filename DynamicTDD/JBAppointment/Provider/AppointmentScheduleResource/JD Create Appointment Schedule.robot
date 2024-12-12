@@ -1668,7 +1668,7 @@ JD-TC-CreateAppointmentSchedule-17
 
 
 JD-TC-CreateAppointmentSchedule-18
-    # [Setup]   Run Keywords  clear_service   ${HLPUSERNAME50}  
+    # [Setup]   Run Keywords  # clear_service   ${HLPUSERNAME50}  
     # ...   AND  clear_location  ${HLPUSERNAME50}  AND  # clear_appt_schedule   ${HLPUSERNAME50}
     [Documentation]    Create an instant schedule with the same details as that of another schedule in another location
      

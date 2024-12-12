@@ -166,7 +166,7 @@ JD-TC-CheckDepartment-2
         ${pro}=  Remove String    ${pro}    ${SPACE}
         ${pro} 	${pro_num}=   Split String    ${pro}  =
         delete_virtual_service  ${pro_num}
-        clear_service  ${pro_num}
+        # clear_service  ${pro_num}
         clear_Department    ${pro_num}
         
         ${resp}=  Encrypted Provider Login  ${pro_num}  ${PASSWORD}
@@ -218,7 +218,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-17
     [Documentation]   create virtual service for a user
     
     delete_virtual_service  ${PUSERNAME27}
-    clear_service  ${PUSERNAME27}
+    # clear_service  ${PUSERNAME27}
     # clear_Department    ${PUSERNAME27}
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD} 

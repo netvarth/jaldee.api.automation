@@ -38,8 +38,8 @@ JD-TC-UpdateBillViewStatus-1
     ${billable_providers}   ${multilocPro}=    Multiloc and Billable Providers   min=80   max=90
     Log   ${billable_providers}
     ${pro_len}=  Get Length   ${billable_providers}
-    clear_service   ${billable_providers[2]}
-    clear_location  ${billable_providers[2]}
+    # clear_service   ${billable_providers[2]}
+    # clear_location  ${billable_providers[2]}
     ${pid}=  get_acc_id  ${billable_providers[2]}
     ${cid}=  get_id  ${CUSERNAME32}
 

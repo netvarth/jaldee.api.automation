@@ -435,7 +435,7 @@ JD-TC-Create Department-10
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
-    clear_service   ${PUSERNAME32}
+    # clear_service   ${PUSERNAME32}
 
     # ${resp}=  Toggle Department Disable
     # Log   ${resp.json()}

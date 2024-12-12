@@ -762,9 +762,9 @@ JD-TC-GetLabelPremissions-5
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_queue      ${HLPUSERNAME0}
-    clear_location   ${HLPUSERNAME0}
-    clear_service    ${HLPUSERNAME0}
+    # clear_queue      ${HLPUSERNAME0}
+    # clear_location   ${HLPUSERNAME0}
+    # clear_service    ${HLPUSERNAME0}
     clear_customer   ${HLPUSERNAME0}
 
     ${pid}=  get_acc_id  ${HLPUSERNAME0}

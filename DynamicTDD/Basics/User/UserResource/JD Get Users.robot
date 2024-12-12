@@ -595,8 +595,8 @@ JD-TC-GetUsers-13
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Test Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${PUSERNAME57}
-    clear_service    ${PUSERNAME57}
+    # clear_queue      ${PUSERNAME57}
+    # clear_service    ${PUSERNAME57}
     clear_customer   ${PUSERNAME57}
 
     ${pid}=  get_acc_id  ${PUSERNAME57}

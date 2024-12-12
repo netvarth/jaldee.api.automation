@@ -207,7 +207,7 @@ JD-TC-ResubmitServiceOptionsForWaitlist-1
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${HLPUSERNAME10}
+    # clear_queue   ${HLPUSERNAME10}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -372,7 +372,7 @@ JD-TC-ResubmitServiceOptionsForWaitlist-2
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${HLPUSERNAME10}
+    # clear_queue   ${HLPUSERNAME10}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -519,7 +519,7 @@ JD-TC-ResubmitServiceOptionsForWaitlist-3
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${HLPUSERNAME10}
+    # clear_queue   ${HLPUSERNAME10}
     
     ${list}=  Create List  1  2  3  4  5  6  7
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -688,7 +688,7 @@ JD-TC-ResubmitServiceOptionsForWaitlist-4
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${HLPUSERNAME10}
+    # clear_queue   ${HLPUSERNAME10}
 
     ${list}=  Create List  1  2  3  4  5  6  7
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -866,7 +866,7 @@ JD-TC-ResubmitServiceOptionsForWaitlist-UH1
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${HLPUSERNAME10}
+    # clear_queue   ${HLPUSERNAME10}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     

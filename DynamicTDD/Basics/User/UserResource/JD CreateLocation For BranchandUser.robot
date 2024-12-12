@@ -20,7 +20,7 @@ JD-TC-CreateLocation-1
       Should Be Equal As Strings  ${resp.status_code}  200
 
 
-      clear_location   ${PUSERNAME5}
+      # clear_location   ${PUSERNAME5}
 
       ${latti}  ${longi}  ${postcode}  ${citya}  ${district}  ${state}  ${address}=  get_loc_details
       ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}

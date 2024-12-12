@@ -2156,8 +2156,8 @@ JD-TC-Reschedule Waitlist-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     reset_queue_metric  ${pid}
-    clear_location   ${PUSERNAME82}
-    clear_service    ${PUSERNAME82}
+    # clear_location   ${PUSERNAME82}
+    # clear_service    ${PUSERNAME82}
     clear_customer   ${PUSERNAME82}
     clear_provider_msgs  ${PUSERNAME82}
     clear_consumer_msgs  ${CUSERNAME12}
@@ -3555,7 +3555,7 @@ JD-TC-Reschedule Waitlist-UH14
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     ${lid1}=  Create Sample Location  
-    clear_queue   ${PUSERNAME33}
+    # clear_queue   ${PUSERNAME33}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -4236,7 +4236,7 @@ JD-TC-Reschedule Waitlist-UH19
 #     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
 #     clear_location   ${HLPUSERNAME34}
-#     clear_service    ${HLPUSERNAME34}
+#     # clear_service    ${HLPUSERNAME34}
 #     clear_customer   ${HLPUSERNAME34}
 #     clear_consumer_msgs  ${CUSERNAME12}
 #     clear_provider_msgs  ${HLPUSERNAME34}

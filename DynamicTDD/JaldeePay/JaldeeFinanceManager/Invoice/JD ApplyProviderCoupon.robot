@@ -452,8 +452,8 @@ JD-TC-ProviderCouponBill-3
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME185}
-    clear_location  ${PUSERNAME185}
+    # clear_service   ${PUSERNAME185}
+    # clear_location  ${PUSERNAME185}
     clear_customer   ${PUSERNAME185}
 
     ${resp}=   Get Service
@@ -631,9 +631,9 @@ JD-TC-ProviderCouponBill-3
 
     [Documentation]  Apply two provider coupon to bill having non taxable service.
 
-    clear_queue      ${PUSERNAME101}
-    clear_location   ${PUSERNAME101}
-    clear_service    ${PUSERNAME101}
+    # clear_queue      ${PUSERNAME101}
+    # clear_location   ${PUSERNAME101}
+    # clear_service    ${PUSERNAME101}
     clear_customer   ${PUSERNAME101}
     clear_Coupon     ${PUSERNAME101}
 
@@ -806,9 +806,9 @@ JD-TC-ProviderCouponBill-4
 
     [Documentation]  Apply provider coupon to bill where bill amount and coupon amount are the same.
 
-    clear_queue      ${PUSERNAME101}
-    clear_location   ${PUSERNAME101}
-    clear_service    ${PUSERNAME101}
+    # clear_queue      ${PUSERNAME101}
+    # clear_location   ${PUSERNAME101}
+    # clear_service    ${PUSERNAME101}
     clear_customer   ${PUSERNAME101}
     clear_Coupon     ${PUSERNAME101}
 
@@ -944,9 +944,9 @@ JD-TC-ProviderCouponBill-5
 
     [Documentation]  Apply provider coupon to bill where bill amount is less than the coupon amount.
 
-    clear_queue      ${PUSERNAME101}
-    clear_location   ${PUSERNAME101}
-    clear_service    ${PUSERNAME101}
+    # clear_queue      ${PUSERNAME101}
+    # clear_location   ${PUSERNAME101}
+    # clear_service    ${PUSERNAME101}
     clear_customer   ${PUSERNAME101}
     clear_Coupon     ${PUSERNAME101}
 
@@ -1079,9 +1079,9 @@ JD-TC-ProviderCouponBill-6
 
     [Documentation]  Apply provider coupon with percentage as calculation type to bill having non taxable service.
 
-    clear_queue      ${PUSERNAME101}
-    clear_location   ${PUSERNAME101}
-    clear_service    ${PUSERNAME101}
+    # clear_queue      ${PUSERNAME101}
+    # clear_location   ${PUSERNAME101}
+    # clear_service    ${PUSERNAME101}
     clear_customer   ${PUSERNAME101}
     clear_Coupon     ${PUSERNAME101}
 
@@ -1218,9 +1218,9 @@ JD-TC-ProviderCouponBill-7
 
     [Documentation]  Apply multiple coupons to bill(one coupon with fixed calculation type and other one is percentage).
 
-    clear_queue      ${PUSERNAME101}
-    clear_location   ${PUSERNAME101}
-    clear_service    ${PUSERNAME101}
+    # clear_queue      ${PUSERNAME101}
+    # clear_location   ${PUSERNAME101}
+    # clear_service    ${PUSERNAME101}
     clear_customer   ${PUSERNAME101}
     clear_Coupon     ${PUSERNAME101}
 
@@ -1426,9 +1426,9 @@ JD-TC-ProviderCouponBill-8
 
     [Documentation]  Apply multiple coupons to bill(one coupon with fixed calculation type and other one is percentage).
 
-    clear_queue      ${PUSERNAME101}
-    clear_location   ${PUSERNAME101}
-    clear_service    ${PUSERNAME101}
+    # clear_queue      ${PUSERNAME101}
+    # clear_location   ${PUSERNAME101}
+    # clear_service    ${PUSERNAME101}
     clear_customer   ${PUSERNAME101}
     clear_Coupon     ${PUSERNAME101}
 
@@ -1634,9 +1634,9 @@ JD-TC-ProviderCouponBill-9
 
     [Documentation]  Apply provider coupon to bill after accept the payment.
 
-    clear_queue      ${PUSERNAME101}
-    clear_location   ${PUSERNAME101}
-    clear_service    ${PUSERNAME101}
+    # clear_queue      ${PUSERNAME101}
+    # clear_location   ${PUSERNAME101}
+    # clear_service    ${PUSERNAME101}
     clear_customer   ${PUSERNAME101}
     clear_Coupon     ${PUSERNAME101}
 
@@ -2086,8 +2086,8 @@ JD-TC-ProviderCouponBill-11
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME185}
-    clear_location  ${PUSERNAME185}
+    # clear_service   ${PUSERNAME185}
+    # clear_location  ${PUSERNAME185}
     clear_customer   ${PUSERNAME185}
 
     ${resp}=   Get Service
@@ -2247,8 +2247,8 @@ JD-TC-ProviderCouponBill-12
     ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME185}
-    clear_location  ${PUSERNAME185}
+    # clear_service   ${PUSERNAME185}
+    # clear_location  ${PUSERNAME185}
     clear_customer   ${PUSERNAME185}
 
     ${resp}=   Get Service
@@ -2383,9 +2383,9 @@ JD-TC-ProviderCouponBill-UH1
 
     [Documentation]  Apply provider coupon to bill with the service which is not in the coupon.
 
-    clear_queue      ${PUSERNAME102}
-    clear_location   ${PUSERNAME102}
-    clear_service    ${PUSERNAME102}
+    # clear_queue      ${PUSERNAME102}
+    # clear_location   ${PUSERNAME102}
+    # clear_service    ${PUSERNAME102}
     clear_customer   ${PUSERNAME102}
     clear_Coupon     ${PUSERNAME102}
 
@@ -2520,9 +2520,9 @@ JD-TC-ProviderCouponBill-UH2
 
     [Documentation]  Apply provider coupon to bill having non taxable service twice.
 
-    clear_queue      ${PUSERNAME105}
-    clear_location   ${PUSERNAME105}
-    clear_service    ${PUSERNAME105}
+    # clear_queue      ${PUSERNAME105}
+    # clear_location   ${PUSERNAME105}
+    # clear_service    ${PUSERNAME105}
     clear_customer   ${PUSERNAME105}
     clear_Coupon     ${PUSERNAME105}
 
@@ -2662,9 +2662,9 @@ JD-TC-ProviderCouponBill-UH3
 
     [Documentation]  Apply an expired coupon to the bill.
 
-    clear_queue      ${PUSERNAME106}
-    clear_location   ${PUSERNAME106}
-    clear_service    ${PUSERNAME106}
+    # clear_queue      ${PUSERNAME106}
+    # clear_location   ${PUSERNAME106}
+    # clear_service    ${PUSERNAME106}
     clear_customer   ${PUSERNAME106}
     clear_Coupon     ${PUSERNAME106}
 
@@ -2810,9 +2810,9 @@ JD-TC-ProviderCouponBill-UH4
 
     [Documentation]  Take check-in before the coupon start time then try to apply this coupon to bill.
 
-    clear_queue      ${PUSERNAME107}
-    clear_location   ${PUSERNAME107}
-    clear_service    ${PUSERNAME107}
+    # clear_queue      ${PUSERNAME107}
+    # clear_location   ${PUSERNAME107}
+    # clear_service    ${PUSERNAME107}
     clear_customer   ${PUSERNAME107}
     clear_Coupon     ${PUSERNAME107}
 
@@ -2937,9 +2937,9 @@ JD-TC-ProviderCouponBill-UH5
 
     [Documentation]  set provider coupon booking channel as online, then try to apply the coupon for a walk in check in 's bill.
 
-    clear_queue      ${PUSERNAME101}
-    clear_location   ${PUSERNAME101}
-    clear_service    ${PUSERNAME101}
+    # clear_queue      ${PUSERNAME101}
+    # clear_location   ${PUSERNAME101}
+    # clear_service    ${PUSERNAME101}
     clear_customer   ${PUSERNAME101}
     clear_Coupon     ${PUSERNAME101}
 
@@ -3063,9 +3063,9 @@ JD-TC-ProviderCouponBill-UH6
 
     [Documentation]  set provider coupon as catalogue based then try to apply the coupon for a checkin's bill.
 
-    clear_queue      ${PUSERNAME101}
-    clear_location   ${PUSERNAME101}
-    clear_service    ${PUSERNAME101}
+    # clear_queue      ${PUSERNAME101}
+    # clear_location   ${PUSERNAME101}
+    # clear_service    ${PUSERNAME101}
     clear_customer   ${PUSERNAME101}
     clear_Coupon     ${PUSERNAME101}
 
@@ -3200,9 +3200,9 @@ JD-TC-ProviderCouponBill-UH7
 
     [Documentation]  try to apply coupon to bill with item in the bill but not in provider coupon.
 
-    clear_queue      ${PUSERNAME101}
-    clear_location   ${PUSERNAME101}
-    clear_service    ${PUSERNAME101}
+    # clear_queue      ${PUSERNAME101}
+    # clear_location   ${PUSERNAME101}
+    # clear_service    ${PUSERNAME101}
     clear_customer   ${PUSERNAME101}
     clear_Coupon     ${PUSERNAME101}
 
@@ -3355,9 +3355,9 @@ JD-TC-ProviderCouponBill-UH8
 
     [Documentation]  Apply provider coupon to bill after settle the bill.
 
-    clear_queue      ${PUSERNAME101}
-    clear_location   ${PUSERNAME101}
-    clear_service    ${PUSERNAME101}
+    # clear_queue      ${PUSERNAME101}
+    # clear_location   ${PUSERNAME101}
+    # clear_service    ${PUSERNAME101}
     clear_customer   ${PUSERNAME101}
     clear_Coupon     ${PUSERNAME101}
 
@@ -3500,8 +3500,8 @@ JD-TC-ProviderCouponBill-UH9
     ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME185}
-    clear_location  ${PUSERNAME185}
+    # clear_service   ${PUSERNAME185}
+    # clear_location  ${PUSERNAME185}
     clear_customer   ${PUSERNAME185}
 
     ${resp}=   Get Service

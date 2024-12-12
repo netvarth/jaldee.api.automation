@@ -173,7 +173,7 @@ JD-TC-ServiceForUser-4
           ${domain}=   Set Variable    ${decrypted_data['sector']}
           ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
 
-          clear_service   ${PUSERNAME${a}}
+          # clear_service   ${PUSERNAME${a}}
           # Set Test Variable   ${pkgId}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
           # ${domain}=   Set Variable    ${resp.json()['sector']}
           # ${subdomain}=    Set Variable      ${resp.json()['subSector']}

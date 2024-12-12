@@ -187,7 +187,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-1
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${PUSERNAME101}
+    # clear_queue   ${PUSERNAME101}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -409,7 +409,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-2
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${PUSERNAME106}
+    # clear_queue   ${PUSERNAME106}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -671,7 +671,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-3
     END
     Set Suite Variable   ${s_id1}  
 
-    clear_queue   ${PUSERNAME108}
+    # clear_queue   ${PUSERNAME108}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -983,7 +983,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-4
     END
     Set Suite Variable   ${s_id2}  
 
-    clear_queue   ${PUSERNAME109}
+    # clear_queue   ${PUSERNAME109}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1301,7 +1301,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-5
     END
     Set Suite Variable   ${s_id3}  
 
-    clear_queue   ${PUSERNAME110}
+    # clear_queue   ${PUSERNAME110}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
