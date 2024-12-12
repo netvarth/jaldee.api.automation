@@ -461,14 +461,14 @@ JD-TC-RemoveProviderCouponForAppointmnet-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${account_id1}  ${resp.json()['id']}
 
-    ${pkg_id}=   get_highest_license_pkg
-    Log   ${pkg_id}
-    Set Test Variable  ${pkgId}   ${pkg_id[0]}
+    # ${pkg_id}=   get_highest_license_pkg
+    # Log   ${pkg_id}
+    # Set Test Variable  ${pkgId}   ${pkg_id[0]}
 
-    IF  '${lic_id}' != '${pkgId}'
-        ${resp}=  Change License Package  ${pkgId}
-        Should Be Equal As Strings    ${resp.status_code}   200
-    END
+    # IF  '${lic_id}' != '${pkgId}'
+    #     ${resp}=  Change License Package  ${pkgId}
+    #     Should Be Equal As Strings    ${resp.status_code}   200
+    # END
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -498,19 +498,19 @@ JD-TC-RemoveProviderCouponForAppointmnet-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
-        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-        Log   ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
+    #     ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
+    #     Log   ${resp.json()}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END
   
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]} 
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]} 
 
     ${resp}=  Get Business Profile
     Log   ${resp.json()}

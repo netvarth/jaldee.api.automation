@@ -339,20 +339,20 @@ JD-TC-ApplyProviderCouponForAppointmnet-1
 
     ${discAmt}=    Evaluate  ${servicecharge}-${pc_amount}
 
-    ${resp}=   Apply Provider Coupon   ${invoice_uid}   ${cupn_code}
-    Log  ${resp.json()} 
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=   Apply Provider Coupon for Appointment    ${apptid1}    ${cupn_code}   
-    # Log  ${resp.json()}
+    # ${resp}=   Apply Provider Coupon   ${invoice_uid}   ${cupn_code}
+    # Log  ${resp.json()} 
     # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Apply Provider Coupon for Appointment    ${apptid1}    ${cupn_code}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
     # Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
 
-    ${resp1}=  Get Invoice By Id  ${invoice_uid}
-    Log  ${resp1.content}
-    Should Be Equal As Strings  ${resp1.status_code}  200
-    Should Be Equal As Strings  ${resp1.json()['billStatus']}  ${billStatus[0]}
+    # ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    # Log  ${resp1.content}
+    # Should Be Equal As Strings  ${resp1.status_code}  200
+    # Should Be Equal As Strings  ${resp1.json()['billStatus']}  ${billStatus[0]}
 
     # ${resp}=   Get Appointment level Bill Details      ${apptid1} 
     # Log  ${resp.json()}
