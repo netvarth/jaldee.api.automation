@@ -572,7 +572,7 @@ JD-TC-Remove Services to finance-3
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    clear_appt_schedule   ${PUSERPH0}
+    # clear_appt_schedule   ${PUSERPH0}
 
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     ${desc}=   FakerLibrary.sentence

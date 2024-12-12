@@ -816,7 +816,7 @@ JD-TC-CreateInvoice-8
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_appt_schedule   ${HLPUSERNAME1}
+    # clear_appt_schedule   ${HLPUSERNAME1}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -2527,7 +2527,7 @@ JD-TC-CreateInvoice-19
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_appt_schedule   ${HLPUSERNAME2}
+    # clear_appt_schedule   ${HLPUSERNAME2}
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}

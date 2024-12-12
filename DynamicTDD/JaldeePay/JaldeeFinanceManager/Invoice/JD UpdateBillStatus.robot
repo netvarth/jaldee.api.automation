@@ -193,7 +193,7 @@ JD-TC-UpdateBillStatus-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[1]}
 
-    clear_appt_schedule   ${billable_providers[3]}
+    # clear_appt_schedule   ${billable_providers[3]}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.content}

@@ -511,7 +511,7 @@ JD-TC-ProviderCouponBill-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME185}
+    # clear_appt_schedule   ${PUSERNAME185}
     
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -2129,7 +2129,7 @@ JD-TC-ProviderCouponBill-11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME185}
+    # clear_appt_schedule   ${PUSERNAME185}
     
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -2265,7 +2265,7 @@ JD-TC-ProviderCouponBill-12
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME185}
+    # clear_appt_schedule   ${PUSERNAME185}
     
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -3518,7 +3518,7 @@ JD-TC-ProviderCouponBill-UH9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME185}
+    # clear_appt_schedule   ${PUSERNAME185}
     
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10

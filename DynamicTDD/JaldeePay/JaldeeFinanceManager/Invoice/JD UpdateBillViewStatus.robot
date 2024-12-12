@@ -95,7 +95,7 @@ JD-TC-UpdateBillViewStatus-1
     Set Test Variable  ${s_id}  ${resp.json()}
 
 
-    clear_appt_schedule   ${billable_providers[2]}
+    # clear_appt_schedule   ${billable_providers[2]}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}

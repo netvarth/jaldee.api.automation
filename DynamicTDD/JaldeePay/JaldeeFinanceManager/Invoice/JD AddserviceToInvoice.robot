@@ -289,7 +289,7 @@ JD-TC-Apply Service To Finance-2
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
 
-    clear_appt_schedule   ${PUSERPH0}
+    # clear_appt_schedule   ${PUSERPH0}
 
     ${pid}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME32}
@@ -493,7 +493,7 @@ JD-TC-Apply Services to Invoice-3
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
 
-    clear_appt_schedule   ${PUSERPH0}
+    # clear_appt_schedule   ${PUSERPH0}
 
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     ${desc}=   FakerLibrary.sentence
@@ -1161,7 +1161,7 @@ JD-TC-Apply Service To Finance-UH1
     Set Test Variable   ${servicecharge}   ${resp.json()['totalAmount']}
 
 
-    clear_appt_schedule   ${PUSERPH0}
+    # clear_appt_schedule   ${PUSERPH0}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
