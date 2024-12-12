@@ -37,12 +37,6 @@ JD-TC-GetQueueAvaliability-1
     # clear_location  ${HLPUSERNAME11}
     # clear_queue  ${HLPUSERNAME11}
 
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${lid}
-
     # ${lid2}=  Create Sample Location
     # ${resp}=   Get Location ById  ${lid2}
     # Log  ${resp.content}
@@ -55,15 +49,21 @@ JD-TC-GetQueueAvaliability-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${lid2}=  Create Sample Location
-        ${resp}=   Get Location ById  ${lid2}
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
-        Set Suite Variable  ${lid2}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
+
+    ${lid2}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${lid2}
 
     ${SERVICE1}=    generate_unique_service_name  ${service_names} 
     Append To List  ${service_names}  ${SERVICE1}
