@@ -150,15 +150,15 @@ JD-TC-Communication Between Consumer and Provider-1
     Should Be Equal As Strings    ${resp.status_code}   200
     clear_Consumermsg  ${CUSERNAME0}
     
-    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME0}    ${account_id}    ${token}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable    ${cid}   ${resp.json()['id']} 
+    # ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME0}    ${account_id}    ${token}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Test Variable    ${cid}   ${resp.json()['id']} 
 
     ${msg}=  Fakerlibrary.sentence
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
-    ${resp}=  Consumer WLCommunication   ${cookie}  ${wid}  ${pid0}  ${msg}  ${messageType[0]}  ${caption}  
+    ${resp}=  Consumer WLCommunication  ${wid}  ${pid0}  ${msg}  ${messageType[0]}  ${caption}  
     Log  ${resp}
     Should Be Equal As Strings  ${resp.status_code}  200
 
