@@ -23,9 +23,13 @@ ${self}      0
 *** Test Cases ***
 
 JD-TC-GetWaitingTimeOfProviders-1
+
     [Documentation]  Get Waiting Time Of 3 Providers with Provider Login
+
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME13}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+*** Comments ***
     get_Host_name_IP
     # clear_service   ${HLPUSERNAME13}
     # clear_location  ${HLPUSERNAME13}
