@@ -498,7 +498,7 @@ JD-TC-Update SalesOrder Catalog-UH6
     ${resp}=  Update SalesOrder Catalog    ${sacatlogid}  name=${Name}   invMgmt=${boolean[0]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings   ${resp.json()}   ${CANT_DISABLE_INV_CAT_FROM_SO_CAT_BCZ_ITEM}
+    Should Be Equal As Strings   ${resp.json()}   ${CANT_CHANGE_INV_MNGMT_IN_SOC}
     
 
 
