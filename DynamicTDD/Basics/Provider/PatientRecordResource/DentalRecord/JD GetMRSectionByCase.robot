@@ -73,15 +73,6 @@ JD-TC-Get MR Section By Case-1
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
 
-    ${resp}=  Enable Disable Department  ${toggle[0]}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    sleep  2s
-    ${resp}=  Get Departments
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
-
     ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -90,6 +81,10 @@ JD-TC-Get MR Section By Case-1
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
+    ${resp}=  Get Departments
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
     ${lid}=  Create Sample Location
 

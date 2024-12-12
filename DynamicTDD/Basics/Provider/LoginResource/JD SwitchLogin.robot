@@ -1471,12 +1471,16 @@ JD-TC-Switch_Login-15
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${accountId}  ${resp.json()['id']}
 
-    ${resp}=  Enable Disable Department  ${toggle[0]}
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    sleep  2s
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
     ${resp}=  Get Departments
-    Log  ${resp.content}
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
