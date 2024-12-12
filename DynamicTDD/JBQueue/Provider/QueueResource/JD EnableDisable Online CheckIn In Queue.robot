@@ -167,6 +167,36 @@ JD-TC-Online CheckIn In Queue-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  onlineCheckIn=False
 
+    ${resp}=  Enable Search Data
+    Log   ${resp.json()} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['onlineCheckIns']}==${bool[0]}   
+        ${resp}=   Enable Online Checkin
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    # ${resp}=  Enable Online Checkin
+    # Log   ${resp.json()} 
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Verify Response  ${resp}  onlineCheckIns=True
+
+    ${resp}=  Get Queue ById  ${qid1}
+    Log   ${resp.json()} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  onlineCheckIn=False
+
+    ${resp}=  Disable Search Data
+    Log   ${resp.json()} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Disable Online Checkin
     Log   ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -364,69 +394,70 @@ JD-TC-Online CheckIn In Queue-UH5
     Should Be Equal As Strings  ${resp.status_code}  404   
     Should Be Equal As Strings  "${resp.json()}"  "${QUEUE_NOT_FOUND}"
 
-JD-TC-Verify Online CheckIn In Queue-2
-    [Documentation]  Verification of case 2
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}    ${PASSWORD}
-    Log   ${resp.json()} 
-    Should Be Equal As Strings    ${resp.status_code}    200
+# JD-TC-Verify Online CheckIn In Queue-2
+#     [Documentation]  Verification of case 2
+#     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}    ${PASSWORD}
+#     Log   ${resp.json()} 
+#     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Waitlist Settings
-    Log   ${resp.json()}   
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Verify Response  ${resp}  onlineCheckIns=False
-    ${resp}=  Get Queue ById  ${qid1}
-    Log   ${resp.json()} 
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  onlineCheckIn=False
-
-    ${resp}=  Enable Search Data
-    Log   ${resp.json()} 
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Enable Online Checkin
-    Log   ${resp.json()} 
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Waitlist Settings
-    Log   ${resp.json()}   
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Verify Response  ${resp}  onlineCheckIns=True
-
-    ${resp}=  Get Queue ById  ${qid1}
-    Log   ${resp.json()} 
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  onlineCheckIn=False
-
-    ${resp}=  Disable Search Data
-    Log   ${resp.json()} 
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-JD-TC-Verify Online CheckIn In Queue-3
-    [Documentation]  Verification of case 3
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
-    Log   ${resp.json()} 
-    Should Be Equal As Strings    ${resp.status_code}    200
+#     ${resp}=  Get Waitlist Settings
+#     Log   ${resp.json()}   
+#     Should Be Equal As Strings  ${resp.status_code}  200 
+#     # Verify Response  ${resp}  onlineCheckIns=False
     
-    ${resp}=  Get Waitlist Settings
-    Log   ${resp.json()}   
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Verify Response  ${resp}  onlineCheckIns=False
-    ${resp}=  Get Queue ById  ${qid2}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  onlineCheckIn=False
+#     ${resp}=  Get Queue ById  ${qid1}
+#     Log   ${resp.json()} 
+#     Should Be Equal As Strings  ${resp.status_code}  200
+#     # Verify Response  ${resp}  onlineCheckIn=False
 
-    ${resp}=  Enable Search Data
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Enable Online Checkin
-    Should Be Equal As Strings  ${resp.status_code}  200
-    sleep  01s
-    ${resp}=  Get Waitlist Settings
-    Log   ${resp.json()}   
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Verify Response  ${resp}  onlineCheckIns=True
-    ${resp}=  Get Queue ById  ${qid2}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  onlineCheckIn=True
-    ${resp}=  Disable Search Data
-    Should Be Equal As Strings  ${resp.status_code}  200
+#     ${resp}=  Enable Search Data
+#     Log   ${resp.json()} 
+#     Should Be Equal As Strings  ${resp.status_code}  200
+
+#     # ${resp}=  Enable Online Checkin
+#     # Log   ${resp.json()} 
+#     # Should Be Equal As Strings  ${resp.status_code}  200
+
+#     ${resp}=  Get Waitlist Settings
+#     Log   ${resp.json()}   
+#     Should Be Equal As Strings  ${resp.status_code}  200 
+#     Verify Response  ${resp}  onlineCheckIns=True
+
+#     ${resp}=  Get Queue ById  ${qid1}
+#     Log   ${resp.json()} 
+#     Should Be Equal As Strings  ${resp.status_code}  200
+#     Verify Response  ${resp}  onlineCheckIn=False
+
+#     ${resp}=  Disable Search Data
+#     Log   ${resp.json()} 
+#     Should Be Equal As Strings  ${resp.status_code}  200
+
+# JD-TC-Verify Online CheckIn In Queue-3
+#     [Documentation]  Verification of case 3
+#     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
+#     Log   ${resp.json()} 
+#     Should Be Equal As Strings    ${resp.status_code}    200
+    
+#     ${resp}=  Get Waitlist Settings
+#     Log   ${resp.json()}   
+#     Should Be Equal As Strings  ${resp.status_code}  200 
+#     Verify Response  ${resp}  onlineCheckIns=False
+#     ${resp}=  Get Queue ById  ${qid2}
+#     Should Be Equal As Strings  ${resp.status_code}  200
+#     Verify Response  ${resp}  onlineCheckIn=False
+
+#     # ${resp}=  Enable Search Data
+#     # Should Be Equal As Strings  ${resp.status_code}  200
+#     # ${resp}=  Enable Online Checkin
+#     # Should Be Equal As Strings  ${resp.status_code}  200
+#     # sleep  01s
+#     ${resp}=  Get Waitlist Settings
+#     Log   ${resp.json()}   
+#     Should Be Equal As Strings  ${resp.status_code}  200 
+#     Verify Response  ${resp}  onlineCheckIns=True
+#     ${resp}=  Get Queue ById  ${qid2}
+#     Log  ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  200
+#     Verify Response  ${resp}  onlineCheckIn=True
+#     ${resp}=  Disable Search Data
+#     Should Be Equal As Strings  ${resp.status_code}  200

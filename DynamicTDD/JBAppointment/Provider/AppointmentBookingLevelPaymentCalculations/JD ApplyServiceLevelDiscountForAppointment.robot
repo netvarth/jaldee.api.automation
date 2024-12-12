@@ -73,8 +73,6 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-
-
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -82,7 +80,6 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-1
         ${resp}=   Enable Disable Appointment   ${toggle[0]} 
         Should Be Equal As Strings  ${resp.status_code}  200
     END
-
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
@@ -145,7 +142,7 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-1
 
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
-    ${servicecharge}=   Random Int  min=100  max=500
+    ${servicecharge}=   Random Int  min=300   max=500
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${servicecharge}=  Convert To Number  ${servicecharge}  1 
     Set Suite Variable   ${servicecharge}
@@ -400,7 +397,7 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-4
     ${discAmt1}=    Evaluate  ${discAmt}-${discountprice11}
 
 
-    ${resp}=   Apply Service Level Discount for Appointment    ${apptid2}    ${discountId4}   ${EMPTY}    ${discount2}    ${discount2}
+    ${resp}=   Apply Service Level Discount for Appointment    ${apptid2}    ${discountId4}   0    ${discount2}    ${discount2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt1}
