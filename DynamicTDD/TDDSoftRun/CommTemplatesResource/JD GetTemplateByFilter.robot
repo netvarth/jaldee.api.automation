@@ -1207,11 +1207,11 @@ JD-TC-GetTemplateByFilter-17
     ${resp}=  Get Send Comm List
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable   ${sendcomm_id1}   ${resp.json()[56]['id']}
-    Set Test Variable   ${sendcomm_name1}       ${resp.json()[56]['name']}
-    Set Test Variable   ${sendcomm_disname1}    ${resp.json()[56]['displayName']}
-    Set Test Variable   ${sendcomm_context1}    ${resp.json()[56]['context']}
-    Set Test Variable   ${sendcomm_vars1}       ${resp.json()[56]['variables']}
+    Set Test Variable   ${sendcomm_id1}   ${resp.json()[24]['id']}
+    Set Test Variable   ${sendcomm_name1}       ${resp.json()[24]['name']}
+    Set Test Variable   ${sendcomm_disname1}    ${resp.json()[24]['displayName']}
+    Set Test Variable   ${sendcomm_context1}    ${resp.json()[24]['context']}
+    Set Test Variable   ${sendcomm_vars1}       ${resp.json()[24]['variables']}
 
     ${resp}=  Get Dynamic Variable List By SendComm   ${sendcomm_id1}
     Log   ${resp.content}

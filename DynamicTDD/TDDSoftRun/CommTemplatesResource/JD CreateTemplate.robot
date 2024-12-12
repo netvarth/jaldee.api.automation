@@ -851,7 +851,7 @@ JD-TC-CreateTemplate-29
     ${resp}=  Get Default Template List by sendComm   ${sendcomm_id1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable   ${deftemp_id1}   ${resp.json()['templates'][2]['id']}
+    Set Suite Variable   ${deftemp_id1}   ${resp.json()['templates'][0]['id']}
 
     ${resp}=  Get Default Template Preview   ${sendcomm_id1}  ${deftemp_id1}  
     Log   ${resp.content}
@@ -870,8 +870,8 @@ JD-TC-CreateTemplate-29
     Set Test Variable   ${dyn_vars}         ${resp.json()['variables']['content']}
 
     ${new_tempname}=      FakerLibrary.word
-
-    ${resp}=  Create Template   ${new_tempname}  ${content1}  ${temp_format1}  ${context1}  ${comm_target1}    ${comm_chanl1} 
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
+    ${resp}=  Create Template   ${new_tempname}  ${content1}  ${temp_format1}  ${context1}  ${comm_target1}    ${comm_chanl} 
     ...     templateHeader=${temp_header1}  footer=${temp_footer1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -888,7 +888,7 @@ JD-TC-CreateTemplate-30
     ${resp}=  Get Send Comm List
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable   ${sendcomm_id1}   ${resp.json()[56]['id']}
+    Set Test Variable   ${sendcomm_id1}   ${resp.json()[24]['id']}
 
     ${temp_name}=    FakerLibrary.word
     ${content_msg}=      FakerLibrary.sentence

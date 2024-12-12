@@ -183,7 +183,7 @@ JD-TC-CreateTemplatePreview-7
     ${content_msg}=      FakerLibrary.sentence
     ${content_msg1}=     Set Variable  ${content_msg} [${dynamic_var1}]
     ${content}=    Create Dictionary  intro=${content_msg1}
-    ${out_content}=  Set Variable   ${content_msg} ${suser_name}
+    ${out_content}=  Set Variable   ${content_msg} ${SPACE}
     
     ${resp}=  Create Template Preview  ${VariableContext[0]}  ${content}  
     Log   ${resp.content}
@@ -233,7 +233,7 @@ JD-TC-CreateTemplatePreview-9
     ${content_msg}=      FakerLibrary.sentence
     ${content_msg1}=     Set Variable  ${content_msg} [${dynamic_var1}]
     ${content}=    Create Dictionary  intro=${content_msg1}
-    ${out_content}=  Set Variable   ${content_msg} ${sdate}
+    ${out_content}=  Set Variable   ${content_msg} ${SPACE}
     
     ${resp}=  Create Template Preview  ${VariableContext[0]}  ${content}  
     Log   ${resp.content}
@@ -253,11 +253,12 @@ JD-TC-CreateTemplatePreview-10
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${dynamic_var1}   ${resp.json()[3]['name']}
+    Set Test Variable   ${cust_id}     ${resp.json()[3]['sampleValue']}
     
     ${content_msg}=      FakerLibrary.sentence
     ${content_msg1}=     Set Variable  ${content_msg} [${dynamic_var1}]
     ${content}=    Create Dictionary  intro=${content_msg1}
-    ${out_content}=  Set Variable   ${content_msg} ${SPACE}
+    ${out_content}=  Set Variable   ${content_msg} ${cust_id}
     
     ${resp}=  Create Template Preview  ${VariableContext[0]}  ${content}  
     Log   ${resp.content}

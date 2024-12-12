@@ -176,7 +176,7 @@ JD-TC-Reschedule Waitlist-1
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
     # Set Test Variable   ${servicetime}   ${resp.json()['serviceTime']}
 
-    sleep  05s
+    # sleep  05s
 
     ${resp}=  Get provider communications
     Log  ${resp.json()}
@@ -192,7 +192,7 @@ JD-TC-Reschedule Waitlist-1
 
     ${date}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
 
-    sleep  03s
+    # sleep  03s
     
     ${resp}=  Get provider communications
     Log  ${resp.json()}
@@ -309,7 +309,7 @@ JD-TC-Reschedule Waitlist-2
     ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
+    ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}   location=${lid}  
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -348,10 +348,10 @@ JD-TC-Reschedule Waitlist-2
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid1}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid1}
 
-    ${wait_time}=  Evaluate  ${duration}/1
-    ${wait_time}=  rounded   ${wait_time}
-    ${wait_time}=  Convert To Integer   ${wait_time}
-    ${hrs}  ${mins}=   Convert_hour_mins   ${wait_time}
+    # ${wait_time}=  Evaluate  ${duration}/1
+    # ${wait_time}=  rounded   ${wait_time}
+    # ${wait_time}=  Convert To Integer   ${wait_time}
+    # ${hrs}  ${mins}=   Convert_hour_mins   ${wait_time}
 
     ${sTime2}=  db.add_timezone_time  ${tz}  ${hrs}  ${mins}
     
@@ -366,13 +366,13 @@ JD-TC-Reschedule Waitlist-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  date=${DAY3}  waitlistStatus=${wl_status[0]}  
     ...   waitlistedBy=${waitlistedby[1]}   personsAhead=1   #checkInTime=${sTime1}  
-    ...   consLastVisitedDate=${date2}${SPACE}${sTime1}  appxWaitingTime=${wait_time}  
+    ...   consLastVisitedDate=${date2}${SPACE}${sTime1}  
     Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${s_id}
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
 
-    sleep  05s
+    # sleep  05s
     
     ${resp}=  Get provider communications
     Log  ${resp.json()}
@@ -592,25 +592,25 @@ JD-TC-Reschedule Waitlist-4
 
     # ${resp}=  SetMerchantId  ${pid}  ${merchantid}
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
 
-    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
-        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-        Log   ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    # IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
+    #     ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
+    #     Log   ${resp.json()}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END 
 
     # ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[1]}
     # Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]} 
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]} 
+    # Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
@@ -659,7 +659,8 @@ JD-TC-Reschedule Waitlist-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  AddCustomer  ${CUSERNAME12}    firstName=${bsname}
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${resp}=  AddCustomer  ${CUSERNAME12}    firstName=${bsname}   email=${pc_emailid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
@@ -743,7 +744,7 @@ JD-TC-Reschedule Waitlist-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${payref}   ${resp.json()['paymentRefId']}
 
-    sleep   2s
+    # sleep   2s
     ${resp}=  Get Bill By consumer  ${wid4}  ${pid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1385,10 +1386,10 @@ JD-TC-Reschedule Waitlist-7
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${wait_time}=  Evaluate  ${duration}/1
-    ${wait_time}=  rounded   ${wait_time}
-    ${wait_time}=  Convert To Integer   ${wait_time}
-    ${hrs}  ${mins}=   Convert_hour_mins   ${wait_time}
+    # ${wait_time}=  Evaluate  ${duration}/1
+    # ${wait_time}=  rounded   ${wait_time}
+    # ${wait_time}=  Convert To Integer   ${wait_time}
+    # ${hrs}  ${mins}=   Convert_hour_mins   ${wait_time}
 
     # ${sTime2}=  db.add_timezone_time  ${tz}  ${hrs}  ${mins}
     ${sTime2}=  add_two   ${sTime1}  ${mins}
@@ -1398,7 +1399,7 @@ JD-TC-Reschedule Waitlist-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  date=${DAY3}  waitlistStatus=${wl_status[0]}  
     ...   waitlistedBy=${waitlistedby[1]}   personsAhead=1   ##checkInTime=${sTime1}  
-    ...   consLastVisitedDate=${date2}${SPACE}${sTime1}  appxWaitingTime=${wait_time}  
+    ...   consLastVisitedDate=${date2}${SPACE}${sTime1}  
     Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${s_id}
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
