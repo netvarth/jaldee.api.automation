@@ -108,10 +108,42 @@ JD-TC-Get Sales Order Catalog Items Count-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${store_id}  ${resp.json()}
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}
+    # ----------------------------------------- create Inv Catalog -------------------------------------------------------
+    ${INV_Cat_Name}=     FakerLibrary.name
+
+    ${resp}=  Create Inventory Catalog   ${INV_Cat_Name}  ${store_id}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${SO_Cata_Encid}  ${resp.json()}
+    Set Suite Variable  ${Catalog_EncIds}  ${resp.json()}
+# ------------------------------------------------------------------------------------------------------------
+
+# ----------------------------------------Create Inventory Catalog Item----------------------------------
+
+    ${resp}=   Create Inventory Catalog Item  ${Catalog_EncIds}   ${item1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Suite Variable   ${ic_Item_id}   ${resp.json()[0]}
+
+# -------------------------------------------------------------------------------------------------------------
+
+    # ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${SO_Cata_Encid}  ${resp.json()}
+
+# --------------------------- Create SalesOrder Inventory Catalog-InvMgr True --------------------------
+
+    ${Store_name}=  FakerLibrary.name
+    Set Suite Variable    ${Store_name}
+    ${inv_cat_encid_List}=  Create List  ${Catalog_EncIds}
+    ${price}=    Random Int  min=2   max=40
+    ${price}=  Convert To Number  ${price}    1
+
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Store_name}  ${boolean[1]}  ${inv_cat_encid_List}    onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[1]}  storePickup=${boolean[1]}  homeDelivery=${boolean[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${inv_order_encid}  ${resp.json()}
+# ---------------------------------------------------------------------------------------------------------
 
     ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
     Log   ${resp.content}

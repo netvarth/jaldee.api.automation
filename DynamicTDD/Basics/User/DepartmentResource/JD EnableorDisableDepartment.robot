@@ -51,8 +51,18 @@ JD-TC-Enable or Disable Department-1
     ${id}=  get_id  ${PUSERNAME_K}
     Set Suite Variable  ${id}
 
-    ${resp}=  Enable Disable Department  ${toggle[0]}
+    ${resp}=  Get Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+    ${resp}=  Get Departments
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
     ${dep_name1}=  FakerLibrary.bs
     Set Suite Variable   ${dep_name1}
