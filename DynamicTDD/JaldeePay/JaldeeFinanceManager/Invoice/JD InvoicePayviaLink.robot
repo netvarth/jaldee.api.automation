@@ -481,6 +481,10 @@ JD-TC-Invoice pay via link-UH9
     Should Be Equal As Strings  ${resp.status_code}  200
     ${INVOICE_SETTLED}=  format String   ${INVOICE_SETTLED}   ${billStatus[1]}
 
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME15}    ${account_id1}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings              ${resp.status_code}   200
