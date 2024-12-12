@@ -23,25 +23,27 @@ ${SERVICE4}	   Groom MakeupW_004
 JD-TC-Change Department Status-1
     [Documentation]  Provider Create Department using service id
     
-    ${iscorp_subdomains}=  get_iscorp_subdomains  1
-    Log  ${iscorp_subdomains}
-    Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
-    Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
-    Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
-    ${firstname_A}=  FakerLibrary.first_name
-    Set Suite Variable  ${firstname_A}
-    ${lastname_A}=  FakerLibrary.last_name
-    Set Suite Variable  ${lastname_A}
+    # ${iscorp_subdomains}=  get_iscorp_subdomains  1
+    # Log  ${iscorp_subdomains}
+    # Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
+    # Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
+    # Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
+    # ${firstname_A}=  FakerLibrary.first_name
+    # Set Suite Variable  ${firstname_A}
+    # ${lastname_A}=  FakerLibrary.last_name
+    # Set Suite Variable  ${lastname_A}
+    # ${PUSERNAME_G}=  Evaluate  ${PUSERNAME}+423814
+    # ${highest_package}=  get_highest_license_pkg
+    # ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_G}    ${highest_package[0]}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Account Activation  ${PUSERNAME_G}  0
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Account Set Credential  ${PUSERNAME_G}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_G}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     ${PUSERNAME_G}=  Evaluate  ${PUSERNAME}+423814
-    ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_G}    ${highest_package[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${PUSERNAME_G}  0
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_G}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_G}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_G}=  Provider Signup without Profile  PhoneNumber=${PUSERNAME_G}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -49,6 +51,11 @@ JD-TC-Change Department Status-1
     Set Suite Variable  ${PUSERNAME_G}
     ${id}=  get_id  ${PUSERNAME_G}
     Set Suite Variable  ${id}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
    
     ${resp}=  Create Sample Service  ${SERVICE1}  
     Set Suite Variable  ${sid1}  ${resp}  
@@ -124,8 +131,14 @@ JD-TC-Change Department Status-UH4
 JD-TC-Change Department Status-UH5
     [Documentation]  Change department status using consumer login
 
-    ${resp}=  ConsumerLogin  ${CUSERNAME0}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  ConsumerLogin  ${CUSERNAME0}  ${PASSWORD}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${CUSERNAME0}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME0}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
     ${resp}=  Change Department Status  ${depid1}   ${dep_status[0]}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   "${resp.json()}"   "${LOGIN_NO_ACCESS_FOR_URL}"

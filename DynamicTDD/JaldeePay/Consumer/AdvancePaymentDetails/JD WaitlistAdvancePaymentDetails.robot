@@ -823,9 +823,18 @@ JD-TC-WaitlistAdvancePaymentdetails-UH7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bill By UUId  ${cwid}
-    Log   ${resp.json()}
+    # ${resp}=  Get Bill By UUId  ${cwid}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Create Invoice for Booking   ${invoicebooking[1]}   ${cwid}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Booking Invoices  ${cwid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid1}   ${resp.json()[0]['invoiceUid']}
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${pid}  ${token} 
     Log   ${resp.content}
@@ -848,7 +857,16 @@ JD-TC-WaitlistAdvancePaymentdetails-UH7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bill By UUId  ${cwid1}
-    Log   ${resp.json()}
+    # ${resp}=  Get Bill By UUId  ${cwid1}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Create Invoice for Booking   ${invoicebooking[1]}   ${cwid}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Booking Invoices  ${cwid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid1}   ${resp.json()[0]['invoiceUid']}
    

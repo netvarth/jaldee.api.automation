@@ -46,6 +46,11 @@ JD-TC-UpdateService-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+
     ${description}=  FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
@@ -381,8 +386,13 @@ JD-TC-UpdateService-UH3
     ${Total}=   Random Int   min=100   max=500
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${Total}=  Convert To Number  ${Total}  1
-    ${resp}=  ConsumerLogin  ${CUSERNAME8}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  ConsumerLogin  ${CUSERNAME8}  ${PASSWORD}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${CUSERNAME8}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME8}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Update Service  ${id}  ${SERVICE1}  ${description}  ${service_duration[3]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}  ${LOGIN_NO_ACCESS_FOR_URL}

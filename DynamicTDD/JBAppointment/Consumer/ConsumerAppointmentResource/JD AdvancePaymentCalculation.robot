@@ -970,19 +970,24 @@ JD-TC-GetAppointmentAdvancePaymentDetails-6
         END
     END
 
-    ${ser_durtn}=   Random Int   min=2   max=10
-    ${min_pre}=   Random Int   min=40   max=50
-    ${min_pre}=  Convert To Number  ${min_pre}  0
-    ${service_amount}=   Random Int   min=100   max=500
-    ${service_amount}=  Convert To Number  ${service_amount}  0
-    ${desc}=   FakerLibrary.sentence
-
     Log  ${snames}
     ${srv_val}=    Get Variable Value    ${s_id}
-    
-    ${resp}=  Create Service  ${unique_snames[${i}]}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[1]}  automaticInvoiceGeneration=${bool[1]}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${s_id}=  Set Variable  ${resp.json()}
+
+    IF  '${srv_val}'=='${None}'
+        ${snames_len}=  Get Length  ${unique_snames}
+        FOR  ${i}  IN RANGE   ${snames_len}
+
+            ${ser_durtn}=   Random Int   min=2   max=10
+            ${min_pre}=   Random Int   min=40   max=50
+            ${min_pre}=  Convert To Number  ${min_pre}  0
+            ${service_amount}=   Random Int   min=100   max=500
+            ${service_amount}=  Convert To Number  ${service_amount}  0
+            ${desc}=   FakerLibrary.sentence
+            ${resp}=  Create Service  ${unique_snames[${i}]}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[1]}  automaticInvoiceGeneration=${bool[1]}
+            Should Be Equal As Strings  ${resp.status_code}  200
+            ${s_id}=  Set Variable  ${resp.json()}
+        END
+    END
 
     Set Suite Variable   ${s_id}
 
@@ -1313,19 +1318,24 @@ JD-TC-GetAppointmentAdvancePaymentDetails-7
         END
     END
 
-    ${ser_durtn}=   Random Int   min=2   max=10
-    ${min_pre}=   Random Int   min=40   max=50
-    ${min_pre}=  Convert To Number  ${min_pre}  0
-    ${service_amount}=   Random Int   min=100   max=500
-    ${service_amount}=  Convert To Number  ${service_amount}  0
-    ${desc}=   FakerLibrary.sentence
-
     Log  ${snames}
     ${srv_val}=    Get Variable Value    ${s_id}
+
+    IF  '${srv_val}'=='${None}'
+        ${snames_len}=  Get Length  ${unique_snames}
+        FOR  ${i}  IN RANGE   ${snames_len}
     
-    ${resp}=  Create Service  ${unique_snames[${i}]}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[0]}  automaticInvoiceGeneration=${bool[1]}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${s_id}=  Set Variable  ${resp.json()}
+            ${ser_durtn}=   Random Int   min=2   max=10
+            ${min_pre}=   Random Int   min=40   max=50
+            ${min_pre}=  Convert To Number  ${min_pre}  0
+            ${service_amount}=   Random Int   min=100   max=500
+            ${service_amount}=  Convert To Number  ${service_amount}  0
+            ${desc}=   FakerLibrary.sentence
+            ${resp}=  Create Service  ${unique_snames[${i}]}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[0]}  automaticInvoiceGeneration=${bool[1]}
+            Should Be Equal As Strings  ${resp.status_code}  200
+            ${s_id}=  Set Variable  ${resp.json()}
+        END
+    END
 
     Set Suite Variable   ${s_id}
 

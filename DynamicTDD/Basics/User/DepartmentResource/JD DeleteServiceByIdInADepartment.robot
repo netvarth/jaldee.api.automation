@@ -36,25 +36,27 @@ ${SERVICE16}	   Groom MakeupW_016
 JD-TC-Delete Service In a Department-1
     [Documentation]  Provider deleting service from department
 
-    ${iscorp_subdomains}=  get_iscorp_subdomains  1
-    Log  ${iscorp_subdomains}
-    Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
-    Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
-    Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
-    ${firstname_A}=  FakerLibrary.first_name
-    Set Suite Variable  ${firstname_A}
-    ${lastname_A}=  FakerLibrary.last_name
-    Set Suite Variable  ${lastname_A}
+    # ${iscorp_subdomains}=  get_iscorp_subdomains  1
+    # Log  ${iscorp_subdomains}
+    # Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
+    # Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
+    # Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
+    # ${firstname_A}=  FakerLibrary.first_name
+    # Set Suite Variable  ${firstname_A}
+    # ${lastname_A}=  FakerLibrary.last_name
+    # Set Suite Variable  ${lastname_A}
+    # ${PUSERNAME_K}=  Evaluate  ${PUSERNAME}+423820
+    # ${highest_package}=  get_highest_license_pkg
+    # ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_K}    ${highest_package[0]}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Account Activation  ${PUSERNAME_K}  0
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Account Set Credential  ${PUSERNAME_K}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_K}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     ${PUSERNAME_K}=  Evaluate  ${PUSERNAME}+423820
-    ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_K}    ${highest_package[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${PUSERNAME_K}  0
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_K}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_K}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_K}=  Provider Signup without Profile  PhoneNumber=${PUSERNAME_K}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -62,6 +64,11 @@ JD-TC-Delete Service In a Department-1
     Set Suite Variable  ${PUSERNAME_K}
     ${id}=  get_id  ${PUSERNAME_K}
     Set Suite Variable  ${id}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
     ${ser_desc}=   FakerLibrary.word
     Set Suite Variable   ${ser_desc}
@@ -431,8 +438,14 @@ JD-TC-Delete Service In a Department-UH5
 JD-TC-Delete Service In a Department-UH6
     [Documentation]  Adding a service to department using consumer login
 
-    ${resp}=  ConsumerLogin  ${CUSERNAME0}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  ConsumerLogin  ${CUSERNAME0}  ${PASSWORD}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${CUSERNAME0}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME0}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
     ${resp}=  Delete Service ById In A Department  ${depid1}  ${sid5}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   "${resp.json()}"   "${LOGIN_NO_ACCESS_FOR_URL}"

@@ -26,25 +26,28 @@ ${SERVICE8}	   Groom MakeupW_8
 JD-TC-Add Service To Department-1
     [Documentation]  Provider selecting filter by department after creating services
 
-    ${iscorp_subdomains}=  get_iscorp_subdomains  1
-    Log  ${iscorp_subdomains}
-    Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
-    Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
-    Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
-    ${firstname_A}=  FakerLibrary.first_name
-    Set Suite Variable  ${firstname_A}
-    ${lastname_A}=  FakerLibrary.last_name
-    Set Suite Variable  ${lastname_A}
+    # ${iscorp_subdomains}=  get_iscorp_subdomains  1
+    # Log  ${iscorp_subdomains}
+    # Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
+    # Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
+    # Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
+    # ${firstname_A}=  FakerLibrary.first_name
+    # Set Suite Variable  ${firstname_A}
+    # ${lastname_A}=  FakerLibrary.last_name
+    # Set Suite Variable  ${lastname_A}
+    # ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+423812
+    # ${highest_package}=  get_highest_license_pkg
+    # ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Account Activation  ${PUSERNAME_E}  0
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+423812
-    ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${PUSERNAME_E}  0
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_E}=  Provider Signup without Profile  PhoneNumber=${PUSERNAME_E}
+    
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -53,6 +56,11 @@ JD-TC-Add Service To Department-1
     Set Suite Variable  ${PUSERNAME_E}
     ${id}=  get_id  ${PUSERNAME_E}
     Set Suite Variable  ${id}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
     
     ${resp}=  View Waitlist Settings
     Log   ${resp.json()}   
@@ -270,8 +278,14 @@ JD-TC-Add Service To Department-UH5
 JD-TC-Add Service To Department-UH6
     [Documentation]  Adding a service to department using consumer login
 
-    ${resp}=  ConsumerLogin  ${CUSERNAME0}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  ConsumerLogin  ${CUSERNAME0}  ${PASSWORD}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${CUSERNAME0}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME0}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
     ${resp}=  Add Services To Department  ${depid01}  ${sid05}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   "${resp.json()}"   "${LOGIN_NO_ACCESS_FOR_URL}"

@@ -50,9 +50,10 @@ JD-TC-Delete Service Image-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  uploadServiceImages   ${id}  ${cookie}
     # Should Be Equal As Strings  ${resp[1]}  200
-    Log  ${resp}
-    Log  ${resp.json()}
+    # Log  ${resp}
+    # Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    
     ${resp}=  uploadServiceImages   ${id}  ${cookie}
     # Should Be Equal As Strings  ${resp[1]}  200
     Log  ${resp.json()}

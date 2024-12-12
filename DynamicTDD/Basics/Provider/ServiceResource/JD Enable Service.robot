@@ -34,6 +34,10 @@ JD-TC-Enable Service-1
         ${resp}=  Encrypted Provider Login  ${PUSERNAME90}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         # clear_service       ${PUSERNAME90}
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${account_id}  ${resp.json()['id']}
         ${resp}=  Create Service   ${SERVICE1}   ${description}   ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
         Log  ${resp}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -89,8 +93,14 @@ JD-TC-Enable Service-UH4
 JD-TC-EnableService-UH5
 
         [Documentation]  Enable a service using consumer login
-        ${resp}=  ConsumerLogin  ${CUSERNAME8}  ${PASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
+        # ${resp}=  ConsumerLogin  ${CUSERNAME8}  ${PASSWORD}
+        # Should Be Equal As Strings  ${resp.status_code}  200
+        ${CUSERNAME8}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME8}
+
+        ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${account_id}  ${token} 
+        Log   ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
         ${resp}=  Enable service  ${id}  
         Should Be Equal As Strings  ${resp.status_code}  401
         Should Be Equal As Strings   ${resp.json()}    ${LOGIN_NO_ACCESS_FOR_URL}

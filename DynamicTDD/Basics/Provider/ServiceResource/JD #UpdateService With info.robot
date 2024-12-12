@@ -64,6 +64,11 @@ JD-TC-Update Service With info-1-Service_type
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${account_id}  ${resp.json()['id']}
+
 *** COMMENTS ***
         
         # clear_service      ${resp}
@@ -1279,8 +1284,13 @@ JD-TC-Update Service With info-UH6
         ${Total}=   Random Int   min=100   max=500
         ${min_pre}=  Convert To Number  ${min_pre}  1
         ${Total}=  Convert To Number  ${Total}  1
-        ${resp}=  ConsumerLogin  ${CUSERNAME8}  ${PASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
+        # ${resp}=  ConsumerLogin  ${CUSERNAME8}  ${PASSWORD}
+        # Should Be Equal As Strings  ${resp.status_code}  200
+        ${CUSERNAME8}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME8}
+
+        ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${account_id}  ${token} 
+        Log   ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
 
         ${consumerNoteTitle}=  FakerLibrary.sentence    
         ${preInfoTitle}=  FakerLibrary.sentence   

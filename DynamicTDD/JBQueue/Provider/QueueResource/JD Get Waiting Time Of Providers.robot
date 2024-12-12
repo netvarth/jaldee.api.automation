@@ -29,6 +29,11 @@ JD-TC-GetWaitingTimeOfProviders-1
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME13}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+
 *** Comments ***
     get_Host_name_IP
     # clear_service   ${HLPUSERNAME13}
@@ -239,8 +244,15 @@ JD-TC-GetWaitingTimeOfProviders-1
 
 JD-TC-GetWaitingTimeOfProviders-2
     [Documentation]  Get Waiting Time Of 3 Providers with consumer Login
-    ${resp}=  ConsumerLogin  ${CUSERNAME1}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  ConsumerLogin  ${CUSERNAME1}  ${PASSWORD}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${CUSERNAME1}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME1}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME1}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
     ${id1}=  get_acc_id  ${HLPUSERNAME13}
     ${id2}=  get_acc_id  ${HLPUSERNAME11}
     ${id3}=  get_acc_id  ${HLPUSERNAME12}

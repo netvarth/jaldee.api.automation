@@ -32,6 +32,11 @@ JD-TC-Get Provider By Id-1
         Set Suite Variable   ${firstname}   ${decrypted_data['firstName']}
         Set Suite Variable   ${lastname}   ${decrypted_data['lastName']}
         Set Suite Variable   ${primaryPhoneNumber}   ${decrypted_data['primaryPhoneNumber']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${account_id}  ${resp.json()['id']}
         
         ${resp}=  Get Provider By Id  ${PUSERNAME111}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -49,8 +54,13 @@ JD-TC-Get Provider By Id-UH1
 JD-TC-Get Provider By Id-UH2
 
         [Documentation]  Get Provider By Id  using consumer login
-        ${resp}=  ConsumerLogin  ${CUSERNAME8}  ${PASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
+        # ${resp}=  ConsumerLogin  ${CUSERNAME8}  ${PASSWORD}
+        # Should Be Equal As Strings  ${resp.status_code}  200
+        ${CUSERNAME8}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME8}
+
+        ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${account_id}  ${token} 
+        Log   ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
         ${resp}=  Get Provider By Id  ${PUSERNAME111}
         Should Be Equal As Strings  ${resp.status_code}  401
         Should Be Equal As Strings   ${resp.json()}    ${LOGIN_NO_ACCESS_FOR_URL}

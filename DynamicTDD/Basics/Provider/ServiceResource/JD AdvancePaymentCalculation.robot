@@ -1060,7 +1060,8 @@ JD-TC-AdvancePaymentcalculation-14
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
+    sleep  01s
+    
     ${resp}=  Get Booking Invoices  ${cwid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1254,13 +1255,24 @@ JD-TC-AdvancePaymentcalculation-15
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Bill By UUId  ${cwid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=    Get Bill By UUId  ${cwid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Create Invoice for Booking   ${invoicebooking[1]}   ${cwid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    sleep  01s
+    
+    ${resp}=  Get Booking Invoices  ${cwid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid1}   ${resp.json()[0]['invoiceUid']} 
 
     ${resp}=    Send Otp For Login    ${CUSERNAME19}    ${account_id}
     Log   ${resp.content}
@@ -1486,13 +1498,24 @@ JD-TC-AdvancePaymentcalculation-16
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Bill By UUId  ${apptid1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=    Get Bill By UUId  ${apptid1}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Create Invoice for Booking   ${invoicebooking[1]}   ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    sleep  01s
+    
+    ${resp}=  Get Booking Invoices  ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid1}   ${resp.json()[0]['invoiceUid']} 
 
     ${resp}=    Send Otp For Login    ${CUSERNAME19}    ${account_id}
     Log   ${resp.content}
@@ -1710,13 +1733,24 @@ JD-TC-AdvancePaymentcalculation-17
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Bill By UUId  ${apptid1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=    Get Bill By UUId  ${apptid1}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Create Invoice for Booking   ${invoicebooking[1]}   ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    sleep  01s
+    
+    ${resp}=  Get Booking Invoices  ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid1}   ${resp.json()[0]['invoiceUid']} 
 
     ${resp}=    Send Otp For Login    ${CUSERNAME19}    ${account_id}
     Log   ${resp.content}
@@ -1934,13 +1968,24 @@ JD-TC-AdvancePaymentcalculation-18
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Bill By UUId  ${apptid1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=    Get Bill By UUId  ${apptid1}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Create Invoice for Booking   ${invoicebooking[1]}   ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    sleep  01s
+    
+    ${resp}=  Get Booking Invoices  ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid1}   ${resp.json()[0]['invoiceUid']} 
 
     ${resp}=    Send Otp For Login    ${CUSERNAME19}    ${account_id}
     Log   ${resp.content}
@@ -2114,13 +2159,24 @@ JD-TC-AdvancePaymentcalculation-19
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Bill By UUId  ${cwid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=    Get Bill By UUId  ${cwid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Create Invoice for Booking   ${invoicebooking[1]}   ${cwid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    sleep  01s
+    
+    ${resp}=  Get Booking Invoices  ${cwid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid1}   ${resp.json()[0]['invoiceUid']} 
 
     ${resp}=    Send Otp For Login    ${CUSERNAME19}    ${account_id}
     Log   ${resp.content}
@@ -2234,19 +2290,25 @@ JD-TC-AdvancePaymentcalculation-20
         END
     END
 
-    ${ser_durtn}=   Random Int   min=2   max=10
-    ${min_pre}=   Random Int   min=40   max=50
-    ${min_pre}=  Convert To Number  ${min_pre}  0
-    ${service_amount}=   Random Int   min=100   max=500
-    ${service_amount}=  Convert To Number  ${service_amount}  0
-    ${desc}=   FakerLibrary.sentence
-
     Log  ${snames}
     ${srv_val}=    Get Variable Value    ${ser_id1}
-    
-    ${resp}=  Create Service  ${unique_snames[${i}]}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[1]}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${ser_id1}=  Set Variable  ${resp.json()}
+
+    IF  '${srv_val}'=='${None}'
+        ${snames_len}=  Get Length  ${unique_snames}
+        FOR  ${i}  IN RANGE   ${snames_len}
+
+            ${ser_durtn}=   Random Int   min=2   max=10
+            ${min_pre}=   Random Int   min=40   max=50
+            ${min_pre}=  Convert To Number  ${min_pre}  0
+            ${service_amount}=   Random Int   min=100   max=500
+            ${service_amount}=  Convert To Number  ${service_amount}  0
+            ${desc}=   FakerLibrary.sentence
+            ${resp}=  Create Service  ${unique_snames[${i}]}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[1]}
+            Should Be Equal As Strings  ${resp.status_code}  200
+            ${ser_id1}=  Set Variable  ${resp.json()}
+        END
+    END
+        
 
     Set Test Variable   ${ser_id1}
 
@@ -2378,16 +2440,7 @@ JD-TC-AdvancePaymentcalculation-20
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME19}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
-
-    ${resp}=    Verify Otp For Login   ${CUSERNAME19}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
+    ${CUSERNAME19}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME19}
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${account_id}  ${token} 
     Log   ${resp.content}
@@ -2460,9 +2513,20 @@ JD-TC-AdvancePaymentcalculation-20
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Bill By UUId  ${cwid}
+    # ${resp}=    Get Bill By UUId  ${cwid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Create Invoice for Booking   ${invoicebooking[1]}   ${cwid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    sleep  01s
+    
+    ${resp}=  Get Booking Invoices  ${cwid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid1}   ${resp.json()[0]['invoiceUid']} 
 
     # ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
     # Log  ${resp.content}
@@ -2595,18 +2659,20 @@ JD-TC-AdvancePaymentcalculation-21
     ${srv_val}=    Get Variable Value    ${ser_id1}
 
     IF  '${srv_val}'=='${None}'
+        ${snames_len}=  Get Length  ${unique_snames}
+        FOR  ${i}  IN RANGE   ${snames_len}
 
-        ${ser_durtn}=   Random Int   min=2   max=10
-        ${min_pre}=   Random Int   min=40   max=50
-        ${min_pre}=  Convert To Number  ${min_pre}  0
-        ${service_amount}=   Random Int   min=100   max=500
-        ${service_amount}=  Convert To Number  ${service_amount}  0
-        ${desc}=   FakerLibrary.sentence
-        
-        ${resp}=  Create Service  ${unique_snames[${i}]}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[0]}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${ser_id1}=  Set Variable  ${resp.json()}
-
+            ${ser_durtn}=   Random Int   min=2   max=10
+            ${min_pre}=   Random Int   min=40   max=50
+            ${min_pre}=  Convert To Number  ${min_pre}  0
+            ${service_amount}=   Random Int   min=100   max=500
+            ${service_amount}=  Convert To Number  ${service_amount}  0
+            ${desc}=   FakerLibrary.sentence
+            
+            ${resp}=  Create Service  ${unique_snames[${i}]}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[0]}
+            Should Be Equal As Strings  ${resp.status_code}  200
+            ${ser_id1}=  Set Variable  ${resp.json()}
+        END
     END
 
     Set Test Variable   ${ser_id1}
@@ -2814,9 +2880,20 @@ JD-TC-AdvancePaymentcalculation-21
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Bill By UUId  ${cwid}
+    # ${resp}=    Get Bill By UUId  ${cwid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Create Invoice for Booking   ${invoicebooking[1]}   ${cwid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    sleep  01s
+    
+    ${resp}=  Get Booking Invoices  ${cwid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid1}   ${resp.json()[0]['invoiceUid']}
 
     # ${resp}=  Consumer Login  ${CUSERNAME20}  ${PASSWORD}
     # Log  ${resp.content}
@@ -2958,19 +3035,23 @@ JD-TC-AdvancePaymentcalculation-22
         END
     END
 
-    ${ser_durtn}=   Random Int   min=2   max=10
-    ${min_pre}=   Random Int   min=40   max=50
-    ${min_pre}=  Convert To Number  ${min_pre}  0
-    ${service_amount}=   Random Int   min=100   max=500
-    ${service_amount}=  Convert To Number  ${service_amount}  0
-    ${desc}=   FakerLibrary.sentence
-
     Log  ${snames}
     ${srv_val}=    Get Variable Value    ${ser_id1}
-    
-    ${resp}=  Create Service  ${unique_snames[${i}]}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[1]}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${ser_id1}=  Set Variable  ${resp.json()}
+
+    IF  '${srv_val}'=='${None}'
+        ${snames_len}=  Get Length  ${unique_snames}
+        FOR  ${i}  IN RANGE   ${snames_len}
+            ${ser_durtn}=   Random Int   min=2   max=10
+            ${min_pre}=   Random Int   min=40   max=50
+            ${min_pre}=  Convert To Number  ${min_pre}  0
+            ${service_amount}=   Random Int   min=100   max=500
+            ${service_amount}=  Convert To Number  ${service_amount}  0
+            ${desc}=   FakerLibrary.sentence
+            ${resp}=  Create Service  ${unique_snames[${i}]}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[1]}
+            Should Be Equal As Strings  ${resp.status_code}  200
+            ${ser_id1}=  Set Variable  ${resp.json()}
+        END
+    END
 
     Set Test Variable   ${ser_id1}
 
@@ -3101,7 +3182,7 @@ JD-TC-AdvancePaymentcalculation-22
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${cid1}  ${resp.json()['providerConsumer']}
 
-    ${CUSERNAME4}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME20}
+    ${CUSERNAME4}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME4}
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME4}  ${account_id}  ${token} 
     Log   ${resp.content}
@@ -3195,9 +3276,20 @@ JD-TC-AdvancePaymentcalculation-22
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Bill By UUId  ${apptid1}
+    # ${resp}=    Get Bill By UUId  ${apptid1}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Create Invoice for Booking   ${invoicebooking[1]}   ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    sleep  01s
+    
+    ${resp}=  Get Booking Invoices  ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid1}   ${resp.json()[0]['invoiceUid']}
 
     # ${resp}=  Consumer Login  ${CUSERNAME4}  ${PASSWORD}
     # Log  ${resp.content}
@@ -3331,19 +3423,24 @@ JD-TC-AdvancePaymentcalculation-23
         END
     END
 
-    ${ser_durtn}=   Random Int   min=2   max=10
-    ${min_pre}=   Random Int   min=40   max=50
-    ${min_pre}=  Convert To Number  ${min_pre}  0
-    ${service_amount}=   Random Int   min=100   max=500
-    ${service_amount}=  Convert To Number  ${service_amount}  0
-    ${desc}=   FakerLibrary.sentence
-
     Log  ${snames}
     ${srv_val}=    Get Variable Value    ${ser_id1}
-    
-    ${resp}=  Create Service  ${unique_snames[${i}]}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[0]}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${ser_id1}=  Set Variable  ${resp.json()}
+
+    IF  '${srv_val}'=='${None}'
+        ${snames_len}=  Get Length  ${unique_snames}
+        FOR  ${i}  IN RANGE   ${snames_len}
+
+            ${ser_durtn}=   Random Int   min=2   max=10
+            ${min_pre}=   Random Int   min=40   max=50
+            ${min_pre}=  Convert To Number  ${min_pre}  0
+            ${service_amount}=   Random Int   min=100   max=500
+            ${service_amount}=  Convert To Number  ${service_amount}  0
+            ${desc}=   FakerLibrary.sentence
+            ${resp}=  Create Service  ${unique_snames[${i}]}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[0]}
+            Should Be Equal As Strings  ${resp.status_code}  200
+            ${ser_id1}=  Set Variable  ${resp.json()}
+        END
+    END
 
     Set Test Variable   ${ser_id1}
 
@@ -3490,6 +3587,12 @@ JD-TC-AdvancePaymentcalculation-23
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${cid1}    ${resp.json()['providerConsumer']}
 
+    Set Test Variable  ${consumerEmail}  ${CUSERNAME4}${C_Email}.${test_mail}
+
+    ${resp}=    Update ProviderConsumer    ${cid}    email=${consumerEmail}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${loc_id1}  ${ser_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -3580,9 +3683,20 @@ JD-TC-AdvancePaymentcalculation-23
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Bill By UUId  ${apptid1}
+    # ${resp}=    Get Bill By UUId  ${apptid1}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Create Invoice for Booking   ${invoicebooking[1]}   ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    sleep  01s
+    
+    ${resp}=  Get Booking Invoices  ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid1}   ${resp.json()[0]['invoiceUid']}
 
     # ${resp}=  Consumer Login  ${CUSERNAME4}  ${PASSWORD}
     # Log  ${resp.content}
