@@ -174,9 +174,24 @@ JD-TC-GetConsentFormById-UH4
 
     [Documentation]  Get Consent Form By Id - with consumer login
 
-    ${resp}=  Consumer Login  ${CUSERNAME1}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Login  ${CUSERNAME1}  ${PASSWORD}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME1}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME1}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME1}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    Get Provider Consent Form Settings By Id    ${cfid2} 
     Log  ${resp.content}

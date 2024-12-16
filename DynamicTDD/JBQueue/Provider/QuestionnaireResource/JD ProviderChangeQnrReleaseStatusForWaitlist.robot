@@ -1169,9 +1169,24 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${CUSERNAME18}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    # ${resp}=  Consumer Login  ${CUSERNAME18}  ${PASSWORD} 
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME18}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME18}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get consumer Waitlist By Id   ${wid}  ${account_id}   
     Log  ${resp.content}

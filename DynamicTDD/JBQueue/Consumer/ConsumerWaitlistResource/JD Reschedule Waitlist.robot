@@ -1400,25 +1400,48 @@ JD-TC-Reschedule Waitlist-8
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bill By consumer  ${wid1}  ${pid} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Get Payment Details By UUId  ${wid1}
-    Log  ${resp.json()}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Test Variable  ${cid}   ${resp.json()['providerConsumer']}
+
+    # ${resp}=  Get Bill By consumer  ${wid1}  ${pid} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${resp}=  Get Payment Details By UUId  ${wid1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${wid1}
+    # Should Be Equal As Strings  ${resp.json()[0]['status']}  ${cupnpaymentStatus[0]}  
+    # Should Be Equal As Strings  ${resp.json()[0]['acceptPaymentBy']}  ${pay_mode_selfpay}
+    # Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${min_pre}.0 
+    # Should Be Equal As Strings  ${resp.json()[0]['custId']}  ${jdconID}   
+    # Should Be Equal As Strings  ${resp.json()[0]['paymentMode']}  ${payment_modes[5]}  
+    # Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${pid}   
+    # Should Be Equal As Strings  ${resp.json()[0]['paymentGateway']}  RAZORPAY 
+
+    ${resp}=  Get Consumer Booking Invoices  ${wid1}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${wid1}
-    Should Be Equal As Strings  ${resp.json()[0]['status']}  ${cupnpaymentStatus[0]}  
-    Should Be Equal As Strings  ${resp.json()[0]['acceptPaymentBy']}  ${pay_mode_selfpay}
-    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${min_pre}.0 
-    Should Be Equal As Strings  ${resp.json()[0]['custId']}  ${jdconID}   
-    Should Be Equal As Strings  ${resp.json()[0]['paymentMode']}  ${payment_modes[5]}  
-    Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${pid}   
-    Should Be Equal As Strings  ${resp.json()[0]['paymentGateway']}  RAZORPAY 
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${pid}
+    Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[0]}
+    Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
     
     sleep   1s
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid}   
@@ -1604,26 +1627,49 @@ JD-TC-Reschedule Waitlist-9
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Test Variable  ${cid}   ${resp.json()['providerConsumer']}
 
     sleep   1s
-    ${resp}=  Get Bill By consumer  ${wid1}  ${pid} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Bill By consumer  ${wid1}  ${pid} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Payment Details By UUId  ${wid1}
-    Log  ${resp.json()}
+    # ${resp}=  Get Payment Details By UUId  ${wid1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${wid1}
+    # Should Be Equal As Strings  ${resp.json()[0]['status']}  ${cupnpaymentStatus[0]}  
+    # Should Be Equal As Strings  ${resp.json()[0]['acceptPaymentBy']}  ${pay_mode_selfpay}
+    # Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${min_pre}.0 
+    # Should Be Equal As Strings  ${resp.json()[0]['custId']}  ${jdconID}   
+    # Should Be Equal As Strings  ${resp.json()[0]['paymentMode']}  ${payment_modes[5]}  
+    # Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${pid}   
+    # Should Be Equal As Strings  ${resp.json()[0]['paymentGateway']}  RAZORPAY 
+
+    ${resp}=  Get Consumer Booking Invoices  ${wid1}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${wid1}
-    Should Be Equal As Strings  ${resp.json()[0]['status']}  ${cupnpaymentStatus[0]}  
-    Should Be Equal As Strings  ${resp.json()[0]['acceptPaymentBy']}  ${pay_mode_selfpay}
-    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${min_pre}.0 
-    Should Be Equal As Strings  ${resp.json()[0]['custId']}  ${jdconID}   
-    Should Be Equal As Strings  ${resp.json()[0]['paymentMode']}  ${payment_modes[5]}  
-    Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${pid}   
-    Should Be Equal As Strings  ${resp.json()[0]['paymentGateway']}  RAZORPAY 
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${pid}
+    Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[0]}
+    Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
 
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid}   
     Log  ${resp.json()}
@@ -1796,26 +1842,48 @@ JD-TC-Reschedule Waitlist-10
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     
     sleep  1s
-    ${resp}=  Get Bill By consumer  ${wid1}  ${pid} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Bill By consumer  ${wid1}  ${pid} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Payment Details By UUId  ${wid1}
-    Log  ${resp.json()}
+    # ${resp}=  Get Payment Details By UUId  ${wid1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${wid1}
+    # Should Be Equal As Strings  ${resp.json()[0]['status']}  ${cupnpaymentStatus[0]}  
+    # Should Be Equal As Strings  ${resp.json()[0]['acceptPaymentBy']}  ${pay_mode_selfpay}
+    # Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${servicecharge}.0 
+    # Should Be Equal As Strings  ${resp.json()[0]['custId']}  ${jdconID}   
+    # Should Be Equal As Strings  ${resp.json()[0]['paymentMode']}  ${payment_modes[5]}  
+    # Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${pid}   
+    # Should Be Equal As Strings  ${resp.json()[0]['paymentGateway']}  RAZORPAY
+
+    ${resp}=  Get Consumer Booking Invoices  ${wid1}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${wid1}
-    Should Be Equal As Strings  ${resp.json()[0]['status']}  ${cupnpaymentStatus[0]}  
-    Should Be Equal As Strings  ${resp.json()[0]['acceptPaymentBy']}  ${pay_mode_selfpay}
-    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${servicecharge}.0 
-    Should Be Equal As Strings  ${resp.json()[0]['custId']}  ${jdconID}   
-    Should Be Equal As Strings  ${resp.json()[0]['paymentMode']}  ${payment_modes[5]}  
-    Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${pid}   
-    Should Be Equal As Strings  ${resp.json()[0]['paymentGateway']}  RAZORPAY
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${pid}
+    Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[0]}
+    Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
 
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid}   
     Log  ${resp.json()}
@@ -2008,25 +2076,47 @@ JD-TC-Reschedule Waitlist-11
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bill By consumer  ${wid1}  ${pid} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Get Payment Details By UUId  ${wid1}
-    Log  ${resp.json()}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    # ${resp}=  Get Bill By consumer  ${wid1}  ${pid} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${resp}=  Get Payment Details By UUId  ${wid1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${wid1}
+    # Should Be Equal As Strings  ${resp.json()[0]['status']}  ${cupnpaymentStatus[0]}  
+    # Should Be Equal As Strings  ${resp.json()[0]['acceptPaymentBy']}  ${pay_mode_selfpay}
+    # Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${servicecharge}
+    # Should Be Equal As Strings  ${resp.json()[0]['custId']}  ${jdconID}   
+    # Should Be Equal As Strings  ${resp.json()[0]['paymentMode']}  ${payment_modes[5]}  
+    # Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${pid}   
+    # Should Be Equal As Strings  ${resp.json()[0]['paymentGateway']}  RAZORPAY 
+
+    ${resp}=  Get Consumer Booking Invoices  ${wid1}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${wid1}
-    Should Be Equal As Strings  ${resp.json()[0]['status']}  ${cupnpaymentStatus[0]}  
-    Should Be Equal As Strings  ${resp.json()[0]['acceptPaymentBy']}  ${pay_mode_selfpay}
-    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${servicecharge}
-    Should Be Equal As Strings  ${resp.json()[0]['custId']}  ${jdconID}   
-    Should Be Equal As Strings  ${resp.json()[0]['paymentMode']}  ${payment_modes[5]}  
-    Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${pid}   
-    Should Be Equal As Strings  ${resp.json()[0]['paymentGateway']}  RAZORPAY 
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${pid}
+    Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[0]}
+    Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
 
     ${resp}=  Reschedule Waitlist  ${pid}  ${wid1}  ${DAY1}  ${q_id2}
     Log   ${resp.json()}
@@ -2198,25 +2288,47 @@ JD-TC-Reschedule Waitlist-12
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bill By consumer  ${wid1}  ${pid} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Get Payment Details By UUId  ${wid1}
-    Log  ${resp.json()}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    # ${resp}=  Get Bill By consumer  ${wid1}  ${pid} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${resp}=  Get Payment Details By UUId  ${wid1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${wid1}
+    # Should Be Equal As Strings  ${resp.json()[0]['status']}  ${cupnpaymentStatus[0]}  
+    # Should Be Equal As Strings  ${resp.json()[0]['acceptPaymentBy']}  ${pay_mode_selfpay}
+    # Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${servicecharge}
+    # Should Be Equal As Strings  ${resp.json()[0]['custId']}  ${jdconID}   
+    # Should Be Equal As Strings  ${resp.json()[0]['paymentMode']}  ${payment_modes[5]}  
+    # Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${pid}   
+    # Should Be Equal As Strings  ${resp.json()[0]['paymentGateway']}  RAZORPAY 
+
+    ${resp}=  Get Consumer Booking Invoices  ${wid1}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${wid1}
-    Should Be Equal As Strings  ${resp.json()[0]['status']}  ${cupnpaymentStatus[0]}  
-    Should Be Equal As Strings  ${resp.json()[0]['acceptPaymentBy']}  ${pay_mode_selfpay}
-    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${servicecharge}
-    Should Be Equal As Strings  ${resp.json()[0]['custId']}  ${jdconID}   
-    Should Be Equal As Strings  ${resp.json()[0]['paymentMode']}  ${payment_modes[5]}  
-    Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${pid}   
-    Should Be Equal As Strings  ${resp.json()[0]['paymentGateway']}  RAZORPAY 
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${pid}
+    Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[0]}
+    Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
 
     ${resp}=  Reschedule Waitlist  ${pid}  ${wid1}  ${DAY3}  ${q_id}
     Log   ${resp.json()}
@@ -6384,10 +6496,24 @@ JD-TC-Reschedule Waitlist-UH23
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME26}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${jdconID1}   ${resp.json()['id']}
+    # ${resp}=  Consumer Login  ${CUSERNAME26}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Test Variable  ${jdconID1}   ${resp.json()['id']}
+    ${resp}=    Send Otp For Login    ${CUSERNAME26}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME26}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME26}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${fname1}   ${resp.json()['firstName']}
     Set Test Variable  ${lname1}   ${resp.json()['lastName']}
     Set Test Variable  ${uname1}   ${resp.json()['userName']}
@@ -6460,10 +6586,25 @@ JD-TC-Reschedule Waitlist-UH24
     [Documentation]  Consumer reschedules waitlist taken from provider side when walkinconsumerbecomesjdconsumer is disabled.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Consumer Login  ${CUSERNAME7}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    # ${resp}=  Consumer Login  ${CUSERNAME7}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Test Variable  ${jdconID}   ${resp.json()['id']}
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME7}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME7}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME7}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
     Set Test Variable  ${uname}   ${resp.json()['userName']}
@@ -6585,10 +6726,25 @@ JD-TC-Reschedule Waitlist-UH24
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME7}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    # ${resp}=  Consumer Login  ${CUSERNAME7}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Test Variable  ${jdconID}   ${resp.json()['id']}
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME7}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME7}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME7}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
     Set Test Variable  ${uname}   ${resp.json()['userName']}
@@ -6755,8 +6911,23 @@ JD-TC-Reschedule Waitlist-UH25
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  "${resp.json()}"    "${SESSION_EXPIRED}"
 
-    ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
-    Log   ${resp.json()}
+    # ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Consumer Communications
@@ -6800,9 +6971,24 @@ JD-TC-Reschedule Waitlist-UH27
 
     ${DAY3}=  db.add_timezone_date  ${tz}  4  
 
-    ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}  200
+    # ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}  200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Reschedule Waitlist  ${pid}  ${EMPTY}  ${DAY3}  ${q_id}
     Log   ${resp.json()}
@@ -6815,8 +7001,23 @@ JD-TC-Reschedule Waitlist-UH28
 
     ${DAY3}=  db.add_timezone_date  ${tz}  4  
 
-    ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
-    Log   ${resp.json()}
+    # ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Reschedule Waitlist  ${pid}  ${wid1}  ${DAY3}  ${EMPTY}
@@ -6828,8 +7029,23 @@ JD-TC-Reschedule Waitlist-UH28
 JD-TC-Reschedule Waitlist-UH29
     [Documentation]  Consumer reschedules without date.
 
-    ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
-    Log   ${resp.json()}
+    # ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Reschedule Waitlist  ${pid}  ${wid1}  ${EMPTY}  ${q_id}

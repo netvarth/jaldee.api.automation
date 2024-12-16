@@ -1193,9 +1193,24 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME13}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    # ${resp}=  Consumer Login  ${CUSERNAME13}  ${PASSWORD} 
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME13}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME13}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME13}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200 
     Set Suite Variable  ${fname}   ${resp.json()['firstName']}
     Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -1336,9 +1351,24 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME13}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    # ${resp}=  Consumer Login  ${CUSERNAME13}  ${PASSWORD} 
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME13}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME13}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME13}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200 
     Set Suite Variable  ${fname}   ${resp.json()['firstName']}
     Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -1461,9 +1491,24 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME13}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    # ${resp}=  Consumer Login  ${CUSERNAME13}  ${PASSWORD} 
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME13}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME13}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME13}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200 
     Set Suite Variable  ${fname}   ${resp.json()['firstName']}
     Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -1655,9 +1700,24 @@ JD-TC-SubmitQuestionnaireForWaitlist-5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME13}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    # ${resp}=  Consumer Login  ${CUSERNAME13}  ${PASSWORD} 
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME13}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME13}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME13}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200 
     Set Suite Variable  ${fname}   ${resp.json()['firstName']}
     Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 

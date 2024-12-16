@@ -565,9 +565,24 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pcons_id}  ${resp.json()[0]['id']}
 
-    ${resp}=  Consumer Login  ${CUSERNAME0}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Consumer Login  ${CUSERNAME0}  ${PASSWORD}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME0}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME0}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200 
 
     ${resp}=  Get consumer Waitlist By Id   ${wid5}  ${accId}   
     Log  ${resp.json()}

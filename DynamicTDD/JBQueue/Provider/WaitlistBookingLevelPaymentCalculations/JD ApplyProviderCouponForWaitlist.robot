@@ -1047,9 +1047,24 @@ JD-TC-ApplyProviderCouponforwaitlist-UH10
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Consumer Login  ${CUSERNAME3}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Consumer Login  ${CUSERNAME3}  ${PASSWORD}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME3}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME3}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME3}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${cid}=  get_id  ${CUSERNAME3}
 
@@ -1067,16 +1082,38 @@ JD-TC-ApplyProviderCouponforwaitlist-UH10
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${CUSERNAME3}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Consumer Login  ${CUSERNAME3}  ${PASSWORD}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
+    # ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200   
  
-    Should Be Equal As Strings  ${resp.json()['uuid']}                                  ${cwid}
-    Should Be Equal As Strings  ${resp.json()['billStatus']}                            ${billStatus[0]}  
+    # Should Be Equal As Strings  ${resp.json()['uuid']}                                  ${cwid}
+    # Should Be Equal As Strings  ${resp.json()['billStatus']}                            ${billStatus[0]}  
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME3}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME3}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME3}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get Consumer Booking Invoices  ${cwid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${account_id}
+    Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[0]}
+    Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
     Log   ${resp.json()}

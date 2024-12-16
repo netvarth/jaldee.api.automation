@@ -187,9 +187,24 @@ JD-TC-ValidateConsumerQuestionnaire-2
 
     [Documentation]  Validate service questionnaire with wrong caption.
 
-    ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    # ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME8}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200 
 
     ${resp}=  Consumer View Questionnaire  ${account_id}  ${s_id}  ${self}
     Log  ${resp.content}
@@ -231,9 +246,24 @@ JD-TC-ValidateConsumerQuestionnaire-3
 
     [Documentation]  Validate service questionnaire without caption.
 
-    ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    # ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME8}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200 
 
     ${resp}=  Consumer View Questionnaire  ${account_id}  ${s_id}  ${self}
     Log  ${resp.content}
@@ -260,9 +290,24 @@ JD-TC-ValidateConsumerQuestionnaire-3
 JD-TC-ValidateConsumerQuestionnaire-UH1
     [Documentation]  Validate service questionnaire without index.
 
-    ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    # ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME8}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200 
 
     ${resp}=  Consumer View Questionnaire  ${account_id}  ${s_id}  ${self}
     Log  ${resp.content}
@@ -287,9 +332,24 @@ JD-TC-ValidateConsumerQuestionnaire-UH1
 JD-TC-ValidateConsumerQuestionnaire-UH2
     [Documentation]  Validate service questionnaire with incorrect action.
 
-    ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    # ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME8}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200 
 
     ${resp}=  Consumer View Questionnaire  ${account_id}  ${s_id}  ${self}
     Log  ${resp.content}
@@ -367,9 +427,24 @@ JD-TC-ValidateConsumerQuestionnaire-UH2
 JD-TC-ValidateConsumerQuestionnaire-UH5
     [Documentation]  Validate service questionnaire without consumer login.
 
-    ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    # ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME8}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200 
 
     ${resp}=  Consumer View Questionnaire  ${account_id}  ${s_id}  ${self}
     Log  ${resp.content}
@@ -516,9 +591,24 @@ JD-TC-ValidateConsumerQuestionnaire-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    # ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME8}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200 
 
     ${resp}=  Consumer View Questionnaire  ${account_id}  ${s_id}  ${self}
     Log  ${resp.content}
