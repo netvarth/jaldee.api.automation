@@ -24,7 +24,7 @@ JD-TC-GetJPFinanceSettings-1
 
     [Documentation]  GetJPFinanceSettings.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME301}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -58,7 +58,7 @@ JD-TC-GetJPFinanceSettings-2
 
     [Documentation]  disable jaldee finance and GetJPFinanceSettings.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME301}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -93,7 +93,7 @@ JD-TC-GetJPFinanceSettings-3
 
     [Documentation]  enable jaldee finance  which is disabled and GetJPFinanceSettings.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME301}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -135,7 +135,7 @@ JD-TC-GetJPFinanceSettings-UH1
 
     [Documentation]  enable already enabled jaldee finance and GetJPFinanceSettings.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME301}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -179,11 +179,11 @@ JD-TC-GetJPFinanceSettings-UH3
 
     [Documentation]   GetJPFinanceSettings Using Consumer Login
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME301}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${pid}=  get_acc_id  ${PUSERNAME89}
+    ${pid}=  get_acc_id  ${PUSERNAME301}
 
     ${PH_Number}=  FakerLibrary.Numerify  %#####
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
@@ -230,7 +230,7 @@ JD-TC-GetJPFinanceSettings-UH4
 
     [Documentation]  disable jaldee finance which is already disabled and GetJPFinanceSettings.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME301}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -310,7 +310,7 @@ JD-TC-UpdateCategoryStatus-UH3
 
     [Documentation]  Update category status with the same status again(Enable).
 
-      ${resp}=  Encrypted Provider Login    ${PUSERNAME89}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login    ${PUSERNAME300}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
