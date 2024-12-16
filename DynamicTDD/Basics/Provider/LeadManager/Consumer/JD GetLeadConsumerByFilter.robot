@@ -49,7 +49,7 @@ JD-TC-Get_Lead_Consumer_By_Filter-1
     Set Suite Variable      ${firstName1}
     Set Suite variable      ${lastName1} 
 
-    ${resp}=    Create Lead Consumer  ${firstName1}  ${lastName1}
+    ${resp}=    Create Lead Consumer  ${firstName1}  ${lastName1}  phone=${CUSERNAME1}  countryCode=${countryCodes[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite variable   ${con_id1}   ${resp.json()}

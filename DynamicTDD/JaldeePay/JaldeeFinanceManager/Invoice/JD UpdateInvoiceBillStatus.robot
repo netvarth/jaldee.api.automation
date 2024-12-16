@@ -31,7 +31,7 @@ ${digits}       0123456789
 
 *** Test Cases ***
 
-JD-TC-UpdateBillStatus-1
+JD-TC-UpdateInvoiceBillStatus-1
 
 
     [Documentation]  Update bill status as settled[Consumer takes an appointment for service with prepayment, and then takes same appt again for same service]
@@ -464,7 +464,7 @@ JD-TC-UpdateBillStatus-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-UpdateBillStatus-2
+JD-TC-UpdateInvoiceBillStatus-2
 
 
     [Documentation]  Update bill status as canceled.
@@ -491,7 +491,7 @@ JD-TC-UpdateBillStatus-2
     Should Be Equal As Strings  ${resp1.status_code}  200
     Should Be Equal As Strings  ${resp1.json()['billStatus']}  ${billStatus[2]}
 
-JD-TC-UpdateBillStatus-3
+JD-TC-UpdateInvoiceBillStatus-3
 
 
     [Documentation]  Update bill status as new from draft.(From direct finance manager dashboard through ui)
@@ -633,7 +633,7 @@ JD-TC-UpdateBillStatus-3
     Should Be Equal As Strings  ${resp1.status_code}  200
     Should Be Equal As Strings  ${resp1.json()['billStatus']}  ${billStatus[0]}
 
-JD-TC-UpdateBillStatus-4
+JD-TC-UpdateInvoiceBillStatus-4
 
 
     [Documentation]  try to update bill status from new to cancel .
@@ -657,7 +657,7 @@ JD-TC-UpdateBillStatus-4
 
     
 
-JD-TC-UpdateBillStatus-UH1
+JD-TC-UpdateInvoiceBillStatus-UH1
 
 
     [Documentation]  try to update  settle invoice thats already settiled.
@@ -673,7 +673,7 @@ JD-TC-UpdateBillStatus-UH1
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${BILL_STATUS_IS_ALREADY_SETTILED}
 
-JD-TC-UpdateBillStatus-UH2
+JD-TC-UpdateInvoiceBillStatus-UH2
 
 
     [Documentation]  try to update already cancelled invoice.
@@ -689,7 +689,7 @@ JD-TC-UpdateBillStatus-UH2
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${BILL_STATUS_IS_ALREADY_CANCELLED}
 
-JD-TC-UpdateBillStatus-UH3
+JD-TC-UpdateInvoiceBillStatus-UH3
 
 
     [Documentation]  try to update bill status using another provider login.
@@ -704,7 +704,7 @@ JD-TC-UpdateBillStatus-UH3
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${CAP_JALDEE_FINANCE_DISABLED}
 
-JD-TC-UpdateBillStatus-UH4
+JD-TC-UpdateInvoiceBillStatus-UH4
 
 
     [Documentation]  try to update bill status using another provider login,where jaldee finance is enabled.

@@ -135,7 +135,7 @@ JD-TC-Get_Chart_Graph-1
     Set Suite Variable      ${firstName_n}
     Set Suite Variable      ${lastName_n}
 
-    ${resp}=    Create Lead Consumer  ${firstName_n}  ${lastName_n}
+    ${resp}=    Create Lead Consumer  ${firstName_n}  ${lastName_n}  phone=${CUSERNAME18}  countryCode=${countryCodes[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test variable   ${con_id}   ${resp.json()}
