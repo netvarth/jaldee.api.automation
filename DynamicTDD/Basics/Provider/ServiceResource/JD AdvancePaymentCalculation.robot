@@ -2247,6 +2247,20 @@ JD-TC-AdvancePaymentcalculation-20
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+    ${resp}=  Get jp finance settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
     ${resp}=   Get Tax Percentage 
     Log    ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -2606,6 +2620,20 @@ JD-TC-AdvancePaymentcalculation-21
     ${resp}=   Get Account Settings 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get jp finance settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
     ${resp}=   Get Tax Percentage 
     Log    ${resp.content}
@@ -3150,7 +3178,18 @@ JD-TC-AdvancePaymentcalculation-22
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${cid1}  ${resp.json()['providerConsumer']}
 
-    ${CUSERNAME4}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME4}
+    # ${CUSERNAME4}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME4}
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME4}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME4}  ${account_id}  ${token} 
     Log   ${resp.content}
@@ -3368,6 +3407,20 @@ JD-TC-AdvancePaymentcalculation-23
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+    ${resp}=  Get jp finance settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
     ${resp}=   Get Tax Percentage 
     Log    ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -3553,7 +3606,7 @@ JD-TC-AdvancePaymentcalculation-23
 
     Set Test Variable  ${consumerEmail}  ${CUSERNAME4}${C_Email}.${test_mail}
 
-    ${resp}=    Update ProviderConsumer    ${cid}    email=${consumerEmail}
+    ${resp}=    Update ProviderConsumer    ${cid1}    email=${consumerEmail}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

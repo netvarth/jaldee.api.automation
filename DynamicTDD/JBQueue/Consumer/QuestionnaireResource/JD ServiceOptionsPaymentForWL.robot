@@ -509,9 +509,13 @@ JD-TC-ServiceOptionsPaymentForWaitlist-2
     Log  ${data}
     Set Suite Variable   ${data}
 
-    ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME17}   ${PASSWORD}
+    # ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME17}   ${PASSWORD}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings   ${resp.status_code}    200
+
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME17}    ${account_id2}    ${token}
     Log  ${resp.content}
-    Should Be Equal As Strings   ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${account_id2}   
     Log  ${resp.content}
@@ -753,9 +757,13 @@ JD-TC-ServiceOptionsPaymentForWaitlist-3
     Log  ${data}
     Set Suite Variable   ${data}
 
-    ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME18}   ${PASSWORD}
+    # ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME18}   ${PASSWORD}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings   ${resp.status_code}    200
+
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME18}    ${account_id}    ${token}
     Log  ${resp.content}
-    Should Be Equal As Strings   ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${account_id}   
     Log  ${resp.content}
@@ -1065,9 +1073,12 @@ JD-TC-ServiceOptionsPaymentForWaitlist-4
     Log  ${data}
     Set Suite Variable   ${data}
 
-    ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME16}   ${PASSWORD}
+    # ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME16}   ${PASSWORD}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings   ${resp.status_code}    200
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME16}    ${account_id}    ${token}
     Log  ${resp.content}
-    Should Be Equal As Strings   ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${account_id}   
     Log  ${resp.content}
@@ -1383,9 +1394,13 @@ JD-TC-ServiceOptionsPaymentForWaitlist-5
     Log  ${data}
     Set Suite Variable   ${data}
 
-    ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME13}   ${PASSWORD}
+    # ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME13}   ${PASSWORD}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings   ${resp.status_code}    200
+
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME13}    ${account_id}    ${token}
     Log  ${resp.content}
-    Should Be Equal As Strings   ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${account_id}   
     Log  ${resp.content}

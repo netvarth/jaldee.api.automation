@@ -33,6 +33,9 @@ JD-TC-Delete Service Image-1
     [Documentation]  Provider check to  Delete Service Image
     ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
     ${description}=  FakerLibrary.sentence
     ${min_pre}=   Random Int   min=10   max=50
     ${Total}=   Random Int   min=100   max=500
@@ -125,13 +128,15 @@ JD-TC-Delete Service Image-UH3
     [Documentation]  Consumer check to Delete Service Image
     # ${resp}=  Pyconsumerlogin  ${CUSERNAME4}  ${PASSWORD}
     # Should Be Equal As Strings  ${resp}  200
-    ${cookie}  ${resp}=   Imageupload.conLogin  ${CUSERNAME4}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${cookie}  ${resp}=   Imageupload.conLogin  ${CUSERNAME4}  ${PASSWORD}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     # ${resp}=  DeleteServiceImage  ${id}  ${imgName}
     # Should Be Equal As Strings  ${resp[1]}  401
     # Should Be Equal As Strings  ${resp[0]}   ${LOGIN_NO_ACCESS_FOR_URL}
-   # logged in user has no access permission to this url 
+   ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME4}    ${account_id}    ${token}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  DeleteServiceImg  ${id}  ${imgName}  ${cookie}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  401

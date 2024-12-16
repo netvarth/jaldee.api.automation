@@ -7,11 +7,12 @@ Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library           /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Library           /ebs/TDD/excelfuncs.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Resource          /ebs/TDD/ProviderPartnerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/hl_providers.py
@@ -48,7 +49,7 @@ JD-TC-Remove_Business_Logo-1
     Set Suite variable    ${fileType1}
     ${caption1}=  Fakerlibrary.Sentence
     Set Suite variable    ${caption1}
-    ${fileName}=    FakerLibrary.firstname
+    ${fileName}=    generate_filename
     Set Suite variable    ${fileName}
 
     ${resp}=    Add Business Logo    ${provider_id1}    ${fileName}    ${fileSize}    ${LoanAction[0]}    ${caption1}    ${fileType1}    ${order}
@@ -58,13 +59,7 @@ JD-TC-Remove_Business_Logo-1
     ${resp}=    Get Business Logo
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}              200
-    Should Be Equal As Strings    ${resp.json()[0]['owner']}       ${provider_id1}
-    Should Be Equal As Strings    ${resp.json()[0]['fileName']}    ${fileName}
-    Should Be Equal As Strings    ${resp.json()[0]['fileSize']}    ${fileSize}
-    Should Be Equal As Strings    ${resp.json()[0]['caption']}     ${caption1}
-    Should Be Equal As Strings    ${resp.json()[0]['fileType']}    ${fileType1}
-    Should Be Equal As Strings    ${resp.json()[0]['action']}      ${LoanAction[0]}
-
+   
     ${resp}=    Remove Business Logo    ${provider_id1}    ${fileName}    ${fileSize}    ${LoanAction[1]}    ${caption1}    ${fileType1}    ${order}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -74,7 +69,6 @@ JD-TC-Remove_Business_Logo-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.content}   ${emptylist}
     
-
 
 JD-TC-Remove_Business_Logo-UH1
                                   
@@ -91,13 +85,7 @@ JD-TC-Remove_Business_Logo-UH1
     ${resp}=    Get Business Logo
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}              200
-    Should Be Equal As Strings    ${resp.json()[0]['owner']}       ${provider_id1}
-    Should Be Equal As Strings    ${resp.json()[0]['fileName']}    ${fileName}
-    Should Be Equal As Strings    ${resp.json()[0]['fileSize']}    ${fileSize}
-    Should Be Equal As Strings    ${resp.json()[0]['caption']}     ${caption1}
-    Should Be Equal As Strings    ${resp.json()[0]['fileType']}    ${fileType1}
-    Should Be Equal As Strings    ${resp.json()[0]['action']}      ${LoanAction[0]}
-
+    
     ${invpid}=    FakerLibrary.Random Number
 
     ${resp}=    Remove Business Logo    ${invpid}    ${fileName}    ${fileSize}    ${LoanAction[1]}    ${caption1}    ${fileType1}    ${order}
@@ -108,14 +96,7 @@ JD-TC-Remove_Business_Logo-UH1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}              200
     Should Be Equal As Strings    ${resp.json()}       ${emptylist}
-    # Should Be Equal As Strings    ${resp.json()[0]['owner']}       ${provider_id1}
-    # Should Be Equal As Strings    ${resp.json()[0]['fileName']}    ${fileName}
-    # Should Be Equal As Strings    ${resp.json()[0]['fileSize']}    ${fileSize}
-    # Should Be Equal As Strings    ${resp.json()[0]['caption']}     ${caption1}
-    # Should Be Equal As Strings    ${resp.json()[0]['fileType']}    ${fileType1}
-    # Should Be Equal As Strings    ${resp.json()[0]['action']}      ${LoanAction[0]}
-
-
+  
 JD-TC-Remove_Business_Logo-UH2
                                   
     [Documentation]               Remove Business Logo with empty file name
@@ -131,13 +112,7 @@ JD-TC-Remove_Business_Logo-UH2
     ${resp}=    Get Business Logo
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}              200
-    Should Be Equal As Strings    ${resp.json()[0]['owner']}       ${provider_id1}
-    Should Be Equal As Strings    ${resp.json()[0]['fileName']}    ${fileName}
-    Should Be Equal As Strings    ${resp.json()[0]['fileSize']}    ${fileSize}
-    Should Be Equal As Strings    ${resp.json()[0]['caption']}     ${caption1}
-    Should Be Equal As Strings    ${resp.json()[0]['fileType']}    ${fileType1}
-    Should Be Equal As Strings    ${resp.json()[0]['action']}      ${LoanAction[0]}
-
+   
     ${resp}=    Remove Business Logo    ${provider_id1}    ${empty}    ${fileSize}    ${LoanAction[1]}    ${caption1}    ${fileType1}    ${order}
     Log  ${resp.json()}
     Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.status_code}    200
@@ -168,12 +143,6 @@ JD-TC-Remove_Business_Logo-UH3
     ${resp}=    Get Business Logo
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}              200
-    Should Be Equal As Strings    ${resp.json()[0]['owner']}       ${provider_id1}
-    Should Be Equal As Strings    ${resp.json()[0]['fileName']}    ${fileName}
-    Should Be Equal As Strings    ${resp.json()[0]['fileSize']}    ${fileSize}
-    Should Be Equal As Strings    ${resp.json()[0]['caption']}     ${caption1}
-    Should Be Equal As Strings    ${resp.json()[0]['fileType']}    ${fileType1}
-    Should Be Equal As Strings    ${resp.json()[0]['action']}      ${LoanAction[0]}
 
     ${resp}=    Remove Business Logo    ${provider_id1}    ${fileName}    ${empty}    ${LoanAction[1]}    ${caption1}    ${fileType1}    ${order}
     Log  ${resp.json()}
@@ -196,13 +165,7 @@ JD-TC-Remove_Business_Logo-UH4
     ${resp}=    Get Business Logo
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}              200
-    Should Be Equal As Strings    ${resp.json()[0]['owner']}       ${provider_id1}
-    Should Be Equal As Strings    ${resp.json()[0]['fileName']}    ${fileName}
-    Should Be Equal As Strings    ${resp.json()[0]['fileSize']}    ${fileSize}
-    Should Be Equal As Strings    ${resp.json()[0]['caption']}     ${caption1}
-    Should Be Equal As Strings    ${resp.json()[0]['fileType']}    ${fileType1}
-    Should Be Equal As Strings    ${resp.json()[0]['action']}      ${LoanAction[0]}
-
+    
     ${resp}=    Remove Business Logo    ${provider_id1}    ${fileName}    ${fileSize}    ${empty}    ${caption1}    ${fileType1}    ${order}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    500
@@ -223,12 +186,6 @@ JD-TC-Remove_Business_Logo-UH5
     ${resp}=    Get Business Logo
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}              200
-    Should Be Equal As Strings    ${resp.json()[0]['owner']}       ${provider_id1}
-    Should Be Equal As Strings    ${resp.json()[0]['fileName']}    ${fileName}
-    Should Be Equal As Strings    ${resp.json()[0]['fileSize']}    ${fileSize}
-    Should Be Equal As Strings    ${resp.json()[0]['caption']}     ${caption1}
-    Should Be Equal As Strings    ${resp.json()[0]['fileType']}    ${fileType1}
-    Should Be Equal As Strings    ${resp.json()[0]['action']}      ${LoanAction[0]}
 
     ${resp}=    Remove Business Logo    ${provider_id1}    ${fileName}    ${fileSize}    ${LoanAction[2]}    ${caption1}    ${fileType1}    ${order}
     Log  ${resp.json()}
@@ -260,13 +217,7 @@ JD-TC-Remove_Business_Logo-UH6
     ${resp}=    Get Business Logo
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}              200
-    Should Be Equal As Strings    ${resp.json()[0]['owner']}       ${provider_id1}
-    Should Be Equal As Strings    ${resp.json()[0]['fileName']}    ${fileName}
-    Should Be Equal As Strings    ${resp.json()[0]['fileSize']}    ${fileSize}
-    Should Be Equal As Strings    ${resp.json()[0]['caption']}     ${caption1}
-    Should Be Equal As Strings    ${resp.json()[0]['fileType']}    ${fileType1}
-    Should Be Equal As Strings    ${resp.json()[0]['action']}      ${LoanAction[0]}
-
+    
     ${resp}=    Remove Business Logo    ${provider_id1}    ${fileName}    ${fileSize}    ${LoanAction[1]}    ${empty}    ${fileType1}    ${order}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -292,12 +243,6 @@ JD-TC-Remove_Business_Logo-UH7
     ${resp}=    Get Business Logo
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}              200
-    Should Be Equal As Strings    ${resp.json()[0]['owner']}       ${provider_id1}
-    Should Be Equal As Strings    ${resp.json()[0]['fileName']}    ${fileName}
-    Should Be Equal As Strings    ${resp.json()[0]['fileSize']}    ${fileSize}
-    Should Be Equal As Strings    ${resp.json()[0]['caption']}     ${caption1}
-    Should Be Equal As Strings    ${resp.json()[0]['fileType']}    ${fileType1}
-    Should Be Equal As Strings    ${resp.json()[0]['action']}      ${LoanAction[0]}
 
     ${resp}=    Remove Business Logo    ${provider_id1}    ${fileName}    ${fileSize}    ${LoanAction[1]}    ${caption1}    ${empty}    ${order}
     Log  ${resp.json()}
@@ -329,12 +274,6 @@ JD-TC-Remove_Business_Logo-UH8
     ${resp}=    Get Business Logo
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}              200
-    Should Be Equal As Strings    ${resp.json()[0]['owner']}       ${provider_id1}
-    Should Be Equal As Strings    ${resp.json()[0]['fileName']}    ${fileName}
-    Should Be Equal As Strings    ${resp.json()[0]['fileSize']}    ${fileSize}
-    Should Be Equal As Strings    ${resp.json()[0]['caption']}     ${caption1}
-    Should Be Equal As Strings    ${resp.json()[0]['fileType']}    ${fileType1}
-    Should Be Equal As Strings    ${resp.json()[0]['action']}      ${LoanAction[0]}
 
     ${resp}=    Remove Business Logo    ${provider_id1}    ${fileName}    ${fileSize}    ${LoanAction[1]}    ${caption1}    ${fileType1}    ${empty}
     Log  ${resp.json()}

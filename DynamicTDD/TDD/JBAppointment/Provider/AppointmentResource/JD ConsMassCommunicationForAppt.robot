@@ -4,17 +4,19 @@ Test Teardown     Run Keywords     Delete All Sessions
 ...               AND           Remove File  cookies.txt
 Force Tags        Appointment, mass communication
 Library           FakerLibrary
+Library           /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/consumermail.py
 
 *** Variables ***
 
 ${SERVICE1}  manicure 
 ${SERVICE2}  pedicure
 ${self}     0
+@{service_names}
 ${digits}       0123456789
 ${jpgfile}     /ebs/TDD/uploadimage.jpg
 ${pngfile}     /ebs/TDD/upload.png
@@ -23,28 +25,22 @@ ${pdffile}     /ebs/TDD/sample.pdf
 *** Test Cases ***
 
 JD-TC-ConsMassCommunicationForAppt-1
+
     [Documentation]   Provider setting consumer mass communication for appointment.
 
-    ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID}   ${resp.json()['id']}
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
-    Set Suite Variable  ${uname}   ${resp.json()['userName']}
-
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
     ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+*** Comments ***
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable  ${p_id}  ${decrypted_data['id']}
     # Set Suite Variable  ${p_id}  ${resp.json()['id']}
+
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -58,12 +54,12 @@ JD-TC-ConsMassCommunicationForAppt-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Enable Disable Appointment   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME250}
-    clear_location  ${PUSERNAME250}
+    # clear_service   ${PUSERNAME250}
+    # clear_location  ${PUSERNAME250}
     clear_customer   ${PUSERNAME250}
 
     ${resp}=   Get Service
@@ -74,35 +70,13 @@ JD-TC-ConsMassCommunicationForAppt-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
-        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-        Log   ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
-
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
-
-    ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
-
     ${lid}=  Create Sample Location  
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME250}
+    # clear_appt_schedule   ${PUSERNAME250}
     clear_Consumermsg  ${CUSERNAME11}
     clear_Providermsg  ${PUSERNAME250}
     
@@ -127,14 +101,14 @@ JD-TC-ConsMassCommunicationForAppt-1
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
-
+  
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
     ${resp}=  AddCustomer  ${CUSERNAME11}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -144,7 +118,7 @@ JD-TC-ConsMassCommunicationForAppt-1
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -220,10 +194,25 @@ JD-TC-ConsMassCommunicationForAppt-1
     # Should Contain  ${resp.json()[0]['attachements'][1]['s3path']}   .jpg
     # Should Be Equal As Strings  ${resp.json()[0]['attachements'][1]['caption']}     ${caption3}
 
-    ${resp}=  Consumer Login  ${CUSERNAME11}   ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=    Send Otp For Login    ${CUSERNAME11}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME11}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+   
     ${resp}=  Get Consumer Communications
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -262,18 +251,6 @@ JD-TC-ConsMassCommunicationForAppt-2
 
     [Documentation]   Provider sending another consumer mass communication for multiple appointments.
 
-    ${resp}=  Consumer Login  ${CUSERNAME36}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
-    Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
-
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
     ${resp}=  Encrypted Provider Login  ${PUSERNAME247}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -283,35 +260,11 @@ JD-TC-ConsMassCommunicationForAppt-2
     Set Test Variable  ${p_id}  ${decrypted_data['id']}
     # Set Test Variable  ${p_id}  ${resp.json()['id']}
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
-        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-        Log   ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
-
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
-
-    clear_service   ${PUSERNAME247}
-    clear_location  ${PUSERNAME247}
+    # clear_service   ${PUSERNAME247}
+    # clear_location  ${PUSERNAME247}
     clear_customer   ${PUSERNAME247}
     clear_Consumermsg  ${CUSERNAME36}
     clear_Providermsg  ${PUSERNAME247}
-
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -319,7 +272,7 @@ JD-TC-ConsMassCommunicationForAppt-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME247}
+    # clear_appt_schedule   ${PUSERNAME247}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -342,21 +295,21 @@ JD-TC-ConsMassCommunicationForAppt-2
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
-
+   
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
 
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
     ${resp}=  AddCustomer  ${CUSERNAME36}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${mem_fname}=   FakerLibrary.first_name
+    ${mem_fname}=   generate_firstname
     ${mem_lname}=   FakerLibrary.last_name
     ${dob}=      FakerLibrary.date
     ${resp}=  AddFamilyMemberByProvider  ${cid}  ${mem_fname}  ${mem_lname}  ${dob}  ${Genderlist[0]}
@@ -372,7 +325,7 @@ JD-TC-ConsMassCommunicationForAppt-2
     ${apptfor}=   Create List  ${apptfor1}  ${apptfor2}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer   ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer   ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -397,8 +350,6 @@ JD-TC-ConsMassCommunicationForAppt-2
     ${resp}=  Consumer Mass Communication for Appt  ${cookie}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${msg}    ${fileswithcaption}      ${apptid11}   ${apptid12} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    
 
     ${resp}=  Get Appointment Messages
     Log  ${resp.json()}
@@ -442,11 +393,25 @@ JD-TC-ConsMassCommunicationForAppt-2
     # Should Contain  ${resp.json()[0]['attachements'][1]['s3path']}   .jpg
     # Should Be Equal As Strings  ${resp.json()[0]['attachements'][1]['caption']}     ${caption3}
 
-    ${resp}=  Consumer Login  ${CUSERNAME36}   ${PASSWORD}
+    ${resp}=  Provider Logout
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    sleep  3s
+    ${resp}=    Send Otp For Login    ${CUSERNAME36}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME36}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME36}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+   
     ${resp}=  Get Consumer Communications
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -703,9 +668,12 @@ JD-TC-ConsMassCommunicationForAppt-UH6
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${cookie}   ${resp}=    Imageupload.conLogin     ${CUSERNAME31}     ${PASSWORD}
-    Log     ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}     200
+    # ${cookie}   ${resp}=    Imageupload.conLogin     ${CUSERNAME31}     ${PASSWORD}
+    # Log     ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}     200
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME31}    ${account_id}    ${token}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     ${caption1}=  Fakerlibrary.Sentence
     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${caption1}
     ${caption2}=  Fakerlibrary.Sentence

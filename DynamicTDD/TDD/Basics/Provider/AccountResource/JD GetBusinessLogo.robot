@@ -7,11 +7,12 @@ Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library           /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Library           /ebs/TDD/excelfuncs.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Resource          /ebs/TDD/ProviderPartnerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/hl_providers.py
@@ -49,7 +50,7 @@ JD-TC-Get_Business_Logo-1
     Set Suite variable    ${fileType1}
     ${caption1}=  Fakerlibrary.Sentence
     Set Suite variable    ${caption1}
-    ${fileName}=    FakerLibrary.firstname
+    ${fileName}=    generate_filename
     Set Suite variable    ${fileName}
 
     ${resp}=    Add Business Logo    ${provider_id1}    ${fileName}    ${fileSize}    ${LoanAction[0]}    ${caption1}    ${fileType1}    ${order}

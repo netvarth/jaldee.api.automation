@@ -23,42 +23,45 @@ Variables         /ebs/TDD/varfiles/consumermail.py
 JD-TC-Upload Logo Image of USER-1
     [Documentation]   User upload logo image
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
-     Log  ${iscorp_subdomains}
-     Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
-     Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
-     Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
-     ${firstname_A}=  FakerLibrary.first_name
-     Set Suite Variable  ${firstname_A}
-     ${lastname_A}=  FakerLibrary.last_name
-     Set Suite Variable  ${lastname_A}
-     ${PUSERNAME_E1}=  Evaluate  ${PUSERNAME}+267906702
-     ${highest_package}=  get_highest_license_pkg
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E1}    ${highest_package[0]}
-     Log  ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Activation  ${PUSERNAME_E1}  0
-     Log   ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${PUSERNAME_E1}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E1}
-     Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
-     Log  ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E1}${\n}
-     Set Suite Variable  ${PUSERNAME_E1}
-     ${id}=  get_id  ${PUSERNAME_E1}
-     Set Suite Variable  ${id}
-     ${bs}=  FakerLibrary.bs
-     Set Suite Variable  ${bs}
-     ${resp}=  Toggle Department Enable
-     Log   ${resp.json()}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     sleep  2s
-     ${resp}=  Get Departments
-     Log   ${resp.json()}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    Log  ${iscorp_subdomains}
+    Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
+    Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
+    Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
+    ${firstname_A}=  FakerLibrary.first_name
+    Set Suite Variable  ${firstname_A}
+    ${lastname_A}=  FakerLibrary.last_name
+    Set Suite Variable  ${lastname_A}
+    ${PUSERNAME_E1}=  Evaluate  ${PUSERNAME}+267906702
+    ${highest_package}=  get_highest_license_pkg
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E1}    ${highest_package[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Account Activation  ${PUSERNAME_E1}  0
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Account Set Credential  ${PUSERNAME_E1}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E1}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E1}${\n}
+    Set Suite Variable  ${PUSERNAME_E1}
+    ${id}=  get_id  ${PUSERNAME_E1}
+    Set Suite Variable  ${id}
+    ${bs}=  FakerLibrary.bs
+    Set Suite Variable  ${bs}
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
+    ${resp}=  Toggle Department Enable
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    sleep  2s
+    ${resp}=  Get Departments
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
     # ${number1}=  Random Int  min=1000  max=2000
     ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+872089
@@ -91,8 +94,8 @@ JD-TC-Upload Logo Image of USER-1
      Set Suite Variable  ${employee_id}
     
     ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${countryCodes[0]}  ${PUSERNAME_U1}  bProfilePermitted  ${boolean[1]}  displayOrder  1  userDisplayName  ${user_dis_name}  employeeId  ${employee_id}
-     Log   ${resp.json()}
-     Should Be Equal As Strings  ${resp.status_code}  200
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id1}  ${resp.json()}
 
     ${resp}=  Get specializations Sub Domain  ${domains}  ${sub_domains}
@@ -211,13 +214,16 @@ JD-TC-Upload Logo Image of USER-UH3
     [Documentation]   Consumer check to Upload Logo image of USER
     # ${resp}=  Pyconsumerlogin  ${CUSERNAME1}  ${PASSWORD}
     # Should Be Equal As Strings  ${resp}  200
-    ${cookie}  ${resp}=   Imageupload.conLogin  ${CUSERNAME1}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${cookie}  ${resp}=   Imageupload.conLogin  ${CUSERNAME1}  ${PASSWORD}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     # @{resp}=  uploadLogoImagesofUSER   ${u_id1}
     # Should Be Equal As Strings  ${resp[1]}  401
     # Should Be Equal As Strings  ${resp[0]}   ${LOGIN_NO_ACCESS_FOR_URL} 
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME1}    ${account_id}    ${token}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  uploadLogoImagesofUSER   ${u_id1}   ${cookie}
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_NO_ACCESS_FOR_URL}"

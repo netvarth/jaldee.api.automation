@@ -22,33 +22,37 @@ JD-TC-Delete Logo Image of USER-1
     [Documentation]   User Delete logo image
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
-     Log  ${iscorp_subdomains}
-     Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
-     Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
-     Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
-     ${firstname_A}=  FakerLibrary.first_name
-     ${lastname_A}=  FakerLibrary.last_name
-     ${PUSERNAME_E1}=  Evaluate  ${PUSERNAME}+18908901
-     ${highest_package}=  get_highest_license_pkg
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E1}    ${highest_package[0]}
-     Log  ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Activation  ${PUSERNAME_E1}  0
-     Log   ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${PUSERNAME_E1}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E1}
-     Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
-     Log  ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E1}${\n}
-     Set Suite Variable  ${PUSERNAME_E1}
-     ${id}=  get_id  ${PUSERNAME_E1}
-     Set Suite Variable  ${id}
-     ${bs}=  FakerLibrary.bs
-     Set Suite Variable  ${bs}
+    Log  ${iscorp_subdomains}
+    Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
+    Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
+    Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
+    ${firstname_A}=  FakerLibrary.first_name
+    ${lastname_A}=  FakerLibrary.last_name
+    ${PUSERNAME_E1}=  Evaluate  ${PUSERNAME}+18908901
+    ${highest_package}=  get_highest_license_pkg
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E1}    ${highest_package[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Account Activation  ${PUSERNAME_E1}  0
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Account Set Credential  ${PUSERNAME_E1}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E1}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E1}${\n}
+    Set Suite Variable  ${PUSERNAME_E1}
+    ${id}=  get_id  ${PUSERNAME_E1}
+    Set Suite Variable  ${id}
+    ${bs}=  FakerLibrary.bs
+    Set Suite Variable  ${bs}
 
-     ${resp}=  View Waitlist Settings
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+
+    ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
@@ -200,9 +204,13 @@ JD-TC-Delete Logo Image of USER-UH2
 JD-TC-Delete Logo Image of USER-UH3
     [Documentation]   Consumer check to Delete Logo image of USER
     
-    ${cookie}  ${resp}=   Imageupload.conLogin  ${CUSERNAME1}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${cookie}  ${resp}=   Imageupload.conLogin  ${CUSERNAME1}  ${PASSWORD}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME1}    ${account_id}    ${token}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  deleteUserLogo  ${u_id1}  ${name}  ${cookie}
     Log  ${resp.content}
