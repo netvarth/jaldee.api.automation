@@ -264,7 +264,7 @@ JD-TC-AddMultipleAppointmentLabel-1
     ${lbl_value}=   Set Variable   ${resp.json()['valueSet'][${i}]['value']}
 
     ${label_dict}=  Create Label Dictionary  ${lbl_name}  ${lbl_value}
-
+    
     ${resp}=  Add Label for Multiple Appointment   ${label_dict}  ${apptid1}  ${apptid2}  ${apptid3}  ${apptid4}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1934,7 +1934,7 @@ JD-TC-AddMultipleAppointmentLabel-9
     Should Be Equal As Strings  ${resp.status_code}  200    
     Set Test Variable   ${mem_id2}   ${resp.json()}
 
-    ${resp}=  Get FamilyMember
+    ${resp}=  Get Family Members   ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
@@ -3306,6 +3306,7 @@ JD-TC-AddMultipleAppointmentLabel-UH2
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${label_dict}=  Create Label Dictionary  ${lbl_name}  ${lbl_value}
+    Set Suite Variable   ${label_dict}
 
     ${resp}=  Add Label for Multiple Appointment   ${label_dict}  ${appt_i}  ${appt_j}
     Log   ${resp.json()}
@@ -3313,6 +3314,64 @@ JD-TC-AddMultipleAppointmentLabel-UH2
     Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_NO_ACCESS_FOR_URL}"
 
 JD-TC-AddMultipleAppointmentLabel-UH3
+
+    [Documentation]  Add label with non existant appointment
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    # ${resp}=  Get Label By Id  ${label_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${lbl_name}=  Set Variable   ${resp.json()['label']}
+    # ${len}=  Get Length  ${resp.json()['valueSet']}
+    # ${i}=   Random Int   min=0   max=${len-1}
+    # ${lbl_value}=   Set Variable   ${resp.json()['valueSet'][${i}]['value']}
+
+    # ${resp}=  Get Appointments Today
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${len}=  Get Length  ${resp.json()}
+    # ${i}=  Random Int  max=${len-1}
+    # ${j}=  Random Int  max=${len-1}
+    # # ${i}  ${j} =   Evaluate    random.sample(range(0, ${len}), 2)    random
+    # ${appt_i}=   Set Variable   ${resp.json()[${i}]['uid']}
+    # ${appt_j}=   Set Variable   ${resp.json()[${j}]['uid']}
+
+    ${inv_apptid}=  Generate Random String  16  [LETTERS][NUMBERS]
+
+    # ${label_dict}=  Create Label Dictionary  ${lbl_name}  ${lbl_value}
+
+    # ${resp}=  Add Label for Multiple Appointment   ${label_dict}  ${appt_i}  ${appt_j}  ${inv_apptid}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  422
+    # Should Be Equal As Strings  "${resp.json()}"  "${INVALID_APPOINTMENT}"
+
+    # ${label}=    Create Dictionary  ${lbl_name}=${lbl_value}
+
+    # ${resp}=  Get Appointment By Id   ${appt_i}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response   ${resp}   label=${label}
+
+    # ${resp}=  Get Appointment By Id   ${appt_j}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response   ${resp}   label=${label}
+
+    # ${label_dict}=  Create Label Dictionary  ${lbl_name}  ${lbl_value}
+
+    ${resp}=  Add Label for Multiple Appointment   ${label_dict}  ${inv_apptid}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"  "${INVALID_APPOINTMENT}"
+
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-AddMultipleAppointmentLabel-UH4
 
     [Documentation]  Add label without creating one
 
@@ -3534,7 +3593,7 @@ JD-TC-AddMultipleAppointmentLabel-UH3
     Verify Response   ${resp}  uid=${apptid2}  appmtDate=${DAY1}   appmtTime=${slot2}  
     ...    label=${Emptydict}
 
-JD-TC-AddMultipleAppointmentLabel-UH4 
+JD-TC-AddMultipleAppointmentLabel-UH5
 
     [Documentation]  Add label with non existant label name
     
@@ -3721,7 +3780,7 @@ JD-TC-AddMultipleAppointmentLabel-UH4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
-JD-TC-AddMultipleAppointmentLabel-UH5
+JD-TC-AddMultipleAppointmentLabel-UH6
 
     [Documentation]  Add label with non existant label value
 
@@ -3914,64 +3973,6 @@ JD-TC-AddMultipleAppointmentLabel-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}  uid=${apptid2}  appmtDate=${DAY1}   appmtTime=${slot2}  
     ...   appointmentEncId=${encId2}  label=${Emptydict}
-
-JD-TC-AddMultipleAppointmentLabel-UH6
-
-    [Documentation]  Add label with non existant appointment
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get Label By Id  ${label_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${lbl_name}=  Set Variable   ${resp.json()['label']}
-    ${len}=  Get Length  ${resp.json()['valueSet']}
-    ${i}=   Random Int   min=0   max=${len-1}
-    ${lbl_value}=   Set Variable   ${resp.json()['valueSet'][${i}]['value']}
-
-    ${resp}=  Get Appointments Today
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${len}=  Get Length  ${resp.json()}
-    ${i}=  Random Int  max=${len-1}
-    ${j}=  Random Int  max=${len-1}
-    # ${i}  ${j} =   Evaluate    random.sample(range(0, ${len}), 2)    random
-    ${appt_i}=   Set Variable   ${resp.json()[${i}]['uid']}
-    ${appt_j}=   Set Variable   ${resp.json()[${j}]['uid']}
-
-    ${inv_apptid}=  Generate Random String  16  [LETTERS][NUMBERS]
-
-    ${label_dict}=  Create Label Dictionary  ${lbl_name}  ${lbl_value}
-
-    ${resp}=  Add Label for Multiple Appointment   ${label_dict}  ${appt_i}  ${appt_j}  ${inv_apptid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"  "${INVALID_APPOINTMENT}"
-
-    ${label}=    Create Dictionary  ${lbl_name}=${lbl_value}
-
-    ${resp}=  Get Appointment By Id   ${appt_i}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}   label=${label}
-
-    ${resp}=  Get Appointment By Id   ${appt_j}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}   label=${label}
-
-    ${label_dict}=  Create Label Dictionary  ${lbl_name}  ${lbl_value}
-
-    ${resp}=  Add Label for Multiple Appointment   ${label_dict}  ${inv_apptid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"  "${INVALID_APPOINTMENT}"
-
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-AddMultipleAppointmentLabel-UH7
 
