@@ -1553,7 +1553,7 @@ Get Questionnaire By Id
 Get Questionnaire List
     [Arguments]   ${accountid}
     Check And Create YNW SuperAdmin Session
-    ${resp}=    GET On Session   synw   /b2b/${accountid}/questionnaire/  expected_status=any 
+    ${resp}=    GET On Session   synw   /b2b/${accountid}/questionnaire   expected_status=any 
     Check Deprication  ${resp}  Get Questionnaire List
     RETURN  ${resp}
 
