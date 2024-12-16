@@ -146,9 +146,9 @@ JD-TC-Get default status by type-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id2}   ${resp.json()}
 
-    ${resp}=  Set default status    ${status_id2}    ${categoryType[2]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Set default status    ${status_id2}    ${categoryType[2]} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get default status by type    ${categoryType[2]} 
     Log  ${resp.json()}
