@@ -163,14 +163,17 @@ JD-TC-Update cash payment- booking level-1
     Set Suite Variable   ${parallel}
     ${capacity}=  Random Int   min=10   max=20
     Set Suite Variable   ${capacity}
-    ${resp}=   Get Service By Id  ${ser_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${servicetotalAmount}  ${resp.json()['totalAmount']}    
+
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  ${ser_id2}  ${ser_id3}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${que_id1}   ${resp.json()}
+
+    ${resp}=   Get Service By Id  ${ser_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${servicetotalAmount}  ${resp.json()['totalAmount']}    
+    
     ${desc}=   FakerLibrary.word
     Set Suite Variable  ${desc}
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 

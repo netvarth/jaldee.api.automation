@@ -211,13 +211,6 @@ JD-TC-Apply Item Level Discount-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid1}  ${resp.json()} 
 
-    ${quantity}=   Random Int  min=5  max=10
-    ${quantity}=  Convert To Number  ${quantity}  1
-        ${serviceprice}=   Random Int  min=10  max=15
-    ${serviceprice}=  Convert To Number  ${serviceprice}  1
-
-    ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}  price=${serviceprice}
-    ${serviceList}=    Create List    ${serviceList}
 
      ${item1}=     FakerLibrary.word
     ${itemCode1}=     FakerLibrary.word
@@ -228,6 +221,15 @@ JD-TC-Apply Item Level Discount-1
     Log  ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${itemId}  ${resp.json()}
+
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+        ${serviceprice}=   Random Int  min=10  max=15
+    ${serviceprice}=  Convert To Number  ${serviceprice}  1
+
+
+    ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}  price=${serviceprice}
+    ${serviceList}=    Create List    ${serviceList}
 
     ${resp}=   Get Item By Id  ${itemId}
     Should Be Equal As Strings  ${resp.status_code}  200
