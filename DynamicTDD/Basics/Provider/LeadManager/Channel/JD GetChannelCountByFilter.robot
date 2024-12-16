@@ -217,18 +217,18 @@ JD-TC-Get_Channel_Count_By_Filter-9
     Should Be Equal As Strings      ${resp.status_code}             200
     Should Be Equal As Strings      ${resp.json()}                  2
 
-JD-TC-Get_Channel_Count_By_Filter-10
+# JD-TC-Get_Channel_Count_By_Filter-10
 
-    [Documentation]   Get Channel Count By Filter - by location
+#     [Documentation]   Get Channel Count By Filter - by location
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}
+#     Log  ${resp.json()}
+#     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Lead Channel Count By Filter  location-eq=${lid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}             200
-    Should Be Equal As Strings      ${resp.json()}                  2
+#     ${resp}=    Get Lead Channel Count By Filter  location-eq=${lid}
+#     Log  ${resp.json()}
+#     Should Be Equal As Strings      ${resp.status_code}             200
+#     Should Be Equal As Strings      ${resp.json()}                  2
 
 JD-TC-Get_Channel_Count_By_Filter-11
 

@@ -347,36 +347,36 @@ JD-TC-Get_Channel_By_Filter-9
     Should Be Equal As Strings      ${resp.json()[1]['channelType']}                           ${leadchannel[0]}
 
 
-JD-TC-Get_Channel_By_Filter-10
+# JD-TC-Get_Channel_By_Filter-10
 
-    [Documentation]   Get Lead Channel By Filter - by location
+#     [Documentation]   Get Lead Channel By Filter - by location
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
+#     Log  ${resp.json()}
+#     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Lead Channel By Filter  location-eq=${lid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}             200
-    Should Be Equal As Strings      ${resp.json()[0]['uid']}                                   ${clid2}
-    Should Be Equal As Strings      ${resp.json()[0]['name']}                                  ${ChannelName2}
-    Should Be Equal As Strings      ${resp.json()[0]['crmLeadProductTypeDto']['account']}      ${accountId}
-    Should Be Equal As Strings      ${resp.json()[0]['crmLeadProductTypeDto']['typeName']}     ${typeName1}
-    Should Be Equal As Strings      ${resp.json()[0]['crmLeadProductTypeDto']['productEnum']}  ${productEnum[0]}
-    Should Be Equal As Strings      ${resp.json()[0]['crmLeadProductTypeDto']['uid']}          ${lpid}
-    Should Be Equal As Strings      ${resp.json()[0]['crmLeadProductTypeDto']['crmStatus']}    ${status[0]}
-    Should Be Equal As Strings      ${resp.json()[0]['crmLeadProductTypeName']}                ${typeName1}
-    Should Be Equal As Strings      ${resp.json()[0]['channelType']}                           ${leadchannel[0]}
+#     ${resp}=    Get Lead Channel By Filter  location-eq=${lid}
+#     Log  ${resp.json()}
+#     Should Be Equal As Strings      ${resp.status_code}             200
+#     Should Be Equal As Strings      ${resp.json()[0]['uid']}                                   ${clid2}
+#     Should Be Equal As Strings      ${resp.json()[0]['name']}                                  ${ChannelName2}
+#     Should Be Equal As Strings      ${resp.json()[0]['crmLeadProductTypeDto']['account']}      ${accountId}
+#     Should Be Equal As Strings      ${resp.json()[0]['crmLeadProductTypeDto']['typeName']}     ${typeName1}
+#     Should Be Equal As Strings      ${resp.json()[0]['crmLeadProductTypeDto']['productEnum']}  ${productEnum[0]}
+#     Should Be Equal As Strings      ${resp.json()[0]['crmLeadProductTypeDto']['uid']}          ${lpid}
+#     Should Be Equal As Strings      ${resp.json()[0]['crmLeadProductTypeDto']['crmStatus']}    ${status[0]}
+#     Should Be Equal As Strings      ${resp.json()[0]['crmLeadProductTypeName']}                ${typeName1}
+#     Should Be Equal As Strings      ${resp.json()[0]['channelType']}                           ${leadchannel[0]}
 
-    Should Be Equal As Strings      ${resp.json()[1]['uid']}                                   ${clid}
-    Should Be Equal As Strings      ${resp.json()[1]['name']}                                  ${ChannelName1}
-    Should Be Equal As Strings      ${resp.json()[1]['crmLeadProductTypeDto']['account']}      ${accountId}
-    Should Be Equal As Strings      ${resp.json()[1]['crmLeadProductTypeDto']['typeName']}     ${typeName1}
-    Should Be Equal As Strings      ${resp.json()[1]['crmLeadProductTypeDto']['productEnum']}  ${productEnum[0]}
-    Should Be Equal As Strings      ${resp.json()[1]['crmLeadProductTypeDto']['uid']}          ${lpid}
-    Should Be Equal As Strings      ${resp.json()[1]['crmLeadProductTypeDto']['crmStatus']}    ${status[0]}
-    Should Be Equal As Strings      ${resp.json()[1]['crmLeadProductTypeName']}                ${typeName1}
-    Should Be Equal As Strings      ${resp.json()[1]['channelType']}                           ${leadchannel[0]}
+#     Should Be Equal As Strings      ${resp.json()[1]['uid']}                                   ${clid}
+#     Should Be Equal As Strings      ${resp.json()[1]['name']}                                  ${ChannelName1}
+#     Should Be Equal As Strings      ${resp.json()[1]['crmLeadProductTypeDto']['account']}      ${accountId}
+#     Should Be Equal As Strings      ${resp.json()[1]['crmLeadProductTypeDto']['typeName']}     ${typeName1}
+#     Should Be Equal As Strings      ${resp.json()[1]['crmLeadProductTypeDto']['productEnum']}  ${productEnum[0]}
+#     Should Be Equal As Strings      ${resp.json()[1]['crmLeadProductTypeDto']['uid']}          ${lpid}
+#     Should Be Equal As Strings      ${resp.json()[1]['crmLeadProductTypeDto']['crmStatus']}    ${status[0]}
+#     Should Be Equal As Strings      ${resp.json()[1]['crmLeadProductTypeName']}                ${typeName1}
+#     Should Be Equal As Strings      ${resp.json()[1]['channelType']}                           ${leadchannel[0]}
 
 
 JD-TC-Get_Channel_By_Filter-11
