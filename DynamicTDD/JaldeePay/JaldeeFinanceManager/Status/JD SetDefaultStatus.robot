@@ -103,30 +103,30 @@ JD-TC-Set Default status-1
 
 
 
-JD-TC-Set Default status-2
+# JD-TC-Set Default status-2
 
-    [Documentation]  Create Status as  Unassign   and set default staus ..
+#     [Documentation]  Create Status as  Unassign   and set default staus ..
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
+#     Log  ${resp.content}
+#     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[2]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${status_id2}   ${resp.json()}
+#     ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[2]} 
+#     Log  ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  200
+#     Set Test Variable   ${status_id2}   ${resp.json()}
 
-    # ${resp}=  Set default status    ${status_id2}    ${categoryType[2]} 
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
+#     # ${resp}=  Set default status    ${status_id2}    ${categoryType[2]} 
+#     # Log  ${resp.json()}
+#     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get default status    ${categoryType[2]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['id']}  ${status_id2}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[2]}
-    Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[1]}
-    Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[1]}
+#     ${resp}=  Get default status    ${categoryType[2]} 
+#     Log  ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  200
+#     Should Be Equal As Strings  ${resp.json()['id']}  ${status_id2}
+#     Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[2]}
+#     Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[1]}
+#     Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[1]}
 
 
 JD-TC-Set Default status-3

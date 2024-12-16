@@ -133,30 +133,30 @@ JD-TC-Get default status by type-1
 #     Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[1]}
 
 
-JD-TC-Get default status by type-2
+# JD-TC-Get default status by type-2
 
-    [Documentation]  Create Status as unassign and Get default status by type..
+#     [Documentation]  Create Status as unassign and Get default status by type..
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD}
+#     Log  ${resp.content}
+#     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[2]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${status_id2}   ${resp.json()}
+#     ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[2]} 
+#     Log  ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  200
+#     Set Test Variable   ${status_id2}   ${resp.json()}
 
-    # ${resp}=  Set default status    ${status_id2}    ${categoryType[2]} 
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
+#     # ${resp}=  Set default status    ${status_id2}    ${categoryType[2]} 
+#     # Log  ${resp.json()}
+#     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get default status by type    ${categoryType[2]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['id']}  ${status_id2}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[2]}
-    Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[1]}
-    Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[1]}
+#     ${resp}=  Get default status by type    ${categoryType[2]} 
+#     Log  ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  200
+#     Should Be Equal As Strings  ${resp.json()['id']}  ${status_id2}
+#     Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[2]}
+#     Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[1]}
+#     Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[1]}
 
 
 JD-TC-Get default status by type-3

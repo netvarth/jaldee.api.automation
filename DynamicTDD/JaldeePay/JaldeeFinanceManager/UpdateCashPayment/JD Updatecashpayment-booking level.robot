@@ -264,7 +264,7 @@ JD-TC-Update cash payment- booking level-3
 
     [Documentation]  Provider take one walkin Appointment and update cash payment .
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -391,7 +391,7 @@ JD-TC-Update cash payment- booking level-4
 
     [Documentation]  update cash payment of appointment,where payment mode is other.
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
