@@ -146,10 +146,7 @@ JD-TC-Update cash payment- booking level-1
 
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Suite Variable    ${ser_id1}    ${resp}  
-    ${resp}=   Get Service By Id  ${ser_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${servicetotalAmount}  ${resp.json()['totalAmount']}       
+   
     ${resp}=   Create Sample Service  ${SERVICE2}
     Set Suite Variable    ${ser_id2}    ${resp}  
     ${resp}=   Create Sample Service  ${SERVICE3}
@@ -166,6 +163,10 @@ JD-TC-Update cash payment- booking level-1
     Set Suite Variable   ${parallel}
     ${capacity}=  Random Int   min=10   max=20
     Set Suite Variable   ${capacity}
+    ${resp}=   Get Service By Id  ${ser_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${servicetotalAmount}  ${resp.json()['totalAmount']}    
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  ${ser_id2}  ${ser_id3}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -399,7 +400,7 @@ JD-TC-Update cash payment- booking level-4
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${amountdue}=  Evaluate  ${servicetotalAmount1}-50
-    ${amountdue}=  roundoff  ${amountdue}  
+    # ${amountdue}=  roundoff  ${amountdue}  
     ${resp}=   Get Appointment level Bill Details      ${apptid1} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

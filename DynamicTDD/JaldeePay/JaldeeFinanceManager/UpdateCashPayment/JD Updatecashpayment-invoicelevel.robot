@@ -32,7 +32,7 @@ ${service_duration}     30
 ${service_duration1}     10
 ${self}         0
 @{status1}    New     Pending    Assigned     Approved    Rejected
-@{New_status}         status1  Proceed     Unassign    Block     Delete    Remove
+@{New_status}         Updatecashstatus1  UpdatecashProceed     UpdatecashUnassign    UpdatecashBlock     UpdatecashDelete    UpdatecashRemove
 ${DisplayName1}   item1_DisplayName
 
 
@@ -691,7 +691,7 @@ JD-TC-Update cash payment- finance invoice level-3
     # Should Be Equal As Strings  ${response_netRate}  ${Tot2}
     # Should Be Equal As Strings   ${response_taxableTotal}  0
     # Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${cwid3}
-    # Set Suite Variable  ${invoice_wtlistonline_uid2}  ${resp.json()[0]['invoiceUid']}
+    Set Suite Variable  ${invoice_wtlistonline_uid2}  ${resp.json()[0]['invoiceUid']}
     # Should Be Equal As Strings  ${resp.json()[0]['billPaymentStatus']}  ${paymentStatus[1]}
     # Should Be Equal As Strings   ${response_amountTotal}  ${Tot2}
 
@@ -706,15 +706,15 @@ JD-TC-Update cash payment- finance invoice level-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${paymentRefId}  ${resp.json()[0]['paymentRefId']} 
 
-
-    ${resp}=  Update cash payment- finance invoice level   ${invoice_wtlistonline_uid2}  ${payment_modes[0]}  100  ${note}  ${paymentRefId}   paymentOndate=${DAY1}   
+    ${updateamount}=  Evaluate  ${balamount}-10
+    ${resp}=  Update cash payment- finance invoice level   ${invoice_wtlistonline_uid2}  ${payment_modes[0]}  ${updateamount}  ${note}  ${paymentRefId}   paymentOndate=${DAY1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${amountdue}=  Evaluate  ${balamount}-100
+    ${amountdue}=  Evaluate  ${balamount}-${updateamount}
 
-    ${tamountPaid}=  Evaluate  ${min_pre1}+100
+    ${tamountPaid}=  Evaluate  ${min_pre1}+${updateamount}
     ${resp1}=  Get Invoice By Id  ${invoice_wtlistonline_uid2}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
