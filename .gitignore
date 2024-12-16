@@ -39,3 +39,6 @@ Docker/logs/*
 Data/TDD_Output/msgslog.txt
 DynamicTDD/TDD_Output/msgslog.txt
 .metadata/*
+Data/local_varfiles/__pycache__/*
+Data/scale_varfiles/__pycache__/*
+Data/test_varfiles/__pycache__/*

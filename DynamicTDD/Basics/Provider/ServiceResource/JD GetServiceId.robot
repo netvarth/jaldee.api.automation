@@ -39,192 +39,192 @@ ${ZOOM_url}    https://zoom.us/j/{}?pwd=THVLcTBZa2lESFZQbU9DQTQrWUxWZz09
 *** Test Cases ***
 
 JD-TC-GetServiceId-1
-        [Documentation]  Get service for a valid provider in Billable domain
-        ${resp}=   Billable
-        ${description}=  FakerLibrary.sentence
-           
-        ${min_pre}=   Random Int   min=1   max=10
-        ${Total}=  Random Int   min=11   max=100
-        ${min_pre}=  Convert To Number  ${min_pre}  0
-        ${Total}=  Convert To Number  ${Total}  0
-        ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[2]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200 
-        Set Suite Variable  ${id}    ${resp.json()}
-        ${resp}=   Get Service By Id  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[2]}   notification=${bool[1]}   notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}   totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
+    [Documentation]  Get service for a valid provider in Billable domain
+    ${resp}=   Billable
+    ${description}=  FakerLibrary.sentence
+        
+    ${min_pre}=   Random Int   min=1   max=10
+    ${Total}=  Random Int   min=11   max=100
+    ${min_pre}=  Convert To Number  ${min_pre}  0
+    ${Total}=  Convert To Number  ${Total}  0
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[2]}  ${bool[1]}  ${Total}  ${bool[1]}  minPrePaymentAmount=${min_pre}  notificationType=${notifytype[2]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Set Suite Variable  ${id}    ${resp.json()}
+    ${resp}=   Get Service By Id  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[2]}   notification=${bool[1]}   notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}   totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
      
 
 JD-TC-GetServiceId-2
-        [Documentation]   Create and get  service in Non Billable domain
-        ${resp}=   Non Billable
-        ${description}=  FakerLibrary.sentence
-        ${time}=  FakerLibrary.pyfloat   left_digits=2   right_digits=2   positive=True
-      
-        ${resp}=  Create Service  ${SERVICE1}  ${description}   ${service_duration[1]}  ${bool[0]}  ${EMPTY}  ${bool[0]}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp}=   Get Service By Id  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}  notification=${bool[1]}   notificationType=${notifytype[2]}  totalAmount=0.0  status=${status[0]}  bType=${btype}  isPrePayment=${bool[0]} 
+    [Documentation]   Create and get  service in Non Billable domain
+    ${resp}=   Non Billable
+    ${description}=  FakerLibrary.sentence
+    ${time}=  FakerLibrary.pyfloat   left_digits=2   right_digits=2   positive=True
+
+    ${resp}=  Create Service  ${SERVICE1}  ${description}   ${service_duration[1]}  ${bool[0]}  ${EMPTY}  ${bool[1]}  notificationType=${notifytype[2]}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=   Get Service By Id  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}  notification=${bool[1]}   notificationType=${notifytype[2]}  totalAmount=0.0  status=${status[0]}  bType=${btype}  isPrePayment=${bool[0]} 
         
 
 JD-TC-GetServiceId-3-pre_info_&_post_info
-        [Documentation]  create and Get physical service for a valid provider in Billable domain
-        ${resp}=   Billable
-        ${description}=  FakerLibrary.sentence
-        
-        ${PUSERPH_id}=  Evaluate  ${PUSERNAME}+10101
-        ${ZOOM_Pid1}=  Format String  ${ZOOM_url}  ${PUSERPH_id}
-        Set Test Variable  ${callingMode1}     ${CallingModes[0]}
-        Set Test Variable  ${ModeId1}          ${ZOOM_Pid1}
-        Set Test Variable  ${ModeStatus1}      ACTIVE
-        ${Desc1}=    FakerLibrary.sentence
-        ${VirtualcallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   status=${ModeStatus1}   instructions=${Desc1}
-        ${virtualCallingModes1}=  Create List  ${VirtualcallingMode1}
-        Set Test Variable  ${virtualCallingModes1}
-        Set Test Variable  ${vstype}  ${vservicetype[1]}
+    [Documentation]  create and Get physical service for a valid provider in Billable domain
+    ${resp}=   Billable
+    ${description}=  FakerLibrary.sentence
+    
+    ${PUSERPH_id}=  Evaluate  ${PUSERNAME}+10101
+    ${ZOOM_Pid1}=  Format String  ${ZOOM_url}  ${PUSERPH_id}
+    Set Test Variable  ${callingMode1}     ${CallingModes[0]}
+    Set Test Variable  ${ModeId1}          ${ZOOM_Pid1}
+    Set Test Variable  ${ModeStatus1}      ACTIVE
+    ${Desc1}=    FakerLibrary.sentence
+    ${VirtualcallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   status=${ModeStatus1}   instructions=${Desc1}
+    ${virtualCallingModes1}=  Create List  ${VirtualcallingMode1}
+    Set Test Variable  ${virtualCallingModes1}
+    Set Test Variable  ${vstype}  ${vservicetype[1]}
 
-        ${description}=  FakerLibrary.sentence
-        ${min_pre}=   Random Int   min=10   max=50
-        ${Total}=   Random Int   min=100   max=500
-        ${min_pre}=  Convert To Number  ${min_pre}  1
-        ${Total}=  Convert To Number  ${Total}  1
+    ${description}=  FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=10   max=50
+    ${Total}=   Random Int   min=100   max=500
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${Total}=  Convert To Number  ${Total}  1
 
-        ${consumerNoteTitle}=  FakerLibrary.sentence    
-        ${preInfoTitle}=  FakerLibrary.sentence   
-        ${preInfoText}=  FakerLibrary.sentence  
-        ${postInfoTitle}=  FakerLibrary.sentence  
-        ${postInfoText}=  FakerLibrary.sentence
-        
-        ${resp}=  Create Service with info  ${SERVICE2}  ${description}  ${service_duration[2]}  ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${Total}  ${status[0]}  ${btype}  ${bool[1]}  ${bool[0]}   ${serviceType[1]}   ${vstype}   ${virtualCallingModes1}   ${EMPTY}   0    ${consumerNoteMandatory[1]}   ${consumerNoteTitle}   ${preInfoEnabled[1]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[1]}   ${postInfoTitle}   ${postInfoText}
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable   ${id4}   ${resp.json()}
+    ${consumerNoteTitle}=  FakerLibrary.sentence    
+    ${preInfoTitle}=  FakerLibrary.sentence   
+    ${preInfoText}=  FakerLibrary.sentence  
+    ${postInfoTitle}=  FakerLibrary.sentence  
+    ${postInfoText}=  FakerLibrary.sentence
+    
+    # ${resp}=  Create Service with info  ${SERVICE2}  ${description}  ${service_duration[2]}  ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${Total}  ${status[0]}  ${btype}  ${bool[1]}  ${bool[0]}   ${serviceType[1]}   ${vstype}   ${virtualCallingModes1}   ${EMPTY}   0    ${consumerNoteMandatory[1]}   ${consumerNoteTitle}   ${preInfoEnabled[1]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[1]}   ${postInfoTitle}   ${postInfoText}
+    ${resp}=  Create Service  ${SERVICE2}  ${description}  ${service_duration[2]}  ${bool[1]}  ${Total}  ${bool[1]}  minPrePaymentAmount=${min_pre}  minPrePaymentAmount=${min_pre}  consumerNoteMandatory=${bool[1]}  consumerNoteTitle=${consumerNoteTitle}   preInfoEnabled=${bool[1]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${bool[1]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${id4}   ${resp.json()}
 
 
-        Should Be Equal As Strings  ${resp.status_code}  200 
-        Set Suite Variable  ${id}    ${resp.json()}
-        ${resp}=   Get Service By Id  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Verify Response  ${resp}  name=${SERVICE2}  description=${description}  serviceDuration=${service_duration[2]}   notification=${bool[1]}   notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}   totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
-        Verify Response  ${resp}  consumerNoteMandatory=${bool[1]}   consumerNoteTitle=${consumerNoteTitle}   preInfoEnabled=${bool[1]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${bool[1]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Set Suite Variable  ${id}    ${resp.json()}
+    ${resp}=   Get Service By Id  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  name=${SERVICE2}  description=${description}  serviceDuration=${service_duration[2]}   notification=${bool[1]}   notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}   totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
+    Verify Response  ${resp}  consumerNoteMandatory=${bool[1]}   consumerNoteTitle=${consumerNoteTitle}   preInfoEnabled=${bool[1]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${bool[1]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
 
 
 JD-TC-GetServiceId-4-pre_info_&_post_info
-        [Documentation]   Create and get  physical service for a valid provider in Non Billable domain
-        ${resp}=   Non Billable
-        ${description}=  FakerLibrary.sentence
-        ${time}=  FakerLibrary.pyfloat   left_digits=2   right_digits=2   positive=True
-      
-        ${PUSERPH_id}=  Evaluate  ${PUSERNAME}+20102
-        Set Test Variable  ${callingMode1}     ${CallingModes[1]}
-        Set Test Variable  ${ModeId1}          ${PUSERPH_id}
-        Set Test Variable  ${ModeStatus1}      ACTIVE
-        ${Desc1}=    FakerLibrary.sentence
-        ${VirtualcallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   status=${ModeStatus1}   instructions=${Desc1}
-        ${virtualCallingModes2}=  Create List  ${VirtualcallingMode1}
-        Set Test Variable  ${virtualCallingModes2}
-        # Set Suite Variable  ${vstype}  ${vservicetype[1]}
-        ${vstype}=  Evaluate  random.choice($vservicetype)  random
+    [Documentation]   Create and get  physical service for a valid provider in Non Billable domain
+    ${resp}=   Non Billable
+    ${description}=  FakerLibrary.sentence
+    ${time}=  FakerLibrary.pyfloat   left_digits=2   right_digits=2   positive=True
+    
+    ${PUSERPH_id}=  Evaluate  ${PUSERNAME}+20102
+    Set Test Variable  ${callingMode1}     ${CallingModes[1]}
+    Set Test Variable  ${ModeId1}          ${PUSERPH_id}
+    Set Test Variable  ${ModeStatus1}      ACTIVE
+    ${Desc1}=    FakerLibrary.sentence
+    ${VirtualcallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   status=${ModeStatus1}   instructions=${Desc1}
+    ${virtualCallingModes2}=  Create List  ${VirtualcallingMode1}
+    Set Test Variable  ${virtualCallingModes2}
+    # Set Suite Variable  ${vstype}  ${vservicetype[1]}
+    ${vstype}=  Evaluate  random.choice($vservicetype)  random
 
-        ${consumerNoteTitle}=  FakerLibrary.sentence    
-        ${preInfoTitle}=  FakerLibrary.sentence   
-        ${preInfoText}=  FakerLibrary.sentence  
-        ${postInfoTitle}=  FakerLibrary.sentence  
-        ${postInfoText}=  FakerLibrary.sentence
-        ${resp}=  Create Service with info  ${SERVICE2}  ${description}  ${service_duration[1]}  ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${EMPTY}  ${status[0]}  ${btype}  ${bool[0]}  ${bool[0]}   ${serviceType[1]}   ${vstype}   ${virtualCallingModes2}   ${EMPTY}   0    ${consumerNoteMandatory[1]}   ${consumerNoteTitle}   ${preInfoEnabled[1]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[1]}   ${postInfoTitle}   ${postInfoText}
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
+    ${consumerNoteTitle}=  FakerLibrary.sentence    
+    ${preInfoTitle}=  FakerLibrary.sentence   
+    ${preInfoText}=  FakerLibrary.sentence  
+    ${postInfoTitle}=  FakerLibrary.sentence  
+    ${postInfoText}=  FakerLibrary.sentence
+    ${resp}=  Create Service with info  ${SERVICE2}  ${description}  ${service_duration[1]}  ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${EMPTY}  ${status[0]}  ${btype}  ${bool[0]}  ${bool[0]}   ${serviceType[1]}   ${vstype}   ${virtualCallingModes2}   ${EMPTY}   0    ${consumerNoteMandatory[1]}   ${consumerNoteTitle}   ${preInfoEnabled[1]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[1]}   ${postInfoTitle}   ${postInfoText}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-        ${resp}=   Get Service By Id  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Verify Response  ${resp}  name=${SERVICE2}  description=${description}  serviceDuration=${service_duration[1]}  notification=${bool[1]}   notificationType=${notifytype[2]}  totalAmount=0.0  status=${status[0]}  bType=${btype}  isPrePayment=${bool[0]} 
-        Verify Response  ${resp}  consumerNoteMandatory=${bool[1]}   consumerNoteTitle=${consumerNoteTitle}   preInfoEnabled=${bool[1]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${bool[1]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
-        Should Not Contain  ${resp.json()}  ${serviceType[0]}
+    ${resp}=   Get Service By Id  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  name=${SERVICE2}  description=${description}  serviceDuration=${service_duration[1]}  notification=${bool[1]}   notificationType=${notifytype[2]}  totalAmount=0.0  status=${status[0]}  bType=${btype}  isPrePayment=${bool[0]} 
+    Verify Response  ${resp}  consumerNoteMandatory=${bool[1]}   consumerNoteTitle=${consumerNoteTitle}   preInfoEnabled=${bool[1]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${bool[1]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
+    Should Not Contain  ${resp.json()}  ${serviceType[0]}
 
 
 JD-TC-GetServiceId-5-pre_info_&_post_info
-        [Documentation]  create and Get virtual service for a valid provider in Billable domain
-        ${resp}=   Billable
-        ${description}=  FakerLibrary.sentence
+    [Documentation]  create and Get virtual service for a valid provider in Billable domain
+    ${resp}=   Billable
+    ${description}=  FakerLibrary.sentence
 
-        ${PUSERPH_id}=  Evaluate  ${PUSERNAME}+10101
-        ${ZOOM_Pid1}=  Format String  ${ZOOM_url}  ${PUSERPH_id}
-        Set Test Variable  ${callingMode1}     ${CallingModes[0]}
-        Set Test Variable  ${ModeId1}          ${ZOOM_Pid1}
-        Set Test Variable  ${ModeStatus1}      ACTIVE
-        ${Desc1}=    FakerLibrary.sentence
-        ${VirtualcallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   status=${ModeStatus1}   instructions=${Desc1}
-        ${virtualCallingModes1}=  Create List  ${VirtualcallingMode1}
-        Set Test Variable  ${virtualCallingModes1}
-        Set Test Variable  ${vstype}  ${vservicetype[1]}
+    ${PUSERPH_id}=  Evaluate  ${PUSERNAME}+10101
+    ${ZOOM_Pid1}=  Format String  ${ZOOM_url}  ${PUSERPH_id}
+    Set Test Variable  ${callingMode1}     ${CallingModes[0]}
+    Set Test Variable  ${ModeId1}          ${ZOOM_Pid1}
+    Set Test Variable  ${ModeStatus1}      ACTIVE
+    ${Desc1}=    FakerLibrary.sentence
+    ${VirtualcallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   status=${ModeStatus1}   instructions=${Desc1}
+    ${virtualCallingModes1}=  Create List  ${VirtualcallingMode1}
+    Set Test Variable  ${virtualCallingModes1}
+    Set Test Variable  ${vstype}  ${vservicetype[1]}
 
-        ${description}=  FakerLibrary.sentence
-        ${min_pre}=   Random Int   min=10   max=50
-        ${Total}=   Random Int   min=100   max=500
-        ${min_pre}=  Convert To Number  ${min_pre}  1
-        ${Total}=  Convert To Number  ${Total}  1
+    ${description}=  FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=10   max=50
+    ${Total}=   Random Int   min=100   max=500
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${Total}=  Convert To Number  ${Total}  1
 
-        ${consumerNoteTitle}=  FakerLibrary.sentence    
-        ${preInfoTitle}=  FakerLibrary.sentence   
-        ${preInfoText}=  FakerLibrary.sentence  
-        ${postInfoTitle}=  FakerLibrary.sentence  
-        ${postInfoText}=  FakerLibrary.sentence
-        
-        ${resp}=  Create Service with info  ${SERVICE3}  ${description}  ${service_duration[2]}  ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${Total}  ${status[0]}  ${btype}  ${bool[1]}  ${bool[0]}   ${serviceType[0]}   ${vstype}   ${virtualCallingModes1}   ${EMPTY}   0    ${consumerNoteMandatory[1]}   ${consumerNoteTitle}   ${preInfoEnabled[1]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[1]}   ${postInfoTitle}   ${postInfoText}
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable   ${id4}   ${resp.json()}
+    ${consumerNoteTitle}=  FakerLibrary.sentence    
+    ${preInfoTitle}=  FakerLibrary.sentence   
+    ${preInfoText}=  FakerLibrary.sentence  
+    ${postInfoTitle}=  FakerLibrary.sentence  
+    ${postInfoText}=  FakerLibrary.sentence
+    
+    ${resp}=  Create Service with info  ${SERVICE3}  ${description}  ${service_duration[2]}  ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${Total}  ${status[0]}  ${btype}  ${bool[1]}  ${bool[0]}   ${serviceType[0]}   ${vstype}   ${virtualCallingModes1}   ${EMPTY}   0    ${consumerNoteMandatory[1]}   ${consumerNoteTitle}   ${preInfoEnabled[1]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[1]}   ${postInfoTitle}   ${postInfoText}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${id4}   ${resp.json()}
 
-
-        Should Be Equal As Strings  ${resp.status_code}  200 
-        Set Suite Variable  ${id}    ${resp.json()}
-        ${resp}=   Get Service By Id  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Verify Response  ${resp}  name=${SERVICE3}  description=${description}  serviceDuration=${service_duration[2]}   notification=${bool[1]}   notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}   totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
-        Verify Response  ${resp}  consumerNoteMandatory=${bool[1]}   consumerNoteTitle=${consumerNoteTitle}   preInfoEnabled=${bool[1]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${bool[1]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Set Suite Variable  ${id}    ${resp.json()}
+    ${resp}=   Get Service By Id  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  name=${SERVICE3}  description=${description}  serviceDuration=${service_duration[2]}   notification=${bool[1]}   notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}   totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
+    Verify Response  ${resp}  consumerNoteMandatory=${bool[1]}   consumerNoteTitle=${consumerNoteTitle}   preInfoEnabled=${bool[1]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${bool[1]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
 
 
 JD-TC-GetServiceId-6-pre_info_&_post_info
-        [Documentation]   Create and get  virtual service for a valid provider in Non Billable domain
-        ${resp}=   Non Billable
-        ${description}=  FakerLibrary.sentence
-        ${time}=  FakerLibrary.pyfloat   left_digits=2   right_digits=2   positive=True
-      
-        ${PUSERPH_id}=  Evaluate  ${PUSERNAME}+20102
-        Set Test Variable  ${callingMode1}     ${CallingModes[1]}
-        Set Suite Variable  ${ModeId1}          ${PUSERPH_id}
-        Set Test Variable  ${ModeStatus1}      ACTIVE
-        ${Desc1}=    FakerLibrary.sentence
-        ${VirtualcallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   countryCode=${countryCodes[0]}  status=${ModeStatus1}   instructions=${Desc1}
-        ${virtualCallingModes2}=  Create List  ${VirtualcallingMode1}
-        Set Test Variable  ${virtualCallingModes2}
-        Set Suite Variable  ${vstype}  ${vservicetype[0]}
-        # ${vstype}=  Evaluate  random.choice($vservicetype)  random
-        ${ZOOM_Pid1}=  Format String  ${ZOOM_url}  ${PUSERPH_id}
+    [Documentation]   Create and get  virtual service for a valid provider in Non Billable domain
+    ${resp}=   Non Billable
+    ${description}=  FakerLibrary.sentence
+    ${time}=  FakerLibrary.pyfloat   left_digits=2   right_digits=2   positive=True
+    
+    ${PUSERPH_id}=  Evaluate  ${PUSERNAME}+20102
+    Set Test Variable  ${callingMode1}     ${CallingModes[1]}
+    Set Suite Variable  ${ModeId1}          ${PUSERPH_id}
+    Set Test Variable  ${ModeStatus1}      ACTIVE
+    ${Desc1}=    FakerLibrary.sentence
+    ${VirtualcallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   countryCode=${countryCodes[0]}  status=${ModeStatus1}   instructions=${Desc1}
+    ${virtualCallingModes2}=  Create List  ${VirtualcallingMode1}
+    Set Test Variable  ${virtualCallingModes2}
+    Set Suite Variable  ${vstype}  ${vservicetype[0]}
+    # ${vstype}=  Evaluate  random.choice($vservicetype)  random
+    ${ZOOM_Pid1}=  Format String  ${ZOOM_url}  ${PUSERPH_id}
 
-        ${VirtualcallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${ZOOM_Pid1}   status=ACTIVE    instructions=${Desc1} 
-        ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERPH_id}   countryCode=${countryCodes[0]}  status=ACTIVE    instructions=${Desc1} 
-        ${vcm1}=  Create List  ${VirtualcallingMode1}   ${VirtualcallingMode2}
+    ${VirtualcallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${ZOOM_Pid1}   status=ACTIVE    instructions=${Desc1} 
+    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERPH_id}   countryCode=${countryCodes[0]}  status=ACTIVE    instructions=${Desc1} 
+    ${vcm1}=  Create List  ${VirtualcallingMode1}   ${VirtualcallingMode2}
 
-        ${resp}=  Update Virtual Calling Mode   ${vcm1}
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Update Virtual Calling Mode   ${vcm1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-        ${consumerNoteTitle}=  FakerLibrary.sentence    
-        ${preInfoTitle}=  FakerLibrary.sentence   
-        ${preInfoText}=  FakerLibrary.sentence  
-        ${postInfoTitle}=  FakerLibrary.sentence  
-        ${postInfoText}=  FakerLibrary.sentence
-        ${resp}=  Create Service with info  ${SERVICE3}  ${description}  ${service_duration[1]}  ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${EMPTY}  ${status[0]}  ${btype}  ${bool[0]}  ${bool[0]}   ${serviceType[0]}   ${vstype}   ${virtualCallingModes2}   ${EMPTY}   0    ${consumerNoteMandatory[1]}   ${consumerNoteTitle}   ${preInfoEnabled[1]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[1]}   ${postInfoTitle}   ${postInfoText}
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
+    ${consumerNoteTitle}=  FakerLibrary.sentence    
+    ${preInfoTitle}=  FakerLibrary.sentence   
+    ${preInfoText}=  FakerLibrary.sentence  
+    ${postInfoTitle}=  FakerLibrary.sentence  
+    ${postInfoText}=  FakerLibrary.sentence
+    ${resp}=  Create Service with info  ${SERVICE3}  ${description}  ${service_duration[1]}  ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${EMPTY}  ${status[0]}  ${btype}  ${bool[0]}  ${bool[0]}   ${serviceType[0]}   ${vstype}   ${virtualCallingModes2}   ${EMPTY}   0    ${consumerNoteMandatory[1]}   ${consumerNoteTitle}   ${preInfoEnabled[1]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[1]}   ${postInfoTitle}   ${postInfoText}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-        ${resp}=   Get Service By Id  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Verify Response  ${resp}  name=${SERVICE3}  description=${description}  serviceDuration=${service_duration[1]}  notification=${bool[1]}   notificationType=${notifytype[2]}  totalAmount=0.0  status=${status[0]}  bType=${btype}  isPrePayment=${bool[0]} 
-        Verify Response  ${resp}  consumerNoteMandatory=${bool[1]}   consumerNoteTitle=${consumerNoteTitle}   preInfoEnabled=${bool[1]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${bool[1]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
+    ${resp}=   Get Service By Id  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  name=${SERVICE3}  description=${description}  serviceDuration=${service_duration[1]}  notification=${bool[1]}   notificationType=${notifytype[2]}  totalAmount=0.0  status=${status[0]}  bType=${btype}  isPrePayment=${bool[0]} 
+    Verify Response  ${resp}  consumerNoteMandatory=${bool[1]}   consumerNoteTitle=${consumerNoteTitle}   preInfoEnabled=${bool[1]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${bool[1]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
         
 
 JD-TC-GetServiceId-UH1

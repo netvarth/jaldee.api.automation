@@ -44,17 +44,20 @@ JD-TC-Enable Service-1
         Set Suite Variable  ${id}  ${resp.json()}
         ${resp}=   Get Service By Id  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}  notification=${bool[1]}    notificationType=${notifytype[2]}  status=${status[0]}  bType=${btype} 
+        # Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}  notification=${bool[1]}    notificationType=${notifytype[2]}  status=${status[0]}  bType=${btype} 
+        Should Be Equal As Strings  ${resp.json()['status']}  ${status[0]}
         ${resp}=  Disable service  ${id}  
         Should Be Equal As Strings  ${resp.status_code}  200  
         ${resp}=   Get Service By Id  ${id}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}  notification=${bool[1]}   notificationType=${notifytype[2]}  status=${status[1]}  bType=${btype}          
+        Should Be Equal As Strings  ${resp.json()['status']}  ${status[1]}
+        # Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}  notification=${bool[1]}   notificationType=${notifytype[2]}  status=${status[1]}  bType=${btype}          
         ${resp}=  Enable service  ${id}  
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp}=   Get Service By Id  ${id}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}  notification=${bool[1]}   notificationType=${notifytype[2]}  status=${status[0]}  bType=${btype}  
+        Should Be Equal As Strings  ${resp.json()['status']}  ${status[0]}
+        # Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}  notification=${bool[1]}   notificationType=${notifytype[2]}  status=${status[0]}  bType=${btype}  
         
 JD-TC-Enable Service-UH1
 

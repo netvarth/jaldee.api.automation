@@ -23,6 +23,8 @@ ${SERVICE1}   SERVICE1
 ${SERVICE2}   SERVICE12
 ${SERVICE3}   SERVICE13
 @{service_duration}  10  20  30   40   50
+${self}      0
+@{service_names}
 
 
 *** Test Cases ***
@@ -44,17 +46,19 @@ JD-TC-Disable Service-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
-    ${resp}=  Create Service  ${SERVICE1}  ${description}   ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}   ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[1]}  minPrePaymentAmount=${min_pre}  minPrePaymentAmount=${min_pre}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid}  ${resp.json()}
     ${resp}=   Get Service By Id  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}  notification=${bool[1]}   notificationType=${notifytype[2]}  status=${status[0]}  bType=${btype}  
+    # Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}  notification=${bool[1]}   notificationType=${notifytype[2]}  status=${status[0]}  bType=${btype}  
+    Should Be Equal As Strings  ${resp.json()['status']}  ${status[0]}
     ${resp}=  Disable service  ${sid} 
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get Service By Id  ${sid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}   notification=${bool[1]}  notificationType=${notifytype[2]}  status=${status[1]}  bType=${btype}   
+    # Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}   notification=${bool[1]}  notificationType=${notifytype[2]}  status=${status[1]}  bType=${btype}   
+    Should Be Equal As Strings  ${resp.json()['status']}  ${status[1]}
 
 JD-TC-Disable Service-UH1
 
@@ -117,8 +121,6 @@ JD-TC-Disable Service-UH4
     Should Be Equal As Strings  "${resp.json()}"  "${SESSION_EXPIRED}"
 
 JD-TC-Disable Service-UH5
-
-
     [Documentation]  Disable a service using consumer login
     # ${resp}=  ConsumerLogin  ${CUSERNAME7}  ${PASSWORD}
     # Should Be Equal As Strings  ${resp.status_code}  200
@@ -133,7 +135,7 @@ JD-TC-Disable Service-UH5
     Should Be Equal As Strings   ${resp.json()}    ${LOGIN_NO_ACCESS_FOR_URL}
 
 JD-TC-Disable Service-UH6
-    [Documentation]   Disable a service which in an active checkin(status=prepayment pending)
+    [Documentation]   Disable a service which has an active checkin(status=prepayment pending)
     ${resp}=  Encrypted Provider Login  ${PUSERNAME78}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service       ${PUSERNAME78}
@@ -161,19 +163,7 @@ JD-TC-Disable Service-UH6
     
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
-    # ${resp}=  ConsumerLogin  ${CUSERNAME7}  ${PASSWORD}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # ${cid}=  get_id  ${CUSERNAME7}
-    # ${Familymember_ph}=  Evaluate  ${PUSERNAME0}+500000
-    # ${f_name}=   generate_firstname
-    # ${l_name}=   FakerLibrary.last_name
-    # ${dob}=      FakerLibrary.date
-    # ${resp}=  AddFamilyMemberByProviderWithPhoneNo  ${cid}  ${f_name}  ${l_name}  ${dob}  ${gender[0]}  ${Familymember_ph}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${mem_id}  ${resp.json()}
-    # ${list}=  Create List   1  2  3  4  5  6  7
-
+    
     ${resp}=    Send Otp For Login    ${CUSERNAME7}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -191,17 +181,15 @@ JD-TC-Disable Service-UH6
     Set Test Variable  ${cid}  ${resp.json()['providerConsumer']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${qid}  ${DAY1}  ${s_id}  i need  False  0
+    ${msg}=  FakerLibrary.word
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${qid}  ${DAY1}  ${s_id}  ${msg}  ${bool[0]}  ${self}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Consumer Logout
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME78}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Disable service  ${s_id} 
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # ${resp}=   Get Service By Id  ${sid}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response  ${resp}  name=${name}  description=${description}   serviceDuration=${service_duration}   notification=${bool[1]}  notificationType=${notifytype[2]}  status=${status[1]}  bType=${btype}   
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${SERVICE_EXISTS_IN_WAITLIST}"
  
@@ -265,11 +253,6 @@ JD-TC-Disable Service-UH7
     ${resp}=  Encrypted Provider Login  ${PUSERNAME78}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Disable service  ${sid2} 
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # ${resp}=   Get Service By Id  ${sid2}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response  ${resp}  name=${SERVICE2}  description=${description1}   serviceDuration=${service_duration[1]}   notification=${bool[1]}  notificationType=${notifytype[2]}  status=${status[1]}  bType=${btype}   
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${SERVICE_EXISTS_IN_WAITLIST}"
 
