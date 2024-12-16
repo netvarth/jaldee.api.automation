@@ -46,7 +46,7 @@ JD-TC-Update_Lead_Consumer-1
     Set Suite Variable      ${firstName}
     Set Suite Variable      ${lastName}
 
-    ${resp}=    Create Lead Consumer  ${firstName}  ${lastName}
+    ${resp}=    Create Lead Consumer  ${firstName}  ${lastName}  phone=${CUSERNAME6}  countryCode=${countryCodes[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite variable   ${con_id}   ${resp.json()}

@@ -49,7 +49,7 @@ JD-TC-Get_Lead_Consumer_Count_By_Filter-1
     Set Suite Variable      ${firstName1}
     Set Suite variable      ${lastName1} 
 
-    ${resp}=    Create Lead Consumer  ${firstName1}  ${lastName1}
+    ${resp}=    Create Lead Consumer  ${firstName1}  ${lastName1}  phone=${CUSERNAME5}  countryCode=${countryCodes[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite variable   ${con_id1}   ${resp.json()}
@@ -192,7 +192,7 @@ JD-TC-Get_Lead_Consumer_Count_By_Filter-8
     ${resp}=    Get Lead Consumer Count By Filter  countryCode-eq=${countryCodes[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
-    Should Be Equal As Strings  ${resp.json()}          1
+    Should Be Equal As Strings  ${resp.json()}          2
 
 JD-TC-Get_Lead_Consumer_Count_By_Filter-9
 

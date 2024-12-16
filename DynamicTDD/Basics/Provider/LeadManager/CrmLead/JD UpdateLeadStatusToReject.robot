@@ -118,7 +118,7 @@ JD-TC-Update_Lead_Status_To_Reject-1
     Set Suite Variable      ${firstName_n}
     Set Suite Variable      ${lastName_n}
 
-    ${resp}=    Create Lead Consumer  ${firstName_n}  ${lastName_n}
+    ${resp}=    Create Lead Consumer  ${firstName_n}  ${lastName_n}  phone=${CUSERNAME28}  countryCode=${countryCodes[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test variable   ${con_id}   ${resp.json()}

@@ -44,7 +44,7 @@ JD-TC-Consumer_Lead_Status_Change-1
     ${firstName}=   generate_firstname
     ${lastName}=    FakerLibrary.lastName
 
-    ${resp}=    Create Lead Consumer  ${firstName}  ${lastName}
+    ${resp}=    Create Lead Consumer  ${firstName}  ${lastName}  phone=${CUSERNAME1}  countryCode=${countryCodes[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite variable   ${con_id}   ${resp.json()}
