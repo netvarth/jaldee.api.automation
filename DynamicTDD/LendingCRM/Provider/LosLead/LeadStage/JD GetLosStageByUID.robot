@@ -54,7 +54,7 @@ JD-TC-GetLeadStageByUid-1
 
     ${Sname}=    FakerLibrary.name
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${Sname}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${leadstageType[1]}  ${Sname}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${stageuid}     ${resp.json()['uid']}
@@ -66,7 +66,7 @@ JD-TC-GetLeadStageByUid-1
     Should Be Equal As Strings    ${resp.json()['account']}     ${account_id}
     Should Be Equal As Strings    ${resp.json()['name']}        ${Sname}
     Should Be Equal As Strings    ${resp.json()['losProduct']}  ${losProduct[0]}
-    Should Be Equal As Strings    ${resp.json()['stageType']}   ${stageType[1]}
+    Should Be Equal As Strings    ${resp.json()['stageType']}   ${leadstageType[1]}
     Should Be Equal As Strings    ${resp.json()['status']}      ${toggle[0]}
 
 JD-TC-GetLeadStageByUid-UH1

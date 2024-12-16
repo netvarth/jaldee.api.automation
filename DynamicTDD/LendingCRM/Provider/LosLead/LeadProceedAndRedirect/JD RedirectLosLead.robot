@@ -173,33 +173,33 @@ JD-TC-RedirectLosLead-1
     ${Sname11}=    FakerLibrary.name
     Set Suite Variable  ${Sname11}
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${Sname11}  sortOrder=${sort_order[0]}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${leadstageType[1]}  ${Sname11}  sortOrder=${sort_order[0]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${stageuid11}     ${resp.json()['uid']}
 
     ${Sname22}=    FakerLibrary.name
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[2]}  ${Sname22}  sortOrder=${sort_order[1]}  onRedirect=${stageuid11}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${leadstageType[2]}  ${Sname22}  sortOrder=${sort_order[1]}  onRedirect=${stageuid11}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${stageuid22}     ${resp.json()['uid']}
 
     ${Sname33}=    FakerLibrary.name
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[3]}  ${Sname33}  sortOrder=${sort_order[2]}  onRedirect=${stageuid22}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${leadstageType[3]}  ${Sname33}  sortOrder=${sort_order[2]}  onRedirect=${stageuid22}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${stageuid33}     ${resp.json()['uid']}
 
     ${Sname44}=    FakerLibrary.name
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[3]}  ${Sname44}  sortOrder=${sort_order[3]}  onRedirect=${stageuid33}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${leadstageType[3]}  ${Sname44}  sortOrder=${sort_order[3]}  onRedirect=${stageuid33}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${stageuid44}     ${resp.json()['uid']}
 
-    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${stageuid11}  ${Sname11}  onProceed=${stageuid22}
+    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${leadstageType[1]}  ${stageuid11}  ${Sname11}  onProceed=${stageuid22}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -208,7 +208,7 @@ JD-TC-RedirectLosLead-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['onProceed']}   ${stageuid22}
 
-    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${stageuid22}  ${Sname22}  onProceed=${stageuid33}
+    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${leadstageType[1]}  ${stageuid22}  ${Sname22}  onProceed=${stageuid33}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -218,7 +218,7 @@ JD-TC-RedirectLosLead-1
     Should Be Equal As Strings    ${resp.json()['onProceed']}   ${stageuid33}
     Should Be Equal As Strings    ${resp.json()['onRedirect']}  ${stageuid11}
 
-    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${stageuid33}  ${Sname33}  onProceed=${stageuid44}
+    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${leadstageType[1]}  ${stageuid33}  ${Sname33}  onProceed=${stageuid44}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

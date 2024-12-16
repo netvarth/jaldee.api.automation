@@ -55,7 +55,7 @@ JD-TC-UpdateLosLeadStage -1
     ${Sname}=    FakerLibrary.name
     Set Suite Variable      ${Sname}
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${Sname}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${leadstageType[1]}  ${Sname}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${stageuid}     ${resp.json()['uid']}
@@ -68,7 +68,7 @@ JD-TC-UpdateLosLeadStage -1
     ${Sname2}=    FakerLibrary.name
     Set Suite Variable      ${Sname2}
 
-    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${stageuid}  ${Sname2}
+    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${leadstageType[1]}  ${stageuid}  ${Sname2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}        200
 
@@ -86,7 +86,7 @@ JD-TC-UpdateLosLeadStage -2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${stageuid}  ${Sname2}
+    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${leadstageType[1]}  ${stageuid}  ${Sname2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}        200
 
@@ -98,14 +98,14 @@ JD-TC-UpdateLosLeadStage -3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[2]}  ${stageuid}  ${Sname2}
+    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${leadstageType[2]}  ${stageuid}  ${Sname2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}        200
 
     ${resp}=    Get Lead Stage By UID  ${stageuid}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}        200
-    Should Be Equal As Strings    ${resp.json()['stageType']}     ${stageType[1]}
+    Should Be Equal As Strings    ${resp.json()['stageType']}     ${leadstageType[1]}
 
 JD-TC-UpdateLosLeadStage -4
 
@@ -117,19 +117,19 @@ JD-TC-UpdateLosLeadStage -4
 
     ${Sname22}=    FakerLibrary.name
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[2]}  ${Sname22}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${leadstageType[2]}  ${Sname22}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${stageuid22}     ${resp.json()['uid']}
 
     ${Sname33}=    FakerLibrary.name
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[3]}  ${Sname33}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${leadstageType[3]}  ${Sname33}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${stageuid33}     ${resp.json()['uid']}
 
-    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[2]}  ${stageuid}  ${Sname2}  onProceed=${stageuid22}  onRedirect=${stageuid33}
+    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${leadstageType[2]}  ${stageuid}  ${Sname2}  onProceed=${stageuid22}  onRedirect=${stageuid33}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}        200
 
@@ -147,7 +147,7 @@ JD-TC-UpdateLosLeadStage -UH1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Update Los Lead Stage  ${losProduct[1]}  ${stageType[1]}  ${stageuid}  ${Sname2}
+    ${resp}=    Update Los Lead Stage  ${losProduct[1]}  ${leadstageType[1]}  ${stageuid}  ${Sname2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}        200
 
@@ -172,7 +172,7 @@ JD-TC-UpdateLosLeadStage -UH2
 
     ${INVALID_X_ID}=    Replace String  ${INVALID_X_ID}  {}   Stage
 
-    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${inv_stageuid}  ${Sname}
+    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${leadstageType[1]}  ${inv_stageuid}  ${Sname}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${INVALID_X_ID}
@@ -186,7 +186,7 @@ JD-TC-UpdateLosLeadStage -UH3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${stageuid}  ${empty}
+    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${leadstageType[1]}  ${stageuid}  ${empty}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${NAME_LENGTH_EXCEED}
@@ -196,7 +196,7 @@ JD-TC-UpdateLosLeadStage -UH4
 
     [Documentation]  Update Lead Stage - without login
 
-    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${stageuid}  ${Sname}
+    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${leadstageType[1]}  ${stageuid}  ${Sname}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings    ${resp.json()}        ${SESSION_EXPIRED}
@@ -234,7 +234,7 @@ JD-TC-UpdateLosLeadStage -UH5
 
     ${NO_PERMISSION_X}=   Replace String  ${NO_PERMISSION_X}  {}   stage
 
-    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${stageuid}  ${Sname3}
+    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${leadstageType[1]}  ${stageuid}  ${Sname3}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${NO_PERMISSION_X}
@@ -270,19 +270,19 @@ JD-TC-UpdateLosLeadStage -UH6
 
     ${Sname}=    FakerLibrary.name
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${Sname}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${leadstageType[1]}  ${Sname}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${stageuid_11}     ${resp.json()['uid']}
 
     ${Sname22}=    FakerLibrary.name
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${Sname22}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${leadstageType[1]}  ${Sname22}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${stageuid_22}     ${resp.json()['uid']}
 
-    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${stageuid_11}  ${Sname22}
+    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${leadstageType[1]}  ${stageuid_11}  ${Sname22}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${DUPLICATE_NAME_INPUT}

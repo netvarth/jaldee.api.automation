@@ -26,9 +26,10 @@ ${pan}              5555555555
 ${bankAccountNo}    55555555555
 ${bankIfsc}         55555555555
 ${jpgfile}          /ebs/TDD/uploadimage.jpg
-${pngfile}      /ebs/TDD/upload.png
+${pngfile}          /ebs/TDD/upload.png
 ${fileSize}         0.00458
 ${order}            0
+${dob}              1996-11-04
 
 *** Test Cases ***
 
@@ -36,7 +37,7 @@ JD-TC-GetLosFollowUpData-1
 
     [Documentation]  Get LOS FollowUp Data
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -64,6 +65,55 @@ JD-TC-GetLosFollowUpData-1
 
     END
 
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Set Test Variable                    ${account_id}       ${resp.json()['id']}
+
+    FOR    ${i}    IN RANGE  0  3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
+    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
+
+
+
+
+
+
+
+    ${resp}=  Get Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
+    sleep  2s
+    ${resp}=  Get Departments
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+
+
+
+
+
+
+    
     ${resp}=  Enable Disable Branch  ${status[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -91,27 +141,6 @@ JD-TC-GetLosFollowUpData-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${branchid1}  ${resp.json()['id']}
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings            ${resp.status_code}  200
-    Set Test Variable                    ${account_id}       ${resp.json()['id']}
-
-    FOR    ${i}    IN RANGE  0  3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}    200
-    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
-    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
 
     ${Sname}=    FakerLibrary.name
 
@@ -172,174 +201,177 @@ JD-TC-GetLosFollowUpData-1
     Should Be Equal As Strings    ${resp.json()['name']}     ${SCname}
     Should Be Equal As Strings    ${resp.json()['status']}   ${toggle[0]}
 
-    ${Sname11}=    FakerLibrary.name
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${Sname11}  sortOrder=${sort_order[0]}
+#.......  Creating Lead Stages ............
+
+
+    ${LeadSname11}=    FakerLibrary.name
+
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${leadleadstageType[1]}  ${LeadSname11}  sortOrder=${sort_order[0]}  isDefault=${boolean[1]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${stageuid11}     ${resp.json()['uid']}
+    Set Suite Variable    ${Leadstageuid11}     ${resp.json()['uid']}
 
-    ${Sname22}=    FakerLibrary.name
+    ${LeadSname22}=    FakerLibrary.name
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[2]}  ${Sname22}  sortOrder=${sort_order[1]}  onRedirect=${stageuid11}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${leadleadstageType[2]}  ${LeadSname22}  sortOrder=${sort_order[1]}  onRedirect=${Leadstageuid11}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${stageuid22}     ${resp.json()['uid']}
+    Set Suite Variable    ${Leadstageuid22}     ${resp.json()['uid']}
 
-    ${Sname33}=    FakerLibrary.name
-    Set Suite Variable  ${Sname33}
+    ${LeadSname33}=    FakerLibrary.name
+    Set Suite Variable  ${LeadSname33}
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[3]}  ${Sname33}  sortOrder=${sort_order[2]}  onRedirect=${stageuid22}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${leadleadstageType[3]}  ${LeadSname33}  sortOrder=${sort_order[2]}  onRedirect=${Leadstageuid22}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${stageuid33}     ${resp.json()['uid']}
+    Set Suite Variable    ${Leadstageuid33}     ${resp.json()['uid']}
 
-    ${Sname44}=    FakerLibrary.name
-    Set Suite Variable  ${Sname44}
+    ${LeadSname44}=    FakerLibrary.name
+    Set Suite Variable  ${LeadSname44}
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[4]}  ${Sname44}  sortOrder=${sort_order[3]}  onRedirect=${stageuid33}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${leadleadstageType[4]}  ${LeadSname44}  sortOrder=${sort_order[3]}  onRedirect=${Leadstageuid33}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${stageuid44}     ${resp.json()['uid']}
+    Set Suite Variable    ${Leadstageuid44}     ${resp.json()['uid']}
 
-    ${Sname55}=    FakerLibrary.name
-    Set Suite Variable  ${Sname55}
+    ${LeadSname55}=    FakerLibrary.name
+    Set Suite Variable  ${LeadSname55}
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[5]}  ${Sname55}  sortOrder=${sort_order[4]}  onRedirect=${stageuid44}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${leadleadstageType[5]}  ${LeadSname55}  sortOrder=${sort_order[4]}  onRedirect=${Leadstageuid44}    isFinalStage=${boolean[1]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${stageuid55}     ${resp.json()['uid']}
-
-    ${Sname66}=    FakerLibrary.name
-    Set Suite Variable  ${Sname66}
-
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[6]}  ${Sname66}  sortOrder=${sort_order[5]}  onRedirect=${stageuid55}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${stageuid66}     ${resp.json()['uid']}
-
-    ${Sname77}=    FakerLibrary.name
-    Set Suite Variable  ${Sname77}
-
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[7]}  ${Sname77}  sortOrder=${sort_order[6]}  onRedirect=${stageuid66}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${stageuid77}     ${resp.json()['uid']}
-
-    ${Sname88}=    FakerLibrary.name
-    Set Suite Variable  ${Sname88}
-
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[8]}  ${Sname88}  sortOrder=${sort_order[7]}  onRedirect=${stageuid77}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${stageuid88}     ${resp.json()['uid']}
-
-    ${Sname99}=    FakerLibrary.name
-    Set Suite Variable  ${Sname99}
-
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[9]}  ${Sname99}  sortOrder=${sort_order[8]}  onRedirect=${stageuid88}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${stageuid99}     ${resp.json()['uid']}
-
-    ${Sname100}=    FakerLibrary.name
-    Set Suite Variable  ${Sname100}
-
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[10]}  ${Sname100}  sortOrder=${sort_order[9]}  onRedirect=${stageuid99}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${stageuid100}     ${resp.json()['uid']}
+    Set Suite Variable    ${Leadstageuid55}     ${resp.json()['uid']}
 
 
+#........ Update Lead Stages .............
 
-    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[0]}  ${stageuid11}  ${Sname11}  onProceed=${stageuid22}
+
+    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${leadleadstageType[0]}  ${Leadstageuid11}  ${LeadSname11}  onProceed=${Leadstageuid22}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead Stage By UID  ${stageuid11} 
+    ${resp}=    Get Lead Stage By UID  ${Leadstageuid11} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['onProceed']}   ${stageuid22}
+    Should Be Equal As Strings    ${resp.json()['onProceed']}   ${Leadstageuid22}
 
-    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${stageuid22}  ${Sname22}  onProceed=${stageuid33}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Get Lead Stage By UID  ${stageuid22} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['onProceed']}   ${stageuid33}
-    Should Be Equal As Strings    ${resp.json()['onRedirect']}  ${stageuid11}
-
-    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[2]}  ${stageuid33}  ${Sname33}  onProceed=${stageuid44}
+    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${leadleadstageType[1]}  ${Leadstageuid22}  ${LeadSname22}  onProceed=${Leadstageuid33}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead Stage By UID  ${stageuid33} 
+    ${resp}=    Get Lead Stage By UID  ${Leadstageuid22} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['onProceed']}   ${stageuid44}
-    Should Be Equal As Strings    ${resp.json()['onRedirect']}  ${stageuid22}
+    Should Be Equal As Strings    ${resp.json()['onProceed']}   ${Leadstageuid33}
+    Should Be Equal As Strings    ${resp.json()['onRedirect']}  ${Leadstageuid11}
 
-    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[3]}  ${stageuid44}  ${Sname44}  onProceed=${stageuid55}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Get Lead Stage By UID  ${stageuid44} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['onProceed']}   ${stageuid55}
-    Should Be Equal As Strings    ${resp.json()['onRedirect']}  ${stageuid33}
-
-    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[4]}  ${stageuid55}  ${Sname55}  onProceed=${stageuid66}
+    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${leadleadstageType[2]}  ${Leadstageuid33}  ${LeadSname33}  onProceed=${Leadstageuid44}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead Stage By UID  ${stageuid55} 
+    ${resp}=    Get Lead Stage By UID  ${Leadstageuid33} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['onProceed']}   ${stageuid66}
-    Should Be Equal As Strings    ${resp.json()['onRedirect']}  ${stageuid44}
+    Should Be Equal As Strings    ${resp.json()['onProceed']}   ${Leadstageuid44}
+    Should Be Equal As Strings    ${resp.json()['onRedirect']}  ${Leadstageuid22}
 
-    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[5]}  ${stageuid66}  ${Sname66}  onProceed=${stageuid77}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Get Lead Stage By UID  ${stageuid66} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['onProceed']}   ${stageuid77}
-    Should Be Equal As Strings    ${resp.json()['onRedirect']}  ${stageuid55}
-
-    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[6]}  ${stageuid77}  ${Sname77}  onProceed=${stageuid88}
+    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${leadleadstageType[3]}  ${Leadstageuid44}  ${LeadSname44}  onProceed=${Leadstageuid55}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead Stage By UID  ${stageuid77} 
+    ${resp}=    Get Lead Stage By UID  ${Leadstageuid44} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['onProceed']}   ${stageuid88}
-    Should Be Equal As Strings    ${resp.json()['onRedirect']}  ${stageuid66}
+    Should Be Equal As Strings    ${resp.json()['onProceed']}   ${Leadstageuid55}
+    Should Be Equal As Strings    ${resp.json()['onRedirect']}  ${Leadstageuid33}
 
-    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[7]}  ${stageuid88}  ${Sname88}  onProceed=${stageuid99}
+
+#.......  Creating Loan Stages ............
+
+
+    ${LoanSname11}=    FakerLibrary.name
+    Set Suite Variable  ${LoanSname11}
+
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${loanleadstageType[0]}  ${LoanSname11}  sortOrder=${sort_order[5]}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${Loanstageuid11}     ${resp.json()['uid']}
+
+    ${LoanSname22}=    FakerLibrary.name
+    Set Suite Variable  ${LoanSname22}
+
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${loanleadstageType[1]}  ${LoanSname22}  sortOrder=${sort_order[6]}  onRedirect=${Loanstageuid11}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${Loanstageuid22}     ${resp.json()['uid']}
+
+    ${LoanSname33}=    FakerLibrary.name
+    Set Suite Variable  ${LoanSname33}
+
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${loanleadstageType[2]}  ${LoanSname33}  sortOrder=${sort_order[7]}  onRedirect=${Loanstageuid22}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${Loanstageuid33}     ${resp.json()['uid']}
+
+    ${LoanSname44}=    FakerLibrary.name
+    Set Suite Variable  ${LoanSname44}
+
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${loanleadstageType[3]}  ${LoanSname44}  sortOrder=${sort_order[8]}  onRedirect=${Loanstageuid33}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${Loanstageuid44}     ${resp.json()['uid']}
+
+    ${LoanSname55}=    FakerLibrary.name
+    Set Suite Variable  ${LoanSname55}
+
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${loanleadstageType[4]}  ${LoanSname55}  sortOrder=${sort_order[9]}  onRedirect=${Loanstageuid44}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${Loanstageuid55}     ${resp.json()['uid']}
+
+
+#........ Update Loan Stages .............
+    
+
+    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${leadleadstageType[5]}  ${Loanstageuid11}  ${LoanSname11}  onProceed=${Loanstageuid22}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead Stage By UID  ${stageuid88} 
+    ${resp}=    Get Lead Stage By UID  ${Loanstageuid11} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['onProceed']}   ${stageuid99}
-    Should Be Equal As Strings    ${resp.json()['onRedirect']}  ${stageuid77}
+    Should Be Equal As Strings    ${resp.json()['onProceed']}   ${Loanstageuid22}
 
-    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[8]}  ${stageuid99}  ${Sname99}  onProceed=${stageuid100}
+    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${loanleadstageType[0]}  ${Loanstageuid22}  ${LoanSname22}  onProceed=${Loanstageuid33}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead Stage By UID  ${stageuid99} 
+    ${resp}=    Get Lead Stage By UID  ${Loanstageuid22} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['onProceed']}   ${stageuid100}
-    Should Be Equal As Strings    ${resp.json()['onRedirect']}  ${stageuid88}
+    Should Be Equal As Strings    ${resp.json()['onProceed']}   ${Loanstageuid33}
+    Should Be Equal As Strings    ${resp.json()['onRedirect']}  ${Loanstageuid11}
+
+    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${loanleadstageType[1]}  ${Loanstageuid33}  ${LoanSname33}  onProceed=${Loanstageuid44}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead Stage By UID  ${Loanstageuid33} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['onProceed']}   ${Loanstageuid44}
+    Should Be Equal As Strings    ${resp.json()['onRedirect']}  ${Loanstageuid22}
+
+    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${loanleadstageType[2]}  ${Loanstageuid44}  ${LoanSname44}  onProceed=${Loanstageuid55}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead Stage By UID  ${Loanstageuid44} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['onProceed']}   ${Loanstageuid55}
+    Should Be Equal As Strings    ${resp.json()['onRedirect']}  ${Loanstageuid33}
 
 
 
@@ -354,7 +386,7 @@ JD-TC-GetLosFollowUpData-1
     Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
-    ${dob}=    FakerLibrary.Date
+    # ${dob}=    FakerLibrary.Date
     ${permanentAddress1}=  FakerLibrary.address
     ${gender}=  Random Element    ${Genderlist}
     Set Suite Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
@@ -362,8 +394,6 @@ JD-TC-GetLosFollowUpData-1
     ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${ageyrs}  ${agemonths}=  db.calculate_age_years_months     ${dob}
 
     ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
     Log   ${resp.json()}
@@ -379,9 +409,9 @@ JD-TC-GetLosFollowUpData-1
     ${product}=  Create Dictionary  uid=${productuid}
     ${sourcingChannel}=  Create Dictionary  uid=${sourcinguid} 
 
-    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}  consumerEmail=${consumerEmail}
+    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}  consumerEmail=${consumerEmail}  firstName=${consumerFirstName}   lastName=${consumerLastName}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  ${branchid1}   product=${product}  sourcingChannel=${sourcingChannel}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${requestedAmount}  ${branchid1}  product=${product}  sourcingChannel=${sourcingChannel}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${lead_uid}     ${resp.json()['uid']}
@@ -390,6 +420,34 @@ JD-TC-GetLosFollowUpData-1
     ${resp}=    Get Lead LOS   ${lead_uid}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+
+
+
+
+    ${PUSERNAME_U2}=  Evaluate  ${PUSERNAME}+3366968
+    clear_users  ${PUSERNAME_U2}
+    Set Suite Variable  ${PUSERNAME_U2}
+    clear_users  ${PUSERNAME_U2}
+    Set Suite Variable  ${PUSERNAME_U2}
+    ${firstname1}=  FakerLibrary.name
+    ${lastname1}=  FakerLibrary.last_name
+    
+    ${whpnum}=  Evaluate  ${PUSERNAME}+346862
+    ${tlgnum}=  Evaluate  ${PUSERNAME}+346389
+
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${countryCodes[1]}  ${PUSERNAME_U2}  ${userType[0]}    deptId=${dep_id}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${u_id1}  ${resp.json()}
+
+    ${resp}=  Get User By Id  ${u_id1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+
+
 
     ${PH_Number2}    Random Number 	       digits=5 
     ${PH_Number2}=    Evaluate    f'{${PH_Number2}:0>7d}'
@@ -400,21 +458,73 @@ JD-TC-GetLosFollowUpData-1
     ${CO_Applicant_LastName}=    FakerLibrary.last_name  
     Set Suite Variable  ${CO_Applicant_LastName}
 
-    ${leadStage}=   Create Dictionary   uid=${stageuid11}
+    ${leadStage}=   Create Dictionary   uid=${Leadstageuid11}
     Set Suite Variable  ${leadStage}
     ${remarks}=    FakerLibrary.name
     Set Suite Variable  ${remarks}
     ${lead}=    Create Dictionary  product=${product}  sourcingChannel=${sourcingChannel}  status=${cdl_status}  progress=${progress}  requestedAmount=${requestedAmount}  description=${description}  consumerKyc=${consumerKyc}
     Set Suite Variable  ${lead}
 
-    ${resp}=    LOS Lead As Draft For Followup Stage  ${lead_uid}  ${stageuid11}  remarks=${remarks}
+    ${resp}=    LOS Lead As Draft For Followup Stage  ${lead_uid}  ${Leadstageuid11}  generatedBy=${u_id1}  remarks=${remarks}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Save And Proceed LOS Lead Followup  ${lead_uid}  ${stageuid11}  
+    ${resp}=    Save And Proceed LOS Lead Followup  ${lead_uid}  ${Leadstageuid11}  generatedBy=${u_id1}  remarks=${remarks}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    GET LOS FollowUp Data   ${lead_uid}  ${stageuid11} 
+    ${resp}=    GET LOS FollowUp Data   ${lead_uid}  ${Leadstageuid11} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+JD-TC-GetLosFollowUpData-UH1
+
+    [Documentation]  Get LOS FollowUp Data - with another provider login 
+
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME44}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    GET LOS FollowUp Data   ${lead_uid}  ${Leadstageuid11} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+JD-TC-GetLosFollowUpData-UH2
+
+    [Documentation]  Get LOS FollowUp Data - without login 
+
+    ${resp}=    GET LOS FollowUp Data   ${lead_uid}  ${Leadstageuid11} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+JD-TC-GetLosFollowUpData-UH3
+
+    [Documentation]  Get LOS FollowUp Data - where lead uid is invalid
+
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${inv}=     Random Int  min=11111  max=999999
+
+    ${resp}=    GET LOS FollowUp Data   ${inv}  ${Leadstageuid11} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+JD-TC-GetLosFollowUpData-UH4
+
+    [Documentation]  Get LOS FollowUp Data - where stage is invalid
+
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${inv}=     Random Int  min=11111  max=999999
+
+    ${resp}=    GET LOS FollowUp Data   ${lead_uid}  ${inv} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200

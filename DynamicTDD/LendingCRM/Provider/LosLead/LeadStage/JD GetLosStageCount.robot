@@ -72,7 +72,7 @@ JD-TC-GetLeadStageCountByFilter-1
     ${Sname}=    FakerLibrary.name
     Set Suite Variable  ${Sname}
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${Sname}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${leadstageType[1]}  ${Sname}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${stageuid}     ${resp.json()['uid']}
@@ -80,7 +80,7 @@ JD-TC-GetLeadStageCountByFilter-1
     ${Sname2}=    FakerLibrary.name
     Set Suite Variable  ${Sname2}
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[1]}  ${stageType[1]}  ${Sname2}
+    ${resp}=    Create Los Lead Stage  ${losProduct[1]}  ${leadstageType[1]}  ${Sname2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${stageuid2}     ${resp.json()['uid']}
@@ -88,7 +88,7 @@ JD-TC-GetLeadStageCountByFilter-1
     ${Sname3}=    FakerLibrary.name
     Set Suite Variable  ${Sname3}
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[1]}  ${stageType[2]}  ${Sname3}
+    ${resp}=    Create Los Lead Stage  ${losProduct[1]}  ${leadstageType[2]}  ${Sname3}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${stageuid3}     ${resp.json()['uid']}
@@ -271,13 +271,13 @@ JD-TC-GetLeadStageCountByFilter-10
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Los Stage   stageType-eq=${stageType[2]}
+    ${resp}=    Get Los Stage   stageType-eq=${leadstageType[2]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}        200
 
     ${length}=   Get Length  ${resp.json()}
 
-    ${resp}=    Get Los Stage Count   stageType-eq=${stageType[2]}
+    ${resp}=    Get Los Stage Count   stageType-eq=${leadstageType[2]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}        200
     Should Be Equal As Strings    ${resp.json()}        ${length}
@@ -435,13 +435,13 @@ JD-TC-GetLeadStageCountByFilter-UH8
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Los Stage   stageType-eq=${stageType[3]}
+    ${resp}=    Get Los Stage   stageType-eq=${leadstageType[3]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${length}=   Get Length  ${resp.json()}
 
-    ${resp}=    Get Los Stage Count   stageType-eq=${stageType[3]}
+    ${resp}=    Get Los Stage Count   stageType-eq=${leadstageType[3]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}        200
     Should Be Equal As Strings    ${resp.json()}        ${length}

@@ -156,7 +156,7 @@ JD-TC-Communication Between Consumer and Provider-1
     # Set Test Variable    ${cid}   ${resp.json()['id']} 
 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     ${resp}=  Consumer WLCommunication  ${wid}  ${pid0}  ${msg}  ${messageType[0]}  ${caption}  
     Log  ${resp}

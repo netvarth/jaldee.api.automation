@@ -72,7 +72,7 @@ JD-TC-GetLeadStageByFilter-1
     ${Sname}=    FakerLibrary.name
     Set Suite Variable  ${Sname}
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${Sname}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${leadstageType[1]}  ${Sname}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${stageuid}     ${resp.json()['uid']}
@@ -80,7 +80,7 @@ JD-TC-GetLeadStageByFilter-1
     ${Sname2}=    FakerLibrary.name
     Set Suite Variable  ${Sname2}
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[1]}  ${stageType[1]}  ${Sname2}
+    ${resp}=    Create Los Lead Stage  ${losProduct[1]}  ${leadstageType[1]}  ${Sname2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${stageuid2}     ${resp.json()['uid']}
@@ -88,7 +88,7 @@ JD-TC-GetLeadStageByFilter-1
     ${Sname3}=    FakerLibrary.name
     Set Suite Variable  ${Sname3}
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[1]}  ${stageType[2]}  ${Sname3}
+    ${resp}=    Create Los Lead Stage  ${losProduct[1]}  ${leadstageType[2]}  ${Sname3}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${stageuid3}     ${resp.json()['uid']}
@@ -104,19 +104,19 @@ JD-TC-GetLeadStageByFilter-1
     Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname3}
     Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
     Should Be Equal As Strings    ${resp.json()[0]['losProduct']}   ${losProduct[1]}
-    Should Be Equal As Strings    ${resp.json()[0]['stageType']}    ${stageType[2]}
+    Should Be Equal As Strings    ${resp.json()[0]['stageType']}    ${leadstageType[2]}
     Should Be Equal As Strings    ${resp.json()[1]['uid']}          ${stageuid2}
     Should Be Equal As Strings    ${resp.json()[1]['account']}      ${account_id}
     Should Be Equal As Strings    ${resp.json()[1]['name']}         ${Sname2}
     Should Be Equal As Strings    ${resp.json()[1]['status']}       ${toggle[0]}
     Should Be Equal As Strings    ${resp.json()[1]['losProduct']}   ${losProduct[1]}
-    Should Be Equal As Strings    ${resp.json()[1]['stageType']}    ${stageType[1]}
+    Should Be Equal As Strings    ${resp.json()[1]['stageType']}    ${leadstageType[1]}
     Should Be Equal As Strings    ${resp.json()[2]['uid']}          ${stageuid}
     Should Be Equal As Strings    ${resp.json()[2]['account']}      ${account_id}
     Should Be Equal As Strings    ${resp.json()[2]['name']}         ${Sname}
     Should Be Equal As Strings    ${resp.json()[2]['status']}       ${toggle[0]}
     Should Be Equal As Strings    ${resp.json()[2]['losProduct']}   ${losProduct[0]}
-    Should Be Equal As Strings    ${resp.json()[2]['stageType']}    ${stageType[1]}
+    Should Be Equal As Strings    ${resp.json()[2]['stageType']}    ${leadstageType[1]}
 
 JD-TC-GetLeadStageByFilter-2
 
@@ -134,7 +134,7 @@ JD-TC-GetLeadStageByFilter-2
     Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname2}
     Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
     Should Be Equal As Strings    ${resp.json()[0]['losProduct']}   ${losProduct[1]}
-    Should Be Equal As Strings    ${resp.json()[0]['stageType']}    ${stageType[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['stageType']}    ${leadstageType[1]}
 
 JD-TC-GetLeadStageByFilter-3
 
@@ -152,19 +152,19 @@ JD-TC-GetLeadStageByFilter-3
     Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname3}
     Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
     Should Be Equal As Strings    ${resp.json()[0]['losProduct']}   ${losProduct[1]}
-    Should Be Equal As Strings    ${resp.json()[0]['stageType']}    ${stageType[2]}
+    Should Be Equal As Strings    ${resp.json()[0]['stageType']}    ${leadstageType[2]}
     Should Be Equal As Strings    ${resp.json()[1]['uid']}          ${stageuid2}
     Should Be Equal As Strings    ${resp.json()[1]['account']}      ${account_id}
     Should Be Equal As Strings    ${resp.json()[1]['name']}         ${Sname2}
     Should Be Equal As Strings    ${resp.json()[1]['status']}       ${toggle[0]}
     Should Be Equal As Strings    ${resp.json()[1]['losProduct']}   ${losProduct[1]}
-    Should Be Equal As Strings    ${resp.json()[1]['stageType']}    ${stageType[1]}
+    Should Be Equal As Strings    ${resp.json()[1]['stageType']}    ${leadstageType[1]}
     Should Be Equal As Strings    ${resp.json()[2]['uid']}          ${stageuid}
     Should Be Equal As Strings    ${resp.json()[2]['account']}      ${account_id}
     Should Be Equal As Strings    ${resp.json()[2]['name']}         ${Sname}
     Should Be Equal As Strings    ${resp.json()[2]['status']}       ${toggle[0]}
     Should Be Equal As Strings    ${resp.json()[2]['losProduct']}   ${losProduct[0]}
-    Should Be Equal As Strings    ${resp.json()[2]['stageType']}    ${stageType[1]}
+    Should Be Equal As Strings    ${resp.json()[2]['stageType']}    ${leadstageType[1]}
 
 
 JD-TC-GetLeadStageByFilter-4
@@ -183,19 +183,19 @@ JD-TC-GetLeadStageByFilter-4
     Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname3}
     Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
     Should Be Equal As Strings    ${resp.json()[0]['losProduct']}   ${losProduct[1]}
-    Should Be Equal As Strings    ${resp.json()[0]['stageType']}    ${stageType[2]}
+    Should Be Equal As Strings    ${resp.json()[0]['stageType']}    ${leadstageType[2]}
     Should Be Equal As Strings    ${resp.json()[1]['uid']}          ${stageuid2}
     Should Be Equal As Strings    ${resp.json()[1]['account']}      ${account_id}
     Should Be Equal As Strings    ${resp.json()[1]['name']}         ${Sname2}
     Should Be Equal As Strings    ${resp.json()[1]['status']}       ${toggle[0]}
     Should Be Equal As Strings    ${resp.json()[1]['losProduct']}   ${losProduct[1]}
-    Should Be Equal As Strings    ${resp.json()[1]['stageType']}    ${stageType[1]}
+    Should Be Equal As Strings    ${resp.json()[1]['stageType']}    ${leadstageType[1]}
     Should Be Equal As Strings    ${resp.json()[2]['uid']}          ${stageuid}
     Should Be Equal As Strings    ${resp.json()[2]['account']}      ${account_id}
     Should Be Equal As Strings    ${resp.json()[2]['name']}         ${Sname}
     Should Be Equal As Strings    ${resp.json()[2]['status']}       ${toggle[0]}
     Should Be Equal As Strings    ${resp.json()[2]['losProduct']}   ${losProduct[0]}
-    Should Be Equal As Strings    ${resp.json()[2]['stageType']}    ${stageType[1]}
+    Should Be Equal As Strings    ${resp.json()[2]['stageType']}    ${leadstageType[1]}
 
 JD-TC-GetLeadStageByFilter-5
 
@@ -217,7 +217,7 @@ JD-TC-GetLeadStageByFilter-5
     Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname2}
     Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[1]}
     Should Be Equal As Strings    ${resp.json()[0]['losProduct']}   ${losProduct[1]}
-    Should Be Equal As Strings    ${resp.json()[0]['stageType']}    ${stageType[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['stageType']}    ${leadstageType[1]}
 
 JD-TC-GetLeadStageByFilter-6
 
@@ -235,19 +235,19 @@ JD-TC-GetLeadStageByFilter-6
     Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname3}
     Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
     Should Be Equal As Strings    ${resp.json()[0]['losProduct']}   ${losProduct[1]}
-    Should Be Equal As Strings    ${resp.json()[0]['stageType']}    ${stageType[2]}
+    Should Be Equal As Strings    ${resp.json()[0]['stageType']}    ${leadstageType[2]}
     Should Be Equal As Strings    ${resp.json()[1]['uid']}          ${stageuid2}
     Should Be Equal As Strings    ${resp.json()[1]['account']}      ${account_id}
     Should Be Equal As Strings    ${resp.json()[1]['name']}         ${Sname2}
     Should Be Equal As Strings    ${resp.json()[1]['status']}       ${toggle[1]}
     Should Be Equal As Strings    ${resp.json()[1]['losProduct']}   ${losProduct[1]}
-    Should Be Equal As Strings    ${resp.json()[1]['stageType']}    ${stageType[1]}
+    Should Be Equal As Strings    ${resp.json()[1]['stageType']}    ${leadstageType[1]}
     Should Be Equal As Strings    ${resp.json()[2]['uid']}          ${stageuid}
     Should Be Equal As Strings    ${resp.json()[2]['account']}      ${account_id}
     Should Be Equal As Strings    ${resp.json()[2]['name']}         ${Sname}
     Should Be Equal As Strings    ${resp.json()[2]['status']}       ${toggle[0]}
     Should Be Equal As Strings    ${resp.json()[2]['losProduct']}   ${losProduct[0]}
-    Should Be Equal As Strings    ${resp.json()[2]['stageType']}    ${stageType[1]}
+    Should Be Equal As Strings    ${resp.json()[2]['stageType']}    ${leadstageType[1]}
 
 
 JD-TC-GetLeadStageByFilter-7
@@ -266,19 +266,19 @@ JD-TC-GetLeadStageByFilter-7
     Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname3}
     Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
     Should Be Equal As Strings    ${resp.json()[0]['losProduct']}   ${losProduct[1]}
-    Should Be Equal As Strings    ${resp.json()[0]['stageType']}    ${stageType[2]}
+    Should Be Equal As Strings    ${resp.json()[0]['stageType']}    ${leadstageType[2]}
     Should Be Equal As Strings    ${resp.json()[1]['uid']}          ${stageuid2}
     Should Be Equal As Strings    ${resp.json()[1]['account']}      ${account_id}
     Should Be Equal As Strings    ${resp.json()[1]['name']}         ${Sname2}
     Should Be Equal As Strings    ${resp.json()[1]['status']}       ${toggle[1]}
     Should Be Equal As Strings    ${resp.json()[1]['losProduct']}   ${losProduct[1]}
-    Should Be Equal As Strings    ${resp.json()[1]['stageType']}    ${stageType[1]}
+    Should Be Equal As Strings    ${resp.json()[1]['stageType']}    ${leadstageType[1]}
     Should Be Equal As Strings    ${resp.json()[2]['uid']}          ${stageuid}
     Should Be Equal As Strings    ${resp.json()[2]['account']}      ${account_id}
     Should Be Equal As Strings    ${resp.json()[2]['name']}         ${Sname}
     Should Be Equal As Strings    ${resp.json()[2]['status']}       ${toggle[0]}
     Should Be Equal As Strings    ${resp.json()[2]['losProduct']}   ${losProduct[0]}
-    Should Be Equal As Strings    ${resp.json()[2]['stageType']}    ${stageType[1]}
+    Should Be Equal As Strings    ${resp.json()[2]['stageType']}    ${leadstageType[1]}
 
 JD-TC-GetLeadStageByFilter-8
 
@@ -296,13 +296,13 @@ JD-TC-GetLeadStageByFilter-8
     Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname3}
     Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
     Should Be Equal As Strings    ${resp.json()[0]['losProduct']}   ${losProduct[1]}
-    Should Be Equal As Strings    ${resp.json()[0]['stageType']}    ${stageType[2]}
+    Should Be Equal As Strings    ${resp.json()[0]['stageType']}    ${leadstageType[2]}
     Should Be Equal As Strings    ${resp.json()[1]['uid']}          ${stageuid2}
     Should Be Equal As Strings    ${resp.json()[1]['account']}      ${account_id}
     Should Be Equal As Strings    ${resp.json()[1]['name']}         ${Sname2}
     Should Be Equal As Strings    ${resp.json()[1]['status']}       ${toggle[1]}
     Should Be Equal As Strings    ${resp.json()[1]['losProduct']}   ${losProduct[1]}
-    Should Be Equal As Strings    ${resp.json()[1]['stageType']}    ${stageType[1]}
+    Should Be Equal As Strings    ${resp.json()[1]['stageType']}    ${leadstageType[1]}
 
 JD-TC-GetLeadStageByFilter-9
 
@@ -320,7 +320,7 @@ JD-TC-GetLeadStageByFilter-9
     Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname2}
     Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[1]}
     Should Be Equal As Strings    ${resp.json()[0]['losProduct']}   ${losProduct[1]}
-    Should Be Equal As Strings    ${resp.json()[0]['stageType']}    ${stageType[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['stageType']}    ${leadstageType[1]}
 
 JD-TC-GetLeadStageByFilter-10
 
@@ -330,7 +330,7 @@ JD-TC-GetLeadStageByFilter-10
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Los Stage   stageType-eq=${stageType[2]}
+    ${resp}=    Get Los Stage   stageType-eq=${leadstageType[2]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}        200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}          ${stageuid3}
@@ -338,7 +338,7 @@ JD-TC-GetLeadStageByFilter-10
     Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname3}
     Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
     Should Be Equal As Strings    ${resp.json()[0]['losProduct']}   ${losProduct[1]}
-    Should Be Equal As Strings    ${resp.json()[0]['stageType']}    ${stageType[2]}
+    Should Be Equal As Strings    ${resp.json()[0]['stageType']}    ${leadstageType[2]}
 
 JD-TC-GetLeadStageByFilter-UH1
 
@@ -469,7 +469,7 @@ JD-TC-GetLeadStageByFilter-UH8
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Los Stage   stageType-eq=${stageType[3]}
+    ${resp}=    Get Los Stage   stageType-eq=${leadstageType[3]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}        []

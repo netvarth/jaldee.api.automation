@@ -59,7 +59,7 @@ JD-TC-CreateLeadStage-1
     ${Sname}=    FakerLibrary.name
     Set Suite Variable  ${Sname}
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${Sname}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${leadstageType[1]}  ${Sname}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${stageuid}     ${resp.json()['uid']}
@@ -79,7 +79,7 @@ JD-TC-CreateLeadStage-2
 
     ${random_number}=    Random Number 	       digits=8
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${random_number}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${leadstageType[1]}  ${random_number}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${stageuid}     ${resp.json()['uid']}
@@ -98,7 +98,7 @@ JD-TC-CreateLeadStage-UH
 
     ${random_number}=    Random Number 	       digits=1
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${random_number}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${leadstageType[1]}  ${random_number}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${NAME_LENGTH_SUBCEED}
@@ -113,7 +113,7 @@ JD-TC-CreateLeadStage-4
 
     ${Sname2}=    Random Number 	       digits=5
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[1]}  ${stageType[1]}  ${Sname2}
+    ${resp}=    Create Los Lead Stage  ${losProduct[1]}  ${leadstageType[1]}  ${Sname2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${stageuid}     ${resp.json()['uid']}
@@ -132,7 +132,7 @@ JD-TC-CreateLeadStage-5
 
     ${Sname2}=    Random Number 	       digits=5
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[1]}  ${stageType[2]}  ${Sname2}
+    ${resp}=    Create Los Lead Stage  ${losProduct[1]}  ${leadstageType[2]}  ${Sname2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${stageuid}     ${resp.json()['uid']}
@@ -151,7 +151,7 @@ JD-TC-CreateLeadStage-UH1
 
     ${random_number}=    Random Number 	       digits=251
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${random_number}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${leadstageType[1]}  ${random_number}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${NAME_LENGTH_EXCEED}
@@ -164,7 +164,7 @@ JD-TC-CreateLeadStage-UH2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${Sname}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${leadstageType[1]}  ${Sname}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${DUPLICATE_NAME_INPUT}
@@ -178,7 +178,7 @@ JD-TC-CreateLeadStage-UH3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${empty}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${leadstageType[1]}  ${empty}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${NAME_LENGTH_EXCEED}
@@ -188,7 +188,7 @@ JD-TC-CreateLeadStage-UH4
 
     [Documentation]  Create Lead Stage - without login
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${Sname}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${leadstageType[1]}  ${Sname}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings    ${resp.json()}        ${SESSION_EXPIRED}
@@ -224,21 +224,21 @@ JD-TC-CreateLeadStage-6
 
     ${Sname11}=    FakerLibrary.name
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${Sname11}  sortOrder=${sort_order[0]}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${leadstageType[1]}  ${Sname11}  sortOrder=${sort_order[0]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${stageuid11}     ${resp.json()['uid']}
 
     ${Sname22}=    FakerLibrary.name
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${Sname22}  sortOrder=${sort_order[1]}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${leadstageType[1]}  ${Sname22}  sortOrder=${sort_order[1]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${stageuid22}     ${resp.json()['uid']}
 
     ${Sname33}=    FakerLibrary.name
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[1]}  ${Sname33}  sortOrder=${sort_order[2]}  onProceed=${stageuid22}  onRedirect=${stageuid11}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${leadstageType[1]}  ${Sname33}  sortOrder=${sort_order[2]}  onProceed=${stageuid22}  onRedirect=${stageuid11}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${stageuid33}     ${resp.json()['uid']}

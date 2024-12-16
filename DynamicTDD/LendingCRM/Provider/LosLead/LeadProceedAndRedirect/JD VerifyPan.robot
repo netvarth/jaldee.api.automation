@@ -213,7 +213,7 @@ JD-TC-VerifyPan-1
     ${Sname66}=    FakerLibrary.name
     Set Suite Variable  ${Sname66}
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[6]}  ${Sname66}  sortOrder=${sort_order[5]}  onRedirect=${stageuid55}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${loanstageType[0]}  ${Sname66}  sortOrder=${sort_order[5]}  onRedirect=${stageuid55}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${stageuid66}     ${resp.json()['uid']}
@@ -221,7 +221,7 @@ JD-TC-VerifyPan-1
     ${Sname77}=    FakerLibrary.name
     Set Suite Variable  ${Sname77}
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[7]}  ${Sname77}  sortOrder=${sort_order[6]}  onRedirect=${stageuid66}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${loanstageType[1]}  ${Sname77}  sortOrder=${sort_order[6]}  onRedirect=${stageuid66}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${stageuid77}     ${resp.json()['uid']}
@@ -229,7 +229,7 @@ JD-TC-VerifyPan-1
     ${Sname88}=    FakerLibrary.name
     Set Suite Variable  ${Sname88}
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[8]}  ${Sname88}  sortOrder=${sort_order[7]}  onRedirect=${stageuid77}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${loanstageType[2]}  ${Sname88}  sortOrder=${sort_order[7]}  onRedirect=${stageuid77}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${stageuid88}     ${resp.json()['uid']}
@@ -237,7 +237,7 @@ JD-TC-VerifyPan-1
     ${Sname99}=    FakerLibrary.name
     Set Suite Variable  ${Sname99}
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[9]}  ${Sname99}  sortOrder=${sort_order[8]}  onRedirect=${stageuid88}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${loanstageType[3]}  ${Sname99}  sortOrder=${sort_order[8]}  onRedirect=${stageuid88}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${stageuid99}     ${resp.json()['uid']}
@@ -245,7 +245,7 @@ JD-TC-VerifyPan-1
     ${Sname100}=    FakerLibrary.name
     Set Suite Variable  ${Sname100}
 
-    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${stageType[10]}  ${Sname100}  sortOrder=${sort_order[9]}  onRedirect=${stageuid99}
+    ${resp}=    Create Los Lead Stage  ${losProduct[0]}  ${loanstageType[4]}  ${Sname100}  sortOrder=${sort_order[9]}  onRedirect=${stageuid99}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${stageuid100}     ${resp.json()['uid']}
@@ -311,7 +311,7 @@ JD-TC-VerifyPan-1
     Should Be Equal As Strings    ${resp.json()['onProceed']}   ${stageuid77}
     Should Be Equal As Strings    ${resp.json()['onRedirect']}  ${stageuid55}
 
-    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[6]}  ${stageuid77}  ${Sname77}  onProceed=${stageuid88}
+    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${loanstageType[0]}  ${stageuid77}  ${Sname77}  onProceed=${stageuid88}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -321,7 +321,7 @@ JD-TC-VerifyPan-1
     Should Be Equal As Strings    ${resp.json()['onProceed']}   ${stageuid88}
     Should Be Equal As Strings    ${resp.json()['onRedirect']}  ${stageuid66}
 
-    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[7]}  ${stageuid88}  ${Sname88}  onProceed=${stageuid99}
+    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${loanstageType[1]}  ${stageuid88}  ${Sname88}  onProceed=${stageuid99}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -331,7 +331,7 @@ JD-TC-VerifyPan-1
     Should Be Equal As Strings    ${resp.json()['onProceed']}   ${stageuid99}
     Should Be Equal As Strings    ${resp.json()['onRedirect']}  ${stageuid77}
 
-    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${stageType[8]}  ${stageuid99}  ${Sname99}  onProceed=${stageuid100}
+    ${resp}=    Update Los Lead Stage  ${losProduct[0]}  ${loanstageType[2]}  ${stageuid99}  ${Sname99}  onProceed=${stageuid100}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
