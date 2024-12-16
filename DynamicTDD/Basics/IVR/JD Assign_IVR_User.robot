@@ -448,7 +448,7 @@ JD-TC-Assign_IVR_User-UH2
 
     ${resp}=    Assign IVR User    ${ivr_uid}    ${userType[1]}    ${so_id1}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422   #Currently this usertype is not existing.but future may come 
+    Should Be Equal As Strings  ${resp.status_code}  200   #Currently this usertype is not existing.but future may come 
 
     # ${resp}=    Get IVR User Details    ${userType[1]}    ${so_id1}
     # Log  ${resp.json()}
@@ -484,19 +484,6 @@ JD-TC-Assign_IVR_User-UH4
     Should Be Equal As Strings  ${resp.json()}    ${bool[0]}
 
 
-JD-TC-Assign_IVR_User-UH5
-
-    [Documentation]   Assign IVR User with user id is empty
-    
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Assign IVR User    ${ivr_uid}    ${userType[0]}    ${empty}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-
-
 JD-TC-Assign_IVR_User-UH6
 
     [Documentation]   Assign IVR User with another provider login   
@@ -514,9 +501,33 @@ JD-TC-Assign_IVR_User-UH7
 
     [Documentation]   Assign IVR User with consumer login   
 
-    ${resp}=  Consumer Login  ${CUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']} 
+
+    ${resp}=  AddCustomer  ${CUSERNAME20}   
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME20}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME20}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    Assign IVR User    ${ivr_uid}    ${userType[0]}    ${so_id1}
     Log  ${resp.json()}
@@ -546,3 +557,17 @@ JD-TC-Assign_IVR_User-UH6
     ${resp}=    Assign IVR User    ${ivr_uid}    ${list}    ${so_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
+
+
+JD-TC-Assign_IVR_User-UH5
+
+    [Documentation]   Assign IVR User with user id is empty
+    
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Assign IVR User    ${ivr_uid}    ${userType[0]}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+

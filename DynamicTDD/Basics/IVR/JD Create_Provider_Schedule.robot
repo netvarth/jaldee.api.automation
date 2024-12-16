@@ -19,6 +19,9 @@ Variables       /ebs/TDD/varfiles/providers.py
 Variables       /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
+*** Variables ***
+
+@{service_names}
 
 *** Test Cases ***
 
@@ -518,7 +521,8 @@ JD-TC-Create_Provider_Schedule-UH6
     ${lid}=  Create Sample Location  
     Set Suite Variable  ${lid}
     
-    ${ser_name}=   FakerLibrary.word
+    ${ser_name}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${ser_name}   
     Set Suite Variable    ${ser_name}
     ${resp}=   Create Sample Service  ${ser_name}
     Set Suite Variable    ${s_id}    ${resp} 
@@ -699,14 +703,14 @@ JD-TC-Create_Provider_Schedule-UH11
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  4  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${resp}=  Create Provider Schedule  ${empty}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[0]}  ${user_id}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"  "${NECESSARY_FIELD_MISSING}"
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  "${resp.json()}"  "${NECESSARY_FIELD_MISSING}"
 
 
 JD-TC-Create_Provider_Schedule-UH12

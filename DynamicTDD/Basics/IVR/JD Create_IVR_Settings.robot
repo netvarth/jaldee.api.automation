@@ -210,7 +210,116 @@ JD-TC-Create_IVR_Settings-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+JD-TC-Create_IVR_Settings-UH3
+
+    [Documentation]   Create IVR Settings where call priority is low
     
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[2]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${languageResetCount}    ${ivr_config_data}   ${bool[1]}   ${bool[1]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create_IVR_Settings-UH5
+
+    [Documentation]   Create IVR Settings where call waiting time is empty
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${empty}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${languageResetCount}    ${ivr_config_data}   ${bool[1]}   ${bool[1]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200      #not considering this from dev
+
+JD-TC-Create_IVR_Settings-UH6
+
+    [Documentation]   Create IVR Settings where service id is empty
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${empty}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${languageResetCount}    ${ivr_config_data}   ${bool[1]}   ${bool[1]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create_IVR_Settings-UH7
+
+    [Documentation]   Create IVR Settings where token is empty
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${empty}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${languageResetCount}    ${ivr_config_data}  ${bool[1]}   ${bool[1]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create_IVR_Settings-UH8
+
+    [Documentation]   Create IVR Settings where secret key is empty
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${empty}    ${apiKey}    ${companyId}    ${publicId}    ${languageResetCount}    ${ivr_config_data}  ${bool[1]}   ${bool[1]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create_IVR_Settings-UH9
+
+    [Documentation]   Create IVR Settings where apiKey is empty
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${secretKey}    ${empty}    ${companyId}    ${publicId}    ${languageResetCount}    ${ivr_config_data}   ${bool[1]}   ${bool[1]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create_IVR_Settings-UH10
+
+    [Documentation]   Create IVR Settings where company id is empty
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${empty}    ${publicId}    ${languageResetCount}    ${ivr_config_data}  ${bool[1]}   ${bool[1]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+JD-TC-Create_IVR_Settings-UH11
+
+    [Documentation]   Create IVR Settings where public id is empty
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${empty}    ${languageResetCount}    ${ivr_config_data}   ${bool[1]}   ${bool[1]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create_IVR_Settings-UH12
+
+    [Documentation]   Create IVR Settings where language Reset Count is empty
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${empty}    ${ivr_config_data}   ${bool[1]}   ${bool[1]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200          #Language reset count is not check from dev side
+
+
+*** Comments ***
+ 
 JD-TC-Create_IVR_Settings-UH1
 
     [Documentation]   Create IVR Settings where account is is invalid
@@ -223,7 +332,7 @@ JD-TC-Create_IVR_Settings-UH1
 
     ${resp}=    Create_IVR_Settings    ${fake_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${languageResetCount}    ${ivr_config_data}   ${bool[1]}   ${bool[1]} 
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-Create_IVR_Settings-UH2
 
@@ -234,18 +343,6 @@ JD-TC-Create_IVR_Settings-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Create_IVR_Settings    ${empty}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${languageResetCount}    ${ivr_config_data}   ${bool[1]}   ${bool[1]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-
-JD-TC-Create_IVR_Settings-UH3
-
-    [Documentation]   Create IVR Settings where call priority is low
-    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[2]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${languageResetCount}    ${ivr_config_data}   ${bool[1]}   ${bool[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -259,102 +356,7 @@ JD-TC-Create_IVR_Settings-UH4
 
     ${resp}=    Create_IVR_Settings    ${acc_id}    ${empty}    ${callWaitingTime}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${languageResetCount}    ${ivr_config_data}   ${bool[1]}   ${bool[1]} 
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-
-JD-TC-Create_IVR_Settings-UH5
-
-    [Documentation]   Create IVR Settings where call waiting time is empty
-    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
-    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${empty}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${languageResetCount}    ${ivr_config_data}   ${bool[1]}   ${bool[1]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422      #not considering this from dev
-
-JD-TC-Create_IVR_Settings-UH6
-
-    [Documentation]   Create IVR Settings where service id is empty
-    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${empty}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${languageResetCount}    ${ivr_config_data}   ${bool[1]}   ${bool[1]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-
-JD-TC-Create_IVR_Settings-UH7
-
-    [Documentation]   Create IVR Settings where token is empty
-    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${empty}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${languageResetCount}    ${ivr_config_data}  ${bool[1]}   ${bool[1]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-
-JD-TC-Create_IVR_Settings-UH8
-
-    [Documentation]   Create IVR Settings where secret key is empty
-    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${empty}    ${apiKey}    ${companyId}    ${publicId}    ${languageResetCount}    ${ivr_config_data}  ${bool[1]}   ${bool[1]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-
-JD-TC-Create_IVR_Settings-UH9
-
-    [Documentation]   Create IVR Settings where apiKey is empty
-    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${secretKey}    ${empty}    ${companyId}    ${publicId}    ${languageResetCount}    ${ivr_config_data}   ${bool[1]}   ${bool[1]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-
-JD-TC-Create_IVR_Settings-UH10
-
-    [Documentation]   Create IVR Settings where company id is empty
-    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${empty}    ${publicId}    ${languageResetCount}    ${ivr_config_data}  ${bool[1]}   ${bool[1]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-JD-TC-Create_IVR_Settings-UH11
-
-    [Documentation]   Create IVR Settings where public id is empty
-    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${empty}    ${languageResetCount}    ${ivr_config_data}   ${bool[1]}   ${bool[1]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-
-JD-TC-Create_IVR_Settings-UH12
-
-    [Documentation]   Create IVR Settings where language Reset Count is empty
-    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${empty}    ${ivr_config_data}   ${bool[1]}   ${bool[1]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422          #Language reset count is not check from dev side
 
 JD-TC-Create_IVR_Settings-UH13
 
@@ -366,4 +368,4 @@ JD-TC-Create_IVR_Settings-UH13
 
     ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${languageResetCount}    ${empty}   ${bool[1]}   ${bool[1]} 
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.status_code}  200

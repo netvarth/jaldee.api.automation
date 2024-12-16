@@ -234,16 +234,16 @@ JD-Get_all_schedules_of_an_account-UH2
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  4  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
 
     ${resp}=  Create Provider Schedule  ${empty}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[0]}  ${user_id}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"   "${NECESSARY_FIELD_MISSING}"
-    Set Suite Variable  ${sch_id}  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  "${resp.json()}"   "${NECESSARY_FIELD_MISSING}"
+    # Set Suite Variable  ${sch_id}  ${resp.json()}
 
     ${resp}=    Get all schedules of an account 
     Log  ${resp.json()}

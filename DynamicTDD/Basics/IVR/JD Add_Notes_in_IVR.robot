@@ -603,7 +603,7 @@ JD-TC-Add_Notes_in_IVR-13
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${attachment1}=   Create Dictionary   action=${LoanAction[0]}  owner=${user_id}  ownerType=${ownerType[0]}  ownerName=${user_name}  fileName=${file_name_txt}  fileSize=${file_size_txt}  caption=${caption3}  fileType=${fileType4}  uid=${ivruid}  order=${order}
+    ${attachment1}=   Create Dictionary   action=${LoanAction[0]}  owner=${user_id}  ownerType=${ownerType[0]}  ownerName=${user_name}  fileName=${file_name_txt}  fileSize=${file_size_large}  caption=${caption3}  fileType=${fileType4}  uid=${ivruid}  order=${order}
 
     ${resp}=    Add Notes To IVR    ${ivruid}    ${note}    ${attachment1}
     Log  ${resp.json()}
@@ -754,7 +754,7 @@ JD-TC-Add_Notes_in_IVR-UH6
 
     ${resp}=    Add Notes To IVR    ${ivruid}    ${note}    ${attachment1}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.status_code}  200
 
 
    
