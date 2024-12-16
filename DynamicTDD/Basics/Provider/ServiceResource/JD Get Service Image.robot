@@ -33,12 +33,15 @@ JD-TC-Get Service Image-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME215}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service       ${PUSERNAME215}
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    
     ${description}=  FakerLibrary.sentence
     ${min_pre}=   Random Int   min=10   max=50
     ${Total}=   Random Int   min=100   max=500
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${Total}=  Convert To Number  ${Total}  1
-    ${description}  ${service_duration[2]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[2]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200   
@@ -91,9 +94,12 @@ JD-TC-Get Service Image-UH3
 
     [Documentation]  Consumer check to Get Gallery Image
 
-    ${resp}=  Consumer Login  ${CUSERNAME4}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Login  ${CUSERNAME4}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME4}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get ServiceImage    ${id}    
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_NO_ACCESS_FOR_URL}"

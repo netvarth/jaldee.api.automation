@@ -98,7 +98,7 @@ JD-TC-GetServiceId-3-pre_info_&_post_info
     ${postInfoText}=  FakerLibrary.sentence
     
     # ${resp}=  Create Service with info  ${SERVICE2}  ${description}  ${service_duration[2]}  ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${Total}  ${status[0]}  ${btype}  ${bool[1]}  ${bool[0]}   ${serviceType[1]}   ${vstype}   ${virtualCallingModes1}   ${EMPTY}   0    ${consumerNoteMandatory[1]}   ${consumerNoteTitle}   ${preInfoEnabled[1]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[1]}   ${postInfoTitle}   ${postInfoText}
-    ${resp}=  Create Service  ${SERVICE2}  ${description}  ${service_duration[2]}  ${bool[1]}  ${Total}  ${bool[1]}  minPrePaymentAmount=${min_pre}  minPrePaymentAmount=${min_pre}  consumerNoteMandatory=${bool[1]}  consumerNoteTitle=${consumerNoteTitle}   preInfoEnabled=${bool[1]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${bool[1]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
+    ${resp}=  Create Service  ${SERVICE2}  ${description}  ${service_duration[2]}  ${bool[1]}  ${Total}  ${bool[1]}  minPrePaymentAmount=${min_pre}  notificationType=${notifytype[2]}  consumerNoteMandatory=${bool[1]}  consumerNoteTitle=${consumerNoteTitle}   preInfoEnabled=${bool[1]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${bool[1]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${id4}   ${resp.json()}
@@ -113,7 +113,7 @@ JD-TC-GetServiceId-3-pre_info_&_post_info
 
 
 JD-TC-GetServiceId-4-pre_info_&_post_info
-    [Documentation]   Create and get  physical service for a valid provider in Non Billable domain
+    [Documentation]   Create and get physical service for a valid provider in Non Billable domain
     ${resp}=   Non Billable
     ${description}=  FakerLibrary.sentence
     ${time}=  FakerLibrary.pyfloat   left_digits=2   right_digits=2   positive=True
@@ -134,7 +134,8 @@ JD-TC-GetServiceId-4-pre_info_&_post_info
     ${preInfoText}=  FakerLibrary.sentence  
     ${postInfoTitle}=  FakerLibrary.sentence  
     ${postInfoText}=  FakerLibrary.sentence
-    ${resp}=  Create Service with info  ${SERVICE2}  ${description}  ${service_duration[1]}  ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${EMPTY}  ${status[0]}  ${btype}  ${bool[0]}  ${bool[0]}   ${serviceType[1]}   ${vstype}   ${virtualCallingModes2}   ${EMPTY}   0    ${consumerNoteMandatory[1]}   ${consumerNoteTitle}   ${preInfoEnabled[1]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[1]}   ${postInfoTitle}   ${postInfoText}
+    # ${resp}=  Create Service with info  ${SERVICE2}  ${description}  ${service_duration[1]}  ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${EMPTY}  ${status[0]}  ${btype}  ${bool[0]}  ${bool[0]}   ${serviceType[1]}   ${vstype}   ${virtualCallingModes2}   ${EMPTY}   0    ${consumerNoteMandatory[1]}   ${consumerNoteTitle}   ${preInfoEnabled[1]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[1]}   ${postInfoTitle}   ${postInfoText}
+    ${resp}=  Create Service  ${SERVICE2}  ${description}  ${service_duration[2]}  ${bool[1]}  ${EMPTY}  ${bool[1]}  minPrePaymentAmount=${EMPTY}  notificationType=${notifytype[2]}  consumerNoteMandatory=${bool[1]}  consumerNoteTitle=${consumerNoteTitle}   preInfoEnabled=${bool[1]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${bool[1]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -173,7 +174,8 @@ JD-TC-GetServiceId-5-pre_info_&_post_info
     ${postInfoTitle}=  FakerLibrary.sentence  
     ${postInfoText}=  FakerLibrary.sentence
     
-    ${resp}=  Create Service with info  ${SERVICE3}  ${description}  ${service_duration[2]}  ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${Total}  ${status[0]}  ${btype}  ${bool[1]}  ${bool[0]}   ${serviceType[0]}   ${vstype}   ${virtualCallingModes1}   ${EMPTY}   0    ${consumerNoteMandatory[1]}   ${consumerNoteTitle}   ${preInfoEnabled[1]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[1]}   ${postInfoTitle}   ${postInfoText}
+    # ${resp}=  Create Service with info  ${SERVICE3}  ${description}  ${service_duration[2]}  ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${Total}  ${status[0]}  ${btype}  ${bool[1]}  ${bool[0]}   ${serviceType[0]}   ${vstype}   ${virtualCallingModes1}   ${EMPTY}   0    ${consumerNoteMandatory[1]}   ${consumerNoteTitle}   ${preInfoEnabled[1]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[1]}   ${postInfoTitle}   ${postInfoText}
+    ${resp}=  Create Service  ${SERVICE3}  ${description}  ${service_duration[2]}  ${bool[1]}  ${Total}  ${bool[1]}  minPrePaymentAmount=${min_pre}  notificationType=${notifytype[2]}  serviceType=${ServiceType[0]}  virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes1}  consumerNoteMandatory=${bool[1]}  consumerNoteTitle=${consumerNoteTitle}   preInfoEnabled=${bool[1]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${bool[1]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${id4}   ${resp.json()}
@@ -187,7 +189,7 @@ JD-TC-GetServiceId-5-pre_info_&_post_info
 
 
 JD-TC-GetServiceId-6-pre_info_&_post_info
-    [Documentation]   Create and get  virtual service for a valid provider in Non Billable domain
+    [Documentation]   Create and get virtual service for a valid provider in Non Billable domain
     ${resp}=   Non Billable
     ${description}=  FakerLibrary.sentence
     ${time}=  FakerLibrary.pyfloat   left_digits=2   right_digits=2   positive=True
@@ -217,7 +219,8 @@ JD-TC-GetServiceId-6-pre_info_&_post_info
     ${preInfoText}=  FakerLibrary.sentence  
     ${postInfoTitle}=  FakerLibrary.sentence  
     ${postInfoText}=  FakerLibrary.sentence
-    ${resp}=  Create Service with info  ${SERVICE3}  ${description}  ${service_duration[1]}  ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${EMPTY}  ${status[0]}  ${btype}  ${bool[0]}  ${bool[0]}   ${serviceType[0]}   ${vstype}   ${virtualCallingModes2}   ${EMPTY}   0    ${consumerNoteMandatory[1]}   ${consumerNoteTitle}   ${preInfoEnabled[1]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[1]}   ${postInfoTitle}   ${postInfoText}
+    # ${resp}=  Create Service with info  ${SERVICE3}  ${description}  ${service_duration[1]}  ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${EMPTY}  ${status[0]}  ${btype}  ${bool[0]}  ${bool[0]}   ${serviceType[0]}   ${vstype}   ${virtualCallingModes2}   ${EMPTY}   0    ${consumerNoteMandatory[1]}   ${consumerNoteTitle}   ${preInfoEnabled[1]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[1]}   ${postInfoTitle}   ${postInfoText}
+    ${resp}=  Create Service  ${SERVICE3}  ${description}  ${service_duration[2]}  ${bool[1]}  ${EMPTY}  ${bool[1]}  minPrePaymentAmount=${EMPTY}  notificationType=${notifytype[2]}  serviceType=${ServiceType[0]}  virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes1}  consumerNoteMandatory=${bool[1]}  consumerNoteTitle=${consumerNoteTitle}   preInfoEnabled=${bool[1]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${bool[1]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -304,7 +307,9 @@ JD-TC-GetServiceId-UH3
     ${description}=  FakerLibrary.sentence
     ${notifytype}    Random Element     ['none','pushMsg','email']
     ${notify}    Random Element     ['True','False']
-    ${resp}=  Create Service  ${SERVICE1}  ${description}   30  ACTIVE  Waitlist    ${notify}    ${notifytype}  45  500  True  False
+    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
+    # ${resp}=  Create Service  ${SERVICE1}  ${description}   30  ACTIVE  Waitlist    ${notify}    ${notifytype}  45  500  True  False
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[2]}  ${bool[0]}  ${Total}  ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${id1}    ${resp.json()}
     ${resp}=   ProviderLogout

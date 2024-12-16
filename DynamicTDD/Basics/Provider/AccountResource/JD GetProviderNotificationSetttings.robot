@@ -71,6 +71,10 @@ JD-TC-GetProviderNotificationSettings-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+
     Set Suite Variable  ${countryCode_CC0}    ${countryCodes[0]}
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -1674,10 +1678,23 @@ JD-TC-GetProviderNotificationSettings-UH1
 
 JD-TC-GetProviderNotificationSettings-UH2
     [Documentation]  Get Provider Notification  Settings, with consumer login
-    ${resp}=  Consumer Login  ${CUSERNAME0}  ${PASSWORD}
-    Log  ${resp.json()}
-    Log  ${resp.status_code}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Consumer Login  ${CUSERNAME0}  ${PASSWORD}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=    Send Otp For Login    ${CUSERNAME0}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME0}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
    
     ${resp}=  Get Provider Notification Settings

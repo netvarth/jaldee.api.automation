@@ -201,13 +201,13 @@ JD-TC-Enabling and Disabling User Availability-4
 
 
 JD-TC-Enabling and Disabling User Availability-5
-     [Documentation]   create loan when user Availability is Online then change status to Away and do next step.
+    [Documentation]   create loan when user Availability is Online then change status to Away and do next step.
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD} 
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+    # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
@@ -273,7 +273,10 @@ JD-TC-Enabling and Disabling User Availability-5
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer with email   ${fname}  ${lname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${phone}  ${EMPTY}
+        # ${resp1}=  AddCustomer with email   ${fname}  ${lname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${phone}  ${EMPTY}
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
+        ${resp1}=  AddCustomer  ${phone}  firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  email=${email2}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
@@ -406,13 +409,13 @@ JD-TC-Enabling and Disabling User Availability-5
 *** Comments ***
 
 JD-TC-Enabling and Disabling User Availability-6
-     [Documentation]   create loan when user Availability is Online then change status to Away and do next step.
+    [Documentation]   create loan when user Availability is Online then change status to Away and do next step.
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD} 
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+    # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
@@ -449,7 +452,10 @@ JD-TC-Enabling and Disabling User Availability-6
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer with email   ${fname}  ${lname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${phone}  ${EMPTY}
+        # ${resp1}=  AddCustomer with email   ${fname}  ${lname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${phone}  ${EMPTY}
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
+        ${resp1}=  AddCustomer  ${phone}  firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  email=${email2}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}

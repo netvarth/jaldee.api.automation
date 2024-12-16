@@ -643,7 +643,7 @@ JD-TC-WaitlistAttachment-6
     # ${resp}=  Consumer Login  ${CUSERNAME14}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp}=  AddCustomer  ${CUSERNAME14}
+    ${resp}=  AddCustomer  ${CUSERNAME14}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

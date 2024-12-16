@@ -39,90 +39,101 @@ ${SERVICE6}   SERVICE6
 JD-TC-Update_Notification_Settings_of_ConsumerByUser-1
     [Documentation]   Getting Notification Settings of Consumer By USER Without Updating notification settings
     
-    ${iscorp_subdomains}=  get_iscorp_subdomains  1
-     Log  ${iscorp_subdomains}
-     Set Test Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
-     Set Test Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
-     Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
-     ${firstname_A}=  FakerLibrary.first_name
-     Set Suite Variable  ${firstname_A}
-     ${lastname_A}=  FakerLibrary.last_name
-     Set Suite Variable  ${lastname_A}
-     ${PUSERNAME_E1}=  Evaluate  ${PUSERNAME}+7710177
-     ${highest_package}=  get_highest_license_pkg
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E1}    ${highest_package[0]}
-     Log  ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Activation  ${PUSERNAME_E1}  0
-     Log   ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${PUSERNAME_E1}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E1}
-     Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
-     Log  ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E1}${\n}
-     Set Suite Variable  ${PUSERNAME_E1}
-     ${id}=  get_id  ${PUSERNAME_E1}
-     Set Suite Variable  ${id}
-     ${bs}=  FakerLibrary.bs
-     Set Suite Variable  ${bs}
+    # ${iscorp_subdomains}=  get_iscorp_subdomains  1
+    # Log  ${iscorp_subdomains}
+    # Set Test Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
+    # Set Test Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
+    # Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
+    # ${firstname_A}=  FakerLibrary.first_name
+    # Set Suite Variable  ${firstname_A}
+    # ${lastname_A}=  FakerLibrary.last_name
+    # Set Suite Variable  ${lastname_A}
+    # ${PUSERNAME_E1}=  Evaluate  ${PUSERNAME}+7710177
+    # ${highest_package}=  get_highest_license_pkg
+    # ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E1}    ${highest_package[0]}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Account Activation  ${PUSERNAME_E1}  0
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Account Set Credential  ${PUSERNAME_E1}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E1}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E1}${\n}
+    # Set Suite Variable  ${PUSERNAME_E1}
+    # ${id}=  get_id  ${PUSERNAME_E1}
+    # Set Suite Variable  ${id}
+    # ${bs}=  FakerLibrary.bs
+    # Set Suite Variable  ${bs}
     
-    ${list}=  Create List  1  2  3  4  5  6  7
-    Set Suite Variable  ${list}  ${list}
-    ${ph1}=  Evaluate  ${PUSERNAME_E1}+1000000000
-    ${ph2}=  Evaluate  ${PUSERNAME_E1}+2000000000
-    ${views}=  Random Element    ${Views}
-    ${name1}=  FakerLibrary.name
-    ${name2}=  FakerLibrary.name
-    ${name3}=  FakerLibrary.name
-    ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
-    ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}181.${test_mail}  ${views}
-    ${bs}=  FakerLibrary.bs
-    ${companySuffix}=  FakerLibrary.companySuffix
-    # ${city}=   FakerLibrary.state
-    # ${latti}=  get_latitude
-    # ${longi}=  get_longitude
-    # ${postcode}=  FakerLibrary.postcode
-    # ${address}=  get_address
-    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    Set Suite Variable  ${tz}
-    ${parking}   Random Element   ${parkingType}
-    ${24hours}    Random Element    ${bool}
-    ${desc}=   FakerLibrary.sentence
-    ${url}=   FakerLibrary.url
+    # ${list}=  Create List  1  2  3  4  5  6  7
+    # Set Suite Variable  ${list}  ${list}
+    # ${ph1}=  Evaluate  ${PUSERNAME_E1}+1000000000
+    # ${ph2}=  Evaluate  ${PUSERNAME_E1}+2000000000
+    # ${views}=  Random Element    ${Views}
+    # ${name1}=  FakerLibrary.name
+    # ${name2}=  FakerLibrary.name
+    # ${name3}=  FakerLibrary.name
+    # ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
+    # ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
+    # ${emails1}=  Emails  ${name3}  Email  ${P_Email}181.${test_mail}  ${views}
+    # ${bs}=  FakerLibrary.bs
+    # ${companySuffix}=  FakerLibrary.companySuffix
+    # # ${city}=   FakerLibrary.state
+    # # ${latti}=  get_latitude
+    # # ${longi}=  get_longitude
+    # # ${postcode}=  FakerLibrary.postcode
+    # # ${address}=  get_address
+    # ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    # ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    # Set Suite Variable  ${tz}
+    # ${parking}   Random Element   ${parkingType}
+    # ${24hours}    Random Element    ${bool}
+    # ${desc}=   FakerLibrary.sentence
+    # ${url}=   FakerLibrary.url
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    Set Suite Variable  ${DAY1}  ${DAY1}
-    ${sTime}=  db.subtract_timezone_time  ${tz}  0  10
-    Set Suite Variable  ${BsTime30}  ${sTime}
-    ${eTime}=  add_timezone_time  ${tz}  1  30  
-    Set Suite Variable  ${BeTime30}  ${eTime}
-    ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
-    Log  ${resp.json()}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # Set Suite Variable  ${DAY1}  ${DAY1}
+    # ${sTime}=  db.subtract_timezone_time  ${tz}  0  10
+    # Set Suite Variable  ${BsTime30}  ${sTime}
+    # ${eTime}=  add_timezone_time  ${tz}  1  30  
+    # Set Suite Variable  ${BeTime30}  ${eTime}
+    # ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # sleep   02s
+
+    
+    # ${fields}=   Get subDomain level Fields  ${domains}  ${sub_domains}
+    # Log  ${fields.json()}
+    # Should Be Equal As Strings    ${fields.status_code}   200
+
+    # ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
+
+    # ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sub_domains}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${resp}=  Get specializations Sub Domain  ${domains}  ${sub_domains}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+
+    # ${spec}=  get_Specializations  ${resp.json()}
+    # ${resp}=  Update Specialization  ${spec}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${PUSERNAME_E1}=  Evaluate  ${PUSERNAME}+7710177
+      
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_E1}=  Provider Signup  PhoneNumber=${PUSERNAME_E1}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    sleep   02s
+    Set Suite Variable  ${PUSERNAME_E1}
 
-    
-    ${fields}=   Get subDomain level Fields  ${domains}  ${sub_domains}
-    Log  ${fields.json()}
-    Should Be Equal As Strings    ${fields.status_code}   200
-
-    ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
-
-    ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sub_domains}
-    Log  ${resp.json()}
+    ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get specializations Sub Domain  ${domains}  ${sub_domains}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${spec}=  get_Specializations  ${resp.json()}
-    ${resp}=  Update Specialization  ${spec}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
 
     ${resp}=  View Waitlist Settings
@@ -149,14 +160,14 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-1
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     
 
-     ${resp}=  Toggle Department Enable
-     Log   ${resp.json()}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     sleep  2s
-     ${resp}=  Get Departments
-     Log   ${resp.json()}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    ${resp}=  Toggle Department Enable
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    sleep  2s
+    ${resp}=  Get Departments
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
     
     ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+576087
     clear_users  ${PUSERNAME_U1}
@@ -186,7 +197,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-1
     Set Suite Variable  ${dob2}
     ${pin2}=  get_pincode
 
-     ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.${test_mail}   ${userType[0]}  ${pin2}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${countryCodes[0]}  ${PUSERNAME_U2}
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.${test_mail}   ${userType[0]}  ${pin2}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${countryCodes[0]}  ${PUSERNAME_U2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id2}  ${resp.json()}
@@ -543,22 +554,47 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-10
     [Documentation]   Update Notification Settings and Verify push notifications of WAITLIST-CANCEL
     clear_Consumermsg   ${CUSERNAME20}
     clear_Providermsg   ${PUSERNAME_E1}
-    ${resp}=  Consumer Login  ${CUSERNAME20}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cons_fname}   ${resp.json()['firstName']}
-    Set Test Variable  ${cons_lname}   ${resp.json()['lastName']}
-    ${cid}=  get_id  ${CUSERNAME20}
+    # ${resp}=  Consumer Login  ${CUSERNAME20}  ${PASSWORD}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${cons_fname}   ${resp.json()['firstName']}
+    # Set Test Variable  ${cons_lname}   ${resp.json()['lastName']}
+    # ${cid}=  get_id  ${CUSERNAME20}
 
-    ${family_fname1}=  FakerLibrary.first_name
-    ${family_lname1}=  FakerLibrary.last_name
-    ${dob1}=  FakerLibrary.Date
-    ${gender1}    Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMember   ${family_fname1}  ${family_lname1}  ${dob1}  ${gender1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200  
-    Set Suite Variable  ${f_id1}   ${resp.json()}
-    Set Suite Variable  ${uname_f_id1}   ${family_fname1} ${family_lname1}
+    # ${family_fname1}=  FakerLibrary.first_name
+    # ${family_lname1}=  FakerLibrary.last_name
+    # ${dob1}=  FakerLibrary.Date
+    # ${gender1}    Random Element    ${Genderlist}
+    # ${resp}=  AddFamilyMember   ${family_fname1}  ${family_lname1}  ${dob1}  ${gender1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200  
+    # Set Suite Variable  ${f_id1}   ${resp.json()}
+    # Set Suite Variable  ${uname_f_id1}   ${family_fname1} ${family_lname1}
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login    ${PCPHONENO}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+   
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${family_fname}=  generate_firstname
+    ${family_lname}=  FakerLibrary.last_name
+    ${dob}=  FakerLibrary.Date
+    ${gender}    Random Element    ${Genderlist}
+    
+    ${resp}=    Add FamilyMember For ProviderConsumer     ${family_fname}  ${family_lname}  ${dob}  ${gender}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${cidfor}   ${resp.json()}
    
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
@@ -630,9 +666,24 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-10
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${CUSERNAME20}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Consumer Login  ${CUSERNAME20}  ${PASSWORD}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME20}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME20}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     
     ${msg}=  Fakerlibrary.word
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
@@ -650,9 +701,9 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-10
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
     Set Suite Variable  ${estTime0}  ${resp.json()['serviceTime']}
 
-    ${resp}=  Consumer Login  ${CUSERNAME20}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Consumer Login  ${CUSERNAME20}  ${PASSWORD}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${CUR_DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id}  ${f_id1}
     Log  ${resp.json()}
@@ -732,9 +783,23 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-10
     Should Be Equal As Strings  ${resp.json()[1]['receiver']['name']}   ${uname_c20}
 
 
-    ${resp}=  Consumer Login  ${CUSERNAME20}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Consumer Login  ${CUSERNAME20}  ${PASSWORD}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=    Send Otp For Login    ${CUSERNAME0}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME0}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${uname1}  ${resp.json()['userName']}
     ${DAY}=  Convert Date  ${CUR_DAY}  result_format=%a, %d %b %Y
    
@@ -826,10 +891,25 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-11
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${CUSERNAME20}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${cid}=  get_id  ${CUSERNAME20} 
+    # ${resp}=  Consumer Login  ${CUSERNAME20}  ${PASSWORD}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=    Send Otp For Login    ${CUSERNAME0}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME0}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${cid}=  get_id  ${CUSERNAME20} 
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
     
 
     ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${p_id}
@@ -990,9 +1070,24 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-11
 
 
 
-    ${resp}=  Consumer Login  ${CUSERNAME20}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Consumer Login  ${CUSERNAME20}  ${PASSWORD}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME0}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME0}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     
 
     ${resp}=  Get Consumer Communications

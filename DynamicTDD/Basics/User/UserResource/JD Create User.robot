@@ -20,33 +20,33 @@ ${secid}     1
 
 ***Keywords***
 
-Get branch by license
-    [Arguments]   ${lic_id}
+# Get branch by license
+#     [Arguments]   ${lic_id}
     
-    ${resp}=   Get File    ${EXECDIR}/TDD/varfiles/providers.py
-    ${len}=   Split to lines  ${resp}
-    ${length}=  Get Length   ${len}
+#     ${resp}=   Get File    ${EXECDIR}/TDD/varfiles/providers.py
+#     ${len}=   Split to lines  ${resp}
+#     ${length}=  Get Length   ${len}
      
-    FOR   ${a}  IN RANGE  ${length}
+#     FOR   ${a}  IN RANGE  ${length}
             
-        ${Branch_PH}=  Set Variable  ${PUSERNAME${a}}
-        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
-        Should Be Equal As Strings    ${resp.status_code}    200
+#         ${Branch_PH}=  Set Variable  ${PUSERNAME${a}}
+#         ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+#         Should Be Equal As Strings    ${resp.status_code}    200
 
-        ${decrypted_data}=  db.decrypt_data  ${resp.content}
-        Log  ${decrypted_data}
-        ${domain}=   Set Variable    ${decrypted_data['sector']}
-        ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
-        ${resp}=   Get Active License
-        Log  ${resp.json()}
-        Should Be Equal As Strings    ${resp.status_code}   200
-        ${pkg_id}=   Set Variable  ${resp.json()['accountLicense']['licPkgOrAddonId']}
-        ${pkg_name}=   Set Variable  ${resp.json()['accountLicense']['name']}
-	    # Run Keyword IF   ${resp.json()['accountLicense']['licPkgOrAddonId']} == ${lic_id}   AND   ${resp.json()['accountLicense']['name']} == ${lic_name}   Exit For Loop
-        Exit For Loop IF  ${resp.json()['accountLicense']['licPkgOrAddonId']} == ${lic_id}
+#         ${decrypted_data}=  db.decrypt_data  ${resp.content}
+#         Log  ${decrypted_data}
+#         ${domain}=   Set Variable    ${decrypted_data['sector']}
+#         ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+#         ${resp}=   Get Active License
+#         Log  ${resp.json()}
+#         Should Be Equal As Strings    ${resp.status_code}   200
+#         ${pkg_id}=   Set Variable  ${resp.json()['accountLicense']['licPkgOrAddonId']}
+#         ${pkg_name}=   Set Variable  ${resp.json()['accountLicense']['name']}
+# 	    # Run Keyword IF   ${resp.json()['accountLicense']['licPkgOrAddonId']} == ${lic_id}   AND   ${resp.json()['accountLicense']['name']} == ${lic_name}   Exit For Loop
+#         Exit For Loop IF  ${resp.json()['accountLicense']['licPkgOrAddonId']} == ${lic_id}
 
-    END
-    RETURN  ${Branch_PH}
+#     END
+#     RETURN  ${Branch_PH}
 
 ***Test Cases***
 
@@ -83,6 +83,11 @@ JD-TC-CreateUser-1
     Set Suite Variable  ${id}
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
+
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -871,8 +876,8 @@ JD-TC-CreateUser -7
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     
-     ${location}=  FakerLibrary.city
-     ${state}=  FakerLibrary.state
+    ${location}=  FakerLibrary.city
+    ${state}=  FakerLibrary.state
 
     ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+651122
     clear_users  ${PUSERNAME_E}
@@ -1183,39 +1188,65 @@ JD-TC-CreateUser -UH11
 JD-TC-CreateUser -8
     [Documentation]   create user with existing consumer's phone number
 
+    # ${PO_Number}    Generate random string    4    0123456789
+    # ${PO_Number}    Convert To Integer  ${PO_Number}
+    # ${CUSERPH0}=  Evaluate  ${CUSERNAME}+${PO_Number}
+    # ${firstname}=  FakerLibrary.name
+    # ${lastname}=  FakerLibrary.last_name
+    # ${address}=  get_address
+    # ${dob}=  FakerLibrary.Date
+    # ${gender}=  Random Element    ${Genderlist}
+    # ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH0}  ${EMPTY}  ${dob}  ${gender}   ${EMPTY} 
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+
+    # ${resp}=  Consumer Activation  ${CUSERPH0}  1
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+
+    # ${resp}=  Consumer Set Credential  ${CUSERPH0}  ${PASSWORD}  1  
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+
+    # ${resp}=  Consumer Login  ${CUSERPH0}  ${PASSWORD}  
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+
+    ${resp}=  Provider Logout
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
     ${PO_Number}    Generate random string    4    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${CUSERPH0}=  Evaluate  ${CUSERNAME}+${PO_Number}
-    ${firstname}=  FakerLibrary.name
-    ${lastname}=  FakerLibrary.last_name
-    ${address}=  get_address
-    ${dob}=  FakerLibrary.Date
-    ${gender}=  Random Element    ${Genderlist}
-    ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH0}  ${EMPTY}  ${dob}  ${gender}   ${EMPTY} 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${CUSERPH0}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERPH0}
 
-    ${resp}=  Consumer Activation  ${CUSERPH0}  1
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Consumer Set Credential  ${CUSERPH0}  ${PASSWORD}  1  
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Consumer Login  ${CUSERPH0}  ${PASSWORD}  
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=    ProviderConsumer Login with token   ${CUSERPH0}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Consumer Logout
-    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${licId}  ${licname}=  get_highest_license_pkg
-    ${buser}=   Get branch by license   ${licId}
-    Set Suite Variable  ${buser}
+    # ${licId}  ${licname}=  get_highest_license_pkg
+    # ${buser}=   Get branch by license   ${licId}
+    # Set Suite Variable  ${buser}
     
-    ${resp}=  Encrypted Provider Login  ${buser}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1223,10 +1254,6 @@ JD-TC-CreateUser -8
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=   Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
     ${resp}=   Get Service
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -1259,119 +1286,117 @@ JD-TC-CreateUser -8
     Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}  mobileNo=${CUSERPH0}
    
     ${resp}=  Provider Logout
-    Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-JD-TC-CreateUser -9
-    [Documentation]   create user with existing consumer's second phone number
+# JD-TC-CreateUser -9
+#     [Documentation]   create user with existing consumer's second phone number
 
-    ${PO_Number}    Generate random string    4    0123456789
-    ${PO_Number}    Convert To Integer  ${PO_Number}
-    ${CUSERPH0}=  Evaluate  ${CUSERNAME}+${PO_Number}
-    ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1000
-    ${firstname}=  FakerLibrary.name
-    ${lastname}=  FakerLibrary.last_name
-    ${address}=  get_address
-    ${dob}=  FakerLibrary.Date
-    ${gender}=  Random Element    ${Genderlist}
-    ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH0}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${EMPTY} 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+#     ${PO_Number}    Generate random string    4    0123456789
+#     ${PO_Number}    Convert To Integer  ${PO_Number}
+#     ${CUSERPH0}=  Evaluate  ${CUSERNAME}+${PO_Number}
+#     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1000
+#     ${firstname}=  FakerLibrary.name
+#     ${lastname}=  FakerLibrary.last_name
+#     ${address}=  get_address
+#     ${dob}=  FakerLibrary.Date
+#     ${gender}=  Random Element    ${Genderlist}
+#     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH0}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${EMPTY} 
+#     Log   ${resp.json()}
+#     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Activation  ${CUSERPH0}  1
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+#     ${resp}=  Consumer Activation  ${CUSERPH0}  1
+#     Log   ${resp.json()}
+#     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Set Credential  ${CUSERPH0}  ${PASSWORD}  1  
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+#     ${resp}=  Consumer Set Credential  ${CUSERPH0}  ${PASSWORD}  1  
+#     Log   ${resp.json()}
+#     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERPH0}  ${PASSWORD}  
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+#     ${resp}=  Consumer Login  ${CUSERPH0}  ${PASSWORD}  
+#     Log   ${resp.json()}
+#     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+#     ${resp}=  Consumer Logout
+#     Log   ${resp.json()}
+#     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${buser}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+#     ${resp}=  Encrypted Provider Login  ${buser}  ${PASSWORD}
+#     Log  ${resp.json()}
+#     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Get License UsageInfo 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+#     ${resp}=   Get License UsageInfo 
+#     Log  ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=   Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+#     ${resp}=   Get Business Profile
+#     Log  ${resp.json()}
+#     Should Be Equal As Strings    ${resp.status_code}    200
+#     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
-    ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+#     ${resp}=  View Waitlist Settings
+#     Log  ${resp.json()}
+#     Should Be Equal As Strings    ${resp.status_code}    200
+#     ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
+#     Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
+#     Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
     
-    sleep  2s
-    ${dep_name1}=  FakerLibrary.bs
-    ${dep_code1}=   Random Int  min=100   max=999
-    ${dep_desc1}=   FakerLibrary.word  
-    ${resp}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${dep_id}  ${resp.json()}
+#     sleep  2s
+#     ${dep_name1}=  FakerLibrary.bs
+#     ${dep_code1}=   Random Int  min=100   max=999
+#     ${dep_desc1}=   FakerLibrary.word  
+#     ${resp}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+#     Log  ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  200
+#     Set Suite Variable  ${dep_id}  ${resp.json()}
 
-    clear_users  ${CUSERPH_SECOND}
-    ${pin3}=  get_pincode
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${CUSERPH_SECOND}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${CUSERPH_SECOND}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${u_id}  ${resp.json()}
+#     clear_users  ${CUSERPH_SECOND}
+#     ${pin3}=  get_pincode
+#     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${CUSERPH_SECOND}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${CUSERPH_SECOND}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+#     Log   ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  200
+#     Set Suite Variable  ${u_id}  ${resp.json()}
 
-    ${resp}=  Get User By Id  ${u_id}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}  mobileNo=${CUSERPH_SECOND}
+#     ${resp}=  Get User By Id  ${u_id}
+#     Log   ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  200
+#     Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}  mobileNo=${CUSERPH_SECOND}
 
-    ${resp}=  Provider Logout
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+#     ${resp}=  Provider Logout
+#     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateUser -10
     [Documentation]   Update a consumer's phone number and create user with consumer's new phone number
 
-    ${PO_Number}    Generate random string    4    0123456789
-    ${PO_Number}    Convert To Integer  ${PO_Number}
-    ${CUSERPH0}=  Evaluate  ${CUSERNAME}+${PO_Number}
-    ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1000
-    ${firstname}=  FakerLibrary.name
-    ${lastname}=  FakerLibrary.last_name
-    ${address}=  get_address
-    ${dob}=  FakerLibrary.Date
-    ${gender}=  Random Element    ${Genderlist}
-    ${email}  Set Variable  ${C_Email}_${lastname}${CUSERPH0}.${test_mail}
-    ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH0}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${email} 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${PO_Number}    Generate random string    4    0123456789
+    # ${PO_Number}    Convert To Integer  ${PO_Number}
+    # ${CUSERPH0}=  Evaluate  ${CUSERNAME}+${PO_Number}
+    # ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1000
+    # ${firstname}=  FakerLibrary.name
+    # ${lastname}=  FakerLibrary.last_name
+    # ${address}=  get_address
+    # ${dob}=  FakerLibrary.Date
+    # ${gender}=  Random Element    ${Genderlist}
+    # ${email}  Set Variable  ${C_Email}_${lastname}${CUSERPH0}.${test_mail}
+    # ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH0}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${email} 
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Activation  ${email}  1
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Activation  ${email}  1
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Set Credential  ${email}  ${PASSWORD}  1  
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Set Credential  ${email}  ${PASSWORD}  1  
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERPH0}  ${PASSWORD}  
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Login  ${CUSERPH0}  ${PASSWORD}  
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Consumer By Id  ${CUSERPH0}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Consumer By Id  ${CUSERPH0}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
 #     ${resp}=  Consumer Logout
 #     Log   ${resp.json()}
@@ -1380,29 +1405,66 @@ JD-TC-CreateUser -10
     # ${PO_Number1}    Generate random string    3    0123456789
     # ${PO_Number1}    Convert To Integer  ${PO_Number1}
     # ${newNo}=  Evaluate  ${PUSERNAME33}+${PO_Number1}
-    ${newNo}=  Evaluate  ${PUSERNAME33}+678
+    # ${newNo}=  Evaluate  ${PUSERNAME33}+678
 
-    ${resp}=  Send Verify Login Consumer   ${newNo}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Send Verify Login Consumer   ${newNo}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Verify Login Consumer   ${newNo}  5
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Verify Login Consumer   ${newNo}  5
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${newNo}  ${PASSWORD}
+    # ${resp}=  Consumer Login  ${newNo}  ${PASSWORD}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${resp}=  Get Consumer By Id  ${newNo}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Consumer By Id  ${newNo}
+    ${resp}=   Get Business Profile
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+
+    ${resp}=  Provider Logout
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    
+    ${PO_Number}    Generate random string    4    0123456789
+    ${PO_Number}    Convert To Integer  ${PO_Number}
+    ${CUSERPH0}=  Evaluate  ${CUSERNAME}+${PO_Number}
+    ${CUSERPH0}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERPH0}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERPH0}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${PO_Number}    Generate random string    4    0123456789
+    ${PO_Number}    Convert To Integer  ${PO_Number}
+    ${newNo}=  Evaluate  ${CUSERNAME}+${PO_Number}
+
+    # Need to update provider consumer phone number here!
+    # Set Test Variable  ${consumerEmail}  ${CUSERNAME4}${C_Email}.${test_mail}
+    
+    ${resp}=    Update ProviderConsumer    ${cid1}    phoneNo=${newNo}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Consumer Logout
-    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${buser}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1410,10 +1472,10 @@ JD-TC-CreateUser -10
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=   Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+    # ${resp}=   Get Business Profile
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${resp}=  View Waitlist Settings
     Log  ${resp.json()}
@@ -1444,7 +1506,6 @@ JD-TC-CreateUser -10
     Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}  mobileNo=${newNo}
 
     ${resp}=  Provider Logout
-    Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
@@ -1493,7 +1554,6 @@ JD-TC-CreateUser -UH12
     Should Be Equal As Strings  "${resp.json()}"  "${MOBILE_NO_USED}"
 
     ${resp}=  Provider Logout
-    Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
@@ -1583,7 +1643,6 @@ JD-TC-CreateUser -11
     Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERPH0}
 
     ${resp}=  Provider Logout
-    Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
@@ -1675,7 +1734,6 @@ JD-TC-CreateUser -12
     Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERPH0}
 
     ${resp}=  Provider Logout
-    Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 

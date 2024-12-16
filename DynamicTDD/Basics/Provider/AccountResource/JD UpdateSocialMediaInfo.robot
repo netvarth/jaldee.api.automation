@@ -16,6 +16,9 @@ JD-TC-UpdateSocialMediaInfo-1
     [Documentation]  Update social media info of a service provider
     ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
     ${fb}=  Create SocialMedia  facebook  https://facebook.com/netvarth
     ${tw}=  Create SocialMedia  twitter  https://twitter.com/netvarth
     ${yt}=  Create SocialMedia  youtube  https://youtube.com/netvarth     
@@ -52,8 +55,22 @@ JD-TC-UpdateSocialMediaInfo-2
 
 JD-TC-UpdateSocialMediaInfo-UH1
     [Documentation]  Update social media info of a service provider by Consumer Login
-    ${resp}=  Consumer Login  ${CUSERNAME1}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200    
+    # ${resp}=  Consumer Login  ${CUSERNAME1}  ${PASSWORD}
+    # Should Be Equal As Strings  ${resp.status_code}  200    
+    ${resp}=    Send Otp For Login    ${CUSERNAME1}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME1}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME1}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Update Social Media Info  ${fb}  ${tw}  ${yt} 
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}

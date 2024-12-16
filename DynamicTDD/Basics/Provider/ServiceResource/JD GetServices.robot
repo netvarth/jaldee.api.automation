@@ -69,11 +69,11 @@ JD-TC-GetServices-1
     Should Be Equal As Strings  ${resp.status_code}  200  
     ${count}=  Get Length  ${resp.json()} 
 	Should Be Equal As Integers  ${count}  5
-    Verify Response List  ${resp}  0  name=${SERVICE5}  description=${description}  serviceDuration=${service_duration[1]}  notificationType=${notifytype[1]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}   status=${status[1]}  bType=${btype}  isPrePayment=${bool[1]}
-    Verify Response List  ${resp}  1  name=${SERVICE4}  description=${description}  serviceDuration=${service_duration[1]}  notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}   bType=${btype}  status=${status[1]}  isPrePayment=${bool[1]}
-    Verify Response List  ${resp}  2  name=${SERVICE3}  description=${description}  serviceDuration=${service_duration[1]}  notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}   status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
-    Verify Response List  ${resp}  3  name=${SERVICE2}  description=${description}  serviceDuration=${service_duration[1]}  notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}   bType=${btype}  status=${status[0]}  isPrePayment=${bool[1]} 
-    Verify Response List  ${resp}  4  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}  notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}   status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
+    Verify Response List  ${resp}  0  name=${SERVICE5}  description=${description}  serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}   status=${status[1]}  bType=${btype}  isPrePayment=${bool[1]}
+    Verify Response List  ${resp}  1  name=${SERVICE4}  description=${description}  serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}   bType=${btype}  status=${status[1]}  isPrePayment=${bool[1]}
+    Verify Response List  ${resp}  2  name=${SERVICE3}  description=${description}  serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}   status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
+    Verify Response List  ${resp}  3  name=${SERVICE2}  description=${description}  serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}   bType=${btype}  status=${status[0]}  isPrePayment=${bool[1]} 
+    Verify Response List  ${resp}  4  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}   status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
 
 JD-TC-GetServices-2
 
@@ -84,7 +84,7 @@ JD-TC-GetServices-2
     Should Be Equal As Strings  ${resp.status_code}  200   
 	${count}=  Get Length  ${resp.json()} 
     Should Be Equal As Integers  ${count}  1
-    Verify Response List  ${resp}  0  name=${SERVICE1}    serviceDuration=${service_duration[1]}     notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
+    Verify Response List  ${resp}  0  name=${SERVICE1}    serviceDuration=${service_duration[1]}     minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
 
 JD-TC-GetServices-3
 
@@ -95,7 +95,7 @@ JD-TC-GetServices-3
     Should Be Equal As Strings  ${resp.status_code}  200   
 	${count}=  Get Length  ${resp.json()} 
 	Should Be Equal As Integers  ${count}  1
-	Verify Response List  ${resp}  0  name=${SERVICE2}   serviceDuration=${service_duration[1]}    notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}	  
+	Verify Response List  ${resp}  0  name=${SERVICE2}   serviceDuration=${service_duration[1]}    minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}	  
 
 JD-TC-GetServices-4
 
@@ -106,9 +106,9 @@ JD-TC-GetServices-4
     Should Be Equal As Strings  ${resp.status_code}  200   
 	${count}=  Get Length  ${resp.json()} 
 	Should Be Equal As Integers  ${count}  3
-	Verify Response List  ${resp}  0  name=${SERVICE3}    serviceDuration=${service_duration[1]}  notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}	  
-	Verify Response List  ${resp}  1  name=${SERVICE2}    serviceDuration=${service_duration[1]}  notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}	  
-	Verify Response List  ${resp}  2  name=${SERVICE1}    serviceDuration=${service_duration[1]}  notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
+	Verify Response List  ${resp}  0  name=${SERVICE3}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}	  
+	Verify Response List  ${resp}  1  name=${SERVICE2}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}	  
+	Verify Response List  ${resp}  2  name=${SERVICE1}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
 
 JD-TC-GetServices-5
 
@@ -119,7 +119,7 @@ JD-TC-GetServices-5
     Should Be Equal As Strings  ${resp.status_code}  200   
 	${count}=  Get Length  ${resp.json()} 
 	Should Be Equal As Integers  ${count}  2
-    Verify Response List  ${resp}  1  name=${SERVICE4}    serviceDuration=${service_duration[1]}  notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[1]}  bType=${btype}  isPrePayment=${bool[1]}	  	  
+    Verify Response List  ${resp}  1  name=${SERVICE4}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[1]}  bType=${btype}  isPrePayment=${bool[1]}	  	  
 	Verify Response List  ${resp}  0  name=${SERVICE5}    serviceDuration=${service_duration[1]}  notificationType=${notifytype[1]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[1]}  bType=${btype}  isPrePayment=${bool[1]}	  	  
 
 JD-TC-GetServices-6
@@ -138,10 +138,10 @@ JD-TC-GetServices-6
 	${count}=  Get Length  ${resp.json()} 
 	Should Be Equal As Integers  ${count}  5
     Verify Response List  ${resp}  0  name=${SERVICE5}    serviceDuration=${service_duration[1]}  notificationType=${notifytype[1]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[1]}  bType=${btype}  isPrePayment=${bool[1]}	  
-	Verify Response List  ${resp}  1  name=${SERVICE4}    serviceDuration=${service_duration[1]}  notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[1]}  bType=${btype}  isPrePayment=${bool[1]}	  
-	Verify Response List  ${resp}  2  name=${SERVICE3}    serviceDuration=${service_duration[1]}  notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}	  
-	Verify Response List  ${resp}  3  name=${SERVICE2}    serviceDuration=${service_duration[1]}  notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
-    Verify Response List  ${resp}  4  name=${SERVICE1}    serviceDuration=${service_duration[1]}  notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
+	Verify Response List  ${resp}  1  name=${SERVICE4}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[1]}  bType=${btype}  isPrePayment=${bool[1]}	  
+	Verify Response List  ${resp}  2  name=${SERVICE3}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}	  
+	Verify Response List  ${resp}  3  name=${SERVICE2}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
+    Verify Response List  ${resp}  4  name=${SERVICE1}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
 
 
 JD-TC-GetServices-7
@@ -197,7 +197,7 @@ JD-TC-GetServices-10
     Should Be Equal As Strings  ${resp.status_code}  200   
 	${count}=  Get Length  ${resp.json()} 
     Should Be Equal As Integers  ${count}  1
-    Verify Response List  ${resp}  0  name=${SERVICE2}   serviceDuration=${service_duration[1]}  notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}   bType=${btype}  isPrePayment=${bool[1]}
+    Verify Response List  ${resp}  0  name=${SERVICE2}   serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}   bType=${btype}  isPrePayment=${bool[1]}
 
 JD-TC-GetServices-11
 
@@ -277,9 +277,9 @@ JD-TC-GetServices-17
     ${count}=  Get Length  ${resp.json()} 
     Should Be Equal As Integers  ${count}  4
     Verify Response List  ${resp}  0  name=${SERVICE4}    serviceDuration=${service_duration[1]}   notificationType=${notifytype[2]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  bType=${btype}  status=INACTIVE  isPrePayment=${bool[1]}  
-    Verify Response List  ${resp}  1  name=${SERVICE3}    serviceDuration=${service_duration[1]}   notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  bType=${btype}  isPrePayment=${bool[1]} 
+    Verify Response List  ${resp}  1  name=${SERVICE3}    serviceDuration=${service_duration[1]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  bType=${btype}  isPrePayment=${bool[1]} 
     Verify Response List  ${resp}  2  name=${SERVICE2}    serviceDuration=${service_duration[1]}   notificationType=${notifytype[2]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  bType=${btype}  status=ACTIVE  isPrePayment=${bool[1]}  
-    Verify Response List  ${resp}  3  name=${SERVICE1}    serviceDuration=${service_duration[1]}   notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  bType=${btype}  isPrePayment=${bool[1]} 
+    Verify Response List  ${resp}  3  name=${SERVICE1}    serviceDuration=${service_duration[1]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  bType=${btype}  isPrePayment=${bool[1]} 
 
 JD-TC-GetServices-18
 
@@ -291,9 +291,9 @@ JD-TC-GetServices-18
     ${count}=  Get Length  ${resp.json()} 
     Should Be Equal As Integers  ${count}  4
     Verify Response List  ${resp}  0  name=${SERVICE6}    serviceDuration=${service_duration[1]}  notificationType=${notifytype[0]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  bType=${btype}  isPrePayment=${bool[1]} 	  
-    Verify Response List  ${resp}  1  name=${SERVICE3}    serviceDuration=${service_duration[1]}  notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  bType=${btype}  isPrePayment=${bool[1]} 
+    Verify Response List  ${resp}  1  name=${SERVICE3}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  bType=${btype}  isPrePayment=${bool[1]} 
     Verify Response List  ${resp}  2  name=${SERVICE2}    serviceDuration=${service_duration[1]}  notificationType=${notifytype[2]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  bType=${btype}  status=ACTIVE  isPrePayment=${bool[1]}  
-    Verify Response List  ${resp}  3  name=${SERVICE1}    serviceDuration=${service_duration[1]}  notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  bType=${btype}  isPrePayment=${bool[1]} 
+    Verify Response List  ${resp}  3  name=${SERVICE1}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  bType=${btype}  isPrePayment=${bool[1]} 
   
 
 JD-TC-GetServices-19

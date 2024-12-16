@@ -37,6 +37,10 @@ JD-TC-AssignBussinessLocationsToUser-1
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
 
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+
     ${lid1}=   Create Sample Location
     Set Suite Variable    ${lid1} 
     ${resp}=   Get Location ById  ${lid1}
@@ -568,9 +572,23 @@ JD-TC-AssignBussinessLocationsToUser-UH3
 
     [Documentation]  Assign bussiness locations to user with consumer login
 
-    ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=    Send Otp For Login    ${CUSERNAME8}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${userIds}=  Create List  ${u_id1}  ${u_id2}
     ${resp}=   Assign Business_loc To User  ${userIds}  ${lid1}  ${lid2}

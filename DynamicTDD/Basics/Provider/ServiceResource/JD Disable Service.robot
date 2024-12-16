@@ -157,7 +157,7 @@ JD-TC-Disable Service-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${name}  ${resp.json()['name']}     
     Set Test Variable   ${service_duration}  ${resp.json()['serviceDuration']} 
-    Set Test Variable   ${description}  ${resp.json()['description']} 
+    # Set Test Variable   ${description}  ${resp.json()['description']} 
     ${pid}=  get_acc_id  ${PUSERNAME78}
     Set Suite Variable  ${pid}
     
@@ -183,7 +183,7 @@ JD-TC-Disable Service-UH6
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${msg}=  FakerLibrary.word
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${qid}  ${DAY1}  ${s_id}  ${msg}  ${bool[0]}  ${self}
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${account_id}  ${qid}  ${DAY1}  ${s_id}  ${msg}  ${bool[0]}  ${self}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Consumer Logout
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -243,7 +243,9 @@ JD-TC-Disable Service-UH7
 
     ${cid}=  get_id  ${CUSERNAME8} 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${qid1}  ${DAY1}  ${sid2}  i need  False  0
+    ${msg}=  FakerLibrary.word
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${account_id}  ${qid1}  ${DAY1}  ${sid2}  ${msg}  ${bool[0]}  ${self}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid1}  ${wid[0]}

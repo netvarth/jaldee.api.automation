@@ -36,10 +36,11 @@ JD-TC-ListFamilyMemberByProvider-1
       Set Suite Variable  ${email2}  ${firstname}${ph2}${C_Email}.${test_mail}
       ${gender}=  Random Element    ${Genderlist}
       ${dob}=  FakerLibrary.Date
-      ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${CUSERNAME9}  ${EMPTY}
-      Set Suite Variable  ${pcid}  ${resp.json()}
+      # ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${CUSERNAME9}  ${EMPTY}
+      ${resp}=  AddCustomer  ${CUSERNAME9}  firstName=${firstname}   lastName=${lastname}  countryCode=${countryCodes[1]}  email=${email2}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${pcid}  ${resp.json()}
       # clear_FamilyMember  ${id}
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
@@ -98,10 +99,11 @@ JD-TC-ListFamilyMemberByProvider-3
       Set Suite Variable  ${email2}  ${firstname}${ph2}${C_Email}.${test_mail}
       ${gender}=  Random Element    ${Genderlist}
       ${dob}=  FakerLibrary.Date
-      ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${PUSERNAME2}  ${EMPTY}
-      Set Suite Variable  ${pcid2}  ${resp.json()}
+      # ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${PUSERNAME2}  ${EMPTY}
+      ${resp}=  AddCustomer  ${PUSERNAME2}  firstName=${firstname}   lastName=${lastname}  countryCode=${countryCodes[1]}  email=${email2}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${pcid2}  ${resp.json()}
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
       ${dob}=  FakerLibrary.Date
@@ -133,10 +135,11 @@ JD-TC-ListFamilyMemberByProvider-4
       Set Test Variable  ${email2}  ${firstname}${ph2}${C_Email}.${test_mail}
       ${gender}=  Random Element    ${Genderlist}
       ${dob}=  FakerLibrary.Date
-      ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}   ${ph2}  ${EMPTY}
-      Set Test Variable  ${pcid3}  ${resp.json()}
+      # ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}   ${ph2}  ${EMPTY}
+      ${resp}=  AddCustomer  ${ph2}  firstName=${firstname}   lastName=${lastname}  countryCode=${countryCodes[1]}  email=${email2}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable  ${pcid3}  ${resp.json()}
       ${firstname1}=  FakerLibrary.first_name
       ${lastname1}=  FakerLibrary.last_name
       ${dob1}=  FakerLibrary.Date
@@ -191,6 +194,10 @@ JD-TC-ListFamilyMemberByProvider-5
       Log  ${decrypted_data}
       Set Test Variable  ${p_id}  ${decrypted_data['id']}
 
+      ${resp}=  Get Business Profile
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${account_id}  ${resp.json()['id']}
+
       # Set Test Variable  ${p_id}  ${resp.json()['id']}
       ${firstname}=  FakerLibrary.first_name
       Set Test Variable  ${firstname}
@@ -202,10 +209,11 @@ JD-TC-ListFamilyMemberByProvider-5
       Set Test Variable  ${gender}
       ${dob}=  FakerLibrary.Date
       Set Test Variable  ${dob}
-      ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email3}  ${gender}  ${dob}  ${ph3}  ${EMPTY}
-      Set Test Variable  ${pcid4}  ${resp.json()}
+      # ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email3}  ${gender}  ${dob}  ${ph3}  ${EMPTY}
+      ${resp}=  AddCustomer  ${ph3}  firstName=${firstname}   lastName=${lastname}  countryCode=${countryCodes[1]}  email=${email3}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable  ${pcid4}  ${resp.json()}
       ${firstname1}=  FakerLibrary.first_name
       Set Test Variable  ${firstname1}
       ${lastname1}=  FakerLibrary.last_name
@@ -229,10 +237,11 @@ JD-TC-ListFamilyMemberByProvider-5
       ${resp}=  ProviderLogout
       ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email3}  ${gender}  ${dob}  ${ph3}  ${EMPTY}
-      Set Suite Variable  ${pcid5}  ${resp.json()}
+      # ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email3}  ${gender}  ${dob}  ${ph3}  ${EMPTY}
+      ${resp}=  AddCustomer  ${ph3}  firstName=${firstname}   lastName=${lastname}  countryCode=${countryCodes[1]}  email=${email3}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${pcid5}  ${resp.json()}
       ${resp}=  AddFamilyMemberByProvider  ${pcid5}  ${firstname1}  ${lastname1}  ${dob1}  ${gender1}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -245,20 +254,36 @@ JD-TC-ListFamilyMemberByProvider-5
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${mem_id4}  ${resp.json()}
-      ${address}=  FakerLibrary.Address
-      ${alternativeNo}=  Evaluate  ${PUSERNAME23}+73004
-      ${resp}=  Consumer SignUp   ${firstname}  ${lastname}  ${address}  ${ph3}  ${alternativeNo}  ${dob}  ${gender}  ${EMPTY} 
-      Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      ${resp}=  Consumer Activation   ${ph3}   1
-      Log   ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Consumer Set Credential   ${ph3}   ${PASSWORD}  1
-      Log   ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Consumer Login  ${ph3}  ${PASSWORD}
-      Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
+      # ${address}=  FakerLibrary.Address
+      # ${alternativeNo}=  Evaluate  ${PUSERNAME23}+73004
+      # ${resp}=  Consumer SignUp   ${firstname}  ${lastname}  ${address}  ${ph3}  ${alternativeNo}  ${dob}  ${gender}  ${EMPTY} 
+      # Log  ${resp.json()}
+      # Should Be Equal As Strings  ${resp.status_code}  200
+      # ${resp}=  Consumer Activation   ${ph3}   1
+      # Log   ${resp.json()}
+      # Should Be Equal As Strings    ${resp.status_code}    200
+      # ${resp}=  Consumer Set Credential   ${ph3}   ${PASSWORD}  1
+      # Log   ${resp.json()}
+      # Should Be Equal As Strings    ${resp.status_code}    200
+      # ${resp}=  Consumer Login  ${ph3}  ${PASSWORD}
+      # Log  ${resp.json()}
+      # Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${resp}=    Send Otp For Login    ${ph3}    ${account_id}
+      Log   ${resp.content}
+      Should Be Equal As Strings    ${resp.status_code}   200
+
+      ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+      ${resp}=    Verify Otp For Login   ${ph3}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+      Log   ${resp.content}
+      Should Be Equal As Strings    ${resp.status_code}   200
+      Set Test Variable  ${token}  ${resp.json()['token']}
+
+      ${resp}=    ProviderConsumer Login with token   ${ph3}    ${account_id}  ${token} 
+      Log   ${resp.content}
+      Should Be Equal As Strings    ${resp.status_code}   200
+
       ${resp}=  ListFamilyMember  
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200

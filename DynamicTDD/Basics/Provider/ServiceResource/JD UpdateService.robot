@@ -132,10 +132,21 @@ JD-TC-UpdateService-4
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Get Service
+    # ${resp}=   Get Service
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable   ${s_id}   ${resp.json()[0]['id']}
+
+    ${description}=  FakerLibrary.sentence
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
+    ${srv_duration}=   Random Int   min=2   max=10
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${srv_duration}  ${bool[0]}  ${Total}  ${bool[0]}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${s_id}   ${resp.json()[0]['id']}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Set Suite Variable  ${s_id}  ${resp.json()}
 
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${resp}=  Update Service  ${s_id}  ${resp.json()[0]['name']}  ${resp.json()[0]['description']}  ${resp.json()[0]['serviceDuration']}  ${bool[1]}  ${resp.json()[0]['totalAmount']}  minPrePaymentAmount=${min_pre}
@@ -174,7 +185,9 @@ JD-TC-UpdateService-6
     [Documentation]  Update service charge for a non billable account.
 
     ${nonbillable_domains}=  get_nonbillable_domains
-    ${random_domain}  Evaluate  random.choice(list(nonbillable_domains.keys())) random 
+    # ${random_domain}  Evaluate  random.choice(list(nonbillable_domains.keys())) random 
+    ${domains_list}=   Evaluate  list(${nonbillable_domains}.keys())
+    ${random_domain}=  Evaluate  random.choice(list(${nonbillable_domains}.keys()))  random
     ${random_subdomain}  Evaluate  random.choice(nonbillable_domains[random_domain]) random
     ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup  Domain=${random_domain}  SubDomain=${random_subdomain}
     Set Suite Variable  ${PUSERNAME_A}

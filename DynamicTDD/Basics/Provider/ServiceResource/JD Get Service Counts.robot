@@ -34,7 +34,10 @@ ${start}    150
 JD-TC-GetServiceCount-1
 
     [Documentation]   Get Service Counts
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
+    ${licid}  ${licname}=  get_highest_license_pkg
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup without Profile  LicenseId=${licid}
+    Set Suite Variable  ${PUSERNAME_A}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service       ${HLPUSERNAME10} 
     ${min_pre}=   Random Int  min=200  max=500
@@ -48,7 +51,7 @@ JD-TC-GetServiceCount-1
     ${resp}=   Get Service Count
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()}  1
+    Should Be Equal As Strings  ${resp.json()}  2
 
 
 JD-TC-GetServiceCount-2
@@ -59,7 +62,7 @@ JD-TC-GetServiceCount-2
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${Total}=   Random Int  min=600  max=800
     ${Total}=  Convert To Number  ${Total}  1
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Create Service  ${SERVICE2}  ${description}   ${service_duration[2]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre} 
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -67,7 +70,7 @@ JD-TC-GetServiceCount-2
     Should Be Equal As Strings  ${resp.status_code}  200  
     ${resp}=   Get Service Count
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()}  3
+    Should Be Equal As Strings  ${resp.json()}  4
 
 JD-TC-GetServiceCount-3
 
@@ -77,7 +80,7 @@ JD-TC-GetServiceCount-3
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${Total}=   Random Int  min=600  max=800
     ${Total}=  Convert To Number  ${Total}  1
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Create Service  ${SERVICE4}  ${description}   ${service_duration[2]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre} 
     Log  ${resp.json()}
@@ -85,17 +88,17 @@ JD-TC-GetServiceCount-3
     Set Suite Variable  ${id}  ${resp.json()}  
     ${resp}=   Get Service Count
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()}  4
+    Should Be Equal As Strings  ${resp.json()}  5
     ${resp}=  Disable service  ${id}  
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get Service Count
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()}  4
+    Should Be Equal As Strings  ${resp.json()}  5
     ${resp}=  Enable service  ${id}  
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get Service Count
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()}  4
+    Should Be Equal As Strings  ${resp.json()}  5
 
 JD-TC-GetServiceCount-UH2
 
@@ -109,7 +112,7 @@ JD-TC-GetServiceCount-UH3
 
     [Documentation]  Check the service counts using consumer login
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log    ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
