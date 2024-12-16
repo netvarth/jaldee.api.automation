@@ -3370,7 +3370,7 @@ Get locations by service
     RETURN  ${resp}
 
 Get Consumer Booking Invoices
-     [Arguments]      ${ynwuuid}  
+    [Arguments]      ${ynwuuid}  
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw   /consumer/jp/finance/invoice/ynwuid/${ynwuuid}    expected_status=any
     Check Deprication  ${resp}  Get Consumer Booking Invoices
@@ -3378,7 +3378,7 @@ Get Consumer Booking Invoices
 
 
 Get invoices bydate
-     [Arguments]      ${startDate}   ${endDate}
+    [Arguments]      ${startDate}   ${endDate}
     ${data}=  Create Dictionary   startDate=${startDate}    endDate=${endDate}
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
