@@ -14,6 +14,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
 *** Variables ***
@@ -39,6 +40,7 @@ ${get_Waiting_Time_name}    get Waiting Time
 ${waiting_option_name}    Waiting Option
 
 ${loc}    AP, IN
+@{service_names}
 
 *** Test Cases ***
 
@@ -46,12 +48,12 @@ JD-TC-Update_IVR_Settings-1
 
     [Documentation]   Update IVR Settings
     
-    # clear_queue      ${PUSERNAME179}
-    # clear_location   ${PUSERNAME179}
-    # clear_service    ${PUSERNAME179}
-    clear_customer   ${PUSERNAME179}
+    # clear_queue      ${HLPUSERNAME17}
+    # clear_location   ${HLPUSERNAME17}
+    # clear_service    ${HLPUSERNAME17}
+    clear_customer   ${HLPUSERNAME17}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -61,7 +63,7 @@ JD-TC-Update_IVR_Settings-1
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME179}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME17}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Account Settings  
@@ -216,12 +218,12 @@ JD-TC-Update_IVR_Settings-2
 
     [Documentation]   Update IVR Settingswithout creating ivr settings
     
-    # clear_queue      ${PUSERNAME179}
-    # clear_location   ${PUSERNAME179}
-    # clear_service    ${PUSERNAME179}
-    clear_customer   ${PUSERNAME179}
+    # clear_queue      ${HLPUSERNAME17}
+    # clear_location   ${HLPUSERNAME17}
+    # clear_service    ${HLPUSERNAME17}
+    clear_customer   ${HLPUSERNAME17}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -231,7 +233,7 @@ JD-TC-Update_IVR_Settings-2
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME179}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME17}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Account Settings  
@@ -371,12 +373,12 @@ JD-TC-Update_IVR_Settings-3
 
     [Documentation]   Update IVR Settings where call waiting time is empty
     
-    # clear_queue      ${PUSERNAME179}
-    # clear_location   ${PUSERNAME179}
-    # clear_service    ${PUSERNAME179}
-    clear_customer   ${PUSERNAME179}
+    # clear_queue      ${HLPUSERNAME17}
+    # clear_location   ${HLPUSERNAME17}
+    # clear_service    ${HLPUSERNAME17}
+    clear_customer   ${HLPUSERNAME17}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -386,7 +388,7 @@ JD-TC-Update_IVR_Settings-3
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME179}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME17}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Account Settings  
@@ -428,12 +430,12 @@ JD-TC-Update_IVR_Settings-4
 
     [Documentation]   Update IVR Settings where sample service is empty
     
-    # clear_queue      ${PUSERNAME179}
-    # clear_location   ${PUSERNAME179}
-    # clear_service    ${PUSERNAME179}
-    clear_customer   ${PUSERNAME179}
+    # clear_queue      ${HLPUSERNAME17}
+    # clear_location   ${HLPUSERNAME17}
+    # clear_service    ${HLPUSERNAME17}
+    clear_customer   ${HLPUSERNAME17}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -443,7 +445,7 @@ JD-TC-Update_IVR_Settings-4
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME179}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME17}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Account Settings  
@@ -503,12 +505,12 @@ JD-TC-Update_IVR_Settings-5
 
     [Documentation]   Update IVR Settings where token is empty
     
-    # clear_queue      ${PUSERNAME179}
-    # clear_location   ${PUSERNAME179}
-    # clear_service    ${PUSERNAME179}
-    clear_customer   ${PUSERNAME179}
+    # clear_queue      ${HLPUSERNAME17}
+    # clear_location   ${HLPUSERNAME17}
+    # clear_service    ${HLPUSERNAME17}
+    clear_customer   ${HLPUSERNAME17}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -518,7 +520,7 @@ JD-TC-Update_IVR_Settings-5
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME179}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME17}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Account Settings  
@@ -560,12 +562,12 @@ JD-TC-Update_IVR_Settings-6
 
     [Documentation]   Update IVR Settings where secret key is empty 
     
-    # clear_queue      ${PUSERNAME179}
-    # clear_location   ${PUSERNAME179}
-    # clear_service    ${PUSERNAME179}
-    clear_customer   ${PUSERNAME179}
+    # clear_queue      ${HLPUSERNAME17}
+    # clear_location   ${HLPUSERNAME17}
+    # clear_service    ${HLPUSERNAME17}
+    clear_customer   ${HLPUSERNAME17}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -575,7 +577,7 @@ JD-TC-Update_IVR_Settings-6
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME179}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME17}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Account Settings  
@@ -617,12 +619,12 @@ JD-TC-Update_IVR_Settings-7
 
     [Documentation]   Update IVR Settings where api key is empty
     
-    # clear_queue      ${PUSERNAME179}
-    # clear_location   ${PUSERNAME179}
-    # clear_service    ${PUSERNAME179}
-    clear_customer   ${PUSERNAME179}
+    # clear_queue      ${HLPUSERNAME17}
+    # clear_location   ${HLPUSERNAME17}
+    # clear_service    ${HLPUSERNAME17}
+    clear_customer   ${HLPUSERNAME17}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -632,7 +634,7 @@ JD-TC-Update_IVR_Settings-7
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME179}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME17}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Account Settings  
@@ -674,12 +676,12 @@ JD-TC-Update_IVR_Settings-8
 
     [Documentation]   Update IVR Settings where token is empty
     
-    # clear_queue      ${PUSERNAME179}
-    # clear_location   ${PUSERNAME179}
-    # clear_service    ${PUSERNAME179}
-    clear_customer   ${PUSERNAME179}
+    # clear_queue      ${HLPUSERNAME17}
+    # clear_location   ${HLPUSERNAME17}
+    # clear_service    ${HLPUSERNAME17}
+    clear_customer   ${HLPUSERNAME17}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -689,7 +691,7 @@ JD-TC-Update_IVR_Settings-8
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME179}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME17}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Account Settings  
@@ -731,12 +733,12 @@ JD-TC-Update_IVR_Settings-9
 
     [Documentation]   Update IVR Settings where public id  is empty
     
-    # clear_queue      ${PUSERNAME179}
-    # clear_location   ${PUSERNAME179}
-    # clear_service    ${PUSERNAME179}
-    clear_customer   ${PUSERNAME179}
+    # clear_queue      ${HLPUSERNAME17}
+    # clear_location   ${HLPUSERNAME17}
+    # clear_service    ${HLPUSERNAME17}
+    clear_customer   ${HLPUSERNAME17}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -746,7 +748,7 @@ JD-TC-Update_IVR_Settings-9
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME179}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME17}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Account Settings  
@@ -758,11 +760,14 @@ JD-TC-Update_IVR_Settings-9
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
 
-    ${ser_name1}=   FakerLibrary.word
+    ${ser_name1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${ser_name1}  
     Set Suite Variable    ${ser_name1} 
     ${resp}=   Create Sample Service  ${ser_name1}
     Set Suite Variable    ${ser_id1}    ${resp}  
-    ${ser_name2}=   FakerLibrary.word
+
+    ${ser_name2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${ser_name2}  
     Set Suite Variable    ${ser_name2} 
 
     ${resp}=   Create Sample Service  ${ser_name2}
@@ -788,12 +793,12 @@ JD-TC-Update_IVR_Settings-10
 
     [Documentation]   Update IVR Settings where Language reset count  is empty
     
-    # clear_queue      ${PUSERNAME179}
-    # clear_location   ${PUSERNAME179}
-    # clear_service    ${PUSERNAME179}
-    clear_customer   ${PUSERNAME179}
+    # clear_queue      ${HLPUSERNAME17}
+    # clear_location   ${HLPUSERNAME17}
+    # clear_service    ${HLPUSERNAME17}
+    clear_customer   ${HLPUSERNAME17}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -803,7 +808,7 @@ JD-TC-Update_IVR_Settings-10
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME179}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME17}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Account Settings  
@@ -1022,12 +1027,12 @@ JD-TC-Update_IVR_Settings-UH3
 
     [Documentation]   Update IVR Settings where ivr call priority is low
     
-    # clear_queue      ${PUSERNAME179}
-    # clear_location   ${PUSERNAME179}
-    # clear_service    ${PUSERNAME179}
-    clear_customer   ${PUSERNAME179}
+    # clear_queue      ${HLPUSERNAME17}
+    # clear_location   ${HLPUSERNAME17}
+    # clear_service    ${HLPUSERNAME17}
+    clear_customer   ${HLPUSERNAME17}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -1037,7 +1042,7 @@ JD-TC-Update_IVR_Settings-UH3
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME179}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME17}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Account Settings  
@@ -1073,17 +1078,18 @@ JD-TC-Update_IVR_Settings-UH3
     ${resp}=    Get IVR Setting
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
+
+*** Comments ***
 JD-TC-Update_IVR_Settings-UH4
 
     [Documentation]   Update IVR Settings where ivr_config_data  is empty
     
-    # clear_queue      ${PUSERNAME179}
-    # clear_location   ${PUSERNAME179}
-    # clear_service    ${PUSERNAME179}
-    clear_customer   ${PUSERNAME179}
+    # clear_queue      ${HLPUSERNAME17}
+    # clear_location   ${HLPUSERNAME17}
+    # clear_service    ${HLPUSERNAME17}
+    clear_customer   ${HLPUSERNAME17}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -1093,7 +1099,7 @@ JD-TC-Update_IVR_Settings-UH4
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME179}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME17}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Account Settings  

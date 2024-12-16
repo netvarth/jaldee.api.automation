@@ -416,7 +416,7 @@ JD-TC-Get_IVR_Graph_Details-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${created_date2}    ${created_date}
+    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[6]}   ${created_date2}    ${created_date}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['labels'][0]}                                 ${created_date2}
@@ -461,7 +461,7 @@ JD-TC-Get_IVR_Graph_Details-2
     ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
 
-    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${start_date}    ${CUR_DAY}
+    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[6]}   ${start_date}    ${CUR_DAY}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['labels'][0]}                                 ${start_date}
@@ -482,7 +482,7 @@ JD-TC-Get_IVR_Graph_Details-UH1
     ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
 
-    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${start_date}    ${CUR_DAY}
+    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[6]}   ${start_date}    ${CUR_DAY}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED}
@@ -523,7 +523,7 @@ JD-TC-Get_IVR_Graph_Details-UH2
     ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
 
-    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${start_date}    ${CUR_DAY}
+    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[6]}   ${start_date}    ${CUR_DAY}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['labels'][0]}                                 ${start_date}
@@ -567,13 +567,15 @@ JD-TC-Get_IVR_Graph_Details-UH3
     ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
 
-    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[4]}   ${start_date}    ${CUR_DAY}
+    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[6]}   ${start_date}    ${CUR_DAY}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['labels'][0]}                                 ${start_date}
     Should Be Equal As Strings  ${resp.json()['labels'][7]}                                 ${CUR_DAY}  
     Should Be Equal As Strings  ${resp.json()['datasets'][0]['data'][0]}                    0
     Should Be Equal As Strings  ${resp.json()['datasets'][1]['data'][0]}                     0
+
+*** Comments ***
 
 JD-TC-Get_IVR_Graph_Details-UH4
 
@@ -611,7 +613,7 @@ JD-TC-Get_IVR_Graph_Details-UH4
     ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
 
-    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${SPACE}    ${CUR_DAY}
+    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[6]}   ${SPACE}    ${CUR_DAY}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
 
@@ -651,7 +653,7 @@ JD-TC-Get_IVR_Graph_Details-UH5
     ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
 
-    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${empty}    ${CUR_DAY}
+    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[6]}   ${empty}    ${CUR_DAY}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
 
@@ -691,7 +693,7 @@ JD-TC-Get_IVR_Graph_Details-UH6
     ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
 
-    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${start_date}    ${SPACE}
+    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[6]}   ${start_date}    ${SPACE}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
 
@@ -731,7 +733,7 @@ JD-TC-Get_IVR_Graph_Details-UH7
     ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
 
-    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${start_date}    ${empty}
+    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[6]}   ${start_date}    ${empty}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
 
@@ -769,7 +771,7 @@ JD-TC-Get_IVR_Graph_Details-UH8
     ${start2}=    DateTime.Add Time To Date    ${start1}    -7 days
   
 
-    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${start2}    ${start1}
+    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[6]}   ${start2}    ${start1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
    
