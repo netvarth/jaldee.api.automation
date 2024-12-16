@@ -106,6 +106,7 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+
 JD-Get_Avaliable_Providers_In_A_Time_Range-2
 
     [Documentation]  Get Avaliable Providers In A Time Range without creating schedules

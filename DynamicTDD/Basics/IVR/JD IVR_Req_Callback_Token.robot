@@ -14,6 +14,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
 *** Variables ***
@@ -46,12 +47,12 @@ JD-TC-IVR_Request_Call_Back_Token-1
 
     [Documentation]   IVR Request Call Back Token
     
-    # clear_queue      ${PUSERNAME173}
-    # clear_location   ${PUSERNAME173}
-    # clear_service    ${PUSERNAME173}
-    clear_customer   ${PUSERNAME173}
+    # clear_queue      ${HLPUSERNAME30}
+    # clear_location   ${HLPUSERNAME30}
+    # clear_service    ${HLPUSERNAME30}
+    clear_customer   ${HLPUSERNAME30}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME173}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -61,7 +62,7 @@ JD-TC-IVR_Request_Call_Back_Token-1
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME173}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME30}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Account Settings  
@@ -215,7 +216,7 @@ JD-TC-IVR_Request_Call_Back_Token-1
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME173}  ${countryCodes[1]}${PUSERNAME173}  ${user_id}  ${user_name}
+    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLPUSERNAME30}  ${countryCodes[1]}${HLPUSERNAME30}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -242,7 +243,7 @@ JD-TC-IVR_Request_Call_Back_Token-1
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME173}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME30}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -325,12 +326,12 @@ JD-TC-IVR_Request_Call_Back_Token-2
 
     [Documentation]   IVR Request Call Back Token before after call
     
-    # clear_queue      ${PUSERNAME173}
-    # clear_location   ${PUSERNAME173}
-    # clear_service    ${PUSERNAME173}
-    clear_customer   ${PUSERNAME173}
+    # clear_queue      ${HLPUSERNAME30}
+    # clear_location   ${HLPUSERNAME30}
+    # clear_service    ${HLPUSERNAME30}
+    clear_customer   ${HLPUSERNAME30}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME173}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -340,7 +341,7 @@ JD-TC-IVR_Request_Call_Back_Token-2
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME173}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME30}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Account Settings  
@@ -482,7 +483,7 @@ JD-TC-IVR_Request_Call_Back_Token-2
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME173}  ${countryCodes[1]}${PUSERNAME173}  ${user_id}  ${user_name}
+    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLPUSERNAME30}  ${countryCodes[1]}${HLPUSERNAME30}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -509,7 +510,7 @@ JD-TC-IVR_Request_Call_Back_Token-2
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME173}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME30}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -594,12 +595,12 @@ JD-TC-IVR_Request_Call_Back_Token-3
 
     [Documentation]   IVR Request Call Back Token before after call
     
-    # clear_queue      ${PUSERNAME173}
-    # clear_location   ${PUSERNAME173}
-    # clear_service    ${PUSERNAME173}
-    clear_customer   ${PUSERNAME173}
+    # clear_queue      ${HLPUSERNAME30}
+    # clear_location   ${HLPUSERNAME30}
+    # clear_service    ${HLPUSERNAME30}
+    clear_customer   ${HLPUSERNAME30}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME173}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -609,7 +610,7 @@ JD-TC-IVR_Request_Call_Back_Token-3
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME173}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME30}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Account Settings  
@@ -751,7 +752,7 @@ JD-TC-IVR_Request_Call_Back_Token-3
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME173}  ${countryCodes[1]}${PUSERNAME173}  ${user_id}  ${user_name}
+    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLPUSERNAME30}  ${countryCodes[1]}${HLPUSERNAME30}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -792,7 +793,7 @@ JD-TC-IVR_Request_Call_Back_Token-3
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME173}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME30}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -863,7 +864,7 @@ JD-TC-IVR_Request_Call_Back_Token-UH1
 
     [Documentation]   IVR Request Call Back Token twice
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME173}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -875,7 +876,7 @@ JD-TC-IVR_Request_Call_Back_Token-UH2
 
     [Documentation]   IVR Request Call Back Token where uid is invalid
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME173}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

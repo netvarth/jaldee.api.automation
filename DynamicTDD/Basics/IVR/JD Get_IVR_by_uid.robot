@@ -14,6 +14,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
 *** Variables ***
@@ -48,12 +49,12 @@ JD-TC-Get_IVR_By_UID-1
 
     [Documentation]   Get IVR by Uid
         
-    # clear_queue      ${PUSERNAME163}
-    # clear_location   ${PUSERNAME163}
-    # clear_service    ${PUSERNAME163}
-    clear_customer   ${PUSERNAME163}
+    # clear_queue      ${HLPUSERNAME28}
+    # clear_location   ${HLPUSERNAME28}
+    # clear_service    ${HLPUSERNAME28}
+    clear_customer   ${HLPUSERNAME28}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME163}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -63,7 +64,7 @@ JD-TC-Get_IVR_By_UID-1
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME163}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME28}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Account Settings  
@@ -217,7 +218,7 @@ JD-TC-Get_IVR_By_UID-1
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME163}  ${countryCodes[1]}${PUSERNAME163}  ${user_id}  ${user_name}
+    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLPUSERNAME28}  ${countryCodes[1]}${HLPUSERNAME28}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -244,7 +245,7 @@ JD-TC-Get_IVR_By_UID-1
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME163}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME28}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -326,12 +327,12 @@ JD-TC-Get_IVR_By_UID-2
 
     [Documentation]   Get IVR by Uid before after login
         
-    # clear_queue      ${PUSERNAME163}
-    # clear_location   ${PUSERNAME163}
-    # clear_service    ${PUSERNAME163}
-    clear_customer   ${PUSERNAME163}
+    # clear_queue      ${HLPUSERNAME28}
+    # clear_location   ${HLPUSERNAME28}
+    # clear_service    ${HLPUSERNAME28}
+    clear_customer   ${HLPUSERNAME28}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME163}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -341,7 +342,7 @@ JD-TC-Get_IVR_By_UID-2
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME163}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME28}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Account Settings  
@@ -483,7 +484,7 @@ JD-TC-Get_IVR_By_UID-2
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-  #  ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME163}  ${countryCodes[1]}${PUSERNAME163}  ${user_id}  ${user_name}
+  #  ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLPUSERNAME28}  ${countryCodes[1]}${HLPUSERNAME28}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -510,7 +511,7 @@ JD-TC-Get_IVR_By_UID-2
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME163}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME28}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -592,12 +593,12 @@ JD-TC-Get_IVR_By_UID-3
 
     [Documentation]   Get IVR by Uid  after incoming call on server
         
-    # clear_queue      ${PUSERNAME163}
-    # clear_location   ${PUSERNAME163}
-    # clear_service    ${PUSERNAME163}
-    clear_customer   ${PUSERNAME163}
+    # clear_queue      ${HLPUSERNAME28}
+    # clear_location   ${HLPUSERNAME28}
+    # clear_service    ${HLPUSERNAME28}
+    clear_customer   ${HLPUSERNAME28}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME163}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -607,7 +608,7 @@ JD-TC-Get_IVR_By_UID-3
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME163}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME28}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Account Settings  
@@ -749,7 +750,7 @@ JD-TC-Get_IVR_By_UID-3
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-  #  ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME163}  ${countryCodes[1]}${PUSERNAME163}  ${user_id}  ${user_name}
+  #  ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLPUSERNAME28}  ${countryCodes[1]}${HLPUSERNAME28}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -786,7 +787,7 @@ JD-TC-Get_IVR_By_UID-3
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME163}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME28}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -857,12 +858,12 @@ JD-TC-Get_IVR_By_UID-4
 
     [Documentation]   Get IVR by Uid  after Dialing user
         
-    # clear_queue      ${PUSERNAME163}
-    # clear_location   ${PUSERNAME163}
-    # clear_service    ${PUSERNAME163}
-    clear_customer   ${PUSERNAME163}
+    # clear_queue      ${HLPUSERNAME28}
+    # clear_location   ${HLPUSERNAME28}
+    # clear_service    ${HLPUSERNAME28}
+    clear_customer   ${HLPUSERNAME28}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME163}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -872,7 +873,7 @@ JD-TC-Get_IVR_By_UID-4
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME163}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME28}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Account Settings  
@@ -1014,7 +1015,7 @@ JD-TC-Get_IVR_By_UID-4
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-  #  ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME163}  ${countryCodes[1]}${PUSERNAME163}  ${user_id}  ${user_name}
+  #  ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLPUSERNAME28}  ${countryCodes[1]}${HLPUSERNAME28}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -1052,7 +1053,7 @@ JD-TC-Get_IVR_By_UID-4
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME163}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME28}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -1123,12 +1124,12 @@ JD-TC-Get_IVR_By_UID-5
 
     [Documentation]   Get IVR by Uid  after User answered the call
         
-    # clear_queue      ${PUSERNAME163}
-    # clear_location   ${PUSERNAME163}
-    # clear_service    ${PUSERNAME163}
-    clear_customer   ${PUSERNAME163}
+    # clear_queue      ${HLPUSERNAME28}
+    # clear_location   ${HLPUSERNAME28}
+    # clear_service    ${HLPUSERNAME28}
+    clear_customer   ${HLPUSERNAME28}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME163}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -1138,7 +1139,7 @@ JD-TC-Get_IVR_By_UID-5
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME163}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME28}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Account Settings  
@@ -1280,7 +1281,7 @@ JD-TC-Get_IVR_By_UID-5
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-  #  ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME163}  ${countryCodes[1]}${PUSERNAME163}  ${user_id}  ${user_name}
+  #  ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLPUSERNAME28}  ${countryCodes[1]}${HLPUSERNAME28}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -1309,7 +1310,7 @@ JD-TC-Get_IVR_By_UID-5
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME163}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME28}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -1412,20 +1413,6 @@ JD-TC-Get_IVR_By_UID-UH2
     Should Be Equal As Strings  ${resp.json()}    ${NO_PERMISSION} 
 
 
-JD-TC-Get_IVR_By_UID-UH3
-
-    [Documentation]   Get IVR by Uid with empty uid
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME140 }  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=    Get Ivr By Uid    ${empty}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-     Should Be Equal As Strings    ${resp.content}    [] 
-
-
 JD-TC-Get_IVR_By_UID-UH4
 
     [Documentation]   Get IVR by Uid with Invalid uid
@@ -1440,3 +1427,19 @@ JD-TC-Get_IVR_By_UID-UH4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings    ${resp.content}    ${empty}
+
+*** Comments ***
+
+
+JD-TC-Get_IVR_By_UID-UH3
+
+    [Documentation]   Get IVR by Uid with empty uid
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140 }  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    Get Ivr By Uid    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+     Should Be Equal As Strings    ${resp.content}    [] 

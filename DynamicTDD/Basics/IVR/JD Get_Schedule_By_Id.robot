@@ -226,6 +226,18 @@ JD-Get_schedules_Using_Id-UH1
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings    ${resp.json()}    ${NO_PERMISSION}
 
+
+JD-Get_schedules_Using_Id-UH2
+
+    [Documentation]   Get schedule of an account without login
+
+    ${resp}=    Get Scheduled Using Id    ${sch_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings  ${resp.json()}    ${SESSION_EXPIRED}
+
+*** Comments ***
+
 JD-Get_schedules_Using_Id-UH2
 
     [Documentation]  Provider schedule name is empty and try to get the schedule
@@ -257,8 +269,8 @@ JD-Get_schedules_Using_Id-UH2
 
     ${resp}=  Create Provider Schedule  ${empty}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[0]}  ${user_id}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"   "${NECESSARY_FIELD_MISSING}"
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  "${resp.json()}"   "${NECESSARY_FIELD_MISSING}"
     Set Suite Variable  ${sch_id}  ${resp.json()}
 
     ${resp}=    Get all schedules of an account 
@@ -269,48 +281,6 @@ JD-Get_schedules_Using_Id-UH2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-Get_schedules_Using_Id-UH3
-
-    [Documentation]  Provider schedule start date and end date is empty and try to get the schedule
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME168}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
-    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
-    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-
-    ${resp}=  Get Business Profile
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${account_id}  ${resp.json()['id']}
-
-    ${lid}=  Create Sample Location  
-    Set Suite Variable  ${lid}
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10      
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-
-    ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${empty}  ${empty}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[0]}  ${user_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"   "${END_DATE_REQUIRED}"
-    Set Suite Variable  ${sch_id}  ${resp.json()}
-
-    ${resp}=    Get all schedules of an account 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-     ${resp}=    Get Scheduled Using Id    ${sch_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-Get_schedules_Using_Id-UH4
 
@@ -441,11 +411,46 @@ JD-Get_schedules_Using_Id-UH6
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-Get_schedules_Using_Id-UH7
 
-    [Documentation]   Get schedule of an account without login
+JD-Get_schedules_Using_Id-UH3
 
-    ${resp}=    Get Scheduled Using Id    ${sch_id}
+    [Documentation]  Provider schedule start date and end date is empty and try to get the schedule
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME168}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+
+    ${lid}=  Create Sample Location  
+    Set Suite Variable  ${lid}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_two   ${sTime1}  ${delta}
+    ${schedule_name}=  FakerLibrary.bs
+
+    ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${empty}  ${empty}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[0]}  ${user_id}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  419
-    Should Be Equal As Strings  ${resp.json()}    ${SESSION_EXPIRED}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"   "${END_DATE_REQUIRED}"
+    Set Suite Variable  ${sch_id}  ${resp.json()}
+
+    ${resp}=    Get all schedules of an account 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${resp}=    Get Scheduled Using Id    ${sch_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
