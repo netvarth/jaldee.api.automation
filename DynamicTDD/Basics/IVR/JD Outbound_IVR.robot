@@ -14,6 +14,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
 *** Variables ***
@@ -46,12 +47,12 @@ JD-TC-Outbound_IVR-1
 
     [Documentation]   Outbound IVR
     
-    # clear_queue      ${PUSERNAME175}
-    # clear_location   ${PUSERNAME175}
-    # clear_service    ${PUSERNAME175}
-    clear_customer   ${PUSERNAME175}
+    # clear_queue      ${HLPUSERNAME31}
+    # clear_location   ${HLPUSERNAME31}
+    # clear_service    ${HLPUSERNAME31}
+    clear_customer   ${HLPUSERNAME31}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME175}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -61,7 +62,7 @@ JD-TC-Outbound_IVR-1
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME175}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME31}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Account Settings  
@@ -215,7 +216,7 @@ JD-TC-Outbound_IVR-1
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME175}  ${countryCodes[1]}${PUSERNAME175}  ${user_id}  ${user_name}
+    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLPUSERNAME31}  ${countryCodes[1]}${HLPUSERNAME31}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -242,7 +243,7 @@ JD-TC-Outbound_IVR-1
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME175}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME31}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -344,7 +345,7 @@ JD-TC-Outbound_IVR-1
 
 #........  user answered    ...............................
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME175}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME31}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -376,12 +377,12 @@ JD-TC-Outbound_IVR-2
 
     [Documentation]   Outbound IVR User disconnected the call
     
-    # clear_queue      ${PUSERNAME175}
-    # clear_location   ${PUSERNAME175}
-    # clear_service    ${PUSERNAME175}
-    clear_customer   ${PUSERNAME175}
+    # clear_queue      ${HLPUSERNAME31}
+    # clear_location   ${HLPUSERNAME31}
+    # clear_service    ${HLPUSERNAME31}
+    clear_customer   ${HLPUSERNAME31}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME175}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -391,7 +392,7 @@ JD-TC-Outbound_IVR-2
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME175}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME31}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Account Settings  
@@ -533,7 +534,7 @@ JD-TC-Outbound_IVR-2
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME175}  ${countryCodes[1]}${PUSERNAME175}  ${user_id}  ${user_name}
+    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLPUSERNAME31}  ${countryCodes[1]}${HLPUSERNAME31}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -560,7 +561,7 @@ JD-TC-Outbound_IVR-2
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME175}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME31}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -662,7 +663,7 @@ JD-TC-Outbound_IVR-2
 
 #........  user disconnected call    ...............................
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME175}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME31}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -694,12 +695,12 @@ JD-TC-Outbound_IVR-3
 
     [Documentation]   Outbound IVR User disconnected the call
     
-    # clear_queue      ${PUSERNAME175}
-    # clear_location   ${PUSERNAME175}
-    # clear_service    ${PUSERNAME175}
-    clear_customer   ${PUSERNAME175}
+    # clear_queue      ${HLPUSERNAME31}
+    # clear_location   ${HLPUSERNAME31}
+    # clear_service    ${HLPUSERNAME31}
+    clear_customer   ${HLPUSERNAME31}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME175}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -709,7 +710,7 @@ JD-TC-Outbound_IVR-3
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME175}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME31}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Account Settings  
@@ -851,7 +852,7 @@ JD-TC-Outbound_IVR-3
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME175}  ${countryCodes[1]}${PUSERNAME175}  ${user_id}  ${user_name}
+    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLPUSERNAME31}  ${countryCodes[1]}${HLPUSERNAME31}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -878,7 +879,7 @@ JD-TC-Outbound_IVR-3
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME175}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME31}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -980,7 +981,7 @@ JD-TC-Outbound_IVR-3
 
 #........  user answered call    ...............................
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME175}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME31}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -1042,12 +1043,12 @@ JD-TC-Outbound_IVR-UH2
 
     [Documentation]   OUtbound IVR with invalid call back request
      
-    # clear_queue      ${PUSERNAME175}
-    # clear_location   ${PUSERNAME175}
-    # clear_service    ${PUSERNAME175}
-    clear_customer   ${PUSERNAME175}
+    # clear_queue      ${HLPUSERNAME31}
+    # clear_location   ${HLPUSERNAME31}
+    # clear_service    ${HLPUSERNAME31}
+    clear_customer   ${HLPUSERNAME31}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME175}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -1057,7 +1058,7 @@ JD-TC-Outbound_IVR-UH2
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME175}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME31}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Account Settings  
@@ -1199,7 +1200,7 @@ JD-TC-Outbound_IVR-UH2
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME175}  ${countryCodes[1]}${PUSERNAME175}  ${user_id}  ${user_name}
+    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLPUSERNAME31}  ${countryCodes[1]}${HLPUSERNAME31}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -1226,7 +1227,7 @@ JD-TC-Outbound_IVR-UH2
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME175}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME31}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -1324,7 +1325,7 @@ JD-TC-Outbound_IVR-UH2
 
 #........  user answered call    ...............................
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME175}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME31}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -1368,12 +1369,12 @@ JD-TC-Outbound_IVR-UH3
 
     [Documentation]   Outbound IVR Without call back request
     
-    # clear_queue      ${PUSERNAME175}
-    # clear_location   ${PUSERNAME175}
-    # clear_service    ${PUSERNAME175}
-    clear_customer   ${PUSERNAME175}
+    # clear_queue      ${HLPUSERNAME31}
+    # clear_location   ${HLPUSERNAME31}
+    # clear_service    ${HLPUSERNAME31}
+    clear_customer   ${HLPUSERNAME31}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME175}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -1383,7 +1384,7 @@ JD-TC-Outbound_IVR-UH3
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME175}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME31}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Account Settings  
@@ -1525,7 +1526,7 @@ JD-TC-Outbound_IVR-UH3
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME175}  ${countryCodes[1]}${PUSERNAME175}  ${user_id}  ${user_name}
+    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLPUSERNAME31}  ${countryCodes[1]}${HLPUSERNAME31}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -1552,7 +1553,7 @@ JD-TC-Outbound_IVR-UH3
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME175}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME31}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -1650,7 +1651,7 @@ JD-TC-Outbound_IVR-UH3
 
 #........  user answered call    ...............................
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME175}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME31}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -1700,12 +1701,12 @@ JD-TC-Outbound_IVR-UH5
 
     [Documentation]   Outbound IVR where flow changed
     
-    # clear_queue      ${PUSERNAME175}
-    # clear_location   ${PUSERNAME175}
-    # clear_service    ${PUSERNAME175}
-    clear_customer   ${PUSERNAME175}
+    # clear_queue      ${HLPUSERNAME31}
+    # clear_location   ${HLPUSERNAME31}
+    # clear_service    ${HLPUSERNAME31}
+    clear_customer   ${HLPUSERNAME31}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME175}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -1715,7 +1716,7 @@ JD-TC-Outbound_IVR-UH5
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME175}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME31}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Account Settings  
@@ -1857,7 +1858,7 @@ JD-TC-Outbound_IVR-UH5
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME175}  ${countryCodes[1]}${PUSERNAME175}  ${user_id}  ${user_name}
+    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLPUSERNAME31}  ${countryCodes[1]}${HLPUSERNAME31}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -1884,7 +1885,7 @@ JD-TC-Outbound_IVR-UH5
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME175}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME31}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -2000,7 +2001,7 @@ JD-TC-Outbound_IVR-UH5
 
 #........  user disconnected call    ...............................
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME175}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME31}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
