@@ -266,19 +266,20 @@ JD-TC-Communication Between Consumer and Provider-1
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME0}    ${pid0}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    clear_Consumermsg  ${CUSERNAME0}
+    clear_Consumermsg  ${CUSERNAME0}z
     
     
-    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME0}    ${pid0}    ${token}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    # Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
-    Set Test Variable    ${cid}   ${resp.json()['id']} 
+    # ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME0}    ${pid0}    ${token}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # # Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+    # Set Test Variable    ${cid}   ${resp.json()['id']} 
 
     ${msg}=  Fakerlibrary.sentence
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
-    ${resp}=  Imageupload.ConsWLCommunication   ${cookie}  ${wid}  ${pid0}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${jpgfile}
+    ${resp}=  Consumer WLCommunication   ${wid}  ${pid0}  ${msg}  ${messageType[0]}  ${caption}  
+    # ${EMPTY}  ${jpgfile}
     Log  ${resp}
     Should Be Equal As Strings  ${resp.status_code}  200
 

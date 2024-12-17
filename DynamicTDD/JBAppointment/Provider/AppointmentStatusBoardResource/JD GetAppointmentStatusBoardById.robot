@@ -21,11 +21,12 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 ${SERVICE1}     Radio Repdca111
 ${SERVICE2}     Radio Repdca123
 ${SERVICE3}     Radio Repdca222
+@{service_names}
 
 *** Test Cases ***
 
 JD-TC-GetAppointmenStatusBoardSetById-1
-
+    
 	[Documentation]  Get the appoinment status board by id
     
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD} 
