@@ -220,88 +220,6 @@ JD-TC-UpdateInvoice-2
     Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
 
 
-JD-TC-UpdateInvoice-3
-
-    [Documentation]  Update invoice with adding waitlist id.***This usecase is not now in dev****
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME41}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-      ${resp}=  AddCustomer  ${CUSERNAME1}
-      Log   ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${cid}  ${resp.json()}
-
-      ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME1}
-      Log   ${resp.json()}
-      Should Be Equal As Strings      ${resp.status_code}  200
-
-
-      ${resp}=  Create Sample Location  
-      Set Suite Variable    ${loc_id1}    ${resp}  
-
-      ${resp}=   Get Location ById  ${loc_id1}
-      Log  ${resp.content}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-
-      ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
-      Set Suite Variable  ${CUR_DAY}
-      ${SERVICE2}=    generate_unique_service_name  ${service_names}
-      ${resp}=   Create Sample Service  ${SERVICE2} 
-      Set Suite Variable    ${ser_id1}    ${resp}
-      ${q_name}=    FakerLibrary.name
-      Set Suite Variable    ${q_name}
-      ${list}=  Create List   1  2  3  4  5  6  7
-      Set Suite Variable    ${list}
-      ${strt_time}=   db.add_timezone_time     ${tz}  1  00
-      Set Suite Variable    ${strt_time}
-      ${end_time}=    db.add_timezone_time     ${tz}  3  00 
-      Set Suite Variable    ${end_time}   
-      ${parallel}=   Random Int  min=1   max=1
-      Set Suite Variable   ${parallel}
-      ${capacity}=  Random Int   min=10   max=20
-      Set Suite Variable   ${capacity}
-      ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
-      Log   ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${que_id1}   ${resp.json()}
-      ${desc}=   FakerLibrary.word
-      Set Suite Variable  ${desc}
-      ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
-      Log   ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      
-      ${wid}=  Get Dictionary Values  ${resp.json()}
-      Set Test Variable  ${wid}  ${wid[0]}
-      ${resp}=  Get Waitlist By Id  ${wid} 
-      Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Test Variable   ${fullAmount}  ${resp.json()['fullAmt']}         
-    
-
- 
-    ${invoiceLabel}=   FakerLibrary.word
-    ${invoiceDate}=   db.subtract_timezone_date  ${tz}  20      
-    ${invoiceId}=   FakerLibrary.word
-
-    ${amount1}=   Random Int  min=500  max=2000
-    ${amount1}=     roundoff    ${amount1}   1
-
-
-
-    ${resp}=  Update Invoice   ${invoice_uid}    ${category_id2}    ${invoiceDate}    ynwUuid=${wid} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp1}=  Get Invoice By Id  ${invoice_uid}
-    Log  ${resp1.content}
-    Should Be Equal As Strings  ${resp1.status_code}  200
-    Should Be Equal As Strings  ${resp1.json()['accountId']}  ${account_id1}
-    Should Be Equal As Strings  ${resp1.json()['invoiceCategoryId']}  ${category_id2}
-    Should Be Equal As Strings  ${resp1.json()['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
 
 
 JD-TC-UpdateInvoice-4
@@ -419,6 +337,91 @@ JD-TC-UpdateInvoice-UH4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${INVOICE_STATUS}
+
+*** Comments ***
+JD-TC-UpdateInvoice-3
+
+    [Documentation]  Update invoice with adding waitlist id.***This usecase is not now in dev****
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME41}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+      ${resp}=  AddCustomer  ${CUSERNAME1}
+      Log   ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${cid}  ${resp.json()}
+
+      ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME1}
+      Log   ${resp.json()}
+      Should Be Equal As Strings      ${resp.status_code}  200
+
+
+      ${resp}=  Create Sample Location  
+      Set Suite Variable    ${loc_id1}    ${resp}  
+
+      ${resp}=   Get Location ById  ${loc_id1}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+      ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+      Set Suite Variable  ${CUR_DAY}
+      ${SERVICE2}=    generate_unique_service_name  ${service_names}
+      ${resp}=   Create Sample Service  ${SERVICE2} 
+      Set Suite Variable    ${ser_id1}    ${resp}
+      ${q_name}=    FakerLibrary.name
+      Set Suite Variable    ${q_name}
+      ${list}=  Create List   1  2  3  4  5  6  7
+      Set Suite Variable    ${list}
+      ${strt_time}=   db.add_timezone_time     ${tz}  1  00
+      Set Suite Variable    ${strt_time}
+      ${end_time}=    db.add_timezone_time     ${tz}  3  00 
+      Set Suite Variable    ${end_time}   
+      ${parallel}=   Random Int  min=1   max=1
+      Set Suite Variable   ${parallel}
+      ${capacity}=  Random Int   min=10   max=20
+      Set Suite Variable   ${capacity}
+      ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
+      Log   ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${que_id1}   ${resp.json()}
+      ${desc}=   FakerLibrary.word
+      Set Suite Variable  ${desc}
+      ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
+      Log   ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      
+      ${wid}=  Get Dictionary Values  ${resp.json()}
+      Set Test Variable  ${wid}  ${wid[0]}
+      ${resp}=  Get Waitlist By Id  ${wid} 
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable   ${fullAmount}  ${resp.json()['fullAmt']}         
+    
+
+ 
+    ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.subtract_timezone_date  ${tz}  20      
+    ${invoiceId}=   FakerLibrary.word
+
+    ${amount1}=   Random Int  min=500  max=2000
+    ${amount1}=     roundoff    ${amount1}   1
+
+
+
+    ${resp}=  Update Invoice   ${invoice_uid}    ${category_id2}    ${invoiceDate}    ynwUuid=${wid} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['accountId']}  ${account_id1}
+    Should Be Equal As Strings  ${resp1.json()['invoiceCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp1.json()['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
+
 
 
 
