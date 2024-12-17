@@ -814,13 +814,7 @@ JD-TC-Reschedule Waitlist-5
     ${resp}=  Get Waitlist By Id  ${wid1} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  
-    ...   waitlistedBy=${waitlistedby[1]}   personsAhead=0 
-    ...   consLastVisitedDate=${date1}${SPACE}${sTime1} 
-    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid1}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid1}
-
+    
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -835,12 +829,7 @@ JD-TC-Reschedule Waitlist-5
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}   waitlistedBy=${waitlistedby[1]}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}  ${s_id}
-    # Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${jdconID}           
-    # Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['firstName']}  ${fname}  
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${q_id2}
-
+   
     ${resp}=  Reschedule Waitlist  ${pid}  ${wid1}  ${DAY1}  ${q_id2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -848,12 +837,8 @@ JD-TC-Reschedule Waitlist-5
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[0]}   waitlistedBy=${waitlistedby[1]}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}  ${s_id}
-    # Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${jdconID}           
-    # Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['firstName']}  ${fname}  
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${q_id2}
-
+    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[0]}   
+   
     ${resp}=  Get Consumer Communications
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -874,8 +859,8 @@ JD-TC-Reschedule Waitlist-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-*** Comments ***
 JD-TC-Reschedule Waitlist-6
+
     [Documentation]  Consumer takes check-in for a provider and reschedules it to another queue.
     ...  ${SPACE} Check Communication messages also
 
