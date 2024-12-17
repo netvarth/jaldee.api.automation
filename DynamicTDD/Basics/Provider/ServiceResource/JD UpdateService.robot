@@ -30,10 +30,11 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 # ${SERVICE10}  S2SERVICE10
 # ${SERVICE14}  S2SERVICE14
 # @{service_duration}  10  20  30  40   50
-# ${defMBVal}  1
-# ${defRRVal}  1
-# ${defLTVal}  0
+${defMBVal}  1
+${defRRVal}  1
+${defLTVal}  0
 @{service_names}
+${zero_amt}  ${0.0}
 
 *** Test Cases ***
 
@@ -53,7 +54,7 @@ JD-TC-UpdateService-1
 
     ${description}=  FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
-    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
+    ${Total}=   Pyfloat  right_digits=1  min_value=100  max_value=250
     ${srv_duration}=   Random Int   min=2   max=10
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
@@ -69,7 +70,7 @@ JD-TC-UpdateService-1
 
     # ${json_data}=  Convert To Dictionary  ${resp.json()}
     # IF   'description' not in ${json_data}
-    #     ${description}=  Set Variable  Default Description
+    #     ${description}=  Set Variable  Default Service Description
     # END
 
 
@@ -126,26 +127,17 @@ JD-TC-UpdateService-3
 
 
 JD-TC-UpdateService-4
-    [Documentation]  Update service to enable prepayment for a billable account.
+    [Documentation]  Update service to enable prepayment for a service without prepayment in billable account.
 
-    # ${billable_domains}=  get_billable_domain
-    # Log  ${billable_domains}
-    # ${random_domain}  Evaluate  random.choice(list(billable_domains.keys())) random 
-    # ${random_subdomain}  Evaluate  random.choice(billable_domains[random_domain]) random
-    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup  #Domain=${random_domain}  SubDomain=${random_subdomain}
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup
     Set Suite Variable  ${PUSERNAME_A}
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=   Get Service
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable   ${s_id}   ${resp.json()[0]['id']}
-
     ${description}=  FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
-    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
+    ${Total}=   Pyfloat  right_digits=1  min_value=100  max_value=250
     ${srv_duration}=   Random Int   min=2   max=10
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
@@ -170,6 +162,31 @@ JD-TC-UpdateService-4
 
 
 JD-TC-UpdateService-5
+    [Documentation]  Update service to disable prepayment for a service with prepayment in a billable account.
+
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup
+    Set Suite Variable  ${PUSERNAME_A}
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['isPrePayment']}   ${bool[1]}
+
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${resp}=  Update Service  ${s_id}  ${resp.json()['name']}  ${resp.json()['description']}  ${resp.json()['serviceDuration']}  ${bool[0]}  ${resp.json()['totalAmount']}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['isPrePayment']}   ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['minPrePaymentAmount']}   ${min_pre}
+
+
+JD-TC-UpdateService-6
     [Documentation]  Update service charge for a billable account.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
@@ -182,7 +199,7 @@ JD-TC-UpdateService-5
 
     ${json_data}=  Convert To Dictionary  ${resp.json()[1]}
     IF   'description' not in ${json_data}
-        ${description}=  Set Variable  Default Description
+        ${description}=  Set Variable  Default Service Description
     ELSE  
         ${description}=  Set Variable  ${resp.json()[1]['description']}
     END
@@ -198,14 +215,12 @@ JD-TC-UpdateService-5
     Should Be Equal As Strings  ${resp.json()['minPrePaymentAmount']}   ${min_pre}
 
 
-JD-TC-UpdateService-6
+JD-TC-UpdateService-7
     [Documentation]  Update service charge for a non billable account.
 
     ${nonbillable_domains}=  get_nonbillable_domains
-    # ${random_domain}  Evaluate  random.choice(list(nonbillable_domains.keys())) random 
-    # ${domains_list}=   Evaluate  list(${nonbillable_domains}.keys())
-    ${random_domain}=  Evaluate  random.choice(list(${nonbillable_domains}.keys()))  random
-    ${random_subdomain}  Evaluate  random.choice(${nonbillable_domains[${random_domain}]}) random
+    ${random_domain} =    Evaluate    random.choice(list(${nonbillable_domains}.keys()))    random
+    ${random_subdomain} =    Evaluate    random.choice(${nonbillable_domains}[${random_domain}])    random
     ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup  Domain=${random_domain}  SubDomain=${random_subdomain}
     Set Suite Variable  ${PUSERNAME_A}
 
@@ -215,17 +230,430 @@ JD-TC-UpdateService-6
     ${resp}=   Get Service
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${s_id}   ${resp.json()[1]['id']}
+    Set Test Variable   ${s_id}   ${resp.json()[0]['id']}
 
+    ${json_data}=  Convert To Dictionary  ${resp.json()[0]}
+    IF   'description' not in ${json_data}
+        ${description}=  Set Variable  Default Service Description
+    ELSE  
+        ${description}=  Set Variable  ${resp.json()[0]['description']}
+    END
+
+    ${Total}=   Pyfloat  right_digits=1  min_value=100  max_value=250
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
-    ${resp}=  Update Service  ${s_id}  ${resp.json()[1]['name']}  ${resp.json()[1]['description']}  ${resp.json()[1]['serviceDuration']}  ${bool[1]}  ${resp.json()[1]['totalAmount']}  minPrePaymentAmount=${min_pre}
+    ${resp}=  Update Service  ${s_id}  ${resp.json()[0]['name']}  ${description}  ${resp.json()[0]['serviceDuration']}  ${bool[1]}  ${Total}  minPrePaymentAmount=${min_pre}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service By Id  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['isPrePayment']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['minPrePaymentAmount']}   ${min_pre}
+    Should Be Equal As Strings  ${resp.json()['minPrePaymentAmount']}   ${zero_amt}
+    Should Be Equal As Strings  ${resp.json()['totalAmount']}   ${zero_amt}
+
+
+JD-TC-UpdateService-8
+    [Documentation]  Update service and set prepayment amount as 0.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    FOR  ${service}  IN  @{resp.json()}
+        ${FOUND}  Set Variable  False
+        IF   ${service['isPrePayment']} == ${bool[1]}
+            ${FOUND}  Set Variable  True
+            Set Test Variable  ${min_pre}  ${service['minPrePaymentAmount']}
+            Set Test Variable  ${s_id}   ${service['id']}
+            BREAK
+        END
+    END
+
+    IF   not ${FOUND}
+        ${description}=  FakerLibrary.sentence
+        ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+        ${Total}=   Pyfloat  right_digits=1  min_value=100  max_value=250
+        ${srv_duration}=   Random Int   min=2   max=10
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        Append To List  ${service_names}  ${SERVICE1}
+        ${resp1}=  Create Service  ${SERVICE1}  ${description}  ${srv_duration}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200 
+        Set Test Variable  ${s_id}  ${resp1.json()}
+    END
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${json_data}=  Convert To Dictionary  ${resp.json()}
+    IF   'description' not in ${json_data}
+        ${description}=  Set Variable  Default Service Description
+    ELSE  
+        ${description}=  Set Variable  ${resp.json()['description']}
+    END
+
+    # ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${resp}=  Update Service  ${s_id}  ${resp.json()['name']}  ${description}  ${resp.json()['serviceDuration']}  ${resp.json()['isPrePayment']}  ${resp.json()['totalAmount']}  minPrePaymentAmount=${zero_amt}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['isPrePayment']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['minPrePaymentAmount']}   ${zero_amt}
+
+
+JD-TC-UpdateService-9
+    [Documentation]  Update service and set totalAmount amount as 0.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    FOR  ${service}  IN  @{resp.json()}
+        ${FOUND}  Set Variable  False
+        IF   ${service['totalAmount']} > 0
+            ${FOUND}  Set Variable  True
+            Set Test Variable  ${s_id}   ${service['id']}
+            BREAK
+        END
+    END
+
+    IF   not ${FOUND}
+        ${description}=  FakerLibrary.sentence
+        ${Total}=   Pyfloat  right_digits=1  min_value=100  max_value=250
+        ${srv_duration}=   Random Int   min=2   max=10
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        Append To List  ${service_names}  ${SERVICE1}
+        ${resp1}=  Create Service  ${SERVICE1}  ${description}  ${srv_duration}  ${bool[0]}  ${Total}  ${bool[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200 
+        Set Test Variable  ${s_id}  ${resp1.json()}
+    END
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${json_data}=  Convert To Dictionary  ${resp.json()}
+    IF   'description' not in ${json_data}
+        ${description}=  Set Variable  Default Service Description
+    ELSE  
+        ${description}=  Set Variable  ${resp.json()['description']}
+    END
+
+    ${resp}=  Update Service  ${s_id}  ${resp.json()['name']}  ${description}  ${resp.json()['serviceDuration']}  ${resp.json()['isPrePayment']}  ${zero_amt}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['totalAmount']}   ${zero_amt}
+
+
+JD-TC-UpdateService-10
+    [Documentation]  Update max bookings allowed in a service
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    FOR  ${service}  IN  @{resp.json()}
+        ${FOUND}  Set Variable  False
+        IF   ${service['totalAmount']} > 0
+            ${FOUND}  Set Variable  True
+            Set Test Variable  ${s_id}   ${service['id']}
+            BREAK
+        END
+    END
+
+    IF   not ${FOUND}
+        ${description}=  FakerLibrary.sentence
+        ${Total}=   Pyfloat  right_digits=1  min_value=100  max_value=250
+        ${srv_duration}=   Random Int   min=2   max=10
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        Append To List  ${service_names}  ${SERVICE1}
+        ${resp1}=  Create Service  ${SERVICE1}  ${description}  ${srv_duration}  ${bool[0]}  ${Total}  ${bool[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200 
+        Set Test Variable  ${s_id}  ${resp1.json()}
+    END
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${json_data}=  Convert To Dictionary  ${resp.json()}
+    IF   'description' not in ${json_data}
+        ${description}=  Set Variable  Default Service Description
+    ELSE  
+        ${description}=  Set Variable  ${resp.json()['description']}
+    END
+
+    ${maxbookings}=   Random Int   min=1   max=5
+    ${resp}=  Update Service  ${s_id}  ${resp.json()['name']}  ${description}  ${resp.json()['serviceDuration']}  ${resp.json()['isPrePayment']}  ${resp.json()['totalAmount']}  maxBookingsAllowed=${maxbookings}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['maxBookingsAllowed']}   ${maxbookings}
+
+
+JD-TC-UpdateService-11
+    [Documentation]  Update priceDynamic in a service
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${s_id}   ${resp.json()[1]['id']}
+    Should Be Equal As Strings  ${resp.json()[1]['priceDynamic']}   ${bool[0]}
+
+    ${json_data}=  Convert To Dictionary  ${resp.json()[1]}
+    IF   'description' not in ${json_data}
+        ${description}=  Set Variable  Default Service Description
+    ELSE  
+        ${description}=  Set Variable  ${resp.json()[1]['description']}
+    END
+
+    ${resp}=  Update Service  ${s_id}  ${resp.json()[1]['name']}  ${description}  ${resp.json()[1]['serviceDuration']}  ${resp.json()[1]['isPrePayment']}  ${resp.json()[1]['totalAmount']}  priceDynamic=${bool[1]}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['priceDynamic']}   ${bool[1]}
+
+
+JD-TC-UpdateService-12
+    [Documentation]  Update resoucesRequired in a service
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
+    ${si}=  Random Int   min=0  max=${len-1}
+    Set Test Variable   ${s_id}   ${resp.json()[${si}]['id']}
+
+    ${json_data}=  Convert To Dictionary  ${resp.json()[${si}]}
+    IF   'description' not in ${json_data}
+        ${description}=  Set Variable  Default Service Description
+    ELSE  
+        ${description}=  Set Variable  ${resp.json()[${si}]['description']}
+    END
+
+    ${resoucesRequired}=   Random Int   min=1   max=5
+    ${resp}=  Update Service  ${s_id}  ${resp.json()[${si}]['name']}  ${description}  ${resp.json()[${si}]['serviceDuration']}  ${resp.json()[${si}]['isPrePayment']}  ${resp.json()[${si}]['totalAmount']}  resoucesRequired=${resoucesRequired}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['resoucesRequired']}   ${resoucesRequired}
+
+
+JD-TC-UpdateService-13
+    [Documentation]  Update lead time in a service
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
+    ${si}=  Random Int   min=0  max=${len-1}
+    Set Test Variable   ${s_id}   ${resp.json()[${si}]['id']}
+    
+    ${json_data}=  Convert To Dictionary  ${resp.json()[${si}]}
+    IF   'description' not in ${json_data}
+        ${description}=  Set Variable  Default Service Description
+    ELSE  
+        ${description}=  Set Variable  ${resp.json()[${si}]['description']}
+    END
+
+    ${leadTime}=   Random Int   min=1   max=5
+    ${resp}=  Update Service  ${s_id}  ${resp.json()[${si}]['name']}  ${description}  ${resp.json()[${si}]['serviceDuration']}  ${resp.json()[${si}]['isPrePayment']}  ${resp.json()[${si}]['totalAmount']}  leadTime=${leadTime}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['leadTime']}   ${leadTime}
+
+
+JD-TC-UpdateService-UH1
+    [Documentation]  Update a service name to an already existing name
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${s_id}   ${resp.json()[1]['id']}
+    Set Test Variable   ${s_name}   ${resp.json()[2]['name']}
+
+    ${json_data}=  Convert To Dictionary  ${resp.json()[1]}
+    IF   'description' not in ${json_data}
+        ${description}=  Set Variable  Default Service Description
+    ELSE  
+        ${description}=  Set Variable  ${resp.json()[1]['description']}
+    END
+
+    ${resp}=  Update Service  ${s_id}  ${s_name}  ${description}  ${resp.json()[1]['serviceDuration']}  ${resp.json()[1]['isPrePayment']}  ${resp.json()[1]['totalAmount']}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}  ${SERVICE_CANT_BE_SAME}
+
+
+JD-TC-UpdateService-UH2
+    [Documentation]  Update a service without login
+    ${description}=  FakerLibrary.sentence
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${Total}=   Pyfloat  right_digits=1  min_value=100  max_value=250
+    ${resp}=  Update Service  ${id}  ${SERVICE1}  ${description}  ${service_duration[3]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings   ${resp.json()}  ${SESSION_EXPIRED}
+
+
+JD-TC-UpdateService-UH3
+    [Documentation]  Update a service using consumer login
+    
+    ${CUSERNAME8}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME8}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${description}=  FakerLibrary.sentence
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${Total}=   Pyfloat  right_digits=1  min_value=100  max_value=250
+    ${resp}=  Update Service  ${id}  ${SERVICE1}  ${description}  ${service_duration[3]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
+    Should Be Equal As Strings  ${resp.status_code}  401
+    Should Be Equal As Strings   ${resp.json()}  ${LOGIN_NO_ACCESS_FOR_URL}
+
+JD-TC-UpdateService-UH4
+    [Documentation]  update service of another provider
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${s_id1}=  Create Sample Service  ${SERVICE1}
+
+    ${resp1}=   Get Service By Id  ${s_id}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${json_data}=  Convert To Dictionary  ${resp1.json()}
+    IF   'description' not in ${json_data}
+        ${description}=  Set Variable  Default Service Description
+    ELSE  
+        ${description}=  Set Variable  ${resp1.json()['description']}
+    END
+
+    ${resp}=  Update Service  ${s_id1}  ${resp1.json()['name']}  ${description}  ${resp1.json()[1]['serviceDuration']}  ${resp1.json()[1]['isPrePayment']}  ${resp1.json()[1]['totalAmount']}
+    Should Be Equal As Strings  ${resp.status_code}  401
+    Should Be Equal As Strings   ${resp.json()}  ${NO_PERMISSION}
+
+
+JD-TC-UpdateService-UH5
+    [Documentation]  Update maxBookingsAllowed in a service as empty
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
+    ${si}=  Random Int   min=0  max=${len-1}
+    Set Test Variable   ${s_id}   ${resp.json()[${si}]['id']}
+
+    ${json_data}=  Convert To Dictionary  ${resp.json()[${si}]}
+    IF   'description' not in ${json_data}
+        ${description}=  Set Variable  Default Service Description
+    ELSE  
+        ${description}=  Set Variable  ${resp.json()[${si}]['description']}
+    END
+
+    ${resp}=  Update Service  ${s_id}  ${resp.json()[${si}]['name']}  ${description}  ${resp.json()[${si}]['serviceDuration']}  ${resp.json()[${si}]['isPrePayment']}  ${resp.json()[${si}]['totalAmount']}  maxBookingsAllowed=${EMPTY}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['maxBookingsAllowed']}   ${defMBVal}
+    
+JD-TC-UpdateService-UH6
+    [Documentation]  Update resoucesRequired in a service as empty
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
+    ${si}=  Random Int   min=0  max=${len-1}
+    Set Test Variable   ${s_id}   ${resp.json()[${si}]['id']}
+
+    ${json_data}=  Convert To Dictionary  ${resp.json()[${si}]}
+    IF   'description' not in ${json_data}
+        ${description}=  Set Variable  Default Service Description
+    ELSE  
+        ${description}=  Set Variable  ${resp.json()[${si}]['description']}
+    END
+
+    ${resp}=  Update Service  ${s_id}  ${resp.json()[${si}]['name']}  ${description}  ${resp.json()[${si}]['serviceDuration']}  ${resp.json()[${si}]['isPrePayment']}  ${resp.json()[${si}]['totalAmount']}  resoucesRequired=${EMPTY}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['resoucesRequired']}   ${defRRVal}
+    
+JD-TC-UpdateService-UH7
+    [Documentation]  Update lead time in a service as empty
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
+    ${si}=  Random Int   min=0  max=${len-1}
+    Set Test Variable   ${s_id}   ${resp.json()[${si}]['id']}
+
+    ${json_data}=  Convert To Dictionary  ${resp.json()[${si}]}
+    IF   'description' not in ${json_data}
+        ${description}=  Set Variable  Default Service Description
+    ELSE  
+        ${description}=  Set Variable  ${resp.json()[${si}]['description']}
+    END
+
+    ${resp}=  Update Service  ${s_id}  ${resp.json()[${si}]['name']}  ${description}  ${resp.json()[${si}]['serviceDuration']}  ${resp.json()[${si}]['isPrePayment']}  ${resp.json()[${si}]['totalAmount']}  leadTime=${EMPTY}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['leadTime']}   ${defLTVal}
 
 
 *** Comments ***
@@ -241,7 +669,7 @@ JD-TC-UpdateService-1
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${Total}=  Convert To Number  ${Total}  1
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[2]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${id1}  ${resp.json()} 
     ${resp}=   Get Service By Id  ${id1}
@@ -277,7 +705,7 @@ JD-TC-UpdateService-2
 
 
 JD-TC-UpdateService-3
-    [Documentation]  update  a service to set prepayment amount 0
+    [Documentation]  update a service to set prepayment amount 0
     ${resp}=   Billable
     # clear_service      ${resp}
     ${description}=  FakerLibrary.sentence
@@ -286,7 +714,7 @@ JD-TC-UpdateService-3
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${Total}=  Convert To Number  ${Total}  1
     ${resp}=  Create Service  ${SERVICE4}  ${description}  ${service_duration[1]}  ${status[0]}  ${btype}  ${bool[1]}  ${notifytype[1]}  ${EMPTY}  ${Total}  ${bool[0]}  ${bool[0]}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${id4}  ${resp.json()}
     ${resp}=   Get Service By Id  ${id4}
@@ -302,7 +730,7 @@ JD-TC-UpdateService-3
 
 JD-TC-UpdateService-4
 
-    [Documentation]   Create a service with prePrePaymentand  and  Update with remove pre payment Amount
+    [Documentation]   Create a service with prePrePayment and Update with remove pre payment Amount
     ${resp}=   Billable
     # clear_service      ${resp}
     ${description}=  FakerLibrary.sentence
@@ -340,14 +768,14 @@ JD-TC-UpdateService-5
     ${resp}=  Update Service  ${id}  ${SERVICE4}  ${description}  ${service_duration[2]}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[0]}  ${min_pre}  ${Total}  ${bool[0]}  ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get Service By Id  ${id}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  name=${SERVICE4}  description=${description}  serviceDuration=${service_duration[2]}  notification=${bool[0]}  notificationType=${notifytype[0]}  totalAmount=0.0  status=${status[0]}  bType=${btype}  isPrePayment=${bool[0]}
 
 
 JD-TC-UpdateService-UH1
 
-    [Documentation]  Update a service name to  an already existing name
+    [Documentation]  Update a service name to an already existing name
     ${billable_domains}=  get_billable_domain
     Set Test Variable  ${domains}  ${billable_domains[0]}
     Set Test Variable  ${sub_domains}  ${billable_domains[1]}
@@ -369,7 +797,7 @@ JD-TC-UpdateService-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${PUSERPH0}
     ${description}=  FakerLibrary.sentence
@@ -462,14 +890,14 @@ JD-TC-UpdateService-UH6
     ${min_pre}=  Convert To Number  ${min_pre}  0
     ${Total}=  Convert To Number  ${Total}  0
     ${resp}=  Create Service  ${SERVICE8}  ${description}  ${service_duration[2]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${id}  ${resp.json()}
     ${resp}=   Get Service By Id  ${id}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  name=${SERVICE8}  description=${description}  serviceDuration=${service_duration[2]}  notification=${bool[1]}  notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
     ${resp}=  Update Service  ${id}  ${SERVICE8}  ${description}  ${service_duration[3]}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[0]}  ${min_pre}  0  ${bool[1]}  ${bool[0]}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     #Should Be Equal As Strings  "${resp.json()}"  "${PREPAYMENT_AMT_LT_PRICE}"
         
@@ -506,7 +934,7 @@ JD-TC-UpdateService-6
     # clear_service   ${PUSERNAME27}
 
     ${resp}=  Get Service
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${SERVICE1}=   FakerLibrary.job
@@ -516,7 +944,7 @@ JD-TC-UpdateService-6
     ${srv_duration}=   Random Int   min=10   max=20
     ${maxbookings}=   Random Int   min=1   max=5
     ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  maxBookingsAllowed=${maxbookings}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}
 
@@ -544,7 +972,7 @@ JD-TC-UpdateService-7
 
     
     ${resp}=  Get Service
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${SERVICE1}=   FakerLibrary.job
@@ -554,7 +982,7 @@ JD-TC-UpdateService-7
     ${srv_duration}=   Random Int   min=10   max=20
     # ${maxbookings}=   Random Int   min=1   max=5
     ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  priceDynamic=${bool[1]}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}
 
@@ -589,7 +1017,7 @@ JD-TC-UpdateService-8
     # clear_service   ${PUSERNAME27}
 
     ${resp}=  Get Service
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${SERVICE1}=   FakerLibrary.job
@@ -599,7 +1027,7 @@ JD-TC-UpdateService-8
     ${srv_duration}=   Random Int   min=10   max=20
     ${resoucesRequired}=   Random Int   min=1   max=5
     ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  resoucesRequired=${resoucesRequired}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}
 
@@ -626,7 +1054,7 @@ JD-TC-UpdateService-9
     # clear_service   ${PUSERNAME27}
 
     ${resp}=  Get Service
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${SERVICE1}=   FakerLibrary.job
@@ -636,7 +1064,7 @@ JD-TC-UpdateService-9
     ${srv_duration}=   Random Int   min=10   max=20
     ${leadTime}=   Random Int   min=1   max=5
     ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  leadTime=${leadTime}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}
 
@@ -664,7 +1092,7 @@ JD-TC-UpdateService-10
 
     
     ${resp}=  Get Service
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${SERVICE1}=   FakerLibrary.job
@@ -674,7 +1102,7 @@ JD-TC-UpdateService-10
     ${srv_duration}=   Random Int   min=10   max=20
     
     ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}
 
@@ -703,7 +1131,7 @@ JD-TC-UpdateService-UH8
     # clear_service   ${PUSERNAME27}
     
     ${resp}=  Get Service
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${SERVICE1}=   FakerLibrary.job
@@ -713,7 +1141,7 @@ JD-TC-UpdateService-UH8
     ${srv_duration}=   Random Int   min=10   max=20
     ${maxbookings}=   Random Int   min=1   max=5
     ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  maxBookingsAllowed=${maxbookings}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}
 
@@ -740,7 +1168,7 @@ JD-TC-UpdateService-UH9
     # clear_service   ${PUSERNAME27}
 
     ${resp}=  Get Service
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${SERVICE1}=   FakerLibrary.job
@@ -750,7 +1178,7 @@ JD-TC-UpdateService-UH9
     ${srv_duration}=   Random Int   min=10   max=20
     ${resoucesRequired}=   Random Int   min=1   max=5
     ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  resoucesRequired=${resoucesRequired}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}
 
@@ -781,7 +1209,7 @@ JD-TC-UpdateService-UH10
     # clear_service   ${PUSERNAME27}
 
     ${resp}=  Get Service
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${SERVICE1}=   FakerLibrary.job
@@ -791,7 +1219,7 @@ JD-TC-UpdateService-UH10
     ${srv_duration}=   Random Int   min=10   max=20
     ${leadTime}=   Random Int   min=1   max=5
     ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  leadTime=${leadTime}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}
 
