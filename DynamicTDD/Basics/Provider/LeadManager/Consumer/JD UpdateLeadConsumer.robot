@@ -112,12 +112,8 @@ JD-TC-Update_Lead_Consumer-3
 
     ${resp}=    Update Lead Consumer  ${con_id}  firstName=${empty}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Get Lead Consumer  ${con_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}             200
-    Should Be Equal As Strings  ${resp.json()['firstName']}     ${empty}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings    ${resp.json()}     ${FIRSTNAME_LENGTH}
 
 
 JD-TC-Update_Lead_Consumer-4

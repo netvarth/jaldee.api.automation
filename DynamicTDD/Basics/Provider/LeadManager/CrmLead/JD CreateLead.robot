@@ -178,7 +178,7 @@ JD-TC-Create_Lead-2
     ${consumerFirstName}=   generate_firstname
     ${consumerLastName}=    FakerLibrary.lastName
 
-    ${resp}=    Create Crm Lead  ${clid}  ${pid}  ${lid}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}
+    ${resp}=    Create Crm Lead  ${clid}  ${pid}  ${lid}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  consumerPhone=${CUSERNAME1}  consumerPhoneCode=${countryCodes[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
     Set Suite variable           ${crm_lead_id2}          ${resp.json()}

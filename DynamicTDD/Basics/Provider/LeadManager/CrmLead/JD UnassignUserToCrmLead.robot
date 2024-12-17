@@ -203,7 +203,11 @@ JD-TC-Unassign_User_To_Crm_Lead-4
 
     ${resp}=    Crm Lead Update Unassign  ${crm_lead_id}  ${inv}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     422
+    Should Be Equal As Strings  ${resp.status_code}     200
+
+    ${resp}=    Get Crm Lead   ${crm_lead_id} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}     200
 
 JD-TC-Unassign_User_To_Crm_Lead-5
 

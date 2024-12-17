@@ -100,8 +100,8 @@ JD-TC-Create_Lead_Consumer-UH1
 
     ${resp}=    Create Lead Consumer  ${empty}  ${lastName}    phone=${CUSERNAME1}  countryCode=${countryCodes[0]}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test variable   ${con_id}   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}     ${FIRSTNAME_LENGTH}
 
 JD-TC-Create_Lead_Consumer-UH2
 
@@ -129,7 +129,7 @@ JD-TC-Create_Lead_Consumer-UH3
     ${firstName}=   Generate Random String    10    [NUMBERS] [LETTERS]
     ${lastName}=    FakerLibrary.lastName
 
-    ${resp}=    Create Lead Consumer  ${firstName}  ${lastName}  phone=${CUSERNAME1}  countryCode=${countryCodes[0]}
+    ${resp}=    Create Lead Consumer  ${firstName}  ${lastName}  phone=${CUSERNAME30}  countryCode=${countryCodes[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test variable   ${con_id}   ${resp.json()}
@@ -145,10 +145,10 @@ JD-TC-Create_Lead_Consumer-UH4
     ${firstName}=   Generate Random String  2  [LETTERS]
     ${lastName}=    FakerLibrary.lastName
 
-    ${resp}=    Create Lead Consumer  ${firstName}  ${lastName}  phone=${CUSERNAME1}  countryCode=${countryCodes[0]}
+    ${resp}=    Create Lead Consumer  ${firstName}  ${lastName}  phone=${CUSERNAME33}  countryCode=${countryCodes[0]}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test variable   ${con_id}   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}     ${FIRSTNAME_LENGTH}
 
 JD-TC-Create_Lead_Consumer-UH5
 
@@ -161,10 +161,9 @@ JD-TC-Create_Lead_Consumer-UH5
     ${firstName}=   Generate Random String  101  [LETTERS]
     ${lastName}=    FakerLibrary.lastName
 
-    ${resp}=    Create Lead Consumer  ${firstName}  ${lastName}  phone=${CUSERNAME1}  countryCode=${countryCodes[0]}
+    ${resp}=    Create Lead Consumer  ${firstName}  ${lastName}  phone=${CUSERNAME31}  countryCode=${countryCodes[0]}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test variable   ${con_id}   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}    200
 
 JD-TC-Create_Lead_Consumer-UH6
 
@@ -177,7 +176,7 @@ JD-TC-Create_Lead_Consumer-UH6
     ${firstName}=   generate_firstname
     ${lastName}=    Generate Random String    10    [NUMBERS] [LETTERS]
 
-    ${resp}=    Create Lead Consumer  ${firstName}  ${lastName}   phone=${CUSERNAME1}  countryCode=${countryCodes[0]}
+    ${resp}=    Create Lead Consumer  ${firstName}  ${lastName}   phone=${CUSERNAME34}  countryCode=${countryCodes[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test variable   ${con_id}   ${resp.json()}
@@ -193,7 +192,7 @@ JD-TC-Create_Lead_Consumer-UH7
     ${firstName}=   generate_firstname
     ${lastName}=    Generate Random String  2  [LETTERS]
 
-    ${resp}=    Create Lead Consumer  ${firstName}  ${lastName}  phone=${CUSERNAME1}  countryCode=${countryCodes[0]}
+    ${resp}=    Create Lead Consumer  ${firstName}  ${lastName}  phone=${CUSERNAME35}  countryCode=${countryCodes[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test variable   ${con_id}   ${resp.json()}
@@ -209,7 +208,7 @@ JD-TC-Create_Lead_Consumer-UH8
     ${firstName}=   generate_firstname
     ${lastName}=    Generate Random String  101  [LETTERS]
 
-    ${resp}=    Create Lead Consumer  ${firstName}  ${lastName}  phone=${CUSERNAME1}  countryCode=${countryCodes[0]}
+    ${resp}=    Create Lead Consumer  ${firstName}  ${lastName}  phone=${CUSERNAME36}  countryCode=${countryCodes[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test variable   ${con_id}   ${resp.json()}
@@ -221,7 +220,7 @@ JD-TC-Create_Lead_Consumer-UH9
     ${firstName}=   generate_firstname
     ${lastName}=    FakerLibrary.lastName
 
-    ${resp}=    Create Lead Consumer  ${firstName}  ${lastName}  phone=${CUSERNAME1}  countryCode=${countryCodes[0]}
+    ${resp}=    Create Lead Consumer  ${firstName}  ${lastName}  phone=${CUSERNAME38}  countryCode=${countryCodes[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     419
     Should Be Equal As Strings    ${resp.json()}        ${SESSION_EXPIRED}
@@ -237,7 +236,7 @@ JD-TC-Create_Lead_Consumer-UH10
     ${firstNam_n}=   generate_firstname
     ${lastName_n}=    FakerLibrary.lastName
 
-    ${resp}=    Create Lead Consumer  ${firstName_n}  ${lastName_n}  phone=${CUSERNAME1}  countryCode=${countryCodes[0]}
+    ${resp}=    Create Lead Consumer  ${firstName_n}  ${lastName_n}  phone=${CUSERNAME37}  countryCode=${countryCodes[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

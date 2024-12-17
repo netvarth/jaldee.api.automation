@@ -21,7 +21,7 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 
 JD-TC-Update_Product-1
 
-    [Documentation]   Update Product - type name updated
+    [Documentation]   Update Product - product name updated
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD}
     Log  ${resp.json()}
@@ -65,7 +65,7 @@ JD-TC-Update_Product-1
 
 JD-TC-Update_Product-2
 
-    [Documentation]   Update Product - where type name is empty
+    [Documentation]   Update Product - where product name is empty
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD}
     Log  ${resp.json()}
@@ -74,7 +74,7 @@ JD-TC-Update_Product-2
     ${resp}=    Update Lead Product  ${lpid}  ${empty}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings    ${resp.json()}            ${PRODUCT_NAME_SIZE}
+    Should Be Equal As Strings    ${resp.json()}            ${PRODUCT_NAME_EMPTY}
 
 JD-TC-Update_Product-3
 
@@ -102,7 +102,7 @@ JD-TC-Update_Product-4
 
 JD-TC-Update_Product-5
 
-    [Documentation]   Update Product - update with same type name
+    [Documentation]   Update Product - update with same product name
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD}
     Log  ${resp.json()}
@@ -165,7 +165,7 @@ JD-TC-Update_Product-UH3
 
 JD-TC-Update_Product-UH4
 
-    [Documentation]   Update Product - creating two lead and updating second lead with the first lead type name
+    [Documentation]   Update Product - creating two lead and updating second lead with the first lead product name
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
     Log  ${resp.json()}

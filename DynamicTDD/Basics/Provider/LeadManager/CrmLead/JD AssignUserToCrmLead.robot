@@ -202,7 +202,8 @@ JD-TC-Assign_User_To_Crm_Lead-UH3
 
     ${resp}=    Crm Lead Update Assign  ${crm_lead_id}  ${inv}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     422
+    Should Be Equal As Strings  ${resp.status_code}     401
+    Should Be Equal As Strings  ${resp.json()}          ${NO_PERMISSION}
 
 JD-TC-Assign_User_To_Crm_Lead-UH4
 

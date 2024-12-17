@@ -47,10 +47,12 @@ JD-TC-Enable_Disable_CRM_Lead-UH1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${ALREDY_ENABLED}=  format String   ${ALREDY_ENABLED}   Lead Manager
+
     ${resp}=    Enable Disable CRM Lead  ${toggle[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}         ${INVENTORY_RX_ALREADY_ENABLED}
+    Should Be Equal As Strings    ${resp.json()}         ${ALREDY_ENABLED}
 
 JD-TC-Enable_Disable_CRM_Lead-UH2
 
@@ -68,10 +70,12 @@ JD-TC-Enable_Disable_CRM_Lead-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${ALREDY_DISABLED}=  format String   ${ALREDY_DISABLED}   Lead Manager
+
     ${resp}=    Enable Disable CRM Lead  ${toggle[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}         ${INVENTORY_RX_ALREADY_DISABLED}
+    Should Be Equal As Strings    ${resp.json()}         ${ALREDY_DISABLED}
 
 JD-TC-Enable_Disable_CRM_Lead-Uh3
 

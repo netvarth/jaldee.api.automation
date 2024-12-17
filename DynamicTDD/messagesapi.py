@@ -2566,7 +2566,7 @@ CONSUMER_KYC_LAST_NAME_REQUIRED= "Consumer Last Name Required  for KYC"
 CONSUMER_KYC_DOB_REQUIRED ="Consumer DoB Required for KYC"
 ENABLE_JALDEE_LENDING_TO_UPDATE = "You need to enable Jaldee Lending AI to update {}"
 ENABLE_RBAC_TO_UPDATE = "You need to enable account level RBAC to update {} RBAC"
-
+FIRSTNAME_LENGTH = "first name character should be between 3 and 100"
 
 # ......  STOCK TRANSFER...........
 CANT_ST_TRNFR_BTW_SAME_INV = "You cannot transfer stock within the same inventory catalog"

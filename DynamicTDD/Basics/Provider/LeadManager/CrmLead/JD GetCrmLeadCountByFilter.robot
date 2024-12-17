@@ -128,7 +128,7 @@ JD-TC-Get_CRM_Lead_Count_By_Filter-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}             200
 
-    ${resp}=    Create Crm Lead  ${clid}  ${firstName_n}  ${con_id}  ${lastName_n}  ${pid}  
+    ${resp}=    Create Crm Lead  ${clid}  ${pid}  ${lid}  consumerUid=${con_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
     Set Test variable           ${crm_lead_id}          ${resp.json()}

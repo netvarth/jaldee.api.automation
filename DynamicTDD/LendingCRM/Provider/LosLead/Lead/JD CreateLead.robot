@@ -3439,7 +3439,7 @@ JD-TC-CreateLead-UH14
     ${cdl_status}=  Create Dictionary  id=${status_id}  name=${Sname}
     ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
     # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
-    ${consumerKyc}=   Create Dictionary  consumerId=${NONE}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhone=${consumerPhone}
+    ${consumerKyc}=   Create Dictionary  consumerId=${NONE}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  ${consumerPhone}
 
     ${resp}=    Create Lead LOS  ${leadchannel[0]}    ${description}  ${requestedAmount}  ${branchid1}  losProduct=${losProduct_value}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
