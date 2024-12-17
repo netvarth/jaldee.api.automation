@@ -1091,7 +1091,7 @@ JD-TC-ApplyProviderCouponforwaitlist-UH10
     # Should Be Equal As Strings  ${resp.status_code}  200   
  
     # Should Be Equal As Strings  ${resp.json()['uuid']}                                  ${cwid}
-    # Should Be Equal As Strings  ${resp.json()['billStatus']}                            ${billStatus[0]}  
+    # Should Be Equal As Strings  ${resp.json()[0]['billStatus']}                            ${billStatus[0]}  
 
     ${resp}=    Send Otp For Login    ${CUSERNAME3}    ${pid}
     Log   ${resp.content}
@@ -1112,7 +1112,7 @@ JD-TC-ApplyProviderCouponforwaitlist-UH10
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${account_id}
-    Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['billStatus']}  ${billStatus[0]}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}

@@ -1105,7 +1105,7 @@ JD-TC-AdvancePaymentcalculation-14
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${account_id}
-    Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['billStatus']}  ${billStatus[0]}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
 
     ${resp}=  Get consumer Waitlist By Id  ${cwid}  ${account_id}
@@ -1304,7 +1304,7 @@ JD-TC-AdvancePaymentcalculation-15
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${account_id}
-    Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['billStatus']}  ${billStatus[0]}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
 
     ${resp}=  Get consumer Waitlist By Id  ${cwid}  ${account_id}
@@ -1543,7 +1543,7 @@ JD-TC-AdvancePaymentcalculation-16
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${account_id}
-    Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['billStatus']}  ${billStatus[0]}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
 
     ${resp}=  Get consumer Appointment By Id    ${account_id}  ${apptid1}
@@ -1774,7 +1774,7 @@ JD-TC-AdvancePaymentcalculation-17
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${account_id}
-    Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['billStatus']}  ${billStatus[0]}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
 
     ${resp}=  Get consumer Appointment By Id    ${account_id}  ${apptid1}
@@ -2005,7 +2005,7 @@ JD-TC-AdvancePaymentcalculation-18
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${account_id}
-    Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['billStatus']}  ${billStatus[0]}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
 
     ${resp}=  Get consumer Appointment By Id    ${account_id}  ${apptid1}
@@ -2192,7 +2192,7 @@ JD-TC-AdvancePaymentcalculation-19
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${account_id}
-    Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['billStatus']}  ${billStatus[0]}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
 
     ${resp}=  Get consumer Waitlist By Id  ${cwid}  ${account_id}
@@ -2556,7 +2556,7 @@ JD-TC-AdvancePaymentcalculation-20
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${account_id}
-    Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['billStatus']}  ${billStatus[0]}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
 
     ${resp}=  Get consumer Waitlist By Id  ${cwid}  ${account_id}
@@ -2934,7 +2934,7 @@ JD-TC-AdvancePaymentcalculation-21
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${account_id}
-    Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['billStatus']}  ${billStatus[0]}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
 
     ${resp}=  Get consumer Waitlist By Id  ${cwid}  ${account_id}
@@ -3340,7 +3340,7 @@ JD-TC-AdvancePaymentcalculation-22
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${account_id}
-    Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['billStatus']}  ${billStatus[0]}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
 
     ${resp}=  Get consumer Appointment By Id    ${account_id}  ${apptid1}
@@ -3757,7 +3757,7 @@ JD-TC-AdvancePaymentcalculation-23
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${account_id}
-    Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['billStatus']}  ${billStatus[0]}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
 
     ${resp}=  Get consumer Appointment By Id    ${account_id}  ${apptid1}

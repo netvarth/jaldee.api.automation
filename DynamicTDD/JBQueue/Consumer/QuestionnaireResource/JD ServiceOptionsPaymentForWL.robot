@@ -843,7 +843,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${account_id}
-    Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['billStatus']}  ${billStatus[0]}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
 
 JD-TC-ServiceOptionsPaymentForWaitlist-4
@@ -1203,7 +1203,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${account_id}
-    Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['billStatus']}  ${billStatus[0]}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
 
 JD-TC-ServiceOptionsPaymentForWaitlist-5
@@ -1562,5 +1562,5 @@ JD-TC-ServiceOptionsPaymentForWaitlist-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${account_id}
-    Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['billStatus']}  ${billStatus[0]}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}

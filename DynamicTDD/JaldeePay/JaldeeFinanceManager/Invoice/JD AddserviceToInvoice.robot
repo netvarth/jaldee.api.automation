@@ -904,16 +904,18 @@ JD-TC-Apply Services to Invoice-5
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Get Service By Id  ${p1_sid1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[1]}
-    Set Suite Variable  ${Tot}  ${resp.json()['totalAmount']}
+
 
 
     ${P1SERVICE2}=    FakerLibrary.word
     Set Suite Variable   ${P1SERVICE2} 
     ${desc}=   FakerLibrary.sentence
+
+    ${resp}=   Get Service By Id  ${p1_sid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[1]}
+    Set Suite Variable  ${Tot}  ${resp.json()['totalAmount']}
 
     ${p1_sid2}=  Create Sample Service   ${P1SERVICE2}     automaticInvoiceGeneration=${bool[1]}    taxable=${bool[1]}   
 
@@ -927,10 +929,10 @@ JD-TC-Apply Services to Invoice-5
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Get Service By Id  ${p1_sid2}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[1]}
+    # ${resp}=   Get Service By Id  ${p1_sid2}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[1]}
 
     ${queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%

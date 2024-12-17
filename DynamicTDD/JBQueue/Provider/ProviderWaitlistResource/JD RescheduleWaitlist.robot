@@ -753,7 +753,7 @@ JD-TC-Reschedule Waitlist-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${account_id}
-    Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['billStatus']}  ${billStatus[0]}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
 
     ${resp}=  Get Payment Details  paymentRefId-eq=${payref}
@@ -1019,7 +1019,7 @@ JD-TC-Reschedule Waitlist-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${pid}
-    Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['billStatus']}  ${billStatus[0]}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
     
 

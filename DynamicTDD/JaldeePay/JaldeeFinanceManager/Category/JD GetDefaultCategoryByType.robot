@@ -243,7 +243,7 @@ JD-TC-JD GetDefaultCategoryByType-UH3
 
     [Documentation]  Get Default Category By Type , without create category.
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME99}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME308}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
