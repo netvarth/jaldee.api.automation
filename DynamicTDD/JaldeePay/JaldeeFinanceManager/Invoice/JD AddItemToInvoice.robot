@@ -700,12 +700,15 @@ JD-TC-Apply Services to finance-4
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
+
+    ${SER}=    generate_unique_service_name  ${service_names}
+
     ${resp}=   Get Service By Id  ${ser_id1}
-    Log  ${resp.content}
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[1]}
     Set Test Variable   ${tot_amt}   ${resp.json()['totalAmount']}
-    ${SER}=    generate_unique_service_name  ${service_names}
+    
     ${resp}=   Create Sample Service  ${SER}
     Set Suite Variable    ${ser_id2}    ${resp} 
     ${SERVICE3}=    generate_unique_service_name  ${service_names} 
