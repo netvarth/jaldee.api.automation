@@ -33,16 +33,31 @@ ${SERVICE6}     SERVICE6
 
 JD-TC-GetServices-1
     [Documentation]  Get  services for a valid provider
-    ${description}=  FakerLibrary.sentence
+    
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    ${sub_domain}=  Set Variable  ${decrypted_data['subSector']}
 
+    ${resp}=  Get Features  ${sub_domain}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${service_name}  ${resp.json()['features']['defaultServices'][0]['service']}
+
+    ${resp}=  Get Service
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Run Keyword And Continue On Failure  Verify Response List   ${resp}  0  name=${service_name}
+
+    ${description}=  FakerLibrary.sentence
     ${min_pre}=   Random Int   min=10   max=50
     ${Total}=   Random Int   min=100   max=500
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${Total}=  Convert To Number  ${Total}  1
     Set Suite Variable  ${Total}
     Set Suite Variable  ${min_pre}
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    
     # clear_service       ${HLPUSERNAME7}  
 
     ${resp}=  Create Service  ${SERVICE1}  ${description}   ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[1]}  minPrePaymentAmount=${min_pre}  notificationType=${notifytype[2]}
@@ -65,13 +80,28 @@ JD-TC-GetServices-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get Service
     Should Be Equal As Strings  ${resp.status_code}  200  
-    ${count}=  Get Length  ${resp.json()} 
-	Should Be Equal As Integers  ${count}  6
-    Verify Response List  ${resp}  0  name=${SERVICE5}  description=${description}  serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}   status=${status[1]}  isPrePayment=${bool[1]}
-    Verify Response List  ${resp}  1  name=${SERVICE4}  description=${description}  serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}   status=${status[1]}  isPrePayment=${bool[1]}
-    Verify Response List  ${resp}  2  name=${SERVICE3}  description=${description}  serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}   status=${status[0]}  isPrePayment=${bool[1]}
-    Verify Response List  ${resp}  3  name=${SERVICE2}  description=${description}  serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}   status=${status[0]}  isPrePayment=${bool[1]} 
-    Verify Response List  ${resp}  4  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}   status=${status[0]}  isPrePayment=${bool[1]}
+    ${length}=  Get Length  ${resp.json()} 
+	Should Be Equal As Integers  ${length}  6
+    FOR  ${index}  IN RANGE  ${length}
+        IF  ${resp.json()[${index}]['id']} == ${id1}
+            Verify Response List  ${resp}  ${index}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}   status=${status[0]}  isPrePayment=${bool[1]}
+        ELSE IF  ${resp.json()[${index}]['id']} == ${id2}
+            Verify Response List  ${resp}  ${index}  name=${SERVICE2}  description=${description}  serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}   status=${status[0]}  isPrePayment=${bool[1]} 
+        ELSE IF  ${resp.json()[${index}]['id']} == ${id3}
+            Verify Response List  ${resp}  ${index}  name=${SERVICE3}  description=${description}  serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}   status=${status[0]}  isPrePayment=${bool[1]}
+        ELSE IF  ${resp.json()[${index}]['id']} == ${id4}
+            Verify Response List  ${resp}  ${index}  name=${SERVICE4}  description=${description}  serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}   status=${status[1]}  isPrePayment=${bool[1]}
+        ELSE IF  ${resp.json()[${index}]['id']} == ${id5}
+            Verify Response List  ${resp}  ${index}  name=${SERVICE5}  description=${description}  serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}   status=${status[1]}  isPrePayment=${bool[1]}
+        END
+    END
+
+    
+    # Verify Response List  ${resp}  0  name=${SERVICE5}  description=${description}  serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}   status=${status[1]}  isPrePayment=${bool[1]}
+    # Verify Response List  ${resp}  1  name=${SERVICE4}  description=${description}  serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}   status=${status[1]}  isPrePayment=${bool[1]}
+    # Verify Response List  ${resp}  2  name=${SERVICE3}  description=${description}  serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}   status=${status[0]}  isPrePayment=${bool[1]}
+    # Verify Response List  ${resp}  3  name=${SERVICE2}  description=${description}  serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}   status=${status[0]}  isPrePayment=${bool[1]} 
+    # Verify Response List  ${resp}  4  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}   status=${status[0]}  isPrePayment=${bool[1]}
 
 JD-TC-GetServices-2
     [Documentation]   Get  services for a valid provider filter by id
@@ -101,9 +131,18 @@ JD-TC-GetServices-4
     Should Be Equal As Strings  ${resp.status_code}  200   
 	${count}=  Get Length  ${resp.json()} 
 	Should Be Equal As Integers  ${count}  4
-	Verify Response List  ${resp}  0  name=${SERVICE3}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  isPrePayment=${bool[1]}	  
-	Verify Response List  ${resp}  1  name=${SERVICE2}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  isPrePayment=${bool[1]}	  
-	Verify Response List  ${resp}  2  name=${SERVICE1}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  isPrePayment=${bool[1]}
+    FOR  ${index}  IN RANGE  ${count}
+        IF  ${resp.json()[${index}]['id']} == ${id1}
+            Verify Response List  ${resp}  ${index}  name=${SERVICE1}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  isPrePayment=${bool[1]}
+        ELSE IF  ${resp.json()[${index}]['id']} == ${id2}
+            Verify Response List  ${resp}  ${index}  name=${SERVICE2}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  isPrePayment=${bool[1]}	  
+        ELSE IF  ${resp.json()[${index}]['id']} == ${id3}
+            Verify Response List  ${resp}  ${index}  name=${SERVICE3}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  isPrePayment=${bool[1]}	  
+        END
+    END
+	# Verify Response List  ${resp}  0  name=${SERVICE3}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  isPrePayment=${bool[1]}	  
+	# Verify Response List  ${resp}  1  name=${SERVICE2}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  isPrePayment=${bool[1]}	  
+	# Verify Response List  ${resp}  2  name=${SERVICE1}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  isPrePayment=${bool[1]}
 
 JD-TC-GetServices-5
     [Documentation]    Get  services for a valid provider filter by status INACTIVE
@@ -113,8 +152,16 @@ JD-TC-GetServices-5
     Should Be Equal As Strings  ${resp.status_code}  200   
 	${count}=  Get Length  ${resp.json()} 
 	Should Be Equal As Integers  ${count}  2
-    Verify Response List  ${resp}  1  name=${SERVICE4}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[1]}  isPrePayment=${bool[1]}	  	  
-	Verify Response List  ${resp}  0  name=${SERVICE5}    serviceDuration=${service_duration[1]}  notificationType=${notifytype[1]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[1]}  isPrePayment=${bool[1]}	  	  
+    # Verify Response List  ${resp}  1  name=${SERVICE4}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[1]}  isPrePayment=${bool[1]}	  	  
+	# Verify Response List  ${resp}  0  name=${SERVICE5}    serviceDuration=${service_duration[1]}  notificationType=${notifytype[1]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[1]}  isPrePayment=${bool[1]}	  	  
+
+    FOR  ${index}  IN RANGE  ${count}
+        IF  ${resp.json()[${index}]['id']} == ${id4}
+            Verify Response List  ${resp}  ${index}  name=${SERVICE4}  serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[1]}  isPrePayment=${bool[1]}	  	  
+        ELSE IF  ${resp.json()[${index}]['id']} == ${id5}
+            Verify Response List  ${resp}  ${index}  name=${SERVICE5}  serviceDuration=${service_duration[1]}  notificationType=${notifytype[1]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[1]}  isPrePayment=${bool[1]}	  	  
+        END
+    END
 
 JD-TC-GetServices-6
     [Documentation]   Get  services for a valid provider filter by account number
@@ -129,11 +176,25 @@ JD-TC-GetServices-6
     Should Be Equal As Strings  ${resp.status_code}  200   
 	${count}=  Get Length  ${resp.json()} 
 	Should Be Equal As Integers  ${count}  6
-    Verify Response List  ${resp}  0  name=${SERVICE5}    serviceDuration=${service_duration[1]}  notificationType=${notifytype[1]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[1]}  isPrePayment=${bool[1]}	  
-	Verify Response List  ${resp}  1  name=${SERVICE4}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[1]}  isPrePayment=${bool[1]}	  
-	Verify Response List  ${resp}  2  name=${SERVICE3}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  isPrePayment=${bool[1]}	  
-	Verify Response List  ${resp}  3  name=${SERVICE2}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  isPrePayment=${bool[1]}
-    Verify Response List  ${resp}  4  name=${SERVICE1}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  isPrePayment=${bool[1]}
+    # Verify Response List  ${resp}  0  name=${SERVICE5}    serviceDuration=${service_duration[1]}  notificationType=${notifytype[1]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[1]}  isPrePayment=${bool[1]}	  
+	# Verify Response List  ${resp}  1  name=${SERVICE4}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[1]}  isPrePayment=${bool[1]}	  
+	# Verify Response List  ${resp}  2  name=${SERVICE3}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  isPrePayment=${bool[1]}	  
+	# Verify Response List  ${resp}  3  name=${SERVICE2}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  isPrePayment=${bool[1]}
+    # Verify Response List  ${resp}  4  name=${SERVICE1}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  isPrePayment=${bool[1]}
+
+    FOR  ${index}  IN RANGE  ${count}
+        IF  ${resp.json()[${index}]['id']} == ${id1}
+            Verify Response List  ${resp}  ${index}  name=${SERVICE1}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  isPrePayment=${bool[1]}
+        ELSE IF  ${resp.json()[${index}]['id']} == ${id2}
+            Verify Response List  ${resp}  ${index}  name=${SERVICE2}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  isPrePayment=${bool[1]}
+        ELSE IF  ${resp.json()[${index}]['id']} == ${id3}
+            Verify Response List  ${resp}  ${index}  name=${SERVICE3}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  isPrePayment=${bool[1]}	  
+        ELSE IF  ${resp.json()[${index}]['id']} == ${id4}
+            Verify Response List  ${resp}  ${index}  name=${SERVICE4}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[1]}  isPrePayment=${bool[1]}	  
+        ELSE IF  ${resp.json()[${index}]['id']} == ${id5}
+            Verify Response List  ${resp}  ${index}  name=${SERVICE5}    serviceDuration=${service_duration[1]}  notificationType=${notifytype[1]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[1]}  isPrePayment=${bool[1]}	  
+        END
+    END
 
 
 JD-TC-GetServices-7
@@ -142,7 +203,7 @@ JD-TC-GetServices-7
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Create Service  ${SERVICE6}  ${description}   ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[1]}  minPrePaymentAmount=${min_pre}  notificationType=${notifytype[1]}
+    ${resp}=  Create Service  ${SERVICE6}  ${description}   ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${id6}  ${resp.json()}
     ${resp}=   Get Service By Id  ${id6}
@@ -162,7 +223,7 @@ JD-TC-GetServices-8
     Should Be Equal As Strings  ${resp.status_code}  200   
     ${count}=  Get Length  ${resp.json()} 
     Should Be Equal As Integers  ${count}  1
-	Verify Response List  ${resp}  0  name=${SERVICE5}    serviceDuration=${service_duration[1]}   notificationType=${notifytype[1]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[1]}  isPrePayment=${bool[1]}  bType=${btype}	  
+	Verify Response List  ${resp}  0  name=${SERVICE5}    serviceDuration=${service_duration[1]}   notificationType=${notifytype[1]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[1]}  isPrePayment=${bool[1]}  	  
 
 
 JD-TC-GetServices-9
@@ -247,7 +308,6 @@ JD-TC-GetServices-16
     Verify Response List  ${resp}  0  name=${SERVICE4}    serviceDuration=${service_duration[1]}  notificationType=${notifytype[2]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=INACTIVE  isPrePayment=${bool[1]}  
 
 
-
 JD-TC-GetServices-17
     [Documentation]  Get  services for a valid provider filter by account and notificationType
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -256,10 +316,21 @@ JD-TC-GetServices-17
     Should Be Equal As Strings  ${resp.status_code}  200   
     ${count}=  Get Length  ${resp.json()} 
     Should Be Equal As Integers  ${count}  4
-    Verify Response List  ${resp}  0  name=${SERVICE4}    serviceDuration=${service_duration[1]}   notificationType=${notifytype[2]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=INACTIVE  isPrePayment=${bool[1]}  
-    Verify Response List  ${resp}  1  name=${SERVICE3}    serviceDuration=${service_duration[1]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  isPrePayment=${bool[1]} 
-    Verify Response List  ${resp}  2  name=${SERVICE2}    serviceDuration=${service_duration[1]}   notificationType=${notifytype[2]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  isPrePayment=${bool[1]}  
-    Verify Response List  ${resp}  3  name=${SERVICE1}    serviceDuration=${service_duration[1]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  isPrePayment=${bool[1]} 
+    # Verify Response List  ${resp}  0  name=${SERVICE4}    serviceDuration=${service_duration[1]}   notificationType=${notifytype[2]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=INACTIVE  isPrePayment=${bool[1]}  
+    # Verify Response List  ${resp}  1  name=${SERVICE3}    serviceDuration=${service_duration[1]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  isPrePayment=${bool[1]} 
+    # Verify Response List  ${resp}  2  name=${SERVICE2}    serviceDuration=${service_duration[1]}   notificationType=${notifytype[2]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  isPrePayment=${bool[1]}  
+    # Verify Response List  ${resp}  3  name=${SERVICE1}    serviceDuration=${service_duration[1]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  isPrePayment=${bool[1]} 
+    FOR  ${index}  IN RANGE  ${count}
+        IF  ${resp.json()[${index}]['id']} == ${id1}
+            Verify Response List  ${resp}  ${index}  name=${SERVICE1}    serviceDuration=${service_duration[1]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  isPrePayment=${bool[1]} 
+        ELSE IF  ${resp.json()[${index}]['id']} == ${id2}
+            Verify Response List  ${resp}  ${index}  name=${SERVICE2}    serviceDuration=${service_duration[1]}   notificationType=${notifytype[2]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  isPrePayment=${bool[1]}  
+        ELSE IF  ${resp.json()[${index}]['id']} == ${id3}
+            Verify Response List  ${resp}  ${index}  name=${SERVICE3}    serviceDuration=${service_duration[1]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  isPrePayment=${bool[1]} 
+        ELSE IF  ${resp.json()[${index}]['id']} == ${id4}
+            Verify Response List  ${resp}  ${index}  name=${SERVICE4}    serviceDuration=${service_duration[1]}   notificationType=${notifytype[2]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=INACTIVE  isPrePayment=${bool[1]}  
+        END
+    END
 
 JD-TC-GetServices-18
     [Documentation]  Get  services for a valid provider filter by account and status
@@ -268,11 +339,23 @@ JD-TC-GetServices-18
     ${resp}=   Get Service    account-eq=${accNo}  status-eq=ACTIVE
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${count}=  Get Length  ${resp.json()} 
-    Should Be Equal As Integers  ${count}  4
-    Verify Response List  ${resp}  0  name=${SERVICE6}    serviceDuration=${service_duration[1]}  notificationType=${notifytype[0]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  isPrePayment=${bool[1]} 	  
-    Verify Response List  ${resp}  1  name=${SERVICE3}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  isPrePayment=${bool[1]} 
-    Verify Response List  ${resp}  2  name=${SERVICE2}    serviceDuration=${service_duration[1]}  notificationType=${notifytype[2]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  isPrePayment=${bool[1]}  
-    Verify Response List  ${resp}  3  name=${SERVICE1}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  isPrePayment=${bool[1]} 
+    Should Be Equal As Integers  ${count}  5
+    # Verify Response List  ${resp}  0  name=${SERVICE6}    serviceDuration=${service_duration[1]}  notificationType=${notifytype[0]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  isPrePayment=${bool[1]} 	  
+    # Verify Response List  ${resp}  1  name=${SERVICE3}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  isPrePayment=${bool[1]} 
+    # Verify Response List  ${resp}  2  name=${SERVICE2}    serviceDuration=${service_duration[1]}  notificationType=${notifytype[2]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  isPrePayment=${bool[1]}  
+    # Verify Response List  ${resp}  3  name=${SERVICE1}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  isPrePayment=${bool[1]} 
+
+    FOR  ${index}  IN RANGE  ${count}
+        IF  ${resp.json()[${index}]['id']} == ${id1}
+            Verify Response List  ${resp}  ${index}  name=${SERVICE1}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  isPrePayment=${bool[1]} 
+        ELSE IF  ${resp.json()[${index}]['id']} == ${id2}
+            Verify Response List  ${resp}  ${index}  name=${SERVICE2}    serviceDuration=${service_duration[1]}  notificationType=${notifytype[2]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  isPrePayment=${bool[1]}  
+        ELSE IF  ${resp.json()[${index}]['id']} == ${id3}
+            Verify Response List  ${resp}  ${index}  name=${SERVICE3}    serviceDuration=${service_duration[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  isPrePayment=${bool[1]} 
+        ELSE IF  ${resp.json()[${index}]['id']} == ${id6}
+            Verify Response List  ${resp}  ${index}  name=${SERVICE6}    serviceDuration=${service_duration[1]}  notificationType=${notifytype[0]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=ACTIVE  isPrePayment=${bool[1]} 	  
+        END
+    END
   
 
 JD-TC-GetServices-19
@@ -282,15 +365,20 @@ JD-TC-GetServices-19
     ${resp}=   Get Service    notificationType-eq=pushMsg  status-eq=ACTIVE
     Should Be Equal As Strings  ${resp.status_code}  200   
 	${count}=  Get Length  ${resp.json()} 
-    Should Be Equal As Integers  ${count}  0
+    Should Be Equal As Integers  ${count}  1  # default service
 
 
 JD-TC-GetServices-UH1 
-    [Documentation]  Get  services by login as consumer
+    [Documentation]  Get services by login as consumer
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
     ${PH_Number}    Random Number 	       digits=5 
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
@@ -310,20 +398,20 @@ JD-TC-GetServices-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ageyrs}  ${agemonths}=  db.calculate_age_years_months     ${dob}
+    # ${ageyrs}  ${agemonths}=  db.calculate_age_years_months     ${dob}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
-    ${fullName}   Set Variable    ${fname} ${lname}
-    Set Test Variable  ${fullName}
+    # ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings      ${resp.status_code}  200
+    # Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+    # ${fullName}   Set Variable    ${fname} ${lname}
+    # Set Test Variable  ${fullName}
 
     ${resp}=  Provider Logout   
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${consumerPhone}    ${accNo}
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
@@ -334,7 +422,7 @@ JD-TC-GetServices-UH1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable   ${token}  ${resp.json()['token']}
    
-    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${accNo}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${account_id}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 

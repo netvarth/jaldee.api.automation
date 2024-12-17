@@ -2435,7 +2435,7 @@ JD-TC-AdvancePaymentcalculation-20
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${cid1}  ${resp.json()['id']}
+    Set Suite Variable  ${cid1}  ${resp.json()['providerConsumer']}
 
     ${desc}=   FakerLibrary.word
     ${EMPTY_List}=  Create List
@@ -2479,7 +2479,7 @@ JD-TC-AdvancePaymentcalculation-20
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${cid1}  ${resp.json()['id']}
+    Set Test Variable  ${cid1}  ${resp.json()['providerConsumer']}
 
     ${resp}=  Get consumer Waitlist By Id  ${cwid}  ${account_id}
     Log   ${resp.content}
@@ -3746,13 +3746,13 @@ JD-TC-AdvancePaymentcalculation-23
     ${resp}=  Get Payment Details  account-eq=${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Numbers  ${resp.json()[0]['amount']}        ${min_pre}
+    Should Be Equal As Numbers  ${resp.json()[0]['amount']}        ${adv_pay_amnt}
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}     ${account_id}
     Should Be Equal As Strings  ${resp.json()[0]['paymentMode']}   ${payment_modes[5]}
     Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}       ${apptid1}
     Should Be Equal As Strings  ${resp.json()[0]['paymentPurpose']}   ${purpose[0]}
 
-    ${balamount}=  Evaluate  ${FullAmount}-${min_pre}
+    ${balamount}=  Evaluate  ${FullAmount}-${adv_pay_amnt}
     ${balamount}=  twodigitfloat  ${balamount} 
 
     # ${resp}=  Get Bill By consumer  ${apptid1}  ${account_id}

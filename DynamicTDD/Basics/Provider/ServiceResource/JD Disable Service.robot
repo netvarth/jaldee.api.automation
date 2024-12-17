@@ -169,18 +169,9 @@ JD-TC-Disable Service-UH6
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${CUSERNAME7}    ${pid}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    ${CUSERNAME7}  ${token}  Create Sample Customer  ${pid}  primaryMobileNo=${CUSERNAME7}
 
-    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
-
-    ${resp}=    Verify Otp For Login   ${CUSERNAME7}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${tokenss}  ${resp.json()['token']}
-
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME7}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME7}  ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${cid}  ${resp.json()['providerConsumer']}

@@ -97,16 +97,7 @@ JD-TC-Get Service Image-UH3
     # ${resp}=  Consumer Login  ${CUSERNAME4}  ${PASSWORD}
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=    Send Otp For Login    ${CUSERNAME4}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-  
-    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
-
-    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value} 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable   ${token}  ${resp.json()['token']}
+    ${CUSERNAME4}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME4}
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME4}    ${account_id}  ${token} 
     Log   ${resp.content}

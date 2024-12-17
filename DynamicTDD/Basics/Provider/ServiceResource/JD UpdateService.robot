@@ -67,15 +67,11 @@ JD-TC-UpdateService-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}   ${SERVICE1}
 
-    ${json_keys} = Evaluate ${resp.json().keys()} sys, resp
+    # ${json_data}=  Convert To Dictionary  ${resp.json()}
+    # IF   'description' not in ${json_data}
+    #     ${description}=  Set Variable  Default Description
+    # END
 
-    IF    'description' not in ${json_keys}
-        Log    'description key not found in the response'
-    END
-
-    IF    'description' not in Evaluate    resp.json().keys()    sys, resp
-        Log    'description key not found in the response'
-    END
 
     ${SERVICE1.1}=    generate_unique_service_name  ${service_names}
     ${resp}=  Update Service  ${s_id}  ${SERVICE1.1}  ${description}  ${srv_duration}  ${bool[0]}  ${Total}
@@ -184,8 +180,15 @@ JD-TC-UpdateService-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${s_id}   ${resp.json()[1]['id']}
 
+    ${json_data}=  Convert To Dictionary  ${resp.json()[1]}
+    IF   'description' not in ${json_data}
+        ${description}=  Set Variable  Default Description
+    ELSE  
+        ${description}=  Set Variable  ${resp.json()[1]['description']}
+    END
+
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
-    ${resp}=  Update Service  ${s_id}  ${resp.json()[1]['name']}  ${resp.json()[1]['description']}  ${resp.json()[1]['serviceDuration']}  ${bool[1]}  ${resp.json()[1]['totalAmount']}  minPrePaymentAmount=${min_pre}
+    ${resp}=  Update Service  ${s_id}  ${resp.json()[1]['name']}  ${description}  ${resp.json()[1]['serviceDuration']}  ${bool[1]}  ${resp.json()[1]['totalAmount']}  minPrePaymentAmount=${min_pre}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service By Id  ${s_id}
@@ -200,9 +203,9 @@ JD-TC-UpdateService-6
 
     ${nonbillable_domains}=  get_nonbillable_domains
     # ${random_domain}  Evaluate  random.choice(list(nonbillable_domains.keys())) random 
-    ${domains_list}=   Evaluate  list(${nonbillable_domains}.keys())
+    # ${domains_list}=   Evaluate  list(${nonbillable_domains}.keys())
     ${random_domain}=  Evaluate  random.choice(list(${nonbillable_domains}.keys()))  random
-    ${random_subdomain}  Evaluate  random.choice(nonbillable_domains[random_domain]) random
+    ${random_subdomain}  Evaluate  random.choice(${nonbillable_domains[${random_domain}]}) random
     ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup  Domain=${random_domain}  SubDomain=${random_subdomain}
     Set Suite Variable  ${PUSERNAME_A}
 
