@@ -242,7 +242,7 @@ JD-TC-UpdateAppointmentQueueSet-2
 
     [Documentation]  Update few details of a Appointment QueueSet
 
-    ${required_lic}    Random Element     ['Basic','Premium','Team','Enterprise']
+    ${required_lic}    Random Element     ['Premium','Team','Enterprise']
 
     ${PUSERNAMEA}=  Provider with license  ${required_lic}
 
