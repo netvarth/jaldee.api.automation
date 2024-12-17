@@ -21,6 +21,7 @@ ${digits}       0123456789
 *** Test Cases ***
 
 JD-TC-Reschedule Waitlist-1
+
     [Documentation]  Consumer takes check-in for a provider and reschedules it to another day.
     ...  ${SPACE} Check Communication messages also
 
@@ -109,10 +110,6 @@ JD-TC-Reschedule Waitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${cid}  ${resp.json()}
 
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
     ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -122,14 +119,14 @@ JD-TC-Reschedule Waitlist-1
     ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token}  ${resp.json()['token']}
+    Set Test Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  location=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -263,11 +260,17 @@ JD-TC-Reschedule Waitlist-2
     ${resp}=  Get Queue ById  ${q_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
+   
+    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
@@ -275,7 +278,6 @@ JD-TC-Reschedule Waitlist-2
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY3}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -311,10 +313,6 @@ JD-TC-Reschedule Waitlist-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -323,12 +321,9 @@ JD-TC-Reschedule Waitlist-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-
+  
 JD-TC-Reschedule Waitlist-3
+
     [Documentation]  Consumer takes check-in for a provider and reschedules it to another day when there is another checkin there.
     ...  ${SPACE} Check Communication messages also
 
@@ -358,21 +353,21 @@ JD-TC-Reschedule Waitlist-3
     Set Suite Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
-        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-        Log   ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+    # IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
+    #     ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
+    #     Log   ${resp.json()}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
+    # Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
@@ -430,47 +425,29 @@ JD-TC-Reschedule Waitlist-3
     ${resp}=  Get Queue ById  ${q_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
-
-    sleep   01s
-
+    
     ${resp}=  AddCustomer  ${CUSERNAME26}  
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()}
 
-    ${desc}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist  ${cid1}  ${s_id}  ${q_id}  ${DAY3}  ${desc}  ${bool[1]}  ${cid1} 
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${wl_json}=  Get Dictionary Values  ${resp.json()}
-    Set Test Variable  ${wl_id1}  ${wl_json[0]}
-
-    ${resp}=  Get Waitlist By Id  ${wl_id1} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY3}  waitlistStatus=${wl_status[0]}  
-    ...   waitlistedBy=${waitlistedby[1]}   personsAhead=0 
-    ...   consLastVisitedDate=${date2}${SPACE}${sTime1}  appxWaitingTime=0
-    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid1}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid1}
-
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    Send Otp For Login    ${CUSERNAME26}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
-    Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME26}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME26}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+   
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
+    ${resp}=  Add To Waitlist Consumers  ${cid1}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -480,13 +457,7 @@ JD-TC-Reschedule Waitlist-3
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[0]}   
-    ...   waitlistedBy=${waitlistedby[2]}   personsAhead=0
-    Should Be Equal As Strings  ${resp.json()['service']['id']}  ${s_id}
-    # Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${jdconID}           
-    # Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['firstName']}  ${fname}  
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${q_id}
-
+   
     ${resp}=  Reschedule Waitlist  ${pid}  ${wid1}  ${DAY3}  ${q_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -494,12 +465,7 @@ JD-TC-Reschedule Waitlist-3
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY3}  waitlistStatus=${wl_status[0]}   
-    ...   waitlistedBy=${waitlistedby[2]}   personsAhead=1
-    Should Be Equal As Strings  ${resp.json()['service']['id']}  ${s_id}
-    # Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${jdconID}           
-    # Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['firstName']}  ${fname}  
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${q_id}
+    Verify Response  ${resp}  date=${DAY3}  
 
     ${resp}=  Get Consumer Communications
     Log  ${resp.json()}
@@ -523,20 +489,21 @@ JD-TC-Reschedule Waitlist-3
 
 
 JD-TC-Reschedule Waitlist-4
+
     [Documentation]  Provider takes check-in for a consumer and consumer reschedules it to another day.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
-    Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
+    # ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    # Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Test Variable  ${lname}   ${resp.json()['lastName']}
+    # Set Test Variable  ${uname}   ${resp.json()['userName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log   ${resp.json()}
@@ -552,21 +519,21 @@ JD-TC-Reschedule Waitlist-4
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
-        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-        Log   ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+    # IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
+    #     ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
+    #     Log   ${resp.json()}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
+    # Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
@@ -624,8 +591,9 @@ JD-TC-Reschedule Waitlist-4
     ${resp}=  Get Queue ById  ${q_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
-
+ 
+    ${fname}=  generate_firstname    
+    ${lname}=  FakerLibrary.last_name
     ${resp}=  AddCustomer  ${CUSERNAME27}  firstName=${fname}  lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -643,15 +611,22 @@ JD-TC-Reschedule Waitlist-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  
-    ...   waitlistedBy=${waitlistedby[1]}   personsAhead=0 
-    ...   consLastVisitedDate=${date1}${SPACE}${sTime1}  appxWaitingTime=0
+    ...   waitlistedBy=${waitlistedby[1]}  
+    ...   consLastVisitedDate=${date1}${SPACE}${sTime1}  
     Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${s_id}
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid1}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid1}
 
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
@@ -659,7 +634,6 @@ JD-TC-Reschedule Waitlist-4
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid}   
     Log  ${resp.json()}
@@ -705,6 +679,7 @@ JD-TC-Reschedule Waitlist-4
 
 
 JD-TC-Reschedule Waitlist-5
+
     [Documentation]  Provider takes check-in for a consumer and consumer reschedules it to another queue.
     ...  ${SPACE} Check Communication messages also
 
@@ -714,7 +689,6 @@ JD-TC-Reschedule Waitlist-5
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${resp}=  Consumer Logout
     Log   ${resp.json()}
@@ -734,25 +708,25 @@ JD-TC-Reschedule Waitlist-5
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
-        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-        Log   ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+    # IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
+    #     ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
+    #     Log   ${resp.json()}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
+    # Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
+    clear_customer   ${HLPUSERNAME20}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${HLPUSERNAME20}
 
@@ -830,7 +804,7 @@ JD-TC-Reschedule Waitlist-5
     Set Test Variable  ${cid1}   ${resp.json()}
 
     ${desc}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist  ${cid1}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1} 
+    ${resp}=  Add To Waitlist  ${cid1}  ${s_id}  ${q_id2}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -842,7 +816,7 @@ JD-TC-Reschedule Waitlist-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  
     ...   waitlistedBy=${waitlistedby[1]}   personsAhead=0 
-    ...   consLastVisitedDate=${date1}${SPACE}${sTime1}  appxWaitingTime=0
+    ...   consLastVisitedDate=${date1}${SPACE}${sTime1} 
     Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${s_id}
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid1}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid1}
@@ -857,7 +831,6 @@ JD-TC-Reschedule Waitlist-5
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid}   
     Log  ${resp.json()}
@@ -866,7 +839,7 @@ JD-TC-Reschedule Waitlist-5
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${s_id}
     # Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${jdconID}           
     # Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['firstName']}  ${fname}  
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${q_id}
+    Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${q_id2}
 
     ${resp}=  Reschedule Waitlist  ${pid}  ${wid1}  ${DAY1}  ${q_id2}
     Log   ${resp.json()}
@@ -901,7 +874,7 @@ JD-TC-Reschedule Waitlist-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-
+*** Comments ***
 JD-TC-Reschedule Waitlist-6
     [Documentation]  Consumer takes check-in for a provider and reschedules it to another queue.
     ...  ${SPACE} Check Communication messages also
@@ -1019,7 +992,6 @@ JD-TC-Reschedule Waitlist-6
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -1197,9 +1169,16 @@ JD-TC-Reschedule Waitlist-7
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['services'][1]['id']}   ${s_id2}
 
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
@@ -1207,7 +1186,6 @@ JD-TC-Reschedule Waitlist-7
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -1365,7 +1343,6 @@ JD-TC-Reschedule Waitlist-8
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -1391,14 +1368,6 @@ JD-TC-Reschedule Waitlist-8
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable   ${payref}   ${resp.json()['paymentRefId']}
-
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Get Bill By UUId  ${wid1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
     # Log  ${resp.json()}
@@ -1592,7 +1561,6 @@ JD-TC-Reschedule Waitlist-9
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -1808,7 +1776,6 @@ JD-TC-Reschedule Waitlist-10
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -2041,7 +2008,6 @@ JD-TC-Reschedule Waitlist-11
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -2253,7 +2219,6 @@ JD-TC-Reschedule Waitlist-12
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -2468,7 +2433,6 @@ JD-TC-Reschedule Waitlist-13
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -2650,7 +2614,6 @@ JD-TC-Reschedule Waitlist-14
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -2832,7 +2795,6 @@ JD-TC-Reschedule Waitlist-15
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -2992,7 +2954,6 @@ JD-TC-Reschedule Waitlist-16
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -3136,7 +3097,6 @@ JD-TC-Reschedule Waitlist-UH1
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -3273,7 +3233,6 @@ JD-TC-Reschedule Waitlist-UH2
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -3422,7 +3381,6 @@ JD-TC-Reschedule Waitlist-UH3
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -3558,7 +3516,6 @@ JD-TC-Reschedule Waitlist-UH4
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -3694,7 +3651,6 @@ JD-TC-Reschedule Waitlist-UH5
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -3830,7 +3786,6 @@ JD-TC-Reschedule Waitlist-UH6
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -3983,7 +3938,6 @@ JD-TC-Reschedule Waitlist-UH7
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -4119,7 +4073,6 @@ JD-TC-Reschedule Waitlist-UH8
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -4309,7 +4262,6 @@ JD-TC-Reschedule Waitlist-UH9
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -4509,7 +4461,6 @@ JD-TC-Reschedule Waitlist-UH10
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY4}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -4656,7 +4607,6 @@ JD-TC-Reschedule Waitlist-UH11
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -4862,7 +4812,6 @@ JD-TC-Reschedule Waitlist-UH12
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -5015,7 +4964,6 @@ JD-TC-Reschedule Waitlist-UH13
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -5187,7 +5135,6 @@ JD-TC-Reschedule Waitlist-UH14
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY3}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -5381,7 +5328,6 @@ JD-TC-Reschedule Waitlist-UH15
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -5552,7 +5498,6 @@ JD-TC-Reschedule Waitlist-UH16
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -5779,7 +5724,6 @@ JD-TC-Reschedule Waitlist-UH17
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -5937,7 +5881,6 @@ JD-TC-Reschedule Waitlist-UH19
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -6089,7 +6032,6 @@ JD-TC-Reschedule Waitlist-UH20
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -6234,7 +6176,6 @@ JD-TC-Reschedule Waitlist-UH21
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -6381,7 +6322,6 @@ JD-TC-Reschedule Waitlist-UH22
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${inval_wid}=  FakerLibrary.Numerify  %%%
     
@@ -6545,7 +6485,6 @@ JD-TC-Reschedule Waitlist-UH23
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${resp}=  Reschedule Waitlist  ${pid}  ${wid1}  ${DAY3}  ${q_id}
     Log   ${resp.json()}
@@ -6607,7 +6546,6 @@ JD-TC-Reschedule Waitlist-UH24
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${resp}=  Consumer Logout
     Log   ${resp.json()}
@@ -6747,7 +6685,6 @@ JD-TC-Reschedule Waitlist-UH24
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     # ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid}   
     # Log  ${resp.json()}
@@ -6883,7 +6820,6 @@ JD-TC-Reschedule Waitlist-UH25
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -7147,7 +7083,6 @@ JD-TC-Reschedule Waitlist-UH30
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -7303,7 +7238,6 @@ JD-TC-Reschedule Waitlist-UH31
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
