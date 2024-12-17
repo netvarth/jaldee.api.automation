@@ -275,7 +275,7 @@ JD-TC-Reschedule Waitlist-2
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -496,7 +496,7 @@ JD-TC-Reschedule Waitlist-4
     # ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     # Log   ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}   200
-    # Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    # Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     # Set Test Variable  ${fname}   ${resp.json()['firstName']}
     # Set Test Variable  ${lname}   ${resp.json()['lastName']}
     # Set Test Variable  ${uname}   ${resp.json()['userName']}
@@ -632,7 +632,7 @@ JD-TC-Reschedule Waitlist-4
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -820,7 +820,7 @@ JD-TC-Reschedule Waitlist-5
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -970,7 +970,7 @@ JD-TC-Reschedule Waitlist-6
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -1170,7 +1170,7 @@ JD-TC-Reschedule Waitlist-7
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME2}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -1287,12 +1287,12 @@ JD-TC-Reschedule Waitlist-8
     Append To List  ${service_names}  ${SERVICE1}
     ${min_pre}=   Random Int   min=10   max=50
     ${servicecharge}=   Random Int  min=100  max=200
-    ${s_id}=  Create Sample Service    ${SERVICE1}  isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre}    totalAmount=${servicecharge}
+    ${s_id}=  Create Sample Service    ${SERVICE1}  isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre}    totalAmount=${servicecharge}   automaticInvoiceGeneration=${bool[1]}
 
-    ${resp}=   Get Service
+    ${resp}=   Get Service By Id  ${s_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
+    Set Test Variable   ${duration}   ${resp.json()['serviceDuration']}
 
     ${lid}=  Create Sample Location  
     ${resp}=   Get Location ById  ${lid}
@@ -1407,7 +1407,7 @@ JD-TC-Reschedule Waitlist-8
     Should Be Equal As Strings  ${resp.json()[0]['billStatus']}  ${billStatus[0]}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
     
-    sleep   1s
+    # sleep   1s
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1446,8 +1446,8 @@ JD-TC-Reschedule Waitlist-8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 *** Comments ***
-
 JD-TC-Reschedule Waitlist-9
+
     [Documentation]  Consumer takes check-in for a service with prepayment and reschedules it after prepayment to another queue.
     ...  ${SPACE} Check Communication messages also
 
@@ -1645,6 +1645,7 @@ JD-TC-Reschedule Waitlist-9
 
 
 JD-TC-Reschedule Waitlist-10
+
     [Documentation]  Consumer takes check-in for a service with prepayment and reschedules it after bill payment to another day.
     ...  ${SPACE} Check Communication messages also
 
@@ -1827,8 +1828,8 @@ JD-TC-Reschedule Waitlist-10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-*** Comments ***
 JD-TC-Reschedule Waitlist-11
+
     [Documentation]  Consumer takes check-in and reschedules it after bill payment to another queue.
     ...  ${SPACE} Check Communication messages also
 
@@ -1878,11 +1879,11 @@ JD-TC-Reschedule Waitlist-11
     Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    ${resp}=   Get Service
+    ${resp}=   Get Service By Id  ${s_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
-    Set Test Variable   ${servicecharge}   ${resp.json()[0]['totalAmount']}
+    Set Test Variable   ${duration}   ${resp.json()['serviceDuration']}
+    Set Test Variable   ${servicecharge}   ${resp.json()['totalAmount']}
 
     ${lid}=  Create Sample Location  
     ${resp}=   Get Location ById  ${lid}
@@ -1942,7 +1943,7 @@ JD-TC-Reschedule Waitlist-11
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -2056,6 +2057,7 @@ JD-TC-Reschedule Waitlist-11
 
 
 JD-TC-Reschedule Waitlist-12
+
     [Documentation]  Consumer takes check-in and reschedules it after bill payment to another day.
     ...  ${SPACE} Check Communication messages also
 
@@ -2153,7 +2155,7 @@ JD-TC-Reschedule Waitlist-12
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -2267,6 +2269,7 @@ JD-TC-Reschedule Waitlist-12
 
 
 JD-TC-Reschedule Waitlist-13
+
     [Documentation]  Consumer checks-in for a service in a queue with token and reschedules it to another day.
     ...  ${SPACE} Check Communication messages also
 
@@ -2367,7 +2370,7 @@ JD-TC-Reschedule Waitlist-13
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -2548,7 +2551,7 @@ JD-TC-Reschedule Waitlist-14
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -2729,7 +2732,7 @@ JD-TC-Reschedule Waitlist-15
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -2888,7 +2891,7 @@ JD-TC-Reschedule Waitlist-16
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -2943,6 +2946,7 @@ JD-TC-Reschedule Waitlist-16
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
+*** Comments ***
 JD-TC-Reschedule Waitlist-UH1
     [Documentation]  Consumer takes check-in for a provider and reschedules it to the same day.
     ...  ${SPACE} Check Communication messages also
@@ -3031,7 +3035,7 @@ JD-TC-Reschedule Waitlist-UH1
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -3167,7 +3171,7 @@ JD-TC-Reschedule Waitlist-UH2
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -3315,7 +3319,7 @@ JD-TC-Reschedule Waitlist-UH3
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -3450,7 +3454,7 @@ JD-TC-Reschedule Waitlist-UH4
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -3585,7 +3589,7 @@ JD-TC-Reschedule Waitlist-UH5
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -3720,7 +3724,7 @@ JD-TC-Reschedule Waitlist-UH6
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -3872,7 +3876,7 @@ JD-TC-Reschedule Waitlist-UH7
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -4007,7 +4011,7 @@ JD-TC-Reschedule Waitlist-UH8
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -4196,7 +4200,7 @@ JD-TC-Reschedule Waitlist-UH9
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -4395,7 +4399,7 @@ JD-TC-Reschedule Waitlist-UH10
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -4541,7 +4545,7 @@ JD-TC-Reschedule Waitlist-UH11
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -4746,7 +4750,7 @@ JD-TC-Reschedule Waitlist-UH12
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -4898,7 +4902,7 @@ JD-TC-Reschedule Waitlist-UH13
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -5069,7 +5073,7 @@ JD-TC-Reschedule Waitlist-UH14
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -5262,7 +5266,7 @@ JD-TC-Reschedule Waitlist-UH15
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -5432,7 +5436,7 @@ JD-TC-Reschedule Waitlist-UH16
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -5658,7 +5662,7 @@ JD-TC-Reschedule Waitlist-UH17
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -5815,7 +5819,7 @@ JD-TC-Reschedule Waitlist-UH19
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -5966,7 +5970,7 @@ JD-TC-Reschedule Waitlist-UH20
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -6110,7 +6114,7 @@ JD-TC-Reschedule Waitlist-UH21
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -6256,7 +6260,7 @@ JD-TC-Reschedule Waitlist-UH22
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -6419,7 +6423,7 @@ JD-TC-Reschedule Waitlist-UH23
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -6465,7 +6469,7 @@ JD-TC-Reschedule Waitlist-UH24
     # ${resp}=  Consumer Login  ${CUSERNAME7}  ${PASSWORD}
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
-    # Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    # Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
 
     ${resp}=    Send Otp For Login    ${CUSERNAME7}    ${pid}
     Log   ${resp.content}
@@ -6604,7 +6608,7 @@ JD-TC-Reschedule Waitlist-UH24
     # ${resp}=  Consumer Login  ${CUSERNAME7}  ${PASSWORD}
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
-    # Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    # Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
 
     ${resp}=    Send Otp For Login    ${CUSERNAME7}    ${pid}
     Log   ${resp.content}
@@ -6754,7 +6758,7 @@ JD-TC-Reschedule Waitlist-UH25
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -7017,7 +7021,7 @@ JD-TC-Reschedule Waitlist-UH30
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -7172,7 +7176,7 @@ JD-TC-Reschedule Waitlist-UH31
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
