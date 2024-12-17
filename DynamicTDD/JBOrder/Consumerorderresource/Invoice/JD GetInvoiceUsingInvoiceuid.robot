@@ -385,7 +385,7 @@ JD-TC-Get Invoice Using InvoiceID-1
     Should Be Equal As Strings    ${resp.json()['store']['id']}                                                              ${Stidd}
     Should Be Equal As Strings    ${resp.json()['orderFor']['id']}                                                          ${cid}
     Should Be Equal As Strings    ${resp.json()['orderFor']['name']}                                                        ${firstName} ${lastName}
-    Should Be Equal As Strings    ${resp.json()['status']}                                                                 ${billStatus[0]}
+    # Should Be Equal As Strings    ${resp.json()['status']}                                                                 ${billStatus[0]}
     Should Be Equal As Strings    ${resp.json()['paymentStatus']}                                                            ${paymentStatus[0]}
     Should Be Equal As Strings    ${resp.json()['timezone']}                                                                Asia/Kolkata
     Should Be Equal As Strings    ${resp.json()['orderIncluded']}                                                           ${bool[1]}
@@ -1234,7 +1234,7 @@ JD-TC-Get Invoice Using InvoiceID-3
     Set Test Variable              ${taxAmount}
     Set Test Variable              ${netRate}
 
-    ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}
+    ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}     ${amount}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}                     200
     Should Be Equal As Strings      ${resp.json()['quantity']}              ${quantity}

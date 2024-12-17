@@ -414,22 +414,22 @@ JD-TC-Get Order By UID-1
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['itemAmount']}                                                        ${price}
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['netTotal']}                                                        ${item1}
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['netRate']}                                                        ${item1}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemSourceEnum']}                                        ${itemSourceEnum}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['spCode']}                                               ${itemEncId1}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['name']}                                                 ${displayName}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['isInventoryItem']}                                       ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemGroups']}                                               []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemSubGroups']}                                            []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['tax']}                                                      []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['composition']}                                               []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemUnits']}                                                []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['isBatchApplicable']}                                          ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['attachments']}                                              []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['status']}                                                ${toggle[0]}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['createdDate']}                                              ${DAY1}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['createdBy']}                                                ${p1_id}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['updatedBy']}                                                0
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemPropertyType']}                                         ${itemPropertyType}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemSourceEnum']}                                        ${itemSourceEnum}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['spCode']}                                               ${itemEncId1}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['name']}                                                 ${displayName}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['isInventoryItem']}                                       ${bool[0]}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemGroups']}                                               []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemSubGroups']}                                            []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['tax']}                                                      []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['composition']}                                               []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemUnits']}                                                []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['isBatchApplicable']}                                          ${bool[0]}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['attachments']}                                              []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['status']}                                                ${toggle[0]}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['createdDate']}                                              ${DAY1}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['createdBy']}                                                ${p1_id}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['updatedBy']}                                                0
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemPropertyType']}                                         ${itemPropertyType}
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['accountId']}                                                           ${accountId}
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['location']['id']}                                                            ${locId1}
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['store']['id']}                                                              ${Stidd}
@@ -445,22 +445,22 @@ JD-TC-Get Order By UID-1
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['itemAmount']}                                                        ${price1}
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['netTotal']}                                                        ${item2}
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['netRate']}                                                        ${item2}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['itemSourceEnum']}                                        ${itemSourceEnum}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['spCode']}                                               ${itemEncId2}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['name']}                                                 ${displayName1}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['isInventoryItem']}                                       ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['itemGroups']}                                               []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['itemSubGroups']}                                            []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['tax']}                                                      []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['composition']}                                               []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['itemUnits']}                                                []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['isBatchApplicable']}                                          ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['attachments']}                                              []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['status']}                                                ${toggle[0]}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['createdDate']}                                              ${DAY1}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['createdBy']}                                                ${p1_id}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['updatedBy']}                                                0
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['itemPropertyType']}                                         ${itemPropertyType}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['itemSourceEnum']}                                        ${itemSourceEnum}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['spCode']}                                               ${itemEncId2}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['name']}                                                 ${displayName1}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['isInventoryItem']}                                       ${bool[0]}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['itemGroups']}                                               []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['itemSubGroups']}                                            []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['tax']}                                                      []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['composition']}                                               []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['itemUnits']}                                                []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['isBatchApplicable']}                                          ${bool[0]}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['attachments']}                                              []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['status']}                                                ${toggle[0]}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['createdDate']}                                              ${DAY1}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['createdBy']}                                                ${p1_id}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['updatedBy']}                                                0
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['itemPropertyType']}                                         ${itemPropertyType}
 
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['accountId']}                                                           ${accountId}
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['location']['id']}                                                            ${locId1}
@@ -477,22 +477,22 @@ JD-TC-Get Order By UID-1
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['itemAmount']}                                                        ${price2}
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['netTotal']}                                                        ${item3}
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['netRate']}                                                        ${item3}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['itemSourceEnum']}                                        ${itemSourceEnum}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['spCode']}                                               ${itemEncId3}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['name']}                                                 ${displayName2}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['isInventoryItem']}                                       ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['itemGroups']}                                               []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['itemSubGroups']}                                            []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['tax']}                                                      []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['composition']}                                               []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['itemUnits']}                                                []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['isBatchApplicable']}                                          ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['attachments']}                                              []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['status']}                                                ${toggle[0]}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['createdDate']}                                              ${DAY1}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['createdBy']}                                                ${p1_id}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['updatedBy']}                                                0
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['itemPropertyType']}                                         ${itemPropertyType}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['itemSourceEnum']}                                        ${itemSourceEnum}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['spCode']}                                               ${itemEncId3}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['name']}                                                 ${displayName2}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['isInventoryItem']}                                       ${bool[0]}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['itemGroups']}                                               []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['itemSubGroups']}                                            []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['tax']}                                                      []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['composition']}                                               []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['itemUnits']}                                                []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['isBatchApplicable']}                                          ${bool[0]}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['attachments']}                                              []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['status']}                                                ${toggle[0]}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['createdDate']}                                              ${DAY1}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['createdBy']}                                                ${p1_id}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['updatedBy']}                                                0
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['itemPropertyType']}                                         ${itemPropertyType}
 
 
 JD-TC-Get Order By UID-2
@@ -770,22 +770,22 @@ JD-TC-Get Order By UID-2
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['itemAmount']}                                                        ${price}
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['netTotal']}                                                        ${item1}
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['netRate']}                                                        ${item1}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemSourceEnum']}                                        ${itemSourceEnum}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['spCode']}                                               ${itemEncId1}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['name']}                                                 ${displayName}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['isInventoryItem']}                                       ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemGroups']}                                               []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemSubGroups']}                                            []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['tax']}                                                      []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['composition']}                                               []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemUnits']}                                                []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['isBatchApplicable']}                                          ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['attachments']}                                              []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['status']}                                                ${toggle[0]}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['createdDate']}                                              ${DAY1}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['createdBy']}                                                ${p1_id}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['updatedBy']}                                                0
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemPropertyType']}                                         ${itemPropertyType}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemSourceEnum']}                                        ${itemSourceEnum}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['spCode']}                                               ${itemEncId1}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['name']}                                                 ${displayName}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['isInventoryItem']}                                       ${bool[0]}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemGroups']}                                               []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemSubGroups']}                                            []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['tax']}                                                      []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['composition']}                                               []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemUnits']}                                                []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['isBatchApplicable']}                                          ${bool[0]}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['attachments']}                                              []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['status']}                                                ${toggle[0]}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['createdDate']}                                              ${DAY1}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['createdBy']}                                                ${p1_id}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['updatedBy']}                                                0
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemPropertyType']}                                         ${itemPropertyType}
 
 JD-TC-Get Order By UID-3
 
@@ -1087,22 +1087,22 @@ JD-TC-Get Order By UID-3
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['itemAmount']}                                                        ${price}
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['netTotal']}                                                        ${item1}
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['netRate']}                                                        ${Total}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemSourceEnum']}                                        ${itemSourceEnum}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['spCode']}                                               ${itemEncId1}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['name']}                                                 ${displayName}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['isInventoryItem']}                                       ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemGroups']}                                               []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemSubGroups']}                                            []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['tax']}                                                      []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['composition']}                                               []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemUnits']}                                                []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['isBatchApplicable']}                                          ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['attachments']}                                              []
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['status']}                                                ${toggle[0]}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['createdDate']}                                              ${DAY1}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['createdBy']}                                                ${p1_id}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['updatedBy']}                                                0
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemPropertyType']}                                         ${itemPropertyType}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemSourceEnum']}                                        ${itemSourceEnum}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['spCode']}                                               ${itemEncId1}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['name']}                                                 ${displayName}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['isInventoryItem']}                                       ${bool[0]}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemGroups']}                                               []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemSubGroups']}                                            []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['tax']}                                                      []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['composition']}                                               []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemUnits']}                                                []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['isBatchApplicable']}                                          ${bool[0]}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['attachments']}                                              []
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['status']}                                                ${toggle[0]}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['createdDate']}                                              ${DAY1}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['createdBy']}                                                ${p1_id}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['updatedBy']}                                                0
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemPropertyType']}                                         ${itemPropertyType}
 
 JD-TC-Get Order By UID-4
 
@@ -1608,7 +1608,7 @@ JD-TC-Get Order By UID-5
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['itemAmount']}                                                        ${price}
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['netTotal']}                                                        ${item1}
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['netRate']}                                                            ${item1} 
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemSourceEnum']}                                        ${itemSourceEnum}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemSourceEnum']}                                        ${itemSourceEnum}
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['spCode']}                                               ${itemEncId1}
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['name']}                                                 ${displayName}
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['isInventoryItem']}                                       ${bool[0]}

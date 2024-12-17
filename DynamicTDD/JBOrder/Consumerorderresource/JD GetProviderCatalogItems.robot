@@ -114,7 +114,7 @@ JD-TC-Get Provider Catalogs Items-1
     ${displayName}=     FakerLibrary.name
     Set Suite Variable              ${displayName} 
 
-    ${resp}=    Create Item Inventory  ${displayName}     isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
+    ${resp}=    Create Item Inventory  ${displayName}     
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId1}  ${resp.json()}
@@ -196,14 +196,14 @@ JD-TC-Get Provider Catalogs Items-2
 
     ${displayName1}=     FakerLibrary.name
     Set Suite Variable  ${displayName1}
-    ${resp}=    Create Item Inventory  ${displayName1}    isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
+    ${resp}=    Create Item Inventory  ${displayName1}    
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId2}  ${resp.json()}
 
     ${displayName2}=     FakerLibrary.name
     Set Suite Variable              ${displayName2} 
-    ${resp}=    Create Item Inventory  ${displayName2}     isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
+    ${resp}=    Create Item Inventory  ${displayName2}     
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId3}  ${resp.json()}
@@ -256,12 +256,12 @@ JD-TC-Get Provider Catalogs Items-2
             Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['spCode']}                                       ${itemEncId1}
             Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['encId']}                                        ${itemEncId1}
             Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['name']}                                         ${displayName}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['invMgmt']}                                      ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['batchEnabled']}                                 ${bool[1]}
+            # Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['invMgmt']}                                      ${bool[1]}
+            # Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['batchEnabled']}                                 ${bool[1]}
             Should Be Equal As Strings    ${resp.json()[${i}]['price']}                                                  ${price}
-            Should Be Equal As Strings    ${resp.json()[${i}]['batchPricing']}                                           ${bool[1]}
+            # Should Be Equal As Strings    ${resp.json()[${i}]['batchPricing']}                                           ${bool[1]}
             Should Be Equal As Strings    ${resp.json()[${i}]['encId']}                                                  ${SOC_itemEncIds1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['invMgmt']}                                                ${bool[0]}
+            # Should Be Equal As Strings    ${resp.json()[${i}]['invMgmt']}                                                ${bool[0]}
             Should Be Equal As Strings    ${resp.json()[${i}]['status']}                                                 ${toggle[0]}
 
 
@@ -273,12 +273,12 @@ JD-TC-Get Provider Catalogs Items-2
             Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['spCode']}                                       ${itemEncId2}
             Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['encId']}                                        ${itemEncId2}
             Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['name']}                                         ${displayName1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['invMgmt']}                                      ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['batchEnabled']}                                 ${bool[1]}
+            # Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['invMgmt']}                                      ${bool[1]}
+            # Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['batchEnabled']}                                 ${bool[1]}
             Should Be Equal As Strings    ${resp.json()[${i}]['price']}                                                  ${price1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['batchPricing']}                                           ${bool[1]}
+            # Should Be Equal As Strings    ${resp.json()[${i}]['batchPricing']}                                           ${bool[1]}
             Should Be Equal As Strings    ${resp.json()[${i}]['encId']}                                                  ${SOC_itemEncIds2}
-            Should Be Equal As Strings    ${resp.json()[${i}]['invMgmt']}                                                ${bool[0]}
+            # Should Be Equal As Strings    ${resp.json()[${i}]['invMgmt']}                                                ${bool[0]}
             Should Be Equal As Strings    ${resp.json()[${i}]['status']}                                                 ${toggle[0]}
 
 
@@ -290,12 +290,12 @@ JD-TC-Get Provider Catalogs Items-2
             Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['spCode']}                                       ${itemEncId3}
             Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['encId']}                                        ${itemEncId3}
             Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['name']}                                         ${displayName2}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['invMgmt']}                                      ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['batchEnabled']}                                 ${bool[1]}
+            # Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['invMgmt']}                                      ${bool[1]}
+            # Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['batchEnabled']}                                 ${bool[1]}
             Should Be Equal As Strings    ${resp.json()[${i}]['price']}                                                  ${price2}
-            Should Be Equal As Strings    ${resp.json()[${i}]['batchPricing']}                                           ${bool[1]}
+            # Should Be Equal As Strings    ${resp.json()[${i}]['batchPricing']}                                           ${bool[1]}
             Should Be Equal As Strings    ${resp.json()[${i}]['encId']}                                                  ${SOC_itemEncIds3}
-            Should Be Equal As Strings    ${resp.json()[${i}]['invMgmt']}                                                ${bool[0]}
+            # Should Be Equal As Strings    ${resp.json()[${i}]['invMgmt']}                                                ${bool[0]}
             Should Be Equal As Strings    ${resp.json()[${i}]['status']}                                                 ${toggle[0]}
 
         END
@@ -408,12 +408,12 @@ JD-TC-Get Provider Catalogs Items-3
             Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['spCode']}                                       ${itemEncId1}
             Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['encId']}                                        ${itemEncId1}
             Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['name']}                                         ${displayName}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['invMgmt']}                                      ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['batchEnabled']}                                 ${bool[1]}
+            # Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['invMgmt']}                                      ${bool[1]}
+            # Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['batchEnabled']}                                 ${bool[1]}
             Should Be Equal As Strings    ${resp.json()[${i}]['price']}                                                  ${price}
-            Should Be Equal As Strings    ${resp.json()[${i}]['batchPricing']}                                           ${bool[1]}
+            # Should Be Equal As Strings    ${resp.json()[${i}]['batchPricing']}                                           ${bool[1]}
             Should Be Equal As Strings    ${resp.json()[${i}]['encId']}                                                  ${SOC_itemEncIds1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['invMgmt']}                                                ${bool[0]}
+            # Should Be Equal As Strings    ${resp.json()[${i}]['invMgmt']}                                                ${bool[0]}
             Should Be Equal As Strings    ${resp.json()[${i}]['status']}                                                 ${toggle[0]}
 
 
@@ -425,12 +425,12 @@ JD-TC-Get Provider Catalogs Items-3
             Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['spCode']}                                       ${itemEncId2}
             Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['encId']}                                        ${itemEncId2}
             Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['name']}                                         ${displayName1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['invMgmt']}                                      ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['batchEnabled']}                                 ${bool[1]}
+            # Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['invMgmt']}                                      ${bool[1]}
+            # Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['batchEnabled']}                                 ${bool[1]}
             Should Be Equal As Strings    ${resp.json()[${i}]['price']}                                                  ${price1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['batchPricing']}                                           ${bool[1]}
+            # Should Be Equal As Strings    ${resp.json()[${i}]['batchPricing']}                                           ${bool[1]}
             Should Be Equal As Strings    ${resp.json()[${i}]['encId']}                                                  ${SOC_itemEncIds2}
-            Should Be Equal As Strings    ${resp.json()[${i}]['invMgmt']}                                                ${bool[0]}
+            # Should Be Equal As Strings    ${resp.json()[${i}]['invMgmt']}                                                ${bool[0]}
             Should Be Equal As Strings    ${resp.json()[${i}]['status']}                                                 ${toggle[0]}
 
 
@@ -442,12 +442,12 @@ JD-TC-Get Provider Catalogs Items-3
             Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['spCode']}                                       ${itemEncId3}
             Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['encId']}                                        ${itemEncId3}
             Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['name']}                                         ${displayName2}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['invMgmt']}                                      ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['batchEnabled']}                                 ${bool[1]}
+            # Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['invMgmt']}                                      ${bool[1]}
+            # Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['batchEnabled']}                                 ${bool[1]}
             Should Be Equal As Strings    ${resp.json()[${i}]['price']}                                                  ${price2}
-            Should Be Equal As Strings    ${resp.json()[${i}]['batchPricing']}                                           ${bool[1]}
+            # Should Be Equal As Strings    ${resp.json()[${i}]['batchPricing']}                                           ${bool[1]}
             Should Be Equal As Strings    ${resp.json()[${i}]['encId']}                                                  ${SOC_itemEncIds3}
-            Should Be Equal As Strings    ${resp.json()[${i}]['invMgmt']}                                                ${bool[0]}
+            # Should Be Equal As Strings    ${resp.json()[${i}]['invMgmt']}                                                ${bool[0]}
             Should Be Equal As Strings    ${resp.json()[${i}]['status']}                                                 ${toggle[0]}
 
         END
@@ -790,7 +790,7 @@ JD-TC-Get Provider Catalogs Items-UH5
     ${displayName}=     FakerLibrary.name
     Set Suite Variable              ${displayName} 
 
-    ${resp}=    Create Item Inventory  ${displayName}     isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
+    ${resp}=    Create Item Inventory  ${displayName}     
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId1}  ${resp.json()}

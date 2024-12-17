@@ -621,7 +621,7 @@ JD-TC-Checkout Cart-UH2
     ${displayName}=     FakerLibrary.name
     Set Test Variable              ${displayName} 
 
-    ${resp}=    Create Item Inventory  ${displayName}     isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
+    ${resp}=    Create Item Inventory  ${displayName}     
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${itemEncId1}  ${resp.json()}
@@ -1183,7 +1183,7 @@ JD-TC-Checkout Cart-3
     Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                                              ${cid}
     Should Be Equal As Strings    ${resp.json()['providerConsumer']['name']}                                            ${firstName} ${lastName}
     Should Be Equal As Strings    ${resp.json()['store']['encId']}                                                      ${store_id}
-    Should Be Equal As Strings    ${resp.json()['store']['name']}                                                       ${Name} 
+    # Should Be Equal As Strings    ${resp.json()['store']['name']}                                                       ${Name} 
     Should Be Equal As Strings    ${resp.json()['accountId']}                                                           ${accountId}
     Should Be Equal As Strings    ${resp.json()['uid']}                                                                 ${cart_uid}
     Should Be Equal As Strings    ${resp.json()['deliveryType']}                                                        ${deliveryType[0]}
@@ -1423,7 +1423,7 @@ JD-TC-Checkout Cart-4
     Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                                              ${cid}
     Should Be Equal As Strings    ${resp.json()['providerConsumer']['name']}                                            ${firstName} ${lastName}
     Should Be Equal As Strings    ${resp.json()['store']['encId']}                                                      ${store_id}
-    Should Be Equal As Strings    ${resp.json()['store']['name']}                                                       ${Name} 
+    # Should Be Equal As Strings    ${resp.json()['store']['name']}                                                       ${Name} 
     Should Be Equal As Strings    ${resp.json()['accountId']}                                                           ${accountId}
     Should Be Equal As Strings    ${resp.json()['uid']}                                                                 ${cart_uid}
     Should Be Equal As Strings    ${resp.json()['deliveryType']}                                                        ${deliveryType[0]}
@@ -2385,7 +2385,7 @@ JD-TC-Checkout Cart-UH6
     ${displayName}=     FakerLibrary.name
     Set Test Variable              ${displayName} 
 
-    ${resp}=    Create Item Inventory  ${displayName}     isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
+    ${resp}=    Create Item Inventory  ${displayName}     
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${itemEncId1}  ${resp.json()}

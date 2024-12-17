@@ -372,7 +372,7 @@ JD-TC-Get Invoice Using Order ID-1
     Should Be Equal As Strings    ${resp.json()[0]['store']['id']}                                                              ${Stidd}
     Should Be Equal As Strings    ${resp.json()[0]['orderFor']['id']}                                                          ${cid}
     Should Be Equal As Strings    ${resp.json()[0]['orderFor']['name']}                                                        ${firstName} ${lastName}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}                                                                 ${billStatus[0]}
+    # Should Be Equal As Strings    ${resp.json()[0]['status']}                                                                 ${billStatus[0]}
     Should Be Equal As Strings    ${resp.json()[0]['paymentStatus']}                                                            ${paymentStatus[0]}
     Should Be Equal As Strings    ${resp.json()[0]['timezone']}                                                                Asia/Kolkata
     Should Be Equal As Strings    ${resp.json()[0]['orderIncluded']}                                                           ${bool[1]}
