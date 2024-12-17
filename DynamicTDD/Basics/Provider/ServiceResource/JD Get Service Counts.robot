@@ -116,7 +116,7 @@ JD-TC-GetServiceCount-UH3
     Log    ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${accountId}=  get_acc_id  ${HLPUSERNAME10}
+    ${accountId}=  get_acc_id  ${PUSERNAME_A}
     Set Suite Variable    ${accountId} 
     
     ${PH_Number}    Random Number 	       digits=5 
@@ -147,7 +147,6 @@ JD-TC-GetServiceCount-UH3
     Set Test Variable  ${fullastName}
 
     ${resp}=  Provider Logout   
-    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}

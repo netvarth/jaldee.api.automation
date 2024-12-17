@@ -1498,7 +1498,7 @@ JD-TC-AdvancePaymentcalculation-16
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Create Invoice for Booking   ${invoicebooking[1]}   ${apptid1}
+    ${resp}=  Create Invoice for Booking   ${invoicebooking[0]}   ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1729,7 +1729,7 @@ JD-TC-AdvancePaymentcalculation-17
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Create Invoice for Booking   ${invoicebooking[1]}   ${apptid1}
+    ${resp}=  Create Invoice for Booking   ${invoicebooking[0]}   ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1960,7 +1960,7 @@ JD-TC-AdvancePaymentcalculation-18
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Create Invoice for Booking   ${invoicebooking[1]}   ${apptid1}
+    ${resp}=  Create Invoice for Booking   ${invoicebooking[0]}   ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2479,6 +2479,7 @@ JD-TC-AdvancePaymentcalculation-20
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${cid1}  ${resp.json()['id']}
 
     ${resp}=  Get consumer Waitlist By Id  ${cwid}  ${account_id}
     Log   ${resp.content}
@@ -3123,7 +3124,8 @@ JD-TC-AdvancePaymentcalculation-22
     IF   '${resp.content}' == '${emptylist}'
         ${fname}=  generate_firstname
         ${lname}=  FakerLibrary.last_name
-        ${resp1}=  AddCustomer  ${CUSERNAME4}  firstName=${fname}   lastName=${lname}
+        Set Test Variable  ${consumerEmail}  ${C_Email}${CUSERNAME4}.${test_mail}
+        ${resp1}=  AddCustomer  ${CUSERNAME4}  firstName=${fname}   lastName=${lname}  email=${consumerEmail}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Suite Variable  ${cid1}   ${resp1.json()}
@@ -3195,6 +3197,12 @@ JD-TC-AdvancePaymentcalculation-22
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${cid1}    ${resp.json()['providerConsumer']}
+
+    # Set Test Variable  ${consumerEmail}  ${C_Email}${CUSERNAME4}.${test_mail}
+
+    # ${resp}=    Update ProviderConsumer    ${cid1}    email=${consumerEmail}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${loc_id1}  ${ser_id1}
     Log  ${resp.content}
@@ -3287,7 +3295,7 @@ JD-TC-AdvancePaymentcalculation-22
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Create Invoice for Booking   ${invoicebooking[1]}   ${apptid1}
+    ${resp}=  Create Invoice for Booking   ${invoicebooking[0]}   ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3692,7 +3700,7 @@ JD-TC-AdvancePaymentcalculation-23
     Should Be Equal As Strings  ${resp.json()['paymentStatus']}   ${paymentStatus[0]} 
     Should Be Equal As Strings  ${resp.json()['apptStatus']}  ${apptStatus[0]}
 
-    ${resp}=  Make payment Consumer Mock  ${account_id}  ${min_pre}  ${purpose[0]}  ${apptid1}  ${ser_id1}  ${bool[0]}   ${bool[1]}  ${cid1}
+    ${resp}=  Make payment Consumer Mock  ${account_id}  ${adv_pay_amnt}  ${purpose[0]}  ${apptid1}  ${ser_id1}  ${bool[0]}   ${bool[1]}  ${cid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
@@ -3704,7 +3712,7 @@ JD-TC-AdvancePaymentcalculation-23
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Create Invoice for Booking   ${invoicebooking[1]}   ${apptid1}
+    ${resp}=  Create Invoice for Booking   ${invoicebooking[0]}   ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

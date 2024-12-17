@@ -59,7 +59,7 @@ Verify Otp For Login
     RETURN  ${resp}
 
 ProviderConsumer SignUp
-    [Arguments]  ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}   ${accountId}   ${countryCode}=91   &{kwargs} 
+    [Arguments]  ${firstName}  ${lastName}  ${email}  ${primaryMobileNo}   ${accountId}   ${countryCode}=91   &{kwargs} 
     ${cons_headers}=  Create Dictionary  &{headers} 
     ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}

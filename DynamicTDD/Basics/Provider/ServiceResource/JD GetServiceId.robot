@@ -47,7 +47,7 @@ JD-TC-GetServiceId-1
     ${Total}=  Random Int   min=11   max=100
     ${min_pre}=  Convert To Number  ${min_pre}  0
     ${Total}=  Convert To Number  ${Total}  0
-    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[2]}  ${bool[1]}  ${Total}  ${bool[1]}  minPrePaymentAmount=${min_pre}  notificationType=${notifytype[2]}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[2]}  ${bool[1]}  ${Total}  ${bool[1]}  minPrePaymentAmount=${min_pre}  notificationType=${notifytype[2]}  bType=${btype}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${id}    ${resp.json()}
@@ -66,7 +66,7 @@ JD-TC-GetServiceId-2
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get Service By Id  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}  notification=${bool[1]}   notificationType=${notifytype[2]}  totalAmount=0.0  status=${status[0]}  bType=${btype}  isPrePayment=${bool[0]} 
+    Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}  notification=${bool[1]}   notificationType=${notifytype[2]}  totalAmount=0.0  status=${status[0]}  isPrePayment=${bool[0]} 
         
 
 JD-TC-GetServiceId-3-pre_info_&_post_info
@@ -108,7 +108,7 @@ JD-TC-GetServiceId-3-pre_info_&_post_info
     Set Suite Variable  ${id}    ${resp.json()}
     ${resp}=   Get Service By Id  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${SERVICE2}  description=${description}  serviceDuration=${service_duration[2]}   notification=${bool[1]}   notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}   totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
+    Verify Response  ${resp}  name=${SERVICE2}  description=${description}  serviceDuration=${service_duration[2]}   notification=${bool[1]}   notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}   totalAmount=${Total}  status=${status[0]}  isPrePayment=${bool[1]}
     Verify Response  ${resp}  consumerNoteMandatory=${bool[1]}   consumerNoteTitle=${consumerNoteTitle}   preInfoEnabled=${bool[1]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${bool[1]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
 
 
@@ -141,7 +141,7 @@ JD-TC-GetServiceId-4-pre_info_&_post_info
 
     ${resp}=   Get Service By Id  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${SERVICE2}  description=${description}  serviceDuration=${service_duration[1]}  notification=${bool[1]}   notificationType=${notifytype[2]}  totalAmount=0.0  status=${status[0]}  bType=${btype}  isPrePayment=${bool[0]} 
+    Verify Response  ${resp}  name=${SERVICE2}  description=${description}  serviceDuration=${service_duration[1]}  notification=${bool[1]}   notificationType=${notifytype[2]}  totalAmount=0.0  status=${status[0]}  isPrePayment=${bool[0]} 
     Verify Response  ${resp}  consumerNoteMandatory=${bool[1]}   consumerNoteTitle=${consumerNoteTitle}   preInfoEnabled=${bool[1]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${bool[1]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
     Should Not Contain  ${resp.json()}  ${serviceType[0]}
 
@@ -184,7 +184,7 @@ JD-TC-GetServiceId-5-pre_info_&_post_info
     Set Suite Variable  ${id}    ${resp.json()}
     ${resp}=   Get Service By Id  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${SERVICE3}  description=${description}  serviceDuration=${service_duration[2]}   notification=${bool[1]}   notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}   totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
+    Verify Response  ${resp}  name=${SERVICE3}  description=${description}  serviceDuration=${service_duration[2]}   notification=${bool[1]}   notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}   totalAmount=${Total}  status=${status[0]}  isPrePayment=${bool[1]}
     Verify Response  ${resp}  consumerNoteMandatory=${bool[1]}   consumerNoteTitle=${consumerNoteTitle}   preInfoEnabled=${bool[1]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${bool[1]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
 
 
@@ -220,13 +220,13 @@ JD-TC-GetServiceId-6-pre_info_&_post_info
     ${postInfoTitle}=  FakerLibrary.sentence  
     ${postInfoText}=  FakerLibrary.sentence
     # ${resp}=  Create Service with info  ${SERVICE3}  ${description}  ${service_duration[1]}  ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${EMPTY}  ${status[0]}  ${btype}  ${bool[0]}  ${bool[0]}   ${serviceType[0]}   ${vstype}   ${virtualCallingModes2}   ${EMPTY}   0    ${consumerNoteMandatory[1]}   ${consumerNoteTitle}   ${preInfoEnabled[1]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[1]}   ${postInfoTitle}   ${postInfoText}
-    ${resp}=  Create Service  ${SERVICE3}  ${description}  ${service_duration[2]}  ${bool[1]}  ${EMPTY}  ${bool[1]}  minPrePaymentAmount=${EMPTY}  notificationType=${notifytype[2]}  serviceType=${ServiceType[0]}  virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes1}  consumerNoteMandatory=${bool[1]}  consumerNoteTitle=${consumerNoteTitle}   preInfoEnabled=${bool[1]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${bool[1]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
+    ${resp}=  Create Service  ${SERVICE3}  ${description}  ${service_duration[2]}  ${bool[1]}  ${EMPTY}  ${bool[1]}  minPrePaymentAmount=${EMPTY}  notificationType=${notifytype[2]}  serviceType=${ServiceType[0]}  virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes2}  consumerNoteMandatory=${bool[1]}  consumerNoteTitle=${consumerNoteTitle}   preInfoEnabled=${bool[1]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${bool[1]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service By Id  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${SERVICE3}  description=${description}  serviceDuration=${service_duration[1]}  notification=${bool[1]}   notificationType=${notifytype[2]}  totalAmount=0.0  status=${status[0]}  bType=${btype}  isPrePayment=${bool[0]} 
+    Verify Response  ${resp}  name=${SERVICE3}  description=${description}  serviceDuration=${service_duration[1]}  notification=${bool[1]}   notificationType=${notifytype[2]}  totalAmount=0.0  status=${status[0]}  isPrePayment=${bool[0]} 
     Verify Response  ${resp}  consumerNoteMandatory=${bool[1]}   consumerNoteTitle=${consumerNoteTitle}   preInfoEnabled=${bool[1]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${bool[1]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
         
 

@@ -1390,10 +1390,10 @@ JD-TC-CreateService-40
     ${resp}=   Get Service
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[1]['name']}   ${SERVICE1} 
-    Should Be Equal As Strings  ${resp.json()[1]['id']}     ${id2}
-    Should Be Equal As Strings  ${resp.json()[0]['name']}   ${SERVICE2} 
-    Should Be Equal As Strings  ${resp.json()[0]['id']}     ${id3}
+    Should Be Equal As Strings  ${resp.json()[0]['name']}   ${SERVICE1} 
+    Should Be Equal As Strings  ${resp.json()[0]['id']}     ${id2}
+    Should Be Equal As Strings  ${resp.json()[1]['name']}   ${SERVICE2} 
+    Should Be Equal As Strings  ${resp.json()[1]['id']}     ${id3}
 
 
 JD-TC-CreateService-UH1

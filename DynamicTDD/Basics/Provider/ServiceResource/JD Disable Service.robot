@@ -142,6 +142,11 @@ JD-TC-Disable Service-UH6
     # clear_location  ${PUSERNAME78}
     # clear_queue  ${PUSERNAME78}
 
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+
     ${resp}=  Create Sample Queue
     Set Suite Variable  ${s_id}  ${resp['service_id']}
     Set Suite Variable  ${qid}   ${resp['queue_id']}
@@ -158,13 +163,13 @@ JD-TC-Disable Service-UH6
     Set Test Variable   ${name}  ${resp.json()['name']}     
     Set Test Variable   ${service_duration}  ${resp.json()['serviceDuration']} 
     # Set Test Variable   ${description}  ${resp.json()['description']} 
-    ${pid}=  get_acc_id  ${PUSERNAME78}
-    Set Suite Variable  ${pid}
+    # ${pid}=  get_acc_id  ${PUSERNAME78}
+    # Set Suite Variable  ${pid}
     
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${CUSERNAME7}    ${account_id}
+    ${resp}=    Send Otp For Login    ${CUSERNAME7}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -175,7 +180,7 @@ JD-TC-Disable Service-UH6
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${tokenss}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME7}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME7}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${cid}  ${resp.json()['providerConsumer']}
@@ -183,7 +188,7 @@ JD-TC-Disable Service-UH6
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${msg}=  FakerLibrary.word
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=  Add To Waitlist Consumers  ${cid}  ${account_id}  ${qid}  ${DAY1}  ${s_id}  ${msg}  ${bool[0]}  ${self}
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${qid}  ${DAY1}  ${s_id}  ${msg}  ${bool[0]}  ${self}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Consumer Logout
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -234,18 +239,18 @@ JD-TC-Disable Service-UH7
 
     # ${resp}=  ConsumerLogin  ${CUSERNAME8}  ${PASSWORD}
     # Should Be Equal As Strings  ${resp.status_code}  200
-    ${CUSERNAME8}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME8}
+    ${CUSERNAME8}  ${token}  Create Sample Customer  ${pid}  primaryMobileNo=${CUSERNAME8}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${cid}  ${resp.json()['providerConsumer']}
 
-    ${cid}=  get_id  ${CUSERNAME8} 
+    # ${cid}=  get_id  ${CUSERNAME8} 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${msg}=  FakerLibrary.word
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=  Add To Waitlist Consumers  ${cid}  ${account_id}  ${qid1}  ${DAY1}  ${sid2}  ${msg}  ${bool[0]}  ${self}
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${qid1}  ${DAY1}  ${sid2}  ${msg}  ${bool[0]}  ${self}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid1}  ${wid[0]}
