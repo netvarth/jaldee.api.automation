@@ -62,7 +62,7 @@ JD-TC-Reschedule Appointment-1
 
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}   
-    ${s_id}=  Create Sample Service  ${SERVICE1}      maxBookingsAllowed=20
+    ${s_id}=  Create Sample Service  ${SERVICE1}      maxBookingsAllowed=20    isPrePayment=${bool[0]}
     Set Suite Variable  ${s_id}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}

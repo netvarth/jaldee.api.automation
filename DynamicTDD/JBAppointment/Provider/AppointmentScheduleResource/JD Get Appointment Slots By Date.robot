@@ -26,11 +26,11 @@ JD-TC-GetSlots By Date-1
 
 	[Documentation]  Get scheule slots on first and last days of schedule
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME197}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_service   ${PUSERNAME101}
-    # clear_location  ${PUSERNAME101}
-    # clear_service   ${PUSERNAME101}
+    # clear_service   ${PUSERNAME197}
+    # clear_location  ${PUSERNAME197}
+    # clear_service   ${PUSERNAME197}
     
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -68,7 +68,7 @@ JD-TC-GetSlots By Date-1
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    # clear_appt_schedule   ${PUSERNAME101}
+    # clear_appt_schedule   ${PUSERNAME197}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}

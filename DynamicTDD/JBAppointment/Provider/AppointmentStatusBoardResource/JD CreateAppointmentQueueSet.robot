@@ -1070,16 +1070,17 @@ JD-TC-CreateAppointmentQueueSet-UH8
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_timezone_time  ${tz}  3   50  
-   
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
-    ${s_id}=  Create Sample Service  ${SERVICE1}      maxBookingsAllowed=20
-    Set Test Variable  ${s_id}
 
     ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'       
+    IF   '${resp.content}' == '${emptylist}'     
+
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        Append To List  ${service_names}  ${SERVICE1}   
+        ${s_id}=  Create Sample Service  ${SERVICE1}      maxBookingsAllowed=20
+        Set Test Variable  ${s_id}
+
         ${schedule_name}=  FakerLibrary.bs
         ${parallel}=  FakerLibrary.Random Int  min=10  max=20
         ${maxval}=  Convert To Integer   ${delta/2}
