@@ -18,7 +18,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 *** Variables ***
 ${prefix}       serviceBatch
 ${suffix}       serving
-${Apptstat}     ENABLED  DISABLED
+@{Apptstat}     ENABLED  DISABLED
 ${start}        110
 @{service_names}
 
