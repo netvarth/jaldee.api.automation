@@ -44,6 +44,7 @@ JD-TC-Get sp item type Count Filter-1
     ${TypeName}=    FakerLibrary.name
     Set Suite Variable  ${TypeName}
 # -------------------------------- Create store type -----------------------------------
+    sleep  02s
     ${resp}=  Create Store Type   ${TypeName}    ${storeNature[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -138,7 +139,7 @@ JD-TC-Get sp item type Count Filter-1
 
     #--------------------------
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}   inventoryCatalog=${inv_cat_encid}  onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[0]}   storePickup=${boolean[1]}  homeDelivery=${boolean[1]}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}    onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[0]}   storePickup=${boolean[1]}  homeDelivery=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable              ${soc_id1}    ${resp.json()}
@@ -389,7 +390,7 @@ JD-TC-Get sp item type Count Filter-3
 
     #--------------------------
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[1]}   onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[0]}   storePickup=${boolean[1]}  homeDelivery=${boolean[1]}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}   onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[0]}   storePickup=${boolean[1]}  homeDelivery=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable              ${soc_id1}    ${resp.json()}
@@ -397,7 +398,7 @@ JD-TC-Get sp item type Count Filter-3
     ${displayName}=     FakerLibrary.name
     Set Test Variable              ${displayName} 
 
-    ${resp}=    Create Item Inventory  ${displayName}     isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}   categoryCode=${categoryCode}   typeCode=${typeCode}  typeCode2=${typeCode}
+    ${resp}=    Create Item Inventory  ${displayName}      categoryCode=${categoryCode}   typeCode=${typeCode}  typeCode2=${typeCode}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${itemEncId1}  ${resp.json()}
@@ -413,14 +414,14 @@ JD-TC-Get sp item type Count Filter-3
 
     ${displayName1}=     FakerLibrary.name
     Set Test Variable  ${displayName1}
-    ${resp}=    Create Item Inventory  ${displayName1}    isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}   categoryCode=${categoryCode}   typeCode=${typeCode1}  typeCode2=${typeCode}
+    ${resp}=    Create Item Inventory  ${displayName1}       categoryCode=${categoryCode}   typeCode=${typeCode1}  typeCode2=${typeCode}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${itemEncId2}  ${resp.json()}
 
     ${displayName2}=     FakerLibrary.name
     Set Test Variable              ${displayName2} 
-    ${resp}=    Create Item Inventory  ${displayName2}     isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}  categoryCode=${categoryCode}   typeCode=${typeCode2}  typeCode2=${typeCode}
+    ${resp}=    Create Item Inventory  ${displayName2}       categoryCode=${categoryCode}   typeCode=${typeCode2}  typeCode2=${typeCode}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${itemEncId3}  ${resp.json()}
@@ -603,7 +604,7 @@ JD-TC-Get sp item type Count Filter-4
     ${displayName}=     FakerLibrary.name
     Set Test Variable              ${displayName} 
 
-    ${resp}=    Create Item Inventory  ${displayName}     isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}   typeCode=${typeCode}
+    ${resp}=    Create Item Inventory  ${displayName}        typeCode=${typeCode}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${itemEncId1}  ${resp.json()}
@@ -761,12 +762,12 @@ JD-TC-Get sp item type Count Filter-4
     Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[2]}
 
     # ............... sales order catalog and item adding...............
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}   ${Name}  ${boolean[1]}  ${inv_cat_encid}  onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[0]}  storePickup=${boolean[1]}  courierService=${boolean[0]}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}   ${Name}  ${boolean[0]}  ${inv_cat_encid}  onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[0]}  storePickup=${boolean[1]}  courierService=${boolean[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable              ${soc_id1}    ${resp.json()}
 
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${soc_id1}    ${boolean[1]}     ${Inv_Cata_Item_Encid1}     ${price}    ${boolean[1]}   minSaleQuantity=${minSaleQuantity}  maxSaleQuantity=${maxSaleQuantity}
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${soc_id1}    ${boolean[0]}     ${Inv_Cata_Item_Encid1}     ${price}    ${boolean[1]}   minSaleQuantity=${minSaleQuantity}  maxSaleQuantity=${maxSaleQuantity}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${SOC_itemEncIds1}  ${resp.json()[0]}
