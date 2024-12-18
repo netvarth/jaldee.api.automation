@@ -1252,7 +1252,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-7
 
     [Documentation]  Create a serviceOption with prepayment type as Percentage then take a appointment and do the prepayment and verify the details.
 
-    # clear Queue     ${HLPUSERNAME2}
+    # clear Queue     ${HLPUSERNAME33}
 
     ${wb}=  readWorkbook  ${xlFile}
     ${sheet1}  GetCurrentSheet   ${wb}
@@ -1270,7 +1270,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-7
     Log  ${unique_snames}
     Set Suite Variable   ${unique_snames}
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -1352,7 +1352,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-7
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1389,7 +1389,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-7
     Log         ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1504,7 +1504,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-7
     Should Be Equal As Strings  ${resp.status_code}  200 
 
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLPUSERNAME2}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLPUSERNAME33}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
   
@@ -1527,7 +1527,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-7
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1591,7 +1591,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-7
 
 JD-TC-GetAppointmentAdvancePaymentDetails-8
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}   
     Should Be Equal As Strings  ${resp.status_code}   200
 
     ${decrypted_data}=  db.decrypt_data   ${resp.content}

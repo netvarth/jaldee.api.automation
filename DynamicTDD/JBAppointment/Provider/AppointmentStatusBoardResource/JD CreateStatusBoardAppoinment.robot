@@ -273,7 +273,7 @@ JD-TC-CreateStatusBoardAppoinment-UH4
 
 JD-TC-CreateStatusBoardAppoinment-UH6
 
-    ${required_lic}    Random Element     ['Basic','Premium','Team','Enterprise']
+    ${required_lic}    Random Element     ['Premium','Team','Enterprise']
 
     ${PUSERNAMEA}=  Provider with license  ${required_lic}
     

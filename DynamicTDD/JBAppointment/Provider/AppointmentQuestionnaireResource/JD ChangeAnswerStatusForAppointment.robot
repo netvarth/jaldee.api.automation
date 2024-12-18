@@ -1771,12 +1771,12 @@ JD-TC-ChangeAnsStatusForAppt-UH6
 JD-TC-ChangeAnsStatusForAppt-UH7
     [Documentation]   change answer status with another provider's appointment id.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME118}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_appt_schedule   ${PUSERNAME114}
-    # clear_service   ${PUSERNAME114}
+    # clear_appt_schedule   ${PUSERNAME118}
+    # clear_service   ${PUSERNAME118}
 
     ${resp}=    Get Locations
     Log  ${resp.content}

@@ -2687,7 +2687,7 @@ JD-TC-AddMultipleAppointmentLabel-13
     [Documentation]  Add label to 15 appointments of one customer at a time
 
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -2698,9 +2698,9 @@ JD-TC-AddMultipleAppointmentLabel-13
     
     # clear_service   ${PUSERNAME65}
     # clear_location  ${PUSERNAME65}
-    clear_customer   ${PUSERNAME67}
+    clear_customer   ${PUSERNAME119}
 
-    clear_Label  ${PUSERNAME67}
+    clear_Label  ${PUSERNAME119}
     ${label_id}=  Create Sample Label
 
     ${resp}=   Get Appointment Settings
@@ -2711,7 +2711,7 @@ JD-TC-AddMultipleAppointmentLabel-13
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_customer   ${PUSERNAME67}
+    clear_customer   ${PUSERNAME119}
 
     clear_Label  ${PUSERNAME66}
     ${label_id}=  Create Sample Label

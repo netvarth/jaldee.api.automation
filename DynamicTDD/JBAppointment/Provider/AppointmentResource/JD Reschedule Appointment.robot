@@ -92,6 +92,17 @@ JD-TC-Reschedule Appointment-1
         Set Suite Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
     END
     
+    ${ser_durtn}=   Random Int   min=2   max=10
+    ${min_pre}=   Random Int   min=40   max=50
+    ${min_pre}=  Convert To Number  ${min_pre}  0
+    ${service_amount}=   Random Int   min=100   max=500
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}   
+    ${desc}=   FakerLibrary.sentence
+    ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}  ${ser_durtn}  ${bool[0]}  ${service_amount}   maxBookingsAllowed=20  
+    Log  ${resp.content}   
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200

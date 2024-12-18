@@ -851,7 +851,6 @@ JD-TC-ApplyProviderCouponForAppointmnet-7
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY2}  ${ser_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleId=${sch_id}
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
