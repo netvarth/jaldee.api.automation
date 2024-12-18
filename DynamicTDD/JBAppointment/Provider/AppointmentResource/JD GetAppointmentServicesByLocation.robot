@@ -160,7 +160,8 @@ JD-TC-GetAppointmentServicesByLocation-1
     ${resp}=  Get Appointment Schedule ById  ${sch_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-   
+    
+    sleep  1s
     ${resp}=    Get Appoinment Service By Location   ${p1_l1}
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}   200
@@ -237,6 +238,7 @@ JD-TC-GetAppointmentServicesByLocation-4
     ${RESP}=  Disable service  ${p1_s1} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    sleep  1s
     ${resp}=    Get Appoinment Service By Location   ${p1_l1}
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}   200

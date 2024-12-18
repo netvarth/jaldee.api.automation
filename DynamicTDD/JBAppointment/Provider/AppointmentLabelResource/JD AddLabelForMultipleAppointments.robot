@@ -2759,7 +2759,7 @@ JD-TC-AddMultipleAppointmentLabel-13
         END
 
         ${schedule_name}=  FakerLibrary.bs
-        ${parallel}=  FakerLibrary.Random Int  min=3  max=10
+        ${parallel}=  FakerLibrary.Random Int  min=10  max=15
         ${maxval}=  Convert To Integer   ${delta/2}
         ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
         ${bool1}=  Random Element  ${bool}
