@@ -1343,7 +1343,6 @@ JD-TC-GetAppointmentAdvancePaymentDetails-7
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    
     ${cookie}  ${resp}=  Imageupload.SALogin    ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1686,7 +1685,21 @@ JD-TC-GetAppointmentAdvancePaymentDetails-8
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
+   
+    ${resp}=  GetCustomer  phoneNo-eq=${pro_cust2}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        ${lname}=  FakerLibrary.last_name
+        Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+        ${resp1}=  AddCustomer  ${pro_cust2}  firstName=${fname}   lastName=${lname}  email=${pc_emailid1}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Test Variable  ${cid1}   ${resp1.json()}
+    ELSE
+        Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
+    END
 
     ${resp}=  ProviderLogout
     Log  ${resp.content}

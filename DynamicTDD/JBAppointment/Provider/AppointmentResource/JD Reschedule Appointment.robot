@@ -181,15 +181,35 @@ JD-TC-Reschedule Appointment-2
     Set Suite Variable   ${DAY3}
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+    Verify Response  ${resp}  scheduleId=${sch_id}
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot1}   ${slots[${j1}]}
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY3}  ${s_id}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][3]['time']}
-    
+    Verify Response  ${resp}  scheduleId=${sch_id}
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j2}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot2}   ${slots[${j2}]}
+
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 

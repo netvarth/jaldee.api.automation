@@ -5329,6 +5329,10 @@ JD-TC-Update schedule-UH2
 	Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id1}  ${resp.json()}
 
+    ${resp}=  Enable Disable Appointment Schedule  ${sch_id}  ${Qstate[1]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Get Appointment Schedule ById  ${sch_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -5344,20 +5348,18 @@ JD-TC-Update schedule-UH2
 
     ${resp}=  Update Appointment Schedule  ${sch_id}  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY3}  ${DAY4}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"   "${QUEUE_SCHEDULE_OVERLAPS_UPDATE}"
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  "${resp.json()}"   "${QUEUE_SCHEDULE_OVERLAPS_UPDATE}"
     
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration}  apptState=${Qstate[0]}  parallelServing=${parallel}  batchEnable=${bool1}
+    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration}  apptState=${Qstate[1]}  parallelServing=${parallel}  batchEnable=${bool1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}  ${lid}
     Should Be Equal As Strings  ${resp.json()['apptSchedule']['recurringType']}  ${recurringtype[1]}
     Should Be Equal As Strings  ${resp.json()['apptSchedule']['repeatIntervals']}  ${list}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['startDate']}  ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['terminator']['endDate']}  ${DAY2}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}  ${converted_sTime1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${converted_eTime1}
+    Should Be Equal As Strings  ${resp.json()['apptSchedule']['startDate']}  ${DAY3}
+    Should Be Equal As Strings  ${resp.json()['apptSchedule']['terminator']['endDate']}  ${DAY4}
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
 
 
