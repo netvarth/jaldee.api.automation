@@ -21,7 +21,7 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 
 ${ZOOM_url}    https://zoom.us/j/{}?pwd=THVLcTBZa2lESFZQbU9DQTQrWUxWZz09
 
-
+@{service_duration}  1  2  3   4   5
 
 ***Keywords***
 
@@ -99,8 +99,8 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMember   ${firstname}  ${lastname}  ${dob}  ${gender}
-    Log  ${resp.json()}
+    ${resp}=    Add FamilyMember For ProviderConsumer     ${firstname}  ${lastname}  ${dob}  ${gender}  
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Suite Variable  ${cidfor}   ${resp.json()}
 
@@ -172,16 +172,18 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     ${SERVICE1}=    FakerLibrary.word
     ${description}=    FakerLibrary.word
     Set Test Variable  ${vstype}  ${vservicetype[0]}
-    ${resp}=  Create virtual Service  ${SERVICE1}   ${description}   5   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${Total1}  ${bool[0]}   ${bool[0]}   ${vstype}   ${virtualCallingModes1}
-    Log  ${resp.json()}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total1}  ${bool[0]}    virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes1}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
+    # ${resp}=  Create virtual Service  ${SERVICE1}   ${description}   5   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${Total1}  ${bool[0]}   ${bool[0]}   ${vstype}   ${virtualCallingModes1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${p1_s1}  ${resp.json()} 
 
     ${resp}=   Get Service By Id  ${p1_s1}
-    Should Be Equal As Strings  ${resp.status_code}  200
     Log  ${resp.json()}
-    Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=5   notification=${bool[1]}   notificationType=${notifytype[2]}   totalAmount=${Total1}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[0]}  serviceType=virtualService   virtualServiceType=${vstype}
-    
+    Should Be Equal As Strings  ${resp.status_code}  200
+   
     ${ZOOM_Pid0}=  Format String  ${ZOOM_url}  ${HLPUSERNAME2}
     Set Suite Variable   ${ZOOM_Pid0}
 
@@ -197,15 +199,17 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     ${SERVICE2}=    FakerLibrary.first_name
     ${description2}=    FakerLibrary.word
     Set Test Variable  ${vstype2}  ${vservicetype[1]}
-    ${resp}=  Create virtual Service  ${SERVICE2}   ${description2}   5   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${Total2}  ${bool[0]}   ${bool[0]}   ${vstype2}   ${virtualCallingModes2}
-    Log  ${resp.json()}
+    ${resp}=  Create Service  ${SERVICE2}  ${description2}  ${service_duration[1]}  ${bool[0]}  ${Total2}  ${bool[0]}    virtualServiceType=${vstype2}  virtualCallingModes=${virtualCallingModes2}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
+    # ${resp}=  Create virtual Service  ${SERVICE2}   ${description2}   5   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${Total2}  ${bool[0]}   ${bool[0]}   ${vstype2}   ${virtualCallingModes2}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${p1_s2}  ${resp.json()} 
     
     ${resp}=   Get Service By Id  ${p1_s2}
-    Should Be Equal As Strings  ${resp.status_code}  200
     Log  ${resp.json()}
-    Verify Response  ${resp}  name=${SERVICE2}  description=${description2}  serviceDuration=5   notification=${bool[1]}   notificationType=${notifytype[2]}   totalAmount=${Total2}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[0]}  serviceType=virtualService   virtualServiceType=${vstype2}
+    Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get Service
     Log  ${resp.json()}

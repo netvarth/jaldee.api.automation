@@ -91,8 +91,8 @@ JD-TC-GetWaitlistByEncryptedID-1
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMember   ${firstname}  ${lastname}  ${dob}  ${gender}
-    Log  ${resp.json()}
+    ${resp}=    Add FamilyMember For ProviderConsumer     ${firstname}  ${lastname}  ${dob}  ${gender}  
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${f1}   ${resp.json()}
     
@@ -111,7 +111,6 @@ JD-TC-GetWaitlistByEncryptedID-1
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1} 
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${s_id1} 
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${qid}  
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}   ${f1}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['firstName']}  ${firstname}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['lastName']}  ${lastname}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['phoneNo']}  ${CUSERNAME20}

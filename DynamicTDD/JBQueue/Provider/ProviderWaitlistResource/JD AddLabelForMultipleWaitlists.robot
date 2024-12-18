@@ -3103,7 +3103,7 @@ JD-TC-AddMultipleWaitlistLabel-UH11
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${desc}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist  ${cid1}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
+    ${resp}=  Add To Waitlist  ${cid1}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}  location=${lid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${wid}=  Get Dictionary Values  ${resp.json()}

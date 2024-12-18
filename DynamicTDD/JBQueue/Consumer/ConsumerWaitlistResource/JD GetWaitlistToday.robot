@@ -155,8 +155,8 @@ JD-TC-Get waitlist Today count-1
     Set Suite Variable   ${lastname}
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMember   ${firstname}  ${lastname}  ${dob}  ${gender}
-    Log  ${resp.json()}
+    ${resp}=    Add FamilyMember For ProviderConsumer     ${firstname}  ${lastname}  ${dob}  ${gender}  
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Suite Variable  ${f1}   ${resp.json()}
     ${resp}=  Add To Waitlist Consumers  ${f1}  ${pid}  ${q1_l1}  ${DAY}  ${sId_2}  ${cnote}  ${bool[0]}  ${f1} 
