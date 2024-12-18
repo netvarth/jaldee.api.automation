@@ -123,7 +123,7 @@ JD-TC-Get sp item category Filter-1
     ${displayName}=     FakerLibrary.name
     Set Suite Variable              ${displayName} 
 
-    ${resp}=    Create Item Inventory  ${displayName}     isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}   categoryCode=${categoryCode}
+    ${resp}=    Create Item Inventory  ${displayName}        categoryCode=${categoryCode}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId1}  ${resp.json()}
@@ -139,14 +139,14 @@ JD-TC-Get sp item category Filter-1
 
     ${displayName1}=     FakerLibrary.name
     Set Suite Variable  ${displayName1}
-    ${resp}=    Create Item Inventory  ${displayName1}    isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
+    ${resp}=    Create Item Inventory  ${displayName1}    
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId2}  ${resp.json()}
 
     ${displayName2}=     FakerLibrary.name
     Set Suite Variable              ${displayName2} 
-    ${resp}=    Create Item Inventory  ${displayName2}     isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
+    ${resp}=    Create Item Inventory  ${displayName2}     
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId3}  ${resp.json()}
@@ -373,7 +373,7 @@ JD-TC-Get sp item category Filter-3
     ${displayName}=     FakerLibrary.name
     Set Test Variable              ${displayName} 
 
-    ${resp}=    Create Item Inventory  ${displayName}     isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}   categoryCode=${categoryCode}   typeCode=${typeCode}  typeCode2=${typeCode}
+    ${resp}=    Create Item Inventory  ${displayName}        categoryCode=${categoryCode}   typeCode=${typeCode}  typeCode2=${typeCode}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${itemEncId1}  ${resp.json()}
@@ -389,14 +389,14 @@ JD-TC-Get sp item category Filter-3
 
     ${displayName1}=     FakerLibrary.name
     Set Test Variable  ${displayName1}
-    ${resp}=    Create Item Inventory  ${displayName1}    isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}   categoryCode=${categoryCode1}   typeCode=${typeCode1}  typeCode2=${typeCode}
+    ${resp}=    Create Item Inventory  ${displayName1}       categoryCode=${categoryCode1}   typeCode=${typeCode1}  typeCode2=${typeCode}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${itemEncId2}  ${resp.json()}
 
     ${displayName2}=     FakerLibrary.name
     Set Test Variable              ${displayName2} 
-    ${resp}=    Create Item Inventory  ${displayName2}     isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}  categoryCode=${categoryCode2}   typeCode=${typeCode2}  typeCode2=${typeCode}
+    ${resp}=    Create Item Inventory  ${displayName2}       categoryCode=${categoryCode2}   typeCode=${typeCode2}  typeCode2=${typeCode}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${itemEncId3}  ${resp.json()}
@@ -579,7 +579,7 @@ JD-TC-Get sp item category Filter-4
     ${displayName}=     FakerLibrary.name
     Set Test Variable              ${displayName} 
 
-    ${resp}=    Create Item Inventory  ${displayName}     isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}   categoryCode=${categoryCode}
+    ${resp}=    Create Item Inventory  ${displayName}        categoryCode=${categoryCode}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${itemEncId1}  ${resp.json()}

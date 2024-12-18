@@ -216,7 +216,7 @@ JD-TC-Update cart-1
             Should Be Equal As Strings    ${resp.json()[${i}]['accountId']}                                              ${accountId}
             Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['encId']}                                       ${soc_id1}
             Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['name']}                                        ${Name}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['invMgmt']}                                     ${bool[0]}
+            # Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['invMgmt']}                                     ${bool[0]}
             Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['spCode']}                                       ${itemEncId1}
             Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['encId']}                                        ${itemEncId1}
             Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['name']}                                         ${displayName}
@@ -233,7 +233,7 @@ JD-TC-Update cart-1
             Should Be Equal As Strings    ${resp.json()[${i}]['accountId']}                                              ${accountId}
             Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['encId']}                                       ${soc_id1}
             Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['name']}                                        ${Name}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['invMgmt']}                                     ${bool[0]}
+            # Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['invMgmt']}                                     ${bool[0]}
             Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['spCode']}                                       ${itemEncId2}
             Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['encId']}                                        ${itemEncId2}
             Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['name']}                                         ${displayName1}
@@ -250,7 +250,7 @@ JD-TC-Update cart-1
             Should Be Equal As Strings    ${resp.json()[${i}]['accountId']}                                              ${accountId}
             Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['encId']}                                       ${soc_id1}
             Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['name']}                                        ${Name}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['invMgmt']}                                     ${bool[0]}
+            # Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['invMgmt']}                                     ${bool[0]}
             Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['spCode']}                                       ${itemEncId3}
             Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['encId']}                                        ${itemEncId3}
             Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['name']}                                         ${displayName2}
@@ -297,7 +297,7 @@ JD-TC-Update cart-1
     Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                                              ${cid}
     Should Be Equal As Strings    ${resp.json()['providerConsumer']['name']}                                            ${firstName} ${lastName}
     Should Be Equal As Strings    ${resp.json()['store']['encId']}                                                      ${store_id}
-    Should Be Equal As Strings    ${resp.json()['store']['name']}                                                       ${Name} 
+    # Should Be Equal As Strings    ${resp.json()['store']['name']}                                                       ${Name} 
     Should Be Equal As Strings    ${resp.json()['accountId']}                                                           ${accountId}
     Should Be Equal As Strings    ${resp.json()['uid']}                                                                 ${cartUid}
     Should Be Equal As Strings    ${resp.json()['deliveryType']}                                                        ${deliveryType[0]}

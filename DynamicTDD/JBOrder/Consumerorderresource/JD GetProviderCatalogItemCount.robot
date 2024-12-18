@@ -26,7 +26,7 @@ JD-TC-Get Provider Catalogs Items Count-1
 
     [Documentation]  Provider add items in salessorder catalog ,consumer side get that catalog items(inventory is off)
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -69,10 +69,10 @@ JD-TC-Get Provider Catalogs Items Count-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLPUSERNAME48}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME6}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
@@ -179,7 +179,7 @@ JD-TC-Get Provider Catalogs Items Count-2
 
     [Documentation]  Provider add two or more items in salessorder catalog ,consumer side get that catalog items(inventory is off)
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -241,7 +241,7 @@ JD-TC-Get Provider Catalogs Items Count-UH1
 
     [Documentation]  Update sales order catalog with online self order disable ,then consumer acess this catalog item
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -283,7 +283,7 @@ JD-TC-Get Provider Catalogs Items Count-3
 
     [Documentation]  Update sales order catalog with online self order enable then disable store ,then consumer acess this catalog item
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -315,7 +315,7 @@ JD-TC-Get Provider Catalogs Items Count-4
 
     [Documentation]  enable store and create sorder catalog with inventory manager is on then add items in that catalog then get that catalog items
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -457,7 +457,7 @@ JD-TC-Get Provider Catalogs Items Count-8
 
     [Documentation]  Item is disabled and then Get catalog item using sorderCatalogEncId
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

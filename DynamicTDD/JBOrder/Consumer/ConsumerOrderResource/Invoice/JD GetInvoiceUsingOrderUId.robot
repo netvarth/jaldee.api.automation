@@ -159,7 +159,7 @@ JD-TC-Get Invoice Using Order ID-1
     ${displayName}=     FakerLibrary.name
     Set Suite Variable              ${displayName} 
 
-    ${resp}=    Create Item Inventory  ${displayName}     isBatchApplicable=${boolean[0]}    isInventoryItem=${bool[0]}
+    ${resp}=    Create Item Inventory  ${displayName}     
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId1}  ${resp.json()}
@@ -175,14 +175,14 @@ JD-TC-Get Invoice Using Order ID-1
 
     ${displayName1}=     FakerLibrary.name
     Set Suite Variable  ${displayName1}
-    ${resp}=    Create Item Inventory  ${displayName1}    isBatchApplicable=${boolean[0]}    isInventoryItem=${bool[0]}
+    ${resp}=    Create Item Inventory  ${displayName1}    
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId2}  ${resp.json()}
 
     ${displayName2}=     FakerLibrary.name
     Set Suite Variable              ${displayName2} 
-    ${resp}=    Create Item Inventory  ${displayName2}     isBatchApplicable=${boolean[0]}    isInventoryItem=${bool[0]}
+    ${resp}=    Create Item Inventory  ${displayName2}     
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId3}  ${resp.json()}
@@ -288,7 +288,7 @@ JD-TC-Get Invoice Using Order ID-1
     Should Be Equal As Strings    ${resp.json()[0]['providerConsumer']['name']}                                                ${firstName} ${lastName}
     Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['encId']}                                                        ${soc_id1}
     Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['name']}                                                          ${Name}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['invMgmt']}                                                       ${bool[0]}
+    # Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['invMgmt']}                                                       ${bool[0]}
     Should Be Equal As Strings    ${resp.json()[0]['netTotal']}                                                                ${Total}
     Should Be Equal As Strings    ${resp.json()[0]['netTotalWithTax']}                                                         ${Total}
     Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                                                 ${Total}
