@@ -315,7 +315,7 @@ JD-TC-UploadPayableAttachment-UH6
 
     [Documentation]   upload a attachment using another Encrypted Provider Login.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME307}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

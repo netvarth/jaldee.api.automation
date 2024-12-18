@@ -266,8 +266,8 @@ JD-TC-Remove Service From Invoice-2
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${servicecharge}=  Convert To Number  ${servicecharge}  1 
     ${srv_duration}=   Random Int   min=10   max=20
-    ${resp}=  Create Sample Service  ${SERVICE3}    automaticInvoiceGeneration=${bool[1]}
-    # ${resp}=  Create Service  ${SERVICE3}  ${desc}   ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}   minPrePaymentAmount=${min_pre}   prePaymentType=${advancepaymenttype[1]}    automaticInvoiceGeneration=${bool[1]}
+    # ${resp}=  Create Sample Service  ${SERVICE3}    automaticInvoiceGeneration=${bool[1]}
+    ${resp}=  Create Service  ${SERVICE3}  ${desc}   ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}     automaticInvoiceGeneration=${bool[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}

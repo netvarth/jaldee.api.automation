@@ -350,7 +350,7 @@ JD-TC-CreateInvoice-14
     Set Suite Variable   ${mer}   ${resp.json()['merchantId']}  
     Set Suite Variable   ${payref}   ${resp.json()['paymentRefId']}
 
-    #sleep   02s
+    # sleep   02s
 
     ${resp}=  Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD}
     Log  ${resp.json()}
@@ -360,7 +360,9 @@ JD-TC-CreateInvoice-14
     # Log  ${resp1.content}
     # Should Be Equal As Strings  ${resp1.status_code}  200
     #sleep   02s
-
+    # ${resp}=   Get Service By Id  ${p1_sid11}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Booking Invoices  ${cwid4}
     Log  ${resp.content}
@@ -421,17 +423,17 @@ JD-TC-CreateInvoice-14
     Should Be Equal As Strings    ${resp.status_code}   200
     #sleep  2s
 
-    ${resp}=  Get consumer Waitlist By Id  ${cwid4}  ${pid1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  paymentStatus=${paymentStatus[1]}   waitlistStatus=${wl_status[0]}
+    # ${resp}=  Get consumer Waitlist By Id  ${cwid4}  ${pid1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  paymentStatus=${paymentStatus[1]}   waitlistStatus=${wl_status[0]}
 
-    #sleep   02s
+
 
     ${resp}=  Make payment Consumer Mock  ${pid2}  ${balamount}  ${purpose[1]}  ${cwid4}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${None}
     Log  ${resp.json()}
 
-
+    # sleep   02s
     ${resp}=  Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

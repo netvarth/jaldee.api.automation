@@ -39,7 +39,7 @@ JD-TC-UpdatePayableStatus-1
 
     [Documentation]  Create a Payable and update it status.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME306}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -246,7 +246,7 @@ JD-TC-UpdatePayableStatus-UH1
 
     [Documentation]  Update PaymentOut status with already updated one.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME306}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -305,7 +305,7 @@ JD-TC-UpdatePayableStatus-UH4
 
     [Documentation]  Update PaymentOut status with invalid status id.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME306}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
