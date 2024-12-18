@@ -655,7 +655,7 @@ JD-TC-Get Next Available Dates-8
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
     ${amt}=  Convert To Number  ${amt}  1
     Set Suite Variable  ${amt}
-    ${resp}=  Create Service For User  ${SERVICE1}  ${description}   ${dur}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  0  ${amt}  ${bool[0]}  ${bool[0]}  ${dep_id}  ${u_id}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}   ${dur}   ${bool[0]}  ${amt}  ${bool[0]}   department=${dep_id}   provider=${u_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${us_id}  ${resp.json()}

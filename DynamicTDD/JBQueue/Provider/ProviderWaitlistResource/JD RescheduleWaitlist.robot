@@ -329,7 +329,7 @@ JD-TC-Reschedule Waitlist-2
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
 
     ${desc}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist  ${cid1}  ${s_id}  ${q_id}  ${DAY3}  ${desc}  ${bool[1]}  ${cid1} 
+    ${resp}=  Add To Waitlist  ${cid1}  ${s_id}  ${q_id}  ${DAY3}  ${desc}  ${bool[1]}  ${cid1}   location=${lid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -353,7 +353,7 @@ JD-TC-Reschedule Waitlist-2
     # ${wait_time}=  Convert To Integer   ${wait_time}
     # ${hrs}  ${mins}=   Convert_hour_mins   ${wait_time}
 
-    ${sTime2}=  db.add_timezone_time  ${tz}  ${hrs}  ${mins}
+    # ${sTime2}=  db.add_timezone_time  ${tz}  ${hrs}  ${mins}
     
     ${resp}=  Reschedule Consumer Checkin   ${wid}  ${DAY3}  ${q_id}
     Log   ${resp.json()}
@@ -659,6 +659,7 @@ JD-TC-Reschedule Waitlist-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${fname}=  generate_firstname
     Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
     ${resp}=  AddCustomer  ${CUSERNAME12}    firstName=${bsname}   email=${pc_emailid1}
     Log   ${resp.json()}
