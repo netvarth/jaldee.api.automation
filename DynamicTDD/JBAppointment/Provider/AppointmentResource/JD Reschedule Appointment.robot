@@ -62,7 +62,7 @@ JD-TC-Reschedule Appointment-1
 
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}   
-    ${s_id}=  Create Sample Service  ${SERVICE1}      maxBookingsAllowed=20    isPrePayment=${bool[0]}
+    ${s_id}=  Create Sample Service  ${SERVICE1}      maxBookingsAllowed=20  
     Set Suite Variable  ${s_id}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -132,9 +132,10 @@ JD-TC-Reschedule Appointment-1
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
-    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
-    Set Test Variable  ${apptid1}  ${apptid[0]}
+    ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
+
+    # ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
+    # Set Test Variable  ${apptid1}  ${apptid[0]}
 
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
@@ -190,9 +191,10 @@ JD-TC-Reschedule Appointment-2
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
           
-    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
-    Set Test Variable  ${apptid1}  ${apptid[0]}
+    # ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
+    # Set Test Variable  ${apptid1}  ${apptid[0]}
 
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
@@ -231,6 +233,7 @@ JD-TC-Reschedule Appointment-3
         Set Test Variable  ${cid}  ${resp.json()}
     ELSE
         Set Test Variable  ${cid}  ${resp.json()[0]['id']}
+        Set Test Variable  ${fname}  ${resp.json()[0]['firstName']}
     END
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id} 
@@ -255,9 +258,9 @@ JD-TC-Reschedule Appointment-3
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
-    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
-    Set Test Variable  ${apptid1}  ${apptid[0]}
+    ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
+    # ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
+    # Set Test Variable  ${apptid1}  ${apptid[0]}
 
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
@@ -2592,7 +2595,8 @@ JD-TC-Reschedule Appointment-17
     ${resp}=  Reschedule Consumer Appointment   ${apptid1}  ${slot2}  ${DAY3}  ${sch_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-   
+    
+    sleep  1s
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2952,7 +2956,7 @@ JD-TC-Reschedule Appointment-20
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           

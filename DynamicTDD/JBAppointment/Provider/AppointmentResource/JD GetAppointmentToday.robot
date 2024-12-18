@@ -30,6 +30,21 @@ JD-TC-GetAppointmentToday-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    Set Test Variable  ${lic_name}   ${decrypted_data['accountLicenseDetails']['accountLicense']['name']}
+   
+    ${highest_package}=  get_highest_license_pkg
+    Log  ${highest_package}
+    Set Test variable  ${lic2}  ${highest_package[0]}
+
+    IF  '${lic_id}' != '${lic2}'
+        ${resp1}=   Change License Package  ${highest_package[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
