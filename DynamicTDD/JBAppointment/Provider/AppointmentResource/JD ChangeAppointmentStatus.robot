@@ -3645,9 +3645,9 @@ JD-TC-ChangeAppointmentStatus-12
 
     [Documentation]  Change status to confirmed from Cancelled.
 
-    ${pid}=  get_acc_id  ${PUSERNAME375}
+    ${pid}=  get_acc_id  ${PUSERNAME378}
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME375}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME378}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3714,7 +3714,7 @@ JD-TC-ChangeAppointmentStatus-12
         END
 
         ${schedule_name}=  FakerLibrary.bs
-        ${parallel}=  FakerLibrary.Random Int  min=3  max=10
+        ${parallel}=  FakerLibrary.Random Int  min=10  max=15
         ${maxval}=  Convert To Integer   ${delta/2}
         ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
         ${bool1}=  Random Element  ${bool}
@@ -3794,7 +3794,7 @@ JD-TC-ChangeAppointmentStatus-12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME375}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME378}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3816,9 +3816,9 @@ JD-TC-ChangeAppointmentStatus-UH17
 
     [Documentation]  Change status to Arrived from Cancelled.
 
-    ${pid}=  get_acc_id  ${PUSERNAME375}
+    ${pid}=  get_acc_id  ${PUSERNAME378}
    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME375}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME378}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3912,7 +3912,7 @@ JD-TC-ChangeAppointmentStatus-UH17
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME375}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME378}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3931,9 +3931,9 @@ JD-TC-ChangeAppointmentStatus-UH18
 
     [Documentation]  Change status to Started from Cancelled.
 
-    ${pid}=  get_acc_id  ${PUSERNAME375}
+    ${pid}=  get_acc_id  ${PUSERNAME378}
    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME375}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME378}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4027,7 +4027,7 @@ JD-TC-ChangeAppointmentStatus-UH18
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME375}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME378}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4046,9 +4046,9 @@ JD-TC-ChangeAppointmentStatus-13
 
     [Documentation]  Change status to confirmed from Rejected.
 
-    ${pid}=  get_acc_id  ${PUSERNAME375}
+    ${pid}=  get_acc_id  ${PUSERNAME378}
   
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME375}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME378}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4141,7 +4141,7 @@ JD-TC-ChangeAppointmentStatus-13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME375}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME378}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4163,9 +4163,9 @@ JD-TC-ChangeAppointmentStatus-UH19
 
     [Documentation]  Change status to Arrived from Rejected.
 
-    ${pid}=  get_acc_id  ${PUSERNAME375}
+    ${pid}=  get_acc_id  ${PUSERNAME378}
    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME375}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME378}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4260,7 +4260,7 @@ JD-TC-ChangeAppointmentStatus-UH19
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME375}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME378}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4279,9 +4279,9 @@ JD-TC-ChangeAppointmentStatus-UH20
 
     [Documentation]  Change status to Started from Rejected.
 
-    ${pid}=  get_acc_id  ${PUSERNAME375}
+    ${pid}=  get_acc_id  ${PUSERNAME378}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME375}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME378}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4398,7 +4398,7 @@ JD-TC-ChangeAppointmentStatus-UH20
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME375}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME378}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4417,7 +4417,7 @@ JD-TC-ChangeAppointmentStatus-UH21
 
     [Documentation]  Change status to confirmed from Cancelled and take another appointment on same time slot for another consumer.
    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME375}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME378}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

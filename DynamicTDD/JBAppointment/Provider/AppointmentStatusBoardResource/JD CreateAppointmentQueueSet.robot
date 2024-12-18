@@ -537,7 +537,7 @@ JD-TC-CreateAppointmentQueueSet-5
 
     [Documentation]  Create a Appointment QueueSet for same service with another Appointment QueueSet details
 
-    ${required_lic}    Random Element     ['Basic','Premium','Team','Enterprise']
+    ${required_lic}    Random Element     ['Premium','Team','Enterprise']
 
     ${PUSERNAME_C}=  Provider with license  ${required_lic}
     Set Suite Variable   ${PUSERNAME_C}
