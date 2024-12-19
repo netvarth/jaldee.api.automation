@@ -604,7 +604,7 @@ JD-TC-Get sp item type Count Filter-4
     ${displayName}=     FakerLibrary.name
     Set Test Variable              ${displayName} 
 
-    ${resp}=    Create Item Inventory  ${displayName}        typeCode=${typeCode}
+    ${resp}=    Create Item Inventory  ${displayName}        typeCode=${typeCode}    isInventoryItem=${bool[1]} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${itemEncId1}  ${resp.json()}
@@ -729,7 +729,7 @@ JD-TC-Get sp item type Count Filter-4
     ${freeQuantity}=                Convert To Number  ${freeQuantity}  1
     ${DAY1}=  db.get_date_by_timezone  ${tz}
 
-    ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${Inv_Cata_Item_Encid1}  200  ${freeQuantity}    ${price}  0  0  0  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}   
+    ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${Inv_Cata_Item_Encid1}  200  ${freeQuantity}    ${price}  0  0  0  ${expiryDate}  ${mrp}  ${EMPTY}  ${iu_id}   
     Set Test Variable              ${purchaseItemDtoList1}
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${DAY1}  ${vendorId}  ${inv_cat_encid1}  ${purchaseNote}  1  ${purchaseItemDtoList1}  
@@ -762,10 +762,20 @@ JD-TC-Get sp item type Count Filter-4
     Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[2]}
 
     # ............... sales order catalog and item adding...............
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}   ${Name}  ${boolean[0]}  ${inv_cat_encid}  onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[0]}  storePickup=${boolean[1]}  courierService=${boolean[0]}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}   ${Name}  ${boolean[1]}  ${inv_cat_encid}  onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[0]}  storePickup=${boolean[1]}  courierService=${boolean[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable              ${soc_id1}    ${resp.json()}
+
+
+
+    # ${invCatItem}=     Create Dictionary       encId=${itemEncId2}
+    # ${Item_details}=  Create Dictionary        spItem=${invCatItem}    price=${price}   
+
+
+    # ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${soc_id1}     ${itemEncId1}     ${price}     ${Item_details}    
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${soc_id1}    ${boolean[0]}     ${Inv_Cata_Item_Encid1}     ${price}    ${boolean[1]}   minSaleQuantity=${minSaleQuantity}  maxSaleQuantity=${maxSaleQuantity}
     Log   ${resp.content}
