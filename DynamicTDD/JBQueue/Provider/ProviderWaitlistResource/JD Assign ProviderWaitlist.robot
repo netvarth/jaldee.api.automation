@@ -1812,7 +1812,8 @@ JD-TC-AssignproviderWaitlist-UH5
     Set Suite Variable  ${ph2}
     Set Suite Variable  ${u_id2}
     
-    ${SERVICE3}=    generate_service_name 
+    ${SERVICE3}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE3} 
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500

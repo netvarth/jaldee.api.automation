@@ -84,7 +84,8 @@ JD-TC-UnAssignproviderWaitlist-1
     # ${resp}=   Get License UsageInfo 
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
-
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1} 
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id}    ${resp}  
 
@@ -165,7 +166,8 @@ JD-TC-UnAssignproviderWaitlist-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1} 
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -202,6 +204,8 @@ JD-TC-UnAssignproviderWaitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}
 
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2} 
     ${sTime2}=  add_timezone_time  ${tz}  3  15  
     ${eTime2}=  add_timezone_time  ${tz}  4  00  
     ${description}=  FakerLibrary.sentence
@@ -308,6 +312,8 @@ JD-TC-UnAssignproviderWaitlist-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2} 
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${eTime1}=  add_timezone_time  ${tz}  1  00  
     ${description}=  FakerLibrary.sentence
@@ -456,6 +462,8 @@ JD-TC-UnAssignproviderWaitlist-3
     Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
     Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
 
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2} 
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${eTime1}=  add_timezone_time  ${tz}  1  00  
     ${description}=  FakerLibrary.sentence
@@ -484,7 +492,8 @@ JD-TC-UnAssignproviderWaitlist-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}
     
-     
+    ${SERVICE3}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE3} 
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -655,6 +664,8 @@ JD-TC-UnAssignproviderWaitlist-UH1
     Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
     Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
 
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2} 
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${eTime1}=  add_timezone_time  ${tz}  1  00  
     ${description}=  FakerLibrary.sentence
@@ -683,7 +694,8 @@ JD-TC-UnAssignproviderWaitlist-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}
     
-    
+    ${SERVICE3}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE3} 
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -824,7 +836,8 @@ JD-TC-UnAssignproviderWaitlist-UH2
     Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
     Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
 
-     
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2} 
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500

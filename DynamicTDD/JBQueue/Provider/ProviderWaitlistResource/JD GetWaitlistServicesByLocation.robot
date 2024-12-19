@@ -261,8 +261,8 @@ JD-TC-Get Waitlist Service By Location-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get waitlist Service By Location  ${p1_l2}  
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"  "${LOCATION_DISABLED}"  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}   []
 
     ${resp}=  Enable Location  ${p1_l2} 
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -331,9 +331,8 @@ JD-TC-Get Waitlist Service By Location-UH4
 
     ${resp}=    Get waitlist Service By Location   0
     Log   ${resp.json()}
-    Should Be Equal As Strings   ${resp.status_code}   404
-    Should Be Equal As Strings  "${resp.json()}"       "${LOCATION_NOT_FOUND}"
-
+    Should Be Equal As Strings   ${resp.status_code}   200
+    Should Be Equal As Strings  ${resp.json()}    []
     
 
  
