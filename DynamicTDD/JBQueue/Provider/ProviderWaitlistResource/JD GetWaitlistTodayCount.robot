@@ -756,7 +756,7 @@ JD-TC-GetWaitlistCountToday-58
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${qid2}   ${resp.json()} 
-      ${resp}=  Add To Waitlist  ${cid}  ${ser_id4}  ${qid2}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}
+      ${resp}=  Add To Waitlist  ${cid}  ${ser_id4}  ${qid2}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}  location=${lid1}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id5}  ${wid[0]}
