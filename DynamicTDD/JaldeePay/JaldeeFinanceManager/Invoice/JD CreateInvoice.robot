@@ -430,7 +430,7 @@ JD-TC-CreateInvoice-14
 
 
 
-    ${resp}=  Make payment Consumer Mock  ${pid2}  ${balamount}  ${purpose[1]}  ${cwid4}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${None}
+    ${resp}=  Make payment Consumer Mock  ${pid2}  ${balamount}  ${purpose[1]}  ${cwid4}  ${p1_sid11}  ${bool[0]}   ${bool[1]}  ${None}
     Log  ${resp.json()}
 
     # sleep   02s
