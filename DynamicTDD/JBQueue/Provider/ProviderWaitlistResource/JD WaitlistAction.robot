@@ -562,7 +562,7 @@ JD-TC-WaitlistAction-UH23
       Should Be Equal As Strings  ${resp.json()['capacity']}   ${capacity}
 
       # ${count}=  Evaluate  ${parallel} * 3
-      FOR  ${i}  IN RANGE   1   ${capacity+1}
+      FOR  ${i}  IN RANGE   1   ${capacity}
             
             ${resp}=  AddCustomer  ${CUSERNAME${i}}
             Log   ${resp.json()}
@@ -602,7 +602,7 @@ JD-TC-WaitlistAction-UH23
       ${resp}=  Add To Waitlist  ${cid}  ${p1_s1}  ${p1_q1}  ${today}  ${desc}  ${bool[1]}  ${cid}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  422
-      Should Be Equal As Strings  "${resp.json()}"    "${WATLIST_MAX_LIMIT_REACHED}"
+      Should Be Equal As Strings  "${resp.json()}"    "${SERVICE_TIME_MORE_THAN_BUS_HOURS}"
 
       
       

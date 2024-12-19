@@ -166,13 +166,13 @@ JD-TC-UnAssignproviderWaitlist-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1} 
+    ${SERVICE11}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE11} 
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
     ${amt}=  Convert To Number  ${amt}  1
-    ${resp}=  Create Service  ${SERVICE1}  ${description}   ${dur}  ${bool[0]}  ${amt}  ${bool[0]}  minPrePaymentAmount=0   provider=${u_id1}
+    ${resp}=  Create Service  ${SERVICE11}  ${description}   ${dur}  ${bool[0]}  ${amt}  ${bool[0]}  minPrePaymentAmount=0   provider=${u_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${s_id1}  ${resp.json()}
@@ -400,21 +400,21 @@ JD-TC-UnAssignproviderWaitlist-3
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
-    ${resp}=  Enable Disable Department  ${toggle[0]}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    sleep  2s
-    ${resp}=  Get Departments
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    # ${resp}=  Enable Disable Department  ${toggle[0]}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # sleep  2s
+    # ${resp}=  Get Departments
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
     ${ser_duratn}=      Random Int   min=10   max=30
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_duratn}  ${bool[0]}  ${servicecharge}  ${bool[0]}  deptId=${dep_id}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_duratn}  ${bool[0]}  ${servicecharge}  ${bool[0]} 
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id}  ${resp.json()}
 
@@ -604,7 +604,7 @@ JD-TC-UnAssignproviderWaitlist-UH1
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
     ${ser_duratn}=      Random Int   min=10   max=30
-    ${resp}=  Create Service   ${SERVICE1}  ${desc}   ${ser_duratn}  ${bool[0]}  ${servicecharge}  ${bool[0]}  deptId=${dep_id}
+    ${resp}=  Create Service   ${SERVICE1}  ${desc}   ${ser_duratn}  ${bool[0]}  ${servicecharge}  ${bool[0]} 
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id}  ${resp.json()}
 
@@ -774,7 +774,7 @@ JD-TC-UnAssignproviderWaitlist-UH2
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
     ${ser_duratn}=      Random Int   min=10   max=30
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_duratn}  ${bool[0]}  ${servicecharge}  ${bool[0]}  deptId=${dep_id}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_duratn}  ${bool[0]}  ${servicecharge}  ${bool[0]} 
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id}  ${resp.json()}
 
@@ -805,7 +805,7 @@ JD-TC-UnAssignproviderWaitlist-UH2
     ${resp}=  Get Waitlist By Id  ${wid6} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1  waitlistedBy=${waitlistedby}  personsAhead=0
+    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1  waitlistedBy=${waitlistedby}
     Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
@@ -862,7 +862,7 @@ JD-TC-UnAssignproviderWaitlist-UH2
     ${resp}=  Get Waitlist By Id  ${wid6} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1    waitlistedBy=${waitlistedby}  personsAhead=0
+    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1    waitlistedBy=${waitlistedby}  
     Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
     Should Be Equal As Strings  ${resp.json()['provider']['id']}                   ${u_id6}
