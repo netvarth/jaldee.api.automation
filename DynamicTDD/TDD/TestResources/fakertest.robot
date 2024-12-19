@@ -15,6 +15,8 @@ Extract UUID Part
     # ${first_part}=    Evaluate    FakerLibrary.Get Faker Data  uuid4 | split('-')[0]
     # Log    ${first_part}
 
+    ${token}=   FakerLibrary.Fake Data   lexify   ^[A-Za-z0-9]{20}$
+    
     ${invoiceId}=  FakerLibrary.iana_id
 
     ${uuid}=    Evaluate    str(__import__('uuid').uuid4())
