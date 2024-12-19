@@ -360,9 +360,9 @@ JD-TC-CreateInvoice-14
     # Log  ${resp1.content}
     # Should Be Equal As Strings  ${resp1.status_code}  200
     #sleep   02s
-    # ${resp}=   Get Service By Id  ${p1_sid11}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=   Get Service By Id  ${p1_sid11}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Booking Invoices  ${cwid4}
     Log  ${resp.content}
@@ -428,15 +428,23 @@ JD-TC-CreateInvoice-14
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Verify Response  ${resp}  paymentStatus=${paymentStatus[1]}   waitlistStatus=${wl_status[0]}
 
+    ${source}=   FakerLibrary.word
 
+    ${resp1}=  Invoice pay via link  ${invoice_wtlistonline_uid}  ${balamount}   ${purpose[6]}    ${source}  ${pid2}   ${finance_payment_modes[8]}  ${bool[0]}   ${p1_sid11}   ${cid1}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
 
-    ${resp}=  Make payment Consumer Mock  ${pid2}  ${balamount}  ${purpose[1]}  ${cwid4}  ${p1_sid11}  ${bool[0]}   ${bool[1]}  ${None}
-    Log  ${resp.json()}
+    # ${resp}=  Make payment Consumer Mock  ${pid2}  ${balamount}  ${purpose[1]}  ${cwid4}  ${p1_sid11}  ${bool[0]}   ${bool[1]}  ${None}
+    # Log  ${resp.json()}
 
     # sleep   02s
     ${resp}=  Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp1}=  Get Invoice By Id  ${invoice_wtlistonline_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
 
     ${resp}=  Get Booking Invoices  ${cwid4}
     Log  ${resp.content}
