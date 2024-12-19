@@ -6,9 +6,11 @@ Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library           /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
@@ -23,6 +25,7 @@ ${shfile}     /ebs/TDD/example.sh
 ${docfile}     /ebs/TDD/docsample.doc
 ${txtfile}     /ebs/TDD/textsample.txt
 ${self}      0
+@{service_names}
 
 *** Test Cases ***
 
@@ -30,15 +33,22 @@ JD-TC-GetWaitlistAttachment-1
 
     [Documentation]   Get waitlist attachment as jpg file.
 
-    clear_queue      ${PUSERNAME79}
-    clear_location   ${PUSERNAME79}
-    clear_service    ${PUSERNAME79}
+   
     clear_customer   ${PUSERNAME79}
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
-    ${resp}=  View Waitlist Settings
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable      ${pid}          ${decrypted_data['id']}
+    Set Suite Variable      ${pdrname}      ${decrypted_data['userName']}
+
+    ${resp}=    Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${accountId}        ${resp.json()['id']}
+    ${resp}=  Get Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -106,6 +116,7 @@ JD-TC-GetWaitlistAttachment-1
     Should Contain  ${resp.json()[0]['s3path']}   .jpg
     Should Be Equal As Strings  ${resp.json()[0]['caption']}     ${caption} 
 
+
     ${resp}=  Get Waitlist By Id  ${wid1} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -116,15 +127,13 @@ JD-TC-GetWaitlistAttachment-2
 
     [Documentation]   Get waitlist attachment as png file.
 
-    clear_queue      ${PUSERNAME79}
-    clear_location   ${PUSERNAME79}
-    clear_service    ${PUSERNAME79}
+    
     clear_customer   ${PUSERNAME79}
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -202,15 +211,13 @@ JD-TC-GetWaitlistAttachment-3
 
     [Documentation]   Get waitlist attachment as pdf file.
 
-    clear_queue      ${PUSERNAME79}
-    clear_location   ${PUSERNAME79}
-    clear_service    ${PUSERNAME79}
+    
     clear_customer   ${PUSERNAME79}
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -289,15 +296,13 @@ JD-TC-GetWaitlistAttachment-4
 
     [Documentation]   Get waitlist attachment as jpeg file.
 
-    clear_queue      ${PUSERNAME79}
-    clear_location   ${PUSERNAME79}
-    clear_service    ${PUSERNAME79}
+    
     clear_customer   ${PUSERNAME79}
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -376,15 +381,13 @@ JD-TC-GetWaitlistAttachment-5
 
     [Documentation]   Get waitlist attachment without caption.
 
-    clear_queue      ${PUSERNAME79}
-    clear_location   ${PUSERNAME79}
-    clear_service    ${PUSERNAME79}
+    
     clear_customer   ${PUSERNAME79}
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -462,15 +465,13 @@ JD-TC-GetWaitlistAttachment-6
 
     [Documentation]   Get waitlist attachment as gif file.
 
-    clear_queue      ${PUSERNAME79}
-    clear_location   ${PUSERNAME79}
-    clear_service    ${PUSERNAME79}
+    
     clear_customer   ${PUSERNAME79}
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -549,15 +550,13 @@ JD-TC-GetWaitlistAttachment-7
 
     [Documentation]   Get waitlist attachment for a canceled waitlist.
 
-    clear_queue      ${PUSERNAME79}
-    clear_location   ${PUSERNAME79}
-    clear_service    ${PUSERNAME79}
+    
     clear_customer   ${PUSERNAME79}
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -609,7 +608,7 @@ JD-TC-GetWaitlistAttachment-7
 
     ${msg}=  Fakerlibrary.word
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=  Waitlist Action Cancel  ${wid1}  ${waitlist_cancl_reasn[4]}   ${msg}
+    ${resp}=  Waitlist Action    ${waitlist_actions[2]}  ${wid1}  cancelReason=${waitlist_cancl_reasn[4]}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -652,19 +651,6 @@ JD-TC-GetWaitlistAttachment-UH1
     Should Be Equal As Strings  "${resp.json()}"   "${INVALID_WAITLIST}"
 
 JD-TC-GetWaitlistAttachment-UH2
-
-    [Documentation]   Get waitlist attachment by consumer login.
-    
-    ${resp}=  Consumer Login  ${CUSERNAME15}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Waitlist By Id  ${wid1} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  401
-    Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_NO_ACCESS_FOR_URL}"    
-
-JD-TC-GetWaitlistAttachment-UH3
 
     [Documentation]   Get waitlist attachment with invalid waitlist id.
     

@@ -39,6 +39,15 @@ JD-TC-GetWaitlistAttachment-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable      ${pid}          ${decrypted_data['id']}
+    Set Suite Variable      ${pdrname}      ${decrypted_data['userName']}
+
+    ${resp}=    Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${accountId}        ${resp.json()['id']}
     ${resp}=  Get Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
@@ -106,6 +115,7 @@ JD-TC-GetWaitlistAttachment-1
     Dictionary Should Contain Key  ${resp.json()[0]}   thumbPath
     Should Contain  ${resp.json()[0]['s3path']}   .jpg
     Should Be Equal As Strings  ${resp.json()[0]['caption']}     ${caption} 
+
 
     ${resp}=  Get Waitlist By Id  ${wid1} 
     Log  ${resp.json()}
