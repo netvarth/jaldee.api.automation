@@ -126,7 +126,7 @@ backup()
     createconf
     # createPrePostSqlFiles
     echo -e "\nBacking up Database to - $DB_BACKUP_PATH/${BACKUP_NAME}-${TODAY}.sql"
-    time mysqldump -h ${MYSQL_HOST} -P ${MYSQL_PORT} --add-drop-database --opt --databases ${DATABASE_NAME} --result-file="$DB_BACKUP_PATH/${BACKUP_FILE}"
+    time mysqldump -h ${MYSQL_HOST} -P ${MYSQL_PORT} --compression-algorithms=zstd --zstd-compression-level=7 --add-drop-database --opt --databases ${DATABASE_NAME} --result-file="$DB_BACKUP_PATH/${BACKUP_FILE}"
     # cat $DB_BACKUP_PATH/pre.sql $DB_BACKUP_PATH/$BACKUP_FILE $DB_BACKUP_PATH/post.sql > "${DB_BACKUP_PATH}/prepost-${BACKUP_FILE}"
     
     ##### Remove backups older than {BACKUP_RETAIN_DAYS} days  #####
