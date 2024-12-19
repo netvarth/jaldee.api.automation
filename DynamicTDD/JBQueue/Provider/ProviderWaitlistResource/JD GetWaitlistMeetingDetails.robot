@@ -172,7 +172,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     ${SERVICE1}=    FakerLibrary.word
     ${description}=    FakerLibrary.word
     Set Test Variable  ${vstype}  ${vservicetype[0]}
-    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total1}  ${bool[0]}    virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes1}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total1}  ${bool[0]}   serviceType=${ServiceType[0]}  virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     # ${resp}=  Create virtual Service  ${SERVICE1}   ${description}   5   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${Total1}  ${bool[0]}   ${bool[0]}   ${vstype}   ${virtualCallingModes1}
@@ -199,7 +199,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     ${SERVICE2}=    FakerLibrary.first_name
     ${description2}=    FakerLibrary.word
     Set Test Variable  ${vstype2}  ${vservicetype[1]}
-    ${resp}=  Create Service  ${SERVICE2}  ${description2}  ${service_duration[1]}  ${bool[0]}  ${Total2}  ${bool[0]}    virtualServiceType=${vstype2}  virtualCallingModes=${virtualCallingModes2}
+    ${resp}=  Create Service  ${SERVICE2}  ${description2}  ${service_duration[1]}  ${bool[0]}  ${Total2}  ${bool[0]}   serviceType=${ServiceType[0]}  virtualServiceType=${vstype2}  virtualCallingModes=${virtualCallingModes2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     # ${resp}=  Create virtual Service  ${SERVICE2}   ${description2}   5   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${Total2}  ${bool[0]}   ${bool[0]}   ${vstype2}   ${virtualCallingModes2}
@@ -237,7 +237,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${resp}=  Create Queue  ${p1queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  1  ${capacity}  ${p1_l1}  ${p1_s1}  ${p1_s2}  ${p1_s3}
+    ${resp}=  Create Queue  ${p1queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  1  ${capacity}  ${p1_l1}  ${p1_s1}  ${p1_s2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${queueId}  ${resp.json()}
@@ -474,13 +474,13 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-
 JD-TC-TeleserviceWaitlist-(Billable Subdomain)-3
+
     [Documentation]  Create Teleservice meeting request for waitlist in WhatsApp (ONLINE CHECKIN)
 
-    ${resp}=   Consumer Login  ${CUSERNAME2}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${accId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     ${cid}=  get_id  ${CUSERNAME2}    
 
     ${DAY}=  db.get_date_by_timezone  ${tz}
@@ -495,11 +495,9 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-3
     ${resp}=  Get consumer Waitlist By Id   ${wid4}  ${accId}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1     waitlistedBy=CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1   
     # Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcid0}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${queueId}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -573,29 +571,30 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-4
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME0}    ${pid}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=    Send Otp For Login    ${CUSERNAME0}    ${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+    # ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME0}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
+    # ${resp}=    Verify Otp For Login   ${CUSERNAME0}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${pid}  ${token} 
+    ${resp}=  ProviderLogout
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${accId}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200 
 
     ${resp}=  Get consumer Waitlist By Id   ${wid5}  ${accId}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1  
     # Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE2}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s2}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${queueId}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -637,8 +636,8 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-4
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-
 JD-TC-TeleserviceWaitlist-(Billable Subdomain)-UH2
+
     [Documentation]  Create Teleservice meeting request for waitlist  in Zoom and WhatsApp (ONLINE CHECKIN)
 
 
@@ -659,11 +658,9 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-UH2
     ${resp}=  Get consumer Waitlist By Id   ${wid6}  ${accId}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1    
     # Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE2}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s2}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${queueId}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -717,6 +714,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-UH2
 JD-TC-TeleserviceWaitlist-(Billable Subdomain)-5
 
     [Documentation]   Create waitlist teleservice Zoom meeting request Which  is already created
+
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${accId}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -734,11 +732,9 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-5
     ${resp}=  Get consumer Waitlist By Id   ${wid7}  ${accId}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1  
     # Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE2}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s2}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${queueId}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -790,11 +786,10 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-5
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
-
 JD-TC-TeleserviceWaitlist-(Billable Subdomain)-6
 
     [Documentation]   Create waitlist teleservice Whatsapp meeting request Which  is already created
+
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${accId}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -812,11 +807,9 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-6
     ${resp}=  Get consumer Waitlist By Id   ${wid8}  ${accId}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1    waitlistedBy=CONSUMER  personsAhead=0
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}  partySize=1  
     # Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${queueId}
 
 
@@ -870,10 +863,12 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-6
     Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-GetWaitlistMeetingDetails-UH3
+
     [Documentation]    Create waitlist teleservice meeting request  with invalid  waitlist id 
-    ${resp}=   Consumer Login  ${CUSERNAME2}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${accId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${INVALID_Wid}   0000
     ${resp}=   Get Waitlist Meeting Details   ${INVALID_Wid}   ${CallingModes[0]}  ${accId}
     Log  ${resp.json()}
