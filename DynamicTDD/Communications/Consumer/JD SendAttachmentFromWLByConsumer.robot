@@ -33,8 +33,8 @@ ${jpgfile}      /ebs/TDD/uploadimage.jpg
 ${order}        0
 ${fileSize}     0.00458
 
-*** Test Cases ***
 
+*** Test Cases ***
 
 JD-TC-SendAttachmentFromWLByConsumer-1
 	[Documentation]  ProviderConsumer  Send Attachment From WL By Consumer.
@@ -180,7 +180,7 @@ JD-TC-SendAttachmentFromWLByConsumer-1
 
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
-    ${resp}=  Send Attachment From Waitlist By Consumer   ${wid}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
+    ${resp}=  Send Attachment From Waitlist By Consumer   ${wid}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}  account=${acc_id}  location=${loc_id1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -199,8 +199,6 @@ JD-TC-SendAttachmentFromWLByConsumer-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['hasAttachment']}    ${bool[1]}
 
-
-
 # JD-TC-SendAttachmentWL-UH1
 
 #     [Documentation]  Send Attachment Waitlist - waitlist id is invalid 
@@ -211,7 +209,7 @@ JD-TC-SendAttachmentFromWLByConsumer-1
   
 #     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}  
+    # ${resp}=    Verify Otp For Login   ${consumerPhone}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}  
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 #     Set Test Variable   ${token}  ${resp.json()['token']}
