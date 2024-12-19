@@ -581,7 +581,8 @@ JD-TC-AssignproviderWaitlist-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE2}=    generate_service_name 
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2} 
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${eTime1}=  add_timezone_time  ${tz}  1  00  
     ${description}=  FakerLibrary.sentence
@@ -1704,7 +1705,7 @@ JD-TC-AssignproviderWaitlist-UH5
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id}    ${resp}  
 
-    ${q_name}=    FakerLibrary.name
+    ${q_name}=   generate_firstname
     ${list}=  Create List   1  2  3  4  5  6  7
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}

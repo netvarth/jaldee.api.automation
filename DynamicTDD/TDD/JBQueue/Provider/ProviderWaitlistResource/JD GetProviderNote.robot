@@ -6,11 +6,14 @@ Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library           /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -28,12 +31,12 @@ ${txtfile}     /ebs/TDD/textsample.txt
 JD-TC-Get Provider Note-1
     [Documentation]   get provider note valid provider
 
-    clear_queue      ${PUSERNAME102}
-    clear_location   ${PUSERNAME102}
-    clear_service    ${PUSERNAME102}
-    clear_customer   ${PUSERNAME102}
+    # clear_queue      ${HLPUSERNAME29}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    clear_customer   ${HLPUSERNAME29}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  AddCustomer  ${CUSERNAME19}
@@ -82,7 +85,7 @@ JD-TC-Get Provider Note-1
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${uuid}  ${wid[0]}   
 
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME102}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${HLPUSERNAME29}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${cookie}
@@ -206,12 +209,12 @@ JD-TC-Get Provider Note-1
 JD-TC-Get Provider Note-2
     [Documentation]   Get Provider Note by valid provider with attachment as png file.
 
-    clear_queue      ${PUSERNAME110}
-    clear_location   ${PUSERNAME110}
-    clear_service    ${PUSERNAME110}
-    clear_customer   ${PUSERNAME110}
+    # clear_queue      ${HLPUSERNAME29}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    clear_customer   ${HLPUSERNAME29}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  AddCustomer  ${CUSERNAME19}
@@ -249,7 +252,7 @@ JD-TC-Get Provider Note-2
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${uuid}  ${wid[0]}   
 
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME110}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${HLPUSERNAME29}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${msg}=  Fakerlibrary.sentence
@@ -275,12 +278,12 @@ JD-TC-Get Provider Note-2
 JD-TC-Get Provider Note-3
     [Documentation]   Get Provider Note by valid provider with attachment as pdf file.
 
-    clear_queue      ${PUSERNAME111}
-    clear_location   ${PUSERNAME111}
-    clear_service    ${PUSERNAME111}
-    clear_customer   ${PUSERNAME111}
+    # clear_queue      ${HLPUSERNAME29}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    clear_customer   ${HLPUSERNAME29}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  AddCustomer  ${CUSERNAME19}
@@ -288,12 +291,19 @@ JD-TC-Get Provider Note-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid}  ${resp.json()}
     
-    ${resp}=   Create Sample Location
-    Set Suite Variable    ${loc_id1}    ${resp}  
-    ${resp}=   Get Location ById  ${loc_id1}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
+    IF   '${resp.content}' == '${emptylist}'
+        ${loc_id1}=  Create Sample Location
+        ${resp}=   Get Location ById  ${loc_id1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Suite Variable  ${loc_id1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END 
     ${ser_name1}=   FakerLibrary.word
     Set Suite Variable    ${ser_name1} 
     ${resp}=   Create Sample Service  ${ser_name1}
@@ -328,7 +338,7 @@ JD-TC-Get Provider Note-3
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${uuid}  ${wid[0]}   
 
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME111}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${HLPUSERNAME29}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${cookie}
@@ -356,12 +366,12 @@ JD-TC-Get Provider Note-3
 JD-TC-Get Provider Note-4
     [Documentation]   Get Provider Note by valid provider with attachment as jpeg file.
 
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    # clear_queue      ${HLPUSERNAME29}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    clear_customer   ${HLPUSERNAME29}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  AddCustomer  ${CUSERNAME19}
@@ -399,7 +409,7 @@ JD-TC-Get Provider Note-4
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${uuid}  ${wid[0]}   
 
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${HLPUSERNAME29}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${msg}=  Fakerlibrary.sentence
@@ -426,12 +436,12 @@ JD-TC-Get Provider Note-4
 JD-TC-Get Provider Note-5
     [Documentation]   Get Provider Note by valid provider with attachment as gif file.
 
-    clear_queue      ${PUSERNAME113}
-    clear_location   ${PUSERNAME113}
-    clear_service    ${PUSERNAME113}
-    clear_customer   ${PUSERNAME113}
+    # clear_queue      ${HLPUSERNAME29}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    clear_customer   ${HLPUSERNAME29}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  AddCustomer  ${CUSERNAME19}
@@ -479,7 +489,7 @@ JD-TC-Get Provider Note-5
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${uuid}  ${wid[0]}   
 
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME113}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${HLPUSERNAME29}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${cookie}
@@ -502,12 +512,12 @@ JD-TC-Get Provider Note-5
 JD-TC-Get Provider Note-6
     [Documentation]   Get Provider Note by valid provider with attachment as txt file.
 
-    clear_queue      ${PUSERNAME116}
-    clear_location   ${PUSERNAME116}
-    clear_service    ${PUSERNAME116}
-    clear_customer   ${PUSERNAME116}
+    # clear_queue      ${HLPUSERNAME29}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    clear_customer   ${HLPUSERNAME29}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME116}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  AddCustomer  ${CUSERNAME19}
@@ -545,7 +555,7 @@ JD-TC-Get Provider Note-6
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${uuid}  ${wid[0]}   
 
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME116}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${HLPUSERNAME29}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${msg}=  Fakerlibrary.sentence
@@ -566,12 +576,12 @@ JD-TC-Get Provider Note-6
 JD-TC-Get Provider Note-7
     [Documentation]   Get Provider Note by valid provider with attachment as doc file.
 
-    clear_queue      ${PUSERNAME114}
-    clear_location   ${PUSERNAME114}
-    clear_service    ${PUSERNAME114}
-    clear_customer   ${PUSERNAME114}
+    # clear_queue      ${HLPUSERNAME29}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    clear_customer   ${HLPUSERNAME29}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  AddCustomer  ${CUSERNAME19}
@@ -609,7 +619,7 @@ JD-TC-Get Provider Note-7
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${uuid}  ${wid[0]}   
 
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME114}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${HLPUSERNAME29}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${msg}=  Fakerlibrary.sentence
@@ -629,8 +639,36 @@ JD-TC-Get Provider Note-7
 JD-TC-Get Provider Note-UH1
     [Documentation]   get provider note  by consumer
 
-    ${resp}=  Consumer Login  ${CUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    ${account_id}=  get_acc_id  ${HLPUSERNAME29}
+    
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+
+    ${resp}=  AddCustomer  ${CUSERNAME3}    firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  email=${pc_emailid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  Send Otp For Login    ${CUSERNAME3}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+    ${resp}=  Verify Otp For Login   ${CUSERNAME3}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+   
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME3}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  get provider Note  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_NO_ACCESS_FOR_URL}"    
@@ -645,7 +683,7 @@ JD-TC-Get Provider Note-UH2
 JD-TC-Get Provider Note-UH3
     [Documentation]   get provider note  by valid invalid use 
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${resp}=  get provider Note   0
     Log  ${resp.json()}
@@ -653,15 +691,16 @@ JD-TC-Get Provider Note-UH3
     Should Be Equal As Strings  "${resp.json()}"  "${INVALID_WAITLIST}"
     # Should Be Equal As Strings  "${resp.json()}"  "${INVALID_CONSUMER}"
 
+*** Comments ***
 JD-TC-Get Provider Note-UH6
     [Documentation]   Get Provider Note by valid provider with attachment as sh file.
 
-    clear_queue      ${PUSERNAME117}
-    clear_location   ${PUSERNAME117}
-    clear_service    ${PUSERNAME117}
-    clear_customer   ${PUSERNAME117}
+    # clear_queue      ${HLPUSERNAME29}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    clear_customer   ${HLPUSERNAME29}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME117}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  AddCustomer  ${CUSERNAME19}
@@ -699,7 +738,7 @@ JD-TC-Get Provider Note-UH6
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${uuid}  ${wid[0]}   
 
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME117}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${HLPUSERNAME29}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${msg}=  Fakerlibrary.sentence

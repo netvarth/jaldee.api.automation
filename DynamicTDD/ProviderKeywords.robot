@@ -4785,22 +4785,6 @@ Update Rating
     Check Deprication  ${resp}  Update Rating
     RETURN  ${resp}
    
-Create provider Note
-    [Arguments]  ${uuid}  ${mesage}
-    ${mesage}=  json.dumps  ${mesage}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/waitlist/notes/${uuid}   data=${mesage}   expected_status=any
-    Check Deprication  ${resp}  Create provider Note
-    RETURN  ${resp}
-
-get provider Note
-    [Arguments]    ${uuid}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw  /provider/waitlist/${uuid}/notes  expected_status=any
-    Check Deprication  ${resp}  get provider Note
-    RETURN  ${resp}
-
-   
 Get Invoices 
     [Arguments]  ${status}
     Check And Create YNW Session
@@ -18817,5 +18801,19 @@ Enable Department
    Check Deprication  ${resp}  Enable Department
     RETURN  ${resp} 
 
+  
+Create provider Note
+    [Arguments]  ${uuid}  ${mesage}
+    ${mesage}=  json.dumps  ${mesage}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/waitlist/notes/${uuid}   data=${mesage}   expected_status=any
+    Check Deprication  ${resp}  Create provider Note
+    RETURN  ${resp}
 
+get provider Note
+    [Arguments]    ${uuid}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw  /provider/waitlist/${uuid}/notes  expected_status=any
+    Check Deprication  ${resp}  get provider Note
+    RETURN  ${resp}
 
