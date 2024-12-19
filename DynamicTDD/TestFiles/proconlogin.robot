@@ -42,10 +42,16 @@ JD-TC-providerConsumerLogin-4
 
     [Documentation]    ProviderConsumer Login with google token After Sign up
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    # ${accountId}=    get_acc_id       ${PUSERNAME70}
+    # ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # # ${accountId}=    get_acc_id       ${PUSERNAME70}
+
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERPH0}=  Provider Signup
+    Set Suite Variable  ${PUSERPH0}
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}   
+    Should Be Equal As Strings  ${resp.status_code}   200
 
     ${resp}=    Get Business Profile
     Log  ${resp.json()}
