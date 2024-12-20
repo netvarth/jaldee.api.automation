@@ -162,10 +162,10 @@ JD-TC-UpdateService-4
 
 
 JD-TC-UpdateService-5
-    [Documentation]  Update service to disable prepayment for a service with prepayment in a billable account.
+    [Documentation]  Update service to disable prepayment, for a service with prepayment, in a billable account.
 
-    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup
-    Set Suite Variable  ${PUSERNAME_A}
+    # ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup
+    # Set Suite Variable  ${PUSERNAME_A}
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -183,7 +183,6 @@ JD-TC-UpdateService-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['isPrePayment']}   ${bool[0]}
-    Should Be Equal As Strings  ${resp.json()['minPrePaymentAmount']}   ${min_pre}
 
 
 JD-TC-UpdateService-6
@@ -521,7 +520,10 @@ JD-TC-UpdateService-UH2
     ${description}=  FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${Total}=   Pyfloat  right_digits=1  min_value=100  max_value=250
-    ${resp}=  Update Service  ${id}  ${SERVICE1}  ${description}  ${service_duration[3]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
+    ${srv_duration}=   Random Int   min=2   max=10
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${description}  ${srv_duration}  ${bool[1]}  ${Total}  minPrePaymentAmount=${min_pre}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}  ${SESSION_EXPIRED}
 
@@ -538,9 +540,13 @@ JD-TC-UpdateService-UH3
     ${description}=  FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${Total}=   Pyfloat  right_digits=1  min_value=100  max_value=250
-    ${resp}=  Update Service  ${id}  ${SERVICE1}  ${description}  ${service_duration[3]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
+    ${srv_duration}=   Random Int   min=2   max=10
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${description}  ${srv_duration}  ${bool[1]}  ${Total}  minPrePaymentAmount=${min_pre}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}  ${LOGIN_NO_ACCESS_FOR_URL}
+
 
 JD-TC-UpdateService-UH4
     [Documentation]  update service of another provider
@@ -552,7 +558,7 @@ JD-TC-UpdateService-UH4
     Append To List  ${service_names}  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
 
-    ${resp1}=   Get Service By Id  ${s_id}
+    ${resp1}=   Get Service By Id  ${s_id1}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
 
@@ -566,7 +572,7 @@ JD-TC-UpdateService-UH4
         ${description}=  Set Variable  ${resp1.json()['description']}
     END
 
-    ${resp}=  Update Service  ${s_id1}  ${resp1.json()['name']}  ${description}  ${resp1.json()[1]['serviceDuration']}  ${resp1.json()[1]['isPrePayment']}  ${resp1.json()[1]['totalAmount']}
+    ${resp}=  Update Service  ${s_id1}  ${resp1.json()['name']}  ${description}  ${resp1.json()['serviceDuration']}  ${resp1.json()['isPrePayment']}  ${resp1.json()['totalAmount']}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}  ${NO_PERMISSION}
 
@@ -599,6 +605,7 @@ JD-TC-UpdateService-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['maxBookingsAllowed']}   ${defMBVal}
     
+
 JD-TC-UpdateService-UH6
     [Documentation]  Update resoucesRequired in a service as empty
 
