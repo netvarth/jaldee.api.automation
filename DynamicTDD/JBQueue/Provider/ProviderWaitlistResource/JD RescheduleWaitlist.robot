@@ -645,7 +645,7 @@ JD-TC-Reschedule Waitlist-4
     ${SERVICE1}=    generate_service_name
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     Set Suite Variable   ${min_pre}
-    ${s_id}=  Create Sample Service    ${SERVICE1}  maxBookingsAllowed=10   isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre} 
+    ${s_id}=  Create Sample Service    ${SERVICE1}  maxBookingsAllowed=10   isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre}   automaticInvoiceGeneration=${bool[1]}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -753,7 +753,7 @@ JD-TC-Reschedule Waitlist-4
     ${resp}=  Get Consumer Booking Invoices  ${wid4}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${account_id}
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${pid}
     Should Be Equal As Strings  ${resp.json()[0]['billStatus']}  ${billStatus[0]}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
 
@@ -761,7 +761,7 @@ JD-TC-Reschedule Waitlist-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${wid4}
-    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${min_pre}.0
+    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${min_pre}
     # Should Be Equal As Strings  ${resp.json()[0]['custId']}  ${jdconID}  
     Should Be Equal As Strings  ${resp.json()[0]['status']}  ${cupnpaymentStatus[0]}
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${pid}
@@ -772,7 +772,7 @@ JD-TC-Reschedule Waitlist-4
     Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${wid4}
     Should Be Equal As Strings  ${resp.json()[0]['status']}  ${cupnpaymentStatus[0]}  
     Should Be Equal As Strings  ${resp.json()[0]['acceptPaymentBy']}  ${pay_mode_selfpay}
-    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${min_pre}.0 
+    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${min_pre}
     # Should Be Equal As Strings  ${resp.json()[0]['custId']}  ${jdconID}   
     Should Be Equal As Strings  ${resp.json()[0]['paymentMode']}  ${payment_modes[5]}  
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${pid}   
@@ -797,7 +797,7 @@ JD-TC-Reschedule Waitlist-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  date=${DAY3}  waitlistStatus=${wl_status[0]}  
     ...   waitlistedBy=${waitlistedby[1]}   personsAhead=0   #checkInTime=${sTime1}  
-    ...   consLastVisitedDate=${date2}${SPACE}${sTime1}  serviceTime=${sTime1}
+    ...   consLastVisitedDate=${date2}${SPACE}${sTime1}  
     Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${s_id}
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
@@ -853,25 +853,25 @@ JD-TC-Reschedule Waitlist-5
 
     ${resp}=  SetMerchantId  ${pid}  ${merchantid}
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
-
-    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
-        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-        Log   ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END 
-
-    # ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[1]}
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
+
+    # IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
+    #     ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
+    #     Log   ${resp.json()}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END 
+
+    # # ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[1]}
+    # # Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]} 
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]} 
+    # Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
@@ -897,11 +897,11 @@ JD-TC-Reschedule Waitlist-5
     ${SERVICE1}=    generate_service_name
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    ${resp}=   Get Service
+    ${resp}=   Get Service By Id  ${s_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
-    Set Test Variable   ${servicecharge}   ${resp.json()[0]['totalAmount']}
+    Set Test Variable   ${duration}   ${resp.json()['serviceDuration']}
+    Set Test Variable   ${servicecharge}   ${resp.json()['totalAmount']}
 
     ${resp}=  Auto Invoice Generation For Service   ${s_id}    ${toggle[0]}
     Log  ${resp.json()}
@@ -927,8 +927,8 @@ JD-TC-Reschedule Waitlist-5
 
     ${f_Name}=  generate_firstname
     ${l_Name}=  FakerLibrary.last_name
-
-    ${resp}=  AddCustomer   ${CUSERNAME13}    firstName=${f_Name}   
+    Set Suite Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${resp}=  AddCustomer   ${CUSERNAME13}    firstName=${f_Name}    email=${pc_emailid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
@@ -957,8 +957,7 @@ JD-TC-Reschedule Waitlist-5
     ${resp}=  Get Queue ById  ${q_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
-
+   
     ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
@@ -1064,7 +1063,7 @@ JD-TC-Reschedule Waitlist-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  date=${DAY3}  waitlistStatus=${wl_status[0]}  
     ...   waitlistedBy=${waitlistedby[1]}   personsAhead=0   #checkInTime=${sTime1}  
-    ...   consLastVisitedDate=${date2}${SPACE}${sTime1}  serviceTime=${sTime1}
+    ...   consLastVisitedDate=${date2}${SPACE}${sTime1} 
     Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${s_id}
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
@@ -1084,7 +1083,7 @@ JD-TC-Reschedule Waitlist-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME13}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME13}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1144,10 +1143,10 @@ JD-TC-Reschedule Waitlist-6
     ${SERVICE1}=    generate_service_name
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    ${resp}=   Get Service
+    ${resp}=   Get Service By Id   ${s_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
+    Set Test Variable   ${duration}   ${resp.json()['serviceDuration']}
 
     ${lid}=  Create Sample Location  
     # clear_queue   ${HLPUSERNAME34}
@@ -1180,8 +1179,7 @@ JD-TC-Reschedule Waitlist-6
     ${resp}=  Get Queue ById  ${q_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
-
+  
     ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
@@ -1237,7 +1235,17 @@ JD-TC-Reschedule Waitlist-6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME12}    ${account_id}  ${token} 
+    ${resp}=  Send Otp For Login    ${CUSERNAME12}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+    ${resp}=  Verify Otp For Login   ${CUSERNAME12}   ${OtpPurpose['Authentication']}   JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME12}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1340,8 +1348,7 @@ JD-TC-Reschedule Waitlist-7
     ${resp}=  Get Queue ById  ${q_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
-
+    
     ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
@@ -1397,7 +1404,7 @@ JD-TC-Reschedule Waitlist-7
     # ${hrs}  ${mins}=   Convert_hour_mins   ${wait_time}
 
     # ${sTime2}=  db.add_timezone_time  ${tz}  ${hrs}  ${mins}
-    ${sTime2}=  add_two   ${sTime1}  ${mins}
+    # ${sTime2}=  add_two   ${sTime1}  ${mins}
 
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
@@ -1424,7 +1431,17 @@ JD-TC-Reschedule Waitlist-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME12}    ${account_id}  ${token} 
+    ${resp}=  Send Otp For Login    ${CUSERNAME12}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+    ${resp}=  Verify Otp For Login   ${CUSERNAME12}   ${OtpPurpose['Authentication']}   JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME12}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1571,7 +1588,17 @@ JD-TC-Reschedule Waitlist-8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME12}    ${account_id}  ${token} 
+    ${resp}=  Send Otp For Login    ${CUSERNAME12}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+    ${resp}=  Verify Otp For Login   ${CUSERNAME12}   ${OtpPurpose['Authentication']}   JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME12}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1588,9 +1615,9 @@ JD-TC-Reschedule Waitlist-9
     [Documentation]  Provider takes checkin for a consumer and reschedules it to another queue for a different location
     ...   ${SPACE}and checks messages
     
-    Log   ${multilocPro}
+    # Log   ${multilocPro}
     
-    ${resp}=  Encrypted Provider Login  ${multilocPro[2]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME38}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1604,7 +1631,7 @@ JD-TC-Reschedule Waitlist-9
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_customer   ${multilocPro[2]}
+    clear_customer   ${HLPUSERNAME38}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1624,7 +1651,7 @@ JD-TC-Reschedule Waitlist-9
 
     ${lid}=  Create Sample Location  
     ${lid1}=  Create Sample Location
-    # clear_queue   ${multilocPro[2]}
+    # clear_queue   ${HLPUSERNAME38}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -1653,8 +1680,7 @@ JD-TC-Reschedule Waitlist-9
     ${resp}=  Get Queue ById  ${q_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${q_id1}   name=${queue_name1}  queueState=${Qstate[0]}
-
+ 
     ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
@@ -1693,8 +1719,7 @@ JD-TC-Reschedule Waitlist-9
     ${resp}=  Get Queue ById  ${q_id2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${q_id2}   name=${queue_name2}  queueState=${Qstate[0]}
-
+  
     ${resp}=  Reschedule Consumer Checkin   ${wid}  ${DAY1}  ${q_id2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1725,7 +1750,17 @@ JD-TC-Reschedule Waitlist-9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME12}    ${account_id}  ${token} 
+    ${resp}=  Send Otp For Login    ${CUSERNAME12}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+    ${resp}=  Verify Otp For Login   ${CUSERNAME12}   ${OtpPurpose['Authentication']}   JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME12}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

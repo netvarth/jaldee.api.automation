@@ -28,14 +28,14 @@ JD-TC-GetQueueAvaliability-1
 
     [Documentation]    Get Queue Avaliability - difference between start and end date is 90 ( the max number of queue is 30 )
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=    get_acc_id       ${HLPUSERNAME11}
+    ${accountId}=    get_acc_id       ${HLPUSERNAME37}
     Set Suite Variable  ${accountId}
-    # clear_service   ${HLPUSERNAME11}
-    # clear_location  ${HLPUSERNAME11}
-    # clear_queue  ${HLPUSERNAME11}
+    # clear_service   ${HLPUSERNAME37}
+    # clear_location  ${HLPUSERNAME37}
+    # clear_queue  ${HLPUSERNAME37}
 
     # ${lid2}=  Create Sample Location
     # ${resp}=   Get Location ById  ${lid2}
@@ -149,7 +149,7 @@ JD-TC-GetQueueAvaliability-2
 
     [Documentation]    Get Queue Avaliability - difference between start and end date is 10
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -161,7 +161,7 @@ JD-TC-GetQueueAvaliability-3
 
     [Documentation]    Get Queue Avaliability - where location id and service is different queues
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -174,7 +174,7 @@ JD-TC-GetQueueAvaliability-4
 
     [Documentation]    Get Queue Avaliability - where queue is disabled
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -195,7 +195,7 @@ JD-TC-GetQueueAvaliability-UH1
 
     [Documentation]    Get Queue Avaliability - where location id is invalid
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -210,7 +210,7 @@ JD-TC-GetQueueAvaliability-UH2
 
     [Documentation]    Get Queue Avaliability - where service id is invalid
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -225,7 +225,7 @@ JD-TC-GetQueueAvaliability-UH3
 
     [Documentation]    Get Queue Avaliability - where location is disabled
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
  
@@ -247,7 +247,7 @@ JD-TC-GetQueueAvaliability-UH4
 
     [Documentation]    Get Queue Avaliability - where service is disabled
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
  
