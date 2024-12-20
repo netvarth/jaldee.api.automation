@@ -524,7 +524,7 @@ JD-TC-UpdateService-14
     ${virtualCallingModes}=  Create List  ${VScallingMode1}
     ${vstype}=   Random Element   ${vservicetype}
     
-    ${resp}=  Update Service  ${s_id}  ${resp.json()['name']}  ${description}  ${resp.json()['serviceDuration']}  ${resp.json()['isPrePayment']}  ${resp.json()['totalAmount']}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
+    ${resp}=  Update Service  ${s_id}  ${resp.json()['name']}  ${description}  ${resp.json()['serviceDuration']}  ${resp.json()['isPrePayment']}  ${resp.json()['totalAmount']}  notification=${bool[0]}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service By Id  ${s_id}
@@ -542,7 +542,7 @@ JD-TC-UpdateService-15
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${Description1}=    FakerLibrary.sentences
-    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_E}   countryCode=${countryCodes[0]}  status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_A}   countryCode=${countryCodes[0]}  status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
     ${virtualCallingModes}=  Create List  ${VScallingMode1}
     ${vstype}=   Random Element   ${vservicetype}
 
@@ -582,6 +582,19 @@ JD-TC-UpdateService-16
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Appointment Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Disable Appointment   ${toggle[0]} 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=   Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['appointment']}   ${bool[1]}
     
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -671,6 +684,14 @@ JD-TC-UpdateService-17
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Waitlist Settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enabledWaitlist']}==${bool[0]}   
+        ${resp}=   Enable Waitlist
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -722,7 +743,7 @@ JD-TC-UpdateService-17
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${pcid1}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${pcid1}
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
@@ -778,7 +799,14 @@ JD-TC-UpdateService-18
     ${resp}=   Get Service By Id  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['leadTime']}   ${leadTime}
+    Should Be Equal As Strings  ${resp.json()['consumerNoteMandatory']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['consumerNoteTitle']}   ${consumerNoteTitle}
+    Should Be Equal As Strings  ${resp.json()['preInfoEnabled']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['preInfoTitle']}   ${preInfoTitle}
+    Should Be Equal As Strings  ${resp.json()['preInfoText']}   ${preInfoText}
+    Should Be Equal As Strings  ${resp.json()['postInfoEnabled']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['postInfoTitle']}   ${postInfoTitle}
+    Should Be Equal As Strings  ${resp.json()['postInfoText']}   ${postInfoText}
 
 
 JD-TC-UpdateService-19
@@ -801,6 +829,11 @@ JD-TC-UpdateService-19
         ${description}=  Set Variable  ${resp.json()[${si}]['description']}
     END
 
+    ${consumerNoteTitle}=  FakerLibrary.sentence
+    ${preInfoTitle}=  FakerLibrary.sentence   
+    ${preInfoText}=  FakerLibrary.sentence  
+    ${postInfoTitle}=  FakerLibrary.sentence  
+    ${postInfoText}=  FakerLibrary.sentence
     ${resp}=  Update Service  ${s_id}  ${resp.json()[${si}]['name']}  ${description}  ${resp.json()[${si}]['serviceDuration']}  ${resp.json()[${si}]['isPrePayment']}  ${resp.json()[${si}]['totalAmount']}  consumerNoteMandatory=${bool[0]}  consumerNoteTitle=${EMPTY}   preInfoEnabled=${bool[1]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${bool[1]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -830,6 +863,11 @@ JD-TC-UpdateService-20
         ${description}=  Set Variable  ${resp.json()[${si}]['description']}
     END
 
+    ${consumerNoteTitle}=  FakerLibrary.sentence
+    ${preInfoTitle}=  FakerLibrary.sentence   
+    ${preInfoText}=  FakerLibrary.sentence  
+    ${postInfoTitle}=  FakerLibrary.sentence  
+    ${postInfoText}=  FakerLibrary.sentence
     ${resp}=  Update Service  ${s_id}  ${resp.json()[${si}]['name']}  ${description}  ${resp.json()[${si}]['serviceDuration']}  ${resp.json()[${si}]['isPrePayment']}  ${resp.json()[${si}]['totalAmount']}  consumerNoteMandatory=${bool[1]}  consumerNoteTitle=${EMPTY}   preInfoEnabled=${bool[1]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${bool[1]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -879,6 +917,59 @@ JD-TC-UpdateService-21
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${json_data}=  Convert To Dictionary  ${resp.json()[${si}]}
+    IF   'description' not in ${json_data}
+        ${description}=  Set Variable  Default Service Description
+    ELSE  
+        ${description}=  Set Variable  ${resp.json()[${si}]['description']}
+    END
+
+    ${resp}=  Update Service  ${s_id}  ${resp.json()[${si}]['name']}  ${description}  ${resp.json()[${si}]['serviceDuration']}  ${resp.json()[${si}]['isPrePayment']}  ${resp.json()[${si}]['totalAmount']}  consumerNoteMandatory=${bool[0]}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['consumerNoteMandatory']}   ${bool[0]}
+
+
+JD-TC-UpdateService-22
+    [Documentation]  update service with consumerNoteMandatory as ${bool[0]} after taking check-in
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${q_id}   ${lid}   ${s_id}  ${tz}=   Get Queue Details
+
+    ${PO_Number}=  Generate Random Phone Number
+    ${resp}=  GetCustomer  phoneNo-eq=${PO_Number}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        Set Suite Variable   ${fname}
+        ${lname}=  FakerLibrary.last_name
+        Set Suite Variable   ${lname}
+        ${resp1}=  AddCustomer  ${PO_Number}  firstName=${fname}   lastName=${lname}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Suite Variable  ${pcid}   ${resp1.json()}
+    ELSE
+        Set Suite Variable  ${pcid}  ${resp.json()[0]['id']}
+    END
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${desc}=   FakerLibrary.word
+    ${resp}=  Add To Waitlist  ${pcid1}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${pcid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Test Variable  ${wid1}  ${wid[0]}
 
     ${resp}=   Get Service By Id  ${s_id}
     Log  ${resp.content}
@@ -1207,13 +1298,13 @@ JD-TC-UpdateService-UH1
     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     ${licid}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domains[0]}  ${sub_domains[0]}  ${PUSERPH0}  ${licid[0]}
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERPH0}  0
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
@@ -1338,7 +1429,7 @@ JD-TC-UpdateService-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  name=${SERVICE9}  description=${description}  serviceDuration=${service_duration[2]}  notification=${bool[1]}  notificationType=${notifytype[2]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
     ${resp}=  Update Service  ${id}  ${SERVICE10}  ${description}  ${service_duration[3]}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[0]}  0  ${Total}  ${bool[1]}  ${bool[0]}
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${MINIMUM_PREPAYMENT_AMOUNT_SHOULD_BE_PROVIDED}"   
 
@@ -1373,7 +1464,7 @@ JD-TC-UpdateService-6
 
     ${maxbookings}=   Random Int   min=5   max=10
     ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}  ${srv_duration}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  maxBookingsAllowed=${maxbookings}
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service By Id  ${s_id}
@@ -1411,7 +1502,7 @@ JD-TC-UpdateService-7
 
     # ${maxbookings}=   Random Int   min=5   max=10
     ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}  ${srv_duration}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  priceDynamic=${bool[0]}
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service By Id  ${s_id}
@@ -1419,7 +1510,7 @@ JD-TC-UpdateService-7
     Verify Response  ${resp}  name=${SERVICE1}  serviceDuration=${srv_duration}  status=${status[0]}  priceDynamic=${bool[0]}
 
     ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}  ${srv_duration}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  priceDynamic=${bool[1]}
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service By Id  ${s_id}
@@ -1456,7 +1547,7 @@ JD-TC-UpdateService-8
 
     ${resoucesRequired}=   Random Int   min=5   max=10
     ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}  ${srv_duration}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  resoucesRequired=${resoucesRequired}
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service By Id  ${s_id}
@@ -1493,7 +1584,7 @@ JD-TC-UpdateService-9
 
     ${leadTime}=   Random Int   min=5   max=10
     ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}  ${srv_duration}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  leadTime=${leadTime}
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service By Id  ${s_id}
@@ -1533,7 +1624,7 @@ JD-TC-UpdateService-10
     ${resoucesRequired}=   Random Int   min=1   max=10
     ${leadTime}=   Random Int   min=1   max=5
     ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}  ${srv_duration}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  maxBookingsAllowed=${maxbookings}  priceDynamic=${bool[1]}  resoucesRequired=${resoucesRequired}  leadTime=${leadTime}
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service By Id  ${s_id}
@@ -1570,7 +1661,7 @@ JD-TC-UpdateService-UH8
 
     ${maxbookings}=   Random Int   min=5   max=10
     ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}  ${srv_duration}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  maxBookingsAllowed=${EMPTY}
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service By Id  ${s_id}
@@ -1607,7 +1698,7 @@ JD-TC-UpdateService-UH9
 
     ${resoucesRequired}=   Random Int   min=5   max=10
     ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}  ${srv_duration}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  resoucesRequired=${EMPTY}
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service By Id  ${s_id}
@@ -1648,7 +1739,7 @@ JD-TC-UpdateService-UH10
 
     ${leadTime}=   Random Int   min=5   max=10
     ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}  ${srv_duration}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  leadTime=${EMPTY}
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service By Id  ${s_id}
