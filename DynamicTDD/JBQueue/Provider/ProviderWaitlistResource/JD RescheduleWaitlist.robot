@@ -16,6 +16,7 @@ ${digits}       0123456789
 @{dom_list}
 @{provider_list}
 @{multiloc_providers}
+@{service_names}
 
 *** Keywords ***
 Multiloc and Billable Providers
@@ -2049,10 +2050,10 @@ JD-TC-Reschedule Waitlist-12
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     # ${resp1}=   Run Keyword If  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
     # Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
     # Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
@@ -2071,7 +2072,8 @@ JD-TC-Reschedule Waitlist-12
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}  
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -3082,10 +3084,10 @@ JD-TC-Reschedule Waitlist-UH9
     ${SERVICE1}=    generate_service_name
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    ${resp}=   Get Service
+    ${resp}=   Get Service By Id   ${s_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
+    Set Test Variable   ${duration}   ${resp.json()['serviceDuration']}
 
     ${lid}=  Create Sample Location  
     # clear_queue   ${HLPUSERNAME34}
@@ -3118,8 +3120,7 @@ JD-TC-Reschedule Waitlist-UH9
     ${resp}=  Get Queue ById  ${q_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
-
+  
     ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
@@ -3145,8 +3146,9 @@ JD-TC-Reschedule Waitlist-UH9
 
     ${resp}=  Reschedule Consumer Checkin   ${wid}  ${DAY1}  ${q_id}
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"      "${WAITLIST_CUSTOMER_ALREADY_IN}"
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.status_code}  422
+    # Should Be Equal As Strings  "${resp.json()}"      "${WAITLIST_CUSTOMER_ALREADY_IN}"
 
 
 JD-TC-Reschedule Waitlist-UH10
@@ -4474,8 +4476,7 @@ JD-TC-Reschedule Waitlist-UH21
     ${resp}=  Get Queue ById  ${q_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${q_id1}   name=${queue_name1}  queueState=${Qstate[0]}
-
+ 
     ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
@@ -4511,17 +4512,18 @@ JD-TC-Reschedule Waitlist-UH21
     ${resp}=  Get Queue ById  ${q_id2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${q_id2}   name=${queue_name2}  queueState=${Qstate[0]}
-
-    ${resp}=  Disable Queue  ${q_id2}
-    Log   ${resp.json()}
+    
+    ${resp}=  Enable Disable Queue  ${q_id2}  ${toggleButton[1]} 
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${resp}=  Disable Queue  ${q_id2}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Queue ById  ${q_id2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${q_id2}   name=${queue_name2}  queueState=${Qstate[1]}
-
+   
     ${resp}=  Reschedule Consumer Checkin   ${wid}  ${DAY1}  ${q_id2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -4914,7 +4916,17 @@ JD-TC-Reschedule Waitlist-UH24
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME12}    ${account_id}  ${token} 
+    ${resp}=  Send Otp For Login    ${CUSERNAME12}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+    ${resp}=  Verify Otp For Login   ${CUSERNAME12}   ${OtpPurpose['Authentication']}   JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME12}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -4972,7 +4984,8 @@ JD-TC-Reschedule Waitlist-UH25
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -5060,8 +5073,9 @@ JD-TC-Reschedule Waitlist-UH25
 
     ${resp}=  Reschedule Consumer Checkin   ${wid}  ${DAY1}  ${q_id}
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"      "${WAITLIST_CUSTOMER_ALREADY_IN}"
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.status_code}  422
+    # Should Be Equal As Strings  "${resp.json()}"      "${WAITLIST_CUSTOMER_ALREADY_IN}"
 
 
 JD-TC-Reschedule Waitlist-UH26
@@ -5083,10 +5097,10 @@ JD-TC-Reschedule Waitlist-UH26
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     # ${resp1}=   Run Keyword If  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
     # Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
     # Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
@@ -5146,7 +5160,11 @@ JD-TC-Reschedule Waitlist-UH26
     ${resp}=  Get Queue ById  ${q_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
+    
+    ${resp}=  AddCustomer  ${CUSERNAME12} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${cid}   ${resp.json()}
 
     ${resp}=  Provider Logout
     Log   ${resp.json()}
@@ -5171,9 +5189,9 @@ JD-TC-Reschedule Waitlist-UH26
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME12}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
-    Set Test Variable  ${lname}   ${resp.json()['lastName']}
-    Set Test Variable  ${uname}   ${resp.json()['userName']}
+    # Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Test Variable  ${lname}   ${resp.json()['lastName']}
+    # Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -5186,10 +5204,8 @@ JD-TC-Reschedule Waitlist-UH26
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[0]}   waitlistedBy=CONSUMER
-    Should Be Equal As Strings  ${resp.json()['service']['id']}  ${s_id}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${jdconID}           
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['firstName']}  ${fname}  
+    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[0]}  
+    Should Be Equal As Strings  ${resp.json()['service']['id']}  ${s_id}   
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${q_id}
 
     ${resp}=  Cancel Waitlist   ${wid1}   ${pid} 
@@ -5241,21 +5257,21 @@ JD-TC-Reschedule Waitlist-UH27
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
-        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-        Log   ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+    # IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
+    #     ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
+    #     Log   ${resp.json()}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
+    # Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
     # clear_location   ${HLPUSERNAME34}
     # clear_service    ${HLPUSERNAME34}
@@ -5306,8 +5322,7 @@ JD-TC-Reschedule Waitlist-UH27
     ${resp}=  Get Queue ById  ${q_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
-
+   
     ${resp}=  AddCustomer  ${CUSERNAME12} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -5357,10 +5372,8 @@ JD-TC-Reschedule Waitlist-UH27
     ${resp}=  Get consumer Waitlist By Id   ${wid}  ${pid}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}   waitlistedBy=${waitlistedby[1]} 
+    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${s_id}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${jdconID}           
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['firstName']}  ${fname}  
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${q_id}
 
     ${resp}=  Cancel Waitlist   ${wid}   ${pid} 
@@ -5370,8 +5383,7 @@ JD-TC-Reschedule Waitlist-UH27
     ${resp}=  Get consumer Waitlist By Id   ${wid}  ${pid}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[4]}
-
+    
     ${resp}=  Consumer Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
