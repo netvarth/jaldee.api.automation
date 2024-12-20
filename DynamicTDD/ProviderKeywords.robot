@@ -1447,6 +1447,52 @@ Create Sample Schedule
     Should Be Equal As Strings  ${resp.status_code}  200
     RETURN  ${resp}
 
+Get Schedule Details
+
+    ${resp}=    Get Appointment Schedules
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${resp}=    Get Locations
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        IF   '${resp.content}' == '${emptylist}'
+            ${lid}=  Create Sample Location
+            ${resp}=   Get Location ById  ${lid}
+            Log  ${resp.content}
+            Should Be Equal As Strings  ${resp.status_code}  200
+            Set Test Variable  ${tz}  ${resp.json()['timezone']}
+        ELSE
+            Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+            Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+        END
+
+        ${resp}=    Get Service
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        IF   '${resp.content}' == '${emptylist}'
+            ${SERVICE1}=    generate_unique_service_name  ${service_names}
+            Append To List  ${service_names}  ${SERVICE1}   
+            ${s_id}=  Create Sample Service  ${SERVICE1}  
+        ELSE
+            Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
+        END
+        ${schedule_name}=  FakerLibrary.bs
+        ${parallel}=  FakerLibrary.Random Int  min=3  max=10
+        ${maxval}=  Convert To Integer   ${delta/2}
+        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+        ${bool1}=  Random Element  ${bool}
+        ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${sch_id}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
+        Set Test Variable  ${lid}  ${resp.json()[0]['location']['id']}
+        Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
+    END
+    RETURN  ${sch_id}   ${lid}   ${s_id}
+
 Get Appointments Today
     # Available Filters:- service, consumer(procon id), firstName, lastName, appointmentEncId, 
     # account, schedule, date, apptdate, apptBy, apptTime, apptStatus, paymentStatus, location,
