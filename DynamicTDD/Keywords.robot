@@ -397,6 +397,7 @@ Generate Random Phone Number
         ${count}=  count_digits  ${PH_Number}
         IF    ${count} < 10
             ${PH_Number}=  Generate random string    10    [NUMBERS]
+            ${PH_Number}    Convert To Integer  ${PH_Number}
             Log  ${PH_Number}
             ${count}=  count_digits  ${PH_Number}
         ELSE

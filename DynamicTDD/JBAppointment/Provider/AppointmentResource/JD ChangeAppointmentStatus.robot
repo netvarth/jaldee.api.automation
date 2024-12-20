@@ -287,7 +287,7 @@ JD-TC-ChangeAppointmentStatus-4
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${sch_id}   ${lid}   ${s_id}=   Get Schedule Details
+    ${sch_id}  ${lid}  ${s_id}  ${tz}=   Get Schedule Details
    
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}

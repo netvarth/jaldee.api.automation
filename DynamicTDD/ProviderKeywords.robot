@@ -1477,8 +1477,14 @@ Get Schedule Details
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
         END
+        
+        ${DAY1}=  db.get_date_by_timezone  ${tz}
+        ${DAY2}=  db.add_timezone_date  ${tz}  10    
+        ${list}=  Create List  1  2  3  4  5  6  7
+        ${sTime1}=  db.get_time_by_timezone  ${tz}
         ${schedule_name}=  FakerLibrary.bs
         ${parallel}=  FakerLibrary.Random Int  min=3  max=10
+        ${delta}=  FakerLibrary.Random Int  min=10  max=60
         ${maxval}=  Convert To Integer   ${delta/2}
         ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
         ${bool1}=  Random Element  ${bool}
@@ -1491,7 +1497,7 @@ Get Schedule Details
         Set Test Variable  ${lid}  ${resp.json()[0]['location']['id']}
         Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
     END
-    RETURN  ${sch_id}   ${lid}   ${s_id}
+    RETURN  ${sch_id}   ${lid}   ${s_id}  ${tz}
 
 Get Appointments Today
     # Available Filters:- service, consumer(procon id), firstName, lastName, appointmentEncId, 
@@ -3402,6 +3408,49 @@ Sample Queue
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     RETURN   ${resp}
+
+
+Get Queue Details
+
+    ${resp}=  Get Queues
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${resp}=    Get Locations
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        IF   '${resp.content}' == '${emptylist}'
+            ${lid}=  Create Sample Location
+            ${resp}=   Get Location ById  ${lid}
+            Log  ${resp.content}
+            Should Be Equal As Strings  ${resp.status_code}  200
+            Set Test Variable  ${tz}  ${resp.json()['timezone']}
+        ELSE
+            Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+            Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+        END
+
+        ${resp}=    Get Service
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        IF   '${resp.content}' == '${emptylist}'
+            ${SERVICE1}=    generate_unique_service_name  ${service_names}
+            Append To List  ${service_names}  ${SERVICE1}   
+            ${s_id}=  Create Sample Service  ${SERVICE1}  
+        ELSE
+            Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
+        END
+
+        ${resp}=  Sample Queue  ${lid}   ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${q_id}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${q_id}  ${resp.json()[0]['id']}
+        Set Test Variable  ${lid}  ${resp.json()[0]['location']['id']}
+        Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
+    END
+    RETURN  ${q_id}   ${lid}   ${s_id}  ${tz}
 
     
 Queue With TokenStart
