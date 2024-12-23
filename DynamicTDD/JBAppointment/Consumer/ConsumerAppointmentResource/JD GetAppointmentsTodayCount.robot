@@ -33,14 +33,14 @@ JD-TC-GetAppointmentTodayCount-1
     [Documentation]  Get consumer's appointments Today count.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable  ${p_id}  ${decrypted_data['id']}
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${HLPUSERNAME50}${\n}
-    Set Suite Variable  ${HLPUSERNAME50}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${HLPUSERNAME48}${\n}
+    Set Suite Variable  ${HLPUSERNAME48}
 
 
     ${resp}=   Get Appointment Settings
@@ -91,7 +91,7 @@ JD-TC-GetAppointmentTodayCount-1
     Set Suite Variable  ${lid1}  ${resp.json()}
 
 
-    ${pid1}=  get_acc_id  ${HLPUSERNAME50}
+    ${pid1}=  get_acc_id  ${HLPUSERNAME48}
     Set Suite Variable   ${pid1}
 
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -113,7 +113,7 @@ JD-TC-GetAppointmentTodayCount-1
     Set Suite Variable   ${s_id3}
 
     ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    ${parallel}=  FakerLibrary.Random Int  min=10  max=20
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
@@ -398,7 +398,7 @@ JD-TC-GetAppointmentTodayCount-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}
@@ -659,7 +659,7 @@ JD-TC-GetAppointmentTodayCount-9
 
 	[Documentation]   Filter Appointment Today Count by Appointment status Arrived.
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -702,7 +702,7 @@ JD-TC-GetAppointmentTodayCount-10
 
 	[Documentation]   Filter Appointment Today Count by Appointment status started.
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -745,7 +745,7 @@ JD-TC-GetAppointmentTodayCount-11
 
 	[Documentation]   Filter Appointment Today Count by Appointment status completed.
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -786,7 +786,7 @@ JD-TC-GetAppointmentTodayCount-12
 
 	[Documentation]   Filter Appointment Today Count by Appointment status cancelled.
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -832,7 +832,7 @@ JD-TC-GetAppointmentTodayCount-13
 
 	[Documentation]   Filter Appointment Today Count by Appointment status Rejected.
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -904,7 +904,7 @@ JD-TC-GetAppointmentTodayCount-UH1
 
     [Documentation]  Get consumer's appointments today Count with provider login
     
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
