@@ -239,8 +239,6 @@ JD-TC-CreateItemInv-1
     ${resp}=    Get Item Inventory  ${item}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
-
-
  
 JD-TC-CreateItemInv-2
 
