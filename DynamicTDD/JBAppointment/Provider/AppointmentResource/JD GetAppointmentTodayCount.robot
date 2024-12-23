@@ -26,7 +26,7 @@ JD-TC-GetAppointmentTodayCount-1
 
     [Documentation]  takes two walkin appointment for today and verify today appointment details count.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -43,8 +43,8 @@ JD-TC-GetAppointmentTodayCount-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    # clear_location_n_service  ${PUSERNAME105}
-    clear_customer   ${PUSERNAME105}
+    # clear_location_n_service  ${PUSERNAME237}
+    clear_customer   ${PUSERNAME237}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -276,7 +276,7 @@ JD-TC-GetAppointmentTodayCount-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -289,12 +289,12 @@ JD-TC-GetAppointmentTodayCount-3
 
     [Documentation]  takes a walkin appointment for today for a service with prepayment , and it should show in today appointment with status as confirmed.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME105}
-    # clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME237}
+    # clear_appt_schedule   ${PUSERNAME237}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -362,12 +362,12 @@ JD-TC-GetAppointmentTodayCount-4
 
     [Documentation]  takes an online appointment for today for a service with prepayment , and it should not show in today appointment with status as confirmed.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME105}
-    # clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME237}
+    # clear_appt_schedule   ${PUSERNAME237}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -448,7 +448,7 @@ JD-TC-GetAppointmentTodayCount-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -466,7 +466,7 @@ JD-TC-GetAppointmentTodayCount-5
 
     [Documentation]  takes an online appointment for today for a service with prepayment then do the pre payment , and it should in today appointment with status as confirmed.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -484,8 +484,8 @@ JD-TC-GetAppointmentTodayCount-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # clear_service   ${PUSERNAME105}
-    # clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME237}
+    # clear_appt_schedule   ${PUSERNAME237}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -571,7 +571,7 @@ JD-TC-GetAppointmentTodayCount-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -589,12 +589,12 @@ JD-TC-GetAppointmentTodayCount-6
 
     [Documentation]  takes an online and a walkin appointment for today, then verify the get appointment today with filter apptStatus as confirmed.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME105}
-    # clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME237}
+    # clear_appt_schedule   ${PUSERNAME237}
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -671,7 +671,7 @@ JD-TC-GetAppointmentTodayCount-6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -699,12 +699,12 @@ JD-TC-GetAppointmentTodayCount-7
 
     [Documentation]  takes two walkin appointment for today, change first appointemtn to started, then verify the get appointment today with filter apptStatus as started.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME105}
-    # clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME237}
+    # clear_appt_schedule   ${PUSERNAME237}
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -767,12 +767,12 @@ JD-TC-GetAppointmentTodayCount-8
 
     [Documentation]  takes two walkin appointment for today, change first appointemtn to completed, then verify the get appointment today with filter apptStatus as completed.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME105}
-    # clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME237}
+    # clear_appt_schedule   ${PUSERNAME237}
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -843,12 +843,12 @@ JD-TC-GetAppointmentTodayCount-9
 
     [Documentation]  takes two walkin appointment for today, change first appointment to cancelled, then verify the get appointment today with filter apptStatus as cancelled.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME105}
-    # clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME237}
+    # clear_appt_schedule   ${PUSERNAME237}
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -912,12 +912,12 @@ JD-TC-GetAppointmentTodayCount-10
 
     [Documentation]  takes two walkin appointment for today, change first appointment to rejected, then verify the get appointment today with filter as rejected.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME105}
-    # clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME237}
+    # clear_appt_schedule   ${PUSERNAME237}
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id2}
     Log  ${resp.json()}
@@ -981,12 +981,12 @@ JD-TC-GetAppointmentTodayCount-11
 
     [Documentation]  takes two walkin appointment for today for two different services,then verify the get appointment today with filter as service.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME105}
-    # clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME237}
+    # clear_appt_schedule   ${PUSERNAME237}
 
     # ${SERVICE1}=    generate_unique_service_name  ${service_names}
     # Append To List  ${service_names}  ${SERVICE1}
@@ -1057,12 +1057,12 @@ JD-TC-GetAppointmentTodayCount-12
 
     [Documentation]  takes two walkin appointment for today for two different provider consumers, then verify the get appointment today with filter as firstName.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME105}
-    # clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME237}
+    # clear_appt_schedule   ${PUSERNAME237}
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -1122,12 +1122,12 @@ JD-TC-GetAppointmentTodayCount-13
 
     [Documentation]  takes two walkin appointment for today for two different provider consumers, then verify the get appointment today with filter as lastName.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME105}
-    # clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME237}
+    # clear_appt_schedule   ${PUSERNAME237}
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -1188,12 +1188,12 @@ JD-TC-GetAppointmentTodayCount-14
 
     [Documentation]  takes two walkin appointment for today, then verify the get appointment today with filter as encoded id.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME105}
-    # clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME237}
+    # clear_appt_schedule   ${PUSERNAME237}
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -1252,12 +1252,12 @@ JD-TC-GetAppointmentTodayCount-15
 
     [Documentation]  takes two walkin appointment for today, then verify the get appointment today with filter as schedule id.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME105}
-    # clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME237}
+    # clear_appt_schedule   ${PUSERNAME237}
 
     ${SERVICE2}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE2}
@@ -1342,7 +1342,7 @@ JD-TC-GetAppointmentTodayCount-16
 
     [Documentation]  takes an online and a walkin appointment for today, then verify the get appointment today with filter as appointment by.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1356,8 +1356,8 @@ JD-TC-GetAppointmentTodayCount-16
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    # clear_service   ${PUSERNAME105}
-    # clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME237}
+    # clear_appt_schedule   ${PUSERNAME237}
 
     # ${SERVICE1}=    generate_unique_service_name  ${service_names}
     # Append To List  ${service_names}  ${SERVICE1}
@@ -1454,7 +1454,7 @@ JD-TC-GetAppointmentTodayCount-16
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1482,7 +1482,7 @@ JD-TC-GetAppointmentTodayCount-17
 
     [Documentation]  takes two walkin appointment for today, then verify the get appointment today with filter as appt time.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1491,8 +1491,8 @@ JD-TC-GetAppointmentTodayCount-17
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    # clear_service   ${PUSERNAME105}
-    # clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME237}
+    # clear_appt_schedule   ${PUSERNAME237}
 
     # ${SERVICE1}=    generate_unique_service_name  ${service_names}
     # Append To List  ${service_names}  ${SERVICE1}
@@ -1572,7 +1572,7 @@ JD-TC-GetAppointmentTodayCount-18
 
     [Documentation]  takes two walkin appointment for today, then verify the get appointment today with filter as paymentStatus NotPaid.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1581,8 +1581,8 @@ JD-TC-GetAppointmentTodayCount-18
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    # clear_service   ${PUSERNAME105}
-    # clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME237}
+    # clear_appt_schedule   ${PUSERNAME237}
 
     # ${SERVICE1}=    generate_unique_service_name  ${service_names}
     # Append To List  ${service_names}  ${SERVICE1}
@@ -1662,7 +1662,7 @@ JD-TC-GetAppointmentTodayCount-19
 
     [Documentation]  takes two walkin appointment for today, then verify the get appointment today with filter as paymentStatus PartiallyPaid.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1671,8 +1671,8 @@ JD-TC-GetAppointmentTodayCount-19
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    # clear_service   ${PUSERNAME105}
-    # clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME237}
+    # clear_appt_schedule   ${PUSERNAME237}
 
     # ${description}=  FakerLibrary.sentence
     # ${ser_durtn}=   Random Int   min=2   max=10
@@ -1764,7 +1764,7 @@ JD-TC-GetAppointmentTodayCount-20
 
     [Documentation]  takes two walkin appointment for today, then verify the get appointment today with filter as paymentStatus FullyPaid.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1773,8 +1773,8 @@ JD-TC-GetAppointmentTodayCount-20
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    # clear_service   ${PUSERNAME105}
-    # clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME237}
+    # clear_appt_schedule   ${PUSERNAME237}
 
     # ${description}=  FakerLibrary.sentence
     # ${ser_durtn}=   Random Int   min=2   max=10
@@ -1872,7 +1872,7 @@ JD-TC-GetAppointmentTodayCount-21
 
     [Documentation]  takes two walkin appointment for today, then verify the get appointment today with filter as location.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1881,8 +1881,8 @@ JD-TC-GetAppointmentTodayCount-21
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    # clear_service   ${PUSERNAME105}
-    # clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME237}
+    # clear_appt_schedule   ${PUSERNAME237}
 
     # ${description}=  FakerLibrary.sentence
     # ${ser_durtn}=   Random Int   min=2   max=10
@@ -1970,7 +1970,7 @@ JD-TC-GetAppointmentTodayCount-23
 
     [Documentation]  takes two walkin appointment for today, then verify the get appointment today with filter as appt start time.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1979,8 +1979,8 @@ JD-TC-GetAppointmentTodayCount-23
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    # clear_service   ${PUSERNAME105}
-    # clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME237}
+    # clear_appt_schedule   ${PUSERNAME237}
 
     # ${SERVICE1}=    generate_unique_service_name  ${service_names}
     # Append To List  ${service_names}  ${SERVICE1}
@@ -2062,7 +2062,7 @@ JD-TC-GetAppointmentTodayCount-24
 
     [Documentation]  takes two walkin appointment for today, change first appointment to cancelled, then verify the get appointment today with filter cancel reason.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2071,8 +2071,8 @@ JD-TC-GetAppointmentTodayCount-24
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    # clear_service   ${PUSERNAME105}
-    # clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME237}
+    # clear_appt_schedule   ${PUSERNAME237}
 
     # ${SERVICE1}=    generate_unique_service_name  ${service_names}
     # Append To List  ${service_names}  ${SERVICE1}
@@ -2184,7 +2184,7 @@ JD-TC-GetAppointmentTodayCount-25
 
     [Documentation]  takes an online and a walkin appointment for today, then verify the get appointment today with filter apptmode.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2198,8 +2198,8 @@ JD-TC-GetAppointmentTodayCount-25
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    # clear_service   ${PUSERNAME105}
-    # clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME237}
+    # clear_appt_schedule   ${PUSERNAME237}
 
     # ${SERVICE1}=    generate_unique_service_name  ${service_names}
     # Append To List  ${service_names}  ${SERVICE1}
@@ -2305,7 +2305,7 @@ JD-TC-GetAppointmentTodayCount-25
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2333,7 +2333,7 @@ JD-TC-GetAppointmentTodayCount-26
 
     [Documentation]  takes two walkin appointment for today for two different provider consumers, then verify the get appointment today with filter as dob.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2342,9 +2342,9 @@ JD-TC-GetAppointmentTodayCount-26
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    # clear_service   ${PUSERNAME105}
-    # clear_appt_schedule   ${PUSERNAME105}
-    clear_customer   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME237}
+    # clear_appt_schedule   ${PUSERNAME237}
+    clear_customer   ${PUSERNAME237}
 
     # ${SERVICE1}=    generate_unique_service_name  ${service_names}
     # Append To List  ${service_names}  ${SERVICE1}
@@ -2442,7 +2442,7 @@ JD-TC-GetAppointmentTodayCount-27
 
     [Documentation]  takes two walkin appointment for today for two different provider consumers, then verify the get appointment today with filter as dob.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2451,9 +2451,9 @@ JD-TC-GetAppointmentTodayCount-27
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    # clear_service   ${PUSERNAME105}
-    # clear_appt_schedule   ${PUSERNAME105}
-    clear_Label  ${PUSERNAME105}
+    # clear_service   ${PUSERNAME237}
+    # clear_appt_schedule   ${PUSERNAME237}
+    clear_Label  ${PUSERNAME237}
   
     # ${SERVICE1}=    generate_unique_service_name  ${service_names}
     # Append To List  ${service_names}  ${SERVICE1}
@@ -2741,7 +2741,7 @@ JD-TC-GetAppointmentTodayCount-UH2
 
     [Documentation]  Get provider's appointments today with consumer login
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME237}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
