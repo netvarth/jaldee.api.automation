@@ -47,7 +47,7 @@ JD-TC-Reschedule Waitlist-1
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -105,23 +105,23 @@ JD-TC-Reschedule Waitlist-1
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
    
-    ${resp}=  AddCustomer  ${CUSERNAME27}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
+    ${resp}=  AddCustomer  ${CUSERNAME33}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${cid}  ${resp.json()}
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME33}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME33}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -207,7 +207,7 @@ JD-TC-Reschedule Waitlist-2
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -261,18 +261,18 @@ JD-TC-Reschedule Waitlist-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME33}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME33}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -372,7 +372,7 @@ JD-TC-Reschedule Waitlist-3
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -493,7 +493,7 @@ JD-TC-Reschedule Waitlist-4
     [Documentation]  Provider takes check-in for a consumer and consumer reschedules it to another day.
     ...  ${SPACE} Check Communication messages also
 
-    # ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    # ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     # Log   ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}   200
     # Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -538,7 +538,7 @@ JD-TC-Reschedule Waitlist-4
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -595,7 +595,7 @@ JD-TC-Reschedule Waitlist-4
     ${fname}=  generate_firstname    
     ${lname}=  FakerLibrary.last_name
     Set Suite Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
-    ${resp}=  AddCustomer  ${CUSERNAME27}  firstName=${fname}  lastName=${lname}  email=${pc_emailid1}
+    ${resp}=  AddCustomer  ${CUSERNAME33}  firstName=${fname}  lastName=${lname}  email=${pc_emailid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()}
@@ -618,18 +618,18 @@ JD-TC-Reschedule Waitlist-4
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid1}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid1}
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME33}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME33}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -717,7 +717,7 @@ JD-TC-Reschedule Waitlist-5
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -789,7 +789,7 @@ JD-TC-Reschedule Waitlist-5
     ${fname}=  generate_firstname    
     ${lname}=  FakerLibrary.last_name
     Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
-    ${resp}=  AddCustomer  ${CUSERNAME27}  firstName=${fname}  lastName=${lname}   email=${pc_emailid1}
+    ${resp}=  AddCustomer  ${CUSERNAME33}  firstName=${fname}  lastName=${lname}   email=${pc_emailid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()}
@@ -806,18 +806,18 @@ JD-TC-Reschedule Waitlist-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME33}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME33}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -894,7 +894,7 @@ JD-TC-Reschedule Waitlist-6
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
     clear_provider_msgs  ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     
 
     ${resp}=   Get Service
@@ -967,7 +967,7 @@ JD-TC-Reschedule Waitlist-6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -1077,7 +1077,7 @@ JD-TC-Reschedule Waitlist-7
     # clear_service    ${PUSERNAME${a}}
     clear_customer   ${PUSERNAME${a}}
     clear_provider_msgs  ${PUSERNAME${a}}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     
 
     ${resp}=   Get Service
@@ -1260,7 +1260,7 @@ JD-TC-Reschedule Waitlist-8
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -1332,7 +1332,7 @@ JD-TC-Reschedule Waitlist-8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -1432,7 +1432,7 @@ JD-TC-Reschedule Waitlist-9
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -1507,7 +1507,7 @@ JD-TC-Reschedule Waitlist-9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -1539,7 +1539,7 @@ JD-TC-Reschedule Waitlist-9
     # Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable   ${payref}   ${resp.json()['paymentRefId']}
 
-    # ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
+    # ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1630,7 +1630,7 @@ JD-TC-Reschedule Waitlist-10
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -1695,7 +1695,7 @@ JD-TC-Reschedule Waitlist-10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -1726,7 +1726,7 @@ JD-TC-Reschedule Waitlist-10
     # Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable   ${payref}   ${resp.json()['paymentRefId']}
 
-    # ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
+    # ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
   
@@ -1828,7 +1828,7 @@ JD-TC-Reschedule Waitlist-11
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -1903,7 +1903,7 @@ JD-TC-Reschedule Waitlist-11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -1939,22 +1939,22 @@ JD-TC-Reschedule Waitlist-11
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
+    # ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME33}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME33}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2051,7 +2051,7 @@ JD-TC-Reschedule Waitlist-12
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -2110,7 +2110,7 @@ JD-TC-Reschedule Waitlist-12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -2146,22 +2146,22 @@ JD-TC-Reschedule Waitlist-12
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
+    # ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME33}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME33}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2248,7 +2248,7 @@ JD-TC-Reschedule Waitlist-13
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -2307,7 +2307,7 @@ JD-TC-Reschedule Waitlist-13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -2395,7 +2395,7 @@ JD-TC-Reschedule Waitlist-14
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -2474,7 +2474,7 @@ JD-TC-Reschedule Waitlist-14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -2562,7 +2562,7 @@ JD-TC-Reschedule Waitlist-15
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -2641,7 +2641,7 @@ JD-TC-Reschedule Waitlist-15
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -2725,7 +2725,7 @@ JD-TC-Reschedule Waitlist-16
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -2796,7 +2796,7 @@ JD-TC-Reschedule Waitlist-16
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -2881,7 +2881,7 @@ JD-TC-Reschedule Waitlist-UH1
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -2939,7 +2939,7 @@ JD-TC-Reschedule Waitlist-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -3016,7 +3016,7 @@ JD-TC-Reschedule Waitlist-UH2
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -3075,7 +3075,7 @@ JD-TC-Reschedule Waitlist-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -3164,7 +3164,7 @@ JD-TC-Reschedule Waitlist-UH3
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -3223,7 +3223,7 @@ JD-TC-Reschedule Waitlist-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -3299,7 +3299,7 @@ JD-TC-Reschedule Waitlist-UH4
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -3358,7 +3358,7 @@ JD-TC-Reschedule Waitlist-UH4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -3434,7 +3434,7 @@ JD-TC-Reschedule Waitlist-UH5
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -3493,7 +3493,7 @@ JD-TC-Reschedule Waitlist-UH5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -3569,7 +3569,7 @@ JD-TC-Reschedule Waitlist-UH6
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -3628,7 +3628,7 @@ JD-TC-Reschedule Waitlist-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -3705,7 +3705,7 @@ JD-TC-Reschedule Waitlist-UH7
     # clear_service    ${PUSERNAME${a}}
     # clear_customer   ${PUSERNAME${a}}
     clear_provider_msgs  ${PUSERNAME${a}}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     
 
     ${resp}=   Get Service
@@ -3855,7 +3855,7 @@ JD-TC-Reschedule Waitlist-UH8
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -3913,7 +3913,7 @@ JD-TC-Reschedule Waitlist-UH8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -3967,7 +3967,7 @@ JD-TC-Reschedule Waitlist-UH8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -4043,7 +4043,7 @@ JD-TC-Reschedule Waitlist-UH9
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -4102,7 +4102,7 @@ JD-TC-Reschedule Waitlist-UH9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -4165,7 +4165,7 @@ JD-TC-Reschedule Waitlist-UH9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -4241,7 +4241,7 @@ JD-TC-Reschedule Waitlist-UH10
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -4301,7 +4301,7 @@ JD-TC-Reschedule Waitlist-UH10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -4388,7 +4388,7 @@ JD-TC-Reschedule Waitlist-UH11
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -4447,7 +4447,7 @@ JD-TC-Reschedule Waitlist-UH11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -4507,7 +4507,7 @@ JD-TC-Reschedule Waitlist-UH11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -4570,7 +4570,7 @@ JD-TC-Reschedule Waitlist-UH12
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -4656,7 +4656,7 @@ JD-TC-Reschedule Waitlist-UH12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -4745,7 +4745,7 @@ JD-TC-Reschedule Waitlist-UH13
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -4804,7 +4804,7 @@ JD-TC-Reschedule Waitlist-UH13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -4908,7 +4908,7 @@ JD-TC-Reschedule Waitlist-UH14
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -4967,7 +4967,7 @@ JD-TC-Reschedule Waitlist-UH14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -5066,7 +5066,7 @@ JD-TC-Reschedule Waitlist-UH15
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -5152,7 +5152,7 @@ JD-TC-Reschedule Waitlist-UH15
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -5237,7 +5237,7 @@ JD-TC-Reschedule Waitlist-UH16
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -5319,7 +5319,7 @@ JD-TC-Reschedule Waitlist-UH16
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -5404,7 +5404,7 @@ JD-TC-Reschedule Waitlist-UH17
     # clear_location   ${PUSERNAME31}
     # clear_service    ${PUSERNAME31}
     clear_customer   ${PUSERNAME31}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${PUSERNAME31}
 
     ${resp}=   Get Service
@@ -5486,7 +5486,7 @@ JD-TC-Reschedule Waitlist-UH17
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -5545,7 +5545,7 @@ JD-TC-Reschedule Waitlist-UH17
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -5637,7 +5637,7 @@ JD-TC-Reschedule Waitlist-UH19
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -5702,7 +5702,7 @@ JD-TC-Reschedule Waitlist-UH19
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -5787,7 +5787,7 @@ JD-TC-Reschedule Waitlist-UH20
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -5853,7 +5853,7 @@ JD-TC-Reschedule Waitlist-UH20
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -5938,7 +5938,7 @@ JD-TC-Reschedule Waitlist-UH21
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -5997,7 +5997,7 @@ JD-TC-Reschedule Waitlist-UH21
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -6084,7 +6084,7 @@ JD-TC-Reschedule Waitlist-UH22
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -6143,7 +6143,7 @@ JD-TC-Reschedule Waitlist-UH22
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -6204,7 +6204,7 @@ JD-TC-Reschedule Waitlist-UH23
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -6286,7 +6286,7 @@ JD-TC-Reschedule Waitlist-UH23
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${fname1}   ${resp.json()['firstName']}
@@ -6379,7 +6379,7 @@ JD-TC-Reschedule Waitlist-UH24
     # Should Be Equal As Strings    ${resp.status_code}   200
     # Set Test Variable  ${token}  ${resp.json()['token']}
 
-    # ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    # ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     # Log   ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}   200
     # Set Test Variable  ${fname}   ${resp.json()['firstName']}
@@ -6594,7 +6594,7 @@ JD-TC-Reschedule Waitlist-UH25
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -6653,7 +6653,7 @@ JD-TC-Reschedule Waitlist-UH25
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -6686,22 +6686,22 @@ JD-TC-Reschedule Waitlist-UH25
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  "${resp.json()}"    "${SESSION_EXPIRED}"
 
-    # ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
+    # ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME33}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME33}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -6746,22 +6746,22 @@ JD-TC-Reschedule Waitlist-UH27
 
     ${DAY3}=  db.add_timezone_date  ${tz}  4  
 
-    # ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
+    # ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}  200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME33}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME33}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -6776,22 +6776,22 @@ JD-TC-Reschedule Waitlist-UH28
 
     ${DAY3}=  db.add_timezone_date  ${tz}  4  
 
-    # ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
+    # ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME33}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME33}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -6804,22 +6804,22 @@ JD-TC-Reschedule Waitlist-UH28
 JD-TC-Reschedule Waitlist-UH29
     [Documentation]  Consumer reschedules without date.
 
-    # ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
+    # ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME33}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME33}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -6855,7 +6855,7 @@ JD-TC-Reschedule Waitlist-UH30
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -6916,7 +6916,7 @@ JD-TC-Reschedule Waitlist-UH30
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -6994,7 +6994,7 @@ JD-TC-Reschedule Waitlist-UH31
     # clear_location   ${HLPUSERNAME20}
     # clear_service    ${HLPUSERNAME20}
     # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${HLPUSERNAME20}
 
     ${resp}=   Get Service
@@ -7071,7 +7071,7 @@ JD-TC-Reschedule Waitlist-UH31
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}

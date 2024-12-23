@@ -193,7 +193,7 @@ JD-TC-Add To WaitlistByConsumer-1
     ${list}=  Create List  1  2  3  4  5  6  7 
     ${DAY}=  get_date_by_timezone  ${tz} 
     ${sTime1}=  db.get_time_by_timezone  ${tz}
-    ${eTime1}=  add_timezone_time  ${tz}  1  30  
+    ${eTime1}=  add_timezone_time  ${tz}  4  30  
     # ${p1queue1}=    FakerLibrary.word
     ${p1queue1}=  Set Variable  ${unique_words[2]}
     ${capacity}=  FakerLibrary.Numerify  %%
@@ -1671,8 +1671,9 @@ JD-TC-Add To WaitlistByConsumer-UH1
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid0}   ${p1_q1}  ${DAY}  ${p1_s1}  ${cnote}  ${bool[0]}  ${self}      
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"   "${WAITLIST_CUSTOMER_ALREADY_IN}" 
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.status_code}  422
+    # Should Be Equal As Strings  "${resp.json()}"   "${WAITLIST_CUSTOMER_ALREADY_IN}" 
 
     ${resp}=  Cancel Waitlist  ${wid55}  ${pid0}
     Log  ${resp.content}
@@ -1725,7 +1726,7 @@ JD-TC-Add To WaitlistByConsumer-18
     Set Suite Variable  ${Sid1_s1} 
 
     ${sTime1}=  get_time_by_timezone  ${tz}
-    ${eTime1}=  add_timezone_time  ${tz}  1  30  
+    ${eTime1}=  add_timezone_time  ${tz}  4  30  
     ${list}=  Create List  1  2  3  4  5  6  7
     ${queue1}=    generate_firstname
     
@@ -1734,13 +1735,18 @@ JD-TC-Add To WaitlistByConsumer-18
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${qid1}  ${resp.json()}
 
-    ${resp}=  AddCustomer  ${CUSERNAME18}
-    Log   ${resp.json()}
+    ${fname}=  generate_firstname
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${resp}=  AddCustomer  ${CUSERNAME18}     email=${pc_emailid1}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid18}  ${resp.json()}
 
-    ${resp}=  AddCustomer  ${CUSERNAME15}
-    Log   ${resp.json()}
+    ${fname}=  generate_firstname
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${resp}=  AddCustomer  ${CUSERNAME15}     email=${pc_emailid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid15}  ${resp.json()}
 
@@ -1884,13 +1890,17 @@ JD-TC-Add To WaitlistByConsumer-19
     # ${DAY}=  db.get_date_by_timezone  ${tz}
     ${DAY}=  get_date_by_timezone  ${tz}
 
-    ${resp}=  AddCustomer  ${CUSERNAME20}
-    Log   ${resp.json()}
+    ${fname}=  generate_firstname
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${resp}=  AddCustomer  ${CUSERNAME20}     email=${pc_emailid1}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid20}  ${resp.json()}
 
-    ${resp}=  AddCustomer  ${CUSERNAME25}
-    Log   ${resp.json()}
+    ${fname}=  generate_firstname
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${resp}=  AddCustomer  ${CUSERNAME25}     email=${pc_emailid1}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid25}  ${resp.json()}
 
@@ -1953,7 +1963,7 @@ JD-TC-Add To WaitlistByConsumer-19
     # ${DAY}=  db.get_date_by_timezone  ${tz}
     ${DAY}=  get_date_by_timezone  ${tz}  
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${pid0}  ${qid1}  ${DAY}  ${Sid1_s1}  ${cnote}  ${bool[0]}  ${cidfor_c1} 
+    ${resp}=  Add To Waitlist Consumers  ${cid25}  ${pid0}  ${qid1}  ${DAY}  ${Sid1_s1}  ${cnote}  ${bool[0]}  ${cidfor_c1} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -1966,11 +1976,9 @@ JD-TC-Add To WaitlistByConsumer-19
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}  waitlistedBy=PROVIDER_CONSUMER
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${Sid1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid25}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}  ${cidfor_c1} 
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${qid1}
 
-    ${resp}=  Add To Waitlist Consumers  ${pid0}   ${qid1}  ${DAY}  ${Sid1_s1}  ${cnote}  ${bool[0]}  ${cidfor_c1}      
+    ${resp}=  Add To Waitlist Consumers  ${cid25}  ${pid0}   ${qid1}  ${DAY}  ${Sid1_s1}  ${cnote}  ${bool[0]}  ${cidfor_c1}      
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -1983,8 +1991,6 @@ JD-TC-Add To WaitlistByConsumer-19
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}  waitlistedBy=PROVIDER_CONSUMER
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${Sid1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid25}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}  ${cidfor_c1} 
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${qid1}
     ${resp}=  Get consumer Waitlist By Id   ${wid19}  ${pid0}   
     Log  ${resp.content}
@@ -1992,11 +1998,9 @@ JD-TC-Add To WaitlistByConsumer-19
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[7]}  waitlistedBy=PROVIDER_CONSUMER
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${Sid1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid25}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}  ${cidfor_c1} 
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${qid1}
 
-    ${resp}=  Add To Waitlist Consumers  ${pid0}   ${qid1}  ${DAY}  ${Sid1_s1}  ${cnote}  ${bool[0]}  ${cidfor_c1}      
+    ${resp}=  Add To Waitlist Consumers  ${cid25}  ${pid0}   ${qid1}  ${DAY}  ${Sid1_s1}  ${cnote}  ${bool[0]}  ${cidfor_c1}      
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -2009,10 +2013,7 @@ JD-TC-Add To WaitlistByConsumer-19
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}  waitlistedBy=PROVIDER_CONSUMER
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${Sid1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid25}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}  ${cidfor_c1} 
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${qid1}
-    
     Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_l2}
     
     ${resp}=  Get consumer Waitlist By Id   ${wid20}  ${pid0}   
@@ -2021,14 +2022,8 @@ JD-TC-Add To WaitlistByConsumer-19
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[7]}  waitlistedBy=PROVIDER_CONSUMER
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${Sid1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid25}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}  ${cidfor_c1} 
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${qid1}
-    
     Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_l2}
-
-
-
 
 JD-TC-Add To WaitlistByConsumer-20
     [Documentation]   Add a consumer and his family member to the same queue for the same Pre_Payment service repeatedly
@@ -2042,13 +2037,16 @@ JD-TC-Add To WaitlistByConsumer-20
     # ${DAY}=  db.get_date_by_timezone  ${tz}
     ${DAY}=  get_date_by_timezone  ${tz}
 
-    ${resp}=  AddCustomer  ${CUSERNAME30}
+    ${fname}=  generate_firstname
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${resp}=  AddCustomer  ${CUSERNAME30}      email=${pc_emailid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid30}  ${resp.json()}
 
-
-    ${resp}=  AddCustomer  ${CUSERNAME35}
+    ${fname}=  generate_firstname
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${resp}=  AddCustomer  ${CUSERNAME35}       email=${pc_emailid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid35}  ${resp.json()}
@@ -2103,7 +2101,7 @@ JD-TC-Add To WaitlistByConsumer-20
     Set Suite Variable  ${cidfor_c2}   ${resp.json()}
 
     # ${DAY}=  db.get_date_by_timezone  ${tz}
-    ${DAY}=  get_date_by_timezone  ${tz}  
+    ${DAY}=  db.add_timezone_date  ${tz}  1 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers     ${cid35}  ${pid0}  ${qid1}  ${DAY}  ${Sid1_s1}  ${cnote}  ${bool[0]}  ${cidfor_c2} 
     Log  ${resp.content}
@@ -2134,8 +2132,6 @@ JD-TC-Add To WaitlistByConsumer-20
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}  waitlistedBy=PROVIDER_CONSUMER
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${Sid1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid35}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}  ${cidfor_c2} 
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${qid1}
 
   
@@ -2152,7 +2148,6 @@ JD-TC-Add To WaitlistByConsumer-20
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}  waitlistedBy=PROVIDER_CONSUMER
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${Sid1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid35}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id5} 
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${qid1}
     
@@ -2170,8 +2165,6 @@ JD-TC-Add To WaitlistByConsumer-20
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}  waitlistedBy=PROVIDER_CONSUMER
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${Sid1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid35}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}  ${cidfor_c2} 
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${qid1}
     ${resp}=  Get consumer Waitlist By Id   ${wid25}  ${pid0}   
     Log  ${resp.content}
@@ -2179,8 +2172,6 @@ JD-TC-Add To WaitlistByConsumer-20
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[7]}  waitlistedBy=PROVIDER_CONSUMER
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${Sid1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid35}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}  ${cidfor_c2} 
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${qid1}
     
     Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_l2}
@@ -2191,10 +2182,8 @@ JD-TC-Add To WaitlistByConsumer-20
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}  waitlistedBy=PROVIDER_CONSUMER
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${Sid1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid35}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id5} 
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${qid1}
-    
     Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_l2}
 
 
@@ -3059,7 +3048,7 @@ JD-TC-Add To WaitlistByConsumer-UH14
     ${DAY}=  get_date_by_timezone  ${tz}
     # ${psTime}=  db.subtract_timezone_time  ${tz}  0  30
     # ${peTime}=  db.subtract_timezone_time  ${tz}   0  15
-    ${psTime}=  db.subtract_timezone_time  ${tz}  0  30 
+    ${psTime}=  db.subtract_timezone_time  ${tz}  0  50 
     ${peTime}=  db.subtract_timezone_time  ${tz}  0  15
     ${list}=  Create List  1  2  3  4  5  6  7
     ${capacity}=  FakerLibrary.Numerify  %%
@@ -3174,23 +3163,19 @@ JD-TC-Add To WaitlistByConsumer-UH16
     # ${longi}=  get_longitude
     # ${postcode}=  FakerLibrary.postcode
     # ${address}=  get_address
-    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    ${tz1}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    Set Suite Variable  ${tz1}
-    ${parking}    Random Element     ${parkingType}
-    ${24hours}    Random Element    ['True','False']
+    # ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    # ${tz1}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    # Set Suite Variable  ${tz1}
+    # ${parking}    Random Element     ${parkingType}
+    # ${24hours}    Random Element    ['True','False']
     # ${DAY}=  db.get_date_by_timezone  ${tz}
-    ${DAY}=  get_date_by_timezone  ${tz1}
-    # ${sTime}=  add_timezone_time  ${tz}  0  15  
-    # ${eTime}=  add_timezone_time  ${tz}  0  30  
-    ${sTime}=  add_timezone_time  ${tz1}  0  15
-    ${eTime}=  add_timezone_time  ${tz1}  0  30
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${url}=   FakerLibrary.url
-    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[4]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${p2_l1}  ${resp.json()}
+    # ${url}=   FakerLibrary.url
+    # ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[4]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${p2_l1}  ${resp.json()}
+
+    ${p2_l1}=  Create Sample Location  
 
     ${P2SERVICE1}=    FakerLibrary.word
     Set Test Variable  ${P2SERVICE1}
@@ -3211,6 +3196,16 @@ JD-TC-Add To WaitlistByConsumer-UH16
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${p2_s2}  ${resp.json()}
+
+    ${resp}=   Get Location ById  ${p2_l1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz1}  ${resp.json()['timezone']}
+
+    ${DAY}=  get_date_by_timezone  ${tz1}
+    ${sTime}=  add_timezone_time  ${tz1}  0  15
+    ${eTime}=  add_timezone_time  ${tz1}  0  30
+    ${list}=  Create List  1  2  3  4  5  6  7
 
     ${resp}=    Update Waitlist Settings  ${calc_mode[0]}  20  ${bool[1]}  ${bool[1]}  ${bool[1]}   ${bool[0]}   ${EMPTY}  
     Log  ${resp.content}

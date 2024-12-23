@@ -909,25 +909,30 @@ General Communication with User
 
     
 Add To Waitlist Consumers
-    [Arguments]   ${consumer}  ${accId}  ${queueId}  ${date}  ${serviceId}  ${consumerNote}  ${revealPhone}  @{vargs}  &{kwargs}
+    [Arguments]   ${consumer}  ${accId}  ${queueId}  ${date}  ${serviceId}  ${consumerNote}  ${revealPhone}  @{fids}  &{kwargs}
     ${cons_headers}=  Create Dictionary  &{headers} 
     ${cons_params}=  Create Dictionary  account=${accId}
     ${queueId}=  Create Dictionary  id=${queueId}
     ${serviceId}=  Create Dictionary  id=${service_id}  
     ${consumer}=    Create Dictionary  id=${consumer}
 
-    ${len}=  Get Length  ${vargs}
-
-    ${consumer1}=  Create Dictionary  id=${vargs[0]}
-    ${consumerlist}=  Create List  ${consumer1}
+    ${fid}=  Create Dictionary  id=${fids[0]}
+    ${len}=  Get Length  ${fids}
+    ${fid}=  Create List  ${fid}
     FOR    ${index}    IN RANGE  1  ${len}
-        ${consumer1}=  Create Dictionary  id=${vargs[${index}]}
-        Append To List  ${consumerlist}  ${consumer1}
+        ${ap}=  Create Dictionary  id=${fids[${index}]}
+        Append To List  ${fid} 	${ap}
     END
-    
+    # ${len}=  Get Length  ${vargs}
 
+    # ${consumer1}=  Create Dictionary  id=${vargs[0]}
+    # ${consumerlist}=  Create List  ${consumer1}
+    # FOR    ${index}    IN RANGE  1  ${len}
+    #     ${consumer1}=  Create Dictionary  id=${vargs[${index}]}
+    #     Append To List  ${consumerlist}  ${consumer1}
+    # END
 
-    ${data}=  Create Dictionary  consumer=${consumer}  queue=${queueId}  date=${date}  service=${serviceId}  consumerNote=${consumerNote}  waitlistingFor=${consumerlist}  revealPhone=${revealPhone} 
+    ${data}=  Create Dictionary  consumer=${consumer}  queue=${queueId}  date=${date}  service=${serviceId}  consumerNote=${consumerNote}  waitlistingFor=${fid}  revealPhone=${revealPhone} 
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
     END

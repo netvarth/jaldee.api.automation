@@ -368,9 +368,7 @@ JD-TC-GetAppointmentTodayCount-1
     ${num_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot3}   ${slots[${j}]}
-    ${k}=  Random Int  max=${num_slots-3}
-    Set Test Variable   ${slot4}   ${slots[${k}]}
-    
+   
     ${apptfor}=  Create Dictionary  id=${cidfor3}   apptTime=${slot3}   firstName=${family_fname3}
     ${apptfor}=   Create List  ${apptfor}
    
@@ -381,7 +379,20 @@ JD-TC-GetAppointmentTodayCount-1
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${apptid3}  ${apptid[0]}
 
-    
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid1}  ${DAY1}  ${lid1}  ${s_id2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
+        END
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot4}   ${slots[${j}]}
+
     ${apptfor}=  Create Dictionary  id=${self}   apptTime=${slot4}   
     ${apptfor}=   Create List  ${apptfor}
   
