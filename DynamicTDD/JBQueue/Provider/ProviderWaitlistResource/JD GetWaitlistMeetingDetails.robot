@@ -59,10 +59,10 @@ Get Non Billable Subdomain
 JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     [Documentation]  Create Teleservice meeting request for waitlist in WhatsApp (WALK-IN CHECKIN)
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME27}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${account_id}=  get_acc_id  ${HLPUSERNAME2}
+    ${account_id}=  get_acc_id  ${HLPUSERNAME27}
     Set Suite Variable  ${account_id}
 
     ${fname}=  generate_firstname
@@ -109,13 +109,13 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     Set Suite Variable  ${ZOOM_id2}    ${UserZOOM_id0}
     Set Suite Variable  ${WHATSAPP_id2}   ${countryCodes[0]}${CUSERNAME0}
 
-    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME27}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
 
-    # clear_customer   ${HLPUSERNAME2}
+    # clear_customer   ${HLPUSERNAME27}
 
     # ${list}=  Create List  1  2  3  4  5  6  7
     # Set Suite Variable  ${list}  ${list}
@@ -131,14 +131,14 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${ZOOM_id0}=  Format String  ${ZOOM_url}  ${HLPUSERNAME2}
+    ${ZOOM_id0}=  Format String  ${ZOOM_url}  ${HLPUSERNAME27}
     Set Suite Variable   ${ZOOM_id0}
 
     ${instructions1}=   FakerLibrary.sentence
     ${instructions2}=   FakerLibrary.sentence
 
     ${VirtualcallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${ZOOM_id0}   status=ACTIVE    instructions=${instructions1} 
-    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${HLPUSERNAME2}   countryCode=${countryCodes[0]}  status=ACTIVE    instructions=${instructions2} 
+    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${HLPUSERNAME27}   countryCode=${countryCodes[0]}  status=ACTIVE    instructions=${instructions2} 
     ${vcm1}=  Create List  ${VirtualcallingMode1}   ${VirtualcallingMode2}
 
     ${resp}=  Update Virtual Calling Mode   ${vcm1}
@@ -154,14 +154,14 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['instructions']}    ${instructions1}
 
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['callingMode']}     ${CallingModes[1]}
-    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['value']}           ${HLPUSERNAME2}
+    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['value']}           ${HLPUSERNAME27}
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['status']}          ACTIVE
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['instructions']}    ${instructions2}
 
     # ${PUSERPH_id0}=  Evaluate  ${PUSERNAME}+50505
     Set Test Variable  ${callingMode1}     ${CallingModes[1]}
     # Set Test Variable  ${ModeId1}          ${PUSERPH_id0}
-    Set Test Variable  ${ModeId1}          ${HLPUSERNAME2}
+    Set Test Variable  ${ModeId1}          ${HLPUSERNAME27}
     Set Test Variable  ${ModeStatus1}      ACTIVE
     ${Description1}=    FakerLibrary.sentence
     ${VScallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   countryCode=${countryCodes[0]}  status=${ModeStatus1}   instructions=${Description1}
@@ -184,7 +184,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${ZOOM_Pid0}=  Format String  ${ZOOM_url}  ${HLPUSERNAME2}
+    ${ZOOM_Pid0}=  Format String  ${ZOOM_url}  ${HLPUSERNAME27}
     Set Suite Variable   ${ZOOM_Pid0}
 
     Set Test Variable  ${callingMode2}     ${CallingModes[0]}
@@ -293,7 +293,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     ${resp}=  Consumer Logout
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME27}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -310,11 +310,11 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
 JD-TC-TeleserviceWaitlist-(Billable Subdomain)-2
     [Documentation]  Create Teleservice meeting request for waitlist in Zoom (WALK-IN CHECKIN)
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME27}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${accId}=  get_acc_id  ${HLPUSERNAME2}
+    ${accId}=  get_acc_id  ${HLPUSERNAME27}
     Set Suite Variable  ${accId}  ${accId} 
 
     ${resp}=  Get Service
@@ -363,7 +363,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-2
     ${resp}=  Consumer Logout
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME27}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -381,11 +381,11 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-2
 JD-TC-TeleserviceWaitlist-(Billable Subdomain)-UH1
     [Documentation]  Create Teleservice meeting request for waitlist in Zoom,WhatsApp,phone and Googlemeet (WALK-IN CHECKIN)
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME27}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${accId}=  get_acc_id  ${HLPUSERNAME2}
+    ${accId}=  get_acc_id  ${HLPUSERNAME27}
     Set Suite Variable  ${accId}  ${accId} 
 
     ${resp}=  Get Service
@@ -460,7 +460,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-UH1
     ${resp}=  Consumer Logout
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME27}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -500,7 +500,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-3
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${queueId}
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME27}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -525,7 +525,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-3
     ${resp}=  Consumer Logout
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME27}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -558,7 +558,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-4
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid5}  ${wid[0]}
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME27}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -597,7 +597,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-4
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s2}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${queueId}
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME27}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -622,7 +622,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-4
     ${resp}=  Consumer Logout
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME27}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -663,7 +663,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-UH2
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s2}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${queueId}
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME27}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -697,7 +697,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-UH2
     ${resp}=  Consumer Logout
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME27}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -737,7 +737,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-5
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s2}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${queueId}
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME27}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -773,7 +773,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-5
     ${resp}=  Consumer Logout
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME27}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -813,7 +813,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-6
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${queueId}
 
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME27}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -849,7 +849,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-6
     ${resp}=  Consumer Logout
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME27}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
