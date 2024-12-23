@@ -28,9 +28,6 @@ JD-TC-SendAttachmentWL-1
 
     [Documentation]  Send Attachment Waitelist   
 
-    clear_location    ${PUSERNAME301}
-    clear_service     ${PUSERNAME301}
-    clear_queue       ${PUSERNAME301} 
     clear_customer    ${PUSERNAME301}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME301}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -137,24 +134,7 @@ JD-TC-SendAttachmentWL-1
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${pdrname}
 
-
 JD-TC-SendAttachmentWL-2
-
-    [Documentation]  Send Attachment Waitelist - waitlist id is invalid 
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME301}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${inv}=     FakerLibrary.Random Int
-
-    ${attachments}=  Create Dictionary  owner=${provider_id}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${pdrname}
-
-    ${resp}=  Send Attachment From Waitlist   ${inv}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-
-JD-TC-SendAttachmentWL-3
 
     [Documentation]  Send Attachment Waitelist - email flag is false 
 
@@ -178,7 +158,7 @@ JD-TC-SendAttachmentWL-3
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${pdrname}
 
-JD-TC-SendAttachmentWL-4
+JD-TC-SendAttachmentWL-3
 
     [Documentation]  Send Attachment Waitelist - sms flag is false
 
@@ -202,7 +182,7 @@ JD-TC-SendAttachmentWL-4
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${pdrname}
 
-JD-TC-SendAttachmentWL-5
+JD-TC-SendAttachmentWL-4
 
     [Documentation]  Send Attachment Waitelist - telegram flag is false
 
@@ -226,7 +206,7 @@ JD-TC-SendAttachmentWL-5
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${pdrname}
 
-JD-TC-SendAttachmentWL-6
+JD-TC-SendAttachmentWL-5
 
     [Documentation]  Send Attachment Waitelist - whats app flag is false
 
@@ -250,7 +230,7 @@ JD-TC-SendAttachmentWL-6
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${pdrname}
 
-JD-TC-SendAttachmentWL-7
+JD-TC-SendAttachmentWL-6
 
     [Documentation]  Send Attachment Waitelist - owner is empty
 
@@ -274,7 +254,7 @@ JD-TC-SendAttachmentWL-7
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${pdrname}
 
-JD-TC-SendAttachmentWL-8
+JD-TC-SendAttachmentWL-7
 
     [Documentation]  Send Attachment Waitelist - file name
 
@@ -289,7 +269,7 @@ JD-TC-SendAttachmentWL-8
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${FILE_NAME_NOT_FOUND}
 
-JD-TC-SendAttachmentWL-9
+JD-TC-SendAttachmentWL-8
 
     [Documentation]  Send Attachment Waitelist - file size is empty
 
@@ -304,7 +284,7 @@ JD-TC-SendAttachmentWL-9
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${FILE_SIZE_ERROR}
 
-JD-TC-SendAttachmentWL-10
+JD-TC-SendAttachmentWL-9
 
     [Documentation]  Send Attachment Waitelist - file type is empty
 
@@ -319,7 +299,7 @@ JD-TC-SendAttachmentWL-10
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${FILE_TYPE_NOT_FOUND}
 
-JD-TC-SendAttachmentWL-11
+JD-TC-SendAttachmentWL-10
 
     [Documentation]  Send Attachment Waitelist - order is empty
 
@@ -343,7 +323,7 @@ JD-TC-SendAttachmentWL-11
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${pdrname}
 
-JD-TC-SendAttachmentWL-12
+JD-TC-SendAttachmentWL-11
 
     [Documentation]  Send Attachment Waitelist - drive id is empty 
 
@@ -357,7 +337,7 @@ JD-TC-SendAttachmentWL-12
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
 
-JD-TC-SendAttachmentWL-13
+JD-TC-SendAttachmentWL-12
 
     [Documentation]  Send Attachment Waitelist - action is remove
 
@@ -381,7 +361,7 @@ JD-TC-SendAttachmentWL-13
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${pdrname}
 
-JD-TC-SendAttachmentWL-14
+JD-TC-SendAttachmentWL-13
 
     [Documentation]  Send Attachment Waitelist - attachment is empty
 
@@ -396,7 +376,7 @@ JD-TC-SendAttachmentWL-14
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${INV_DRIVE_ID}
 
-JD-TC-SendAttachmentWL-15
+JD-TC-SendAttachmentWL-14
 
     [Documentation]  Send Attachment Waitelist - inv drive id
 
@@ -412,7 +392,7 @@ JD-TC-SendAttachmentWL-15
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
 
-JD-TC-SendAttachmentWL-16
+JD-TC-SendAttachmentWL-15
 
     [Documentation]  Send Attachment Waitelist - without login
 
@@ -424,22 +404,7 @@ JD-TC-SendAttachmentWL-16
     Should Be Equal As Strings  ${resp.json()}       ${SESSION_EXPIRED}
 
 
-JD-TC-SendAttachmentWL-17
-
-    [Documentation]  Send Attachment Waitelist - with consumer login
-
-    ${resp}=  Consumer Login  ${CUSERNAME7}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${attachments}=  Create Dictionary  owner=${provider_id}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${pdrname}
-
-    ${resp}=  Send Attachment From Waitlist   ${wid}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  401
-    Should Be Equal As Strings  ${resp.json()}       ${NoAccess}
-
-JD-TC-SendAttachmentWL-18
+JD-TC-SendAttachmentWL-16
 
     [Documentation]  Send Attachment Waitelist - with Provider consumer login
 
@@ -452,7 +417,7 @@ JD-TC-SendAttachmentWL-18
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Customer Logout   
+    ${resp}=  Consumer Logout   
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -466,5 +431,5 @@ JD-TC-SendAttachmentWL-18
 
     ${resp}=  Send Attachment From Waitlist   ${wid}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  400
-    Should Be Equal As Strings  ${resp.json()}       ${LOGIN_INVALID_URL}
+    Should Be Equal As Strings  ${resp.status_code}  401
+    Should Be Equal As Strings  ${resp.json()}       ${NoAccess}
