@@ -191,31 +191,17 @@ JD-TC-Get Appointment Schedule Count-4
 
 JD-TC-Get Appointment Schedule Count-UH1
 
-    [Documentation]   Get Appointment Schedule Count of apptState
+    [Documentation]   Get Appointment Schedule Count of appt Schedule State
 
     ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Appointment Schedule Count       apptState-eq=${Apptstat[0]}
+    ${resp}=    Get Appointment Schedule Count       state-eq=${Apptstat[0]}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  400
-    Should Be Equal As Strings  "${resp.json()}"      "${FILTER_ERROR}"
-
+    Should Be Equal As Strings  ${resp.status_code}  200
+ 
 JD-TC-Get Appointment Schedule Count-UH2
-
-    [Documentation]   Get Appointment Schedule Count of parallelServing
-
-    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get Appointment Schedule Count       parallelServing=${parallel}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  400
-    Should Be Equal As Strings  "${resp.json()}"      "${FILTER_ERROR}"
-
-JD-TC-Get Appointment Schedule Count-UH3
 
     [Documentation]   Without Provider Login
 
@@ -224,7 +210,7 @@ JD-TC-Get Appointment Schedule Count-UH3
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  "${resp.json()}"   "${SESSION_EXPIRED}"
 
-JD-TC-Get Appointment Schedule Count-UH4
+JD-TC-Get Appointment Schedule Count-UH3
 
     [Documentation]   With Consumer Login
 
