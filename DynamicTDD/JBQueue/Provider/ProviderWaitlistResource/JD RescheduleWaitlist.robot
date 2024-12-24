@@ -472,7 +472,7 @@ JD-TC-Reschedule Waitlist-3
     ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
+    ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}  location=${lid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -3392,7 +3392,8 @@ JD-TC-Reschedule Waitlist-UH12
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}   
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -5189,12 +5190,12 @@ JD-TC-Reschedule Waitlist-UH26
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME12}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    # Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    Set Test Variable  ${pro_cust}   ${resp.json()['id']}
     # Set Test Variable  ${lname}   ${resp.json()['lastName']}
     # Set Test Variable  ${uname}   ${resp.json()['userName']}
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
+    ${resp}=  Add To Waitlist Consumers  ${pro_cust}   ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     

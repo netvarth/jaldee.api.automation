@@ -754,7 +754,8 @@ JD-TC-AssignproviderWaitlist-6
     ${u_id2}=  Create Sample User 
     Set suite Variable                    ${u_id2}
 
-    ${SERVICE3}=    generate_service_name 
+    ${SERVICE3}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE3}   
     ${sTime2}=  add_timezone_time  ${tz}  1  15  
     ${eTime2}=  add_timezone_time  ${tz}  2  00  
     ${description}=  FakerLibrary.sentence

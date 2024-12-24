@@ -864,6 +864,10 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-5
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
+    ${resp}=  AddCustomer  ${CUSERNAME13}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
     ${resp}=   Get Service
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -932,16 +936,16 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${resp}=    Send Otp For Login    ${CUSERNAME13}    ${account_id}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}   200
+    ${resp}=    Send Otp For Login    ${CUSERNAME13}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-    # ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
     ${resp}=    Verify Otp For Login   ${CUSERNAME13}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-    # Set Suite Variable  ${token}  ${resp.json()['token']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME13}    ${account_id}    ${token}
     Log   ${resp.json()}
@@ -980,6 +984,9 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings   ${resp.json()['releasedQnr'][0]['status']}   ${QnrReleaseStatus[1]}
 
+    ${resp}=   Provider Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME13}    ${account_id}    ${token}
     Log   ${resp.json()}
@@ -1000,7 +1007,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME1}    ${acc_id}    ${token}
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME13}    ${account_id}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1091,7 +1098,10 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-UH3
     Set Suite Variable   ${id}
     Set Suite Variable   ${qnrid}
 
-
+    ${resp}=  AddCustomer  ${CUSERNAME18}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
     ${qns}   Get Provider Questionnaire By Id   ${id}  
     Log  ${qns.content}
     Should Be Equal As Strings  ${qns.status_code}  200
@@ -1132,6 +1142,17 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-UH3
     ${resp}=  Provider Logout
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME18}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME18}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME18}    ${account_id}    ${token}
     Log   ${resp.json()}
