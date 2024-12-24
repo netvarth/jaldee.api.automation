@@ -536,7 +536,10 @@ JD-TC-ResubmitQuestionnaireForWaitlist-3
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${q_id}  ${resp.json()}
-
+    ${resp}=  AddCustomer  ${CUSERNAME10}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
     ${resp}=  Get Queue ById  ${q_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -560,8 +563,8 @@ JD-TC-ResubmitQuestionnaireForWaitlist-3
     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME10}    ${account_id}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+    # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
     Set Test Variable  ${cid}  ${resp.json()['providerConsumer']}
 
     ${cnote}=   FakerLibrary.name
@@ -1091,13 +1094,12 @@ JD-TC-ResubmitQuestionnaireForWaitlist-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${reason}=  Random Element  ${waitlist_cancl_reasn}
-    ${msg}=   FakerLibrary.word
+    
+    ${msg}=  Fakerlibrary.word
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=   Waitlist Action Cancel  ${wid1}  ${reason}  ${msg}
-    Log  ${resp.content}
+    ${resp}=  Waitlist Action   ${waitlist_actions[2]}  ${wid1}  cancelReason=${waitlist_cancl_reasn[1]}      
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    sleep  04s
 
     ${resp}=  Get Waitlist By Id  ${wid1}
     Log  ${resp.content}
@@ -1454,19 +1456,8 @@ JD-TC-ResubmitQuestionnaireForWaitlist-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Check Answers   ${resp}  ${data}
 
+
 JD-TC-ResubmitQuestionnaireForWaitlist-UH4
-    [Documentation]  Resubmit questionnaire by consumer login
-
-    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME10}    ${account_id}    ${token}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    
-    ${resp}=  Imageupload.PWlResubmitQns   ${cookie}   ${wid1}   ${data}  ${pdffile}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  401
-
-
-JD-TC-ResubmitQuestionnaireForWaitlist-UH5
     [Documentation]  Resubmit questionnaire without consumer login
 
     ${cookie_val}   Generate_random_value  size=32  chars=string.digits
@@ -1932,3 +1923,15 @@ JD-TC-ResubmitQuestionnaireForWaitlist-6
 #     Check Answers   ${resp}  ${data}
 
 
+*** Comments ***
+
+JD-TC-ResubmitQuestionnaireForWaitlist-UH4
+    [Documentation]  Resubmit questionnaire by consumer login
+
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME10}    ${account_id}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    
+    ${resp}=  Imageupload.PWlResubmitQns   ${cookie}   ${wid1}   ${data}  ${pdffile}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  401

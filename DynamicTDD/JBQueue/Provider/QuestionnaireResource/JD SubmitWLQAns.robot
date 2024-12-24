@@ -685,11 +685,10 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  waitlistStatus=${wl_status[1]} 
 
-    ${reason}=  Random Element  ${waitlist_cancl_reasn}
-    ${msg}=   FakerLibrary.word
+    ${msg}=  Fakerlibrary.word
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=   Waitlist Action Cancel  ${wid1}  ${reason}  ${msg}
-    Log  ${resp.content}
+    ${resp}=  Waitlist Action   ${waitlist_actions[2]}  ${wid1}  cancelReason=${waitlist_cancl_reasn[1]}      
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Waitlist By Id  ${wid1}

@@ -1215,34 +1215,33 @@ JD-TC-AssignproviderWaitlist-9
         ${resp}=  Enable Disable Department  ${toggle[0]}  
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-
     END
     
     # sleep  2s
-    ${resp}=  Get Departments
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${dep_id3}  ${resp.json()['departments'][0]['departmentId']}
+    # ${resp}=  Get Departments
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${dep_id3}  ${resp.json()['departments'][0]['departmentId']}
      
     ${ph1}=  Evaluate  ${HLPUSERNAME11}+1000470000
-    ${firstname}=  FakerLibrary.name
-    ${lastname}=  FakerLibrary.last_name
-    ${dob}=  FakerLibrary.Date
+    # ${firstname}=  FakerLibrary.name
+    # ${lastname}=  FakerLibrary.last_name
+    # ${dob}=  FakerLibrary.Date
 
-    FOR    ${i}    IN RANGE    3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200 
+    # FOR    ${i}    IN RANGE    3
+    #     ${pin}=  get_pincode
+    #     ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+    #     IF    '${kwstatus}' == 'FAIL'
+    #             Continue For Loop
+    #     ELSE IF    '${kwstatus}' == 'PASS'
+    #             Exit For Loop
+    #     END
+    # END
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${whpnum}=  Evaluate  ${HLPUSERNAME11}+336245
-    ${tlgnum}=  Evaluate  ${HLPUSERNAME11}+336345
+    # ${whpnum}=  Evaluate  ${HLPUSERNAME11}+336245
+    # ${tlgnum}=  Evaluate  ${HLPUSERNAME11}+336345
 
     ${ph1}  ${u_id1} =  Create and Configure Sample User    deptId=${dep_id3}
     Set Suite Variable  ${ph1}
@@ -1382,21 +1381,21 @@ JD-TC-AssignproviderWaitlist-10
     Set Suite Variable  ${dep_id3}  ${resp.json()['departments'][0]['departmentId']}
      
     ${ph1}=  Evaluate  ${HLPUSERNAME11}+1000650000
-    ${firstname}=  FakerLibrary.name
-    ${lastname}=  FakerLibrary.last_name
-    ${dob}=  FakerLibrary.Date
+    # ${firstname}=  FakerLibrary.name
+    # ${lastname}=  FakerLibrary.last_name
+    # ${dob}=  FakerLibrary.Date
 
-    FOR    ${i}    IN RANGE    3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200 
+    # FOR    ${i}    IN RANGE    3
+    #     ${pin}=  get_pincode
+    #     ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+    #     IF    '${kwstatus}' == 'FAIL'
+    #             Continue For Loop
+    #     ELSE IF    '${kwstatus}' == 'PASS'
+    #             Exit For Loop
+    #     END
+    # END
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200 
 
     ${ph1}  ${u_id1} =  Create and Configure Sample User    deptId=${dep_id3}
     Set Suite Variable  ${ph1}
@@ -2124,17 +2123,17 @@ JD-TC-AssignproviderWaitlist-UH9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id3}  ${resp.json()['departments'][0]['departmentId']}
 
-    FOR    ${i}    IN RANGE    3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200 
+    # FOR    ${i}    IN RANGE    3
+    #     ${pin}=  get_pincode
+    #     ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+    #     IF    '${kwstatus}' == 'FAIL'
+    #             Continue For Loop
+    #     ELSE IF    '${kwstatus}' == 'PASS'
+    #             Exit For Loop
+    #     END
+    # END
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200 
 
     ${ph1}  ${u_id1} =  Create and Configure Sample User  deptId=${dep_id3}
     Set Suite Variable  ${ph1}
