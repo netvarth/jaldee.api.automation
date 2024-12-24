@@ -989,7 +989,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-6
         END
     END
 
-    Set Suite Variable   ${s_id}
+    Set Test Variable   ${s_id}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -1337,7 +1337,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-7
         END
     END
 
-    Set Suite Variable   ${s_id}
+    Set Test Variable   ${s_id}
 
     ${resp}=   Get Service
     Log  ${resp.content}
