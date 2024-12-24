@@ -8267,7 +8267,8 @@ JD-TC-Update schedule-UH29
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
 
     ${schedule_name1}=  FakerLibrary.bs
-    ${consumerparallelserving1}=  FakerLibrary.Random Int  min=${parallel}    max=20
+    ${minparallel}=  Evaluate   ${parallel} + 1
+    ${consumerparallelserving1}=  FakerLibrary.Random Int  min=${minparallel}    max=20
     ${resp}=  Update Appointment Schedule  ${sch_id}  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${sTime1}  ${eTime1}  ${parallel}    ${consumerparallelserving1}  ${lid}  ${duration}  ${bool[1]}  ${s_id}
     Log    ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
