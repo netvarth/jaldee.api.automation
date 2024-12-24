@@ -88,7 +88,8 @@ JD-TC-GetPayableWithFilter-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id1}   ${resp.json()}
 
-    ${name1}=   FakerLibrary.word
+    # ${name1}=   FakerLibrary.word
+    ${name1}=    generate_unique_service_name  ${service_names}
     Set Suite Variable  ${name1} 
     ${resp}=  Create Category   ${name1}  ${categoryType[2]} 
     Log  ${resp.json()}
