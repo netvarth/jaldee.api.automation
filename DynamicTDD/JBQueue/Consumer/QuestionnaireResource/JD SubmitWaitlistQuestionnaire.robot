@@ -809,7 +809,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-4
 JD-TC-SubmitQuestionnaireForWaitlist-UH1
     [Documentation]  Submit questionnaire for cancelled appointment
     
-    clear_customer   ${PUSERNAME20}
+    # clear_customer   ${PUSERNAME20}
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.content}
@@ -989,7 +989,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH1
 JD-TC-SubmitQuestionnaireForWaitlist-UH2
     [Documentation]  Submit questionnaire without validating data
 
-    clear_customer   ${PUSERNAME20}
+    # clear_customer   ${PUSERNAME20}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.content}
@@ -1118,7 +1118,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH2
 JD-TC-SubmitQuestionnaireForWaitlist-UH3
     [Documentation]  Submit questionnaire after validation fails
 
-    clear_customer   ${PUSERNAME20}
+    # clear_customer   ${PUSERNAME20}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.content}
@@ -1276,7 +1276,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH3
 JD-TC-SubmitQuestionnaireForWaitlist-UH4
     [Documentation]  Submit questionnaire by provider login
 
-    clear_customer   ${PUSERNAME20}
+    # clear_customer   ${PUSERNAME20}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.content}
@@ -1416,7 +1416,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH4
 JD-TC-SubmitQuestionnaireForWaitlist-UH5
     [Documentation]  Submit questionnaire without consumer login
 
-    clear_customer   ${PUSERNAME20}
+    # clear_customer   ${PUSERNAME20}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.content}
