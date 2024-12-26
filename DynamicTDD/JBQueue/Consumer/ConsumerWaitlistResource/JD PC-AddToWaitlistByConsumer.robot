@@ -3107,11 +3107,10 @@ JD-TC-Add To WaitlistByConsumer-UH16
 	[Documentation]  Add consumer to waitlist for a service with prepayment and try to change prepayment status from prepaymentPending to arrived.   
 
 
-    ${firstname}  ${lastname}  ${PUSERPH3}  ${LoginId}=  Provider Signup
-    Set Suite Variable  ${PUSERPH3}
+    # ${firstname}  ${lastname}  ${PUSERNAME282}  ${LoginId}=  Provider Signup
+    # Set Suite Variable  ${PUSERNAME282}
 
-
-    ${resp}=  Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME282}  ${PASSWORD}
     # Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -3157,7 +3156,7 @@ JD-TC-Add To WaitlistByConsumer-UH16
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${pid1}=  get_acc_id  ${PUSERPH3}
+    ${pid1}=  get_acc_id  ${PUSERNAME282}
     # ${city}=   FakerLibrary.state
     # ${latti}=  get_latitude
     # ${longi}=  get_longitude
@@ -3228,14 +3227,14 @@ JD-TC-Add To WaitlistByConsumer-UH16
     ${bank_name}=  FakerLibrary.company
     ${name}=  FakerLibrary.name
     ${branch}=   db.get_place
-    ${resp}=   Update Account Payment Settings   ${bool[0]}  ${bool[0]}  ${bool[1]}  ${PUSERPH3}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
+    ${resp}=   Update Account Payment Settings   ${bool[0]}  ${bool[0]}  ${bool[1]}  ${PUSERNAME282}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  payuVerify  ${pid1}
     Log  ${resp}
 
-    ${resp}=   Update Account Payment Settings   ${bool[1]}  ${bool[0]}  ${bool[1]}  ${PUSERPH3}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
+    ${resp}=   Update Account Payment Settings   ${bool[1]}  ${bool[0]}  ${bool[1]}  ${PUSERNAME282}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3280,7 +3279,7 @@ JD-TC-Add To WaitlistByConsumer-UH16
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME282}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3306,7 +3305,7 @@ JD-TC-Add To WaitlistByConsumer-UH16
     ${resp}=  Consumer Logout       
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME282}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Waitlist Action  ${waitlist_actions[0]}  ${wid1}
@@ -3320,14 +3319,14 @@ JD-TC-Add To WaitlistByConsumer-UH16
 
 JD-TC-Add To WaitlistByConsumer-UH17
 	[Documentation]  the consumer add to waitlist for a service with prepayment  , try to change prepaymentPending to STARTED 
-    # ${resp}=   Run Keywords   clear_queue  ${PUSERPH3}  AND  # clear waitlist   ${PUSERPH3}
-    ${pid1}=  get_acc_id  ${PUSERPH3}
+    # ${resp}=   Run Keywords   clear_queue  ${PUSERNAME282}  AND  # clear waitlist   ${PUSERNAME282}
+    ${pid1}=  get_acc_id  ${PUSERNAME282}
     ${cid}=  get_id  ${CUSERNAME5}
     # ${DAY}=  db.get_date_by_timezone  ${tz}
     ${DAY}=  get_date_by_timezone  ${tz}
-   clear Customer  ${PUSERPH3}
+   clear Customer  ${PUSERNAME282}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME282}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3417,7 +3416,7 @@ JD-TC-Add To WaitlistByConsumer-UH17
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME282}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
@@ -3440,15 +3439,15 @@ JD-TC-Add To WaitlistByConsumer-UH17
 
 JD-TC-Add To WaitlistByConsumer-21
 	[Documentation]  the consumer add to waitlist for a service with prepayment  , try to change prepaymentPending to checkedIn 
-    # ${resp}=   Run Keywords   clear_queue  ${PUSERPH3}  
-    # AND  # clear waitlist   ${PUSERPH3}
-    ${pid1}=  get_acc_id  ${PUSERPH3}
+    # ${resp}=   Run Keywords   clear_queue  ${PUSERNAME282}  
+    # AND  # clear waitlist   ${PUSERNAME282}
+    ${pid1}=  get_acc_id  ${PUSERNAME282}
     ${cid}=  get_id  ${CUSERNAME5}
     # ${DAY}=  db.get_date_by_timezone  ${tz}
     ${DAY}=  get_date_by_timezone  ${tz}
-   clear Customer  ${PUSERPH3}
+   clear Customer  ${PUSERNAME282}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME282}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3547,7 +3546,7 @@ JD-TC-Add To WaitlistByConsumer-21
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME282}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
@@ -3560,14 +3559,14 @@ JD-TC-Add To WaitlistByConsumer-21
 
 JD-TC-Add To WaitlistByConsumer-22
 	[Documentation]  checking the waitlistStatus of a consumer 
-    # ${resp}=   Run Keywords   clear_queue  ${PUSERPH3}  
-    # AND  # clear waitlist   ${PUSERPH3}
-    ${pid1}=  get_acc_id  ${PUSERPH3}
+    # ${resp}=   Run Keywords   clear_queue  ${PUSERNAME282}  
+    # AND  # clear waitlist   ${PUSERNAME282}
+    ${pid1}=  get_acc_id  ${PUSERNAME282}
     ${cid}=  get_id  ${CUSERNAME8}
-   clear Customer  ${PUSERPH3}
+   clear Customer  ${PUSERNAME282}
     
 
-    ${resp}=  Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME282}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3648,13 +3647,13 @@ JD-TC-Add To WaitlistByConsumer-22
 
 JD-TC-Add To WaitlistByConsumer-23
 	[Documentation]  the consumer add to waitlist for a service with prepayment , try to change prepaymentPending to Cancel 
-    # ${resp}=   Run Keywords   clear_queue  ${PUSERPH3}  
-    # AND  # clear waitlist   ${PUSERPH3}
-    ${pid1}=  get_acc_id  ${PUSERPH3}
+    # ${resp}=   Run Keywords   clear_queue  ${PUSERNAME282}  
+    # AND  # clear waitlist   ${PUSERNAME282}
+    ${pid1}=  get_acc_id  ${PUSERNAME282}
     ${cid}=  get_id  ${CUSERNAME2}
     
 
-    ${resp}=  Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME282}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3728,7 +3727,7 @@ JD-TC-Add To WaitlistByConsumer-23
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME282}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3779,7 +3778,7 @@ JD-TC-Add To WaitlistByConsumer-23
     ${resp}=  Consumer Logout       
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME282}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200    
     
