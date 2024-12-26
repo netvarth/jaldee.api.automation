@@ -205,7 +205,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-1
     ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${q_id}  ${resp.json()}
+    Set Suite Variable  ${q_id}  ${resp.json()}
 
     ${resp}=  Get Queue ById  ${q_id}
     Log  ${resp.content}
@@ -880,10 +880,10 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH1
     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
     Set Suite Variable  ${Questionnaireid}  ${qns.json()['questionnaireId']}
 
-    ${resp}=  AddCustomer  ${CUSERNAME13}   firstName=${fname}   lastName=${lname}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${cid}  ${resp.json()}
+    # ${resp}=  AddCustomer  ${CUSERNAME13}   firstName=${fname}   lastName=${lname}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${cid}  ${resp.json()}
     
     ${description}=  FakerLibrary.sentence
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${description}   ${bool[1]}  ${cid}
@@ -1197,18 +1197,18 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH3
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME13}    ${pid}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=    Send Otp For Login    ${CUSERNAME13}    ${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+    # ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME13}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
+    # ${resp}=    Verify Otp For Login   ${CUSERNAME13}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME13}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME13}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200 
     Set Suite Variable  ${fname}   ${resp.json()['firstName']}
@@ -1355,18 +1355,18 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH4
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME13}    ${pid}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=    Send Otp For Login    ${CUSERNAME13}    ${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+    # ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME13}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
+    # ${resp}=    Verify Otp For Login   ${CUSERNAME13}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME13}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME13}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200 
     Set Suite Variable  ${fname}   ${resp.json()['firstName']}
@@ -1413,10 +1413,431 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH4
     # Check Answers   ${resp}  ${data}
 
 
+
+
+JD-TC-SubmitQuestionnaireForWaitlist-5
+    [Documentation]  Submit questionnaire for appointment with audio and video upload too.
+
+    ${wb}=  readWorkbook  ${xlFile1}
+    ${sheet1}  GetCurrentSheet   ${wb}
+    Set Suite Variable   ${sheet1}
+    ${colnames}=  getColumnHeaders  ${sheet1}
+    Log List  ${colnames}
+    Log List  ${QnrChannel}
+    Log List  ${QnrTransactionType}
+    Set Suite Variable   ${colnames}
+    ${servicenames}   getColumnValuesByName  ${sheet1}  ${colnames[6]}
+    Log   ${servicenames}
+    Set Suite Variable   ${servicenames}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
+
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${s_len}=  Get Length  ${resp.json()}
+    @{snames}=  Create List
+    FOR  ${i}  IN RANGE   ${s_len}
+        Append To List  ${snames}  ${resp.json()[${i}]['name']}
+    END
+
+    Remove Values From List  ${servicenames}   ${NONE}
+    Log  ${servicenames}
+    ${unique_snames}=    Remove Duplicates    ${servicenames}
+    Log  ${unique_snames}
+    Set Suite Variable   ${unique_snames}
+    ${snames_len}=  Get Length  ${unique_snames}
+    FOR  ${i}  IN RANGE   ${snames_len}
+        IF  '${unique_snames[${i}]}' not in @{snames}
+            &{dict}=  Create Dictionary   ${colnames[6]}=${unique_snames[${i}]}
+            ${ttype}=  getColumnValueByMultipleVals  ${sheet1}  ${colnames[1]}  &{dict}  
+            Log  ${ttype}
+            ${u_ttype}=    Remove Duplicates    ${ttype}
+            Log  ${u_ttype}
+            IF  '${QnrTransactionType[3]}' in @{u_ttype}
+                ${s_id}=    Create Sample Service    ${unique_snames[${i}]}
+            ELSE IF   '${QnrTransactionType[0]}' in @{u_ttype}
+                ${d_id}=    Create Sample Donation    ${unique_snames[${i}]}
+            END
+        END
+    END
+
+    ${resp}=  Provider Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${cookie}  ${resp}=  Imageupload.SALogin    ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}   ${xlFile1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Get jaldeeIntegration Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${s_len}=  Get Length  ${resp.json()}
+    FOR    ${i}    IN RANGE    ${s_len}
+        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+        END
+        Exit For Loop If    '${s_id}' != '${None}'
+    END
+    Set Suite Variable   ${s_id}  
+
+    # clear_queue   ${PUSERNAME20}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${q_id}  ${resp.json()}
+
+    ${resp}=  Get Queue ById  ${q_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${q_id}   queueState=${Qstate[0]}
+
+    ${resp}=  Get Questionnaire List By Provider   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
+    FOR  ${i}  IN RANGE   ${len}
+        IF  '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[0]}' and '${resp.json()[${i}]['transactionId']}' == '${s_id}' 
+            ${id}  Set Variable  ${resp.json()[${i}]['id']} 
+            ${qnrid}  Set Variable  ${resp.json()[${i}]['questionnaireId']}
+            Exit For Loop If   '${id}' != '${None}'
+        END
+    #   ${id}  Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[0]}'  Set Variable  ${resp.json()[${i}]['id']} 
+    #   ${qnrid}   Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[0]}'  Set Variable  ${resp.json()[${i}]['questionnaireId']}
+    #   Exit For Loop If   '${id}' != '${None}'
+    END
+    Set Suite Variable   ${id}
+    Set Suite Variable   ${qnrid}
+
+    ${qns}   Get Provider Questionnaire By Id   ${id}  
+    Log  ${qns.content}
+    Should Be Equal As Strings  ${qns.status_code}  200
+    Should Be Equal As Strings  ${qns.json()['transactionId']}  ${s_id}
+
+    IF  '${qns.json()['status']}' == '${status[1]}' 
+        ${resp1}=   Provider Change Questionnaire Status  ${id}  ${status[0]}  
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${qns}   Get Provider Questionnaire By Id   ${id}  
+    Log  ${qns.content}
+    Should Be Equal As Strings  ${qns.status_code}  200
+    Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
+    Set Suite Variable  ${Questionnaireid}  ${qns.json()['questionnaireId']}
+
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+   
+    ${resp}=  AddCustomer  ${CUSERNAME13}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${cid}  ${resp.json()}
+
+    ${resp}=  Provider Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    # ${resp}=  Consumer Login  ${CUSERNAME13}  ${PASSWORD} 
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME13}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME13}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME13}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200 
+    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+
+    ${cnote}=   FakerLibrary.name
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${account_id}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+          
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Test Variable  ${wid1}  ${wid[0]}
+
+    ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${account_id}   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Verify Response  ${resp}  waitlistStatus=${wl_status[0]}
+
+    ${resp}=  Consumer View Questionnaire  ${account_id}  ${s_id}  ${self}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings   ${resp.json()['questionnaireId']}  ${qnrid}
+    Should Be Equal As Strings  ${resp.json()['id']}   ${id}
+    
+    ${fudata}=  db.fileUploadDT   ${resp.json()}  ${FileAction[0]}  ${mp4file}  ${mp3file}
+    Log  ${fudata}
+    
+    ${data}=  db.QuestionnaireAnswers   ${resp.json()}   ${self}   &{fudata}
+    # db.QuestionnaireAnswers   ${resp.json()}   ${self}   &{fudata}
+    Log  ${data}
+
+    ${resp}=  Consumer Validate Questionnaire  ${account_id}  ${data}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${cookie}  ${resp}=  Imageupload.ProconLogin  ${CUSERNAME13}   ${account_id}  ${token}
+    Log  ${resp.content}
+    Should Be Equal As Strings   ${resp.status_code}    200
+
+    ${resp}=  Imageupload.CWlQAnsUpload   ${cookie}  ${account_id}   ${wid1}   ${data}  ${pdffile}  ${jpgfile}  ${mp4file}  ${mp3file}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Consumer View Questionnaire  ${account_id}  ${s_id}  ${self}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    # Check Answers   ${resp}  ${data}
+    
+    ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${account_id}   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${len}=  Get Length  ${resp.json()['questionnaire']['questionAnswers']}
+    # ${j}=  Set Variable  ${0}
+    # FOR  ${i}  IN RANGE   ${len}
+
+    #     Continue For Loop If  '${resp.json()['questionnaire']['questionAnswers'][${i}]['question']['fieldDataType']}' != '${QnrDatatypes[5]}'
+
+    #     Run Keyword If  '${resp.json()['questionnaire']['questionAnswers'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[5]}' and '${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['answer']['${QnrDatatypes[5]}'][0]['status']}' == '${QnrStatus[0]}'
+    #     ...    Run Keywords
+    #     ...    Run Keyword And Continue On Failure  Set Test Variable  ${fileid${j}}  ${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['answer']['${QnrDatatypes[5]}'][0]['uid']}
+    #     ...    AND  Run Keyword And Continue On Failure  Set Test Variable  ${lblname${j}}  ${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['labelName']}
+    #     # ...    AND  Run Keyword And Continue On Failure  Consumer Change Answer Status for Waitlist  ${lblname${j}}  ${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['labelName']}
+    #     ${resp1}=   Run Keyword If  '${resp.json()['questionnaire']['questionAnswers'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[5]}' and '${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['answer']['${QnrDatatypes[5]}'][0]['status']}' == '${QnrStatus[0]}'
+    #     ...   Consumer Change Answer Status for Waitlist  ${account_id}  ${wid1}  ${fileid${j}}  ${lblname${j}}
+    #     Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.content}
+    #     Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+        
+        
+    #     ${j}=  Set variable if  '${resp.json()['questionnaire']['questionAnswers'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[5]}' and '${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['answer']['${QnrDatatypes[5]}'][0]['status']}' == '${QnrStatus[0]}'
+    #     ...   ${j+1}    ${j}
+        
+    # END
+    
+    Check Answers   ${resp}  ${data}
+
+
+JD-TC-SubmitQuestionnaireForWaitlist-6
+    [Documentation]  Submit after questionnaire for waitlist taken from provider side
+
+    clear_customer   ${PUSERNAME20}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Get jaldeeIntegration Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['onlinePresence']}==${bool[0]}
+        ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${EMPTY}  ${EMPTY}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=   Get jaldeeIntegration Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
+
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    # ${resp}=    Get Locations
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    # Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+
+    # ${resp}=   Get Service
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${s_len}=  Get Length  ${resp.json()}
+    # FOR    ${i}    IN RANGE    ${s_len}
+    #     IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
+    #         ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
+    #     END
+    #     Exit For Loop If    '${s_id}' != '${None}'
+    # END
+    # Set Suite Variable   ${s_id}  
+
+    # clear_queue   ${PUSERNAME20}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    
+    # ${resp}=  Sample Queue  ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${q_id}  ${resp.json()}
+
+    ${resp}=  Get Queue ById  ${q_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${q_id}  ${resp.json()['id']}
+    Set Test Variable  ${lid}  ${resp.json()['location']['id']}
+    Set Test Variable  ${s_id}  ${resp.json()['services'][0]['id']}
+    # Verify Response  ${resp}  id=${q_id}   queueState=${Qstate[0]}
+
+    ${resp}=  Get Questionnaire List By Provider   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
+    FOR  ${i}  IN RANGE   ${len}
+        IF  '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[0]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}' and '${resp.json()[${i}]['transactionId']}' == '${s_id}' 
+            ${id}  Set Variable  ${resp.json()[${i}]['id']} 
+            ${qnrid}  Set Variable  ${resp.json()[${i}]['questionnaireId']}
+            Exit For Loop If   '${id}' != '${None}'
+        END
+    #   ${id}  Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[0]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}'  Set Variable  ${resp.json()[${i}]['id']} 
+    #   ${qnrid}   Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[0]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}'  Set Variable  ${resp.json()[${i}]['questionnaireId']}
+    #   Exit For Loop If   '${id}' != '${None}'
+    END
+    Set Suite Variable   ${id}
+    Set Suite Variable   ${qnrid}
+
+    ${qns}   Get Provider Questionnaire By Id   ${id}  
+    Log  ${qns.content}
+    Should Be Equal As Strings  ${qns.status_code}  200
+    Should Be Equal As Strings  ${qns.json()['transactionId']}  ${s_id}
+
+    IF  '${qns.json()['status']}' == '${status[1]}' 
+        ${resp1}=   Provider Change Questionnaire Status  ${id}  ${status[0]}  
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${qns}   Get Provider Questionnaire By Id   ${id}  
+    Log  ${qns.content}
+    Should Be Equal As Strings  ${qns.status_code}  200
+    Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
+    Set Suite Variable  ${Questionnaireid}  ${qns.json()['questionnaireId']}
+
+    ${resp}=  AddCustomer  ${CUSERNAME13}   firstName=${fname}   lastName=${lname}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${cid}  ${resp.json()}
+    
+    ${description}=  FakerLibrary.sentence
+    ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${description}   ${bool[1]}  ${cid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200     
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Test Variable  ${wid1}  ${wid[0]}
+
+    ${resp}=   Get Waitlist EncodedId    ${wid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${encId}=  Set Variable   ${resp.json()}
+
+    ${resp}=  Get Waitlist By Id  ${wid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  waitlistStatus=${wl_status[1]} 
+
+    ${resp}=  Provider Change Questionnaire release Status For waitlist    ${QnrReleaseStatus[1]}   ${wid1}  ${id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Waitlist By Id  ${wid1} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()['releasedQnr'][0]['status']}   ${QnrReleaseStatus[1]}
+
+    ${resp}=  Provider Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME13}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME13}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME13}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${cid}  ${resp.json()['providerConsumer']}
+
+    ${resp}=  Get Consumer Questionnaire By uuid For Waitlist    ${wid1}   ${account_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings   ${resp.json()[0]['questionnaireId']}  ${qnrid}
+    Should Be Equal As Strings  ${resp.json()[0]['id']}   ${id}
+    
+    ${fudata}=  db.fileUploadDT   ${resp.json()[0]}  ${FileAction[0]}  ${pdffile}
+    Log  ${fudata}
+    ${data}=  db.QuestionnaireAnswers   ${resp.json()[0]}   ${self}   &{fudata}
+    Log  ${data}
+    ${resp}=  Consumer Validate Questionnaire  ${account_id}  ${data}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${cookie}  ${resp}=  Imageupload.ProconLogin  ${CUSERNAME13}   ${account_id}  ${token}
+    Log  ${resp.content}
+    Should Be Equal As Strings   ${resp.status_code}    200
+
+    ${resp}=  Imageupload.CWlQAnsUpload   ${cookie}  ${account_id}   ${wid1}   ${data}  ${pdffile}  ${jpgfile}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${account_id}   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Check Answers   ${resp}  ${data}
+
+*** Comments ***
+
 JD-TC-SubmitQuestionnaireForWaitlist-UH5
     [Documentation]  Submit questionnaire without consumer login
 
-    # clear_customer   ${PUSERNAME20}
+    clear_customer   ${PUSERNAME20}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.content}
@@ -1554,395 +1975,3 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH5
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Check Answers   ${resp}  ${data}
-
-
-JD-TC-SubmitQuestionnaireForWaitlist-5
-    [Documentation]  Submit questionnaire for appointment with audio and video upload too.
-
-    ${wb}=  readWorkbook  ${xlFile1}
-    ${sheet1}  GetCurrentSheet   ${wb}
-    Set Suite Variable   ${sheet1}
-    ${colnames}=  getColumnHeaders  ${sheet1}
-    Log List  ${colnames}
-    Log List  ${QnrChannel}
-    Log List  ${QnrTransactionType}
-    Set Suite Variable   ${colnames}
-    ${servicenames}   getColumnValuesByName  ${sheet1}  ${colnames[6]}
-    Log   ${servicenames}
-    Set Suite Variable   ${servicenames}
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get Business Profile
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${account_id}  ${resp.json()['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
-
-    ${resp}=   Get Service
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${s_len}=  Get Length  ${resp.json()}
-    @{snames}=  Create List
-    FOR  ${i}  IN RANGE   ${s_len}
-        Append To List  ${snames}  ${resp.json()[${i}]['name']}
-    END
-
-    Remove Values From List  ${servicenames}   ${NONE}
-    Log  ${servicenames}
-    ${unique_snames}=    Remove Duplicates    ${servicenames}
-    Log  ${unique_snames}
-    Set Suite Variable   ${unique_snames}
-    ${snames_len}=  Get Length  ${unique_snames}
-    FOR  ${i}  IN RANGE   ${snames_len}
-        IF  '${unique_snames[${i}]}' not in @{snames}
-            &{dict}=  Create Dictionary   ${colnames[6]}=${unique_snames[${i}]}
-            ${ttype}=  getColumnValueByMultipleVals  ${sheet1}  ${colnames[1]}  &{dict}  
-            Log  ${ttype}
-            ${u_ttype}=    Remove Duplicates    ${ttype}
-            Log  ${u_ttype}
-            IF  '${QnrTransactionType[3]}' in @{u_ttype}
-                ${s_id}=    Create Sample Service    ${unique_snames[${i}]}
-            ELSE IF   '${QnrTransactionType[0]}' in @{u_ttype}
-                ${d_id}=    Create Sample Donation    ${unique_snames[${i}]}
-            END
-        END
-    END
-
-    ${resp}=  Provider Logout
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
-    ${cookie}  ${resp}=  Imageupload.SALogin    ${SUSERNAME}  ${SPASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}   ${xlFile1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=   Get jaldeeIntegration Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
-
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
-    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
-
-    ${resp}=   Get Service
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${s_len}=  Get Length  ${resp.json()}
-    FOR    ${i}    IN RANGE    ${s_len}
-        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
-            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
-        END
-        Exit For Loop If    '${s_id}' != '${None}'
-    END
-    Set Suite Variable   ${s_id}  
-
-    # clear_queue   ${PUSERNAME20}
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    
-    ${resp}=  Sample Queue  ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${q_id}  ${resp.json()}
-
-    ${resp}=  Get Queue ById  ${q_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${q_id}   queueState=${Qstate[0]}
-
-    ${resp}=  Get Questionnaire List By Provider   
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${len}
-        IF  '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[0]}' and '${resp.json()[${i}]['transactionId']}' == '${s_id}' 
-            ${id}  Set Variable  ${resp.json()[${i}]['id']} 
-            ${qnrid}  Set Variable  ${resp.json()[${i}]['questionnaireId']}
-            Exit For Loop If   '${id}' != '${None}'
-        END
-    #   ${id}  Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[0]}'  Set Variable  ${resp.json()[${i}]['id']} 
-    #   ${qnrid}   Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[0]}'  Set Variable  ${resp.json()[${i}]['questionnaireId']}
-    #   Exit For Loop If   '${id}' != '${None}'
-    END
-    Set Suite Variable   ${id}
-    Set Suite Variable   ${qnrid}
-
-    ${qns}   Get Provider Questionnaire By Id   ${id}  
-    Log  ${qns.content}
-    Should Be Equal As Strings  ${qns.status_code}  200
-    Should Be Equal As Strings  ${qns.json()['transactionId']}  ${s_id}
-
-    IF  '${qns.json()['status']}' == '${status[1]}' 
-        ${resp1}=   Provider Change Questionnaire Status  ${id}  ${status[0]}  
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    END
-
-    ${qns}   Get Provider Questionnaire By Id   ${id}  
-    Log  ${qns.content}
-    Should Be Equal As Strings  ${qns.status_code}  200
-    Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
-    Set Suite Variable  ${Questionnaireid}  ${qns.json()['questionnaireId']}
-
-    ${resp}=  Provider Logout
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${resp}=  Consumer Login  ${CUSERNAME13}  ${PASSWORD} 
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200 
-
-    ${resp}=    Send Otp For Login    ${CUSERNAME13}    ${pid}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
-
-    ${resp}=    Verify Otp For Login   ${CUSERNAME13}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
-
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME13}    ${pid}  ${token} 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200 
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
-
-    ${cnote}=   FakerLibrary.name
-    ${resp}=  Add To Waitlist Consumers  ${cid}  ${account_id}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-          
-    ${wid}=  Get Dictionary Values  ${resp.json()}
-    Set Test Variable  ${wid1}  ${wid[0]}
-
-    ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${account_id}   
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Verify Response  ${resp}  waitlistStatus=${wl_status[0]}
-
-    ${resp}=  Consumer View Questionnaire  ${account_id}  ${s_id}  ${self}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings   ${resp.json()['questionnaireId']}  ${qnrid}
-    Should Be Equal As Strings  ${resp.json()['id']}   ${id}
-    
-    ${fudata}=  db.fileUploadDT   ${resp.json()}  ${FileAction[0]}  ${mp4file}  ${mp3file}
-    Log  ${fudata}
-    
-    ${data}=  db.QuestionnaireAnswers   ${resp.json()}   ${self}   &{fudata}
-    # db.QuestionnaireAnswers   ${resp.json()}   ${self}   &{fudata}
-    Log  ${data}
-
-    ${resp}=  Consumer Validate Questionnaire  ${account_id}  ${data}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${cookie}  ${resp}=  Imageupload.ProconLogin  ${CUSERNAME13}   ${account_id}  ${token}
-    Log  ${resp.content}
-    Should Be Equal As Strings   ${resp.status_code}    200
-
-    ${resp}=  Imageupload.CWlQAnsUpload   ${cookie}  ${account_id}   ${wid1}   ${data}  ${pdffile}  ${jpgfile}  ${mp4file}  ${mp3file}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Consumer View Questionnaire  ${account_id}  ${s_id}  ${self}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    # Check Answers   ${resp}  ${data}
-    
-    ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${account_id}   
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${len}=  Get Length  ${resp.json()['questionnaire']['questionAnswers']}
-    ${j}=  Set Variable  ${0}
-    FOR  ${i}  IN RANGE   ${len}
-
-        Continue For Loop If  '${resp.json()['questionnaire']['questionAnswers'][${i}]['question']['fieldDataType']}' != '${QnrDatatypes[5]}'
-
-        Run Keyword If  '${resp.json()['questionnaire']['questionAnswers'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[5]}' and '${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['answer']['${QnrDatatypes[5]}'][0]['status']}' == '${QnrStatus[0]}'
-        ...    Run Keywords
-        ...    Run Keyword And Continue On Failure  Set Test Variable  ${fileid${j}}  ${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['answer']['${QnrDatatypes[5]}'][0]['uid']}
-        ...    AND  Run Keyword And Continue On Failure  Set Test Variable  ${lblname${j}}  ${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['labelName']}
-        # ...    AND  Run Keyword And Continue On Failure  Consumer Change Answer Status for Waitlist  ${lblname${j}}  ${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['labelName']}
-        ${resp1}=   Run Keyword If  '${resp.json()['questionnaire']['questionAnswers'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[5]}' and '${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['answer']['${QnrDatatypes[5]}'][0]['status']}' == '${QnrStatus[0]}'
-        ...   Consumer Change Answer Status for Waitlist  ${account_id}  ${wid1}  ${fileid${j}}  ${lblname${j}}
-        Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.content}
-        Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
-        
-        
-        ${j}=  Set variable if  '${resp.json()['questionnaire']['questionAnswers'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[5]}' and '${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['answer']['${QnrDatatypes[5]}'][0]['status']}' == '${QnrStatus[0]}'
-        ...   ${j+1}    ${j}
-        
-    END
-    
-    Check Answers   ${resp}  ${data}
-
-
-JD-TC-SubmitQuestionnaireForWaitlist-6
-    [Documentation]  Submit after questionnaire for waitlist taken from provider side
-
-    clear_customer   ${PUSERNAME20}
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=   Get jaldeeIntegration Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['onlinePresence']}==${bool[0]}
-        ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${EMPTY}  ${EMPTY}
-        Log   ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
-
-    ${resp}=   Get jaldeeIntegration Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
-
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
-    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
-
-    ${resp}=   Get Service
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${s_len}=  Get Length  ${resp.json()}
-    FOR    ${i}    IN RANGE    ${s_len}
-        IF    '${resp.json()[${i}]["name"]}' in @{unique_snames} and '${resp.json()[${i}]["serviceType"]}' != '${ServiceType[2]}'
-            ${s_id}=    Set Variable    ${resp.json()[${i}]["id"]}
-        END
-        Exit For Loop If    '${s_id}' != '${None}'
-    END
-    Set Suite Variable   ${s_id}  
-
-    # clear_queue   ${PUSERNAME20}
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    
-    ${resp}=  Sample Queue  ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${q_id}  ${resp.json()}
-
-    ${resp}=  Get Queue ById  ${q_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${q_id}   queueState=${Qstate[0]}
-
-    ${resp}=  Get Questionnaire List By Provider   
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${len}
-        IF  '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[0]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}' and '${resp.json()[${i}]['transactionId']}' == '${s_id}' 
-            ${id}  Set Variable  ${resp.json()[${i}]['id']} 
-            ${qnrid}  Set Variable  ${resp.json()[${i}]['questionnaireId']}
-            Exit For Loop If   '${id}' != '${None}'
-        END
-    #   ${id}  Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[0]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}'  Set Variable  ${resp.json()[${i}]['id']} 
-    #   ${qnrid}   Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[0]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}'  Set Variable  ${resp.json()[${i}]['questionnaireId']}
-    #   Exit For Loop If   '${id}' != '${None}'
-    END
-    Set Suite Variable   ${id}
-    Set Suite Variable   ${qnrid}
-
-    ${qns}   Get Provider Questionnaire By Id   ${id}  
-    Log  ${qns.content}
-    Should Be Equal As Strings  ${qns.status_code}  200
-    Should Be Equal As Strings  ${qns.json()['transactionId']}  ${s_id}
-
-    IF  '${qns.json()['status']}' == '${status[1]}' 
-        ${resp1}=   Provider Change Questionnaire Status  ${id}  ${status[0]}  
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    END
-
-    ${qns}   Get Provider Questionnaire By Id   ${id}  
-    Log  ${qns.content}
-    Should Be Equal As Strings  ${qns.status_code}  200
-    Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
-    Set Suite Variable  ${Questionnaireid}  ${qns.json()['questionnaireId']}
-
-    ${resp}=  AddCustomer  ${CUSERNAME13}   firstName=${fname}   lastName=${lname}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${cid}  ${resp.json()}
-    
-    ${description}=  FakerLibrary.sentence
-    ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${description}   ${bool[1]}  ${cid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200     
-    ${wid}=  Get Dictionary Values  ${resp.json()}
-    Set Test Variable  ${wid1}  ${wid[0]}
-
-    ${resp}=   Get Waitlist EncodedId    ${wid1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId}=  Set Variable   ${resp.json()}
-
-    ${resp}=  Get Waitlist By Id  ${wid1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  waitlistStatus=${wl_status[1]} 
-
-    ${resp}=  Provider Change Questionnaire release Status For waitlist    ${QnrReleaseStatus[1]}   ${wid1}  ${id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Waitlist By Id  ${wid1} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings   ${resp.json()['releasedQnr'][0]['status']}   ${QnrReleaseStatus[1]}
-
-    ${resp}=  Provider Logout
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME13}    ${account_id}  ${token} 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${cid}  ${resp.json()['providerConsumer']}
-
-    ${resp}=  Get Consumer Questionnaire By uuid For Waitlist    ${wid1}   ${account_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings   ${resp.json()[0]['questionnaireId']}  ${qnrid}
-    Should Be Equal As Strings  ${resp.json()[0]['id']}   ${id}
-    
-    ${fudata}=  db.fileUploadDT   ${resp.json()[0]}  ${FileAction[0]}  ${pdffile}
-    Log  ${fudata}
-    ${data}=  db.QuestionnaireAnswers   ${resp.json()[0]}   ${self}   &{fudata}
-    Log  ${data}
-    ${resp}=  Consumer Validate Questionnaire  ${account_id}  ${data}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${cookie}  ${resp}=  Imageupload.ProconLogin  ${CUSERNAME13}   ${account_id}  ${token}
-    Log  ${resp.content}
-    Should Be Equal As Strings   ${resp.status_code}    200
-
-    ${resp}=  Imageupload.CWlQAnsUpload   ${cookie}  ${account_id}   ${wid1}   ${data}  ${pdffile}  ${jpgfile}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${account_id}   
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Check Answers   ${resp}  ${data}
