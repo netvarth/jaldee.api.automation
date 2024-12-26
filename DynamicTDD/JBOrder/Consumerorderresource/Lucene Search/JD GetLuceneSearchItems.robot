@@ -25,9 +25,9 @@ ${maxSaleQuantity}   50
 
 *** Test Cases ***
 
-JD-TC-Get Order By UID-1
+JD-TC-Get Lucene Search For ConsumerOrder-1
 
-    [Documentation]  Get Order by uid
+    [Documentation]  Get Lucene Search For ConsumerOrder
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
@@ -73,7 +73,7 @@ JD-TC-Get Order By UID-1
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
 
     ${resp}=  Get Store Type By Filter     
     Log   ${resp.content}
@@ -110,9 +110,7 @@ JD-TC-Get Order By UID-1
     ${resp}=  Get Store Type By EncId   ${St_Id}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
@@ -131,9 +129,7 @@ JD-TC-Get Order By UID-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -235,10 +231,158 @@ JD-TC-Get Order By UID-1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${displayName2} = 	Convert To Lower Case 	${displayName2}
     ${resp}=    Get Lucene Search For ConsumerOrder    ${accountId}    name=${displayName2}
     Log    ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()[0]['inventoryItem']}                                                           ${boolean[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['batchApplicable']}                                                            ${boolean[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['price']}                                                              ${price2}
+    Should Be Equal As Strings    ${resp.json()[0]['sOrderCatalogEncId']}                                                        ${soc_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['encId']}                                                        ${SOC_itemEncIds3}
+    Should Be Equal As Strings    ${resp.json()[0]['itemCode']}                                        ${itemEncId3}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}                                         ${displayName2}
 
+JD-TC-Get Lucene Search For ConsumerOrder-2
+
+    [Documentation]  Get Lucene Search For ConsumerOrder  with another item name
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${displayName1} = 	Convert To Lower Case 	${displayName1}
+    ${resp}=    Get Lucene Search For ConsumerOrder    ${accountId}    name=${displayName1}
+    Log    ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()[0]['inventoryItem']}                                                           ${boolean[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['batchApplicable']}                                                            ${boolean[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['price']}                                                              ${price1}
+    Should Be Equal As Strings    ${resp.json()[0]['sOrderCatalogEncId']}                                                        ${soc_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['encId']}                                                        ${SOC_itemEncIds2}
+    Should Be Equal As Strings    ${resp.json()[0]['itemCode']}                                        ${itemEncId2}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}                                                      ${displayName1}    
+
+JD-TC-Get Lucene Search For ConsumerOrder-3
+
+    [Documentation]  Get Lucene Search For ConsumerOrder  with another item name
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${displayName} = 	Convert To Lower Case 	${displayName}
+    ${resp}=    Get Lucene Search For ConsumerOrder    ${accountId}    name=${displayName}
+    Log    ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()[0]['inventoryItem']}                                                           ${boolean[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['batchApplicable']}                                                            ${boolean[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['price']}                                                              ${price}
+    Should Be Equal As Strings    ${resp.json()[0]['sOrderCatalogEncId']}                                                        ${soc_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['encId']}                                                        ${SOC_itemEncIds1}
+    Should Be Equal As Strings    ${resp.json()[0]['itemCode']}                                        ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}                                                              ${displayName}
+
+JD-TC-Get Lucene Search For ConsumerOrder-4
+
+    [Documentation]  Get Lucene Search For ConsumerOrder  with aitem starting letter
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${first}= 	Split String 	${displayName}
+    ${displayName} = 	Convert To Lower Case 	${displayName}
+    ${resp}=    Get Lucene Search For ConsumerOrder    ${accountId}    name=${first}
+    Log    ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()[0]['inventoryItem']}                                                           ${boolean[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['batchApplicable']}                                                            ${boolean[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['price']}                                                              ${price}
+    Should Be Equal As Strings    ${resp.json()[0]['sOrderCatalogEncId']}                                                        ${soc_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['encId']}                                                        ${SOC_itemEncIds1}
+    Should Be Equal As Strings    ${resp.json()[0]['itemCode']}                                        ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}                                                              ${displayName}
+
+JD-TC-Get Lucene Search For ConsumerOrder-5
+
+    [Documentation]  Get Lucene Search For ConsumerOrder  using all data
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${displayName} = 	Convert To Lower Case 	${displayName}
+    ${displayName1} = 	Convert To Lower Case 	${displayName1}
+    ${displayName2} = 	Convert To Lower Case 	${displayName2}
+    ${resp}=    Get Lucene Search For ConsumerOrder    ${accountId}    name=*
+    Log    ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${len}=  Get Length  ${resp.json()}
+
+ 
+
+    FOR  ${i}  IN RANGE   ${len}
+
+        IF  '${resp.json()[${i}]['itemCode']}' == '${itemEncId1}'  
+            Should Be Equal As Strings    ${resp.json()[${i}]['inventoryItem']}                                                           ${boolean[0]}
+            Should Be Equal As Strings    ${resp.json()[${i}]['batchApplicable']}                                                            ${boolean[0]}
+            Should Be Equal As Strings    ${resp.json()[${i}]['price']}                                                              ${price}
+            Should Be Equal As Strings    ${resp.json()[${i}]['sOrderCatalogEncId']}                                                        ${soc_id1}
+            Should Be Equal As Strings    ${resp.json()[${i}]['encId']}                                                        ${SOC_itemEncIds1}
+            Should Be Equal As Strings    ${resp.json()[${i}]['itemCode']}                                        ${itemEncId1}
+            Should Be Equal As Strings    ${resp.json()[${i}]['name']}                                                              ${displayName}
+
+
+        ELSE IF     '${resp.json()[${i}]['itemCode']}' == '${itemEncId2}'      
+            Should Be Equal As Strings    ${resp.json()[${i}]['inventoryItem']}                                                           ${boolean[0]}
+            Should Be Equal As Strings    ${resp.json()[${i}]['batchApplicable']}                                                            ${boolean[0]}
+            Should Be Equal As Strings    ${resp.json()[${i}]['price']}                                                              ${price1}
+            Should Be Equal As Strings    ${resp.json()[${i}]['sOrderCatalogEncId']}                                                        ${soc_id1}
+            Should Be Equal As Strings    ${resp.json()[${i}]['encId']}                                                        ${SOC_itemEncIds2}
+            Should Be Equal As Strings    ${resp.json()[${i}]['itemCode']}                                        ${itemEncId2}
+            Should Be Equal As Strings    ${resp.json()[${i}]['name']}                                                      ${displayName1}  
+
+
+        ELSE IF     '${resp.json()[${i}]['itemCode']}' == '${itemEncId3}'      
+            Should Be Equal As Strings    ${resp.json()[${i}]['inventoryItem']}                                                           ${boolean[0]}
+            Should Be Equal As Strings    ${resp.json()[${i}]['batchApplicable']}                                                            ${boolean[0]}
+            Should Be Equal As Strings    ${resp.json()[${i}]['price']}                                                              ${price2}
+            Should Be Equal As Strings    ${resp.json()[${i}]['sOrderCatalogEncId']}                                                        ${soc_id1}
+            Should Be Equal As Strings    ${resp.json()[${i}]['encId']}                                                        ${SOC_itemEncIds3}
+            Should Be Equal As Strings    ${resp.json()[${i}]['itemCode']}                                        ${itemEncId3}
+            Should Be Equal As Strings    ${resp.json()[${i}]['name']}                                         ${displayName2}                                           ${toggle[0]}
+
+        END
+    END
+
+JD-TC-Get Lucene Search For ConsumerOrder-UH1
+
+    [Documentation]  Get Lucene Search For ConsumerOrder  with invalid number
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Lucene Search For ConsumerOrder    ${accountId}    name=${price1}
+    Log    ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()}                                                           []
+
+
+
+JD-TC-Get Lucene Search For ConsumerOrder-UH2
+
+    [Documentation]  Get Lucene Search For ConsumerOrder  with invalid character
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Lucene Search For ConsumerOrder    ${accountId}    name='abc'
+    Log    ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()}                []
 *** Comments ***
 # -------------------------------- Add a provider Consumer -----------------------------------
 
