@@ -1430,7 +1430,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-5
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1481,7 +1481,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

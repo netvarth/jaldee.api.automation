@@ -909,12 +909,11 @@ JD-TC-SubmitServiceOptionsForWaitlist-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${reason}=  Random Element  ${waitlist_cancl_reasn}
     ${msg}=   FakerLibrary.word
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=   Waitlist Action Cancel  ${wid1}  ${reason}  ${msg}
+    ${resp}=  Waitlist Action   ${waitlist_actions[2]}  ${wid1}  cancelReason=${waitlist_cancl_reasn[4]}   
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  200 
 
     sleep  02s
     ${resp}=  Get Waitlist By Id   ${wid1}

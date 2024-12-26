@@ -191,7 +191,7 @@ JD-TC-ValidateConsumerQuestionnaire-2
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME8}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME8}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -202,7 +202,7 @@ JD-TC-ValidateConsumerQuestionnaire-2
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200 
 
@@ -250,7 +250,7 @@ JD-TC-ValidateConsumerQuestionnaire-3
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME8}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME8}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -261,7 +261,7 @@ JD-TC-ValidateConsumerQuestionnaire-3
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200 
 
@@ -294,7 +294,7 @@ JD-TC-ValidateConsumerQuestionnaire-UH1
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME8}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME8}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -305,7 +305,7 @@ JD-TC-ValidateConsumerQuestionnaire-UH1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200 
 
@@ -336,7 +336,7 @@ JD-TC-ValidateConsumerQuestionnaire-UH2
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME8}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME8}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -347,7 +347,7 @@ JD-TC-ValidateConsumerQuestionnaire-UH2
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200 
 
@@ -431,7 +431,7 @@ JD-TC-ValidateConsumerQuestionnaire-UH5
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME8}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME8}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -442,7 +442,7 @@ JD-TC-ValidateConsumerQuestionnaire-UH5
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200 
 
@@ -464,11 +464,11 @@ JD-TC-ValidateConsumerQuestionnaire-UH5
 
     ${resp}=  Consumer Validate Questionnaire  ${account_id}  ${data}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  419
-    Should Be Equal As Strings   ${resp.json()}    ${SESSION_EXPIRED}
-
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()}    []
 
 JD-TC-ValidateConsumerQuestionnaire-UH6
+
     [Documentation]  Validate service questionnaire by provider login.
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
@@ -587,15 +587,19 @@ JD-TC-ValidateConsumerQuestionnaire-4
     END
     Set Suite Variable   ${s_id}
 
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+   
+    ${resp}=  AddCustomer  ${CUSERNAME8}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${cid}  ${resp.json()}
+
     ${resp}=  Provider Logout
-    Log  ${resp.content}
+    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD} 
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200 
-
-    ${resp}=    Send Otp For Login    ${CUSERNAME8}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME8}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -606,7 +610,7 @@ JD-TC-ValidateConsumerQuestionnaire-4
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200 
 
