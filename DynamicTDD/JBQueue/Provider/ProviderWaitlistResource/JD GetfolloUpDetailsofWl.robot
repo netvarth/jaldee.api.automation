@@ -108,7 +108,7 @@ JD-TC-GetFollowUpDetailsWl-1
     Set Suite Variable  ${que_id1}   ${resp.json()}  
     # sleep  2s  
     ${desc}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid}
+    ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid}   location=${loc_id2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${wid}=  Get Dictionary Values  ${resp.json()}

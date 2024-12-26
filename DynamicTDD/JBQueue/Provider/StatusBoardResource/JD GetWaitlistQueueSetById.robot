@@ -82,7 +82,7 @@ JD-TC-GetQueueSetById-1
     ${dept1}=   Create Dictionary  departmentId=${depid1}
     ${dep}=  Create List   ${dept1}
     ${w_list}=   Create List    ${wl_status[0]}
-    ${resp}=  Create QueueSet for Branch   ${s_name[0]}  ${s_name[1]}   ${s_desc}   ${fieldList}   ${dep}    ${ser}     ${queue}    ${EMPTY}   ${EMPTY}     ${w_list}    ${statusboard_type[0]}  ${service_list}  ${statusboard_type[1]}  ${queue_list}  ${statusboard_type[2]}  ${department_list}
+    ${resp}=  Create QueueSet for provider   ${s_name[0]}  ${s_name[1]}   ${s_desc}   ${fieldList}   ${ser}     ${queue}    ${EMPTY}   ${EMPTY}     ${w_list}    ${statusboard_type[1]}   ${queue_list}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sbq_id1}  ${resp.json()}
@@ -98,20 +98,21 @@ JD-TC-GetQueueSetById-1
     Should Be Equal As Strings  ${resp.json()['fieldList'][0]['order']}  ${order1}   
     Should Be Equal As Strings  ${resp.json()['fieldList'][0]['displayName']}  ${Values[1]}   
     Should Be Equal As Strings  ${resp.json()['fieldList'][0]['defaultValue']}  ${Values[2]}  
-    Should Be Equal As Strings  ${resp.json()['queueSetFor'][0]['type']}   ${statusboard_type[0]}
-    Should Be Equal As Strings  ${resp.json()['queueSetFor'][1]['type']}   ${statusboard_type[1]}   
-    Should Be Equal As Strings  ${resp.json()['queueSetFor'][2]['type']}   ${statusboard_type[2]}
-    Should Be Equal As Strings  ${resp.json()['qBoardConditions']['departments'][0]['departmentId']}   ${depid1}  
+    Should Be Equal As Strings  ${resp.json()['queueSetFor'][0]['type']}   ${statusboard_type[1]}
     Should Be Equal As Strings  ${resp.json()['qBoardConditions']['services'][0]['id']}   ${s_id1}
     Should Be Equal As Strings  ${resp.json()['qBoardConditions']['queues'][0]['id']}   ${qid1}
-    Should Be Equal As Strings  ${resp.json()['queryString']}     department-eq=${depid1}&service-eq=${s_id1}&queue-eq=${qid1}&waitlistStatus-eq=checkedIn&label-eq=::
+    Should Be Equal As Strings  ${resp.json()['queryString']}    service-eq=${s_id1}&queue-eq=${qid1}&waitlistStatus-eq=checkedIn&label-eq=::
+
 JD-TC-GetQueueSetById -UH1
+
     [Documentation]   Provider get a Waitlist QueueSet without login  
+
     ${resp}=  Get WaitlistQueueSet By Id  ${sbq_id1}
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings   "${resp.json()}"   "${SESSION_EXPIRED}"
 
 JD-TC-GetQueueSetById -UH2
+
     [Documentation]   Consumer get a WaitlistQueueSet
     
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}

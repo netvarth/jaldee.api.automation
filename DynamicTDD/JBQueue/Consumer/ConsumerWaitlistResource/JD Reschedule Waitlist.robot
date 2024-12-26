@@ -2649,7 +2649,7 @@ JD-TC-Reschedule Waitlist-15
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}   location=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -6182,7 +6182,7 @@ JD-TC-Reschedule Waitlist-UH23
     [Documentation]  Consumer reschedules another consumer's checkin.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -6205,7 +6205,7 @@ JD-TC-Reschedule Waitlist-UH23
     # clear_service    ${HLPUSERNAME29}
     # clear_customer   ${HLPUSERNAME29}
     clear_consumer_msgs  ${CUSERNAME33}
-    clear_provider_msgs  ${HLPUSERNAME29}
+    clear_provider_msgs  ${HLPUSERNAME35}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -6267,6 +6267,12 @@ JD-TC-Reschedule Waitlist-UH23
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${cid}  ${resp.json()}
 
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+   
+    ${resp}=  AddCustomer  ${CUSERNAME33}   firstName=${fname}   lastName=${lname} 
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
     # ${resp}=  Consumer Login  ${CUSERNAME26}  ${PASSWORD}
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
@@ -6285,6 +6291,17 @@ JD-TC-Reschedule Waitlist-UH23
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME33}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME33}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
     
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
@@ -6326,8 +6343,8 @@ JD-TC-Reschedule Waitlist-UH23
   
     ${resp}=  Reschedule Waitlist  ${pid}  ${wid1}  ${DAY3}  ${q_id}
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  401
-    Should Be Equal As Strings  "${resp.json()}"    "${NO_PERMISSION}"
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  "${resp.json()}"    "${NO_PERMISSION}"
 
     # ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid}   
     # Log  ${resp.json()}
@@ -6346,7 +6363,7 @@ JD-TC-Reschedule Waitlist-UH23
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

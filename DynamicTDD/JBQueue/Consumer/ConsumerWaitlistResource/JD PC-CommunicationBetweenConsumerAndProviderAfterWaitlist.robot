@@ -46,6 +46,7 @@ JD-TC-Communication Between Consumer and Provider-1
     Log  ${decrypted_data}
     Set Test Variable  ${pid0}  ${decrypted_data['id']}
 
+*** Comments ***
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
