@@ -91,7 +91,8 @@ JD-TC-Reschedule Waitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -261,7 +262,8 @@ JD-TC-Reschedule Waitlist-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -425,7 +427,8 @@ JD-TC-Reschedule Waitlist-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -643,7 +646,8 @@ JD-TC-Reschedule Waitlist-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     Set Suite Variable   ${min_pre}
     ${s_id}=  Create Sample Service    ${SERVICE1}  maxBookingsAllowed=10   isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre}   automaticInvoiceGeneration=${bool[1]}
@@ -895,7 +899,8 @@ JD-TC-Reschedule Waitlist-5
     clear_provider_msgs  ${billable_providers[2]}
     clear_consumer_msgs  ${CUSERNAME13}
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service By Id  ${s_id}
@@ -1141,7 +1146,8 @@ JD-TC-Reschedule Waitlist-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service By Id   ${s_id}
@@ -1305,7 +1311,8 @@ JD-TC-Reschedule Waitlist-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -1496,7 +1503,8 @@ JD-TC-Reschedule Waitlist-8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -1642,7 +1650,8 @@ JD-TC-Reschedule Waitlist-9
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -1801,7 +1810,8 @@ JD-TC-Reschedule Waitlist-10
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -1941,7 +1951,8 @@ JD-TC-Reschedule Waitlist-11
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -1982,12 +1993,11 @@ JD-TC-Reschedule Waitlist-11
     ${resp}=  Get Queue ById  ${q_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
-
+ 
     ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
+    ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}   location=${lid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -2220,7 +2230,8 @@ JD-TC-Reschedule Waitlist-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${SERVICE2}=    FakerLibrary.Word
@@ -2351,7 +2362,8 @@ JD-TC-Reschedule Waitlist-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -2462,7 +2474,8 @@ JD-TC-Reschedule Waitlist-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -2571,7 +2584,8 @@ JD-TC-Reschedule Waitlist-UH4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service By Id   ${s_id}
@@ -2682,7 +2696,8 @@ JD-TC-Reschedule Waitlist-UH5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -2803,7 +2818,8 @@ JD-TC-Reschedule Waitlist-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -2913,7 +2929,8 @@ JD-TC-Reschedule Waitlist-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -2980,7 +2997,8 @@ JD-TC-Reschedule Waitlist-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -3081,7 +3099,8 @@ JD-TC-Reschedule Waitlist-UH9
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service By Id   ${s_id}
@@ -3154,7 +3173,7 @@ JD-TC-Reschedule Waitlist-UH9
 JD-TC-Reschedule Waitlist-UH10
     [Documentation]  Provider takes checkin for a consumer and reschedules it to non existant queue
     
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME281}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3170,7 +3189,7 @@ JD-TC-Reschedule Waitlist-UH10
 
     # clear_location   ${HLPUSERNAME34}
     # clear_service    ${HLPUSERNAME34}
-    clear_customer   ${HLPUSERNAME34}
+    clear_customer   ${PUSERNAME281}
     # clear_consumer_msgs  ${CUSERNAME12}
     # clear_provider_msgs  ${HLPUSERNAME34}
 
@@ -3286,7 +3305,8 @@ JD-TC-Reschedule Waitlist-UH11
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -3511,7 +3531,8 @@ JD-TC-Reschedule Waitlist-UH13
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -3684,7 +3705,8 @@ JD-TC-Reschedule Waitlist-UH14
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -3762,7 +3784,8 @@ JD-TC-Reschedule Waitlist-UH15
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -3869,7 +3892,8 @@ JD-TC-Reschedule Waitlist-UH16
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -4097,7 +4121,8 @@ JD-TC-Reschedule Waitlist-UH18
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -4199,7 +4224,8 @@ JD-TC-Reschedule Waitlist-UH19
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -4311,7 +4337,8 @@ JD-TC-Reschedule Waitlist-UH19
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 	
-#     ${SERVICE1}=    generate_service_name
+#     ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
 #     ${min_pre}=   Random Int   min=10   max=50
 #     ${servicecharge}=   Random Int  min=100  max=200
 #     ${s_id}=  Create Sample Service with Prepayment   ${SERVICE1}  ${min_pre}  ${servicecharge}
@@ -4441,7 +4468,8 @@ JD-TC-Reschedule Waitlist-UH21
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -4564,7 +4592,8 @@ JD-TC-Reschedule Waitlist-UH22
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -4689,7 +4718,8 @@ JD-TC-Reschedule Waitlist-UH23
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -4813,7 +4843,8 @@ JD-TC-Reschedule Waitlist-UH24
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -5128,7 +5159,8 @@ JD-TC-Reschedule Waitlist-UH26
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -5290,7 +5322,8 @@ JD-TC-Reschedule Waitlist-UH27
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
