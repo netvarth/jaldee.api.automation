@@ -42,12 +42,12 @@ JD-TC-Get waitlist Today count-1
 
 	[Documentation]  Add To Waitlist By Consumer valid  provider
     
-    # clear_service   ${HLPUSERNAME9}
-    # clear_location   ${HLPUSERNAME9}
-    # clear_queue     ${HLPUSERNAME9}
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
+    # clear_service   ${HLPUSERNAME40}
+    # clear_location   ${HLPUSERNAME40}
+    # clear_queue     ${HLPUSERNAME40}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${pid}=  get_acc_id  ${HLPUSERNAME9}
+    ${pid}=  get_acc_id  ${HLPUSERNAME40}
     Set Suite Variable  ${pid} 
 
     ${lid1}=   Create Sample Location
@@ -107,7 +107,7 @@ JD-TC-Get waitlist Today count-1
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
    
-    ${resp}=  AddCustomer  ${CUSERNAME20}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
+    ${resp}=  AddCustomer  ${CUSERNAME32}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -115,18 +115,18 @@ JD-TC-Get waitlist Today count-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME20}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME32}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME20}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME32}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME32}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${cid}   ${resp.json()['id']}
@@ -162,7 +162,7 @@ JD-TC-Get waitlist Today count-1
     ${resp}=  Add To Waitlist Consumers  ${f1}  ${pid}  ${q1_l1}  ${DAY}  ${sId_2}  ${cnote}  ${bool[0]}  ${f1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Waitlist Action  ${waitlist_actions[1]}  ${uuid1}
     Should Be Equal As Strings  ${resp.status_code}  200       
@@ -171,7 +171,7 @@ JD-TC-Get waitlist Today count-2
 
 	[Documentation]  Get Waitlist Today
     
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME32}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -183,7 +183,7 @@ JD-TC-Get waitlist Today count-3
 
 	[Documentation]  Get Waitlist today after rescheduling one of the waitlist
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

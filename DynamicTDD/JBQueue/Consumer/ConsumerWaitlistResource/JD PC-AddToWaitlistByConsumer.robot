@@ -3452,8 +3452,10 @@ JD-TC-Add To WaitlistByConsumer-21
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
-    ${resp}=  AddCustomer  ${CUSERNAME8}
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    Set Suite Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${resp}=  AddCustomer  ${CUSERNAME8}  firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}   email=${pc_emailid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
