@@ -383,7 +383,195 @@ JD-TC-Get Lucene Search For ConsumerOrder-UH2
     Log    ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()}                []
-*** Comments ***
+
+JD-TC-Get Lucene Search For ConsumerOrder-6
+
+    [Documentation]  Get Lucene Search without login
+
+    ${displayName} = 	Convert To Lower Case 	${displayName}
+    ${resp}=    Get Lucene Search For ConsumerOrder    ${accountId}    name=${displayName}
+    Log    ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()[0]['inventoryItem']}                                                           ${boolean[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['batchApplicable']}                                                            ${boolean[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['price']}                                                              ${price}
+    Should Be Equal As Strings    ${resp.json()[0]['sOrderCatalogEncId']}                                                        ${soc_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['encId']}                                                        ${SOC_itemEncIds1}
+    Should Be Equal As Strings    ${resp.json()[0]['itemCode']}                                        ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}                                                              ${displayName}
+
+JD-TC-Get Lucene Search For ConsumerOrder-7
+
+    [Documentation]  Get Lucene Search using provider login
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${displayName} = 	Convert To Lower Case 	${displayName}
+    ${resp}=    Get Lucene Search For ConsumerOrder    ${accountId}    name=${displayName}
+    Log    ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()[0]['inventoryItem']}                                                           ${boolean[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['batchApplicable']}                                                            ${boolean[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['price']}                                                              ${price}
+    Should Be Equal As Strings    ${resp.json()[0]['sOrderCatalogEncId']}                                                        ${soc_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['encId']}                                                        ${SOC_itemEncIds1}
+    Should Be Equal As Strings    ${resp.json()[0]['itemCode']}                                        ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}                                                              ${displayName}
+
+# *** Comments ***
+
+JD-TC-Get Lucene Search For ConsumerOrder-8
+
+    [Documentation]  Get items after provider consumer login
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME51}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableInventory']}==${bool[0]}
+        ${resp1}=  Enable Disable Inventory  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+
+        ${resp}=  Get Account Settings
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['enableInventory']}  ${bool[1]}
+    END
+
+    IF  ${resp.json()['enableSalesOrder']}==${bool[0]}
+        ${resp1}=  Enable/Disable SalesOrder  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+
+        ${resp}=  Get Account Settings
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['enableSalesOrder']}  ${bool[1]}
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp}=  Get Store Type By Filter     
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${TypeName}=    FakerLibrary.name
+    Set Test Variable  ${TypeName}
+# -------------------------------- Create store type -----------------------------------
+    ${resp}=  Create Store Type   ${TypeName}    ${storeNature[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable    ${St_Id}    ${resp.json()}
+    # sleep  02s
+
+    # ${resp}=  Get Store Type By EncId   ${St_Id}    
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME51}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${accountId1}=  get_acc_id  ${HLPUSERNAME51}
+    Set Suite Variable    ${accountId1} 
+
+
+    ${resp}=  Get User
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${p1_id}   ${resp.json()[0]['id']}
+
+
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${locId1}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${locId1}  ${resp.json()[0]['id']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+
+    ${Name}=    FakerLibrary.last name
+    Set Test Variable    ${Name}
+    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+309187748
+    Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
+    ${email}=  Create List  ${email_id}
+
+    ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}   onlineOrder=${boolean[1]}    walkinOrder=${boolean[1]}   partnerOrder=${boolean[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${store_id}  ${resp.json()}
+
+    ${resp}=    Get Store ByEncId   ${store_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable    ${Stidd}    ${resp.json()['id']}
+
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}   onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[0]}  storePickup=${boolean[1]}  homeDelivery=${boolean[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable              ${soc_id1}    ${resp.json()}
+
+
+
+    ${displayName4}=     FakerLibrary.name
+    Set Suite Variable              ${displayName4} 
+    ${resp}=    Create Item Inventory  ${displayName4}     isBatchApplicable=${boolean[0]}    isInventoryItem=${bool[0]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${itemEncId3}  ${resp.json()}
+
+
+
+    ${price4}=    Random Int  min=50   max=60
+    ${price4}=                    Convert To Number  ${price4}  1
+    Set Suite Variable    ${price4}  
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${soc_id1}      ${itemEncId3}    ${price4}       minSaleQuantity=${minSaleQuantity}  maxSaleQuantity=${maxSaleQuantity}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${SOC_itemEncIds3}  ${resp.json()[0]}
+
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
 # -------------------------------- Add a provider Consumer -----------------------------------
 
     ${firstName}=  FakerLibrary.name
@@ -396,7 +584,7 @@ JD-TC-Get Lucene Search For ConsumerOrder-UH2
     # ${email}=    FakerLibrary.Email
     # Set Suite Variable    ${email}
 
-    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -411,241 +599,41 @@ JD-TC-Get Lucene Search For ConsumerOrder-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email_id}    ${primaryMobileNo}     ${accountId}
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email_id}    ${primaryMobileNo}     ${accountId1}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200    
    
-    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
 
-    ${resp}=    Get Provider Catalog Item Filter    sorderCatalogEncId-eq=${soc_id1}  accountId-eq=${accountId}  storeEncId-eq=${store_id}
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${displayName4} = 	Convert To Lower Case 	${displayName4}
+    ${resp}=    Get Lucene Search For ConsumerOrder    ${accountId1}    name=${displayName4}
+    Log    ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Strings    ${len}    3
- 
+    Should Be Equal As Strings    ${resp.json()[0]['inventoryItem']}                                                           ${boolean[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['batchApplicable']}                                                            ${boolean[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['price']}                                                              ${price4}
+    Should Be Equal As Strings    ${resp.json()[0]['sOrderCatalogEncId']}                                                        ${soc_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['encId']}                                                        ${SOC_itemEncIds3}
+    Should Be Equal As Strings    ${resp.json()[0]['itemCode']}                                        ${itemEncId3}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}                                         ${displayName4}
+JD-TC-Get Lucene Search For ConsumerOrder-9
 
-    FOR  ${i}  IN RANGE   ${len}
+    [Documentation]  Get Lucene Search using provider consumer login
 
-        IF  '${resp.json()[${i}]['encId']}' == '${SOC_itemEncIds1}'  
-            Should Be Equal As Strings    ${resp.json()[${i}]['accountId']}                                              ${accountId}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['encId']}                                       ${soc_id1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['name']}                                        ${Name}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['invMgmt']}                                     ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['spCode']}                                       ${itemEncId1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['encId']}                                        ${itemEncId1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['name']}                                         ${displayName}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['invMgmt']}                                      ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['batchEnabled']}                                 ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['price']}                                                  ${price}
-            Should Be Equal As Strings    ${resp.json()[${i}]['batchPricing']}                                           ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['encId']}                                                  ${SOC_itemEncIds1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['invMgmt']}                                                ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['status']}                                                 ${toggle[0]}
-
-
-        ELSE IF     '${resp.json()[${i}]['encId']}' == '${SOC_itemEncIds2}'      
-            Should Be Equal As Strings    ${resp.json()[${i}]['accountId']}                                              ${accountId}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['encId']}                                       ${soc_id1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['name']}                                        ${Name}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['invMgmt']}                                     ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['spCode']}                                       ${itemEncId2}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['encId']}                                        ${itemEncId2}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['name']}                                         ${displayName1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['invMgmt']}                                      ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['batchEnabled']}                                 ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['price']}                                                  ${price1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['batchPricing']}                                           ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['encId']}                                                  ${SOC_itemEncIds2}
-            Should Be Equal As Strings    ${resp.json()[${i}]['invMgmt']}                                                ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['status']}                                                 ${toggle[0]}
-
-
-        ELSE IF     '${resp.json()[${i}]['encId']}' == '${SOC_itemEncIds3}'      
-            Should Be Equal As Strings    ${resp.json()[${i}]['accountId']}                                              ${accountId}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['encId']}                                       ${soc_id1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['name']}                                        ${Name}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['invMgmt']}                                     ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['spCode']}                                       ${itemEncId3}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['encId']}                                        ${itemEncId3}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['name']}                                         ${displayName2}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['invMgmt']}                                      ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['batchEnabled']}                                 ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['price']}                                                  ${price2}
-            Should Be Equal As Strings    ${resp.json()[${i}]['batchPricing']}                                           ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['encId']}                                                  ${SOC_itemEncIds3}
-            Should Be Equal As Strings    ${resp.json()[${i}]['invMgmt']}                                                ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['status']}                                                 ${toggle[0]}
-
-        END
-    END
-
-    ${quantity}=  FakerLibrary.Random Int  min=${minSaleQuantity}   max=${maxSaleQuantity}
-    ${quantity}=                    Convert To Number  ${quantity}  1
-    ${item1}=  Evaluate  ${price}*${quantity}
-    ${item2}=  Evaluate  ${price1}*${quantity}
-    ${item3}=  Evaluate  ${price2}*${quantity}
-    ${Total}=  Evaluate  ${item1}+${item2}+${item3}
-
-    ${catalogItem}=  Create Dictionary    encId=${SOC_itemEncIds1}
-    ${catalogItem1}=  Create Dictionary    encId=${SOC_itemEncIds2}
-    ${catalogItem2}=  Create Dictionary    encId=${SOC_itemEncIds3}
-    ${catalogItems}=  Create Dictionary    catalogItem=${catalogItem}  quantity=${quantity}
-    ${catalogItems1}=  Create Dictionary    catalogItem=${catalogItem1}  quantity=${quantity}
-    ${catalogItems2}=  Create Dictionary    catalogItem=${catalogItem2}  quantity=${quantity}
-
-    ${resp}=  Create Cart From Consumerside      ${store_id}    ${cid}      ${deliveryType[0]}    ${catalogItems}   ${catalogItems1}   ${catalogItems2}
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId1}  ${token} 
     Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${displayName4} = 	Convert To Lower Case 	${displayName4}
+    ${resp}=    Get Lucene Search For ConsumerOrder    ${accountId1}    name=${displayName4}
+    Log    ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${cart_uid}    ${resp.json()['uid']}
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    Set Suite Variable    ${DAY1} 
-    ${resp}=    Get ConsumerCart By Uid   ${cart_uid} 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                                              ${cid}
-    Should Be Equal As Strings    ${resp.json()['providerConsumer']['name']}                                            ${firstName} ${lastName}
-    Should Be Equal As Strings    ${resp.json()['store']['encId']}                                                      ${store_id}
-    Should Be Equal As Strings    ${resp.json()['store']['name']}                                                       ${Name} 
-    Should Be Equal As Strings    ${resp.json()['accountId']}                                                           ${accountId}
-    Should Be Equal As Strings    ${resp.json()['uid']}                                                                 ${cart_uid}
-    Should Be Equal As Strings    ${resp.json()['deliveryType']}                                                        ${deliveryType[0]}
-    Should Be Equal As Strings    ${resp.json()['netTotal']}                                                            ${Total}
-    Should Be Equal As Strings    ${resp.json()['locationId']}                                                            ${locId1}
-    Should Be Equal As Strings    ${resp.json()['netRate']}                                                             ${Total}
-
-
-    ${postcode}=  FakerLibrary.postcode
-    ${phone}=  Create Dictionary    number=${primaryMobileNo}   countryCode=91
-    ${homeDeliveryAddress}=  Create Dictionary    firstName=${firstName}  lastName=${lastName}  email=${email_id}   address=${Name}  city=${firstName}  postalCode=${postcode}   phone=${phone}
-    ${resp}=    CheckOut Cart Items   ${cart_uid}   homeDeliveryAddress=${homeDeliveryAddress}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${orderUid}    ${resp.json()}
-
-    ${resp}=    GetOrder using uid   ${orderUid} 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['accountId']}                                                               ${accountId}
-    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                                                  ${cid}
-    Should Be Equal As Strings    ${resp.json()['providerConsumer']['name']}                                                ${firstName} ${lastName}
-    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                                        ${soc_id1}
-    Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                                          ${Name}
-    Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                                                       ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()['netTotal']}                                                                ${Total}
-    Should Be Equal As Strings    ${resp.json()['netTotalWithTax']}                                                         ${Total}
-    Should Be Equal As Strings    ${resp.json()['netRate']}                                                                 ${Total}
-    Should Be Equal As Strings    ${resp.json()['amountDue']}                                                                 ${Total}
-    Should Be Equal As Strings    ${resp.json()['location']['id']}                                                            ${locId1}
-    Should Be Equal As Strings    ${resp.json()['store']['id']}                                                              ${Stidd}
-    Should Be Equal As Strings    ${resp.json()['orderFor']['id']}                                                          ${cid}
-    Should Be Equal As Strings    ${resp.json()['orderFor']['name']}                                                        ${firstName} ${lastName}
-    # Should Be Equal As Strings    ${resp.json()['status']}                                                                 ${billStatus[0]}
-    Should Be Equal As Strings    ${resp.json()['paymentStatus']}                                                            ${paymentStatus[0]}
-    Should Be Equal As Strings    ${resp.json()['timezone']}                                                                Asia/Kolkata
-    # Should Be Equal As Strings    ${resp.json()['orderIncluded']}                                                           ${bool[1]}
-    # Should Be Equal As Strings    ${resp.json()['viewStatus']}                                                               ${billViewStatus[0]}
-    # Should Be Equal As Strings    ${resp.json()['invoiceDate']}                                                               ${DAY1}
-    # Should Be Equal As Strings    ${resp.json()['encId']}                                                                   ${orderUid}
-    Should Be Equal As Strings    ${resp.json()['contactInfo']['phone']['number']}                                          ${primaryMobileNo}
-    Should Be Equal As Strings    ${resp.json()['contactInfo']['email']}                                                     ${email_id}
-    Should Be Equal As Strings    ${resp.json()['createdDate']}                                                               ${DAY1}
-    Should Be Equal As Strings    ${resp.json()['prePaymentAmount']}                                                           ${Total}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['accountId']}                                                           ${accountId}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['location']['id']}                                                            ${locId1}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['store']['id']}                                                              ${Stidd}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['order']['uid']}                                                            ${orderUid}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['catalog']['encId']}                                                        ${soc_id1}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['catalogItem']['encId']}                                                        ${SOC_itemEncIds1}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItem']['encId']}                                        ${itemEncId1}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItem']['name']}                                         ${displayName}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['encId']}                                                       ${SOC_itemEncIds1}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['orderQuantity']}                                                       ${quantity}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['status']}                                                        ${toggle[0]}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['dueQuantity']}                                                       ${quantity}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['itemAmount']}                                                        ${price}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['netTotal']}                                                        ${item1}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['netRate']}                                                        ${item1}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemSourceEnum']}                                        ${itemSourceEnum}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['spCode']}                                               ${itemEncId1}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['name']}                                                 ${displayName}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['isInventoryItem']}                                       ${bool[0]}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemGroups']}                                               []
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemSubGroups']}                                            []
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['tax']}                                                      []
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['composition']}                                               []
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemUnits']}                                                []
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['isBatchApplicable']}                                          ${bool[0]}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['attachments']}                                              []
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['status']}                                                ${toggle[0]}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['createdDate']}                                              ${DAY1}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['createdBy']}                                                ${p1_id}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['updatedBy']}                                                0
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemPropertyType']}                                         ${itemPropertyType}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['accountId']}                                                           ${accountId}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['location']['id']}                                                            ${locId1}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['store']['id']}                                                              ${Stidd}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['order']['uid']}                                                            ${orderUid}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['catalog']['encId']}                                                        ${soc_id1}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['catalogItem']['encId']}                                                        ${SOC_itemEncIds2}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItem']['encId']}                                        ${itemEncId2}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItem']['name']}                                         ${displayName1}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['encId']}                                                       ${SOC_itemEncIds2}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['orderQuantity']}                                                       ${quantity}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['status']}                                                        ${toggle[0]}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['dueQuantity']}                                                       ${quantity}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['itemAmount']}                                                        ${price1}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['netTotal']}                                                        ${item2}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['netRate']}                                                        ${item2}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['itemSourceEnum']}                                        ${itemSourceEnum}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['spCode']}                                               ${itemEncId2}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['name']}                                                 ${displayName1}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['isInventoryItem']}                                       ${bool[0]}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['itemGroups']}                                               []
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['itemSubGroups']}                                            []
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['tax']}                                                      []
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['composition']}                                               []
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['itemUnits']}                                                []
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['isBatchApplicable']}                                          ${bool[0]}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['attachments']}                                              []
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['status']}                                                ${toggle[0]}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['createdDate']}                                              ${DAY1}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['createdBy']}                                                ${p1_id}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['updatedBy']}                                                0
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][1]['spItemDto']['itemPropertyType']}                                         ${itemPropertyType}
-
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['accountId']}                                                           ${accountId}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['location']['id']}                                                            ${locId1}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['store']['id']}                                                              ${Stidd}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['order']['uid']}                                                            ${orderUid}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['catalog']['encId']}                                                        ${soc_id1}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['catalogItem']['encId']}                                                        ${SOC_itemEncIds3}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItem']['encId']}                                        ${itemEncId3}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItem']['name']}                                         ${displayName2}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['encId']}                                                       ${SOC_itemEncIds3}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['orderQuantity']}                                                       ${quantity}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['status']}                                                        ${toggle[0]}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['dueQuantity']}                                                       ${quantity}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['itemAmount']}                                                        ${price2}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['netTotal']}                                                        ${item3}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['netRate']}                                                        ${item3}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['itemSourceEnum']}                                        ${itemSourceEnum}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['spCode']}                                               ${itemEncId3}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['name']}                                                 ${displayName2}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['isInventoryItem']}                                       ${bool[0]}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['itemGroups']}                                               []
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['itemSubGroups']}                                            []
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['tax']}                                                      []
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['composition']}                                               []
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['itemUnits']}                                                []
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['isBatchApplicable']}                                          ${bool[0]}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['attachments']}                                              []
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['status']}                                                ${toggle[0]}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['createdDate']}                                              ${DAY1}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['createdBy']}                                                ${p1_id}
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['updatedBy']}                                                0
-    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][2]['spItemDto']['itemPropertyType']}                                         ${itemPropertyType}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}                                         ${displayName4}
