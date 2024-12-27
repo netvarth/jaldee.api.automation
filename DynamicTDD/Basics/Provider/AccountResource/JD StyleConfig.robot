@@ -48,7 +48,7 @@ JD-TC-AddOrUpdate UserStyle -1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -83,7 +83,7 @@ JD-TC-AddOrUpdate UserStyle -1
     #     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
     # END
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
