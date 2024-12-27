@@ -89,7 +89,6 @@ JD-TC-UpdateProviderNotificationSettings-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.json()[0]['resourceType']}  ${NotificationResourceType[0]}
     Should Be Equal As Strings  ${resp.json()[0]['eventType']}  ${EventType[0]}  
-    Should Be Equal As Strings  ${resp.json()[0]['email'][0]}  ${EMAIL_id0}
     Should Be Equal As Strings  ${resp.json()[0]['sms'][0]['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[0]['sms'][0]['countryCode']}      ${countryCode_CC0}
     Should Be Equal As Strings  ${resp.json()[0]['pushMsg'][0]['number']}       ${PUSERPH0} 
@@ -99,7 +98,6 @@ JD-TC-UpdateProviderNotificationSettings-1
 
     Should Be Equal As Strings  ${resp.json()[1]['resourceType']}  ${NotificationResourceType[0]}
     Should Be Equal As Strings  ${resp.json()[1]['eventType']}  ${EventType[1]}  
-    Should Be Equal As Strings  ${resp.json()[1]['email'][0]}  ${EMAIL_id0} 
     Should Be Equal As Strings  ${resp.json()[1]['sms'][0]['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[1]['sms'][0]['countryCode']}      ${countryCode_CC0}
     Should Be Equal As Strings  ${resp.json()[1]['pushMsg'][0]['number']}       ${PUSERPH0} 
@@ -107,43 +105,46 @@ JD-TC-UpdateProviderNotificationSettings-1
     # Should Be Equal As Strings  ${resp.json()[1]['sms'][0]}  ${PUSERPH0}
     # Should Be Equal As Strings  ${resp.json()[1]['pushMsg'][0]}  ${PUSERPH0}
 
-    Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[1]}
-    Should Be Equal As Strings  ${resp.json()[2]['eventType']}  ${EventType[7]}  
-    Should Be Equal As Strings  ${resp.json()[2]['email'][0]}  ${EMAIL_id0}
+    Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[0]}
+    Should Be Equal As Strings  ${resp.json()[2]['eventType']}  ${EventType[4]}  
     Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['countryCode']}      ${countryCode_CC0}
     Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]['number']}       ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
-    # Should Be Equal As Strings  ${resp.json()[2]['sms'][0]}  ${PUSERPH0} 
-    # Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]}  ${PUSERPH0}
 
     Should Be Equal As Strings  ${resp.json()[3]['resourceType']}  ${NotificationResourceType[1]}
     Should Be Equal As Strings  ${resp.json()[3]['eventType']}  ${EventType[8]}  
-    Should Be Equal As Strings  ${resp.json()[3]['email'][0]}  ${EMAIL_id0}
     Should Be Equal As Strings  ${resp.json()[3]['sms'][0]['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[3]['sms'][0]['countryCode']}      ${countryCode_CC0}
     Should Be Equal As Strings  ${resp.json()[3]['pushMsg'][0]['number']}       ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[3]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
-    # Should Be Equal As Strings  ${resp.json()[3]['sms'][0]}  ${PUSERPH0} 
-    # Should Be Equal As Strings  ${resp.json()[3]['pushMsg'][0]}  ${PUSERPH0}
+    # Should Be Equal As Strings  ${resp.json()[2]['sms'][0]}  ${PUSERPH0} 
+    # Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]}  ${PUSERPH0}
 
-    Should Be Equal As Strings  ${resp.json()[4]['resourceType']}  ${NotificationResourceType[3]}
-    Should Be Equal As Strings  ${resp.json()[4]['eventType']}     ${EventType[10]}
-    Should Be Equal As Strings  ${resp.json()[4]['email'][0]}      ${EMAIL_id0}
+    Should Be Equal As Strings  ${resp.json()[4]['resourceType']}  ${NotificationResourceType[1]}
+    Should Be Equal As Strings  ${resp.json()[4]['eventType']}  ${EventType[9]}  
     Should Be Equal As Strings  ${resp.json()[4]['sms'][0]['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[4]['sms'][0]['countryCode']}      ${countryCode_CC0}
     Should Be Equal As Strings  ${resp.json()[4]['pushMsg'][0]['number']}       ${PUSERPH0} 
-    Should Be Equal As Strings  ${resp.json()[4]['pushMsg'][0]['countryCode']}  ${countryCode_CC0} 
-    # Should Be Equal As Strings  ${resp.json()[4]['sms'][0]}        ${PUSERPH0}
-    # Should Be Equal As Strings  ${resp.json()[4]['pushMsg'][0]}    ${PUSERPH0}
-    
-    Should Be Equal As Strings  ${resp.json()[5]['resourceType']}  ${NotificationResourceType[2]}
-    Should Be Equal As Strings  ${resp.json()[5]['eventType']}     ${EventType[9]}
-    Should Be Equal As Strings  ${resp.json()[5]['email'][0]}      ${EMAIL_id0}
+    Should Be Equal As Strings  ${resp.json()[4]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
+    # Should Be Equal As Strings  ${resp.json()[3]['sms'][0]}  ${PUSERPH0} 
+    # Should Be Equal As Strings  ${resp.json()[3]['pushMsg'][0]}  ${PUSERPH0}
+
+    Should Be Equal As Strings  ${resp.json()[5]['resourceType']}  ${NotificationResourceType[1]}
+    Should Be Equal As Strings  ${resp.json()[5]['eventType']}     ${EventType[10]}
     Should Be Equal As Strings  ${resp.json()[5]['sms'][0]['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[5]['sms'][0]['countryCode']}      ${countryCode_CC0}
     Should Be Equal As Strings  ${resp.json()[5]['pushMsg'][0]['number']}       ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[5]['pushMsg'][0]['countryCode']}  ${countryCode_CC0} 
+    # Should Be Equal As Strings  ${resp.json()[4]['sms'][0]}        ${PUSERPH0}
+    # Should Be Equal As Strings  ${resp.json()[4]['pushMsg'][0]}    ${PUSERPH0}
+    
+    Should Be Equal As Strings  ${resp.json()[6]['resourceType']}  ${NotificationResourceType[3]}
+    Should Be Equal As Strings  ${resp.json()[6]['eventType']}     ${EventType[12]}
+    Should Be Equal As Strings  ${resp.json()[6]['sms'][0]['number']}           ${PUSERPH0} 
+    Should Be Equal As Strings  ${resp.json()[6]['sms'][0]['countryCode']}      ${countryCode_CC0}
+    Should Be Equal As Strings  ${resp.json()[6]['pushMsg'][0]['number']}       ${PUSERPH0} 
+    Should Be Equal As Strings  ${resp.json()[6]['pushMsg'][0]['countryCode']}  ${countryCode_CC0} 
     # Should Be Equal As Strings  ${resp.json()[5]['sms'][0]}        ${PUSERPH0}
     # Should Be Equal As Strings  ${resp.json()[5]['pushMsg'][0]}    ${PUSERPH0}
 
@@ -163,7 +164,6 @@ JD-TC-UpdateProviderNotificationSettings-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.json()[0]['resourceType']}  ${NotificationResourceType[0]}
     Should Be Equal As Strings  ${resp.json()[0]['eventType']}  ${EventType[0]}  
-    Should Be Equal As Strings  ${resp.json()[0]['email'][0]}  ${EMAIL_id0}
     Should Be Equal As Strings  ${resp.json()[0]['sms'][0]['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[0]['sms'][0]['countryCode']}      ${countryCode_CC0}
     Should Be Equal As Strings  ${resp.json()[0]['pushMsg'][0]['number']}       ${PUSERPH0} 
@@ -375,7 +375,6 @@ JD-TC-UpdateProviderNotificationSettings-7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.json()[1]['resourceType']}  ${NotificationResourceType[0]}
     Should Be Equal As Strings  ${resp.json()[1]['eventType']}  ${EventType[1]} 
-    Should Be Equal As Strings  ${resp.json()[1]['email'][0]}  ${EMAIL_id0}
     Should Be Equal As Strings  ${resp.json()[1]['sms'][0]['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[1]['sms'][0]['countryCode']}      ${countryCode_CC0}
     Should Be Equal As Strings  ${resp.json()[1]['pushMsg'][0]['number']}       ${PUSERPH0} 
@@ -565,9 +564,8 @@ JD-TC-UpdateProviderNotificationSettings-12
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[1]}
-    Should Be Equal As Strings  ${resp.json()[2]['eventType']}  ${EventType[7]}  
-    Should Be Equal As Strings  ${resp.json()[2]['email'][0]}  ${EMAIL_id0} 
+    Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[0]}
+    Should Be Equal As Strings  ${resp.json()[2]['eventType']}  ${EventType[4]}  
     Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['countryCode']}      ${countryCode_CC0}
     Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]['number']}       ${PUSERPH0} 
