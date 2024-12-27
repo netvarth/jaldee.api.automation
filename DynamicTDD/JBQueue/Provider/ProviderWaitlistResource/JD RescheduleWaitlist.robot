@@ -4763,7 +4763,7 @@ JD-TC-Reschedule Waitlist-UH23
     ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
+    ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}   location=${lid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     

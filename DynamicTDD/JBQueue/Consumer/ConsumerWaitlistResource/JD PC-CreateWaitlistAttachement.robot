@@ -739,7 +739,8 @@ JD-TC-WaitlistAttachment-7
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz} 
-    ${ser_name1}=   FakerLibrary.word
+    ${ser_name1}=  generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${ser_name1}
     ${resp}=   Create Sample Service  ${ser_name1}
     Set Test Variable    ${ser_id1}    ${resp}  
     ${ser_name2}=   FakerLibrary.word
