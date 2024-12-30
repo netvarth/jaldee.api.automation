@@ -26,47 +26,49 @@ JD-TC-GetProviderNotificationSettings-1
 
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+5785527
     Set Suite Variable   ${PUSERPH0}
-    ${licid}  ${licname}=  get_highest_license_pkg
-    Log  ${licid}
-    Log  ${licname}
-    ${domresp}=  Get BusinessDomainsConf
-    Log   ${domresp.json()}
-    Should Be Equal As Strings  ${domresp.status_code}  200
+    # ${licid}  ${licname}=  get_highest_license_pkg
+    # Log  ${licid}
+    # Log  ${licname}
+    # ${domresp}=  Get BusinessDomainsConf
+    # Log   ${domresp.json()}
+    # Should Be Equal As Strings  ${domresp.status_code}  200
 
-    ${dlen0}=  Get Length  ${domresp.json()}
-    ${dlen}=  Evaluate  ${dlen0}-1
-    ${dval}=   Random Int   min=0   max=${dlen}
+    # ${dlen0}=  Get Length  ${domresp.json()}
+    # ${dlen}=  Evaluate  ${dlen0}-1
+    # ${dval}=   Random Int   min=0   max=${dlen}
 
-    ${sdlen0}=  Get Length  ${domresp.json()[${dval}]['subDomains']}
-    ${sdlen}=  Evaluate  ${sdlen0}-1
-    ${sdval}=   Random Int   min=0   max=${sdlen}
+    # ${sdlen0}=  Get Length  ${domresp.json()[${dval}]['subDomains']}
+    # ${sdlen}=  Evaluate  ${sdlen0}-1
+    # ${sdval}=   Random Int   min=0   max=${sdlen}
 
-    Set Suite Variable  ${d1}  ${domresp.json()[${dval}]['domain']}
-    Set Suite Variable  ${sd1}  ${domresp.json()[${dval}]['subDomains'][${sdval}]['subDomain']}
-    Set Suite Variable  ${EMAIL_id0}   ${P_Email}${PUSERPH0}.${test_mail}
-    Log  ${d1}
-    Log  ${sd1}
+    # Set Suite Variable  ${d1}  ${domresp.json()[${dval}]['domain']}
+    # Set Suite Variable  ${sd1}  ${domresp.json()[${dval}]['subDomains'][${sdval}]['subDomain']}
+    # Set Suite Variable  ${EMAIL_id0}   ${P_Email}${PUSERPH0}.${test_mail}
+    # Log  ${d1}
+    # Log  ${sd1}
 
-    ${firstname}=  FakerLibrary.first_name
-    ${lastname}=  FakerLibrary.last_name
-    ${address}=  FakerLibrary.address
-    ${dob}=  FakerLibrary.Date
-    ${gender}=    Random Element    ${Genderlist}
+    # ${firstname}=  FakerLibrary.first_name
+    # ${lastname}=  FakerLibrary.last_name
+    # ${address}=  FakerLibrary.address
+    # ${dob}=  FakerLibrary.Date
+    # ${gender}=    Random Element    ${Genderlist}
     
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${EMAIL_id0}  ${d1}  ${sd1}  ${PUSERPH0}  ${licid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${EMAIL_id0}  ${d1}  ${sd1}  ${PUSERPH0}  ${licid}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Activation  ${EMAIL_id0}  0
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()}    true
+    # ${resp}=  Account Activation  ${EMAIL_id0}  0
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Should Be Equal As Strings    ${resp.json()}    true
     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
 
-    ${resp}=  Account Set Credential  ${EMAIL_id0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${EMAIL_id0}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Account Set Credential  ${EMAIL_id0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${EMAIL_id0}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERPH0}=  Provider Signup without Profile  PhoneNumber=${PUSERPH0}
+    
     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
