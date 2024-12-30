@@ -405,6 +405,99 @@ JD-TC-UpdateService-10
 
 
 JD-TC-UpdateService-11
+    [Documentation]  Update max bookings allowed in a user's service from main account.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${PUSER_A_U1}  ${u_id1} =  Create and Configure Sample User  #admin=${bool[1]}
+    Set Suite Variable  ${PUSER_A_U1}
+    Set Suite Variable  ${u_id1}
+
+    ${resp}=    Provider Logout
+    Should Be Equal As Strings  ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${PUSER_A_U1}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}   200
+
+    ${description}=  FakerLibrary.sentence
+    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
+    ${srv_duration}=   Random Int   min=2   max=10
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${srv_duration}  ${bool[0]}  ${Total}  ${bool[0]}  provider=${u_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Set Test Variable  ${s_id}  ${resp.json()} 
+    
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['maxBookingsAllowed']}   ${defMBVal}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${json_data}=  Convert To Dictionary  ${resp.json()}
+    IF   'description' not in ${json_data}
+        ${description}=  Set Variable  Default Service Description
+    ELSE  
+        ${description}=  Set Variable  ${resp.json()['description']}
+    END
+
+    ${maxbookings}=   Random Int   min=1   max=5
+    ${resp}=  Update Service  ${s_id}  ${resp.json()['name']}  ${description}  ${resp.json()['serviceDuration']}  ${resp.json()['isPrePayment']}  ${resp.json()['totalAmount']}  maxBookingsAllowed=${maxbookings}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['maxBookingsAllowed']}   ${maxbookings}
+
+
+JD-TC-UpdateService-12
+    [Documentation]  user Update max bookings allowed in a user's service.
+
+    ${resp}=  Encrypted Provider Login  ${PUSER_A_U1}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}   200
+
+    ${description}=  FakerLibrary.sentence
+    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
+    ${srv_duration}=   Random Int   min=2   max=10
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${srv_duration}  ${bool[0]}  ${Total}  ${bool[0]}  provider=${u_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Set Test Variable  ${s_id}  ${resp.json()} 
+    
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['maxBookingsAllowed']}   ${defMBVal}
+
+    ${json_data}=  Convert To Dictionary  ${resp.json()}
+    IF   'description' not in ${json_data}
+        ${description}=  Set Variable  Default Service Description
+    ELSE  
+        ${description}=  Set Variable  ${resp.json()['description']}
+    END
+
+    ${maxbookings}=   Random Int   min=1   max=5
+    ${resp}=  Update Service  ${s_id}  ${resp.json()['name']}  ${description}  ${resp.json()['serviceDuration']}  ${resp.json()['isPrePayment']}  ${resp.json()['totalAmount']}  maxBookingsAllowed=${maxbookings}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['maxBookingsAllowed']}   ${maxbookings}
+
+
+JD-TC-UpdateService-13
     [Documentation]  Update priceDynamic in a service
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
@@ -432,7 +525,7 @@ JD-TC-UpdateService-11
     Should Be Equal As Strings  ${resp.json()['priceDynamic']}   ${bool[1]}
 
 
-JD-TC-UpdateService-12
+JD-TC-UpdateService-14
     [Documentation]  Update resoucesRequired in a service
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
@@ -462,7 +555,7 @@ JD-TC-UpdateService-12
     Should Be Equal As Strings  ${resp.json()['resoucesRequired']}   ${resoucesRequired}
 
 
-JD-TC-UpdateService-13
+JD-TC-UpdateService-15
     [Documentation]  Update lead time in a service
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
@@ -492,7 +585,7 @@ JD-TC-UpdateService-13
     Should Be Equal As Strings  ${resp.json()['leadTime']}   ${leadTime}
 
 
-JD-TC-UpdateService-14
+JD-TC-UpdateService-16
     [Documentation]  update a physicalService to virtualService
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
@@ -535,7 +628,7 @@ JD-TC-UpdateService-14
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['callingMode']}   ${CallingModes[1]}
 
 
-JD-TC-UpdateService-15
+JD-TC-UpdateService-17
     [Documentation]  update a virtualService to physicalService
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
@@ -548,9 +641,10 @@ JD-TC-UpdateService-15
 
     ${description}=    FakerLibrary.sentence
     ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
+    ${srv_duration}=   Random Int   min=2   max=10
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
-    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${srv_duration}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${s_id}  ${resp.json()} 
@@ -573,197 +667,6 @@ JD-TC-UpdateService-15
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['serviceType']}   ${ServiceType[1]}
-    Should Be Equal As Strings  ${resp.json()['virtualServiceType']}   ${vstype}
-    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['callingMode']}   ${CallingModes[1]}
-
-
-JD-TC-UpdateService-16
-    [Documentation]  update a service type after taking an appointment
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Disable Appointment   ${toggle[0]} 
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
-
-    ${resp}=   Get Account Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['appointment']}   ${bool[1]}
-    
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${lid}=  Create Sample Location
-        ${resp}=   Get Location ById  ${lid}
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${lid}  ${resp.json()['id']}
-        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ELSE
-        Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
-    END
-    
-    ${description}=  FakerLibrary.sentence
-    ${Total}=   Pyfloat  right_digits=1  min_value=100  max_value=250
-    ${srv_duration}=   Random Int   min=2   max=10
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
-    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${srv_duration}  ${bool[0]}  ${Total}  ${bool[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Test Variable  ${s_id}  ${resp.json()} 
-
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
-    
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
-
-    ${PO_Number}=  Generate Random Phone Number
-    ${resp}=  GetCustomer  phoneNo-eq=${PO_Number}  
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${fname}=  generate_firstname
-        Set Suite Variable   ${fname}
-        ${lname}=  FakerLibrary.last_name
-        Set Suite Variable   ${lname}
-        ${resp1}=  AddCustomer  ${PO_Number}  firstName=${fname}   lastName=${lname}
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-        Set Suite Variable  ${pcid}   ${resp1.json()}
-    ELSE
-        Set Suite Variable  ${pcid}  ${resp.json()[0]['id']}
-    END
-    
-    ${apptfor1}=  Create Dictionary  id=${pcid}   apptTime=${slot1}
-    ${apptfor}=   Create List  ${apptfor1}
-
-    ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${pcid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
-    Set Test Variable  ${apptid1}  ${apptid[0]}
-
-    ${resp}=   Get Service By Id  ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${Description1}=    FakerLibrary.sentences
-    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_A}   countryCode=${countryCodes[0]}  status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
-    ${virtualCallingModes}=  Create List  ${VScallingMode1}
-    ${vstype}=   Random Element   ${vservicetype}
-    
-    ${resp}=  Update Service  ${s_id}  ${resp.json()['name']}  ${description}  ${resp.json()['serviceDuration']}  ${resp.json()['isPrePayment']}  ${resp.json()['totalAmount']}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=   Get Service By Id  ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['serviceType']}   ${ServiceType[0]}
-    Should Be Equal As Strings  ${resp.json()['virtualServiceType']}   ${vstype}
-    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['callingMode']}   ${CallingModes[1]}
-
-
-JD-TC-UpdateService-17
-    [Documentation]  update a service type after taking an check-in
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Waitlist Settings
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['enabledWaitlist']}==${bool[0]}   
-        ${resp}=   Enable Waitlist
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
-    
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${lid}=  Create Sample Location
-        ${resp}=   Get Location ById  ${lid}
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${lid}  ${resp.json()['id']}
-        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ELSE
-        Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
-    END
-    
-    ${description}=  FakerLibrary.sentence
-    ${Total}=   Pyfloat  right_digits=1  min_value=100  max_value=250
-    ${srv_duration}=   Random Int   min=2   max=10
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
-    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${srv_duration}  ${bool[0]}  ${Total}  ${bool[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Test Variable  ${s_id}  ${resp.json()} 
-
-    ${resp}=  Sample Queue  ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${q_id}  ${resp.json()}
-
-    ${PO_Number}=  Generate Random Phone Number
-    ${resp}=  GetCustomer  phoneNo-eq=${PO_Number}  
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${fname}=  generate_firstname
-        Set Suite Variable   ${fname}
-        ${lname}=  FakerLibrary.last_name
-        Set Suite Variable   ${lname}
-        ${resp1}=  AddCustomer  ${PO_Number}  firstName=${fname}   lastName=${lname}
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-        Set Suite Variable  ${pcid1}   ${resp1.json()}
-    ELSE
-        Set Suite Variable  ${pcid1}  ${resp.json()[0]['id']}
-    END
-    
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${desc}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist  ${pcid1}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${pcid1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${wid}=  Get Dictionary Values  ${resp.json()}
-    Set Test Variable  ${wid1}  ${wid[0]}
-
-    ${resp}=   Get Service By Id  ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${Description1}=    FakerLibrary.sentences
-    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_A}   countryCode=${countryCodes[0]}  status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
-    ${virtualCallingModes}=  Create List  ${VScallingMode1}
-    ${vstype}=   Random Element   ${vservicetype}
-    
-    ${resp}=  Update Service  ${s_id}  ${resp.json()['name']}  ${description}  ${resp.json()['serviceDuration']}  ${resp.json()['isPrePayment']}  ${resp.json()['totalAmount']}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=   Get Service By Id  ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['serviceType']}   ${ServiceType[0]}
     Should Be Equal As Strings  ${resp.json()['virtualServiceType']}   ${vstype}
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['callingMode']}   ${CallingModes[1]}
 
@@ -889,7 +792,17 @@ JD-TC-UpdateService-21
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+    # Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
+        END
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot1}   ${slots[${j}]}
 
     ${PO_Number}=  Generate Random Phone Number
     ${resp}=  GetCustomer  phoneNo-eq=${PO_Number}  
@@ -1133,6 +1046,7 @@ JD-TC-UpdateService-UH6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['resoucesRequired']}   ${defRRVal}
+
     
 JD-TC-UpdateService-UH7
     [Documentation]  Update lead time in a service as empty
@@ -1162,6 +1076,184 @@ JD-TC-UpdateService-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['leadTime']}   ${defLTVal}
 
+
+JD-TC-UpdateService-UH8
+    [Documentation]  update a service type after taking an appointment
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Appointment Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Disable Appointment   ${toggle[0]} 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=   Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['appointment']}   ${bool[1]}
+    
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${lid}  ${resp.json()['id']}
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+    
+    ${description}=  FakerLibrary.sentence
+    ${Total}=   Pyfloat  right_digits=1  min_value=100  max_value=250
+    ${srv_duration}=   Random Int   min=2   max=10
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${srv_duration}  ${bool[0]}  ${Total}  ${bool[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Set Test Variable  ${s_id}  ${resp.json()} 
+
+    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${sch_id}  ${resp.json()}
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+
+    ${PO_Number}=  Generate Random Phone Number
+    ${resp}=  GetCustomer  phoneNo-eq=${PO_Number}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        Set Suite Variable   ${fname}
+        ${lname}=  FakerLibrary.last_name
+        Set Suite Variable   ${lname}
+        ${resp1}=  AddCustomer  ${PO_Number}  firstName=${fname}   lastName=${lname}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Suite Variable  ${pcid}   ${resp1.json()}
+    ELSE
+        Set Suite Variable  ${pcid}  ${resp.json()[0]['id']}
+    END
+    
+    ${apptfor1}=  Create Dictionary  id=${pcid}   apptTime=${slot1}
+    ${apptfor}=   Create List  ${apptfor1}
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Take Appointment For Consumer  ${pcid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
+    Set Test Variable  ${apptid1}  ${apptid[0]}
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${Description1}=    FakerLibrary.sentences
+    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_A}   countryCode=${countryCodes[0]}  status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${virtualCallingModes}=  Create List  ${VScallingMode1}
+    ${vstype}=   Random Element   ${vservicetype}
+    
+    ${resp}=  Update Service  ${s_id}  ${resp.json()['name']}  ${description}  ${resp.json()['serviceDuration']}  ${resp.json()['isPrePayment']}  ${resp.json()['totalAmount']}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"  "${SERVICETYPE_CAN_NOT_CHANGE_USED_IN_APPT}"
+
+
+JD-TC-UpdateService-UH9
+    [Documentation]  update a service type after taking an check-in
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Waitlist Settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enabledWaitlist']}==${bool[0]}   
+        ${resp}=   Enable Waitlist
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+    
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${lid}  ${resp.json()['id']}
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+    
+    ${description}=  FakerLibrary.sentence
+    ${Total}=   Pyfloat  right_digits=1  min_value=100  max_value=250
+    ${srv_duration}=   Random Int   min=2   max=10
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${srv_duration}  ${bool[0]}  ${Total}  ${bool[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Set Test Variable  ${s_id}  ${resp.json()} 
+
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${q_id}  ${resp.json()}
+
+    ${PO_Number}=  Generate Random Phone Number
+    ${resp}=  GetCustomer  phoneNo-eq=${PO_Number}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  generate_firstname
+        Set Suite Variable   ${fname}
+        ${lname}=  FakerLibrary.last_name
+        Set Suite Variable   ${lname}
+        ${resp1}=  AddCustomer  ${PO_Number}  firstName=${fname}   lastName=${lname}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Suite Variable  ${pcid1}   ${resp1.json()}
+    ELSE
+        Set Suite Variable  ${pcid1}  ${resp.json()[0]['id']}
+    END
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${desc}=   FakerLibrary.word
+    ${resp}=  Add To Waitlist  ${pcid1}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${pcid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Test Variable  ${wid1}  ${wid[0]}
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${Description1}=    FakerLibrary.sentences
+    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_A}   countryCode=${countryCodes[0]}  status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${virtualCallingModes}=  Create List  ${VScallingMode1}
+    ${vstype}=   Random Element   ${vservicetype}
+    
+    ${resp}=  Update Service  ${s_id}  ${resp.json()['name']}  ${description}  ${resp.json()['serviceDuration']}  ${resp.json()['isPrePayment']}  ${resp.json()['totalAmount']}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"  "${SERVICETYPE_CAN_NOT_CHANGE_USED_IN_WL}"
 
 
 
@@ -1223,12 +1315,13 @@ JD-TC-UpdateService-3
     ${Total}=   Random Int   min=100   max=500
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${Total}=  Convert To Number  ${Total}  1
-    ${resp}=  Create Service  ${SERVICE4}  ${description}  ${service_duration[1]}  ${status[0]}  ${btype}  ${bool[1]}  ${notifytype[1]}  ${EMPTY}  ${Total}  ${bool[0]}  ${bool[0]}
+    ${srv_duration}=   Random Int   min=2   max=10
+    ${resp}=  Create Service  ${SERVICE4}  ${description}  ${srv_duration}  ${status[0]}  ${btype}  ${bool[1]}  ${notifytype[1]}  ${EMPTY}  ${Total}  ${bool[0]}  ${bool[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${id4}  ${resp.json()}
     ${resp}=   Get Service By Id  ${id4}
-    Verify Response  ${resp}  name=${SERVICE4}  description=${description}   serviceDuration=${service_duration[1]}    notification=${bool[1]}  notificationType=${notifytype[1]}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[0]}
+    Verify Response  ${resp}  name=${SERVICE4}  description=${description}   serviceDuration=${srv_duration}    notification=${bool[1]}  notificationType=${notifytype[1]}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[0]}
     ${min_pre1}=   FakerLibrary.pyfloat   left_digits=2   right_digits=2   positive=True
     ${Total1}=   FakerLibrary.pyfloat   left_digits=3   right_digits=2   positive=True
     ${resp}=  Update Service  ${id4}  ${SERVICE14}  ${description}  ${service_duration[3]}  ${status[0]}  ${btype}  ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${Total1}  ${bool[0]}  ${bool[0]}
