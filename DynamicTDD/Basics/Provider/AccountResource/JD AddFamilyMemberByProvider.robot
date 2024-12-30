@@ -8,6 +8,7 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
@@ -76,9 +77,11 @@ JD-TC-AddFamilyMemberByProvider-2
       
 
 JD-TC-AddFamilyMemberByProvider-3
+
     [Documentation]    Adding a family member with  same phone number 
-    phoneNo=${Familymember_ph}  countryCode=${countryCodes[0]}=  Evaluate  ${PUSERNAME0}+200000
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
+
+    ${Familymember_ph}=  Generate Random 555 Number
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     # ${id}=  get_id  ${PUSERNAME0}
     ${firstname}=  FakerLibrary.first_name
@@ -97,7 +100,7 @@ JD-TC-AddFamilyMemberByProvider-3
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMemberByProvider  ${pcid1}  ${firstname}  ${lastname}  ${dob}  ${gender}  phoneNo=${Familymember_ph}  countryCode=${countryCode}
+    ${resp}=  AddFamilyMemberByProvider  ${pcid1}  ${firstname}  ${lastname}  ${dob}  ${gender}  phoneNo=${Familymember_ph}  countryCode=${countryCodes[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${mem_id}  ${resp.json()}
     ${firstname1}=  FakerLibrary.first_name
@@ -119,8 +122,9 @@ JD-TC-AddFamilyMemberByProvider-3
       
 JD-TC-AddFamilyMemberByProvider-4
     [Documentation]   One familymember added by two providers
-    phoneNo=${Familymember_ph}  countryCode=${countryCodes[0]}=  Evaluate  ${PUSERNAME0}+200001
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
+    
+    ${Familymember_ph}=  Generate Random 555 Number
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     # ${id}=  get_id  ${PUSERNAME0}
     # clear_FamilyMember  ${id}
@@ -134,11 +138,12 @@ JD-TC-AddFamilyMemberByProvider-4
     Set Test Variable  ${gender}
     ${resp}=  AddFamilyMemberByProvider  ${pcid1}  ${firstname}  ${lastname}  ${dob}  ${gender}  phoneNo=${Familymember_ph}  countryCode=${countryCodes[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     # ${id}=  get_id  ${PUSERNAME0}
     # ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${PUSERNAME0}  ${EMPTY}
-    ${resp}=  AddCustomer  ${PUSERNAME0}  firstName=${firstname}   lastName=${lastname}  countryCode=${countryCodes[1]}  email=${email2}
+    ${pro_cust1}=  Generate Random 555 Number
+    ${resp}=  AddCustomer  ${pro_cust1}  firstName=${firstname}   lastName=${lastname}  countryCode=${countryCodes[1]}  email=${email2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pcid2}  ${resp.json()}
@@ -148,8 +153,10 @@ JD-TC-AddFamilyMemberByProvider-4
     # Should Be Equal As Strings  "${resp.json()}"  "${ACCOUNT_EXIST_EMAIL_PHONE}"
 
 JD-TC-AddFamilyMemberByProvider-5
+
     [Documentation]   One familymember added by one provider and consumer
-    phoneNo=${Familymember_ph}  countryCode=${countryCodes[0]}=  Evaluate  ${PUSERNAME0}+200002
+    
+    ${Familymember_ph}=  Generate Random 555 Number
     ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     # ${id}=  get_id  ${CUSERNAME0}

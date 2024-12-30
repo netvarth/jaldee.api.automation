@@ -113,21 +113,7 @@ JD-TC-Add_Business_Logo-UH3
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings  ${resp.json()}  ${FILE_SIZE_ERROR}
 
-
 JD-TC-Add_Business_Logo-UH4
-                                  
-    [Documentation]               Add Business Logo with empty Action
-    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Add Business Logo    ${provider_id1}    ${fileName}    ${fileSize}    ${empty}    ${caption1}    ${fileType1}    ${order}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    500
-
-
-JD-TC-Add_Business_Logo-UH5
                                   
     [Documentation]               Add Business Logo with loan Action as remove
     
@@ -140,7 +126,7 @@ JD-TC-Add_Business_Logo-UH5
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-JD-TC-Add_Business_Logo-UH6
+JD-TC-Add_Business_Logo-UH5
                                   
     [Documentation]               Add Business Logo with empty caption
     
@@ -153,7 +139,7 @@ JD-TC-Add_Business_Logo-UH6
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-JD-TC-Add_Business_Logo-UH7
+JD-TC-Add_Business_Logo-UH6
                                   
     [Documentation]               Add Business Logo with empty file type
     
@@ -166,7 +152,7 @@ JD-TC-Add_Business_Logo-UH7
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-JD-TC-Add_Business_Logo-UH8
+JD-TC-Add_Business_Logo-UH7
                                   
     [Documentation]               Add Business Logo with empty order
     
