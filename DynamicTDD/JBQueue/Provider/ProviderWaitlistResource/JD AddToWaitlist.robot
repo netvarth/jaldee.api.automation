@@ -756,8 +756,8 @@ JD-TC-AddToWaitlist-UH5
       Set Test Variable  ${cid7}  ${resp.json()}
 
       ${resp}=  Add To Waitlist  ${cid7}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1}
-      Should Be Equal As Strings  ${resp.status_code}  404
-      Should Be Equal As Strings  "${resp.json()}"  "${NOT_A_Familiy_Member}"
+      Should Be Equal As Strings  ${resp.status_code}  401
+      Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION}"
 
 JD-TC-AddToWaitlist-UH6
       [Documentation]   Add a consumer to the same queue for the same service repeatedly

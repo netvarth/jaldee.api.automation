@@ -282,6 +282,13 @@ Get Sub Domain Settings
     Check Deprication  ${resp}  Get Sub Domain Settings
     RETURN  ${resp} 
 
+Add SalesChannel
+    [Arguments]  ${sc_code}
+    Check And Create YNW Session
+    ${resp}=    POST On Session   ynw   /provider/salesChannel/${sc_code}   expected_status=any
+    RETURN   ${resp}
+
+    
 ############# Keywords for Provider signup ###############################
 
 Select Random Specializations

@@ -23,11 +23,11 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 
 JD-TC-Get Queue By Id-1
 	[Documentation]  Get Queues by Id valid  provider
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_service   ${HLPUSERNAME2}
-    # clear_location  ${HLPUSERNAME2}
-    # clear_queue  ${HLPUSERNAME2}
+    # clear_service   ${HLPUSERNAME39}
+    # clear_location  ${HLPUSERNAME39}
+    # clear_queue  ${HLPUSERNAME39}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -86,11 +86,11 @@ JD-TC-Get Queue By Id-1
 
 JD-TC-Get Queue By Id-2
     [Documentation]    Create a queue with field tokenStart in a location of a valid provider and get queue by id
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_service   ${HLPUSERNAME2}
-    # clear_location  ${HLPUSERNAME2}
-    # clear_queue  ${HLPUSERNAME2}
+    # clear_service   ${HLPUSERNAME39}
+    # clear_location  ${HLPUSERNAME39}
+    # clear_queue  ${HLPUSERNAME39}
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
     ${eTime1}=  add_timezone_time  ${tz}  0  30  
@@ -195,7 +195,7 @@ JD-TC-Get Queue By Id-UH3
 
 JD-TC-Get Queue By Id-UH4
 	[Documentation]  Get Queues by id using Invalid id
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${resp}=  Get Queue ById  0
     Should Be Equal As Strings  ${resp.status_code}  422   

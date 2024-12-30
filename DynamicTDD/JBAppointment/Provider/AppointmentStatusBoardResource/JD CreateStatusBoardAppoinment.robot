@@ -35,7 +35,9 @@ JD-TC-CreateStatusBoardAppoinment-1
     # clear_service   ${HLPUSERNAME45}
     # clear_location  ${HLPUSERNAME45}
     clear_Addon  ${HLPUSERNAME45}
-
+    
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}   
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
     ${lid1}=  Create Sample Location  
@@ -385,6 +387,9 @@ JD-TC-CreateStatusBoardAppoinment-UH7
     # clear_service   ${PUSERNAMEA}
     # clear_location  ${PUSERNAMEA}
     clear_Addon  ${PUSERNAMEA}
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}   
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
     ${lid1}=  Create Sample Location  

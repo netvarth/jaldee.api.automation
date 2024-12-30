@@ -82,12 +82,11 @@ JD-TC-CreateQueueSet-1
     ${dept1}=   Create Dictionary  departmentId=${depid}
     ${dep}=  Create List   ${dept1}
     ${w_list}=   Create List    ${wl_status[0]}
-    ${resp}=  Create QueueSet for Branch   ${s_name[0]}  ${s_name[1]}   ${s_desc}   ${fieldList}   ${dep}    ${ser}     ${queue}    ${EMPTY}   ${EMPTY}     ${w_list}    ${statusboard_type[0]}  ${service_list}  ${statusboard_type[1]}  ${queue_list}  ${statusboard_type[2]}  ${department_list}
+    ${resp}=  Create QueueSet for provider   ${s_name[0]}  ${s_name[1]}   ${s_desc}   ${fieldList}   ${ser}     ${queue}    ${EMPTY}   ${EMPTY}     ${w_list}    ${statusboard_type[1]}   ${queue_list}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sbq_id1}  ${resp.json()}
 
-   
     ${resp}=  Get WaitlistQueueSet By Id  ${sbq_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -100,13 +99,10 @@ JD-TC-CreateQueueSet-1
     Should Be Equal As Strings  ${resp.json()['fieldList'][0]['order']}  ${order1}   
     Should Be Equal As Strings  ${resp.json()['fieldList'][0]['displayName']}  ${Values[1]}   
     Should Be Equal As Strings  ${resp.json()['fieldList'][0]['defaultValue']}  ${Values[2]}  
-    Should Be Equal As Strings  ${resp.json()['queueSetFor'][0]['type']}   ${statusboard_type[0]}
-    Should Be Equal As Strings  ${resp.json()['queueSetFor'][1]['type']}   ${statusboard_type[1]}   
-    Should Be Equal As Strings  ${resp.json()['queueSetFor'][2]['type']}   ${statusboard_type[2]}
-    Should Be Equal As Strings  ${resp.json()['qBoardConditions']['departments'][0]['departmentId']}   ${depid}  
+    Should Be Equal As Strings  ${resp.json()['queueSetFor'][0]['type']}   ${statusboard_type[1]}
     Should Be Equal As Strings  ${resp.json()['qBoardConditions']['services'][0]['id']}   ${s_id1}
     Should Be Equal As Strings  ${resp.json()['qBoardConditions']['queues'][0]['id']}   ${qid1}
-    Should Be Equal As Strings  ${resp.json()['queryString']}   department-eq=${depid}&service-eq=${s_id1}&queue-eq=${qid1}&waitlistStatus-eq=checkedIn&label-eq=::
+    Should Be Equal As Strings  ${resp.json()['queryString']}  service-eq=${s_id1}&queue-eq=${qid1}&waitlistStatus-eq=checkedIn&label-eq=::
 
 JD-TC-CreateQueueSet-2
 	[Documentation]  Create a Waitlist QueueSet for Queue only
@@ -282,9 +278,7 @@ JD-TC-CreateQueueSet-5
     Set Suite Variable  ${s_name}
     ${s_desc}=  FakerLibrary.Sentence
     Set Suite Variable  ${s_desc}
-    ${department_list}=  Create list  ${depid1}
-    Set Suite Variable  ${department_list}
-
+    ${queue_list}=  Create list  
 
     ${dept1}=   Create Dictionary  departmentId=${depid1}
     ${dept}=  Create List   ${dept1}
@@ -292,7 +286,7 @@ JD-TC-CreateQueueSet-5
     ${sid1}=  Create List
     ${que}=   Create List
 
-    ${resp}=  Create QueueSet for Branch   ${s_name[0]}  ${s_name[1]}  ${s_desc}  ${fieldList}    ${dept}    ${sid1}     ${que}    ${EMPTY}   ${EMPTY}    ${w_list}   ${statusboard_type[2]}      ${department_list}
+    ${resp}=  Create QueueSet for provider   ${s_name[0]}  ${s_name[1]}  ${s_desc}  ${fieldList}   ${sid1}    ${que}    ${EMPTY}   ${EMPTY}    ${w_list}   ${statusboard_type[2]}    ${queue_list}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sbq_id1}  ${resp.json()}  
@@ -310,8 +304,8 @@ JD-TC-CreateQueueSet-5
     Should Be Equal As Strings  ${resp.json()['fieldList'][0]['displayName']}  ${Values[1]}   
     Should Be Equal As Strings  ${resp.json()['fieldList'][0]['defaultValue']}  ${Values[2]}  
     Should Be Equal As Strings  ${resp.json()['queueSetFor'][0]['type']}   ${statusboard_type[2]}
-    Should Be Equal As Strings  ${resp.json()['qBoardConditions']['departments'][0]['departmentId']}   ${depid1}
-    Should Be Equal As Strings  ${resp.json()['queryString']}    department-eq=${depid1}&waitlistStatus-eq=checkedIn&label-eq=::
+    Should Be Equal As Strings  ${resp.json()['queryString']}    waitlistStatus-eq=checkedIn&label-eq=::
+    
 JD-TC-CreateQueueSet-6
 
 	[Documentation]  Create a QueueSet for same department with another QueueSet details
@@ -326,16 +320,16 @@ JD-TC-CreateQueueSet-6
     Set Suite Variable  ${s_name}
     ${s_desc}=  FakerLibrary.Sentence
     Set Suite Variable  ${s_desc}
-    ${department_list}=  Create list  ${depid1}
-    Set Suite Variable  ${department_list}
-
+    ${queue_list}=  Create list 
+    Set Suite Variable   ${queue_list}
+    
     ${dept1}=   Create Dictionary  departmentId=${depid1}
     ${dept}=  Create List   ${dept1}
     ${w_list}=   Create List    ${wl_status[0]}
     ${sid1}=  Create List
     ${que}=   Create List
 
-    ${resp}=  Create QueueSet for Branch   ${s_name[0]}  ${s_name[1]}  ${s_desc}  ${fieldList}    ${dept}    ${sid1}     ${que}    ${EMPTY}   ${EMPTY}    ${w_list}   ${statusboard_type[2]}      ${department_list}
+    ${resp}=  Create QueueSet for provider   ${s_name[0]}  ${s_name[1]}  ${s_desc}  ${fieldList}   ${sid1}     ${que}    ${EMPTY}   ${EMPTY}    ${w_list}   ${statusboard_type[2]}      ${queue_list}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sbq_id1}  ${resp.json()}   
@@ -353,8 +347,7 @@ JD-TC-CreateQueueSet-6
     Should Be Equal As Strings  ${resp.json()['fieldList'][0]['displayName']}  ${Values[1]}   
     Should Be Equal As Strings  ${resp.json()['fieldList'][0]['defaultValue']}  ${Values[2]}  
     Should Be Equal As Strings  ${resp.json()['queueSetFor'][0]['type']}   ${statusboard_type[2]}
-    Should Be Equal As Strings  ${resp.json()['qBoardConditions']['departments'][0]['departmentId']}   ${depid1}
-    Should Be Equal As Strings  ${resp.json()['queryString']}         department-eq=${depid1}&waitlistStatus-eq=checkedIn&label-eq=::
+    Should Be Equal As Strings  ${resp.json()['queryString']}        waitlistStatus-eq=checkedIn&label-eq=::
 
 
 JD-TC-CreateQueueSet -UH1
@@ -364,7 +357,7 @@ JD-TC-CreateQueueSet -UH1
     ${sid1}=  Create List
     ${que}=   Create List
    
-    ${resp}=  Create QueueSet for provider   ${s_name[0]}  ${s_name[1]}  ${s_desc}  ${fieldList}    ${sid1}     ${que}    ${EMPTY}   ${EMPTY}    ${w_list}   ${statusboard_type[2]}      ${department_list}
+    ${resp}=  Create QueueSet for provider   ${s_name[0]}  ${s_name[1]}  ${s_desc}  ${fieldList}    ${sid1}     ${que}    ${EMPTY}   ${EMPTY}    ${w_list}   ${statusboard_type[2]}      ${queue_list}
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings   "${resp.json()}"   "${SESSION_EXPIRED}"
 
@@ -411,7 +404,7 @@ JD-TC-CreateQueueSet -UH2
     ${w_list}=   Create List    ${wl_status[0]}
     ${sid1}=  Create List
     ${que}=   Create List
-    ${resp}=  Create QueueSet for provider   ${s_name[0]}  ${s_name[1]}  ${s_desc}  ${fieldList}     ${sid1}     ${que}    ${EMPTY}   ${EMPTY}    ${w_list}   ${statusboard_type[2]}      ${department_list}
+    ${resp}=  Create QueueSet for provider   ${s_name[0]}  ${s_name[1]}  ${s_desc}  ${fieldList}     ${sid1}     ${que}    ${EMPTY}   ${EMPTY}    ${w_list}   ${statusboard_type[2]}      ${queue_list}
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_NO_ACCESS_FOR_URL}"
  
@@ -425,10 +418,9 @@ JD-TC-CreateQueueSet-UH3
     ${w_list}=   Create List    ${wl_status[0]}
     ${sid1}=  Create List
     ${que}=   Create List
-    ${resp}=  Create QueueSet for Branch   ${s_name[0]}  ${s_name[1]}  ${s_desc}  ${fieldList}    ${dept}    ${sid1}     ${que}    ${EMPTY}   ${EMPTY}    ${w_list}   ${statusboard_type[2]}      ${department_list}
+    ${resp}=  Create QueueSet for provider   ${s_name[0]}  ${s_name[1]}  ${s_desc}  ${fieldList}     ${sid1}     ${que}    ${EMPTY}   ${EMPTY}    ${w_list}   ${statusboard_type[2]}    ${que}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Log  ${resp.json()}
     Should Be Equal As Strings  "${resp.json()}"  "${QUEUE_SET_NAME_ALREADY_EXIST}"
 
 

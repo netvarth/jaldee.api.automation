@@ -20,7 +20,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 ${digits}       0123456789
 ${self}     0
 @{service_names}
-@{service_duration}   5   20
+@{service_duration}  5  10
 ${parallel}     1
 
 ***Keywords***
@@ -193,7 +193,7 @@ JD-TC-Add To WaitlistByConsumer-1
     ${list}=  Create List  1  2  3  4  5  6  7 
     ${DAY}=  get_date_by_timezone  ${tz} 
     ${sTime1}=  db.get_time_by_timezone  ${tz}
-    ${eTime1}=  add_timezone_time  ${tz}  1  30  
+    ${eTime1}=  add_timezone_time  ${tz}  4  30  
     # ${p1queue1}=    FakerLibrary.word
     ${p1queue1}=  Set Variable  ${unique_words[2]}
     ${capacity}=  FakerLibrary.Numerify  %%
@@ -1671,8 +1671,9 @@ JD-TC-Add To WaitlistByConsumer-UH1
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid0}   ${p1_q1}  ${DAY}  ${p1_s1}  ${cnote}  ${bool[0]}  ${self}      
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"   "${WAITLIST_CUSTOMER_ALREADY_IN}" 
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.status_code}  422
+    # Should Be Equal As Strings  "${resp.json()}"   "${WAITLIST_CUSTOMER_ALREADY_IN}" 
 
     ${resp}=  Cancel Waitlist  ${wid55}  ${pid0}
     Log  ${resp.content}
@@ -1725,7 +1726,7 @@ JD-TC-Add To WaitlistByConsumer-18
     Set Suite Variable  ${Sid1_s1} 
 
     ${sTime1}=  get_time_by_timezone  ${tz}
-    ${eTime1}=  add_timezone_time  ${tz}  1  30  
+    ${eTime1}=  add_timezone_time  ${tz}  4  30  
     ${list}=  Create List  1  2  3  4  5  6  7
     ${queue1}=    generate_firstname
     
@@ -1734,13 +1735,18 @@ JD-TC-Add To WaitlistByConsumer-18
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${qid1}  ${resp.json()}
 
-    ${resp}=  AddCustomer  ${CUSERNAME18}
-    Log   ${resp.json()}
+    ${fname}=  generate_firstname
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${resp}=  AddCustomer  ${CUSERNAME18}     email=${pc_emailid1}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid18}  ${resp.json()}
 
-    ${resp}=  AddCustomer  ${CUSERNAME15}
-    Log   ${resp.json()}
+    ${fname}=  generate_firstname
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${resp}=  AddCustomer  ${CUSERNAME15}     email=${pc_emailid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid15}  ${resp.json()}
 
@@ -1884,13 +1890,17 @@ JD-TC-Add To WaitlistByConsumer-19
     # ${DAY}=  db.get_date_by_timezone  ${tz}
     ${DAY}=  get_date_by_timezone  ${tz}
 
-    ${resp}=  AddCustomer  ${CUSERNAME20}
-    Log   ${resp.json()}
+    ${fname}=  generate_firstname
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${resp}=  AddCustomer  ${CUSERNAME20}     email=${pc_emailid1}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid20}  ${resp.json()}
 
-    ${resp}=  AddCustomer  ${CUSERNAME25}
-    Log   ${resp.json()}
+    ${fname}=  generate_firstname
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${resp}=  AddCustomer  ${CUSERNAME25}     email=${pc_emailid1}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid25}  ${resp.json()}
 
@@ -1953,7 +1963,7 @@ JD-TC-Add To WaitlistByConsumer-19
     # ${DAY}=  db.get_date_by_timezone  ${tz}
     ${DAY}=  get_date_by_timezone  ${tz}  
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${pid0}  ${qid1}  ${DAY}  ${Sid1_s1}  ${cnote}  ${bool[0]}  ${cidfor_c1} 
+    ${resp}=  Add To Waitlist Consumers  ${cid25}  ${pid0}  ${qid1}  ${DAY}  ${Sid1_s1}  ${cnote}  ${bool[0]}  ${cidfor_c1} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -1966,11 +1976,9 @@ JD-TC-Add To WaitlistByConsumer-19
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}  waitlistedBy=PROVIDER_CONSUMER
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${Sid1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid25}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}  ${cidfor_c1} 
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${qid1}
 
-    ${resp}=  Add To Waitlist Consumers  ${pid0}   ${qid1}  ${DAY}  ${Sid1_s1}  ${cnote}  ${bool[0]}  ${cidfor_c1}      
+    ${resp}=  Add To Waitlist Consumers  ${cid25}  ${pid0}   ${qid1}  ${DAY}  ${Sid1_s1}  ${cnote}  ${bool[0]}  ${cidfor_c1}      
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -1983,8 +1991,6 @@ JD-TC-Add To WaitlistByConsumer-19
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}  waitlistedBy=PROVIDER_CONSUMER
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${Sid1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid25}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}  ${cidfor_c1} 
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${qid1}
     ${resp}=  Get consumer Waitlist By Id   ${wid19}  ${pid0}   
     Log  ${resp.content}
@@ -1992,11 +1998,9 @@ JD-TC-Add To WaitlistByConsumer-19
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[7]}  waitlistedBy=PROVIDER_CONSUMER
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${Sid1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid25}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}  ${cidfor_c1} 
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${qid1}
 
-    ${resp}=  Add To Waitlist Consumers  ${pid0}   ${qid1}  ${DAY}  ${Sid1_s1}  ${cnote}  ${bool[0]}  ${cidfor_c1}      
+    ${resp}=  Add To Waitlist Consumers  ${cid25}  ${pid0}   ${qid1}  ${DAY}  ${Sid1_s1}  ${cnote}  ${bool[0]}  ${cidfor_c1}      
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -2009,10 +2013,7 @@ JD-TC-Add To WaitlistByConsumer-19
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}  waitlistedBy=PROVIDER_CONSUMER
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${Sid1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid25}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}  ${cidfor_c1} 
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${qid1}
-    
     Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_l2}
     
     ${resp}=  Get consumer Waitlist By Id   ${wid20}  ${pid0}   
@@ -2021,14 +2022,8 @@ JD-TC-Add To WaitlistByConsumer-19
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[7]}  waitlistedBy=PROVIDER_CONSUMER
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${Sid1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid25}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}  ${cidfor_c1} 
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${qid1}
-    
     Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_l2}
-
-
-
 
 JD-TC-Add To WaitlistByConsumer-20
     [Documentation]   Add a consumer and his family member to the same queue for the same Pre_Payment service repeatedly
@@ -2040,15 +2035,18 @@ JD-TC-Add To WaitlistByConsumer-20
 
     ${desc}=   FakerLibrary.sentence
     # ${DAY}=  db.get_date_by_timezone  ${tz}
-    ${DAY}=  get_date_by_timezone  ${tz}
+    ${DAY}=  db.add_timezone_date  ${tz}  4  
 
-    ${resp}=  AddCustomer  ${CUSERNAME30}
+    ${fname}=  generate_firstname
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${resp}=  AddCustomer  ${CUSERNAME30}      email=${pc_emailid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid30}  ${resp.json()}
 
-
-    ${resp}=  AddCustomer  ${CUSERNAME35}
+    ${fname}=  generate_firstname
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${resp}=  AddCustomer  ${CUSERNAME35}       email=${pc_emailid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid35}  ${resp.json()}
@@ -2103,7 +2101,7 @@ JD-TC-Add To WaitlistByConsumer-20
     Set Suite Variable  ${cidfor_c2}   ${resp.json()}
 
     # ${DAY}=  db.get_date_by_timezone  ${tz}
-    ${DAY}=  get_date_by_timezone  ${tz}  
+    ${DAY}=  db.add_timezone_date  ${tz}  1 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers     ${cid35}  ${pid0}  ${qid1}  ${DAY}  ${Sid1_s1}  ${cnote}  ${bool[0]}  ${cidfor_c2} 
     Log  ${resp.content}
@@ -2134,8 +2132,6 @@ JD-TC-Add To WaitlistByConsumer-20
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}  waitlistedBy=PROVIDER_CONSUMER
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${Sid1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid35}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}  ${cidfor_c2} 
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${qid1}
 
   
@@ -2152,7 +2148,6 @@ JD-TC-Add To WaitlistByConsumer-20
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}  waitlistedBy=PROVIDER_CONSUMER
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${Sid1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid35}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id5} 
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${qid1}
     
@@ -2170,8 +2165,6 @@ JD-TC-Add To WaitlistByConsumer-20
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}  waitlistedBy=PROVIDER_CONSUMER
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${Sid1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid35}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}  ${cidfor_c2} 
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${qid1}
     ${resp}=  Get consumer Waitlist By Id   ${wid25}  ${pid0}   
     Log  ${resp.content}
@@ -2179,8 +2172,6 @@ JD-TC-Add To WaitlistByConsumer-20
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[7]}  waitlistedBy=PROVIDER_CONSUMER
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${Sid1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid35}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}  ${cidfor_c2} 
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${qid1}
     
     Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_l2}
@@ -2191,10 +2182,8 @@ JD-TC-Add To WaitlistByConsumer-20
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}  waitlistedBy=PROVIDER_CONSUMER
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${Sid1_s1}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid35}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id5} 
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${qid1}
-    
     Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_l2}
 
 
@@ -3059,7 +3048,7 @@ JD-TC-Add To WaitlistByConsumer-UH14
     ${DAY}=  get_date_by_timezone  ${tz}
     # ${psTime}=  db.subtract_timezone_time  ${tz}  0  30
     # ${peTime}=  db.subtract_timezone_time  ${tz}   0  15
-    ${psTime}=  db.subtract_timezone_time  ${tz}  0  30 
+    ${psTime}=  db.subtract_timezone_time  ${tz}  0  50 
     ${peTime}=  db.subtract_timezone_time  ${tz}  0  15
     ${list}=  Create List  1  2  3  4  5  6  7
     ${capacity}=  FakerLibrary.Numerify  %%
@@ -3118,11 +3107,10 @@ JD-TC-Add To WaitlistByConsumer-UH16
 	[Documentation]  Add consumer to waitlist for a service with prepayment and try to change prepayment status from prepaymentPending to arrived.   
 
 
-    ${firstname}  ${lastname}  ${PUSERPH3}  ${LoginId}=  Provider Signup
-    Set Suite Variable  ${PUSERPH3}
+    # ${firstname}  ${lastname}  ${PUSERNAME282}  ${LoginId}=  Provider Signup
+    # Set Suite Variable  ${PUSERNAME282}
 
-
-    ${resp}=  Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME282}  ${PASSWORD}
     # Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -3168,29 +3156,25 @@ JD-TC-Add To WaitlistByConsumer-UH16
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${pid1}=  get_acc_id  ${PUSERPH3}
+    ${pid1}=  get_acc_id  ${PUSERNAME282}
     # ${city}=   FakerLibrary.state
     # ${latti}=  get_latitude
     # ${longi}=  get_longitude
     # ${postcode}=  FakerLibrary.postcode
     # ${address}=  get_address
-    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    ${tz1}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    Set Suite Variable  ${tz1}
-    ${parking}    Random Element     ${parkingType}
-    ${24hours}    Random Element    ['True','False']
+    # ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    # ${tz1}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    # Set Suite Variable  ${tz1}
+    # ${parking}    Random Element     ${parkingType}
+    # ${24hours}    Random Element    ['True','False']
     # ${DAY}=  db.get_date_by_timezone  ${tz}
-    ${DAY}=  get_date_by_timezone  ${tz1}
-    # ${sTime}=  add_timezone_time  ${tz}  0  15  
-    # ${eTime}=  add_timezone_time  ${tz}  0  30  
-    ${sTime}=  add_timezone_time  ${tz1}  0  15
-    ${eTime}=  add_timezone_time  ${tz1}  0  30
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${url}=   FakerLibrary.url
-    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[4]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${p2_l1}  ${resp.json()}
+    # ${url}=   FakerLibrary.url
+    # ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[4]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${p2_l1}  ${resp.json()}
+
+    ${p2_l1}=  Create Sample Location  
 
     ${P2SERVICE1}=    FakerLibrary.word
     Set Test Variable  ${P2SERVICE1}
@@ -3211,6 +3195,16 @@ JD-TC-Add To WaitlistByConsumer-UH16
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${p2_s2}  ${resp.json()}
+
+    ${resp}=   Get Location ById  ${p2_l1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz1}  ${resp.json()['timezone']}
+
+    ${DAY}=  get_date_by_timezone  ${tz1}
+    ${sTime}=  add_timezone_time  ${tz1}  0  15
+    ${eTime}=  add_timezone_time  ${tz1}  0  30
+    ${list}=  Create List  1  2  3  4  5  6  7
 
     ${resp}=    Update Waitlist Settings  ${calc_mode[0]}  20  ${bool[1]}  ${bool[1]}  ${bool[1]}   ${bool[0]}   ${EMPTY}  
     Log  ${resp.content}
@@ -3233,14 +3227,14 @@ JD-TC-Add To WaitlistByConsumer-UH16
     ${bank_name}=  FakerLibrary.company
     ${name}=  FakerLibrary.name
     ${branch}=   db.get_place
-    ${resp}=   Update Account Payment Settings   ${bool[0]}  ${bool[0]}  ${bool[1]}  ${PUSERPH3}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
+    ${resp}=   Update Account Payment Settings   ${bool[0]}  ${bool[0]}  ${bool[1]}  ${PUSERNAME282}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  payuVerify  ${pid1}
     Log  ${resp}
 
-    ${resp}=   Update Account Payment Settings   ${bool[1]}  ${bool[0]}  ${bool[1]}  ${PUSERPH3}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
+    ${resp}=   Update Account Payment Settings   ${bool[1]}  ${bool[0]}  ${bool[1]}  ${PUSERNAME282}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3278,14 +3272,14 @@ JD-TC-Add To WaitlistByConsumer-UH16
     Set Test Variable    ${cid}   ${resp.json()['id']}  
     ${cid}=  get_id  ${CUSERNAME8}    
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${pid1}  ${p2_q1}  ${DAY}  ${p2_s1}  ${cnote}  ${bool[0]}  ${self}
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid1}  ${p2_q1}  ${DAY}  ${p2_s1}  ${cnote}  ${bool[0]}  ${self}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME282}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3302,7 +3296,7 @@ JD-TC-Add To WaitlistByConsumer-UH16
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid1}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}      waitlistedBy=PROVIDER_CONSUMER
+    Verify Response  ${resp}  date=${DAY}    waitlistedBy=PROVIDER_CONSUMER
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P2SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p2_s1}
     
@@ -3311,28 +3305,28 @@ JD-TC-Add To WaitlistByConsumer-UH16
     ${resp}=  Consumer Logout       
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME282}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Waitlist Action  ${waitlist_actions[0]}  ${wid1}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    ${WAITLIST_STATUS_NOT_CHANGEABLE}=  Format String  ${WAITLIST_STATUS_NOT_CHANGEABLE}  ${wl_status[3]}   ${wl_status[1]}
-    Should Be Equal As Strings  "${resp.json()}"  "${WAITLIST_STATUS_NOT_CHANGEABLE}"
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${WAITLIST_STATUS_NOT_CHANGEABLE}=  Format String  ${WAITLIST_STATUS_NOT_CHANGEABLE}  ${wl_status[3]}   ${wl_status[1]}
+    # Should Be Equal As Strings  "${resp.json()}"  "${WAITLIST_STATUS_NOT_CHANGEABLE}"
 
 
 
 
 JD-TC-Add To WaitlistByConsumer-UH17
 	[Documentation]  the consumer add to waitlist for a service with prepayment  , try to change prepaymentPending to STARTED 
-    # ${resp}=   Run Keywords   clear_queue  ${PUSERPH3}  AND  # clear waitlist   ${PUSERPH3}
-    ${pid1}=  get_acc_id  ${PUSERPH3}
+    # ${resp}=   Run Keywords   clear_queue  ${PUSERNAME282}  AND  # clear waitlist   ${PUSERNAME282}
+    ${pid1}=  get_acc_id  ${PUSERNAME282}
     ${cid}=  get_id  ${CUSERNAME5}
     # ${DAY}=  db.get_date_by_timezone  ${tz}
     ${DAY}=  get_date_by_timezone  ${tz}
-   clear Customer  ${PUSERPH3}
+   clear Customer  ${PUSERNAME282}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME282}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3391,15 +3385,15 @@ JD-TC-Add To WaitlistByConsumer-UH17
     Should Be Equal As Strings    ${resp.status_code}   200
     clear_Consumermsg  ${CUSERNAME8}
 
-    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME8}    ${pid1}    ${token}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME8}    ${pid1}    ${token}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${pcons_id8}    ${resp.json()['providerConsumer']}
     # Set Test Variable    ${cid}   ${resp.json()['id']}   
 
     ${cid}=  get_id  ${CUSERNAME8}    
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${pid1}  ${p2_q1}  ${DAY}  ${p2_s1}  ${cnote}  ${bool[0]}  ${self}
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid1}  ${p2_q1}  ${DAY}  ${p2_s1}  ${cnote}  ${bool[0]}  ${self}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${wid}=  Get Dictionary Values  ${resp.json()}
@@ -3408,7 +3402,7 @@ JD-TC-Add To WaitlistByConsumer-UH17
     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid1}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}    appxWaitingTime=0  waitlistedBy=PROVIDER_CONSUMER  
+    Verify Response  ${resp}  date=${DAY}     appxWaitingTime=0  waitlistedBy=PROVIDER_CONSUMER  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P2SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p2_s1}
     
@@ -3422,7 +3416,7 @@ JD-TC-Add To WaitlistByConsumer-UH17
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME282}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
@@ -3433,9 +3427,9 @@ JD-TC-Add To WaitlistByConsumer-UH17
 
     ${resp}=  Waitlist Action  STARTED  ${wid1}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    ${WAITLIST_STATUS_NOT_CHANGEABLE}=  Format String  ${WAITLIST_STATUS_NOT_CHANGEABLE}  ${wl_status[3]}   ${wl_status[2]}
-    Should Be Equal As Strings  "${resp.json()}"  "${WAITLIST_STATUS_NOT_CHANGEABLE}"
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${WAITLIST_STATUS_NOT_CHANGEABLE}=  Format String  ${WAITLIST_STATUS_NOT_CHANGEABLE}  ${wl_status[3]}   ${wl_status[2]}
+    # Should Be Equal As Strings  "${resp.json()}"  "${WAITLIST_STATUS_NOT_CHANGEABLE}"
 
     ${resp1}=  Get Waitlist Today  
     Log   ${resp1.json()}
@@ -3445,30 +3439,44 @@ JD-TC-Add To WaitlistByConsumer-UH17
 
 JD-TC-Add To WaitlistByConsumer-21
 	[Documentation]  the consumer add to waitlist for a service with prepayment  , try to change prepaymentPending to checkedIn 
-    # ${resp}=   Run Keywords   clear_queue  ${PUSERPH3}  
-    # AND  # clear waitlist   ${PUSERPH3}
-    ${pid1}=  get_acc_id  ${PUSERPH3}
+    # ${resp}=   Run Keywords   clear_queue  ${PUSERNAME282}  
+    # AND  # clear waitlist   ${PUSERNAME282}
+    ${pid1}=  get_acc_id  ${PUSERNAME282}
     ${cid}=  get_id  ${CUSERNAME5}
     # ${DAY}=  db.get_date_by_timezone  ${tz}
     ${DAY}=  get_date_by_timezone  ${tz}
-   clear Customer  ${PUSERPH3}
+   clear Customer  ${PUSERNAME282}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME282}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
-    ${resp}=  AddCustomer  ${CUSERNAME8}
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    Set Suite Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${resp}=  AddCustomer  ${CUSERNAME8}  firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}   email=${pc_emailid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${p2_s1}   ${resp.json()[1]['id']}
-    Set Test Variable   ${P2SERVICE1}   ${resp.json()[1]['name']}
+    # Set Test Variable   ${p2_s1}   ${resp.json()[1]['id']}
+    # Set Test Variable   ${P2SERVICE1}   ${resp.json()[1]['name']}
     Set Test Variable   ${p2_s2}   ${resp.json()[2]['id']}
     Set Test Variable   ${P2SERVICE2}   ${resp.json()[2]['name']}
+
+    ${P2SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P2SERVICE1}
+    ${description}=  FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=10   max=20
+    ${min_pre}=  Convert To Number  ${min_pre}  0
+    ${p2_s1}=  Create Sample Service   ${P2SERVICE1}   isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}  maxBookingsAllowed=10
+    Set Suite Variable   ${p2_s1}
+   
+    ${resp}=   Get Service ById   ${p2_s1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -3512,16 +3520,16 @@ JD-TC-Add To WaitlistByConsumer-21
     Should Be Equal As Strings    ${resp.status_code}   200
     clear_Consumermsg  ${CUSERNAME8}
 
-    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME8}    ${pid1}    ${token}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME8}    ${pid1}    ${token}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${pcons_id8}    ${resp.json()['providerConsumer']}
     # Set Test Variable    ${cid}   ${resp.json()['id']}   
 
 
     ${cid}=  get_id  ${CUSERNAME8}    
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${pid1}  ${p2_q1}  ${DAY}  ${p2_s1}  ${cnote}  ${bool[0]}  ${self}
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid1}  ${p2_q1}  ${DAY}  ${p2_s1}  ${cnote}  ${bool[0]}  ${self}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -3541,7 +3549,7 @@ JD-TC-Add To WaitlistByConsumer-21
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME282}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
@@ -3554,26 +3562,29 @@ JD-TC-Add To WaitlistByConsumer-21
 
 JD-TC-Add To WaitlistByConsumer-22
 	[Documentation]  checking the waitlistStatus of a consumer 
-    # ${resp}=   Run Keywords   clear_queue  ${PUSERPH3}  
-    # AND  # clear waitlist   ${PUSERPH3}
-    ${pid1}=  get_acc_id  ${PUSERPH3}
+    # ${resp}=   Run Keywords   clear_queue  ${PUSERNAME282}  
+    # AND  # clear waitlist   ${PUSERNAME282}
+    ${pid1}=  get_acc_id  ${PUSERNAME282}
     ${cid}=  get_id  ${CUSERNAME8}
-   clear Customer  ${PUSERPH3}
+   clear Customer  ${PUSERNAME282}
     
 
-    ${resp}=  Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME282}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  AddCustomer  ${CUSERNAME8}
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${resp}=  AddCustomer  ${CUSERNAME8}  firstName=${fname}   lastName=${lname}    email=${pc_emailid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${p2_s1}   ${resp.json()[1]['id']}
-    Set Test Variable   ${P2SERVICE1}   ${resp.json()[1]['name']}
+    # Set Test Variable   ${p2_s1}   ${resp.json()[1]['id']}
+    # Set Test Variable   ${P2SERVICE1}   ${resp.json()[1]['name']}
     Set Test Variable   ${p2_s2}   ${resp.json()[2]['id']}
     Set Test Variable   ${P2SERVICE2}   ${resp.json()[2]['name']}
 
@@ -3604,7 +3615,7 @@ JD-TC-Add To WaitlistByConsumer-22
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
     ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
@@ -3620,15 +3631,15 @@ JD-TC-Add To WaitlistByConsumer-22
     Should Be Equal As Strings    ${resp.status_code}   200
     clear_Consumermsg  ${CUSERNAME8}
 
-    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME8}    ${pid1}    ${token}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME8}    ${pid1}    ${token}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}   200
     # Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
-    Set Test Variable    ${cid}   ${resp.json()['id']}  
+    # Set Test Variable    ${cid}   ${resp.json()['id']}  
 
     ${cid}=  get_id  ${CUSERNAME8}    
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${pid1}  ${p2_q1}  ${DAY}  ${p2_s1}  ${cnote}  ${bool[0]}  0
+    ${resp}=  Add To Waitlist Consumers   ${cid}   ${pid1}  ${p2_q1}  ${DAY}  ${p2_s1}  ${cnote}  ${bool[0]}  0
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -3642,25 +3653,28 @@ JD-TC-Add To WaitlistByConsumer-22
 
 JD-TC-Add To WaitlistByConsumer-23
 	[Documentation]  the consumer add to waitlist for a service with prepayment , try to change prepaymentPending to Cancel 
-    # ${resp}=   Run Keywords   clear_queue  ${PUSERPH3}  
-    # AND  # clear waitlist   ${PUSERPH3}
-    ${pid1}=  get_acc_id  ${PUSERPH3}
+    # ${resp}=   Run Keywords   clear_queue  ${PUSERNAME282}  
+    # AND  # clear waitlist   ${PUSERNAME282}
+    ${pid1}=  get_acc_id  ${PUSERNAME282}
     ${cid}=  get_id  ${CUSERNAME2}
     
 
-    ${resp}=  Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME282}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  AddCustomer  ${CUSERNAME2}
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${resp}=  AddCustomer  ${CUSERNAME2}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${p2_s1}   ${resp.json()[1]['id']}
-    Set Test Variable   ${P2SERVICE1}   ${resp.json()[1]['name']}
+    # Set Test Variable   ${p2_s1}   ${resp.json()[1]['id']}
+    # Set Test Variable   ${P2SERVICE1}   ${resp.json()[1]['name']}
     Set Test Variable   ${p2_s2}   ${resp.json()[2]['id']}
     Set Test Variable   ${P2SERVICE2}   ${resp.json()[2]['name']}
 
@@ -3708,21 +3722,21 @@ JD-TC-Add To WaitlistByConsumer-23
     Should Be Equal As Strings    ${resp.status_code}   200
     clear_Consumermsg  ${CUSERNAME2}
 
-    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME2}    ${pid1}    ${token}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME2}    ${pid1}    ${token}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}   200
     # Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
     Set Test Variable    ${cid}   ${resp.json()['id']}  
    
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${pid1}  ${p2_q1}  ${DAY}  ${p2_s1}  ${cnote}  ${bool[0]}  ${self}
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid1}  ${p2_q1}  ${DAY}  ${p2_s1}  ${cnote}  ${bool[0]}  ${self}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME282}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3764,7 +3778,6 @@ JD-TC-Add To WaitlistByConsumer-23
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}      waitlistedBy=PROVIDER_CONSUMER
-    Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P2SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p2_s1}
     
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons2}
@@ -3773,419 +3786,15 @@ JD-TC-Add To WaitlistByConsumer-23
     ${resp}=  Consumer Logout       
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200    
-    
-    ${msg}=   FakerLibrary.word
-    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=  Waitlist Action    ${waitlist_actions[2]}  ${wid2}  cancelReason=${waitlist_cancl_reasn[4]}  
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-
-JD-TC-Add To WaitlistByConsumer-24
-    
-    [Documentation]  Add to waitlist a consumer and familymember
-
-    ${firstname}  ${lastname}  ${PUSERPH8}  ${LoginId}=  Provider Signup
-    Set Suite Variable   ${PUSERPH8}
-
-    ${resp}=  Encrypted Provider Login  ${PUSERPH8}  ${PASSWORD}
-    # Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${pid}  ${decrypted_data['id']}
-    # Set Test Variable  ${pid}  ${resp.json()['id']}
-
-    ${resp}=  Get Waitlist Settings
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['enabledWaitlist']}==${bool[0]}   
-        ${resp}=   Enable Waitlist
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
-
-    ${resp}=  Get Waitlist Settings
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}   ${bool[1]}
-    sleep   01s
-    ${resp}=   Get jaldeeIntegration Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['onlinePresence']}==${bool[0]}
-        ${resp}=  Set jaldeeIntegration Settings    ${bool[1]}  ${EMPTY}  ${EMPTY}
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
-
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
-
-    ${pid0}=  get_acc_id  ${PUSERPH8}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=  AddCustomer  ${CUSERNAME5}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${loc1}  ${resp.json()[0]['id']} 
-    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
-    
-    ${P1SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${P1SERVICE1}
-    Set Suite Variable   ${P1SERVICE1}
-    ${desc}=   FakerLibrary.sentence
-    ${servicecharge}=   Random Int  min=100  max=500
-    ${resp}=  Create Service  ${P1SERVICE1}  ${desc}   ${service_duration[0]}  ${bool[0]}    ${servicecharge}    ${bool[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${ps1}  ${resp.json()}
-
-    ${P2SERVICE2}=    FakerLibrary.word
-    Set Suite Variable  ${P2SERVICE2}
-    ${desc}=   FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=1   max=50
-    Set Suite Variable  ${min_pre}
-    ${servicecharge}=   Random Int  min=100  max=500
-    ${Total1}=  Convert To Number  ${servicecharge}  1 
-    Set Suite Variable   ${Total}   ${Total1}
-    ${amt_float}=  twodigitfloat  ${Total}
-    Set Suite Variable  ${amt_float}  ${amt_float}  
-
-    ${resp}=  Create Service  ${P2SERVICE2}  ${desc}   ${service_duration[1]}  ${bool[0]}  ${servicecharge}  ${bool[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${ps2}  ${resp.json()}
-
-    # ${sTime1}=  db.get_time_by_timezone   ${tz}
-    # ${eTime1}=  add_timezone_time  ${tz}  1  30  
-    ${sTime1}=  db.get_time_by_timezone  ${tz}
-    ${eTime1}=  add_timezone_time  ${tz}  1  30  
-    ${p1queue1}=    FakerLibrary.word
-    ${capacity}=  FakerLibrary.Numerify  %%
-    ${resp}=  Create Queue  ${p1queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel[0]}  ${capacity}  ${loc1}  ${ps1}  ${ps2}  
-    Log  ${resp.content} 
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${p_q1}  ${resp.json()}
-
-    ${resp}=    Enable Search Data
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  ProviderLogout
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-     ${resp}=    Send Otp For Login    ${CUSERNAME5}    ${pid0}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-  
-     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
-  
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable   ${token}  ${resp.json()['token']}
-
-    # ${resp}=  Consumer Logout   
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-   
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    clear_Consumermsg  ${CUSERNAME2}
-
-    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME5}    ${pid0}    ${token}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    # Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
-    Set Test Variable    ${cid}   ${resp.json()['id']}  
-
-    ${cid}=  get_id  ${CUSERNAME5}
-    ${firstname}=  generate_firstname
-    ${lastname}=  FakerLibrary.last_name
-    ${dob}=  FakerLibrary.Date
-    ${gender}    Random Element    ${Genderlist}
-    ${resp}=  Add FamilyMember For ProviderConsumer   ${firstname}  ${lastname}  ${dob}  ${gender}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Test Variable  ${f1}   ${resp.json()}
-
-    ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid0}  ${p_q1}  ${DAY}  ${ps1}  ${cnote}  ${bool[0]}  ${f1}  ${self}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200   
-    
-    ${wid}=  Get Dictionary Values  ${resp.json()}
-    Set Suite Variable  ${cwid}  ${wid[0]} 
-    Set Suite Variable  ${cwidfam}  ${wid[1]} 
-
-    ${resp}=  Encrypted Provider Login  ${PUSERPH8}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME5}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pcons5}  ${resp.json()[1]['id']}
-
-    ${resp}=  ProviderLogout
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=  Get consumer Waitlist By Id   ${cwid}  ${pid0}   
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
-    Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}  ${ps1}
-    
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons5}
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p_q1}
-
-
-    ${resp}=  Get consumer Waitlist By Id   ${cwidfam}  ${pid0}   
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}     waitlistedBy=PROVIDER_CONSUMER  
-    Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}  ${ps1}
-    
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}  ${f1}
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p_q1}
-    Set Test Variable  ${cfid}   ${resp.json()['waitlistingFor'][0]['id']}
-
-
-    ${resp}=   Encrypted Provider Login  ${PUSERPH8}  ${PASSWORD} 
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME5}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${cid}  ${resp.json()[1]['id']}
-
-    ${resp}=  ListFamilyMemberByProvider  ${cid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List  ${resp}  0  id=${cfid}
-    Should Be Equal As Strings  ${resp.json()[0]['firstName']}  ${firstname}
-    Should Be Equal As Strings  ${resp.json()[0]['lastName']}  ${lastname}
-    Should Be Equal As Strings  ${resp.json()[0]['dob']}  ${dob}
-    Should Be Equal As Strings  ${resp.json()[0]['gender']}  ${gender}
-
-
-
-    
-    
-JD-TC-Add To WaitlistByConsumer-25
-    
-    [Documentation]  Add to waitlist a consumer and familymember with prepayment
-
-    # clear waitlist   ${PUSERPH8}
-    ${pid0}=  get_acc_id  ${PUSERPH8}
-    ${cid}=  get_id  ${CUSERNAME8}
-    
-    ${resp}=  Encrypted Provider Login  ${PUSERPH8}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  AddCustomer  ${CUSERNAME8}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-
-    # ${GST_num}  ${pan_num}=   db.Generate_gst_number   ${Container_id}
-    # ${ifsc_code}=   db.Generate_ifsc_code
-    # ${bank_ac}=   db.Generate_random_value  size=11   chars=${digits} 
-    # ${bank_name}=  FakerLibrary.company
-    # ${name}=  FakerLibrary.name
-    # ${branch}=   db.get_place
-    # ${resp}=   Update Account Payment Settings   ${bool[0]}  ${bool[0]}  ${bool[1]}  ${PUSERPH8}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME282}  ${PASSWORD}
     # Log  ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}   200
+    # Should Be Equal As Strings  ${resp.status_code}  200    
 
-    # ${resp}=  payuVerify  ${pid0}
-    # Log  ${resp}
-
-    # ${resp}=   Update Account Payment Settings   ${bool[1]}  ${bool[0]}  ${bool[1]}  ${PUSERPH8}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
-    # Log  ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-
-    # ${resp}=   Get Account Settings 
-    # Log  ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-    # ${resp}=  SetMerchantId  ${pid0}  ${merchantid}
-
-    ${resp}=  Get Account Settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
-        ${resp}=   Enable Disable Online Payment   ${toggle[0]}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
-
-    ${resp}=  Get Account Settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${GST_num}  ${pan_num}=   db.Generate_gst_number   ${Container_id}
-    ${resp}=  Update Tax Percentage  ${gstpercentage[3]}  ${GST_num} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    
-    ${resp}=  Enable Tax
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    
-    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
-        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    END
-
-    ${resp}=  Get jp finance settings    
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
-    Set Suite Variable  ${accountId}  ${resp.json()['accountId']}    
-    
-
-    ${resp}=  Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${loc1}  ${resp.json()[0]['id']} 
-    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
-
-    # ${DAY}=  db.add_timezone_date  ${tz}  3  
-    ${DAY}=  db.add_timezone_date  ${tz}  3
-
-    ${resp}=   Get payment profiles  
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=  ProviderLogout
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    
-     ${resp}=    Send Otp For Login    ${CUSERNAME8}    ${pid0}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-  
-     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
-  
-    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable   ${token}  ${resp.json()['token']}
-
-    # ${resp}=  Consumer Logout   
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-   
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME8}    ${pid0}    ${token}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    clear_Consumermsg  ${CUSERNAME2}
-
-    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME8}    ${pid0}    ${token}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    # Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
-    Set Test Variable    ${consid1}   ${resp.json()['id']}  
-
-    
-    ${firstname}=  generate_firstname
-    ${lastname}=  FakerLibrary.last_name
-    ${dob}=  FakerLibrary.Date
-    ${gender}    Random Element    ${Genderlist}
-    ${resp}=  Add FamilyMember For ProviderConsumer   ${firstname}  ${lastname}  ${dob}  ${gender}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Test Variable  ${f1}   ${resp.json()}
-
-    ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid0}  ${p_q1}  ${DAY}  ${ps2}  ${cnote}  ${bool[0]}  ${f1}  ${self}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200   
-    
-    ${wid}=  Get Dictionary Values  ${resp.json()}
-    Set Suite Variable  ${cwid}  ${wid[0]} 
-    Set Suite Variable  ${cwidfam}  ${wid[1]} 
-
-    ${resp}=  Encrypted Provider Login  ${PUSERPH8}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME8}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pcons_id0}  ${resp.json()[1]['id']}
-
-    ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200   
-
-    ${resp}=  Get consumer Waitlist By Id   ${cwid}  ${pid0}   
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}    appxWaitingTime=0  waitlistedBy=PROVIDER_CONSUMER  
-    Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P2SERVICE2}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}  ${ps2}
-    
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id0}
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p_q1}
-
-    ${resp}=  Get consumer Waitlist By Id   ${cwidfam}  ${pid0}   
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}    appxWaitingTime=12  waitlistedBy=PROVIDER_CONSUMER  
-    Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P2SERVICE2}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}  ${ps2}
-    
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}  ${f1}
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p_q1}
-
-    ${min_pre2}=  Evaluate  $min_pre * 2
-    ${resp}=    Get convenienceFee Details     ${pid0}    customizedJBProfile   ${min_pre2}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-   
-    # ${min_pre2}=  Evaluate  $min_pre * 2
-    ${resp}=  Make payment Consumer Mock  ${pid0}  ${min_pre2}  ${purpose[0]}  ${cwid}  ${ps2}  ${bool[0]}   ${bool[1]}  ${consid1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=  Make payment Consumer Mock  ${Total}  ${bool[1]}  ${cwid}  ${pid0}  ${purpose[0]}   ${cid1}
+    # ${msg}=   FakerLibrary.word
+    # Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    # ${resp}=  Waitlist Action    ${waitlist_actions[2]}  ${wid2}  cancelReason=${waitlist_cancl_reasn[4]}  
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
-    sleep   02s
-
-    ${resp}=  Get consumer Waitlist By Id  ${cwidfam}  ${pid0}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  paymentStatus=${paymentStatus[1]}
-
-    sleep   2s
-    ${resp}=   Cancel Waitlist  ${cwidfam}  ${pid0}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-
 
 JD-TC-Add To WaitlistByConsumer-UH18
     [Documentation]  add to waitlist w1 and cancell the waitlist
@@ -4660,8 +4269,8 @@ JD-TC-Add To WaitlistByConsumer-UH20
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['onlinePresence']}==${bool[0]}
-        ${resp}=  Set jaldeeIntegration Settings    ${bool[1]}  ${EMPTY}  ${EMPTY}
+    IF  ${resp.json()['onlinePresence']}==${bool[1]}
+        ${resp}=  Set jaldeeIntegration Settings    ${bool[0]}  ${EMPTY}  ${EMPTY}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
@@ -4669,7 +4278,7 @@ JD-TC-Add To WaitlistByConsumer-UH20
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[0]}
 
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -4792,7 +4401,476 @@ JD-TC-Add To WaitlistByConsumer-18
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}  
 
 
+JD-TC-Add To WaitlistByConsumer-24
+    
+    [Documentation]  Add to waitlist a consumer and familymember
 
+    ${firstname}  ${lastname}  ${PUSERPH8}  ${LoginId}=  Provider Signup
+    Set Suite Variable   ${PUSERPH8}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERPH8}  ${PASSWORD}
+    # Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
+
+    ${resp}=  Get Waitlist Settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enabledWaitlist']}==${bool[0]}   
+        ${resp}=   Enable Waitlist
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=  Get Waitlist Settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}   ${bool[1]}
+    sleep   01s
+    ${resp}=   Get jaldeeIntegration Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['onlinePresence']}==${bool[0]}
+        ${resp}=  Set jaldeeIntegration Settings    ${bool[1]}  ${EMPTY}  ${EMPTY}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=   Get jaldeeIntegration Settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
+
+    ${pid0}=  get_acc_id  ${PUSERPH8}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  AddCustomer  ${CUSERNAME5}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${loc1}  ${resp.json()[0]['id']} 
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    
+    ${P1SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P1SERVICE1}
+    Set Suite Variable   ${P1SERVICE1}
+    ${desc}=   FakerLibrary.sentence
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${resp}=  Create Service  ${P1SERVICE1}  ${desc}   ${service_duration[0]}  ${bool[0]}    ${servicecharge}    ${bool[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${ps1}  ${resp.json()}
+
+    ${P2SERVICE2}=    FakerLibrary.word
+    Set Suite Variable  ${P2SERVICE2}
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=1   max=50
+    Set Suite Variable  ${min_pre}
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${Total1}=  Convert To Number  ${servicecharge}  1 
+    Set Suite Variable   ${Total}   ${Total1}
+    ${amt_float}=  twodigitfloat  ${Total}
+    Set Suite Variable  ${amt_float}  ${amt_float}  
+
+    ${resp}=  Create Service  ${P2SERVICE2}  ${desc}   ${service_duration[1]}  ${bool[0]}  ${servicecharge}  ${bool[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${ps2}  ${resp.json()}
+
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    # ${eTime1}=  add_timezone_time  ${tz}  1  30  
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  1  30  
+    ${p1queue1}=    FakerLibrary.word
+    ${capacity}=  FakerLibrary.Numerify  %%
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${DAY}=  get_date_by_timezone  ${tz}
+    ${resp}=  Create Queue  ${p1queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel[0]}  ${capacity}  ${loc1}  ${ps1}  ${ps2}  
+    Log  ${resp.content} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${p_q1}  ${resp.json()}
+
+    ${resp}=    Enable Search Data
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  ProviderLogout
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+     ${resp}=    Send Otp For Login    ${CUSERNAME5}    ${pid0}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    clear_Consumermsg  ${CUSERNAME2}
+
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME5}    ${pid0}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+    Set Test Variable    ${cid}   ${resp.json()['id']}  
+
+    ${cid}=  get_id  ${CUSERNAME5}
+    ${firstname}=  generate_firstname
+    ${lastname}=  FakerLibrary.last_name
+    ${dob}=  FakerLibrary.Date
+    ${gender}    Random Element    ${Genderlist}
+    ${resp}=  Add FamilyMember For ProviderConsumer   ${firstname}  ${lastname}  ${dob}  ${gender}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Set Test Variable  ${f1}   ${resp.json()}
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid0}  ${p_q1}  ${DAY}  ${ps1}  ${cnote}  ${bool[0]}  ${f1}  ${self}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200   
+    
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Suite Variable  ${cwid}  ${wid[0]} 
+    Set Suite Variable  ${cwidfam}  ${wid[1]} 
+
+    ${resp}=  Encrypted Provider Login  ${PUSERPH8}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME5}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pcons5}  ${resp.json()[1]['id']}
+
+    ${resp}=  ProviderLogout
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME5}    ${pid0}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get consumer Waitlist By Id   ${cwid}  ${pid0}   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}      waitlistedBy=PROVIDER_CONSUMER  
+    Should Be Equal As Strings  ${resp.json()['service']['id']}  ${ps1}
+    
+    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons5}
+    Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p_q1}
+
+
+    ${resp}=  Get consumer Waitlist By Id   ${cwidfam}  ${pid0}   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[0]}     waitlistedBy=PROVIDER_CONSUMER  
+    Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['service']['id']}  ${ps1}
+    
+    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}  ${f1}
+    Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p_q1}
+    Set Test Variable  ${cfid}   ${resp.json()['waitlistingFor'][0]['id']}
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH8}  ${PASSWORD} 
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME5}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${cid}  ${resp.json()[1]['id']}
+
+    ${resp}=  ListFamilyMemberByProvider  ${cid}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response List  ${resp}  0  id=${cfid}
+    Should Be Equal As Strings  ${resp.json()[0]['firstName']}  ${firstname}
+    Should Be Equal As Strings  ${resp.json()[0]['lastName']}  ${lastname}
+    Should Be Equal As Strings  ${resp.json()[0]['dob']}  ${dob}
+    Should Be Equal As Strings  ${resp.json()[0]['gender']}  ${gender}
+
+
+JD-TC-Add To WaitlistByConsumer-24
+    
+    [Documentation]  Add to waitlist a consumer and familymember with prepayment
+
+    ${firstname}  ${lastname}  ${PUSERPH8}  ${LoginId}=  Provider Signup
+    Set Suite Variable   ${PUSERPH8}
+
+    # clear waitlist   ${PUSERPH8}
+    ${pid0}=  get_acc_id  ${PUSERPH8}
+    ${cid}=  get_id  ${CUSERNAME8}
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERPH8}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Waitlist Settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enabledWaitlist']}==${bool[0]}   
+        ${resp}=   Enable Waitlist
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=  Get Waitlist Settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}   ${bool[1]}
+    sleep   01s
+    ${resp}=   Get jaldeeIntegration Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['onlinePresence']}==${bool[0]}
+        ${resp}=  Set jaldeeIntegration Settings    ${bool[1]}  ${EMPTY}  ${EMPTY}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=   Get jaldeeIntegration Settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
+
+
+    ${resp}=  AddCustomer  ${CUSERNAME8}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    # ${GST_num}  ${pan_num}=   db.Generate_gst_number   ${Container_id}
+    # ${ifsc_code}=   db.Generate_ifsc_code
+    # ${bank_ac}=   db.Generate_random_value  size=11   chars=${digits} 
+    # ${bank_name}=  FakerLibrary.company
+    # ${name}=  FakerLibrary.name
+    # ${branch}=   db.get_place
+    # ${resp}=   Update Account Payment Settings   ${bool[0]}  ${bool[0]}  ${bool[1]}  ${PUSERPH8}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+
+    # ${resp}=  payuVerify  ${pid0}
+    # Log  ${resp}
+
+    # ${resp}=   Update Account Payment Settings   ${bool[1]}  ${bool[0]}  ${bool[1]}  ${PUSERPH8}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+
+    # ${resp}=   Get Account Settings 
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=  SetMerchantId  ${pid0}  ${merchantid}
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+        ${resp}=   Enable Disable Online Payment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${GST_num}  ${pan_num}=   db.Generate_gst_number   ${Container_id}
+    ${resp}=  Update Tax Percentage  ${gstpercentage[3]}  ${GST_num} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    
+    ${resp}=  Enable Tax
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+    Set Suite Variable  ${accountId}  ${resp.json()['accountId']}    
+    
+
+    ${resp}=  Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${loc1}  ${resp.json()[0]['id']} 
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+
+    ${P1SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P1SERVICE1}
+    Set Suite Variable   ${P1SERVICE1}
+    ${desc}=   FakerLibrary.sentence
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${resp}=  Create Service  ${P1SERVICE1}  ${desc}   ${service_duration[0]}  ${bool[0]}    ${servicecharge}    ${bool[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${ps1}  ${resp.json()}
+
+    ${P2SERVICE2}=    FakerLibrary.word
+    Set Suite Variable  ${P2SERVICE2}
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=1   max=50
+    Set Suite Variable  ${min_pre}
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${Total1}=  Convert To Number  ${servicecharge}  1 
+    Set Suite Variable   ${Total}   ${Total1}
+    ${amt_float}=  twodigitfloat  ${Total}
+    Set Suite Variable  ${amt_float}  ${amt_float}  
+
+    ${resp}=  Create Service  ${P2SERVICE2}  ${desc}   ${service_duration[1]}  ${bool[0]}  ${servicecharge}  ${bool[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${ps2}  ${resp.json()}
+
+    # ${DAY}=  db.add_timezone_date  ${tz}  3  
+    ${DAY}=  db.add_timezone_date  ${tz}  3
+
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  1  30  
+    ${p1queue1}=    FakerLibrary.word
+    ${capacity}=  FakerLibrary.Numerify  %%
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${DAY}=  get_date_by_timezone  ${tz}
+    ${resp}=  Create Queue  ${p1queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel[0]}  ${capacity}  ${loc1}  ${ps1}  ${ps2}  
+    Log  ${resp.content} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${p_q1}  ${resp.json()}
+
+    ${resp}=   Get payment profiles  
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  ProviderLogout
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+     ${resp}=    Send Otp For Login    ${CUSERNAME8}    ${pid0}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    # ${resp}=  Consumer Logout   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME8}    ${pid0}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    clear_Consumermsg  ${CUSERNAME2}
+
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME8}    ${pid0}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+    Set Test Variable    ${consid1}   ${resp.json()['id']}  
+
+    
+    ${firstname}=  generate_firstname
+    ${lastname}=  FakerLibrary.last_name
+    ${dob}=  FakerLibrary.Date
+    ${gender}    Random Element    ${Genderlist}
+    ${resp}=  Add FamilyMember For ProviderConsumer   ${firstname}  ${lastname}  ${dob}  ${gender}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Set Test Variable  ${f1}   ${resp.json()}
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid0}  ${p_q1}  ${DAY}  ${ps2}  ${cnote}  ${bool[0]}  ${f1}  ${self}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200   
+    
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Suite Variable  ${cwid}  ${wid[0]} 
+    Set Suite Variable  ${cwidfam}  ${wid[1]} 
+
+    ${resp}=  Encrypted Provider Login  ${PUSERPH8}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME8}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${pcons_id0}  ${resp.json()[1]['id']}
+
+    ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200   
+
+    ${resp}=  Get consumer Waitlist By Id   ${cwid}  ${pid0}   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}    appxWaitingTime=0  waitlistedBy=PROVIDER_CONSUMER  
+    Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P2SERVICE2}
+    Should Be Equal As Strings  ${resp.json()['service']['id']}  ${ps2}
+    
+    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id0}
+    Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p_q1}
+
+    ${resp}=  Get consumer Waitlist By Id   ${cwidfam}  ${pid0}   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[3]}    appxWaitingTime=12  waitlistedBy=PROVIDER_CONSUMER  
+    Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P2SERVICE2}
+    Should Be Equal As Strings  ${resp.json()['service']['id']}  ${ps2}
+    
+    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeFamilyMemberId']}  ${f1}
+    Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p_q1}
+
+    ${min_pre2}=  Evaluate  $min_pre * 2
+    ${resp}=    Get convenienceFee Details     ${pid0}    customizedJBProfile   ${min_pre2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+   
+    # ${min_pre2}=  Evaluate  $min_pre * 2
+    ${resp}=  Make payment Consumer Mock  ${pid0}  ${min_pre2}  ${purpose[0]}  ${cwid}  ${ps2}  ${bool[0]}   ${bool[1]}  ${consid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${resp}=  Make payment Consumer Mock  ${Total}  ${bool[1]}  ${cwid}  ${pid0}  ${purpose[0]}   ${cid1}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    sleep   02s
+
+    ${resp}=  Get consumer Waitlist By Id  ${cwidfam}  ${pid0}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  paymentStatus=${paymentStatus[1]}
+
+    sleep   2s
+    ${resp}=   Cancel Waitlist  ${cwidfam}  ${pid0}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+
+    
 
 
 

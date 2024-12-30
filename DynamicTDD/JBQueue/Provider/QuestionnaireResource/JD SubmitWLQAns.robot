@@ -685,11 +685,10 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  waitlistStatus=${wl_status[1]} 
 
-    ${reason}=  Random Element  ${waitlist_cancl_reasn}
-    ${msg}=   FakerLibrary.word
+    ${msg}=  Fakerlibrary.word
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=   Waitlist Action Cancel  ${wid1}  ${reason}  ${msg}
-    Log  ${resp.content}
+    ${resp}=  Waitlist Action   ${waitlist_actions[2]}  ${wid1}  cancelReason=${waitlist_cancl_reasn[1]}      
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Waitlist By Id  ${wid1}
@@ -1174,7 +1173,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-4
 JD-TC-SubmitQuestionnaireForWaitlist-5
     [Documentation]  Submit questionnaire for waitlist with audio and video upload too.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME280}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1225,7 +1224,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME280}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1252,18 +1251,18 @@ JD-TC-SubmitQuestionnaireForWaitlist-5
     END
     Set Suite Variable   ${s_id}  
 
-    # clear_queue   ${PUSERNAME120}
+    # clear_queue   ${PUSERNAME280}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    # ${resp}=  Sample Queue  ${lid}   ${s_id}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${q_id}  ${resp.json()}
-
-    # ${resp}=  Get Queue ById  ${q_id}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${q_id}  ${resp.json()}
+   
+    ${resp}=  Get Queue ById  ${q_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
     # Verify Response  ${resp}  id=${q_id}   queueState=${Qstate[0]}
 
     ${resp}=  Get Questionnaire List By Provider   
@@ -1350,7 +1349,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME120}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME280}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 

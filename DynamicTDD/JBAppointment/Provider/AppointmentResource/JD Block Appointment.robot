@@ -2551,8 +2551,8 @@ JD-TC-Block Appointment-UH17
 
     ${resp}=  Block Appointment For Consumer  ${EMPTY}  ${sch_id}  ${DAY1}  ${apptfor}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  500
-    Should Be Equal As Strings   ${resp.json()}    ${JALDEE_OUT_OF_REACH_PROBLEM}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}    ${NECESSARY_FIELD_MISSING}
 
 JD-TC-Block Appointment-UH18
 

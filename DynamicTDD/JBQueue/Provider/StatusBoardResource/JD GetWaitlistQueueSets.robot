@@ -96,7 +96,7 @@ JD-TC-GetWaitlistQueueSets-1
     ${dept1}=   Create Dictionary  departmentId=${depid1}
     ${dep}=  Create List   ${dept1}
     ${w_list}=   Create List    ${wl_status[0]}
-    ${resp}=  Create QueueSet for Branch   ${s_name1[0]}  ${s_name1[1]}   ${s_desc1}   ${fieldList}   ${dep}    ${ser}     ${queue}    ${EMPTY}   ${EMPTY}     ${w_list}    ${statusboard_type[0]}  ${service_list}  ${statusboard_type[1]}  ${queue_list}  ${statusboard_type[2]}  ${department_list}
+    ${resp}=  Create QueueSet for provider   ${s_name1[0]}  ${s_name1[1]}   ${s_desc1}   ${fieldList}   ${ser}     ${queue}    ${EMPTY}   ${EMPTY}     ${w_list}    ${statusboard_type[1]}   ${queue_list}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sbq_id1}  ${resp.json()}
@@ -113,7 +113,7 @@ JD-TC-GetWaitlistQueueSets-1
     ${dept1}=   Create Dictionary  departmentId=${depid1}
     ${dep}=  Create List   ${dept1}
     ${w_list}=   Create List    ${wl_status[0]}
-    ${resp}=  Create QueueSet for Branch   ${s_name2[0]}  ${s_name2[1]}   ${s_desc2}   ${fieldList}   ${dep}    ${ser}     ${queue}    ${EMPTY}   ${EMPTY}     ${w_list}     ${statusboard_type[1]}  ${queue_list2}  
+    ${resp}=  Create QueueSet for provider   ${s_name2[0]}  ${s_name2[1]}   ${s_desc2}   ${fieldList}   ${ser}     ${queue}    ${EMPTY}   ${EMPTY}     ${w_list}    ${statusboard_type[1]}   ${queue_list2}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sb_id2}  ${resp.json()}
@@ -130,7 +130,7 @@ JD-TC-GetWaitlistQueueSets-1
     ${dept1}=   Create Dictionary  departmentId=${depid1}
     ${dep}=  Create List   ${dept1}
     ${w_list}=   Create List    ${wl_status[0]}
-    ${resp}=  Create QueueSet for Branch   ${s_name3[0]}  ${s_name3[1]}   ${s_desc3}   ${fieldList}   ${dep}    ${ser}     ${queue}    ${EMPTY}   ${EMPTY}     ${w_list}    ${statusboard_type[0]}  ${service_list3}  
+    ${resp}=  Create QueueSet for provider   ${s_name3[0]}  ${s_name3[1]}   ${s_desc3}   ${fieldList}   ${ser}     ${queue}    ${EMPTY}   ${EMPTY}     ${w_list}    ${statusboard_type[0]}   ${service_list3}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sb_id3}  ${resp.json()}

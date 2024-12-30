@@ -200,7 +200,7 @@ JD-TC-Create_Product-UH2
     ${resp}=    Create Lead Product  ${empty}  ${productEnum[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}         ${PRODUCT_NAME_EMPTY}
+    Should Be Equal As Strings    ${resp.json()}         ${PRODUCT_NAME_SIZE}
 
 JD-TC-Create_Product-UH3
 

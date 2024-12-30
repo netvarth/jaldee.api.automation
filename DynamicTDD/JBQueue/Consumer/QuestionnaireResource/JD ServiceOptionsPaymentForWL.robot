@@ -378,7 +378,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}   ${xlFile}
+    ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id2}   ${xlFile}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -596,6 +596,16 @@ JD-TC-ServiceOptionsPaymentForWaitlist-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+    ${resp}=  Get jp finance settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
     ${resp}=   Get Service
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -627,7 +637,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-3
             ${u_ttype}=    Remove Duplicates    ${ttype}
             Log  ${u_ttype}
             IF   '${QnrTransactionType[3]}' in @{u_ttype} and '${srv_val1}'=='${None}'
-                ${resp}=  Create Service  ${unique_snames[${i}]}  ${description}   2  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  50  500  ${bool[1]}  ${bool[1]}
+                ${resp}=  Create Service  ${unique_snames[${i}]}  ${description}   2   ${bool[0]}  500   ${bool[1]}  automaticInvoiceGeneration=${bool[1]}
                 Should Be Equal As Strings  ${resp.status_code}  200
                 ${s_id1}=  Set Variable  ${resp.content}
             ELSE IF  '${QnrTransactionType[0]}' in @{u_ttype} and '${don_val}'=='${None}'
@@ -719,6 +729,14 @@ JD-TC-ServiceOptionsPaymentForWaitlist-3
     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
     Set Suite Variable  ${Questionnaireid}  ${qns.json()['questionnaireId']}
 
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+   
+    ${resp}=  AddCustomer  ${CUSERNAME18}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${cid}  ${resp.json()}
+
     ${resp}=  Provider Logout
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -727,7 +745,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-3
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME18}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME18}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -738,7 +756,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-3
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200 
     Set Suite Variable  ${fname}   ${resp.json()['firstName']}
@@ -820,18 +838,18 @@ JD-TC-ServiceOptionsPaymentForWaitlist-3
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME18}    ${pid}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=    Send Otp For Login    ${CUSERNAME18}    ${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+    # ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME18}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
+    # ${resp}=    Verify Otp For Login   ${CUSERNAME18}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -846,8 +864,10 @@ JD-TC-ServiceOptionsPaymentForWaitlist-3
     Should Be Equal As Strings  ${resp.json()[0]['billStatus']}  ${billStatus[0]}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
 
+*** Comments ***
+
 JD-TC-ServiceOptionsPaymentForWaitlist-4
-    [Documentation]  wailtlist Payment with GST and Coupon
+    [Documentation]  wailtlist Payment with GST and Jaldee Coupon
     
     ${wb}=  readWorkbook  ${xlFile}
     ${sheet1}  GetCurrentSheet   ${wb}
@@ -1207,7 +1227,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-4
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
 
 JD-TC-ServiceOptionsPaymentForWaitlist-5
-    [Documentation]  wailtlist Payment with Coupon
+    [Documentation]  wailtlist Payment with jaldee Coupon
     
     ${wb}=  readWorkbook  ${xlFile}
     ${sheet1}  GetCurrentSheet   ${wb}

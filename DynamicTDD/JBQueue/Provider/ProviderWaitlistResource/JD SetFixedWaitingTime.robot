@@ -514,11 +514,11 @@ JD-TC-FixedWaitingTime-UH4
 JD-TC-FixedWaitingTime-UH5
     [Documentation]   Set fixed waiting time  by Consumer login
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${account_id}=  get_acc_id  ${HLPUSERNAME25}
+    ${account_id}=  get_acc_id  ${PUSERNAME25}
 
     ${PH_Number}=  FakerLibrary.Numerify  %#####
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'

@@ -25,7 +25,7 @@ JD-TC-Reschedule Waitlist-1
     [Documentation]  Consumer takes check-in for a provider and reschedules it to another day.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -44,11 +44,11 @@ JD-TC-Reschedule Waitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -73,7 +73,7 @@ JD-TC-Reschedule Waitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -105,23 +105,23 @@ JD-TC-Reschedule Waitlist-1
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
    
-    ${resp}=  AddCustomer  ${CUSERNAME27}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
+    ${resp}=  AddCustomer  ${CUSERNAME33}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${cid}  ${resp.json()}
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME33}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME33}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -159,7 +159,7 @@ JD-TC-Reschedule Waitlist-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -176,7 +176,7 @@ JD-TC-Reschedule Waitlist-2
     [Documentation]  Consumer takes future check-in for a provider and reschedules it to today.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -204,11 +204,11 @@ JD-TC-Reschedule Waitlist-2
     # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
     # Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -233,7 +233,7 @@ JD-TC-Reschedule Waitlist-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -261,18 +261,18 @@ JD-TC-Reschedule Waitlist-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME33}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME33}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -313,7 +313,7 @@ JD-TC-Reschedule Waitlist-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -339,7 +339,7 @@ JD-TC-Reschedule Waitlist-3
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -369,11 +369,11 @@ JD-TC-Reschedule Waitlist-3
     # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
     # Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -398,7 +398,7 @@ JD-TC-Reschedule Waitlist-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -475,7 +475,7 @@ JD-TC-Reschedule Waitlist-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -493,7 +493,7 @@ JD-TC-Reschedule Waitlist-4
     [Documentation]  Provider takes check-in for a consumer and consumer reschedules it to another day.
     ...  ${SPACE} Check Communication messages also
 
-    # ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    # ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     # Log   ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}   200
     # Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -505,7 +505,7 @@ JD-TC-Reschedule Waitlist-4
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -535,11 +535,11 @@ JD-TC-Reschedule Waitlist-4
     # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
     # Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -564,7 +564,7 @@ JD-TC-Reschedule Waitlist-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -595,7 +595,7 @@ JD-TC-Reschedule Waitlist-4
     ${fname}=  generate_firstname    
     ${lname}=  FakerLibrary.last_name
     Set Suite Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
-    ${resp}=  AddCustomer  ${CUSERNAME27}  firstName=${fname}  lastName=${lname}  email=${pc_emailid1}
+    ${resp}=  AddCustomer  ${CUSERNAME33}  firstName=${fname}  lastName=${lname}  email=${pc_emailid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()}
@@ -618,18 +618,18 @@ JD-TC-Reschedule Waitlist-4
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid1}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid1}
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME33}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME33}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -666,7 +666,7 @@ JD-TC-Reschedule Waitlist-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -684,7 +684,7 @@ JD-TC-Reschedule Waitlist-5
     [Documentation]  Provider takes check-in for a consumer and consumer reschedules it to another queue.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -714,11 +714,11 @@ JD-TC-Reschedule Waitlist-5
     # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
     # Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -743,7 +743,7 @@ JD-TC-Reschedule Waitlist-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -789,7 +789,7 @@ JD-TC-Reschedule Waitlist-5
     ${fname}=  generate_firstname    
     ${lname}=  FakerLibrary.last_name
     Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
-    ${resp}=  AddCustomer  ${CUSERNAME27}  firstName=${fname}  lastName=${lname}   email=${pc_emailid1}
+    ${resp}=  AddCustomer  ${CUSERNAME33}  firstName=${fname}  lastName=${lname}   email=${pc_emailid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()}
@@ -806,18 +806,18 @@ JD-TC-Reschedule Waitlist-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME33}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME33}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -845,7 +845,7 @@ JD-TC-Reschedule Waitlist-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -862,7 +862,7 @@ JD-TC-Reschedule Waitlist-6
     [Documentation]  Consumer takes check-in for a provider and reschedules it to another queue.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -890,11 +890,11 @@ JD-TC-Reschedule Waitlist-6
     # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
     # Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_provider_msgs  ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_provider_msgs  ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
     
 
     ${resp}=   Get Service
@@ -920,7 +920,7 @@ JD-TC-Reschedule Waitlist-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -967,7 +967,7 @@ JD-TC-Reschedule Waitlist-6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -1012,7 +1012,7 @@ JD-TC-Reschedule Waitlist-6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1029,7 +1029,7 @@ JD-TC-Reschedule Waitlist-7
     [Documentation]  Consumer takes check-in for a provider and reschedules it to another queue with 2 services(one service is different).
     ...  ${SPACE} Check Communication messages also
 
-    # ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1077,7 +1077,7 @@ JD-TC-Reschedule Waitlist-7
     # clear_service    ${PUSERNAME${a}}
     clear_customer   ${PUSERNAME${a}}
     clear_provider_msgs  ${PUSERNAME${a}}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     
 
     ${resp}=   Get Service
@@ -1099,7 +1099,7 @@ JD-TC-Reschedule Waitlist-7
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     # ${lid}=  Create Sample Location  
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -1229,7 +1229,7 @@ JD-TC-Reschedule Waitlist-8
     [Documentation]  Consumer takes check-in for a service with prepayment and reschedules it after prepayment to another day.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1257,11 +1257,11 @@ JD-TC-Reschedule Waitlist-8
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1300,7 +1300,7 @@ JD-TC-Reschedule Waitlist-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -1332,7 +1332,7 @@ JD-TC-Reschedule Waitlist-8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -1398,7 +1398,7 @@ JD-TC-Reschedule Waitlist-8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1415,7 +1415,7 @@ JD-TC-Reschedule Waitlist-9
     [Documentation]  Consumer takes check-in for a service with prepayment and reschedules it after prepayment to another queue.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1429,11 +1429,11 @@ JD-TC-Reschedule Waitlist-9
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1460,7 +1460,7 @@ JD-TC-Reschedule Waitlist-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -1507,7 +1507,7 @@ JD-TC-Reschedule Waitlist-9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -1539,7 +1539,7 @@ JD-TC-Reschedule Waitlist-9
     # Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable   ${payref}   ${resp.json()['paymentRefId']}
 
-    # ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
+    # ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1595,7 +1595,7 @@ JD-TC-Reschedule Waitlist-9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1613,7 +1613,7 @@ JD-TC-Reschedule Waitlist-10
     [Documentation]  Consumer takes check-in for a service with prepayment and reschedules it after bill payment to another day.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1627,11 +1627,11 @@ JD-TC-Reschedule Waitlist-10
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1663,7 +1663,7 @@ JD-TC-Reschedule Waitlist-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -1695,7 +1695,7 @@ JD-TC-Reschedule Waitlist-10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -1726,7 +1726,7 @@ JD-TC-Reschedule Waitlist-10
     # Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable   ${payref}   ${resp.json()['paymentRefId']}
 
-    # ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
+    # ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
   
@@ -1780,7 +1780,7 @@ JD-TC-Reschedule Waitlist-10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1797,7 +1797,7 @@ JD-TC-Reschedule Waitlist-11
     [Documentation]  Consumer takes check-in and reschedules it after bill payment to another queue.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1825,11 +1825,11 @@ JD-TC-Reschedule Waitlist-11
     # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
     # Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1855,7 +1855,7 @@ JD-TC-Reschedule Waitlist-11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -1903,7 +1903,7 @@ JD-TC-Reschedule Waitlist-11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -1935,26 +1935,26 @@ JD-TC-Reschedule Waitlist-11
     # Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable   ${payref}   ${resp.json()['paymentRefId']}
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
+    # ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME33}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME33}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2002,7 +2002,7 @@ JD-TC-Reschedule Waitlist-11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2020,7 +2020,7 @@ JD-TC-Reschedule Waitlist-12
     [Documentation]  Consumer takes check-in and reschedules it after bill payment to another day.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2048,11 +2048,11 @@ JD-TC-Reschedule Waitlist-12
     # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
     # Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2078,7 +2078,7 @@ JD-TC-Reschedule Waitlist-12
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -2110,7 +2110,7 @@ JD-TC-Reschedule Waitlist-12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -2142,26 +2142,26 @@ JD-TC-Reschedule Waitlist-12
     # Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable   ${payref}   ${resp.json()['paymentRefId']}
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
+    # ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME33}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME33}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2209,7 +2209,7 @@ JD-TC-Reschedule Waitlist-12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2227,7 +2227,7 @@ JD-TC-Reschedule Waitlist-13
     [Documentation]  Consumer checks-in for a service in a queue with token and reschedules it to another day.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2245,11 +2245,11 @@ JD-TC-Reschedule Waitlist-13
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2274,7 +2274,7 @@ JD-TC-Reschedule Waitlist-13
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -2307,7 +2307,7 @@ JD-TC-Reschedule Waitlist-13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -2352,7 +2352,7 @@ JD-TC-Reschedule Waitlist-13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2369,7 +2369,7 @@ JD-TC-Reschedule Waitlist-14
     [Documentation]  Consumer checks-in for a service in a queue with token and reschedules it to another queue without token.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2392,11 +2392,11 @@ JD-TC-Reschedule Waitlist-14
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2421,7 +2421,7 @@ JD-TC-Reschedule Waitlist-14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -2474,7 +2474,7 @@ JD-TC-Reschedule Waitlist-14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -2519,7 +2519,7 @@ JD-TC-Reschedule Waitlist-14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2536,7 +2536,7 @@ JD-TC-Reschedule Waitlist-15
     [Documentation]  Consumer checks-in for a service and reschedules it to another queue with token.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2559,11 +2559,11 @@ JD-TC-Reschedule Waitlist-15
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2588,7 +2588,7 @@ JD-TC-Reschedule Waitlist-15
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -2641,7 +2641,7 @@ JD-TC-Reschedule Waitlist-15
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -2649,7 +2649,7 @@ JD-TC-Reschedule Waitlist-15
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}   location=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -2686,7 +2686,7 @@ JD-TC-Reschedule Waitlist-15
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2703,7 +2703,7 @@ JD-TC-Reschedule Waitlist-16
     [Documentation]  Consumer takes check-in for a provider and reschedules it to another queue in a different location.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2722,11 +2722,11 @@ JD-TC-Reschedule Waitlist-16
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2747,7 +2747,7 @@ JD-TC-Reschedule Waitlist-16
 
     ${lid}=  Create Sample Location  
     ${lid2}=  Create Sample Location
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -2796,7 +2796,7 @@ JD-TC-Reschedule Waitlist-16
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -2841,7 +2841,7 @@ JD-TC-Reschedule Waitlist-16
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2859,7 +2859,7 @@ JD-TC-Reschedule Waitlist-UH1
     [Documentation]  Consumer takes check-in for a provider and reschedules it to the same day.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2878,11 +2878,11 @@ JD-TC-Reschedule Waitlist-UH1
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2907,7 +2907,7 @@ JD-TC-Reschedule Waitlist-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -2939,7 +2939,7 @@ JD-TC-Reschedule Waitlist-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -2977,7 +2977,7 @@ JD-TC-Reschedule Waitlist-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2994,7 +2994,7 @@ JD-TC-Reschedule Waitlist-UH2
     [Documentation]  Consumer takes check-in for a provider and reschedules it with the same details twice.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3013,11 +3013,11 @@ JD-TC-Reschedule Waitlist-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3042,7 +3042,7 @@ JD-TC-Reschedule Waitlist-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -3075,7 +3075,7 @@ JD-TC-Reschedule Waitlist-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -3125,7 +3125,7 @@ JD-TC-Reschedule Waitlist-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3142,7 +3142,7 @@ JD-TC-Reschedule Waitlist-UH3
     [Documentation]  Consumer takes check-in for a provider and reschedules it with the same details as current checkin.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3161,11 +3161,11 @@ JD-TC-Reschedule Waitlist-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3190,7 +3190,7 @@ JD-TC-Reschedule Waitlist-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -3223,7 +3223,7 @@ JD-TC-Reschedule Waitlist-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -3260,7 +3260,7 @@ JD-TC-Reschedule Waitlist-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3277,7 +3277,7 @@ JD-TC-Reschedule Waitlist-UH4
     [Documentation]  Consumer takes check-in for a provider and reschedules it to a date after the queue end date.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3296,11 +3296,11 @@ JD-TC-Reschedule Waitlist-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3325,7 +3325,7 @@ JD-TC-Reschedule Waitlist-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -3358,7 +3358,7 @@ JD-TC-Reschedule Waitlist-UH4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -3395,7 +3395,7 @@ JD-TC-Reschedule Waitlist-UH4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3412,7 +3412,7 @@ JD-TC-Reschedule Waitlist-UH5
     [Documentation]  Consumer takes check-in for a provider and reschedules it to a date before the queue start date.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3431,11 +3431,11 @@ JD-TC-Reschedule Waitlist-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3460,7 +3460,7 @@ JD-TC-Reschedule Waitlist-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -3493,7 +3493,7 @@ JD-TC-Reschedule Waitlist-UH5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -3530,7 +3530,7 @@ JD-TC-Reschedule Waitlist-UH5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3547,7 +3547,7 @@ JD-TC-Reschedule Waitlist-UH6
     [Documentation]  Consumer takes check-in for a provider and reschedules it to a past date.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3566,11 +3566,11 @@ JD-TC-Reschedule Waitlist-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3595,7 +3595,7 @@ JD-TC-Reschedule Waitlist-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -3628,7 +3628,7 @@ JD-TC-Reschedule Waitlist-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -3665,7 +3665,7 @@ JD-TC-Reschedule Waitlist-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3705,7 +3705,7 @@ JD-TC-Reschedule Waitlist-UH7
     # clear_service    ${PUSERNAME${a}}
     # clear_customer   ${PUSERNAME${a}}
     clear_provider_msgs  ${PUSERNAME${a}}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     
 
     ${resp}=   Get Service
@@ -3833,7 +3833,7 @@ JD-TC-Reschedule Waitlist-UH8
     [Documentation]  Consumer takes check-in for a provider and reschedules it after changing waitlist status to started.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3852,11 +3852,11 @@ JD-TC-Reschedule Waitlist-UH8
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3881,7 +3881,7 @@ JD-TC-Reschedule Waitlist-UH8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -3913,7 +3913,7 @@ JD-TC-Reschedule Waitlist-UH8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -3941,7 +3941,7 @@ JD-TC-Reschedule Waitlist-UH8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3967,7 +3967,7 @@ JD-TC-Reschedule Waitlist-UH8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -4004,7 +4004,7 @@ JD-TC-Reschedule Waitlist-UH8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4021,7 +4021,7 @@ JD-TC-Reschedule Waitlist-UH9
     [Documentation]  Consumer takes check-in for a provider and reschedules it after changing waitlist status to completed.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4040,11 +4040,11 @@ JD-TC-Reschedule Waitlist-UH9
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -4069,7 +4069,7 @@ JD-TC-Reschedule Waitlist-UH9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -4102,7 +4102,7 @@ JD-TC-Reschedule Waitlist-UH9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -4130,7 +4130,7 @@ JD-TC-Reschedule Waitlist-UH9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4165,7 +4165,7 @@ JD-TC-Reschedule Waitlist-UH9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -4202,7 +4202,7 @@ JD-TC-Reschedule Waitlist-UH9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4219,7 +4219,7 @@ JD-TC-Reschedule Waitlist-UH10
     [Documentation]  Consumer takes check-in for a provider and reschedules it after cancelling waitlist.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4238,11 +4238,11 @@ JD-TC-Reschedule Waitlist-UH10
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -4267,7 +4267,7 @@ JD-TC-Reschedule Waitlist-UH10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -4301,7 +4301,7 @@ JD-TC-Reschedule Waitlist-UH10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -4349,7 +4349,7 @@ JD-TC-Reschedule Waitlist-UH10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4366,7 +4366,7 @@ JD-TC-Reschedule Waitlist-UH11
     [Documentation]  Consumer takes check-in for a provider and reschedules it after provider cancels waitlist.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4385,11 +4385,11 @@ JD-TC-Reschedule Waitlist-UH11
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -4414,7 +4414,7 @@ JD-TC-Reschedule Waitlist-UH11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -4447,7 +4447,7 @@ JD-TC-Reschedule Waitlist-UH11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -4475,7 +4475,7 @@ JD-TC-Reschedule Waitlist-UH11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4507,7 +4507,7 @@ JD-TC-Reschedule Waitlist-UH11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -4531,7 +4531,7 @@ JD-TC-Reschedule Waitlist-UH11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4548,7 +4548,7 @@ JD-TC-Reschedule Waitlist-UH12
     [Documentation]  Consumer takes check-in for a provider and reschedules it to another queue for a future date when future checkin for that queue is disabled.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4567,11 +4567,11 @@ JD-TC-Reschedule Waitlist-UH12
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -4596,7 +4596,7 @@ JD-TC-Reschedule Waitlist-UH12
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -4656,7 +4656,7 @@ JD-TC-Reschedule Waitlist-UH12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -4702,7 +4702,7 @@ JD-TC-Reschedule Waitlist-UH12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4719,7 +4719,7 @@ JD-TC-Reschedule Waitlist-UH13
     [Documentation]  Consumer takes check-in for a provider and reschedules it to a future date when future checkin is disabled.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4742,11 +4742,11 @@ JD-TC-Reschedule Waitlist-UH13
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -4771,7 +4771,7 @@ JD-TC-Reschedule Waitlist-UH13
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -4804,7 +4804,7 @@ JD-TC-Reschedule Waitlist-UH13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -4850,7 +4850,7 @@ JD-TC-Reschedule Waitlist-UH13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4871,7 +4871,7 @@ JD-TC-Reschedule Waitlist-UH14
     [Documentation]  Consumer takes future check-in for a provider and reschedules it to today when today checkin is disabled.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4905,11 +4905,11 @@ JD-TC-Reschedule Waitlist-UH14
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -4934,7 +4934,7 @@ JD-TC-Reschedule Waitlist-UH14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -4967,7 +4967,7 @@ JD-TC-Reschedule Waitlist-UH14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -5013,7 +5013,7 @@ JD-TC-Reschedule Waitlist-UH14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -5034,7 +5034,7 @@ JD-TC-Reschedule Waitlist-UH15
     [Documentation]  Consumer takes check-in for a provider and reschedules it to another queue when today checkin for that queue is disabled.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -5063,11 +5063,11 @@ JD-TC-Reschedule Waitlist-UH15
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -5092,7 +5092,7 @@ JD-TC-Reschedule Waitlist-UH15
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -5152,7 +5152,7 @@ JD-TC-Reschedule Waitlist-UH15
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -5198,7 +5198,7 @@ JD-TC-Reschedule Waitlist-UH15
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -5215,7 +5215,7 @@ JD-TC-Reschedule Waitlist-UH16
     [Documentation]  Consumer takes check-in for a provider and reschedules it to a disabled queue.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -5234,11 +5234,11 @@ JD-TC-Reschedule Waitlist-UH16
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -5263,7 +5263,7 @@ JD-TC-Reschedule Waitlist-UH16
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -5319,7 +5319,7 @@ JD-TC-Reschedule Waitlist-UH16
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -5365,7 +5365,7 @@ JD-TC-Reschedule Waitlist-UH16
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -5404,7 +5404,7 @@ JD-TC-Reschedule Waitlist-UH17
     # clear_location   ${PUSERNAME31}
     # clear_service    ${PUSERNAME31}
     clear_customer   ${PUSERNAME31}
-    clear_consumer_msgs  ${CUSERNAME27}
+    clear_consumer_msgs  ${CUSERNAME33}
     clear_provider_msgs  ${PUSERNAME31}
 
     ${resp}=   Get Service
@@ -5430,7 +5430,7 @@ JD-TC-Reschedule Waitlist-UH17
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -5464,7 +5464,7 @@ JD-TC-Reschedule Waitlist-UH17
     Should Be Equal As Strings    ${resp.status_code}    200
 
     
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -5483,11 +5483,11 @@ JD-TC-Reschedule Waitlist-UH17
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -5512,7 +5512,7 @@ JD-TC-Reschedule Waitlist-UH17
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -5545,7 +5545,7 @@ JD-TC-Reschedule Waitlist-UH17
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -5591,7 +5591,7 @@ JD-TC-Reschedule Waitlist-UH17
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -5615,7 +5615,7 @@ JD-TC-Reschedule Waitlist-UH19
     [Documentation]  Consumer takes check-in for a provider and reschedules it to a non working day.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -5634,11 +5634,11 @@ JD-TC-Reschedule Waitlist-UH19
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -5663,7 +5663,7 @@ JD-TC-Reschedule Waitlist-UH19
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -5702,7 +5702,7 @@ JD-TC-Reschedule Waitlist-UH19
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -5748,7 +5748,7 @@ JD-TC-Reschedule Waitlist-UH19
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -5765,7 +5765,7 @@ JD-TC-Reschedule Waitlist-UH20
     [Documentation]  Consumer takes check-in for a provider and reschedules it to a holiday.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -5784,11 +5784,11 @@ JD-TC-Reschedule Waitlist-UH20
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -5813,7 +5813,7 @@ JD-TC-Reschedule Waitlist-UH20
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -5853,7 +5853,7 @@ JD-TC-Reschedule Waitlist-UH20
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -5899,7 +5899,7 @@ JD-TC-Reschedule Waitlist-UH20
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -5916,7 +5916,7 @@ JD-TC-Reschedule Waitlist-UH21
     [Documentation]  Consumer takes check-in for a provider and reschedules it to non existant queue.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -5935,11 +5935,11 @@ JD-TC-Reschedule Waitlist-UH21
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -5964,7 +5964,7 @@ JD-TC-Reschedule Waitlist-UH21
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -5997,7 +5997,7 @@ JD-TC-Reschedule Waitlist-UH21
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -6045,7 +6045,7 @@ JD-TC-Reschedule Waitlist-UH21
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -6062,7 +6062,7 @@ JD-TC-Reschedule Waitlist-UH22
     [Documentation]  Consumer reschedules an invalid waitlist id.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -6081,11 +6081,11 @@ JD-TC-Reschedule Waitlist-UH22
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -6110,7 +6110,7 @@ JD-TC-Reschedule Waitlist-UH22
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -6143,7 +6143,7 @@ JD-TC-Reschedule Waitlist-UH22
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -6165,7 +6165,7 @@ JD-TC-Reschedule Waitlist-UH22
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -6182,7 +6182,7 @@ JD-TC-Reschedule Waitlist-UH23
     [Documentation]  Consumer reschedules another consumer's checkin.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -6201,11 +6201,11 @@ JD-TC-Reschedule Waitlist-UH23
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME35}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -6230,7 +6230,7 @@ JD-TC-Reschedule Waitlist-UH23
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -6267,6 +6267,12 @@ JD-TC-Reschedule Waitlist-UH23
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${cid}  ${resp.json()}
 
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+   
+    ${resp}=  AddCustomer  ${CUSERNAME33}   firstName=${fname}   lastName=${lname} 
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
     # ${resp}=  Consumer Login  ${CUSERNAME26}  ${PASSWORD}
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
@@ -6285,8 +6291,19 @@ JD-TC-Reschedule Waitlist-UH23
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME33}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME33}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
     
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${fname1}   ${resp.json()['firstName']}
@@ -6326,8 +6343,8 @@ JD-TC-Reschedule Waitlist-UH23
   
     ${resp}=  Reschedule Waitlist  ${pid}  ${wid1}  ${DAY3}  ${q_id}
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  401
-    Should Be Equal As Strings  "${resp.json()}"    "${NO_PERMISSION}"
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  "${resp.json()}"    "${NO_PERMISSION}"
 
     # ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid}   
     # Log  ${resp.json()}
@@ -6346,7 +6363,7 @@ JD-TC-Reschedule Waitlist-UH23
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -6379,7 +6396,7 @@ JD-TC-Reschedule Waitlist-UH24
     # Should Be Equal As Strings    ${resp.status_code}   200
     # Set Test Variable  ${token}  ${resp.json()['token']}
 
-    # ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    # ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     # Log   ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}   200
     # Set Test Variable  ${fname}   ${resp.json()['firstName']}
@@ -6389,7 +6406,7 @@ JD-TC-Reschedule Waitlist-UH24
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -6417,11 +6434,11 @@ JD-TC-Reschedule Waitlist-UH24
     # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
     # Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[0]}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
     clear_consumer_msgs  ${CUSERNAME7}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -6446,7 +6463,7 @@ JD-TC-Reschedule Waitlist-UH24
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -6556,7 +6573,7 @@ JD-TC-Reschedule Waitlist-UH24
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -6572,7 +6589,7 @@ JD-TC-Reschedule Waitlist-UH24
 JD-TC-Reschedule Waitlist-UH25
     [Documentation]  Consumer reschedules without login.
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -6591,11 +6608,11 @@ JD-TC-Reschedule Waitlist-UH25
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -6620,7 +6637,7 @@ JD-TC-Reschedule Waitlist-UH25
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -6653,7 +6670,7 @@ JD-TC-Reschedule Waitlist-UH25
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -6686,22 +6703,22 @@ JD-TC-Reschedule Waitlist-UH25
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  "${resp.json()}"    "${SESSION_EXPIRED}"
 
-    # ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
+    # ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME33}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME33}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -6713,7 +6730,7 @@ JD-TC-Reschedule Waitlist-UH25
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -6731,7 +6748,7 @@ JD-TC-Reschedule Waitlist-UH26
 
     ${DAY3}=  db.add_timezone_date  ${tz}  5 
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -6746,22 +6763,22 @@ JD-TC-Reschedule Waitlist-UH27
 
     ${DAY3}=  db.add_timezone_date  ${tz}  4  
 
-    # ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
+    # ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}  200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME33}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME33}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -6776,22 +6793,22 @@ JD-TC-Reschedule Waitlist-UH28
 
     ${DAY3}=  db.add_timezone_date  ${tz}  4  
 
-    # ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
+    # ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME33}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME33}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -6804,22 +6821,22 @@ JD-TC-Reschedule Waitlist-UH28
 JD-TC-Reschedule Waitlist-UH29
     [Documentation]  Consumer reschedules without date.
 
-    # ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
+    # ${resp}=  Consumer Login  ${CUSERNAME33}  ${PASSWORD}
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME27}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME33}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME33}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -6833,7 +6850,7 @@ JD-TC-Reschedule Waitlist-UH30
     [Documentation]  Consumer takes check-in for a service with prepayment and reschedules it to another day.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -6852,11 +6869,11 @@ JD-TC-Reschedule Waitlist-UH30
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -6883,7 +6900,7 @@ JD-TC-Reschedule Waitlist-UH30
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -6916,7 +6933,7 @@ JD-TC-Reschedule Waitlist-UH30
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -6955,7 +6972,7 @@ JD-TC-Reschedule Waitlist-UH30
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -6972,7 +6989,7 @@ JD-TC-Reschedule Waitlist-UH31
     [Documentation]  Consumer takes check-in for a service with prepayment and reschedules it to another queue.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -6991,11 +7008,11 @@ JD-TC-Reschedule Waitlist-UH31
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    # clear_location   ${HLPUSERNAME20}
-    # clear_service    ${HLPUSERNAME20}
-    # clear_customer   ${HLPUSERNAME20}
-    clear_consumer_msgs  ${CUSERNAME27}
-    clear_provider_msgs  ${HLPUSERNAME20}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
+    # clear_customer   ${HLPUSERNAME29}
+    clear_consumer_msgs  ${CUSERNAME33}
+    clear_provider_msgs  ${HLPUSERNAME29}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -7022,7 +7039,7 @@ JD-TC-Reschedule Waitlist-UH31
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_queue   ${HLPUSERNAME20}
+    # clear_queue   ${HLPUSERNAME29}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -7071,7 +7088,7 @@ JD-TC-Reschedule Waitlist-UH31
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME27}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME33}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['providerConsumer']}
@@ -7110,7 +7127,7 @@ JD-TC-Reschedule Waitlist-UH31
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

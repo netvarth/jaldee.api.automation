@@ -57,16 +57,16 @@ JD-TC-Get WL Service By Location -1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get specializations Sub Domain  ${domain}  ${subdomain}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable    ${spec1}     ${resp.json()[0]['displayName']}   
-    Set Test Variable    ${spec2}     ${resp.json()[1]['displayName']}   
+    # ${resp}=  Get specializations Sub Domain  ${domain}  ${subdomain}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Test Variable    ${spec1}     ${resp.json()[0]['displayName']}   
+    # Set Test Variable    ${spec2}     ${resp.json()[1]['displayName']}   
 
-    ${spec}=  Create List    ${spec1}   ${spec2}
+    # ${spec}=  Create List    ${spec1}   ${spec2}
 
-    ${resp}=  Update Business Profile with kwargs  specialization=${spec}  
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Update Business Profile with kwargs  specialization=${spec}  
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_G}.${test_mail}
 

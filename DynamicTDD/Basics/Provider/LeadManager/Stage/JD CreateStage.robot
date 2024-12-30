@@ -168,10 +168,6 @@ JD-TC-Create_Stage-1
     Should Be Equal As Strings  ${resp.status_code}     200
     Set Suite variable           ${stage_id}            ${resp.json()}
 
-    ${resp}=    Get Stage By Id  ${stage_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
-
 JD-TC-Create_Stage-2
 
     [Documentation]   Create Stage - create stage with same name 

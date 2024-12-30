@@ -2913,3 +2913,12 @@ SA Get Frequency By Account
     ${resp}=  GET On Session  synw  /provider/medicalrecord/frequency/account/${account}    expected_status=any
     Check Deprication  ${resp}  SA Get Frequency By Account
     RETURN  ${resp}
+
+#------------------Consumer Order---------------------------------
+
+Get Lucene Search For ConsumerOrder
+    [Arguments]   ${account}   &{param}
+    Check And Create YNW SuperAdmin Session
+    ${resp}=    GET On Session    synw    /searchdetails/${account}/sordercatalog/item/suggestion/search   params=${param}     expected_status=any
+    Check Deprication  ${resp}  Get Lucene Search For ConsumerOrder
+    RETURN  ${resp}

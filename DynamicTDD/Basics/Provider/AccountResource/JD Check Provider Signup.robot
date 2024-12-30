@@ -134,7 +134,7 @@ JD-TC-Check Provider Signup-1
         Should Be Equal As Strings  ${resp.json()[0]['bSchedule']['timespec'][0]['timeSlots'][0]['sTime']}  ${sTime}
         Should Be Equal As Strings  ${resp.json()[0]['bSchedule']['timespec'][0]['timeSlots'][0]['eTime']}  ${eTime}
 
-        ${resp}=  View Waitlist Settings
+        ${resp}=  Get Waitlist Settings
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         Set Test Variable  ${enble_w}  ${resp.json()['enabledWaitlist']}

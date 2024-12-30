@@ -65,8 +65,8 @@ ${bType}                  Waitlist
 @{jdn_disc_max}           100   200   300
 @{jdn_type}               Percent  Label
 @{action}                 addService  adjustService  removeService  addItem   adjustItem   removeItem   addServiceLevelDiscount   removeServiceLevelDiscount   addItemLevelDiscount   removeItemLevelDiscount   addBillLevelDiscount   removeBillLevelDiscount   addProviderCoupons   removeProviderCoupons  addJaldeeCoupons   removeJaldeeCoupons   addDisplayNotes   addPrivateNotes  updateDeliveryCharges
-@{NotificationResourceType}  TOKEN  APPOINTMENT  ACCOUNT   DONATION   ORDER
-@{EventType}                WAITLISTADD  WAITLISTCANCEL  WAITLISTDONE  WAITLISTARRIVED  EARLY  PREFINAL  FINAL  APPOINTMENTADD  APPOINTMENTCANCEL  LICENSE  DONATIONSERVICE  
+@{NotificationResourceType}  CHECKIN  APPOINTMENT  ACCOUNT   DONATION   ORDER
+@{EventType}                WAITLISTADD  WAITLISTCANCEL  WAITLISTDONE  WAITLISTARRIVED  WAITLISTRECHECKIN  EARLY  PREFINAL  FINAL  APPOINTMENTADD  APPOINTMENTCANCEL  APPOINTMENTRESCHEDULE  LICENSE  DONATIONSERVICE  
                             ...   FIRSTNOTIFICATION  SECONDNOTIFICATION  THIRDNOTIFICATION  FORTHNOTIFICATION  APPOINTMENTRESCHEDULE  ORDERCONFIRM  ORDERCANCEL  ORDERSTATUSCHANGE
 @{travelMode}               DRIVING  WALKING  BICYCLING  TRANSIT  UNKNOWN
 @{startTimeMode}            ONEHOUR   TWOHOUR   AFTERSTART

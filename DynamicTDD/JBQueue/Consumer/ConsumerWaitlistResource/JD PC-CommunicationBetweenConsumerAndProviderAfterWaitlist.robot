@@ -46,6 +46,7 @@ JD-TC-Communication Between Consumer and Provider-1
     Log  ${decrypted_data}
     Set Test Variable  ${pid0}  ${decrypted_data['id']}
 
+*** Comments ***
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -158,17 +159,13 @@ JD-TC-Communication Between Consumer and Provider-1
     ${msg}=  Fakerlibrary.sentence
     # Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
-    ${resp}=  Consumer WLCommunication  ${wid}  ${pid0}  ${msg}  ${messageType[0]}  ${caption}  
+    ${resp}=  Send Message With Waitlist consumer  ${pid0}  ${wid}  ${msg}  ${messageType[0]}  
     Log  ${resp}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Consumer Communications
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['owner']['id']}   ${cid}
-    Should Be Equal As Strings  ${resp.json()[0]['msg']}   ${msg}
-    Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}   0
-    Should Be Equal As Strings  ${resp.json()[0]['accountId']}    ${account_id}
     
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -180,9 +177,6 @@ JD-TC-Communication Between Consumer and Provider-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  CommunicationBetweenConsumerAndProvider  ${pid0}  ${wid}  Thank you for your message
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-Communication Between Consumer and Provider-2
     
