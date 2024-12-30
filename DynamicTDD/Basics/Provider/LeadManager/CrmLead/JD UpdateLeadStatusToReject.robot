@@ -28,7 +28,7 @@ JD-TC-Update_Lead_Status_To_Reject-1
 
     [Documentation]   Update Lead Status To Reject 
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME146}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -149,7 +149,7 @@ JD-TC-Update_Lead_Status_To_Reject-2
 
     [Documentation]   Update Lead Status To Reject - Active to rejected status
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME146}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -173,7 +173,7 @@ JD-TC-Update_Lead_Status_To_Reject-UH1
 
     [Documentation]   Update Lead Status To Reject - Rejected to rejected status
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME146}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -202,7 +202,7 @@ JD-TC-Update_Lead_Status_To_Reject-UH3
 
     [Documentation]   Update Lead Status To Reject - where uid is invalid
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME146}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

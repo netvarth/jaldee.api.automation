@@ -28,7 +28,7 @@ JD-TC-Update_Lead_Status_To_Active-1
 
     [Documentation]   Update Lead Status To Active 
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME145}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -148,7 +148,7 @@ JD-TC-Update_Lead_Status_To_Active-UH1
 
     [Documentation]   Update Lead Status To Active - where Lead uid is invalid
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME145}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -176,7 +176,7 @@ JD-TC-Update_Lead_Status_To_Active-2
 
     [Documentation]   Update Lead Status To Active - where status was rejected
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME145}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -200,7 +200,7 @@ JD-TC-Update_Lead_Status_To_Active-UH3
 
     [Documentation]   Update Lead Status To Active - Active to active status
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME145}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

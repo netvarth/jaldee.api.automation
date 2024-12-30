@@ -29,7 +29,7 @@ JD-TC-Get_CRM_Lead_Count_By_Filter-1
 
     [Documentation]   Get Crm Lead Count By Filter 
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}

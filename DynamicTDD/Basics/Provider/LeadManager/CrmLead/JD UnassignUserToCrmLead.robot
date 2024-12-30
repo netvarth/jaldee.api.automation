@@ -28,7 +28,7 @@ JD-TC-Unassign_User_To_Crm_Lead-1
 
     [Documentation]   Unassign User To Crm Lead 
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME143}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -165,7 +165,7 @@ JD-TC-Unassign_User_To_Crm_Lead-2
 
     [Documentation]   Unassign User To Crm Lead - Unassign the same user again
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME143}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -177,7 +177,7 @@ JD-TC-Unassign_User_To_Crm_Lead-3
 
     [Documentation]   Unassign User To Crm Lead - where lead id is invalid
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME143}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -195,7 +195,7 @@ JD-TC-Unassign_User_To_Crm_Lead-4
 
     [Documentation]   Unassign User To Crm Lead - where user id is invalid
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME143}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
