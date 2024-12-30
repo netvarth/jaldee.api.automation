@@ -44,9 +44,12 @@ JD-TC-Get_CRM_Lead_By_Filter-1
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${sTime}=  add_timezone_time  ${tz}  0  15  
-    Set Suite Variable   ${sTime}
-    ${eTime}=  add_timezone_time  ${tz}  0  45  
-    Set Suite Variable   ${eTime}
+    ${eTime}=  add_timezone_time  ${tz}  0  45 
+    Set Suite Variable      ${sTime} 
+    Set Suite Variable      ${eTime}
+    Set Suite Variable      ${city}
+    Set Suite Variable      ${state}
+    Set Suite Variable      ${postcode}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 

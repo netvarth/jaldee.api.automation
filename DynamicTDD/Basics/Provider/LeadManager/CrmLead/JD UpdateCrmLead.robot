@@ -167,7 +167,7 @@ JD-TC-Update_Lead-1
     Should Be Equal As Strings  ${resp.json()['createdByName']}      ${pdrname}
     Should Be Equal As Strings  ${resp.json()['createdDate']}        ${DAY1}
 
-    ${resp}=    Update Crm Lead  ${crm_lead_id}  ${firstName_n}  ${lastName_n}
+    ${resp}=    Update Crm Lead  ${crm_lead_id}  ${firstName_n}  ${lastName_n}    consumerPhone=${CUSERNAME26}  consumerCountryCode=${countryCodes[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
@@ -200,7 +200,7 @@ JD-TC-Update_Lead-2
 
     ${firstName2}=   generate_firstname
 
-    ${resp}=    Update Crm Lead  ${crm_lead_id}  ${firstName2}  ${lastName_n} 
+    ${resp}=    Update Crm Lead  ${crm_lead_id}  ${firstName2}  ${lastName_n}   consumerPhone=${CUSERNAME27}  consumerCountryCode=${countryCodes[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
@@ -233,7 +233,7 @@ JD-TC-Update_Lead-3
 
     ${lastName2}=   generate_firstname
 
-    ${resp}=    Update Crm Lead  ${crm_lead_id}  ${firstName_n}  ${lastName2} 
+    ${resp}=    Update Crm Lead  ${crm_lead_id}  ${firstName_n}  ${lastName2}   consumerPhone=${CUSERNAME28}  consumerCountryCode=${countryCodes[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
@@ -266,7 +266,7 @@ JD-TC-Update_Lead-UH1
 
     ${FIELD_CANT_BE_EMPTY}=   Replace String  ${FIELD_CANT_BE_EMPTY}  {}   first name
 
-    ${resp}=    Update Crm Lead  ${crm_lead_id}  ${NULL}  ${lastName_n} 
+    ${resp}=    Update Crm Lead  ${crm_lead_id}  ${NULL}  ${lastName_n}  consumerPhone=${CUSERNAME29}  consumerCountryCode=${countryCodes[0]} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     422
     Should Be Equal As Strings  ${resp.json()}          ${FIELD_CANT_BE_EMPTY}
@@ -281,7 +281,7 @@ JD-TC-Update_Lead-UH2
 
     ${FIELD_CANT_BE_EMPTY}=   Replace String  ${FIELD_CANT_BE_EMPTY}  {}   last name
 
-    ${resp}=    Update Crm Lead  ${crm_lead_id}  ${firstName_n}  ${NULL} 
+    ${resp}=    Update Crm Lead  ${crm_lead_id}  ${firstName_n}  ${NULL}  consumerPhone=${CUSERNAME30}  consumerCountryCode=${countryCodes[0]} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     422
     Should Be Equal As Strings  ${resp.json()}          ${FIELD_CANT_BE_EMPTY}
@@ -296,7 +296,7 @@ JD-TC-Update_Lead-UH3
 
     ${FIELD_CANT_BE_EMPTY}=   Replace String  ${FIELD_CANT_BE_EMPTY}  {}   first name
 
-    ${resp}=    Update Crm Lead  ${crm_lead_id}  ${NULL}  ${NULL} 
+    ${resp}=    Update Crm Lead  ${crm_lead_id}  ${NULL}  ${NULL}  consumerPhone=${CUSERNAME31}  consumerCountryCode=${countryCodes[0]} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     422
     Should Be Equal As Strings  ${resp.json()}          ${FIELD_CANT_BE_EMPTY}
@@ -313,7 +313,7 @@ JD-TC-Update_Lead-UH4
 
     ${INVALID_Y_ID}=   Replace String  ${INVALID_Y_ID}  {}   Lead
 
-    ${resp}=    Update Crm Lead  ${inv}  ${firstName_n}  ${lastName_n} 
+    ${resp}=    Update Crm Lead  ${inv}  ${firstName_n}  ${lastName_n}  consumerPhone=${CUSERNAME32}  consumerCountryCode=${countryCodes[0]} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     422
     Should Be Equal As Strings  ${resp.json()}          ${INVALID_Y_ID}
@@ -322,7 +322,7 @@ JD-TC-Update_Lead-UH5
 
     [Documentation]   Update lead - without login
 
-    ${resp}=    Update Crm Lead  ${crm_lead_id}  ${firstName_n}  ${lastName_n} 
+    ${resp}=    Update Crm Lead  ${crm_lead_id}  ${firstName_n}  ${lastName_n}  consumerPhone=${CUSERNAME33}  consumerCountryCode=${countryCodes[0]} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     419
     Should Be Equal As Strings  ${resp.json()}          ${SESSION_EXPIRED}
