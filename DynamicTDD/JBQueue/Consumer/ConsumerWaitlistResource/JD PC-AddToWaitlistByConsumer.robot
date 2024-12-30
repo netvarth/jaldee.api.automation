@@ -1051,7 +1051,7 @@ JD-TC-Add To WaitlistByConsumer-10
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid0}   ${p1_q3}  ${DAY}  ${p1_s2}  ${cnote}  ${bool[0]}  ${self}
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid0}   ${p1_q3}  ${DAY}  ${p1_s2}  ${cnote}  ${bool[0]}  ${self}  location=${p1_l2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${wid}=  Get Dictionary Values  ${resp.json()}
