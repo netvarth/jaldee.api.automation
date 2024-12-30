@@ -28,7 +28,7 @@ JD-TC-Get_CRM_Lead-1
 
     [Documentation]   Get Crm Lead
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME128}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -180,7 +180,7 @@ JD-TC-Get_CRM_Lead-UH1
 
     [Documentation]   Get Crm Lead - where uid is invalid
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME128}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

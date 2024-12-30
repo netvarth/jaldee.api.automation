@@ -29,7 +29,7 @@ JD-TC-Create_Note-1
 
     [Documentation]   Create Note
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME121}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -167,7 +167,7 @@ JD-TC-Create_Note-2
 
     [Documentation]   Create Note - where note is empty
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME121}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -184,7 +184,7 @@ JD-TC-Create_Note-UH1
 
     [Documentation]   Create Note - where lead id is invalid
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME121}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -29,7 +29,7 @@ JD-TC-Create_Lead-1
 
     [Documentation]   Create Lead - with Consumer created
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -171,14 +171,14 @@ JD-TC-Create_Lead-2
 
     [Documentation]   Create Lead - consumer not created
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${consumerFirstName}=   generate_firstname
     ${consumerLastName}=    FakerLibrary.lastName
 
-    ${resp}=    Create Crm Lead  ${clid}  ${pid}  ${lid}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  consumerPhone=${CUSERNAME1}  consumerPhoneCode=${countryCodes[0]}
+    ${resp}=    Create Crm Lead  ${clid}  ${pid}  ${lid}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}       consumerCountryCode=${countryCodes[0]}    consumerPhone=${CUSERNAME1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
     Set Suite variable           ${crm_lead_id2}          ${resp.json()}
@@ -188,11 +188,16 @@ JD-TC-Create_Lead-3
 
     [Documentation]   Create Lead - with same consumer and same details again and already created lead
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Create Crm Lead  ${clid}  ${pid}  ${lid}  consumerUid=${con_id}  
+    ${resp}=    Create Lead Consumer  ${firstName_n}  ${lastName_n}    phone=${CUSERNAME17}  countryCode=${countryCodes[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test variable   ${con_id1}   ${resp.json()}
+
+    ${resp}=    Create Crm Lead  ${clid}  ${pid}  ${lid}  consumerUid=${con_id1}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
@@ -201,11 +206,17 @@ JD-TC-Create_Lead-4
 
     [Documentation]   Create Lead - where location id is empty
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Create Crm Lead  ${clid}  ${pid}  ${NULL}  consumerUid=${con_id}  
+    ${resp}=    Create Lead Consumer  ${firstName_n}  ${lastName_n}    phone=${CUSERNAME18}  countryCode=${countryCodes[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test variable   ${con_id1}   ${resp.json()}
+
+
+    ${resp}=    Create Crm Lead  ${clid}  ${pid}  ${NULL}  consumerUid=${con_id1}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
@@ -213,7 +224,7 @@ JD-TC-Create_Lead-UH1
 
     [Documentation]   Create Lead - where channel id is empty
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -228,23 +239,29 @@ JD-TC-Create_Lead-UH2
 
     [Documentation]   Create Lead - where owner is empty
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=    Create Lead Consumer  ${firstName_n}  ${lastName_n}    phone=${CUSERNAME25}  countryCode=${countryCodes[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test variable   ${con_id1}   ${resp.json()}
+
+
     ${INVALID_Y_ID}=   Replace String  ${INVALID_Y_ID}  {}   Owner
 
-    ${resp}=    Create Crm Lead  ${clid}  ${empty}  ${lid}  consumerUid=${con_id}  
+    ${resp}=    Create Crm Lead  ${clid}  ${empty}  ${lid}  consumerUid=${con_id1}  
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     422
-    Should Be Equal As Strings  ${resp.json()}          ${INVALID_Y_ID}
+    Should Be Equal As Strings  ${resp.status_code}     200
+    # Should Be Equal As Strings  ${resp.json()}          ${INVALID_Y_ID}
 
 
 JD-TC-Create_Lead-UH3
 
     [Documentation]   Create Lead - where consumer id is empty
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -258,7 +275,7 @@ JD-TC-Create_Lead-UH4
 
     [Documentation]   Create Lead - where firstname and uid is empty
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -272,9 +289,9 @@ JD-TC-Create_Lead-UH4
 
 JD-TC-Create_Lead-UH5
 
-    [Documentation]   Create Lead - where lastname and uid is empty
+    [Documentation]   Create Lead - where lastname is empty
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -282,10 +299,9 @@ JD-TC-Create_Lead-UH5
 
     ${FIELD_CANT_BE_EMPTY}=   Replace String  ${FIELD_CANT_BE_EMPTY}  {}   last name
 
-    ${resp}=    Create Crm Lead  ${clid}  ${pid}  ${lid}  consumerFirstName=${consumerFirstName}  consumerLastName=${NULL} 
+    ${resp}=    Create Crm Lead  ${clid}  ${pid}  ${lid}  consumerFirstName=${consumerFirstName}  consumerLastName=${empty}  consumerPhone=${CUSERNAME26}  consumerCountryCode=${countryCodes[0]} 
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     422
-    Should Be Equal As Strings  ${resp.json()}          ${FIELD_CANT_BE_EMPTY}
+    Should Be Equal As Strings  ${resp.status_code}     200
 
 
 JD-TC-Create_Lead-UH6

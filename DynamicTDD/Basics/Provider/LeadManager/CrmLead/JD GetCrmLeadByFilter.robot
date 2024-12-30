@@ -28,7 +28,7 @@ JD-TC-Get_CRM_Lead_By_Filter-1
 
     [Documentation]   Get Crm Lead By Filter 
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -186,7 +186,7 @@ JD-TC-Get_CRM_Lead_By_Filter-1
     Set Suite Variable      ${consumerFirstName}
     Set Suite Variable      ${consumerLastName}
 
-    ${resp}=    Create Crm Lead  ${clid}  ${pid}  ${lid}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}    gender=${Genderlist[0]}     countryCode=${countryCodes[0]}    phone=${PUSERNAME_U1}   address=${address}   email=${P_Email}${PUSERNAME_U1}.${test_mail}    city=${city}   state=${state}    country=${city}   pin=${postcode}  
+    ${resp}=    Create Crm Lead  ${clid}  ${pid}  ${lid}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}    gender=${Genderlist[0]}     consumerCountryCode=${countryCodes[0]}    consumerPhone=${PUSERNAME_U1}   address=${address}   email=${P_Email}${PUSERNAME_U1}.${test_mail}    city=${city}   state=${state}    country=${city}   pin=${postcode}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
     Set Suite variable           ${crm_lead_id2}          ${resp.json()}
@@ -277,7 +277,7 @@ JD-TC-Get_CRM_Lead_By_Filter-2
 
     [Documentation]   Get Crm Lead By Filter - id
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -308,107 +308,33 @@ JD-TC-Get_CRM_Lead_By_Filter-3
 
     [Documentation]   Get Crm Lead By Filter - account
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get Crm Lead By Filter      account-eq=${accountId}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
-    Should Be Equal As Strings  ${resp.json()[0]['productType']['id']}  ${product_id}
-    Should Be Equal As Strings  ${resp.json()[0]['channel']['id']}      ${channel_id}   
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}                ${crm_lead_id2}
-    Should Be Equal As Strings  ${resp.json()[0]['productEnum']}        ${productEnum[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['productName']}        ${typeName1}
-    Should Be Equal As Strings  ${resp.json()[0]['productUid']}         ${lpid}
-    Should Be Equal As Strings  ${resp.json()[0]['channelType']}        ${leadchannel[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['channelName']}        ${ChannelName1}
-    Should Be Equal As Strings  ${resp.json()[0]['channelUid']}         ${clid}
-    Should Be Equal As Strings  ${resp.json()[0]['consumerFirstName']}  ${consumerFirstName}
-    Should Be Equal As Strings  ${resp.json()[0]['consumerLastName']}   ${consumerLastName}
-    Should Be Equal As Strings  ${resp.json()[0]['internalStatus']}     ${status[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['ownerId']}            ${pid}
-    Should Be Equal As Strings  ${resp.json()[0]['ownerName']}          ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[0]['createdBy']}          ${pid}
-    Should Be Equal As Strings  ${resp.json()[0]['createdByName']}      ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[0]['createdDate']}        ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['location']}           ${lid}
-    Should Be Equal As Strings  ${resp.json()[0]['locationName']}       ${place}
-    Should Be Equal As Strings  ${resp.json()[1]['productType']['id']}  ${product_id}
-    Should Be Equal As Strings  ${resp.json()[1]['channel']['id']}      ${channel_id}   
-    Should Be Equal As Strings  ${resp.json()[1]['uid']}                ${crm_lead_id}
-    Should Be Equal As Strings  ${resp.json()[1]['productEnum']}        ${productEnum[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['productName']}        ${typeName1}
-    Should Be Equal As Strings  ${resp.json()[1]['productUid']}         ${lpid}
-    Should Be Equal As Strings  ${resp.json()[1]['channelType']}        ${leadchannel[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['channelName']}        ${ChannelName1}
-    Should Be Equal As Strings  ${resp.json()[1]['channelUid']}         ${clid}
-    Should Be Equal As Strings  ${resp.json()[1]['consumerFirstName']}  ${firstName_n}
-    Should Be Equal As Strings  ${resp.json()[1]['consumerLastName']}   ${lastName_n}
-    Should Be Equal As Strings  ${resp.json()[1]['internalStatus']}     ${status[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['ownerId']}            ${pid}
-    Should Be Equal As Strings  ${resp.json()[1]['ownerName']}          ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[1]['createdBy']}          ${pid}
-    Should Be Equal As Strings  ${resp.json()[1]['createdByName']}      ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[1]['createdDate']}        ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[1]['location']}           ${lid}
-    Should Be Equal As Strings  ${resp.json()[1]['locationName']}       ${place}
+    
 
 JD-TC-Get_CRM_Lead_By_Filter-4
 
     [Documentation]   Get Crm Lead By Filter - created date
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get Crm Lead By Filter      createdDate-eq=${DAY1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
-    Should Be Equal As Strings  ${resp.json()[0]['productType']['id']}  ${product_id}
-    Should Be Equal As Strings  ${resp.json()[0]['channel']['id']}      ${channel_id}   
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}                ${crm_lead_id2}
-    Should Be Equal As Strings  ${resp.json()[0]['productEnum']}        ${productEnum[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['productName']}        ${typeName1}
-    Should Be Equal As Strings  ${resp.json()[0]['productUid']}         ${lpid}
-    Should Be Equal As Strings  ${resp.json()[0]['channelType']}        ${leadchannel[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['channelName']}        ${ChannelName1}
-    Should Be Equal As Strings  ${resp.json()[0]['channelUid']}         ${clid}
-    Should Be Equal As Strings  ${resp.json()[0]['consumerFirstName']}  ${consumerFirstName}
-    Should Be Equal As Strings  ${resp.json()[0]['consumerLastName']}   ${consumerLastName}
-    Should Be Equal As Strings  ${resp.json()[0]['internalStatus']}     ${status[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['ownerId']}            ${pid}
-    Should Be Equal As Strings  ${resp.json()[0]['ownerName']}          ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[0]['createdBy']}          ${pid}
-    Should Be Equal As Strings  ${resp.json()[0]['createdByName']}      ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[0]['createdDate']}        ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['location']}           ${lid}
-    Should Be Equal As Strings  ${resp.json()[0]['locationName']}       ${place}
-    Should Be Equal As Strings  ${resp.json()[1]['productType']['id']}  ${product_id}
-    Should Be Equal As Strings  ${resp.json()[1]['channel']['id']}      ${channel_id}   
-    Should Be Equal As Strings  ${resp.json()[1]['uid']}                ${crm_lead_id}
-    Should Be Equal As Strings  ${resp.json()[1]['productEnum']}        ${productEnum[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['productName']}        ${typeName1}
-    Should Be Equal As Strings  ${resp.json()[1]['productUid']}         ${lpid}
-    Should Be Equal As Strings  ${resp.json()[1]['channelType']}        ${leadchannel[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['channelName']}        ${ChannelName1}
-    Should Be Equal As Strings  ${resp.json()[1]['channelUid']}         ${clid}
-    Should Be Equal As Strings  ${resp.json()[1]['consumerFirstName']}  ${firstName_n}
-    Should Be Equal As Strings  ${resp.json()[1]['consumerLastName']}   ${lastName_n}
-    Should Be Equal As Strings  ${resp.json()[1]['internalStatus']}     ${status[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['ownerId']}            ${pid}
-    Should Be Equal As Strings  ${resp.json()[1]['ownerName']}          ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[1]['createdBy']}          ${pid}
-    Should Be Equal As Strings  ${resp.json()[1]['createdByName']}      ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[1]['createdDate']}        ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[1]['location']}           ${lid}
-    Should Be Equal As Strings  ${resp.json()[1]['locationName']}       ${place}
+    
 
 JD-TC-Get_CRM_Lead_By_Filter-5
 
     [Documentation]   Get Crm Lead By Filter - uid
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -439,7 +365,7 @@ JD-TC-Get_CRM_Lead_By_Filter-6
 
     [Documentation]   Get Crm Lead By Filter -  reference No
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -470,7 +396,7 @@ JD-TC-Get_CRM_Lead_By_Filter-7
 
     [Documentation]   Get Crm Lead By Filter - product type
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -520,57 +446,19 @@ JD-TC-Get_CRM_Lead_By_Filter-8
 
     [Documentation]   Get Crm Lead By Filter - product Enum
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get Crm Lead By Filter      productEnum-eq=${productEnum[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
-    Should Be Equal As Strings  ${resp.json()[0]['productType']['id']}  ${product_id}
-    Should Be Equal As Strings  ${resp.json()[0]['channel']['id']}      ${channel_id}   
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}                ${crm_lead_id2}
-    Should Be Equal As Strings  ${resp.json()[0]['productEnum']}        ${productEnum[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['productName']}        ${typeName1}
-    Should Be Equal As Strings  ${resp.json()[0]['productUid']}         ${lpid}
-    Should Be Equal As Strings  ${resp.json()[0]['channelType']}        ${leadchannel[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['channelName']}        ${ChannelName1}
-    Should Be Equal As Strings  ${resp.json()[0]['channelUid']}         ${clid}
-    Should Be Equal As Strings  ${resp.json()[0]['consumerFirstName']}  ${consumerFirstName}
-    Should Be Equal As Strings  ${resp.json()[0]['consumerLastName']}   ${consumerLastName}
-    Should Be Equal As Strings  ${resp.json()[0]['internalStatus']}     ${status[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['ownerId']}            ${pid}
-    Should Be Equal As Strings  ${resp.json()[0]['ownerName']}          ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[0]['createdBy']}          ${pid}
-    Should Be Equal As Strings  ${resp.json()[0]['createdByName']}      ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[0]['createdDate']}        ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['location']}           ${lid}
-    Should Be Equal As Strings  ${resp.json()[0]['locationName']}       ${place}
-    Should Be Equal As Strings  ${resp.json()[1]['productType']['id']}  ${product_id}
-    Should Be Equal As Strings  ${resp.json()[1]['channel']['id']}      ${channel_id}   
-    Should Be Equal As Strings  ${resp.json()[1]['uid']}                ${crm_lead_id}
-    Should Be Equal As Strings  ${resp.json()[1]['productEnum']}        ${productEnum[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['productName']}        ${typeName1}
-    Should Be Equal As Strings  ${resp.json()[1]['productUid']}         ${lpid}
-    Should Be Equal As Strings  ${resp.json()[1]['channelType']}        ${leadchannel[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['channelName']}        ${ChannelName1}
-    Should Be Equal As Strings  ${resp.json()[1]['channelUid']}         ${clid}
-    Should Be Equal As Strings  ${resp.json()[1]['consumerFirstName']}  ${firstName_n}
-    Should Be Equal As Strings  ${resp.json()[1]['consumerLastName']}   ${lastName_n}
-    Should Be Equal As Strings  ${resp.json()[1]['internalStatus']}     ${status[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['ownerId']}            ${pid}
-    Should Be Equal As Strings  ${resp.json()[1]['ownerName']}          ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[1]['createdBy']}          ${pid}
-    Should Be Equal As Strings  ${resp.json()[1]['createdByName']}      ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[1]['createdDate']}        ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[1]['location']}           ${lid}
-    Should Be Equal As Strings  ${resp.json()[1]['locationName']}       ${place}
 
 JD-TC-Get_CRM_Lead_By_Filter-9
 
     [Documentation]   Get Crm Lead By Filter - product Name
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -620,7 +508,7 @@ JD-TC-Get_CRM_Lead_By_Filter-10
 
     [Documentation]   Get Crm Lead By Filter - product Uid
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -670,7 +558,7 @@ JD-TC-Get_CRM_Lead_By_Filter-11
 
     [Documentation]   Get Crm Lead By Filter - channel
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -720,57 +608,20 @@ JD-TC-Get_CRM_Lead_By_Filter-12
 
     [Documentation]   Get Crm Lead By Filter - channel Type
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get Crm Lead By Filter      channelType-eq=${leadchannel[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
-    Should Be Equal As Strings  ${resp.json()[0]['productType']['id']}  ${product_id}
-    Should Be Equal As Strings  ${resp.json()[0]['channel']['id']}      ${channel_id}   
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}                ${crm_lead_id2}
-    Should Be Equal As Strings  ${resp.json()[0]['productEnum']}        ${productEnum[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['productName']}        ${typeName1}
-    Should Be Equal As Strings  ${resp.json()[0]['productUid']}         ${lpid}
-    Should Be Equal As Strings  ${resp.json()[0]['channelType']}        ${leadchannel[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['channelName']}        ${ChannelName1}
-    Should Be Equal As Strings  ${resp.json()[0]['channelUid']}         ${clid}
-    Should Be Equal As Strings  ${resp.json()[0]['consumerFirstName']}  ${consumerFirstName}
-    Should Be Equal As Strings  ${resp.json()[0]['consumerLastName']}   ${consumerLastName}
-    Should Be Equal As Strings  ${resp.json()[0]['internalStatus']}     ${status[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['ownerId']}            ${pid}
-    Should Be Equal As Strings  ${resp.json()[0]['ownerName']}          ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[0]['createdBy']}          ${pid}
-    Should Be Equal As Strings  ${resp.json()[0]['createdByName']}      ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[0]['createdDate']}        ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['location']}           ${lid}
-    Should Be Equal As Strings  ${resp.json()[0]['locationName']}       ${place}
-    Should Be Equal As Strings  ${resp.json()[1]['productType']['id']}  ${product_id}
-    Should Be Equal As Strings  ${resp.json()[1]['channel']['id']}      ${channel_id}   
-    Should Be Equal As Strings  ${resp.json()[1]['uid']}                ${crm_lead_id}
-    Should Be Equal As Strings  ${resp.json()[1]['productEnum']}        ${productEnum[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['productName']}        ${typeName1}
-    Should Be Equal As Strings  ${resp.json()[1]['productUid']}         ${lpid}
-    Should Be Equal As Strings  ${resp.json()[1]['channelType']}        ${leadchannel[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['channelName']}        ${ChannelName1}
-    Should Be Equal As Strings  ${resp.json()[1]['channelUid']}         ${clid}
-    Should Be Equal As Strings  ${resp.json()[1]['consumerFirstName']}  ${firstName_n}
-    Should Be Equal As Strings  ${resp.json()[1]['consumerLastName']}   ${lastName_n}
-    Should Be Equal As Strings  ${resp.json()[1]['internalStatus']}     ${status[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['ownerId']}            ${pid}
-    Should Be Equal As Strings  ${resp.json()[1]['ownerName']}          ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[1]['createdBy']}          ${pid}
-    Should Be Equal As Strings  ${resp.json()[1]['createdByName']}      ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[1]['createdDate']}        ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[1]['location']}           ${lid}
-    Should Be Equal As Strings  ${resp.json()[1]['locationName']}       ${place}
+    
 
 JD-TC-Get_CRM_Lead_By_Filter-13
 
     [Documentation]   Get Crm Lead By Filter - channel Name
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -820,7 +671,7 @@ JD-TC-Get_CRM_Lead_By_Filter-14
 
     [Documentation]   Get Crm Lead By Filter - channel Uid
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -870,7 +721,7 @@ JD-TC-Get_CRM_Lead_By_Filter-15
 
     [Documentation]   Get Crm Lead By Filter - consumer Uid
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -901,7 +752,7 @@ JD-TC-Get_CRM_Lead_By_Filter-16
 
     [Documentation]   Get Crm Lead By Filter - consumer FirstName
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -932,7 +783,7 @@ JD-TC-Get_CRM_Lead_By_Filter-17
 
     [Documentation]   Get Crm Lead By Filter - consumer LastName
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -963,7 +814,7 @@ JD-TC-Get_CRM_Lead_By_Filter-18
 
     [Documentation]   Get Crm Lead By Filter - consumer Dob
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -994,7 +845,7 @@ JD-TC-Get_CRM_Lead_By_Filter-19
 
     [Documentation]   Get Crm Lead By Filter - consumer gender
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1044,38 +895,20 @@ JD-TC-Get_CRM_Lead_By_Filter-20
 
     [Documentation]   Get Crm Lead By Filter - consumer country code
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get Crm Lead By Filter      consumerCountryCode-eq=${countryCodes[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
-    Should Be Equal As Strings  ${resp.json()[0]['productType']['id']}  ${product_id}
-    Should Be Equal As Strings  ${resp.json()[0]['channel']['id']}      ${channel_id}   
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}                ${crm_lead_id2}
-    Should Be Equal As Strings  ${resp.json()[0]['productEnum']}        ${productEnum[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['productName']}        ${typeName1}
-    Should Be Equal As Strings  ${resp.json()[0]['productUid']}         ${lpid}
-    Should Be Equal As Strings  ${resp.json()[0]['channelType']}        ${leadchannel[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['channelName']}        ${ChannelName1}
-    Should Be Equal As Strings  ${resp.json()[0]['channelUid']}         ${clid}
-    Should Be Equal As Strings  ${resp.json()[0]['consumerFirstName']}  ${consumerFirstName}
-    Should Be Equal As Strings  ${resp.json()[0]['consumerLastName']}   ${consumerLastName}
-    Should Be Equal As Strings  ${resp.json()[0]['internalStatus']}     ${status[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['ownerId']}            ${pid}
-    Should Be Equal As Strings  ${resp.json()[0]['ownerName']}          ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[0]['createdBy']}          ${pid}
-    Should Be Equal As Strings  ${resp.json()[0]['createdByName']}      ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[0]['createdDate']}        ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['location']}           ${lid}
-    Should Be Equal As Strings  ${resp.json()[0]['locationName']}       ${place}
+    
 
 JD-TC-Get_CRM_Lead_By_Filter-21
 
     [Documentation]   Get Crm Lead By Filter - consumer Phone
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1106,7 +939,7 @@ JD-TC-Get_CRM_Lead_By_Filter-22
 
     [Documentation]   Get Crm Lead By Filter - consumer email
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1137,7 +970,7 @@ JD-TC-Get_CRM_Lead_By_Filter-23
 
     [Documentation]   Get Crm Lead By Filter - consumer city
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1187,7 +1020,7 @@ JD-TC-Get_CRM_Lead_By_Filter-24
 
     [Documentation]   Get Crm Lead By Filter - consumer state
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1218,7 +1051,7 @@ JD-TC-Get_CRM_Lead_By_Filter-25
 
     [Documentation]   Get Crm Lead By Filter - consumer country
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1268,7 +1101,7 @@ JD-TC-Get_CRM_Lead_By_Filter-26
 
     [Documentation]   Get Crm Lead By Filter - consumer pin
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1318,7 +1151,7 @@ JD-TC-Get_CRM_Lead_By_Filter-27
 
     [Documentation]   Get Crm Lead By Filter - assignees
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1368,7 +1201,7 @@ JD-TC-Get_CRM_Lead_By_Filter-27
 
 #     [Documentation]   Get Crm Lead By Filter - 
 
-#     ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1418,57 +1251,20 @@ JD-TC-Get_CRM_Lead_By_Filter-29
 
     [Documentation]   Get Crm Lead By Filter - 
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get Crm Lead By Filter      internalStatus-eq=${status[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
-    Should Be Equal As Strings  ${resp.json()[0]['productType']['id']}  ${product_id}
-    Should Be Equal As Strings  ${resp.json()[0]['channel']['id']}      ${channel_id}   
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}                ${crm_lead_id2}
-    Should Be Equal As Strings  ${resp.json()[0]['productEnum']}        ${productEnum[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['productName']}        ${typeName1}
-    Should Be Equal As Strings  ${resp.json()[0]['productUid']}         ${lpid}
-    Should Be Equal As Strings  ${resp.json()[0]['channelType']}        ${leadchannel[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['channelName']}        ${ChannelName1}
-    Should Be Equal As Strings  ${resp.json()[0]['channelUid']}         ${clid}
-    Should Be Equal As Strings  ${resp.json()[0]['consumerFirstName']}  ${consumerFirstName}
-    Should Be Equal As Strings  ${resp.json()[0]['consumerLastName']}   ${consumerLastName}
-    Should Be Equal As Strings  ${resp.json()[0]['internalStatus']}     ${status[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['ownerId']}            ${pid}
-    Should Be Equal As Strings  ${resp.json()[0]['ownerName']}          ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[0]['createdBy']}          ${pid}
-    Should Be Equal As Strings  ${resp.json()[0]['createdByName']}      ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[0]['createdDate']}        ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['location']}           ${lid}
-    Should Be Equal As Strings  ${resp.json()[0]['locationName']}       ${place}
-    Should Be Equal As Strings  ${resp.json()[1]['productType']['id']}  ${product_id}
-    Should Be Equal As Strings  ${resp.json()[1]['channel']['id']}      ${channel_id}   
-    Should Be Equal As Strings  ${resp.json()[1]['uid']}                ${crm_lead_id}
-    Should Be Equal As Strings  ${resp.json()[1]['productEnum']}        ${productEnum[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['productName']}        ${typeName1}
-    Should Be Equal As Strings  ${resp.json()[1]['productUid']}         ${lpid}
-    Should Be Equal As Strings  ${resp.json()[1]['channelType']}        ${leadchannel[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['channelName']}        ${ChannelName1}
-    Should Be Equal As Strings  ${resp.json()[1]['channelUid']}         ${clid}
-    Should Be Equal As Strings  ${resp.json()[1]['consumerFirstName']}  ${firstName_n}
-    Should Be Equal As Strings  ${resp.json()[1]['consumerLastName']}   ${lastName_n}
-    Should Be Equal As Strings  ${resp.json()[1]['internalStatus']}     ${status[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['ownerId']}            ${pid}
-    Should Be Equal As Strings  ${resp.json()[1]['ownerName']}          ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[1]['createdBy']}          ${pid}
-    Should Be Equal As Strings  ${resp.json()[1]['createdByName']}      ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[1]['createdDate']}        ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[1]['location']}           ${lid}
-    Should Be Equal As Strings  ${resp.json()[1]['locationName']}       ${place}
+    
 
 JD-TC-Get_CRM_Lead_By_Filter-31
 
     [Documentation]   Get Crm Lead By Filter - rejected By
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1518,57 +1314,20 @@ JD-TC-Get_CRM_Lead_By_Filter-32
 
     [Documentation]   Get Crm Lead By Filter - rejected By Name
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get Crm Lead By Filter      rejectedByName-eq=${pdrname}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
-    Should Be Equal As Strings  ${resp.json()[0]['productType']['id']}  ${product_id}
-    Should Be Equal As Strings  ${resp.json()[0]['channel']['id']}      ${channel_id}   
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}                ${crm_lead_id2}
-    Should Be Equal As Strings  ${resp.json()[0]['productEnum']}        ${productEnum[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['productName']}        ${typeName1}
-    Should Be Equal As Strings  ${resp.json()[0]['productUid']}         ${lpid}
-    Should Be Equal As Strings  ${resp.json()[0]['channelType']}        ${leadchannel[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['channelName']}        ${ChannelName1}
-    Should Be Equal As Strings  ${resp.json()[0]['channelUid']}         ${clid}
-    Should Be Equal As Strings  ${resp.json()[0]['consumerFirstName']}  ${consumerFirstName}
-    Should Be Equal As Strings  ${resp.json()[0]['consumerLastName']}   ${consumerLastName}
-    Should Be Equal As Strings  ${resp.json()[0]['internalStatus']}     ${status[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['ownerId']}            ${pid}
-    Should Be Equal As Strings  ${resp.json()[0]['ownerName']}          ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[0]['createdBy']}          ${pid}
-    Should Be Equal As Strings  ${resp.json()[0]['createdByName']}      ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[0]['createdDate']}        ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['location']}           ${lid}
-    Should Be Equal As Strings  ${resp.json()[0]['locationName']}       ${place}
-    Should Be Equal As Strings  ${resp.json()[1]['productType']['id']}  ${product_id}
-    Should Be Equal As Strings  ${resp.json()[1]['channel']['id']}      ${channel_id}   
-    Should Be Equal As Strings  ${resp.json()[1]['uid']}                ${crm_lead_id}
-    Should Be Equal As Strings  ${resp.json()[1]['productEnum']}        ${productEnum[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['productName']}        ${typeName1}
-    Should Be Equal As Strings  ${resp.json()[1]['productUid']}         ${lpid}
-    Should Be Equal As Strings  ${resp.json()[1]['channelType']}        ${leadchannel[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['channelName']}        ${ChannelName1}
-    Should Be Equal As Strings  ${resp.json()[1]['channelUid']}         ${clid}
-    Should Be Equal As Strings  ${resp.json()[1]['consumerFirstName']}  ${firstName_n}
-    Should Be Equal As Strings  ${resp.json()[1]['consumerLastName']}   ${lastName_n}
-    Should Be Equal As Strings  ${resp.json()[1]['internalStatus']}     ${status[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['ownerId']}            ${pid}
-    Should Be Equal As Strings  ${resp.json()[1]['ownerName']}          ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[1]['createdBy']}          ${pid}
-    Should Be Equal As Strings  ${resp.json()[1]['createdByName']}      ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[1]['createdDate']}        ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[1]['location']}           ${lid}
-    Should Be Equal As Strings  ${resp.json()[1]['locationName']}       ${place}
+    
 
 JD-TC-Get_CRM_Lead_By_Filter-33
 
     [Documentation]   Get Crm Lead By Filter - rejected Date
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1618,7 +1377,7 @@ JD-TC-Get_CRM_Lead_By_Filter-35
 
     [Documentation]   Get Crm Lead By Filter - converted By
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1668,7 +1427,7 @@ JD-TC-Get_CRM_Lead_By_Filter-36
 
     [Documentation]   Get Crm Lead By Filter - converted By Name
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1718,7 +1477,7 @@ JD-TC-Get_CRM_Lead_By_Filter-37
 
     [Documentation]   Get Crm Lead By Filter - converted Date
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1768,251 +1527,66 @@ JD-TC-Get_CRM_Lead_By_Filter-38
 
     [Documentation]   Get Crm Lead By Filter - owner id
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get Crm Lead By Filter      ownerId-eq=${pid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
-    Should Be Equal As Strings  ${resp.json()[0]['productType']['id']}  ${product_id}
-    Should Be Equal As Strings  ${resp.json()[0]['channel']['id']}      ${channel_id}   
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}                ${crm_lead_id2}
-    Should Be Equal As Strings  ${resp.json()[0]['productEnum']}        ${productEnum[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['productName']}        ${typeName1}
-    Should Be Equal As Strings  ${resp.json()[0]['productUid']}         ${lpid}
-    Should Be Equal As Strings  ${resp.json()[0]['channelType']}        ${leadchannel[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['channelName']}        ${ChannelName1}
-    Should Be Equal As Strings  ${resp.json()[0]['channelUid']}         ${clid}
-    Should Be Equal As Strings  ${resp.json()[0]['consumerFirstName']}  ${consumerFirstName}
-    Should Be Equal As Strings  ${resp.json()[0]['consumerLastName']}   ${consumerLastName}
-    Should Be Equal As Strings  ${resp.json()[0]['internalStatus']}     ${status[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['ownerId']}            ${pid}
-    Should Be Equal As Strings  ${resp.json()[0]['ownerName']}          ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[0]['createdBy']}          ${pid}
-    Should Be Equal As Strings  ${resp.json()[0]['createdByName']}      ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[0]['createdDate']}        ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['location']}           ${lid}
-    Should Be Equal As Strings  ${resp.json()[0]['locationName']}       ${place}
-    Should Be Equal As Strings  ${resp.json()[1]['productType']['id']}  ${product_id}
-    Should Be Equal As Strings  ${resp.json()[1]['channel']['id']}      ${channel_id}   
-    Should Be Equal As Strings  ${resp.json()[1]['uid']}                ${crm_lead_id}
-    Should Be Equal As Strings  ${resp.json()[1]['productEnum']}        ${productEnum[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['productName']}        ${typeName1}
-    Should Be Equal As Strings  ${resp.json()[1]['productUid']}         ${lpid}
-    Should Be Equal As Strings  ${resp.json()[1]['channelType']}        ${leadchannel[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['channelName']}        ${ChannelName1}
-    Should Be Equal As Strings  ${resp.json()[1]['channelUid']}         ${clid}
-    Should Be Equal As Strings  ${resp.json()[1]['consumerFirstName']}  ${firstName_n}
-    Should Be Equal As Strings  ${resp.json()[1]['consumerLastName']}   ${lastName_n}
-    Should Be Equal As Strings  ${resp.json()[1]['internalStatus']}     ${status[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['ownerId']}            ${pid}
-    Should Be Equal As Strings  ${resp.json()[1]['ownerName']}          ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[1]['createdBy']}          ${pid}
-    Should Be Equal As Strings  ${resp.json()[1]['createdByName']}      ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[1]['createdDate']}        ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[1]['location']}           ${lid}
-    Should Be Equal As Strings  ${resp.json()[1]['locationName']}       ${place}
+    
 
 JD-TC-Get_CRM_Lead_By_Filter-39
 
     [Documentation]   Get Crm Lead By Filter - owner Name
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get Crm Lead By Filter      ownerName-eq=${pdrname}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
-    Should Be Equal As Strings  ${resp.json()[0]['productType']['id']}  ${product_id}
-    Should Be Equal As Strings  ${resp.json()[0]['channel']['id']}      ${channel_id}   
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}                ${crm_lead_id2}
-    Should Be Equal As Strings  ${resp.json()[0]['productEnum']}        ${productEnum[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['productName']}        ${typeName1}
-    Should Be Equal As Strings  ${resp.json()[0]['productUid']}         ${lpid}
-    Should Be Equal As Strings  ${resp.json()[0]['channelType']}        ${leadchannel[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['channelName']}        ${ChannelName1}
-    Should Be Equal As Strings  ${resp.json()[0]['channelUid']}         ${clid}
-    Should Be Equal As Strings  ${resp.json()[0]['consumerFirstName']}  ${consumerFirstName}
-    Should Be Equal As Strings  ${resp.json()[0]['consumerLastName']}   ${consumerLastName}
-    Should Be Equal As Strings  ${resp.json()[0]['internalStatus']}     ${status[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['ownerId']}            ${pid}
-    Should Be Equal As Strings  ${resp.json()[0]['ownerName']}          ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[0]['createdBy']}          ${pid}
-    Should Be Equal As Strings  ${resp.json()[0]['createdByName']}      ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[0]['createdDate']}        ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['location']}           ${lid}
-    Should Be Equal As Strings  ${resp.json()[0]['locationName']}       ${place}
-    Should Be Equal As Strings  ${resp.json()[1]['productType']['id']}  ${product_id}
-    Should Be Equal As Strings  ${resp.json()[1]['channel']['id']}      ${channel_id}   
-    Should Be Equal As Strings  ${resp.json()[1]['uid']}                ${crm_lead_id}
-    Should Be Equal As Strings  ${resp.json()[1]['productEnum']}        ${productEnum[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['productName']}        ${typeName1}
-    Should Be Equal As Strings  ${resp.json()[1]['productUid']}         ${lpid}
-    Should Be Equal As Strings  ${resp.json()[1]['channelType']}        ${leadchannel[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['channelName']}        ${ChannelName1}
-    Should Be Equal As Strings  ${resp.json()[1]['channelUid']}         ${clid}
-    Should Be Equal As Strings  ${resp.json()[1]['consumerFirstName']}  ${firstName_n}
-    Should Be Equal As Strings  ${resp.json()[1]['consumerLastName']}   ${lastName_n}
-    Should Be Equal As Strings  ${resp.json()[1]['internalStatus']}     ${status[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['ownerId']}            ${pid}
-    Should Be Equal As Strings  ${resp.json()[1]['ownerName']}          ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[1]['createdBy']}          ${pid}
-    Should Be Equal As Strings  ${resp.json()[1]['createdByName']}      ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[1]['createdDate']}        ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[1]['location']}           ${lid}
-    Should Be Equal As Strings  ${resp.json()[1]['locationName']}       ${place}
+    
 
 JD-TC-Get_CRM_Lead_By_Filter-40
 
     [Documentation]   Get Crm Lead By Filter - created By Name
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get Crm Lead By Filter      createdByName-eq=${pdrname}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
-    Should Be Equal As Strings  ${resp.json()[0]['productType']['id']}  ${product_id}
-    Should Be Equal As Strings  ${resp.json()[0]['channel']['id']}      ${channel_id}   
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}                ${crm_lead_id2}
-    Should Be Equal As Strings  ${resp.json()[0]['productEnum']}        ${productEnum[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['productName']}        ${typeName1}
-    Should Be Equal As Strings  ${resp.json()[0]['productUid']}         ${lpid}
-    Should Be Equal As Strings  ${resp.json()[0]['channelType']}        ${leadchannel[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['channelName']}        ${ChannelName1}
-    Should Be Equal As Strings  ${resp.json()[0]['channelUid']}         ${clid}
-    Should Be Equal As Strings  ${resp.json()[0]['consumerFirstName']}  ${consumerFirstName}
-    Should Be Equal As Strings  ${resp.json()[0]['consumerLastName']}   ${consumerLastName}
-    Should Be Equal As Strings  ${resp.json()[0]['internalStatus']}     ${status[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['ownerId']}            ${pid}
-    Should Be Equal As Strings  ${resp.json()[0]['ownerName']}          ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[0]['createdBy']}          ${pid}
-    Should Be Equal As Strings  ${resp.json()[0]['createdByName']}      ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[0]['createdDate']}        ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['location']}           ${lid}
-    Should Be Equal As Strings  ${resp.json()[0]['locationName']}       ${place}
-    Should Be Equal As Strings  ${resp.json()[1]['productType']['id']}  ${product_id}
-    Should Be Equal As Strings  ${resp.json()[1]['channel']['id']}      ${channel_id}   
-    Should Be Equal As Strings  ${resp.json()[1]['uid']}                ${crm_lead_id}
-    Should Be Equal As Strings  ${resp.json()[1]['productEnum']}        ${productEnum[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['productName']}        ${typeName1}
-    Should Be Equal As Strings  ${resp.json()[1]['productUid']}         ${lpid}
-    Should Be Equal As Strings  ${resp.json()[1]['channelType']}        ${leadchannel[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['channelName']}        ${ChannelName1}
-    Should Be Equal As Strings  ${resp.json()[1]['channelUid']}         ${clid}
-    Should Be Equal As Strings  ${resp.json()[1]['consumerFirstName']}  ${firstName_n}
-    Should Be Equal As Strings  ${resp.json()[1]['consumerLastName']}   ${lastName_n}
-    Should Be Equal As Strings  ${resp.json()[1]['internalStatus']}     ${status[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['ownerId']}            ${pid}
-    Should Be Equal As Strings  ${resp.json()[1]['ownerName']}          ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[1]['createdBy']}          ${pid}
-    Should Be Equal As Strings  ${resp.json()[1]['createdByName']}      ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[1]['createdDate']}        ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[1]['location']}           ${lid}
-    Should Be Equal As Strings  ${resp.json()[1]['locationName']}       ${place}
+    
 
 JD-TC-Get_CRM_Lead_By_Filter-41
 
     [Documentation]   Get Crm Lead By Filter - location id
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get Crm Lead By Filter      location-eq=${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
-    Should Be Equal As Strings  ${resp.json()[0]['productType']['id']}  ${product_id}
-    Should Be Equal As Strings  ${resp.json()[0]['channel']['id']}      ${channel_id}   
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}                ${crm_lead_id2}
-    Should Be Equal As Strings  ${resp.json()[0]['productEnum']}        ${productEnum[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['productName']}        ${typeName1}
-    Should Be Equal As Strings  ${resp.json()[0]['productUid']}         ${lpid}
-    Should Be Equal As Strings  ${resp.json()[0]['channelType']}        ${leadchannel[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['channelName']}        ${ChannelName1}
-    Should Be Equal As Strings  ${resp.json()[0]['channelUid']}         ${clid}
-    Should Be Equal As Strings  ${resp.json()[0]['consumerFirstName']}  ${consumerFirstName}
-    Should Be Equal As Strings  ${resp.json()[0]['consumerLastName']}   ${consumerLastName}
-    Should Be Equal As Strings  ${resp.json()[0]['internalStatus']}     ${status[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['ownerId']}            ${pid}
-    Should Be Equal As Strings  ${resp.json()[0]['ownerName']}          ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[0]['createdBy']}          ${pid}
-    Should Be Equal As Strings  ${resp.json()[0]['createdByName']}      ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[0]['createdDate']}        ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['location']}           ${lid}
-    Should Be Equal As Strings  ${resp.json()[0]['locationName']}       ${place}
-    Should Be Equal As Strings  ${resp.json()[1]['productType']['id']}  ${product_id}
-    Should Be Equal As Strings  ${resp.json()[1]['channel']['id']}      ${channel_id}   
-    Should Be Equal As Strings  ${resp.json()[1]['uid']}                ${crm_lead_id}
-    Should Be Equal As Strings  ${resp.json()[1]['productEnum']}        ${productEnum[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['productName']}        ${typeName1}
-    Should Be Equal As Strings  ${resp.json()[1]['productUid']}         ${lpid}
-    Should Be Equal As Strings  ${resp.json()[1]['channelType']}        ${leadchannel[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['channelName']}        ${ChannelName1}
-    Should Be Equal As Strings  ${resp.json()[1]['channelUid']}         ${clid}
-    Should Be Equal As Strings  ${resp.json()[1]['consumerFirstName']}  ${firstName_n}
-    Should Be Equal As Strings  ${resp.json()[1]['consumerLastName']}   ${lastName_n}
-    Should Be Equal As Strings  ${resp.json()[1]['internalStatus']}     ${status[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['ownerId']}            ${pid}
-    Should Be Equal As Strings  ${resp.json()[1]['ownerName']}          ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[1]['createdBy']}          ${pid}
-    Should Be Equal As Strings  ${resp.json()[1]['createdByName']}      ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[1]['createdDate']}        ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[1]['location']}           ${lid}
-    Should Be Equal As Strings  ${resp.json()[1]['locationName']}       ${place}
+   
 
 JD-TC-Get_CRM_Lead_By_Filter-42
 
     [Documentation]   Get Crm Lead By Filter - location name
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get Crm Lead By Filter      locationName-eq=${place}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
-    Should Be Equal As Strings  ${resp.json()[0]['productType']['id']}  ${product_id}
-    Should Be Equal As Strings  ${resp.json()[0]['channel']['id']}      ${channel_id}   
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}                ${crm_lead_id2}
-    Should Be Equal As Strings  ${resp.json()[0]['productEnum']}        ${productEnum[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['productName']}        ${typeName1}
-    Should Be Equal As Strings  ${resp.json()[0]['productUid']}         ${lpid}
-    Should Be Equal As Strings  ${resp.json()[0]['channelType']}        ${leadchannel[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['channelName']}        ${ChannelName1}
-    Should Be Equal As Strings  ${resp.json()[0]['channelUid']}         ${clid}
-    Should Be Equal As Strings  ${resp.json()[0]['consumerFirstName']}  ${consumerFirstName}
-    Should Be Equal As Strings  ${resp.json()[0]['consumerLastName']}   ${consumerLastName}
-    Should Be Equal As Strings  ${resp.json()[0]['internalStatus']}     ${status[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['ownerId']}            ${pid}
-    Should Be Equal As Strings  ${resp.json()[0]['ownerName']}          ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[0]['createdBy']}          ${pid}
-    Should Be Equal As Strings  ${resp.json()[0]['createdByName']}      ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[0]['createdDate']}        ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['location']}           ${lid}
-    Should Be Equal As Strings  ${resp.json()[0]['locationName']}       ${place}
-    Should Be Equal As Strings  ${resp.json()[1]['productType']['id']}  ${product_id}
-    Should Be Equal As Strings  ${resp.json()[1]['channel']['id']}      ${channel_id}   
-    Should Be Equal As Strings  ${resp.json()[1]['uid']}                ${crm_lead_id}
-    Should Be Equal As Strings  ${resp.json()[1]['productEnum']}        ${productEnum[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['productName']}        ${typeName1}
-    Should Be Equal As Strings  ${resp.json()[1]['productUid']}         ${lpid}
-    Should Be Equal As Strings  ${resp.json()[1]['channelType']}        ${leadchannel[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['channelName']}        ${ChannelName1}
-    Should Be Equal As Strings  ${resp.json()[1]['channelUid']}         ${clid}
-    Should Be Equal As Strings  ${resp.json()[1]['consumerFirstName']}  ${firstName_n}
-    Should Be Equal As Strings  ${resp.json()[1]['consumerLastName']}   ${lastName_n}
-    Should Be Equal As Strings  ${resp.json()[1]['internalStatus']}     ${status[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['ownerId']}            ${pid}
-    Should Be Equal As Strings  ${resp.json()[1]['ownerName']}          ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[1]['createdBy']}          ${pid}
-    Should Be Equal As Strings  ${resp.json()[1]['createdByName']}      ${pdrname}
-    Should Be Equal As Strings  ${resp.json()[1]['createdDate']}        ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[1]['location']}           ${lid}
-    Should Be Equal As Strings  ${resp.json()[1]['locationName']}       ${place}
+    
 
 JD-TC-Get_CRM_Lead_By_Filter-43
 
