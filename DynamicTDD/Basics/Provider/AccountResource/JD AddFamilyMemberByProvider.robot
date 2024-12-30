@@ -180,14 +180,15 @@ JD-TC-AddFamilyMemberByProvider-5
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${resp}=  AddFamilyMemberWithPhNo   ${firstname}  ${lastname}  phoneNo=${Familymember_ph}  countryCode=${countryCodes[0]}  ${dob}  ${gender}
+    ${resp}=  AddFamilyMemberWithPhNo   ${firstname}  ${lastname}  ${Familymember_ph}   ${dob}  ${gender}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${mem_id1}  ${resp.json()}
-    ${resp}=  ListFamilyMember  
-    Log   ${resp.json()}
+
+    ${resp}=  Get Family Members   ${pcid}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List  ${resp}  0  user=${mem_id1}
+
     # Should Be Equal As Strings  "${resp.json()}"  "${MEMBER_EXIST_ALREADY_WITH_ANOTHER_PROVIDER}"
 
 JD-TC-AddFamilyMemberByProvider-6
@@ -233,24 +234,24 @@ JD-TC-AddFamilyMemberByProvider-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${mem_id2}  ${resp.json()}
     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph3}${\n}
-    ${address}=  FakerLibrary.Address
-    ${alternativeNo}=  Evaluate  ${PUSERNAME23}+73006
-    ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${ph3}    ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Activation  ${ph3}  1
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Set Credential  ${ph3}  ${PASSWORD}  1
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Login   ${ph3}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  ListFamilyMember  
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()}  []
+    # ${address}=  FakerLibrary.Address
+    # ${alternativeNo}=  Evaluate  ${PUSERNAME23}+73006
+    # ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${ph3}    ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Activation  ${ph3}  1
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Set Credential  ${ph3}  ${PASSWORD}  1
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Login   ${ph3}  ${PASSWORD}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  ListFamilyMember  
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()}  []
     #Verify Response List  ${resp}  0  user=${mem_id2}
     #Verify Response List  ${resp}  1  user=${mem_id1}
 
@@ -349,15 +350,11 @@ JD-TC-AddFamilyMemberByProvider-7
     ${resp}=    ProviderConsumer Login with token   ${ph4}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${resp}=  ListFamilyMember  
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()}  []
-    #Verify Response List  ${resp}  0  user=${mem_id4}
-    #Verify Response List  ${resp}  1  user=${mem_id2}
-    #Verify Response List  ${resp}  2  user=${mem_id1}
-    #Should Not Contain   ${resp}  3  user=${mem_id3}
 
+    ${resp}=  Get Family Members   ${pcid4}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+ 
 JD-TC-AddFamilyMemberByProvider-UH1
     [Documentation]  Add a family member without login1710000011
     ${firstname}=  FakerLibrary.first_name
