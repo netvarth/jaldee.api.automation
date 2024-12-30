@@ -55,7 +55,6 @@ JD-TC-Add_Department_Icon-1
         ${resp}=  Enable Disable Department  ${toggle[0]}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-
     END
 
     ${resp}=  Get Departments

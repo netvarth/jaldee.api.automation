@@ -7,6 +7,7 @@ Library           String
 Library           json
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Library           /ebs/TDD/db.py
@@ -32,20 +33,20 @@ JD-TC-DeActivate Service Provider -1
     # ${sdom}=  Random Int   min=0  max=${sdlen-1}
     # Set Test Variable  ${sub_dom}  ${domresp.json()[${d1}]['subDomains'][${sdom}]['subDomain']}
 
-    ${domresp}=  get_iscorp_subdomains  0
-    Log  ${domresp}
-    ${dlen}=  Get Length  ${domresp}
-    ${d1}=  Random Int   min=0  max=${dlen-1}
-    Set Test Variable  ${dom}  ${domresp[${d1}]['domain']}
-    Set Test Variable  ${sub_dom}  ${domresp[${d1}]['subdomains']}
+    # ${domresp}=  get_iscorp_subdomains  0
+    # Log  ${domresp}
+    # ${dlen}=  Get Length  ${domresp}
+    # ${d1}=  Random Int   min=0  max=${dlen-1}
+    # Set Test Variable  ${dom}  ${domresp[${d1}]['domain']}
+    # Set Test Variable  ${sub_dom}  ${domresp[${d1}]['subdomains']}
 
-    ${licresp}=   Get Licensable Packages
-    Should Be Equal As Strings   ${licresp.status_code}   200
-    ${liclen}=  Get Length  ${licresp.json()}
-    FOR  ${pos}  IN RANGE  ${liclen}
-        Set Suite Variable  ${pkgId}  ${licresp.json()[${pos}]['pkgId']}
-        Set Suite Variable  ${pkg_name}  ${licresp.json()[${pos}]['displayName']}
-    END
+    # ${licresp}=   Get Licensable Packages
+    # Should Be Equal As Strings   ${licresp.status_code}   200
+    # ${liclen}=  Get Length  ${licresp.json()}
+    # FOR  ${pos}  IN RANGE  ${liclen}
+    #     Set Suite Variable  ${pkgId}  ${licresp.json()[${pos}]['pkgId']}
+    #     Set Suite Variable  ${pkg_name}  ${licresp.json()[${pos}]['displayName']}
+    # END
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -55,16 +56,18 @@ JD-TC-DeActivate Service Provider -1
     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     Set Test Variable   ${PUSERNAME_A}
     # ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME_A}    ${pkgId}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME_A}    ${pkgId}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Activation  ${PUSERNAME_A}  0
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Account Activation  ${PUSERNAME_A}  0
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup without Profile  PhoneNumber=${PUSERNAME_A}
+    
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -76,7 +79,7 @@ JD-TC-DeActivate Service Provider -1
     ${resp}=   Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${ACCOUNT_DEACTIVATED}
+    Should Be Equal As Strings    ${resp.json()}   ${ACCOUNT_DEACTIVATED_BASE}
 
 
 JD-TC-DeActivate Service Provider -2
@@ -92,12 +95,12 @@ JD-TC-DeActivate Service Provider -2
     # ${sdom}=  Random Int   min=0  max=${sdlen-1}
     # Set Test Variable  ${sub_dom}  ${domresp.json()[${d1}]['subDomains'][${sdom}]['subDomain']}
 
-    ${domresp}=  get_iscorp_subdomains  0
-    Log  ${domresp}
-    ${dlen}=  Get Length  ${domresp}
-    ${d1}=  Random Int   min=0  max=${dlen-1}
-    Set Test Variable  ${dom}  ${domresp[${d1}]['domain']}
-    Set Test Variable  ${sub_dom}  ${domresp[${d1}]['subdomains']}
+    # ${domresp}=  get_iscorp_subdomains  0
+    # Log  ${domresp}
+    # ${dlen}=  Get Length  ${domresp}
+    # ${d1}=  Random Int   min=0  max=${dlen-1}
+    # Set Test Variable  ${dom}  ${domresp[${d1}]['domain']}
+    # Set Test Variable  ${sub_dom}  ${domresp[${d1}]['subdomains']}
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -106,16 +109,18 @@ JD-TC-DeActivate Service Provider -2
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+${PO_Number}
     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     Set Test Variable   ${PUSERNAME_A}
-    ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME_A}    ${highest_package[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${highest_package}=  get_highest_license_pkg
+    # ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME_A}    ${highest_package[0]}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Activation  ${PUSERNAME_A}  0
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Account Activation  ${PUSERNAME_A}  0
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup without Profile  PhoneNumber=${PUSERNAME_A}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
@@ -133,7 +138,7 @@ JD-TC-DeActivate Service Provider -2
 
     ${SERVICE1}=   FakerLibrary.name
     ${description}=  FakerLibrary.sentence
-    ${resp}=  Create Service  ${SERVICE1}  ${description}   ${ser_durtn}  ${status[0]}  ${btype}  ${notify}   ${notifytype}  ${min_pre}  ${ser_amount}  ${bool[1]}  ${bool[1]}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}   ${ser_durtn}    ${bool[0]}  ${ser_amount}   ${bool[1]}   
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable    ${s_id1}  ${resp.json()}
 
@@ -144,7 +149,7 @@ JD-TC-DeActivate Service Provider -2
     ${resp}=   Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${ACCOUNT_DEACTIVATED}
+    Should Be Equal As Strings    ${resp.json()}   ${ACCOUNT_DEACTIVATED_BASE}
 
 JD-TC-DeActivate Service Provider -3
     [Documentation]   Login a Provider and create a waitlist then deActivate that provider.
@@ -159,12 +164,12 @@ JD-TC-DeActivate Service Provider -3
     # ${sdom}=  Random Int   min=0  max=${sdlen-1}
     # Set Test Variable  ${sub_dom}  ${domresp.json()[${d1}]['subDomains'][${sdom}]['subDomain']}
 
-    ${domresp}=  get_iscorp_subdomains  1
-    Log  ${domresp}
-    ${dlen}=  Get Length  ${domresp}
-    ${d1}=  Random Int   min=0  max=${dlen-1}
-    Set Test Variable  ${dom}  ${domresp[${d1}]['domain']}
-    Set Test Variable  ${sub_dom}  ${domresp[${d1}]['subdomains']}
+    # ${domresp}=  get_iscorp_subdomains  1
+    # Log  ${domresp}
+    # ${dlen}=  Get Length  ${domresp}
+    # ${d1}=  Random Int   min=0  max=${dlen-1}
+    # Set Test Variable  ${dom}  ${domresp[${d1}]['domain']}
+    # Set Test Variable  ${sub_dom}  ${domresp[${d1}]['subdomains']}
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -173,16 +178,18 @@ JD-TC-DeActivate Service Provider -3
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+${PO_Number}
     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     Set Test Variable   ${PUSERNAME_A}
-    ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME_A}    ${highest_package[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+        # ${highest_package}=  get_highest_license_pkg
+        # ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME_A}    ${highest_package[0]}
+        # Log  ${resp.json()}
+        # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Activation  ${PUSERNAME_A}  0
-    Should Be Equal As Strings    ${resp.status_code}    200
+        # ${resp}=  Account Activation  ${PUSERNAME_A}  0
+        # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
-    Should Be Equal As Strings    ${resp.status_code}    200
+        # ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
+        # Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup without Profile  PhoneNumber=${PUSERNAME_A}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
@@ -219,10 +226,9 @@ JD-TC-DeActivate Service Provider -3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
-        Log  ${resp.content}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-
     END
 
     ${resp}=  Get Departments
@@ -273,7 +279,7 @@ JD-TC-DeActivate Service Provider -3
 
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_duratn}  ${status[0]}   ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre1}  ${Tot1}  ${bool[1]}  ${bool[0]}  department=${dep_id}   
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_duratn}   ${bool[0]}   ${Tot1}   ${bool[0]}  department=${dep_id}   
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id}  ${resp.json()}
@@ -311,11 +317,44 @@ JD-TC-DeActivate Service Provider -3
     Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-DeActivate Service Provider -4
+
     [Documentation]   consumer login - DeActivate provider.
 
-    ${resp}=   Consumer Login  ${CUSERNAME3}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    clear_customer   ${PUSERNAME65}
+    ${pid}=  get_acc_id  ${PUSERNAME65}
+
+    ${NewCustomer}    Generate random string    10    123456789
+    ${NewCustomer}    Convert To Integer  ${NewCustomer}
+    ${fname}=  FakerLibrary.name    
+    ${lname}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${NewCustomer}   firstName=${fname}   lastName=${lname}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+   
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+    
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    DeActivate Service Provider 
     Log  ${resp.content}
