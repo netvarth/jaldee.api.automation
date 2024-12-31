@@ -868,6 +868,42 @@ JD-TC-CreateQueue-12
     Should Be Equal As Strings  ${resp.json()['queueState']}  ${Qstate[0]}
     Should Be Equal As Strings  ${resp.json()['tokenStarts']}  ${token_start}
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id1}
+JD-TC-CreateQueue-13
+    [Documentation]    Create a queue with field tokenStart in a location then create a another queue with same token start of first queue
+
+    ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}   200
+
+
+    ${SERVICE1}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE1}
+    Set Suite Variable  ${SERVICE1}
+
+    ${s_id}=  Create Sample Service  ${SERVICE1}   provider=${u_id}
+
+    ${resp}=  Get Service By Id  ${s_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login     ${HLPUSERNAME1}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}   200
+
+    # ${queue_start}=  Evaluate  ${token_start}+${queue_capacity}
+    # ${next_queue_start}=  Evaluate  (${queue_start}/100+1)*100
+    ${sTime5}=  add_timezone_time  ${tz}  2  15  
+    ${eTime5}=  add_timezone_time  ${tz}  2  30  
+    ${queue_name}=  FakerLibrary.bs
+    ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime5}  ${eTime5}  1  5  ${lid}  ${s_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${q_id}  ${resp.json()}
+
 
 JD-TC-CreateQueue-UH1
     [Documentation]    Create a queue in a location with same queue name
