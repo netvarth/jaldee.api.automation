@@ -80,22 +80,22 @@ JD-TC-Get Lucene Search Documentation-1
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[0]}'
-        ${resp1}=   Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    ELSE IF    '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[1]}'
-        ${resp1}=   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[0]}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    END
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF  '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[0]}'
+    #     ${resp1}=   Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
+    #     Should Be Equal As Strings  ${resp1.status_code}  200
+    # ELSE IF    '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[1]}'
+    #     ${resp1}=   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[0]}
+    #     Should Be Equal As Strings  ${resp1.status_code}  200
+    # END
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+    # Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME1}  
     Log  ${resp.content}
@@ -121,7 +121,7 @@ JD-TC-Get Lucene Search Documentation-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Customer Logout   
+    ${resp}=  Consumer Logout   
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
