@@ -172,7 +172,7 @@ JD-TC-Work Flow-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SOC_itemEncIds1}  ${resp.json()[0]}
 
-    ${resp}=  Update SalesOrder Catalog     ${soc_id1}   onlineSelfOrder=${boolean[0]}      walkInOrder=${boolean[0]}
+    ${resp}=  Update SalesOrder Catalog     ${soc_id1}   onlineSelfOrder=${boolean[0]}      walkInOrder=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
