@@ -126,7 +126,13 @@ JD-TC-Delete Dental Record-1
     ${type}=  Create Dictionary  id=${type_id}  
     ${doctor}=  Create Dictionary  id=${pid}
 
-    ${resp}=    Create MR Case    ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  
+    # ${resp}=    Create MR Case    ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings              ${resp.status_code}   200
+    # Set Suite Variable    ${caseId}        ${resp.json()['id']}
+    # Set Suite Variable    ${caseUId}    ${resp.json()['uid']}
+
+    ${resp}=    Create Case     ${title}  ${doctor}  ${consumer}    
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
     Set Suite Variable    ${caseId}        ${resp.json()['id']}
