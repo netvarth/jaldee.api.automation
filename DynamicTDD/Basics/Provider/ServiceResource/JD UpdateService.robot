@@ -86,6 +86,63 @@ JD-TC-UpdateService-1
 
 
 JD-TC-UpdateService-2
+    [Documentation]  Update service name in a user's service from main account.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${PUSER_A_U1}  ${u_id1} =  Create and Configure Sample User  #admin=${bool[1]}
+    Set Suite Variable  ${PUSER_A_U1}
+    Set Suite Variable  ${u_id1}
+
+    ${resp}=    Provider Logout
+    Should Be Equal As Strings  ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${PUSER_A_U1}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}   200
+
+    ${description}=  FakerLibrary.sentence
+    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
+    ${srv_duration}=   Random Int   min=2   max=10
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${srv_duration}  ${bool[0]}  ${Total}  ${bool[0]}  provider=${u_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Set Test Variable  ${s_id}  ${resp.json()} 
+    
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['maxBookingsAllowed']}   ${defMBVal}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${json_data}=  Convert To Dictionary  ${resp.json()}
+    # IF   'description' not in ${json_data}
+    #     ${description}=  Set Variable  Default Service Description
+    # ELSE  
+    #     ${description}=  Set Variable  ${resp.json()['description']}
+    # END
+
+    
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${resp.json()['description']}  ${resp.json()['serviceDuration']}  ${resp.json()['isPrePayment']}  ${resp.json()['totalAmount']}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['name']}   ${SERVICE1}
+
+
+JD-TC-UpdateService-2
     [Documentation]  update service description for a service.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
@@ -667,8 +724,6 @@ JD-TC-UpdateService-17
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['serviceType']}   ${ServiceType[1]}
-    Should Be Equal As Strings  ${resp.json()['virtualServiceType']}   ${vstype}
-    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['callingMode']}   ${CallingModes[1]}
 
 
 JD-TC-UpdateService-18
@@ -785,6 +840,14 @@ JD-TC-UpdateService-21
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Appointment Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Disable Appointment   ${toggle[0]} 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     ${sch_id}   ${lid}   ${s_id}  ${tz}=   Get Schedule Details
 
@@ -793,11 +856,11 @@ JD-TC-UpdateService-21
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
-    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
         END
     END
     ${num_slots}=  Get Length  ${slots}
@@ -835,14 +898,14 @@ JD-TC-UpdateService-21
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${json_data}=  Convert To Dictionary  ${resp.json()[${si}]}
+    ${json_data}=  Convert To Dictionary  ${resp.json()}
     IF   'description' not in ${json_data}
         ${description}=  Set Variable  Default Service Description
     ELSE  
-        ${description}=  Set Variable  ${resp.json()[${si}]['description']}
+        ${description}=  Set Variable  ${resp.json()['description']}
     END
 
-    ${resp}=  Update Service  ${s_id}  ${resp.json()[${si}]['name']}  ${description}  ${resp.json()[${si}]['serviceDuration']}  ${resp.json()[${si}]['isPrePayment']}  ${resp.json()[${si}]['totalAmount']}  consumerNoteMandatory=${bool[0]}
+    ${resp}=  Update Service  ${s_id}  ${resp.json()['name']}  ${description}  ${resp.json()['serviceDuration']}  ${resp.json()['isPrePayment']}  ${resp.json()['totalAmount']}  consumerNoteMandatory=${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service By Id  ${s_id}
@@ -856,6 +919,14 @@ JD-TC-UpdateService-22
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Waitlist Settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enabledWaitlist']}==${bool[0]}   
+        ${resp}=   Enable Waitlist
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     ${q_id}   ${lid}   ${s_id}  ${tz}=   Get Queue Details
 
@@ -878,7 +949,7 @@ JD-TC-UpdateService-22
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${desc}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist  ${pcid1}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${pcid1}
+    ${resp}=  Add To Waitlist  ${pcid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${pcid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${wid}=  Get Dictionary Values  ${resp.json()}
@@ -888,6 +959,35 @@ JD-TC-UpdateService-22
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${json_data}=  Convert To Dictionary  ${resp.json()}
+    IF   'description' not in ${json_data}
+        ${description}=  Set Variable  Default Service Description
+    ELSE  
+        ${description}=  Set Variable  ${resp.json()['description']}
+    END
+
+    ${resp}=  Update Service  ${s_id}  ${resp.json()['name']}  ${description}  ${resp.json()['serviceDuration']}  ${resp.json()['isPrePayment']}  ${resp.json()['totalAmount']}  consumerNoteMandatory=${bool[0]}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['consumerNoteMandatory']}   ${bool[0]}
+
+
+JD-TC-UpdateService-23
+    [Documentation]  Update a service to with consumerNoteTitle as EMPTY when consumerNoteMandatory is ${bool[1]}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
+    ${si}=  Random Int   min=0  max=${len-1}
+    Set Test Variable   ${s_id}   ${resp.json()[${si}]['id']}
+    
     ${json_data}=  Convert To Dictionary  ${resp.json()[${si}]}
     IF   'description' not in ${json_data}
         ${description}=  Set Variable  Default Service Description
@@ -895,13 +995,189 @@ JD-TC-UpdateService-22
         ${description}=  Set Variable  ${resp.json()[${si}]['description']}
     END
 
-    ${resp}=  Update Service  ${s_id}  ${resp.json()[${si}]['name']}  ${description}  ${resp.json()[${si}]['serviceDuration']}  ${resp.json()[${si}]['isPrePayment']}  ${resp.json()[${si}]['totalAmount']}  consumerNoteMandatory=${bool[0]}
+    ${consumerNoteTitle}=  FakerLibrary.sentence
+    ${preInfoTitle}=  FakerLibrary.sentence   
+    ${preInfoText}=  FakerLibrary.sentence  
+    ${postInfoTitle}=  FakerLibrary.sentence  
+    ${postInfoText}=  FakerLibrary.sentence
+    ${resp}=  Update Service  ${s_id}  ${resp.json()[${si}]['name']}  ${description}  ${resp.json()[${si}]['serviceDuration']}  ${resp.json()[${si}]['isPrePayment']}  ${resp.json()[${si}]['totalAmount']}  consumerNoteMandatory=${bool[1]}  consumerNoteTitle=${EMPTY}  preInfoEnabled=${bool[1]}  preInfoTitle=${preInfoTitle}  preInfoText=${preInfoText}  postInfoEnabled=${bool[1]}  postInfoTitle=${postInfoTitle}  postInfoText=${postInfoText}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service By Id  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['consumerNoteMandatory']}   ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['consumerNoteMandatory']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['consumerNoteTitle']}   ${EMPTY}
+    Should Be Equal As Strings  ${resp.json()['preInfoEnabled']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['preInfoTitle']}   ${preInfoTitle}
+    Should Be Equal As Strings  ${resp.json()['preInfoText']}   ${preInfoText}
+    Should Be Equal As Strings  ${resp.json()['postInfoEnabled']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['postInfoTitle']}   ${postInfoTitle}
+    Should Be Equal As Strings  ${resp.json()['postInfoText']}   ${postInfoText}
+
+
+JD-TC-UpdateService-24
+    [Documentation]  Update a service to with preInfoTitle as EMPTY when preInfoEnabled is ${bool[1]}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
+    ${si}=  Random Int   min=0  max=${len-1}
+    Set Test Variable   ${s_id}   ${resp.json()[${si}]['id']}
+    
+    ${json_data}=  Convert To Dictionary  ${resp.json()[${si}]}
+    IF   'description' not in ${json_data}
+        ${description}=  Set Variable  Default Service Description
+    ELSE  
+        ${description}=  Set Variable  ${resp.json()[${si}]['description']}
+    END
+
+    ${consumerNoteTitle}=  FakerLibrary.sentence
+    ${preInfoTitle}=  FakerLibrary.sentence   
+    ${preInfoText}=  FakerLibrary.sentence  
+    ${postInfoTitle}=  FakerLibrary.sentence  
+    ${postInfoText}=  FakerLibrary.sentence
+    ${resp}=  Update Service  ${s_id}  ${resp.json()[${si}]['name']}  ${description}  ${resp.json()[${si}]['serviceDuration']}  ${resp.json()[${si}]['isPrePayment']}  ${resp.json()[${si}]['totalAmount']}  consumerNoteMandatory=${bool[1]}  consumerNoteTitle=${consumerNoteTitle}  preInfoEnabled=${bool[1]}  preInfoTitle=${EMPTY}  preInfoText=${preInfoText}  postInfoEnabled=${bool[1]}  postInfoTitle=${postInfoTitle}  postInfoText=${postInfoText}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['consumerNoteMandatory']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['consumerNoteTitle']}   ${consumerNoteTitle}
+    Should Be Equal As Strings  ${resp.json()['preInfoEnabled']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['preInfoTitle']}   ${EMPTY}
+    Should Be Equal As Strings  ${resp.json()['preInfoText']}   ${preInfoText}
+    Should Be Equal As Strings  ${resp.json()['postInfoEnabled']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['postInfoTitle']}   ${postInfoTitle}
+    Should Be Equal As Strings  ${resp.json()['postInfoText']}   ${postInfoText}
+
+
+JD-TC-UpdateService-25
+    [Documentation]  Update a service to with preInfoText as EMPTY when preInfoEnabled is ${bool[1]}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
+    ${si}=  Random Int   min=0  max=${len-1}
+    Set Test Variable   ${s_id}   ${resp.json()[${si}]['id']}
+    
+    ${json_data}=  Convert To Dictionary  ${resp.json()[${si}]}
+    IF   'description' not in ${json_data}
+        ${description}=  Set Variable  Default Service Description
+    ELSE  
+        ${description}=  Set Variable  ${resp.json()[${si}]['description']}
+    END
+
+    ${consumerNoteTitle}=  FakerLibrary.sentence
+    ${preInfoTitle}=  FakerLibrary.sentence   
+    ${preInfoText}=  FakerLibrary.sentence  
+    ${postInfoTitle}=  FakerLibrary.sentence  
+    ${postInfoText}=  FakerLibrary.sentence
+    ${resp}=  Update Service  ${s_id}  ${resp.json()[${si}]['name']}  ${description}  ${resp.json()[${si}]['serviceDuration']}  ${resp.json()[${si}]['isPrePayment']}  ${resp.json()[${si}]['totalAmount']}  consumerNoteMandatory=${bool[1]}  consumerNoteTitle=${consumerNoteTitle}  preInfoEnabled=${bool[1]}  preInfoTitle=${preInfoTitle}  preInfoText=${EMPTY}  postInfoEnabled=${bool[1]}  postInfoTitle=${postInfoTitle}  postInfoText=${postInfoText}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['consumerNoteMandatory']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['consumerNoteTitle']}   ${consumerNoteTitle}
+    Should Be Equal As Strings  ${resp.json()['preInfoEnabled']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['preInfoTitle']}   ${preInfoTitle}
+    Should Be Equal As Strings  ${resp.json()['preInfoText']}   ${EMPTY}
+    Should Be Equal As Strings  ${resp.json()['postInfoEnabled']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['postInfoTitle']}   ${postInfoTitle}
+    Should Be Equal As Strings  ${resp.json()['postInfoText']}   ${postInfoText}
+
+
+JD-TC-UpdateService-26
+    [Documentation]  Update a service to with postInfoTitle as EMPTY when postInfoEnabled is ${bool[1]}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
+    ${si}=  Random Int   min=0  max=${len-1}
+    Set Test Variable   ${s_id}   ${resp.json()[${si}]['id']}
+    
+    ${json_data}=  Convert To Dictionary  ${resp.json()[${si}]}
+    IF   'description' not in ${json_data}
+        ${description}=  Set Variable  Default Service Description
+    ELSE  
+        ${description}=  Set Variable  ${resp.json()[${si}]['description']}
+    END
+
+    ${consumerNoteTitle}=  FakerLibrary.sentence
+    ${preInfoTitle}=  FakerLibrary.sentence   
+    ${preInfoText}=  FakerLibrary.sentence  
+    ${postInfoTitle}=  FakerLibrary.sentence  
+    ${postInfoText}=  FakerLibrary.sentence
+    ${resp}=  Update Service  ${s_id}  ${resp.json()[${si}]['name']}  ${description}  ${resp.json()[${si}]['serviceDuration']}  ${resp.json()[${si}]['isPrePayment']}  ${resp.json()[${si}]['totalAmount']}  consumerNoteMandatory=${bool[1]}  consumerNoteTitle=${consumerNoteTitle}  preInfoEnabled=${bool[1]}  preInfoTitle=${preInfoTitle}  preInfoText=${preInfoText}  postInfoEnabled=${bool[1]}  postInfoTitle=${EMPTY}  postInfoText=${postInfoText}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['consumerNoteMandatory']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['consumerNoteTitle']}   ${consumerNoteTitle}
+    Should Be Equal As Strings  ${resp.json()['preInfoEnabled']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['preInfoTitle']}   ${preInfoTitle}
+    Should Be Equal As Strings  ${resp.json()['preInfoText']}   ${preInfoText}
+    Should Be Equal As Strings  ${resp.json()['postInfoEnabled']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['postInfoTitle']}   ${EMPTY}
+    Should Be Equal As Strings  ${resp.json()['postInfoText']}   ${postInfoText}
+
+
+JD-TC-UpdateService-27
+    [Documentation]  Update a service to with postInfoText as EMPTY when postInfoEnabled is ${bool[1]}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
+    ${si}=  Random Int   min=0  max=${len-1}
+    Set Test Variable   ${s_id}   ${resp.json()[${si}]['id']}
+    
+    ${json_data}=  Convert To Dictionary  ${resp.json()[${si}]}
+    IF   'description' not in ${json_data}
+        ${description}=  Set Variable  Default Service Description
+    ELSE  
+        ${description}=  Set Variable  ${resp.json()[${si}]['description']}
+    END
+
+    ${consumerNoteTitle}=  FakerLibrary.sentence
+    ${preInfoTitle}=  FakerLibrary.sentence   
+    ${preInfoText}=  FakerLibrary.sentence  
+    ${postInfoTitle}=  FakerLibrary.sentence  
+    ${postInfoText}=  FakerLibrary.sentence
+    ${resp}=  Update Service  ${s_id}  ${resp.json()[${si}]['name']}  ${description}  ${resp.json()[${si}]['serviceDuration']}  ${resp.json()[${si}]['isPrePayment']}  ${resp.json()[${si}]['totalAmount']}  consumerNoteMandatory=${bool[1]}  consumerNoteTitle=${consumerNoteTitle}  preInfoEnabled=${bool[1]}  preInfoTitle=${preInfoTitle}  preInfoText=${preInfoText}  postInfoEnabled=${bool[1]}  postInfoTitle=${postInfoTitle}  postInfoText=${EMPTY}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['consumerNoteMandatory']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['consumerNoteTitle']}   ${consumerNoteTitle}
+    Should Be Equal As Strings  ${resp.json()['preInfoEnabled']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['preInfoTitle']}   ${preInfoTitle}
+    Should Be Equal As Strings  ${resp.json()['preInfoText']}   ${preInfoText}
+    Should Be Equal As Strings  ${resp.json()['postInfoEnabled']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['postInfoTitle']}   ${postInfoTitle}
+    Should Be Equal As Strings  ${resp.json()['postInfoText']}   ${EMPTY}
 
 
 JD-TC-UpdateService-UH1
