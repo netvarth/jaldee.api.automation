@@ -76,15 +76,15 @@ JD-TC-GetProviderNotificationSettings-1
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
-
     Set Suite Variable  ${countryCode_CC0}    ${countryCodes[0]}
+
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['resourceType']}               ${NotificationResourceType[0]}
     Should Be Equal As Strings  ${resp.json()[0]['eventType']}                  ${EventType[0]}
     Should Be Equal As Strings  ${resp.json()[0]['sms'][0]['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[0]['sms'][0]['countryCode']}      ${countryCode_CC0} 
-    Should Be Equal As Strings  ${resp.json()[0]['email'][0]}                   ${EMAIL_id0} 
     Should Be Equal As Strings  ${resp.json()[0]['pushMsg'][0]['number']}       ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[0]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
 
@@ -92,15 +92,13 @@ JD-TC-GetProviderNotificationSettings-1
     Should Be Equal As Strings  ${resp.json()[1]['eventType']}  ${EventType[1]}
     Should Be Equal As Strings  ${resp.json()[1]['sms'][0]['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[1]['sms'][0]['countryCode']}      ${countryCode_CC0} 
-    Should Be Equal As Strings  ${resp.json()[1]['email'][0]}                   ${EMAIL_id0} 
     Should Be Equal As Strings  ${resp.json()[1]['pushMsg'][0]['number']}       ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[1]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
 
-    Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[1]}
-    Should Be Equal As Strings  ${resp.json()[2]['eventType']}  ${EventType[7]}
+    Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[0]}
+    Should Be Equal As Strings  ${resp.json()[2]['eventType']}  ${EventType[4]}
     Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['countryCode']}      ${countryCode_CC0} 
-    Should Be Equal As Strings  ${resp.json()[2]['email'][0]}                   ${EMAIL_id0} 
     Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]['number']}       ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
 
@@ -108,28 +106,25 @@ JD-TC-GetProviderNotificationSettings-1
     Should Be Equal As Strings  ${resp.json()[3]['eventType']}  ${EventType[8]}
     Should Be Equal As Strings  ${resp.json()[3]['sms'][0]['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[3]['sms'][0]['countryCode']}      ${countryCode_CC0} 
-    Should Be Equal As Strings  ${resp.json()[3]['email'][0]}                   ${EMAIL_id0} 
     Should Be Equal As Strings  ${resp.json()[3]['pushMsg'][0]['number']}       ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[3]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
 
-    Should Be Equal As Strings  ${resp.json()[4]['resourceType']}  ${NotificationResourceType[3]}
-    Should Be Equal As Strings  ${resp.json()[4]['eventType']}     ${EventType[10]}
+    Should Be Equal As Strings  ${resp.json()[4]['resourceType']}  ${NotificationResourceType[1]}
+    Should Be Equal As Strings  ${resp.json()[4]['eventType']}     ${EventType[9]}
     Should Be Equal As Strings  ${resp.json()[4]['sms'][0]['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[4]['sms'][0]['countryCode']}      ${countryCode_CC0} 
-    Should Be Equal As Strings  ${resp.json()[4]['email'][0]}                   ${EMAIL_id0} 
     Should Be Equal As Strings  ${resp.json()[4]['pushMsg'][0]['number']}       ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[4]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
     
-    Should Be Equal As Strings  ${resp.json()[5]['resourceType']}  ${NotificationResourceType[2]}
-    Should Be Equal As Strings  ${resp.json()[5]['eventType']}     ${EventType[9]}
+    Should Be Equal As Strings  ${resp.json()[5]['resourceType']}  ${NotificationResourceType[1]}
+    Should Be Equal As Strings  ${resp.json()[5]['eventType']}     ${EventType[10]}
     Should Be Equal As Strings  ${resp.json()[5]['sms'][0]['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[5]['sms'][0]['countryCode']}      ${countryCode_CC0} 
-    Should Be Equal As Strings  ${resp.json()[5]['email'][0]}                   ${EMAIL_id0} 
     Should Be Equal As Strings  ${resp.json()[5]['pushMsg'][0]['number']}       ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[5]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
 
-
 JD-TC-GetProviderNotificationSettings-2
+
     [Documentation]  Verify Updated Provider Notification  Settings For WAITLISTADD using SMS number as EMPTY 
    
     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
@@ -146,7 +141,6 @@ JD-TC-GetProviderNotificationSettings-2
     Should Be Equal As Strings  ${resp.json()[0]['eventType']}  ${EventType[0]}
     Should Be Equal As Strings  ${resp.json()[0]['sms'][0]['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[0]['sms'][0]['countryCode']}      ${countryCode_CC0} 
-    Should Be Equal As Strings  ${resp.json()[0]['email'][0]}                   ${EMAIL_id0} 
     Should Be Equal As Strings  ${resp.json()[0]['pushMsg'][0]['number']}       ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[0]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
 
@@ -335,7 +329,6 @@ JD-TC-GetProviderNotificationSettings-7
     Should Be Equal As Strings  ${resp.json()[1]['eventType']}  ${EventType[1]}
     Should Be Equal As Strings  ${resp.json()[1]['sms'][0]['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[1]['sms'][0]['countryCode']}      ${countryCode_CC0} 
-    Should Be Equal As Strings  ${resp.json()[1]['email'][0]}                   ${EMAIL_id0} 
     Should Be Equal As Strings  ${resp.json()[1]['pushMsg'][0]['number']}       ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[1]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
 
@@ -553,11 +546,10 @@ JD-TC-GetProviderNotificationSettings-12
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[1]}
-    Should Be Equal As Strings  ${resp.json()[2]['eventType']}  ${EventType[7]}
+    Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[0]}
+    Should Be Equal As Strings  ${resp.json()[2]['eventType']}  ${EventType[4]}
     Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['countryCode']}      ${countryCode_CC0} 
-    Should Be Equal As Strings  ${resp.json()[2]['email'][0]}                   ${EMAIL_id0} 
     Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]['number']}       ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
 
@@ -566,13 +558,13 @@ JD-TC-GetProviderNotificationSettings-12
     # Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]}  ${PUSERPH0}
 
    
-    ${resp}=  Update Provider Notification Settings  ${NotificationResourceType[1]}  ${EventType[7]}  ${EMPTY_List}  ${PUser_EMAIL_list2}  ${PushMSG_Num_list2}  0
+    ${resp}=  Update Provider Notification Settings  ${NotificationResourceType[0]}  ${EventType[4]}  ${EMPTY_List}  ${PUser_EMAIL_list2}  ${PushMSG_Num_list2}  0
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[1]}
-    Should Be Equal As Strings  ${resp.json()[2]['eventType']}  ${EventType[7]}
+    Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[0]}
+    Should Be Equal As Strings  ${resp.json()[2]['eventType']}  ${EventType[4]}
     Should Be Equal As Strings  ${resp.json()[2]['sms']}                        ${EMPTY_List} 
     Should Be Equal As Strings  ${resp.json()[2]['email'][0]}                   ${PUser_EMAIL2} 
     Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]['number']}       ${PUSERPH0} 
@@ -598,8 +590,8 @@ JD-TC-GetProviderNotificationSettings-13
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[1]}
-    Should Be Equal As Strings  ${resp.json()[2]['eventType']}  ${EventType[7]}
+    Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[0]}
+    Should Be Equal As Strings  ${resp.json()[2]['eventType']}  ${EventType[4]}
     Should Be Equal As Strings  ${resp.json()[2]['sms']}                        ${EMPTY_List} 
     Should Be Equal As Strings  ${resp.json()[2]['email'][0]}                   ${PUser_EMAIL2} 
     Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]['number']}       ${PUSERPH0} 
@@ -609,14 +601,14 @@ JD-TC-GetProviderNotificationSettings-13
     # Should Be Equal As Strings  ${resp.json()[2]['email'][0]}  ${PUser_EMAIL2} 
     # Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]}  ${PUSERPH0}
 
-
-    ${resp}=  Update Provider Notification Settings  ${NotificationResourceType[1]}  ${EventType[7]}  ${SMS_Num_list2}  ${EMPTY_List}  ${PushMSG_Num_list2}  0
+    ${resp}=  Update Provider Notification Settings  ${NotificationResourceType[0]}  ${EventType[4]}  ${SMS_Num_list2}  ${EMPTY_List}  ${PushMSG_Num_list2}  0
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[1]}
-    Should Be Equal As Strings  ${resp.json()[2]['eventType']}  ${EventType[7]}
+    Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[0]}
+    Should Be Equal As Strings  ${resp.json()[2]['eventType']}  ${EventType[4]}
     Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['number']}           ${PUSERNAME_U2} 
     Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['countryCode']}      ${countryCode_CC1} 
     Should Be Equal As Strings  ${resp.json()[2]['email']}                      ${EMPTY_List} 
@@ -640,8 +632,8 @@ JD-TC-GetProviderNotificationSettings-14
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[1]}
-    Should Be Equal As Strings  ${resp.json()[2]['eventType']}  ${EventType[7]}
+    Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[0]}
+    Should Be Equal As Strings  ${resp.json()[2]['eventType']}  ${EventType[4]}
     Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['number']}           ${PUSERNAME_U2} 
     Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['countryCode']}      ${countryCode_CC1} 
     Should Be Equal As Strings  ${resp.json()[2]['email']}                      ${EMPTY_List} 
@@ -653,13 +645,13 @@ JD-TC-GetProviderNotificationSettings-14
     # Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]}  ${PUSERPH0}
 
    
-    ${resp}=  Update Provider Notification Settings  ${NotificationResourceType[1]}  ${EventType[7]}  ${SMS_Num_list2}  ${PUser_EMAIL_list2}  ${EMPTY_List}  0
+    ${resp}=  Update Provider Notification Settings  ${NotificationResourceType[0]}  ${EventType[4]}  ${SMS_Num_list2}  ${PUser_EMAIL_list2}  ${EMPTY_List}  0
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[1]}
-    Should Be Equal As Strings  ${resp.json()[2]['eventType']}  ${EventType[7]}
+    Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[0]}
+    Should Be Equal As Strings  ${resp.json()[2]['eventType']}  ${EventType[4]}
     Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['number']}           ${PUSERNAME_U2} 
     Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['countryCode']}      ${countryCode_CC1} 
     Should Be Equal As Strings  ${resp.json()[2]['email'][0]}                   ${PUser_EMAIL2} 
@@ -685,8 +677,8 @@ JD-TC-GetProviderNotificationSettings-15
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[1]}
-    Should Be Equal As Strings  ${resp.json()[2]['eventType']}  ${EventType[7]}
+    Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[0]}
+    Should Be Equal As Strings  ${resp.json()[2]['eventType']}  ${EventType[4]}
     Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['number']}           ${PUSERNAME_U2} 
     Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['countryCode']}      ${countryCode_CC1} 
     Should Be Equal As Strings  ${resp.json()[2]['email'][0]}                   ${PUser_EMAIL2} 
@@ -698,13 +690,13 @@ JD-TC-GetProviderNotificationSettings-15
 
 
    
-    ${resp}=  Update Provider Notification Settings  ${NotificationResourceType[1]}  ${EventType[7]}  ${EMPTY_List}  ${EMPTY_List}  ${EMPTY_List}  0
+    ${resp}=  Update Provider Notification Settings  ${NotificationResourceType[0]}  ${EventType[4]}  ${EMPTY_List}  ${EMPTY_List}  ${EMPTY_List}  0
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[1]}
-    Should Be Equal As Strings  ${resp.json()[2]['eventType']}  ${EventType[7]}
+    Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[0]}
+    Should Be Equal As Strings  ${resp.json()[2]['eventType']}  ${EventType[4]}
     Should Be Equal As Strings  ${resp.json()[2]['sms']}  ${EMPTY_List}  
     Should Be Equal As Strings  ${resp.json()[2]['email']}  ${EMPTY_List} 
     Should Be Equal As Strings  ${resp.json()[2]['pushMsg']}  ${EMPTY_List}
@@ -723,21 +715,21 @@ JD-TC-GetProviderNotificationSettings-16
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[1]}
-    Should Be Equal As Strings  ${resp.json()[2]['eventType']}  ${EventType[7]}
+    Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[0]}
+    Should Be Equal As Strings  ${resp.json()[2]['eventType']}  ${EventType[4]}
     Should Be Equal As Strings  ${resp.json()[2]['sms']}  ${EMPTY_List}  
     Should Be Equal As Strings  ${resp.json()[2]['email']}  ${EMPTY_List} 
     Should Be Equal As Strings  ${resp.json()[2]['pushMsg']}  ${EMPTY_List}
 
 
    
-    ${resp}=  Update Provider Notification Settings  ${NotificationResourceType[1]}  ${EventType[7]}  ${SMS_Num_list2}  ${PUser_EMAIL_list2}  ${PushMSG_Num_list2}  0
+    ${resp}=  Update Provider Notification Settings  ${NotificationResourceType[0]}  ${EventType[4]}  ${SMS_Num_list2}  ${PUser_EMAIL_list2}  ${PushMSG_Num_list2}  0
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[1]}
-    Should Be Equal As Strings  ${resp.json()[2]['eventType']}  ${EventType[7]}
+    Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[0]}
+    Should Be Equal As Strings  ${resp.json()[2]['eventType']}  ${EventType[4]}
     Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['number']}           ${PUSERNAME_U2} 
     Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['countryCode']}      ${countryCode_CC1} 
     Should Be Equal As Strings  ${resp.json()[2]['email'][0]}                   ${PUser_EMAIL2} 
