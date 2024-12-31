@@ -49,13 +49,12 @@ JD-TC-Remove_Department_Icon-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Waitlist Settings
-    Log  ${resp.content}
+    Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
-        Log  ${resp.content}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-
     END
 
     ${resp}=  Get Departments
@@ -132,13 +131,12 @@ JD-TC-Remove_Department_Icon-UH1
     # Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
 
     ${resp}=  Get Waitlist Settings
-    Log  ${resp.content}
+    Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
-        Log  ${resp.content}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-
     END
 
     ${resp}=  Get Departments
