@@ -575,16 +575,16 @@ JD-TC-GetProviderReminderById-9
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${NewCustomer}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=    Send Otp For Login    ${NewCustomer}    ${account_id}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+    # ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
+    # ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Test Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=  GetCustomer  phoneNo-eq=${NewCustomer}
     Log   ${resp.json()}

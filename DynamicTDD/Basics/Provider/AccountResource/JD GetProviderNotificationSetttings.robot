@@ -537,8 +537,8 @@ JD-TC-GetProviderNotificationSettings-12
     [Documentation]  Verify Updated Provider Notification  Settings For APPOINTMENTADD using SMS number as EMPTY  
    
     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}   200
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
     # ${decrypted_data}=  db.decrypt_data  ${resp.content}
     # Log  ${decrypted_data}
     # Set Suite Variable  ${pid0}  ${resp.json()['id']}
@@ -546,6 +546,7 @@ JD-TC-GetProviderNotificationSettings-12
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[0]}
     Should Be Equal As Strings  ${resp.json()[2]['eventType']}  ${EventType[4]}
     Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['number']}           ${PUSERPH0} 
