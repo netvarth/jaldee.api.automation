@@ -869,7 +869,7 @@ JD-TC-CreateQueue-12
     Should Be Equal As Strings  ${resp.json()['tokenStarts']}  ${token_start}
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id1}
 JD-TC-CreateQueue-13
-    [Documentation]    Create a queue with field tokenStart in a location then create a another queue with same token start of first queue
+    [Documentation]    Create a queue with users service .
 
     ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}

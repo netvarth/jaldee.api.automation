@@ -2211,5 +2211,98 @@ JD-TC-CreateAppointmentSchedule-23
     Should Be Equal As Strings  ${resp.status_code}  200
     
 
+JD-TC-CreateAppointmentSchedule-24
 
-   
+    [Documentation]    Create a schedule with same details of another provider
+
+    ${firstname}  ${lastname}  ${PUSERPHONE1}  ${login_id}=  Provider Signup  
+    Set Suite Variable    ${PUSERPHONE1}
+    ${resp}=  Encrypted Provider Login  ${PUSERPHONE1}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END 
+
+    ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+300145
+    clear_users  ${PUSERNAME_U1}
+    Set Suite Variable  ${PUSERNAME_U1}
+    ${firstname}=  FakerLibrary.name
+    ${lastname}=  FakerLibrary.last_name
+    ${dob}=  FakerLibrary.Date
+    # ${whpnum}=  Evaluate  ${PUSERNAME}+336245
+    # ${tlgnum}=  Evaluate  ${PUSERNAME}+336345
+
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${countryCodes[1]}  ${PUSERNAME_U1}    ${userType[0]}   admin=${bool[1]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${u_id}  ${resp.json()}
+
+    ${resp}=    Reset LoginId  ${u_id}  ${PUSERNAME_U1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Forgot Password   loginId=${PUSERNAME_U1}   password=${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${PUSERNAME_U1}   ${OtpPurpose['ProviderResetPassword']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key} =   db.Verify Accnt   ${PUSERNAME_U1}     ${OtpPurpose['ProviderResetPassword']}
+    Set Suite Variable   ${key}
+
+    ${resp}=    Forgot Password     otp=${key}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}   200
+
+    ${SERVICE3}=    generate_unique_service_name  ${service_names} 
+    Append To List  ${service_names}  ${SERVICE3}
+    Set Suite Variable  ${SERVICE3}
+
+    ${s_id}=  Create Sample Service  ${SERVICE3}   provider=${u_id}
+    Set Suite Variable  ${s_id}
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200    
+
+    ${resp}=  Encrypted Provider Login  ${PUSERPHONE1}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  add_timezone_time  ${tz}  3  30  
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_timezone_time  ${tz}  3  50
+    ${schedule_name}=  FakerLibrary.bs
+    ${parallel}=  FakerLibrary.Random Int  min=5  max=10
+    ${consumerparallel}=  FakerLibrary.Random Int  min=1  max=5
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${srv_dur}
+    ${bool1}=  Random Element  ${bool}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${consumerparallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${sch_id}  ${resp.json()}
