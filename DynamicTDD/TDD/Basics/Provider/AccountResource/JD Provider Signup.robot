@@ -180,11 +180,13 @@ JD-TC-Provider_Signup-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
-    ${resp}=    Account Activation  ${ph5}  ${OtpPurpose['ProviderSignUp']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Account Activation  ${ph5}  ${OtpPurpose['ProviderSignUp']}   JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential  ${ph5}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${onlyspl}
+    ${resp}=  Account Set Credential  ${ph5}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${onlyspl}   JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}       422
     Should Be Equal As Strings      ${resp.json()}          ${LOGIN_LOGINiD_VALIDATION_NOT_FOUND}

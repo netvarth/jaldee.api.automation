@@ -171,7 +171,7 @@ JD-TC-Provider_Signup-5
 
     [Documentation]    Complete Provider Signup ( Loginid only with special char )
 
-    ${ph5}=  Evaluate  ${PUSERNAME}+5666558
+    ${ph5}=  Evaluate  ${PUSERNAME}+56664400
     Set Suite Variable  ${ph5}
     ${firstname2}=  FakerLibrary.first_name
     ${lastname2}=  FakerLibrary.last_name
@@ -180,15 +180,15 @@ JD-TC-Provider_Signup-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
-    ${resp}=    Account Activation  ${ph5}  ${OtpPurpose['ProviderSignUp']}
+    ${resp}=    Account Activation  ${ph5}  ${OtpPurpose['ProviderSignUp']}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential  ${ph5}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${onlyspl}
+    ${resp}=  Account Set Credential  ${ph5}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${onlyspl}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}       422
     Should Be Equal As Strings      ${resp.json()}          ${LOGIN_LOGINiD_VALIDATION_NOT_FOUND}
-
+*** Comments ***
 JD-TC-Provider_Signup-6
 
     [Documentation]    Complete Provider Signup ( Loginid with alphabets and numbers )
