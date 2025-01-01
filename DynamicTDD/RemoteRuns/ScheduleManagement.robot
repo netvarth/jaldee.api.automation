@@ -45,7 +45,7 @@ JD-TC-Schedule-1
     # Append To File  ${var_file}  PUSERNAME${num}=${LoginId}${\n}
     # Log    PUSERNAME${num}
     # ${PUSERNAME_B}=  Set Variable  ${PUSERNAME17}
-    ${PUSERNAME_B}=  Set Variable  ${PUSERNAME23}
+    ${PUSERNAME_B}=  Set Variable  ${PUSERNAME25}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log   ${resp.json()}
@@ -1024,6 +1024,19 @@ JD-TC-Schedule-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     #......... Check the Analytics..............
+
+    sleep  01s
+    # sleep  05m
+
+    FOR   ${a}  IN RANGE   15
+       
+        ${resp}=  Flush Analytics Data to DB
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        sleep  1s
+        Exit For Loop If    ${resp.content}=="FREE"
+    
+    END
 
     ${resp}=  Get Account Level Analytics Acc To config   ${DAY1}  
     Log  ${resp.content}
