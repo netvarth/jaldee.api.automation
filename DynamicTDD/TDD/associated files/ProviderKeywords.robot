@@ -11590,15 +11590,14 @@ Create DentalRecord
     [Arguments]      ${toothNo}  ${toothType}  ${orginUid}   &{kwargs}
 
     ${data}=  Create Dictionary    toothNo=${toothNo}  toothType=${toothType}    orginUid=${orginUid}
-
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
     END
-
+    ${data}=  Create List  ${data}
     ${data}=  json.dumps  ${data}
 
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/dental  data=${data}  expected_status=any
+    ${resp}=  POST On Session  ynw  /provider/dental/multiple  data=${data}  expected_status=any
     RETURN  ${resp}
 
 

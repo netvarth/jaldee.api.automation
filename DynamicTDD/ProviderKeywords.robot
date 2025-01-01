@@ -1898,21 +1898,22 @@ Get MR Case By UID
     Check Deprication  ${resp}  Get MR Case By UID
     RETURN  ${resp}
 
+
 Create DentalRecord
+
     [Arguments]      ${toothNo}  ${toothType}  ${orginUid}   &{kwargs}
 
     ${data}=  Create Dictionary    toothNo=${toothNo}  toothType=${toothType}    orginUid=${orginUid}
-
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
     END
-
+    ${data}=  Create List  ${data}
     ${data}=  json.dumps  ${data}
 
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/dental  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Create DentalRecord
+    ${resp}=  POST On Session  ynw  /provider/dental/multiple  data=${data}  expected_status=any
     RETURN  ${resp}
+
 
 Delete DentalRecord
     Check And Create YNW Session
