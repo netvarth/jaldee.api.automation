@@ -2300,7 +2300,7 @@ JD-TC-CreateAppointmentSchedule-24
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=5  max=10
     ${consumerparallel}=  FakerLibrary.Random Int  min=1  max=5
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${srv_dur}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=5
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${consumerparallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.content}

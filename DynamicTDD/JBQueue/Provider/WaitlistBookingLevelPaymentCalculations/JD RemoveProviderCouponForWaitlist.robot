@@ -208,7 +208,7 @@ JD-TC-RemoveProviderCouponforwaitlist-1
   Set Suite Variable  ${que_id1}   ${resp.json()}
   ${desc}=   FakerLibrary.word
   Set Suite Variable  ${desc}
-  ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
+  ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid}   location=${loc_id1}
   Log   ${resp.json()}
   Should Be Equal As Strings  ${resp.status_code}  200
   
