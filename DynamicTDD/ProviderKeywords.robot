@@ -18528,6 +18528,23 @@ Remove Badge
     ${resp}=    PUT On Session    ynw  /provider/spitem/${spItemCode}/removebadges   data=${data}  expected_status=any    headers=${headers}
     RETURN  ${resp}
 
+
+#---------------------finance analytics--------------------------------------
+Get Finance Metrics
+    [Arguments]   &{kwargs}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/analytics/list  params=${kwargs}  expected_status=any
+    Check Deprication  ${resp}  Get Finance Metrics
+    RETURN  ${resp}
+
+Get Finance Analytics
+    [Arguments]   &{param} 
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/jp/finance/analytics/account  params=${param}   expected_status=any
+    Check Deprication  ${resp}  Get Finance Analytics
+    RETURN  ${resp}
+
+
 *** Comments ***
 
 

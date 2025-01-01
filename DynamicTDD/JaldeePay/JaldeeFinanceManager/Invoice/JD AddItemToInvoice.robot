@@ -28,7 +28,6 @@ ${DisplayName1}   item1_DisplayName
 
 
 
-
 *** Test Cases ***
 
 JD-TC-Apply Item to Invoice-1
@@ -37,6 +36,9 @@ JD-TC-Apply Item to Invoice-1
 
     ${firstname}  ${lastname}  ${PUSERPH0}  ${LoginId}=  Provider Signup
     Set Suite Variable  ${PUSERPH0}
+
+    ${accId}=  get_acc_id  ${PUSERPH0}
+    Set Suite Variable  ${accId} 
 
     ${resp}=  Get Waitlist Settings
     Log   ${resp.content}
@@ -117,6 +119,7 @@ JD-TC-Apply Item to Invoice-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${name}=   FakerLibrary.word
     ${resp}=  CreateVendorCategory  ${name}  
     Log  ${resp.json()}
@@ -209,6 +212,25 @@ JD-TC-Apply Item to Invoice-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    FOR   ${a}  IN RANGE   15
+       
+        ${resp}=  Flush Analytics Data to DB
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        sleep  1s
+        Exit For Loop If    ${resp.content}=="FREE"
+    
+    END
+
+    ${resp}=  Get Finance Metrics  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${metricId}    ${resp.json()[0]['metricId']}
+#  dateFrom=${DAY1}  dateTo=${DAY1}
+    ${resp}=  Get Finance Analytics  frequency=${dateCategory[0]}   accId=${accId}   locationId=${lid}     metricId=${metricId}     
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
