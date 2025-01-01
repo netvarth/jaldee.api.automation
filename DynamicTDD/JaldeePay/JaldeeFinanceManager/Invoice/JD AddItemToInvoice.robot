@@ -228,9 +228,10 @@ JD-TC-Apply Item to Invoice-1
     ${resp}=  Get Finance Metrics  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${metricId}    ${resp.json()[0]['metricId']}
+    # Set Suite Variable  ${metricId}    ${resp.json()[0]['metricId']}
 #  dateFrom=${DAY1}  dateTo=${DAY1}
-    ${resp}=  Get Finance Analytics  frequency=${dateCategory[0]}   accId=${accId}   locationId=${lid}     metricId=${metricId}     
+    #Finance Invoice Count
+    ${resp}=  Get Finance Analytics  frequency=${dateCategory[0]}   accId=${accId}   locationId=${lid}     metricId=160    
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
