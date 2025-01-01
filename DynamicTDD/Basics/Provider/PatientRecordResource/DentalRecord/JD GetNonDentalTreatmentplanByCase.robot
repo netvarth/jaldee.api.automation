@@ -140,7 +140,7 @@ JD-TC-Get NonDental Treatment Plan By case Id-1
     ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
     ${works}=  Create List  ${one}
 
-    ${resp}=    Create Treatment Plan    ${caseUId}   ${EMPTY}   ${treatment}  ${works}  
+    ${resp}=    Create Treatment Plan    ${caseUId}    ${treatment}  ${works}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
     Set Suite Variable    ${treatmentId}        ${resp.json()}

@@ -136,7 +136,8 @@ JD-TC-Get List of Treatment Plan against a Case and Tooth-1
     ${resp}=    Create DentalRecord    ${toothNo}  ${toothType[0]}  ${caseUId}    investigation=${investigation}    toothSurfaces=${toothSurfaces}
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
-    Set Suite Variable      ${id}           ${resp.json()}
+    Set Suite Variable       ${ids}          ${resp.json()}
+    Set Suite Variable      ${id}           ${ids[0]}
 
     ${treatment}=  FakerLibrary.name
     ${work}=  FakerLibrary.name

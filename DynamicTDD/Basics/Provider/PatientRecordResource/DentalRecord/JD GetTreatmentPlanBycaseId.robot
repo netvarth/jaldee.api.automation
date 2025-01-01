@@ -128,7 +128,7 @@ JD-TC-Get Treatment Plan By case Id-1
     ${consumer}=  Create Dictionary  id=${cid} 
     Set Suite Variable    ${consumer} 
 
-    ${resp}=    Create MR Case    ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  
+    ${resp}=    Create Case    ${title}   ${doctor}  ${consumer}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
     Set Suite Variable    ${caseId}        ${resp.json()['id']}
@@ -142,8 +142,8 @@ JD-TC-Get Treatment Plan By case Id-1
     ${resp}=    Create DentalRecord    ${toothNo}  ${toothType[0]}  ${caseUId}    investigation=${investigation}    toothSurfaces=${toothSurfaces}
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
-    Set Suite Variable       ${id1}          ${resp.json()}
-    # Set Test Variable      ${uid}           ${resp.json()["uid"]}
+    Set Suite Variable       ${ids}          ${resp.json()}
+    Set Suite Variable      ${id1}           ${ids[0]}
 
     ${resp}=    Get DentalRecord ById   ${id1}    
     Log   ${resp.content}
@@ -154,7 +154,7 @@ JD-TC-Get Treatment Plan By case Id-1
     ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
     ${works}=  Create List  ${one}
 
-    ${resp}=    Create Treatment Plan    ${caseUId}   ${id1}   ${treatment}  ${works}  
+    ${resp}=    Create Treatment Plan    ${caseUId}    ${treatment}  ${works}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
     Set Suite Variable    ${treatmentId}        ${resp.json()}
@@ -168,8 +168,6 @@ JD-TC-Get Treatment Plan By case Id-1
     Should Be Equal As Strings    ${resp.json()[0]['caseDto']['doctor']['id']}     ${pid} 
     Should Be Equal As Strings    ${resp.json()[0]['caseDto']['doctor']['firstName']}     ${pdrfname} 
     Should Be Equal As Strings    ${resp.json()[0]['caseDto']['doctor']['lastName']}     ${pdrlname}
-    Should Be Equal As Strings    ${resp.json()[0]['caseDto']['type']['id']}     ${type_id} 
-    Should Be Equal As Strings    ${resp.json()[0]['caseDto']['category']['id']}     ${category_id} 
     Should Be Equal As Strings    ${resp.json()[0]['caseDto']['createdDate']}     ${DAY1}
     Should Be Equal As Strings    ${resp.json()[0]['treatment']}     ${treatment}
     Should Be Equal As Strings    ${resp.json()[0]['works'][0]['status']}     ${PRStatus[0]}
