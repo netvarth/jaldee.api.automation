@@ -194,7 +194,7 @@ JD-TC-Get Prescription Count By Filter-1
     ${consumer}=  Create Dictionary  id=${cid} 
     Set Suite Variable    ${consumer} 
 
-     ${resp}=    Create MR Case    ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  
+     ${resp}=    Create Case    ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
     Set Suite Variable    ${caseId}        ${resp.json()['id']}
