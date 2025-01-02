@@ -54,7 +54,7 @@ Account SignUp
     RETURN  ${resp}
 
 Account Activation
-    [Arguments]  ${loginid}  ${purpose}  &{kwargs}
+    [Arguments]  ${loginid}  ${purpose}  ${otp_verify}=0  &{kwargs}
     Check And Create YNW Session
     # ${key}=   verify accnt  ${loginid}  ${purpose}
     FOR  ${key}  ${value}  IN  &{kwargs}
@@ -68,13 +68,18 @@ Account Activation
     ELSE
         ${key}=   verify accnt  ${loginid}  ${purpose}  ${sessionid}
     END
+
+    IF    '${otp_verify}' != '0'
+        ${key}=    Set Variable    ${otp_verify}
+    END
+
     ${headers2}=     Create Dictionary    Content-Type=application/json    #Authorization=browser
     ${resp}=    POST On Session    ynw    /provider/oauth/otp/${key}/verify  headers=${headers2}  expected_status=any
     Check Deprication  ${resp}  Account Activation
     RETURN  ${resp}
 
 Account Set Credential
-    [Arguments]  ${email}  ${password}  ${purpose}  ${loginId}  &{kwargs}
+    [Arguments]  ${email}  ${password}  ${purpose}  ${loginId}  ${otp_verify}=0  &{kwargs}
     ${auth}=     Create Dictionary   password=${password}  loginId=${loginId}
     Check And Create YNW Session
     FOR  ${key}  ${value}  IN  &{kwargs}
@@ -88,6 +93,11 @@ Account Set Credential
     ELSE
         ${key}=   verify accnt  ${email}  ${purpose}  ${sessionid}
     END
+
+    IF    '${otp_verify}' != '0'
+        ${key}=    Set Variable    ${otp_verify}
+    END
+    
     ${apple}=    json.dumps    ${auth}
     ${resp}=    PUT On Session    ynw    /provider/${key}/activate    data=${apple}    expected_status=any
     Check Deprication  ${resp}  Account Set Credential
