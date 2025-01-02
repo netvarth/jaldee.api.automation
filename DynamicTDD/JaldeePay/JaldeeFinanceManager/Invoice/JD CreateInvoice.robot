@@ -209,6 +209,20 @@ JD-TC-CreateInvoice-1
     Should Be Equal As Strings  ${resp1.json()['adhocItemList'][0]['quantity']}  ${quantity}
     Should Be Equal As Strings  ${resp1.json()['adhocItemList'][0]['price']}  ${price}
 
+
+    FOR   ${a}  IN RANGE   15
+       
+        ${resp}=  Flush Analytics Data to DB
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        sleep  01s
+        Exit For Loop If    ${resp.content}=="FREE"
+    
+    END
+    #Finance Invoice Total
+    ${resp}=  Get Finance Analytics  frequency=${dateCategory[0]}   accId=${pid}   locationId=${lid}     metricId=161    
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 JD-TC-CreateInvoice-2
 
     [Documentation]  Create multiple invoice using multiple provider consumers.
