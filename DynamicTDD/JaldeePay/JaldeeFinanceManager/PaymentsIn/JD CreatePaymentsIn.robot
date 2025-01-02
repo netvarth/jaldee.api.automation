@@ -42,6 +42,9 @@ JD-TC-Create PaymentsIn-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${accId}=  get_acc_id  ${PUSERNAME20}
+    Set Suite Variable  ${accId} 
+
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
 
@@ -206,7 +209,19 @@ JD-TC-Create PaymentsIn-1
 
 
 
-
+    FOR   ${a}  IN RANGE   15
+       
+        ${resp}=  Flush Analytics Data to DB
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        sleep  01s
+        Exit For Loop If    ${resp.content}=="FREE"
+    
+    END
+    #Finance PaymentsIn Total
+    ${resp}=  Get Finance Analytics  frequency=${dateCategory[0]}   accId=${accId}   locationId=${lid}     metricId=174    
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-Create PaymentsIn-2
 
@@ -300,7 +315,19 @@ JD-TC-Create PaymentsIn-2
     Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
 
 
-
+    FOR   ${a}  IN RANGE   15
+       
+        ${resp}=  Flush Analytics Data to DB
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        sleep  01s
+        Exit For Loop If    ${resp.content}=="FREE"
+    
+    END
+    #Finance PaymentsIn Count
+    ${resp}=  Get Finance Analytics  frequency=${dateCategory[0]}   accId=${accId}   locationId=${lid}     metricId=173    
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
 
 JD-TC-Create PaymentsIn-UH1

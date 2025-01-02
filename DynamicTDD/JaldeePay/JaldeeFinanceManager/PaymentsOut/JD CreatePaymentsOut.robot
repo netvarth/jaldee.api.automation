@@ -55,6 +55,9 @@ JD-TC-Create PaymentsOut-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${accId}=  get_acc_id  ${PUSERNAME47}
+    Set Suite Variable  ${accId} 
+
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
 
@@ -210,6 +213,24 @@ JD-TC-Create PaymentsOut-1
     Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
     Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
 
+    FOR   ${a}  IN RANGE   15
+       
+        ${resp}=  Flush Analytics Data to DB
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        sleep  1s
+        Exit For Loop If    ${resp.content}=="FREE"
+    
+    END
+
+
+    #Finance PaymentsOut Total
+    ${resp}=  Get Finance Analytics  frequency=${dateCategory[0]}   accId=${accId}   locationId=${lid}     metricId=176    
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+
 JD-TC-Create PaymentsOut-2
 
     [Documentation]  Create a Payable with empty payableLabel.
@@ -249,6 +270,21 @@ JD-TC-Create PaymentsOut-2
     Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
     Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
 
+    FOR   ${a}  IN RANGE   15
+       
+        ${resp}=  Flush Analytics Data to DB
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        sleep  01s
+        Exit For Loop If    ${resp.content}=="FREE"
+    
+    END
+    #Finance PaymentsOut Count
+    ${resp}=  Get Finance Analytics  frequency=${dateCategory[0]}   accId=${accId}   locationId=${lid}     metricId=175    
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+# *** Comments ***
 JD-TC-Create PaymentsOut-3
 
     [Documentation]  Create a Payable with empty reference number.
