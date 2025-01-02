@@ -38,7 +38,7 @@ Send Otp For Login
     RETURN  ${resp}
 
 Verify Otp For Login
-    [Arguments]  ${loginid}  ${purpose}    &{kwargs}
+    [Arguments]  ${loginid}  ${purpose}   ${otp_verify}=0   &{kwargs}
 
     FOR  ${key}  ${value}  IN  &{kwargs}
         IF  '${key}' == 'JSESSIONYNW'
@@ -50,6 +50,10 @@ Verify Otp For Login
         ${key}=   verify accnt  ${loginid}  ${purpose}
     ELSE
         ${key}=   verify accnt  ${loginid}  ${purpose}  ${sessionid}
+    END
+
+    IF    '${otp_verify}' != '0'
+        ${key}=    Set Variable    ${otp_verify}
     END
 
     Check And Create YNW Session
