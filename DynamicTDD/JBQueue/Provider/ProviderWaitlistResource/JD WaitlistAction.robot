@@ -151,7 +151,7 @@ JD-TC-WaitlistAction-5
       ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${desc}=   FakerLibrary.word
-      ${resp}=  Add To Waitlist  ${cons_id}  ${ser_id1}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cons_id}
+      ${resp}=  Add To Waitlist  ${cons_id}  ${ser_id1}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cons_id}  location=${loc_id1}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id1}  ${wid[0]}
