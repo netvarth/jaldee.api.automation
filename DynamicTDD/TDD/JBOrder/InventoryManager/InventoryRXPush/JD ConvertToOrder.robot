@@ -32,26 +32,29 @@ ${originFrom}       NONE
 JD-TC-ConvertToOrder-1
     [Documentation]    Convert to Order
 
-    ${iscorp_subdomains}=  get_iscorp_subdomains  1
-    Log  ${iscorp_subdomains}
-    Set Suite Variable  ${iscorp_subdomains}
-    Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
-    Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
-    Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
-    ${firstname_A}=  FakerLibrary.first_name
-    Set Suite Variable  ${firstname_A}
-    ${lastname_A}=  FakerLibrary.last_name
-    Set Suite Variable  ${lastname_A}
-    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+4548754
-    ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${PUSERNAME_E}  0
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${iscorp_subdomains}=  get_iscorp_subdomains  1
+    # Log  ${iscorp_subdomains}
+    # Set Suite Variable  ${iscorp_subdomains}
+    # Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
+    # Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
+    # Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
+    # ${firstname_A}=  FakerLibrary.first_name
+    # Set Suite Variable  ${firstname_A}
+    # ${lastname_A}=  FakerLibrary.last_name
+    # Set Suite Variable  ${lastname_A}
+    # ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+4548754
+    # ${highest_package}=  get_highest_license_pkg
+    # ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Account Activation  ${PUSERNAME_E}  0
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${firstname}  ${lastname}  ${PUSERNAME_E}  ${LoginId}=  Provider Signup
+    Set Suite Variable  ${PUSERNAME_E}
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -82,7 +85,7 @@ JD-TC-ConvertToOrder-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
-    ${doc1}=  Create Sample User 
+    ${doc1}=  Create Sample User   deptId=${dep_id} 
     Set Suite Variable      ${doc1}
 
     ${resp}=  Get User By Id  ${doc1}
@@ -92,7 +95,7 @@ JD-TC-ConvertToOrder-1
     Set Suite Variable  ${Docfname}  ${resp.json()['firstName']}
     Set Suite Variable  ${Doclname}  ${resp.json()['lastName']}
      
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -157,7 +160,7 @@ JD-TC-ConvertToOrder-1
     # ${accountId}=  get_acc_id  ${HLPUSERNAME16}
     # Set Suite Variable    ${accountId} 
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
@@ -204,7 +207,7 @@ JD-TC-ConvertToOrder-1
     ${displayName1}=        FakerLibrary.name
     Set Suite Variable      ${displayName1}
 
-    ${resp}=    Create Item Inventory  ${displayName1}    isInventoryItem=${bool[1]}
+    ${resp}=    Create Item Inventory  ${displayName1}    isInventoryItem=${bool[1]}    isBatchApplicable=${boolean[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${item1}  ${resp.json()}
@@ -212,7 +215,7 @@ JD-TC-ConvertToOrder-1
     ${displayName2}=        FakerLibrary.name
     Set Suite Variable      ${displayName2}
 
-    ${resp}=    Create Item Inventory  ${displayName2}    isInventoryItem=${bool[1]}
+    ${resp}=    Create Item Inventory  ${displayName2}    isInventoryItem=${bool[1]}    isBatchApplicable=${boolean[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${item2}  ${resp.json()}
@@ -359,7 +362,7 @@ JD-TC-ConvertToOrder-1
     ${invoiceReferenceNo}=          Random Int  min=1  max=999
     ${purchaseNote}=                FakerLibrary.Sentence
     ${roundOff}=                    Random Int  min=1  max=10
-
+ 
     ${purchaseItemDtoList1}=        Create purchaseItemDtoList   ${ic_Item_id}   ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}   ${iu_id}
     Set Suite Variable              ${purchaseItemDtoList1}
 
@@ -436,7 +439,7 @@ JD-TC-ConvertToOrder-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -449,7 +452,7 @@ JD-TC-ConvertToOrder-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -537,7 +540,7 @@ JD-TC-ConvertToOrder-1
     Set Suite Variable      ${duration1}
     Set Suite Variable      ${quantity1}
 
-    ${resp}=    RX Create Prescription  ${cid}  ${doc1}  ${displayName1}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}
+    ${resp}=    RX Create Prescription  ${cid}  ${doc1}  ${displayName1}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}  itemDosage=1
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
     Set Suite Variable              ${prescription_id}      ${resp.json()}
