@@ -2524,14 +2524,14 @@ JD-TC-Checkout Cart-UH6
     Should Be Equal As Strings    ${resp.json()['locationId']}                                                            ${locId1}
     Should Be Equal As Strings    ${resp.json()['netRate']}                                                             ${item1}
 
-    ${ITEM_REQ_QTY_NOTAVALIABLE_WITHOUT_QTY}=  format String   ${ITEM_REQ_QTY_NOTAVALIABLE_WITHOUT_QTY}   ${displayName}
+    ${X_ITEM_IS_OUT_OF_STOCK}=  format String   ${X_ITEM_IS_OUT_OF_STOCK}   ${displayName}
     ${postcode}=  FakerLibrary.postcode
     ${phone}=  Create Dictionary    number=${primaryMobileNo}   countryCode=91
     ${homeDeliveryAddress}=  Create Dictionary    firstName=${firstName}  lastName=${lastName}  email=${email_id}   address=${Name}  city=${firstName}  postalCode=${postcode}   phone=${phone}
     ${resp}=    CheckOut Cart Items   ${cart_uid1}    homeDeliveryAddress=${homeDeliveryAddress}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings  ${resp.json()}   ${ITEM_REQ_QTY_NOTAVALIABLE_WITHOUT_QTY}
+    Should Be Equal As Strings  ${resp.json()}   ${X_ITEM_IS_OUT_OF_STOCK}
 
 
 

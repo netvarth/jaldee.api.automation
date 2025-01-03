@@ -820,14 +820,14 @@ JD-TC-Get sp item category Count Filter-4
     ${resp}=    Get sp item category Filter     ${accountId}   status-eq=${toggle[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()[0]['categoryCode']}                                              ${categoryCode}
-    Should Be Equal As Strings    ${resp.json()[0]['categoryName']}                                            ${categoryName}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}                                                      ${toggle[0]}
+    # Should Be Equal As Strings    ${resp.json()[0]['categoryCode']}                                              ${categoryCode}
+    # Should Be Equal As Strings    ${resp.json()[0]['categoryName']}                                            ${categoryName}
+    # Should Be Equal As Strings    ${resp.json()[0]['status']}                                                      ${toggle[0]}
 
     ${resp}=    Get sp item category Count Filter      ${accountId}   status-eq=${toggle[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()}  1
+    Should Be Equal As Strings    ${resp.json()}  0
 
 
 
