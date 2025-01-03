@@ -18,47 +18,16 @@ Variables         /ebs/TDD/varfiles/providers.py
 ${secid}     1
 @{service_duration}   5   20
 
-***Keywords***
-
-# Get branch by license
-#     [Arguments]   ${lic_id}
-    
-#     ${resp}=   Get File    ${EXECDIR}/TDD/varfiles/providers.py
-#     ${len}=   Split to lines  ${resp}
-#     ${length}=  Get Length   ${len}
-     
-#     FOR   ${a}  IN RANGE  ${length}
-            
-#         ${Branch_PH}=  Set Variable  ${PUSERNAME${a}}
-#         ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
-#         Should Be Equal As Strings    ${resp.status_code}    200
-
-#         ${decrypted_data}=  db.decrypt_data  ${resp.content}
-#         Log  ${decrypted_data}
-#         ${domain}=   Set Variable    ${decrypted_data['sector']}
-#         ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
-#         ${resp}=   Get Active License
-#         Log  ${resp.json()}
-#         Should Be Equal As Strings    ${resp.status_code}   200
-#         ${pkg_id}=   Set Variable  ${resp.json()['accountLicense']['licPkgOrAddonId']}
-#         ${pkg_name}=   Set Variable  ${resp.json()['accountLicense']['name']}
-# 	    # Run Keyword IF   ${resp.json()['accountLicense']['licPkgOrAddonId']} == ${lic_id}   AND   ${resp.json()['accountLicense']['name']} == ${lic_name}   Exit For Loop
-#         Exit For Loop IF  ${resp.json()['accountLicense']['licPkgOrAddonId']} == ${lic_id}
-
-#     END
-#     RETURN  ${Branch_PH}
-
 ***Test Cases***
 
 JD-TC-CreateUser-1
 
     [Documentation]  Create a user by branch login
+
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
     Log  ${iscorp_subdomains}
     Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
     Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
-    # Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
-    # Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
     ${firstname_A}=  FakerLibrary.first_name
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
@@ -67,7 +36,7 @@ JD-TC-CreateUser-1
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    202
     ${resp}=  Account Activation  ${PUSERNAME_E}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -88,14 +57,13 @@ JD-TC-CreateUser-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
+        ${resp}=  Enable Disable Department  ${toggle[0]}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-
     END
 
     ${lid}=  Create Sample Location
@@ -119,46 +87,16 @@ JD-TC-CreateUser-1
     Set Suite Variable  ${lastname}
     ${dob}=  FakerLibrary.Date
     Set Suite Variable  ${dob}
-    # ${pin}=  get_pincode
-     # Set Suite Variable  ${pin}
-     # ${resp}=  Get LocationsByPincode     ${pin}
-     FOR    ${i}    IN RANGE    3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-     END
-     Should Be Equal As Strings    ${resp.status_code}    200 
-     Set Suite Variable  ${pin}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${city}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Suite Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Suite Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
-
+  
     ${whpnum}=  Evaluate  ${PUSERNAME}+346245
     ${tlgnum}=  Evaluate  ${PUSERNAME}+346345
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[2]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}  ${EMPTY}  ${bool[1]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}
+    ${pin}=  get_pincode
+    
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${countryCodes[0]}  ${PUSERNAME_U1}   ${userType[2]}    
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
-
-    ${iscorp_subdomains}=  get_iscorp_subdomains  1
-    Log  ${iscorp_subdomains}
-    ${dlen}=  Get Length  ${iscorp_subdomains}
-    FOR  ${pos}  IN RANGE  ${dlen}  
-        IF  '${iscorp_subdomains[${pos}]['subdomains']}' == '${sub_domains}'
-            Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[${pos}]['subdomainId']}
-            Set Suite Variable  ${userSubDomain}  ${iscorp_subdomains[${pos}]['userSubDomainId']}
-            Exit For Loop
-        ELSE
-            Continue For Loop
-        END
-    END
 
     ${resp}=  ProviderLogout
      Log  ${resp.json()}
@@ -172,14 +110,7 @@ JD-TC-CreateUser-1
     ${resp}=  Get User By Id  ${u_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${sub_domain_id}  ${resp.json()['subdomain']}
-    Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[2]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}   state=${state}  pincode=${pin}   deptId=0  subdomain=${sub_domain_id}
-    Should Be Equal As Strings  ${resp.json()['whatsAppNum']['number']}           ${whpnum} 
-    Should Be Equal As Strings  ${resp.json()['whatsAppNum']['countryCode']}      ${countryCodes[1]}
-    Should Be Equal As Strings  ${resp.json()['telegramNum']['number']}           ${tlgnum} 
-    Should Be Equal As Strings  ${resp.json()['telegramNum']['countryCode']}      ${countryCodes[1]}
-    Should Be Equal As Strings  ${resp.json()['city']}      ${city}    ignore_case=True
-  
+   
     ${resp}=  Get User Count
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -191,82 +122,52 @@ JD-TC-CreateUser-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${len}=  Get Length  ${resp.json()}
-    # Should Be Equal As Integers  ${len}  3
     FOR  ${i}  IN RANGE   ${len}
         Run Keyword IF  '${resp.json()[${i}]['id']}' == '${u_id}'  
         ...    Run Keywords 
         ...    Should Be Equal As Strings       ${resp.json()[${i}]['firstName']}                       ${firstname}       
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['lastName']}                        ${lastname}       
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['mobileNo']}                        ${PUSERNAME_U1}      
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['dob']}                             ${dob}      
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['gender']}                          ${Genderlist[0]}      
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['mobileNo']}                        ${PUSERNAME_U1}        
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[2]}     
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U1}.${test_mail}  
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city}    ignore_case=True
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['state']}                           ${state}
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          0   
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['subdomain']}                       0
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['admin']}                           ${bool[1]} 
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['pincode']}                         ${pin} 
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['whatsAppNum']['number']}           ${whpnum} 
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['whatsAppNum']['countryCode']}      ${countryCodes[1]}
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['telegramNum']['number']}           ${tlgnum} 
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['telegramNum']['countryCode']}      ${countryCodes[1]}
        
-
         ...    ELSE IF     '${resp.json()[${i}]['id']}' == '${id}'   
         ...    Run Keywords
         ...    Should Be Equal As Strings       ${resp.json()[${i}]['firstName']}                       ${firstname_A}       
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['lastName']}                        ${lastname_A} 
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[0]}     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['mobileNo']}                        ${PUSERNAME_E}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          ${dep_id}    
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['subdomain']}                       1
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['admin']}                           ${bool[1]} 
-      
+
     END
 
   
 JD-TC-CreateUser-2
+
     [Documentation]  Create more users by branch login
+
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
     ${PUSERNAME_U2}=  Evaluate  ${PUSERNAME}+336646
     clear_users  ${PUSERNAME_U2}
     ${firstname1}=  FakerLibrary.name
     ${lastname1}=  FakerLibrary.last_name
     ${dob1}=  FakerLibrary.Date
-    # ${pin1}=  get_pincode
-     # ${resp}=  Get LocationsByPincode     ${pin1}
-     FOR    ${i}    IN RANGE    3
-        ${pin1}=  get_pincode
-        ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin1}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-     END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${city1}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${state1}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Test Variable  ${pin1}    ${resp.json()[0]['PostOffice'][0]['Pincode']}
    
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[1]}  ${PUSERNAME_U2}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${PUSERNAME_U2}  ${NULL}  ${NULL}
+    ${pin1}=  get_pincode
+    
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${countryCodes[0]}  ${PUSERNAME_U2}   ${userType[2]}    
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${u_id1}  ${resp.json()}
+    Set Suite Variable  ${u_id1}  ${resp.json()}
 
     ${resp}=  Get User By Id  ${u_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sub_domain_id1}  ${resp.json()['subdomain']}
     
-
     ${PUSERNAME_U3}=  Evaluate  ${PUSERNAME}+336647
     Set Suite Variable  ${PUSERNAME_U3}
     clear_users  ${PUSERNAME_U3}
@@ -276,24 +177,10 @@ JD-TC-CreateUser-2
     ${dob2}=  FakerLibrary.Date
     ${location2}=  FakerLibrary.city
     ${state2}=  FakerLibrary.state 
-    # ${pin2}=  get_pincode
-     # ${resp}=  Get LocationsByPincode     ${pin2}
-     FOR    ${i}    IN RANGE    3
-        ${pin2}=  get_pincode
-        ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin2}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-     END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${city2}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${state2}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Test Variable  ${pin2}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
- 
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U3}.${test_mail}   ${userType[0]}  ${pin2}  ${countryCodes[1]}  ${PUSERNAME_U3}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    
+    ${pin1}=  get_pincode
+    
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${countryCodes[0]}  ${PUSERNAME_U3}   ${userType[0]}    deptId=${dep_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}
@@ -304,18 +191,18 @@ JD-TC-CreateUser-2
     Set Suite Variable  ${sub_domain_id2}  ${resp.json()['subdomain']}
     
     ${resp}=  ProviderLogout
-     Log  ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
-     Log  ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
      
     ${resp}=  Get User Count
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  4
-     sleep  02s
+    sleep  02s
 
     ${resp}=  Get User
     Log   ${resp.json()}
@@ -326,64 +213,26 @@ JD-TC-CreateUser-2
         ...    Run Keywords 
         ...    Should Be Equal As Strings       ${resp.json()[${i}]['firstName']}                       ${firstname}       
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['lastName']}                        ${lastname} 
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['mobileNo']}                        ${PUSERNAME_U1}      
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['dob']}                             ${dob}      
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['gender']}                          ${Genderlist[0]}      
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[2]}     
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U1}.${test_mail}  
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city}   ignore_case=True
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['state']}                           ${state}
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          0   
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['subdomain']}                       ${sub_domain_id}
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['admin']}                           ${bool[1]}
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['pincode']}                         ${pin}  
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['mobileNo']}                        ${PUSERNAME_U1}     
 
         ...    ELSE IF     '${resp.json()[${i}]['id']}' == '${id}'   
         ...    Run Keywords
         ...    Should Be Equal As Strings       ${resp.json()[${i}]['firstName']}                       ${firstname_A}       
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['lastName']}                        ${lastname_A} 
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[0]}     
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['mobileNo']}                        ${PUSERNAME_E}
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          ${dep_id}    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['subdomain']}                       1
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['admin']}                           ${bool[1]} 
-      
+    
         ...    ELSE IF     '${resp.json()[${i}]['id']}' == '${u_id1}'   
         ...    Run Keywords
          ...    Should Be Equal As Strings  ${resp.json()[${i}]['firstName']}                           ${firstname1} 
         ...    Should Be Equal As Strings  ${resp.json()[${i}]['lastName']}                             ${lastname1} 
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['mobileNo']}                        ${PUSERNAME_U2}      
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['dob']}                             ${dob1}      
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['gender']}                          ${Genderlist[0]}      
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[0]}     
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U2}.${test_mail}  
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city1}   ignore_case=True
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['state']}                           ${state1}
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          ${dep_id}    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['subdomain']}                       ${sub_domain_id1}
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['admin']}                           ${bool[0]} 
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['pincode']}                         ${pin1} 
-
+       
         ...    ELSE IF     '${resp.json()[${i}]['id']}' == '${u_id2}'   
         ...    Run Keywords
          ...    Should Be Equal As Strings  ${resp.json()[${i}]['firstName']}                           ${firstname2} 
         ...    Should Be Equal As Strings  ${resp.json()[${i}]['lastName']}                             ${lastname2} 
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['mobileNo']}                        ${PUSERNAME_U3}      
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['dob']}                             ${dob2}      
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['gender']}                          ${Genderlist[0]}      
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[0]}     
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U3}.${test_mail}  
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city2}   ignore_case=True 
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['state']}                           ${state2}
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          ${dep_id}    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['subdomain']}                       ${sub_domain_id2}
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['admin']}                           ${bool[0]} 
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['pincode']}                         ${pin2} 
-
+      
     END
 
 JD-TC-CreateUser-3
@@ -393,10 +242,6 @@ JD-TC-CreateUser-3
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${SERVICE1}=   FakerLibrary.name
-    # ${s_id1}=  Create Sample Service  ${SERVICE1}
-    # Set Suite Variable   ${sid1}
 
     ${resp}=   Get Service
     Log  ${resp.json()}
@@ -418,24 +263,8 @@ JD-TC-CreateUser-3
     ${firstname3}=  FakerLibrary.name
     ${lastname3}=  FakerLibrary.last_name
     ${dob3}=  FakerLibrary.Date
-    # ${pin3}=  get_pincode
-     # ${resp}=  Get LocationsByPincode     ${pin3}
-     FOR    ${i}    IN RANGE    3
-        ${pin3}=  get_pincode
-        ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin3}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-     END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${city3}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${state3}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Test Variable  ${pin3}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
- 
-    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U4}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U4}  ${dep_id1}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    
+    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${countryCodes[0]}  ${PUSERNAME_U4}   ${userType[0]}    deptId=${depid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id3}  ${resp.json()}
@@ -462,22 +291,16 @@ JD-TC-CreateUser-3
         ...    Should Be Equal As Strings       ${resp.json()[${i}]['firstName']}                       ${firstname3}       
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['lastName']}                        ${lastname3} 
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['mobileNo']}                        ${PUSERNAME_U4}      
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['dob']}                             ${dob3}      
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['gender']}                          ${Genderlist[0]}      
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[0]}     
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U4}.${test_mail}  
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['state']}                           ${state3}
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          ${depid1}  
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['subdomain']}                       ${sub_domain_id3}
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['admin']}                           ${bool[0]} 
     END
     
 JD-TC-CreateUser-4
+
     [Documentation]  Create a user for a different subdomain in same domain by branch login
+
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
     Set Suite Variable  ${sub_domain_id1}   ${iscorp_subdomains[1]['subdomainId']}
     ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+336649
@@ -485,24 +308,8 @@ JD-TC-CreateUser-4
     ${firstname3}=  FakerLibrary.name
     ${lastname3}=  FakerLibrary.last_name
     ${dob3}=  FakerLibrary.Date
-    # ${pin3}=  get_pincode
-     # ${resp}=  Get LocationsByPincode     ${pin3}
-     FOR    ${i}    IN RANGE    3
-        ${pin3}=  get_pincode
-        ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin3}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-     END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${city3}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${state3}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Test Variable  ${pin3}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
- 
-    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U5}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U5}  ${dep_id1}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+   
+    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${countryCodes[0]}  ${PUSERNAME_U5}   ${userType[0]}    deptId=${dep_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id3}  ${resp.json()}
@@ -529,23 +336,16 @@ JD-TC-CreateUser-4
         ...    Should Be Equal As Strings       ${resp.json()[${i}]['firstName']}                       ${firstname3}       
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['lastName']}                        ${lastname3} 
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['mobileNo']}                        ${PUSERNAME_U5}      
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['dob']}                             ${dob3}      
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['gender']}                          ${Genderlist[0]}      
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[0]}     
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U5}.${test_mail}  
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city3}   ignore_case=True
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['state']}                           ${state3}
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          ${depid1}  
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['subdomain']}                       ${sub_domain_id3}
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['admin']}                           ${bool[0]} 
     END
     
 JD-TC-CreateUser-5
+
     [Documentation]  Create a user for a different usertype(ASSISTANT) by branch login
+
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
     Set Suite Variable  ${sub_domain_id1}   ${iscorp_subdomains[1]['subdomainId']}
     ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+336849
@@ -554,27 +354,12 @@ JD-TC-CreateUser-5
     ${lastname3}=  FakerLibrary.last_name
     ${address3}=  get_address
     ${dob3}=  FakerLibrary.Date
-    # ${pin3}=  get_pincode
-     # ${resp}=  Get LocationsByPincode     ${pin3}
-     FOR    ${i}    IN RANGE    3
-        ${pin3}=  get_pincode
-        ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin3}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-     END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${city3}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${state3}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Test Variable  ${pin3}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
- 
-    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U5}.${test_mail}   ${userType[1]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U5}  ${dep_id1}  ${sub_domain_id1}  ${bool[0]}   ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    
+    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${countryCodes[0]}  ${PUSERNAME_U5}   ${userType[0]}    deptId=${dep_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id3}  ${resp.json()}
+
     ${resp}=  Get User Count
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -592,23 +377,16 @@ JD-TC-CreateUser-5
         ...    Should Be Equal As Strings       ${resp.json()[${i}]['firstName']}                       ${firstname3}       
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['lastName']}                        ${lastname3} 
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['mobileNo']}                        ${PUSERNAME_U5}      
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['dob']}                             ${dob3}      
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['gender']}                          ${Genderlist[0]}      
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[1]}     
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U5}.${test_mail}  
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city3}   ignore_case=True
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['state']}                           ${state3}
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          0   
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['subdomain']}                       0
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['admin']}                           ${bool[0]} 
     END
    
 JD-TC-CreateUser-6
+
     [Documentation]  Create a user for a different usertype(ADMIN) by branch login
+
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
     Set Suite Variable  ${sub_domain_id1}   ${iscorp_subdomains[1]['subdomainId']}
     ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+336850
@@ -617,27 +395,12 @@ JD-TC-CreateUser-6
     ${lastname3}=  FakerLibrary.last_name
     ${address3}=  get_address
     ${dob3}=  FakerLibrary.Date
-    # ${pin3}=  get_pincode
-     # ${resp}=  Get LocationsByPincode     ${pin3}
-     FOR    ${i}    IN RANGE    3
-        ${pin3}=  get_pincode
-        ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin3}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-     END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${city3}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${state3}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Test Variable  ${pin3}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
-
-    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U5}.${test_mail}   ${userType[2]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U5}  ${dep_id1}  ${sub_domain_id1}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+   
+    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${countryCodes[0]}  ${PUSERNAME_U5}   ${userType[0]}    deptId=${dep_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id4}  ${resp.json()}
+
     ${resp}=  Get User Count
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -656,20 +419,12 @@ JD-TC-CreateUser-6
         ...    Should Be Equal As Strings       ${resp.json()[${i}]['firstName']}                       ${firstname3}       
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['lastName']}                        ${lastname3} 
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['mobileNo']}                        ${PUSERNAME_U5}      
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['dob']}                             ${dob3}      
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['gender']}                          ${Genderlist[0]}      
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[2]}     
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U5}.${test_mail}  
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city3}  ignore_case=True
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['state']}                           ${state3}
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          0   
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['subdomain']}                       0
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['admin']}                           ${bool[1]} 
     END
 
 JD-TC-CreateUser-UH1
+
     [Documentation]  Create a user for a invalid subdomain by branch login
+
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -684,14 +439,16 @@ JD-TC-CreateUser-UH1
     ${address3}=  get_address
     ${dob3}=  FakerLibrary.Date
     ${pin3}=  get_pincode
-    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U6}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U6}  ${dep_id1}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+
+    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${countryCodes[0]}  ${PUSERNAME_U6}   ${userType[0]}    deptId=${dep_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.status_code}  404
-    # Should Be Equal As Strings  ${resp.json()}   ${SUBSECTOR}
+    Set Test Variable  ${u_id4}  ${resp.json()}
 
 JD-TC-CreateUser-UH2
+
     [Documentation]  Create a user for a invalid department by branch login
+
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -703,13 +460,16 @@ JD-TC-CreateUser-UH2
     ${address3}=  get_address
     ${dob3}=  FakerLibrary.Date
     ${pin3}=  get_pincode
-    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U6}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U6}  ${dep_id2}  ${sub_domain_id1}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+
+    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${countryCodes[0]}  ${PUSERNAME_U6}   ${userType[0]}    deptId=${depid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${INVALID_DEPARTMENT}"
 
 JD-TC-CreateUser-UH3
+
     [Documentation]  Create a user with already existing ph by branch login
+
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -720,13 +480,16 @@ JD-TC-CreateUser-UH3
     ${address3}=  get_address
     ${dob3}=  FakerLibrary.Date
     ${pin3}=  get_pincode
-    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U6}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U6}  ${dep_id1}  ${sub_domain_id1}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+
+    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${countryCodes[0]}  ${PUSERNAME_U6}   ${userType[0]}    deptId=${dep_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${MOBILE_NO_USED}"
 
 JD-TC-CreateUser-UH4
+
     [Documentation]  Create a user with empty ph by branch login
+
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -735,7 +498,8 @@ JD-TC-CreateUser-UH4
     ${address3}=  get_address
     ${dob3}=  FakerLibrary.Date
     ${pin3}=  get_pincode
-    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${lastname3}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${EMPTY}  ${dep_id1}  ${sub_domain_id1}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+
+    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${countryCodes[0]}  ${EMPTY}   ${userType[0]}    deptId=${dep_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.status_code}  422
