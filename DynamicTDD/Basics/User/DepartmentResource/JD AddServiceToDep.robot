@@ -9,6 +9,7 @@ Library           FakerLibrary
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
@@ -62,7 +63,7 @@ JD-TC-Add Service To Department-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
     
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log   ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Create Sample Service  ${SERVICE1}
@@ -73,8 +74,15 @@ JD-TC-Add Service To Department-1
     Set Suite Variable  ${sid03}  ${resp}
     ${resp}=  Create Sample Service  ${SERVICE4}
     Set Suite Variable  ${sid04}  ${resp}
-    ${resp}=   Toggle Department Enable
-    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Waitlist Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
     #services added to default department
 
 JD-TC-Add Service To Department-2
@@ -123,7 +131,7 @@ JD-TC-Add Service To Department-3
     ${min_prepayment}=  Random Int   min=1    max=50
     ${ser_duratn}=      Random Int   min=10   max=30
     Set Suite Variable   ${ser_duratn}
-    ${resp}=  Create Service Department  ${SERVICE5}  ${desc}   ${ser_duratn}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}  ${depid02}
+    ${resp}=  Create Service   ${SERVICE5}  ${desc}   ${ser_duratn}  ${bool[0]}  ${total_amount}   ${bool[0]}   department=${depid02}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid05}  ${resp.json()}
     ${resp}=  Get Department ById  ${depid02}
@@ -138,7 +146,7 @@ JD-TC-Add Service To Department-4
     Should Be Equal As Strings  ${resp.status_code}  200
     ${total_amount}=  Random Int  min=100  max=500
     ${min_prepayment}=  Random Int   min=1   max=50
-    ${resp}=  Create Service Department  ${SERVICE6}  ${desc}   ${ser_duratn}   ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}  ${depid02}
+    ${resp}=  Create Service   ${SERVICE6}  ${desc}   ${ser_duratn}  ${bool[0]}   ${total_amount}  ${bool[0]}  department=${depid02}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid06}  ${resp.json()}
     ${resp}=  Get Department ById  ${depid02}
@@ -200,7 +208,7 @@ JD-TC-Add Service To Department-8
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_F}    ${highest_package[0]}
     Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    202
     ${resp}=  Account Activation  ${PUSERNAME_F}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -214,15 +222,22 @@ JD-TC-Add Service To Department-8
     ${id}=  get_id  ${PUSERNAME_F}
     Set Suite Variable  ${id}
     
-    ${resp}=   Toggle Department Enable
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Waitlist Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
     ${dep_name4}=  FakerLibrary.bs
     ${dep_code4}=   Random Int  min=100   max=999
     ${resp}=  Create Department  ${dep_name4}  ${dep_code4}  ${dep_desc} 
     Set Suite Variable  ${depid04}  ${resp.json()}
     ${total_amount}=  Random Int  min=100  max=500
     ${min_prepayment}=  Random Int   min=1   max=50
-    ${resp}=  Create Service Department  ${SERVICE1}  ${desc}   ${ser_duratn}   ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}   ${depid04}
+    ${resp}=  Create Service   ${SERVICE1}  ${desc}   ${ser_duratn}  ${bool[0]}   ${total_amount}  ${bool[0]}   department=${depid04}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid011}  ${resp.json()}
     ${resp}=  Get Department ById  ${depid04}
@@ -280,9 +295,46 @@ JD-TC-Add Service To Department-UH6
 
     # ${resp}=  ConsumerLogin  ${CUSERNAME0}  ${PASSWORD}
     # Should Be Equal As Strings  ${resp.status_code}  200
-    ${CUSERNAME0}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME0}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${account_id}  ${token} 
+    #............provider consumer creation..........
+    
+    clear_customer   ${PUSERNAME_E}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${acc_id1}  ${resp.json()['id']}
+
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable  ${PCPHONENO}  555${PH_Number}
+
+    ${fname}=  generate_firstname
+    ${lastname}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lastname}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${acc_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+    
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${acc_id1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -306,7 +358,7 @@ JD-TC-Add Service To Department-UH8
     Should Be Equal As Strings  ${resp.status_code}  200    
     ${total_amount}=  Random Int  min=100  max=500
     ${min_prepayment}=  Random Int   min=1   max=50
-    ${resp}=  Create Service Department  ${SERVICE7}  ${desc}   ${ser_duratn}    ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}    ${EMPTY}
+    ${resp}=  Create Service   ${SERVICE7}  ${desc}   ${ser_duratn}   ${bool[0]}   ${total_amount}  ${bool[0]}    department=${EMPTY}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${DEPT_ID}"
        
@@ -318,7 +370,7 @@ JD-TC-Add Service To Department-UH9
     Should Be Equal As Strings  ${resp.status_code}  200  
     ${total_amount}=  Random Int  min=100  max=500
     ${min_prepayment}=  Random Int   min=1   max=50
-    ${resp}=  Create Service Department  ${SERVICE2}  ${desc}   ${ser_duratn}   ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}  ${depid02}
+    ${resp}=  Create Service   ${SERVICE2}  ${desc}   ${ser_duratn}  ${bool[0]}   ${total_amount}   ${bool[0]}  department=${depid02}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}    ${SERVICE_CANT_BE_SAME}
     # ${resp}=  Get Department ById  ${depid02}
