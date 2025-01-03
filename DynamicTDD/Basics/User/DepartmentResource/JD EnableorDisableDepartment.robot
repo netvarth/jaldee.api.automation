@@ -59,6 +59,7 @@ JD-TC-Enable or Disable Department-1
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
+
     ${resp}=  Get Departments
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -83,7 +84,7 @@ JD-TC-Enable or Disable Department-1
     ${ser_duratn}=      Random Int   min=10   max=30
     Set Suite Variable   ${ser_duratn}
 
-    ${resp}=  Create Service Department  ${SERVICE1}  ${desc}   ${ser_duratn}   ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}  ${did01}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_duratn}   ${bool[0]}  ${total_amount}  ${bool[0]}  department=${did01}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid1}  ${resp.json()}  
@@ -111,6 +112,7 @@ JD-TC-Enable or Disable Department-2
     ${resp}=  Enable Department  ${did01}
     Log   ${resp.content} 
     Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Enable service   ${sid1} 
     Log   ${resp.content} 
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -144,7 +146,7 @@ JD-TC-Enable or Disable Department-UH1
     ${total_amount}=    Random Int  min=100  max=500
     ${min_prepayment}=  Random Int   min=1   max=50
     
-    ${resp}=  Create Service Department  ${SERVICE2}  ${desc}   ${ser_duratn}   ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}  ${did01}
+    ${resp}=  Create Service   ${SERVICE2}  ${desc}   ${ser_duratn}  ${bool[0]}  ${total_amount}   ${bool[0]}  department=${did01}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${INACTIVE_DEPARTMENT}"
 

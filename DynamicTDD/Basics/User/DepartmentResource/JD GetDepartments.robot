@@ -9,6 +9,7 @@ Library           FakerLibrary
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
@@ -64,9 +65,16 @@ JD-TC-Get Departments-1
     Set Suite Variable  ${sid2}  ${resp}
     ${resp}=  Create Sample Service  ${SERVICE3}
     Set Suite Variable  ${sid3}  ${resp}
-    ${resp}=  Toggle Department Enable
-    Should Be Equal As Strings  ${resp.status_code}  200
-    sleep  2s
+    
+    ${resp}=  Get Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
     ${resp}=  Get Departments
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -75,7 +83,7 @@ JD-TC-Get Departments-1
     Should Be Equal As Strings  ${resp.json()['departments'][0]['departmentDescription']}       ${default_depname}
     Should Be Equal As Strings  ${resp.json()['departments'][0]['departmentStatus']}            ${status[0]}
     ${count}=  Get Length  ${resp.json()['departments'][0]['serviceIds']}
-	Should Be Equal As Integers  ${count}  3  
+	Should Be Equal As Integers  ${count}  4 
     ${dep_name1}=  FakerLibrary.bs
     Set Suite Variable   ${dep_name1}
     ${dep_code1}=   Random Int  min=100   max=999
@@ -95,10 +103,10 @@ JD-TC-Get Departments-1
     ${resp}=  Get Departments
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['departments'][0]['departmentName']}              ${default_depname}
-    Should Be Equal As Strings  ${resp.json()['departments'][0]['departmentCode']}              ${default_depname}
-    Should Be Equal As Strings  ${resp.json()['departments'][0]['departmentDescription']}       ${default_depname}
-    Should Be Equal As Strings  ${resp.json()['departments'][0]['departmentStatus']}            ${status[0]}
+    Should Be Equal As Strings  ${resp.json()['departments'][2]['departmentName']}              ${default_depname}
+    Should Be Equal As Strings  ${resp.json()['departments'][2]['departmentCode']}              ${default_depname}
+    Should Be Equal As Strings  ${resp.json()['departments'][2]['departmentDescription']}       ${default_depname}
+    Should Be Equal As Strings  ${resp.json()['departments'][2]['departmentStatus']}            ${status[0]}
     
     Should Be Equal As Strings  ${resp.json()['departments'][1]['departmentName']}              ${dep_name1}
     Should Be Equal As Strings  ${resp.json()['departments'][1]['departmentId']}                ${depid1}
@@ -107,12 +115,12 @@ JD-TC-Get Departments-1
     Should Be Equal As Strings  ${resp.json()['departments'][1]['departmentStatus']}            ${status[0]}
     Should Be Equal As Strings  ${resp.json()['departments'][1]['serviceIds'][0]}               ${sid1}
     Should Be Equal As Strings  ${resp.json()['departments'][1]['serviceIds'][1]}               ${sid2}
-    Should Be Equal As Strings  ${resp.json()['departments'][2]['departmentName']}              ${dep_name2}
-    Should Be Equal As Strings  ${resp.json()['departments'][2]['departmentId']}                ${depid2}
-    Should Be Equal As Strings  ${resp.json()['departments'][2]['departmentCode']}              ${dep_code2}
-    Should Be Equal As Strings  ${resp.json()['departments'][2]['departmentDescription']}       ${dep_desc}
-    Should Be Equal As Strings  ${resp.json()['departments'][2]['departmentStatus']}            ${status[0]}
-    Should Be Equal As Strings  ${resp.json()['departments'][2]['serviceIds'][0]}               ${sid3}
+    Should Be Equal As Strings  ${resp.json()['departments'][0]['departmentName']}              ${dep_name2}
+    Should Be Equal As Strings  ${resp.json()['departments'][0]['departmentId']}                ${depid2}
+    Should Be Equal As Strings  ${resp.json()['departments'][0]['departmentCode']}              ${dep_code2}
+    Should Be Equal As Strings  ${resp.json()['departments'][0]['departmentDescription']}       ${dep_desc}
+    Should Be Equal As Strings  ${resp.json()['departments'][0]['departmentStatus']}            ${status[0]}
+    Should Be Equal As Strings  ${resp.json()['departments'][0]['serviceIds'][0]}               ${sid3}
 
 JD-TC-Get Departments-2
     [Documentation]  Provider Get Departments
@@ -128,29 +136,29 @@ JD-TC-Get Departments-2
     Set Suite Variable  ${depid3}  ${resp.json()}
     ${resp}=  Get Departments
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['departments'][0]['departmentName']}              ${default_depname}
-    Should Be Equal As Strings  ${resp.json()['departments'][0]['departmentCode']}              ${default_depname}
-    Should Be Equal As Strings  ${resp.json()['departments'][0]['departmentDescription']}       ${default_depname}
-    Should Be Equal As Strings  ${resp.json()['departments'][0]['departmentStatus']}            ${status[0]}   
-    Should Be Equal As Strings  ${resp.json()['departments'][1]['departmentName']}              ${dep_name1}
-    Should Be Equal As Strings  ${resp.json()['departments'][1]['departmentId']}                ${depid1}
-    Should Be Equal As Strings  ${resp.json()['departments'][1]['departmentCode']}              ${dep_code1}
-    Should Be Equal As Strings  ${resp.json()['departments'][1]['departmentDescription']}       ${dep_desc}
-    Should Be Equal As Strings  ${resp.json()['departments'][1]['departmentStatus']}            ${status[0]}
-    Should Be Equal As Strings  ${resp.json()['departments'][1]['serviceIds'][0]}               ${sid1}
-    Should Be Equal As Strings  ${resp.json()['departments'][1]['serviceIds'][1]}               ${sid2}
-    Should Be Equal As Strings  ${resp.json()['departments'][2]['departmentName']}              ${dep_name2}
-    Should Be Equal As Strings  ${resp.json()['departments'][2]['departmentId']}                ${depid2}
-    Should Be Equal As Strings  ${resp.json()['departments'][2]['departmentCode']}              ${dep_code2}
+    Should Be Equal As Strings  ${resp.json()['departments'][3]['departmentName']}              ${default_depname}
+    Should Be Equal As Strings  ${resp.json()['departments'][3]['departmentCode']}              ${default_depname}
+    Should Be Equal As Strings  ${resp.json()['departments'][3]['departmentDescription']}       ${default_depname}
+    Should Be Equal As Strings  ${resp.json()['departments'][3]['departmentStatus']}            ${status[0]}   
+    Should Be Equal As Strings  ${resp.json()['departments'][2]['departmentName']}              ${dep_name1}
+    Should Be Equal As Strings  ${resp.json()['departments'][2]['departmentId']}                ${depid1}
+    Should Be Equal As Strings  ${resp.json()['departments'][2]['departmentCode']}              ${dep_code1}
     Should Be Equal As Strings  ${resp.json()['departments'][2]['departmentDescription']}       ${dep_desc}
     Should Be Equal As Strings  ${resp.json()['departments'][2]['departmentStatus']}            ${status[0]}
-    Should Be Equal As Strings  ${resp.json()['departments'][2]['serviceIds'][0]}               ${sid3}
-    Should Be Equal As Strings  ${resp.json()['departments'][3]['departmentName']}              ${dep_name3}
-    Should Be Equal As Strings  ${resp.json()['departments'][3]['departmentId']}                ${depid3}
-    Should Be Equal As Strings  ${resp.json()['departments'][3]['departmentCode']}              ${dep_code3}
-    Should Be Equal As Strings  ${resp.json()['departments'][3]['departmentDescription']}       ${dep_desc}
-    Should Be Equal As Strings  ${resp.json()['departments'][3]['departmentStatus']}            ${status[0]}
-    Should Be Equal As Strings  ${resp.json()['departments'][3]['serviceIds']}                  []
+    Should Be Equal As Strings  ${resp.json()['departments'][2]['serviceIds'][0]}               ${sid1}
+    Should Be Equal As Strings  ${resp.json()['departments'][2]['serviceIds'][1]}               ${sid2}
+    Should Be Equal As Strings  ${resp.json()['departments'][1]['departmentName']}              ${dep_name2}
+    Should Be Equal As Strings  ${resp.json()['departments'][1]['departmentId']}                ${depid2}
+    Should Be Equal As Strings  ${resp.json()['departments'][1]['departmentCode']}              ${dep_code2}
+    Should Be Equal As Strings  ${resp.json()['departments'][1]['departmentDescription']}       ${dep_desc}
+    Should Be Equal As Strings  ${resp.json()['departments'][1]['departmentStatus']}            ${status[0]}
+    Should Be Equal As Strings  ${resp.json()['departments'][1]['serviceIds'][0]}               ${sid3}
+    Should Be Equal As Strings  ${resp.json()['departments'][0]['departmentName']}              ${dep_name3}
+    Should Be Equal As Strings  ${resp.json()['departments'][0]['departmentId']}                ${depid3}
+    Should Be Equal As Strings  ${resp.json()['departments'][0]['departmentCode']}              ${dep_code3}
+    Should Be Equal As Strings  ${resp.json()['departments'][0]['departmentDescription']}       ${dep_desc}
+    Should Be Equal As Strings  ${resp.json()['departments'][0]['departmentStatus']}            ${status[0]}
+    Should Be Equal As Strings  ${resp.json()['departments'][0]['serviceIds']}                  []
 
 JD-TC-Get Departments-3
     [Documentation]  Provider Create department using Service names then Get Departments
@@ -212,9 +220,46 @@ JD-TC-Get Departments-UH2
 
     # ${resp}=  ConsumerLogin  ${CUSERNAME0}  ${PASSWORD}
     # Should Be Equal As Strings  ${resp.status_code}  200
-    ${CUSERNAME0}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME0}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${account_id}  ${token} 
+    #............provider consumer creation..........
+    
+    clear_customer   ${PUSERNAME_K}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${acc_id1}  ${resp.json()['id']}
+
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable  ${PCPHONENO}  555${PH_Number}
+
+    ${fname}=  generate_firstname
+    ${lastname}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lastname}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${acc_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+    
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${acc_id1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
