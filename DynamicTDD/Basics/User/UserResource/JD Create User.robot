@@ -73,7 +73,6 @@ JD-TC-CreateUser-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -99,14 +98,13 @@ JD-TC-CreateUser-1
     Set Suite Variable  ${u_id}  ${resp.json()}
 
     ${resp}=  ProviderLogout
-     Log  ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
-     Log  ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
-     sleep  03s
-
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+ 
     ${resp}=  Get User By Id  ${u_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -115,8 +113,7 @@ JD-TC-CreateUser-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  2
-     sleep  02s
-
+   
     ${resp}=  Get User
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -202,8 +199,7 @@ JD-TC-CreateUser-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  4
-    sleep  02s
-
+ 
     ${resp}=  Get User
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -278,8 +274,7 @@ JD-TC-CreateUser-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  5
-     sleep  03s
-
+    
     ${resp}=  Get User
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -323,8 +318,7 @@ JD-TC-CreateUser-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  6
-    sleep  02s
-
+   
     ${resp}=  Get User
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -365,7 +359,6 @@ JD-TC-CreateUser-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  7
 
-    sleep  2s
     ${resp}=  Get User
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -405,8 +398,7 @@ JD-TC-CreateUser-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  8
-    sleep  02s
-
+   
     ${resp}=  Get User
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -615,7 +607,6 @@ JD-TC-CreateUser -7
     ${resp}=  Update Business Profile with schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    sleep   02s
 
     ${fields}=   Get subDomain level Fields  ${domains}  ${sub_domains}
     Log  ${fields.json()}
@@ -644,8 +635,7 @@ JD-TC-CreateUser -7
         Should Be Equal As Strings  ${resp.status_code}  200
 
     END
-    sleep   01s
-
+   
     ${resp}=  Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -673,8 +663,7 @@ JD-TC-CreateUser -7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id2}  ${resp.json()}
-    sleep  02s
-
+   
     ${resp}=  Get User
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -782,11 +771,13 @@ JD-TC-CreateUser -UH9
     Set Test Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${resp}=  Get Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp2}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp2}' != '${None}'   Log   ${resp2.json()}
-    Run Keyword If  '${resp2}' != '${None}'   Should Be Equal As Strings  ${resp2.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${dep_name1}=  FakerLibrary.bs
     ${dep_code1}=   Random Int  min=100   max=999
@@ -834,11 +825,13 @@ JD-TC-CreateUser -UH10
     Set Test Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${resp}=  Get Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp2}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp2}' != '${None}'   Log   ${resp2.json()}
-    Run Keyword If  '${resp2}' != '${None}'   Should Be Equal As Strings  ${resp2.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${dep_name1}=  FakerLibrary.bs
     ${dep_code1}=   Random Int  min=100   max=999
@@ -936,11 +929,13 @@ JD-TC-CreateUser -UH11
     Set Test Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${resp}=  Get Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp2}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp2}' != '${None}'   Log   ${resp2.json()}
-    Run Keyword If  '${resp2}' != '${None}'   Should Be Equal As Strings  ${resp2.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${dep_name1}=  FakerLibrary.bs
     ${dep_code1}=   Random Int  min=100   max=999
@@ -1039,14 +1034,16 @@ JD-TC-CreateUser -8
     ${resp}=   Get Service
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
-    ${resp}=  Get Waitlist Settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
     
-    sleep  2s
+    ${resp}=  Get Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+    
     ${dep_name1}=  FakerLibrary.bs
     ${dep_code1}=   Random Int  min=100   max=999
     ${dep_desc1}=   FakerLibrary.word  
@@ -1260,13 +1257,14 @@ JD-TC-CreateUser -10
     # Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${resp}=  Get Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
-    
-    sleep  2s
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
     ${dep_name1}=  FakerLibrary.bs
     ${dep_code1}=   Random Int  min=100   max=999
     ${dep_desc1}=   FakerLibrary.word  
@@ -1308,13 +1306,14 @@ JD-TC-CreateUser -UH12
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${resp}=  Get Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
-    
-    sleep  2s
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
     ${dep_name1}=  FakerLibrary.bs
     ${dep_code1}=   Random Int  min=100   max=999
     ${dep_desc1}=   FakerLibrary.word  
@@ -1356,13 +1355,14 @@ JD-TC-CreateUser -11
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${resp}=  Get Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
-    
-    sleep  2s
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
     ${dep_name1}=  FakerLibrary.bs
     ${dep_code1}=   Random Int  min=100   max=999
     ${dep_desc1}=   FakerLibrary.word  
@@ -1445,13 +1445,14 @@ JD-TC-CreateUser -12
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${resp}=  Get Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
-    
-    sleep  2s
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
     ${dep_name1}=  FakerLibrary.bs
     ${dep_code1}=   Random Int  min=100   max=999
     ${dep_desc1}=   FakerLibrary.word  
@@ -1541,13 +1542,14 @@ JD-TC-CreateUser -13
 
 
     ${resp}=  Get Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
-    
-    sleep  2s
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
     ${dep_name1}=  FakerLibrary.bs
     ${dep_code1}=   Random Int  min=100   max=999
     ${dep_desc1}=   FakerLibrary.word  
@@ -1630,13 +1632,14 @@ JD-TC-CreateUser -14
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${resp}=  Get Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
-    
-    sleep  2s
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
     ${dep_name1}=  FakerLibrary.bs
     ${dep_code1}=   Random Int  min=100   max=999
     ${dep_desc1}=   FakerLibrary.word  
@@ -1755,8 +1758,7 @@ JD-TC-CreateUser-UH16
         Should Be Equal As Strings  ${resp.status_code}  200
 
     END
-    
-    sleep  2s
+   
     ${resp}=  Get Departments
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1876,13 +1878,11 @@ JD-TC-CreateUser-16
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
+        ${resp}=  Enable Disable Department  ${toggle[0]}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-
     END
     
-    sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1977,13 +1977,11 @@ JD-TC-CreateUser-UH13
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
+        ${resp}=  Enable Disable Department  ${toggle[0]}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-
     END
-    
-    sleep  2s
+  
     ${resp}=  Get Departments
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2050,13 +2048,11 @@ JD-TC-CreateUser-UH14
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
+        ${resp}=  Enable Disable Department  ${toggle[0]}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-
     END
     
-    sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2356,10 +2352,9 @@ JD-TC-CreateUser-20
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
+        ${resp}=  Enable Disable Department  ${toggle[0]}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-
     END
 
     ${resp}=  Get Departments
