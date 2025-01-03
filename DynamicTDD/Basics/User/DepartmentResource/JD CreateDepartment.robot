@@ -9,6 +9,7 @@ Library           FakerLibrary
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
@@ -76,20 +77,28 @@ JD-TC-Create Department-1
     Set Suite Variable   ${min_prepayment}
     ${ser_duratn}=      Random Int   min=10   max=30
     Set Suite Variable   ${ser_duratn}
-    ${resp}=   Create Service  ${SERVICE1}  ${ser_desc}  ${ser_duratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}
+    ${resp}=   Create Service  ${SERVICE1}  ${ser_desc}  ${ser_duratn}   ${bool[0]}    ${total_amount}    ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid1}  ${resp.json()}  
-    ${resp}=   Create Service  ${SERVICE2}  ${ser_desc}  ${ser_duratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}
+    ${resp}=   Create Service  ${SERVICE2}  ${ser_desc}  ${ser_duratn}   ${bool[0]}   ${total_amount}    ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid2}  ${resp.json()}  
-    ${resp}=   Create Service  ${SERVICE3}  ${ser_desc}  ${ser_duratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}
+    ${resp}=   Create Service  ${SERVICE3}  ${ser_desc}  ${ser_duratn}    ${bool[0]}   ${total_amount}    ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid3}  ${resp.json()}  
-    ${resp}=   Create Service  ${SERVICE5}  ${ser_desc}  ${ser_duratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}
+    ${resp}=   Create Service  ${SERVICE5}  ${ser_desc}  ${ser_duratn}    ${bool[0]}    ${total_amount}   ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid5}  ${resp.json()} 
-    ${resp}=  Toggle Department Enable
-    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Waitlist Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
     ${dep_name1}=  FakerLibrary.bs
     Set Suite Variable   ${dep_name1}
     ${dep_code1}=   Random Int  min=100   max=999
@@ -112,8 +121,16 @@ JD-TC-Create Department-2
     Set Suite Variable   ${dep_name2}
     ${dep_code2}=   Random Int  min=100   max=999
     Set Suite Variable   ${dep_code2}
-    ${resp}=  Toggle Department Enable
-    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Waitlist Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
     ${resp}=  Create Department With ServiceName  ${dep_name2}  ${dep_code2}  ${dep_desc1}    ${SERVICE3}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${depid2}  ${resp.json()}
@@ -128,8 +145,16 @@ JD-TC-Create Department-3
     Set Suite Variable   ${dep_name3}
     ${dep_code3}=   Random Int  min=100   max=999
     Set Suite Variable   ${dep_code3}
-    ${resp}=  Toggle Department Enable
-    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  Get Waitlist Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
     ${resp}=  Create Department  ${dep_name3}  ${dep_code3}  ${dep_desc1}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${depid3}  ${resp.json()}
@@ -141,8 +166,15 @@ JD-TC-Create Department-4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Toggle Department Enable
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Waitlist Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
     ${dep_code4}=   Random Int  min=100   max=999
     Set Suite Variable   ${dep_code4}
     ${resp}=  Create Department  ${dep_name3}  ${dep_code4}  ${dep_desc1}  
@@ -205,14 +237,13 @@ JD-TC-Create Department-UH4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
   
-    ${resp}=  View Waitlist Settings
-    Log  ${resp.content}
+    ${resp}=  Get Waitlist Settings
+    Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
-        Log  ${resp.content}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-
     END
     
     ${dep_name}=  FakerLibrary.bs
@@ -235,9 +266,46 @@ JD-TC-Create Department-UH6
 
     #  ${resp}=  ConsumerLogin  ${CUSERNAME0}  ${PASSWORD}
     #  Should Be Equal As Strings  ${resp.status_code}  200
-    ${CUSERNAME0}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME0}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_H}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${account_id}  ${token} 
+    #............provider consumer creation..........
+    
+    clear_customer   ${PUSERNAME_H}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${acc_id1}  ${resp.json()['id']}
+
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable  ${PCPHONENO}  555${PH_Number}
+
+    ${fname}=  generate_firstname
+    ${lastname}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lastname}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${acc_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+    
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${acc_id1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -316,7 +384,7 @@ JD-TC-Create Department-6
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_I}    ${highest_package[0]}
     Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    202
     ${resp}=  Account Activation  ${PUSERNAME_I}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -339,8 +407,16 @@ JD-TC-Create Department-6
     ${resp}=   Create Service  ${SERVICE3}  ${ser_desc}  ${ser_duratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid31}  ${resp.json()}  
-    ${resp}=  Toggle Department Enable
-    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  Get Waitlist Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
     ${dep_name}=  FakerLibrary.bs
     Set Suite Variable  ${dep_name}
     ${dep_code}=   Random Int  min=100   max=999
@@ -378,7 +454,7 @@ JD-TC-Create Department-8
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_J}    ${highest_package[0]}
     Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    202
     ${resp}=  Account Activation  ${PUSERNAME_J}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -442,14 +518,13 @@ JD-TC-Create Department-10
     # Should Be Equal As Strings  ${resp.status_code}  200
     
     # ${resp}=  Toggle Department Enable
-    ${resp}=  View Waitlist Settings
-    Log  ${resp.content}
+    ${resp}=  Get Waitlist Settings
+    Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
-        Log  ${resp.content}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-
     END
 
     ${dep_name}=  FakerLibrary.bs

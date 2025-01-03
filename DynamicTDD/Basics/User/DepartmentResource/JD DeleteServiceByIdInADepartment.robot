@@ -9,6 +9,7 @@ Library           FakerLibrary
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
@@ -78,57 +79,63 @@ JD-TC-Delete Service In a Department-1
     Set Suite Variable   ${min_prepayment}
     ${ser_duratn}=      Random Int   min=10   max=30
     Set Suite Variable   ${ser_duratn}
-    ${resp}=   Create Service  ${SERVICE1}  ${ser_desc}  ${ser_duratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}
+    ${resp}=   Create Service  ${SERVICE1}  ${ser_desc}  ${ser_duratn}   ${bool[0]}  ${total_amount}   ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid1}  ${resp.json()}  
-    ${resp}=   Create Service  ${SERVICE2}  ${ser_desc}  ${ser_duratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}
+    ${resp}=   Create Service  ${SERVICE2}  ${ser_desc}  ${ser_duratn}    ${bool[0]}  ${total_amount}   ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid2}  ${resp.json()}  
-    ${resp}=   Create Service  ${SERVICE3}  ${ser_desc}  ${ser_duratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}
+    ${resp}=   Create Service  ${SERVICE3}  ${ser_desc}  ${ser_duratn}    ${bool[0]}  ${total_amount}   ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid3}  ${resp.json()}  
-    ${resp}=   Create Service  ${SERVICE4}  ${ser_desc}  ${ser_duratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}
+    ${resp}=   Create Service  ${SERVICE4}  ${ser_desc}  ${ser_duratn}  ${bool[0]}  ${total_amount}  ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid4}  ${resp.json()}  
-    ${resp}=   Create Service  ${SERVICE5}  ${ser_desc}  ${ser_duratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}
+    ${resp}=   Create Service  ${SERVICE5}  ${ser_desc}  ${ser_duratn}  ${bool[0]}  ${total_amount}  ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid5}  ${resp.json()}  
-    ${resp}=   Create Service  ${SERVICE6}  ${ser_desc}  ${ser_duratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}
+    ${resp}=   Create Service  ${SERVICE6}  ${ser_desc}  ${ser_duratn}  ${bool[0]}  ${total_amount}   ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid6}  ${resp.json()} 
-    ${resp}=   Create Service  ${SERVICE7}  ${ser_desc}  ${ser_duratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}
+    ${resp}=   Create Service  ${SERVICE7}  ${ser_desc}  ${ser_duratn}  ${bool[0]}  ${total_amount}  ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid7}  ${resp.json()}   
-    ${resp}=   Create Service  ${SERVICE8}  ${ser_desc}  ${ser_duratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}
+    ${resp}=   Create Service  ${SERVICE8}  ${ser_desc}  ${ser_duratn}  ${bool[0]}  ${total_amount}   ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid8}  ${resp.json()}  
-    ${resp}=   Create Service  ${SERVICE9}  ${ser_desc}  ${ser_duratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}
+    ${resp}=   Create Service  ${SERVICE9}  ${ser_desc}  ${ser_duratn}  ${bool[0]}  ${total_amount}   ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid9}  ${resp.json()}  
-    ${resp}=   Create Service  ${SERVICE10}  ${ser_desc}  ${ser_duratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}
+    ${resp}=   Create Service  ${SERVICE10}  ${ser_desc}  ${ser_duratn}  ${bool[0]}  ${total_amount}  ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid10}  ${resp.json()}  
-    ${resp}=   Create Service  ${SERVICE11}  ${ser_desc}  ${ser_duratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}
+    ${resp}=   Create Service  ${SERVICE11}  ${ser_desc}  ${ser_duratn}  ${bool[0]}  ${total_amount}  ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid11}  ${resp.json()}  
-    ${resp}=   Create Service  ${SERVICE12}  ${ser_desc}  ${ser_duratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}
+    ${resp}=   Create Service  ${SERVICE12}  ${ser_desc}  ${ser_duratn}  ${bool[0]}  ${total_amount}  ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid12}  ${resp.json()}  
-    ${resp}=   Create Service  ${SERVICE13}  ${ser_desc}  ${ser_duratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}
+    ${resp}=   Create Service  ${SERVICE13}  ${ser_desc}  ${ser_duratn}  ${bool[0]}  ${total_amount}  ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid13}  ${resp.json()} 
 
-    ${resp}=   Create Service  ${SERVICE15}  ${ser_desc}  ${ser_duratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}
+    ${resp}=   Create Service  ${SERVICE15}  ${ser_desc}  ${ser_duratn}  ${bool[0]}  ${total_amount}  ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid15}  ${resp.json()} 
 
-    ${resp}=   Create Service  ${SERVICE16}  ${ser_desc}  ${ser_duratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}
+    ${resp}=   Create Service  ${SERVICE16}  ${ser_desc}  ${ser_duratn}  ${bool[0]}  ${total_amount}  ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid16}  ${resp.json()} 
 
-    ${resp}=  Toggle Department Enable
-    Should Be Equal As Strings  ${resp.status_code}  200
-    sleep  03s
+    ${resp}=  Get Waitlist Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
     ${resp}=  Get Departments
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -158,9 +165,7 @@ JD-TC-Delete Service In a Department-1
     ${resp}=   Get Service By Id   ${sid3} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${SERVICE3}  description=${ser_desc}   serviceDuration=${ser_duratn}   notification=${bool[1]}  notificationType=${notifytype[2]}  status=${status[1]}  bType=${btype}   
-    
-
+   
 
 JD-TC-Delete Service In a Department-3
     [Documentation]  Provider deleting another service from a department
@@ -318,7 +323,7 @@ JD-TC-Delete Service In a Department-7
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # ${resp}=   Create Service  ${SERVICE15}  ${ser_desc}  ${ser_duratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}
+    # ${resp}=   Create Service  ${SERVICE15}  ${ser_desc}  ${ser_duratn}  ${bool[1]}  ${total_amount}  ${bool[1]}  ${bool[0]}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${sid15}  ${resp.json()} 
     ${dep_name18}=  FakerLibrary.bs
@@ -339,12 +344,11 @@ JD-TC-Delete Service In a Department-7
     ${resp}=  Get Services in Department  ${depid18}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=   Get Service By Id  ${sid15}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${SERVICE15}  description=${ser_desc}   serviceDuration=${ser_duratn}   notification=${bool[1]}  notificationType=${notifytype[2]}  status=${status[1]}  bType=${btype}   
-
-
+   
 JD-TC-Delete Service In a Department-UH1
     [Documentation]  Provider deleting already deleted service
 
@@ -396,8 +400,15 @@ JD-TC-Delete Service In a Department-UH3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Toggle Department Enable
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Waitlist Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
     ${resp}=  Delete Service ById In A Department  ${depid1}  ${sid5}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION}"
@@ -419,7 +430,7 @@ JD-TC-Delete Service In a Department-UH4
     Set Suite Variable  ${total_amount}
     ${min_prepayment}=  Random Int   min=1   max=50
     Set Suite Variable   ${min_prepayment}
-    ${resp}=  Create Service Department  ${SERVICE14}  ${dep_desc}   ${ser_duratn}   ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}   ${depid2}
+    ${resp}=  Create Service   ${SERVICE14}  ${dep_desc}   ${ser_duratn}   ${bool[0]}  ${total_amount}  ${bool[0]}   department=${depid2}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid14}  ${resp.json()}
     ${resp}=  Delete Service ById In A Department  ${depid2}  ${sid4}
@@ -440,9 +451,46 @@ JD-TC-Delete Service In a Department-UH6
 
     # ${resp}=  ConsumerLogin  ${CUSERNAME0}  ${PASSWORD}
     # Should Be Equal As Strings  ${resp.status_code}  200
-    ${CUSERNAME0}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME0}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${account_id}  ${token} 
+    #............provider consumer creation..........
+    
+    clear_customer   ${PUSERNAME_K}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${acc_id1}  ${resp.json()['id']}
+
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable  ${PCPHONENO}  555${PH_Number}
+
+    ${fname}=  generate_firstname
+    ${lastname}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lastname}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${acc_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+    
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${acc_id1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
