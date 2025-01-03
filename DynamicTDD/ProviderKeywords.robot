@@ -215,7 +215,21 @@ Enable Disable Department
     ${resp}=  PUT On Session    ynw  /provider/settings/waitlistMgr/department/${status}   expected_status=any
     Check Deprication  ${resp}  Enable Disable Department
     RETURN  ${resp} 
-   	
+
+Disable Department
+   [Arguments]  ${depid} 
+   Check And Create YNW Session
+   ${resp}=  PUT On Session  ynw  /provider/departments/${depid}/disable  expected_status=any
+   Check Deprication  ${resp}  Disable Department
+    RETURN  ${resp}
+
+Enable Department
+   [Arguments]  ${depid} 
+   Check And Create YNW Session
+   ${resp}=  PUT On Session  ynw  /provider/departments/${depid}/enable  expected_status=any
+   Check Deprication  ${resp}  Enable Department
+    RETURN  ${resp} 
+    
 # Toggle Department Enable
 # 	Check And Create YNW Session
 #     ${resp}=  PUT On Session    ynw  /provider/settings/waitlistMgr/department/Enable   expected_status=any
