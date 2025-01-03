@@ -1590,12 +1590,12 @@ JD-TC-create cart-UH12
     # ${catalogItems}=  Create Dictionary    catalogItem=${catalogItem}  quantity=${quantity}
 
 
-    ${DETAILS_REQUIRED}=  format String   ${DETAILS_REQUIRED}   	catalog item
+    ${FIELD_REQUIRED}=  format String   ${FIELD_REQUIRED}   	catalog item
 
     ${resp}=  Create Cart From Consumerside      ${store_id}    ${cid}      ${deliveryType[0]}       ${catalogItem}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings  ${resp.json()}   ${DETAILS_REQUIRED}
+    Should Be Equal As Strings  ${resp.json()}   ${FIELD_REQUIRED}
 
 
 JD-TC-create cart-UH13
