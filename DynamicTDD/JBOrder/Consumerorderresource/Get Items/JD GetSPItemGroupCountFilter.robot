@@ -285,7 +285,7 @@ JD-TC-Get sp item group Count Filter -UH1
     ${resp}=    Get sp item group Count Filter    ${accountId}   status-eq=${toggle[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()}   []
+    Should Be Equal As Strings    ${resp.json()}   0
 
 JD-TC-Get sp item group Count Filter -UH2
 
@@ -298,7 +298,7 @@ JD-TC-Get sp item group Count Filter -UH2
     ${resp}=    Get sp item group Count Filter    ${primaryMobileNo}   status-eq=${toggle[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()}   []
+    Should Be Equal As Strings    ${resp.json()}   0
 
 
 
@@ -530,7 +530,7 @@ JD-TC-Get sp item group Count Filter -UH3
     ${resp}=    Get sp item group Count Filter    ${accountId}   status-eq=${toggle[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()}                                              []
+    Should Be Equal As Strings    ${resp.json()}                                              2
 
 
 

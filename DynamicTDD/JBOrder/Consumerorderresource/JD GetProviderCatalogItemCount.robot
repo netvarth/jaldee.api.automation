@@ -115,7 +115,7 @@ JD-TC-Get Provider Catalogs Items Count-1
     ${displayName}=     FakerLibrary.name
     Set Suite Variable              ${displayName} 
 
-    ${resp}=    Create Item Inventory  ${displayName}     
+    ${resp}=    Create Item Inventory  ${displayName}   isInventoryItem=${bool[1]}   
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId1}  ${resp.json()}

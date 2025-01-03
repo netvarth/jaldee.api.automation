@@ -597,12 +597,12 @@ JD-TC-Get sp item category Filter-4
     ${displayName}=     FakerLibrary.name
     Set Test Variable              ${displayName} 
 
-    ${resp}=    Create Item Inventory  ${displayName}        categoryCode=${categoryCode}
+    ${resp}=    Create Item Inventory  ${displayName}        categoryCode=${categoryCode}   isInventoryItem=${bool[1]}    isBatchApplicable=${boolean[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${itemEncId1}  ${resp.json()}
 
-    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
+    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${inv_cat_encid1}  ${resp.json()}
@@ -755,12 +755,12 @@ JD-TC-Get sp item category Filter-4
     Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[2]}
 
     # ............... sales order catalog and item adding...............
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}   ${Name}  ${boolean[0]}  ${inv_cat_encid}  onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[0]}  storePickup=${boolean[1]}  courierService=${boolean[0]}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}   ${Name}  ${boolean[1]}  ${inv_cat_encid}  onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[0]}  storePickup=${boolean[1]}  courierService=${boolean[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable              ${soc_id1}    ${resp.json()}
 
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${soc_id1}    ${boolean[0]}     ${Inv_Cata_Item_Encid1}     ${price}    ${boolean[1]}   minSaleQuantity=${minSaleQuantity}  maxSaleQuantity=${maxSaleQuantity}
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${soc_id1}    ${boolean[1]}     ${Inv_Cata_Item_Encid1}     ${price}    ${boolean[1]}   minSaleQuantity=${minSaleQuantity}  maxSaleQuantity=${maxSaleQuantity}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${SOC_itemEncIds1}  ${resp.json()[0]}

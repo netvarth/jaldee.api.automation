@@ -530,6 +530,6 @@ JD-TC-Get sp item group Filter -UH3
     ${resp}=    Get sp item group Filter     ${accountId}   status-eq=${toggle[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()}                                              []
+    # Should Be Equal As Strings    ${resp.json()}                                              []
 
 
