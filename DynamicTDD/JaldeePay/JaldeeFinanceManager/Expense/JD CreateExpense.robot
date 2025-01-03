@@ -215,6 +215,47 @@ JD-TC-CreateExpense-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+
+    FOR   ${a}  IN RANGE   15
+       
+        ${resp}=  Flush Analytics Data to DB
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        sleep  01s
+        Exit For Loop If    ${resp.content}=="FREE"
+    
+    END
+    #Finance Expense Total
+    ${resp}=  Get Finance Analytics  frequency=${dateCategory[0]}   accId=${pid}   locationId=${lid}     metricId=168    
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    #Finance Expense Partially Paid Count
+    ${resp}=  Get Finance Analytics  frequency=${dateCategory[0]}   accId=${pid}   locationId=${lid}     metricId=172   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    #Finance Expense Paid Total
+    ${resp}=  Get Finance Analytics  frequency=${dateCategory[0]}   accId=${pid}   locationId=${lid}     metricId=169   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    #Finance Expense Fully Paid Count
+    ${resp}=  Get Finance Analytics  frequency=${dateCategory[0]}   accId=${pid}   locationId=${lid}     metricId=171  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    #Finance Expense Due Total
+    ${resp}=  Get Finance Analytics  frequency=${dateCategory[0]}   accId=${pid}   locationId=${lid}     metricId=170   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    #Finance Expense Count
+    ${resp}=  Get Finance Analytics  frequency=${dateCategory[0]}   accId=${pid}   locationId=${lid}     metricId=167   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
 JD-TC-CreateExpense-2
 
     [Documentation]  Create Expense for an SP With empty expensefor.
