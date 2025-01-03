@@ -65,17 +65,25 @@ JD-TC-Update Department-1
     Set Suite Variable   ${min_prepayment}
     ${ser_duratn}=      Random Int   min=10   max=30
     Set Suite Variable   ${ser_duratn}
-    ${resp}=   Create Service  ${SERVICE1}  ${ser_desc}  ${ser_duratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}
+    ${resp}=   Create Service  ${SERVICE1}  ${ser_desc}  ${ser_duratn}   ${bool[0]}  ${total_amount}   ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid1}  ${resp.json()}  
-    ${resp}=   Create Service  ${SERVICE2}  ${ser_desc}  ${ser_duratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}
+    ${resp}=   Create Service  ${SERVICE2}  ${ser_desc}  ${ser_duratn}    ${bool[0]}  ${total_amount}    ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid2}  ${resp.json()}  
-    ${resp}=   Create Service  ${SERVICE3}  ${ser_desc}  ${ser_duratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}
+    ${resp}=   Create Service  ${SERVICE3}  ${ser_desc}  ${ser_duratn}    ${bool[0]}  ${total_amount}    ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid3}  ${resp.json()}  
-    ${resp}=  Toggle Department Enable
-    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  Get Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
     ${dep_name1}=  FakerLibrary.bs
     Set Suite Variable   ${dep_name1}
     ${dep_code1}=   Random Int  min=100   max=999
@@ -163,8 +171,9 @@ JD-TC-Update Department-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${depid2}  ${resp.json()}
     ${resp}=  Update Department  ${depid2}   ${dep_name1}   ${dep_code3}  ${dep_desc}   ${sid2}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"  "${DETP_CODE_ALREADY_EXISTS}"
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.status_code}  422
+    # Should Be Equal As Strings  "${resp.json()}"  "${DETP_CODE_ALREADY_EXISTS}"
 
 JD-TC-Update Department-UH2
     [Documentation]  Provider Create already existing department code

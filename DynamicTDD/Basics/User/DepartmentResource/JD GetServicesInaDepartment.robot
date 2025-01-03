@@ -9,6 +9,7 @@ Library           FakerLibrary
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
@@ -67,18 +68,26 @@ JD-TC-Get Services in Department-1
     Set Suite Variable   ${min_prepayment}
     ${ser_duratn}=      Random Int   min=10   max=30
     Set Suite Variable   ${ser_duratn}
-    ${resp}=   Create Service  ${SERVICE1}  ${ser_desc}  ${ser_duratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}
+    ${resp}=   Create Service  ${SERVICE1}  ${ser_desc}  ${ser_duratn}   ${bool[0]}  ${total_amount}   ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid1}  ${resp.json()}  
-    ${resp}=   Create Service  ${SERVICE2}  ${ser_desc}  ${ser_duratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}
+    ${resp}=   Create Service  ${SERVICE2}  ${ser_desc}  ${ser_duratn}   ${bool[0]}  ${total_amount}   ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid2}  ${resp.json()}  
-    ${resp}=   Create Service  ${SERVICE3}  ${ser_desc}  ${ser_duratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}
+    ${resp}=   Create Service  ${SERVICE3}  ${ser_desc}  ${ser_duratn}   ${bool[0]}  ${total_amount}   ${bool[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid3}  ${resp.json()}  
-    ${resp}=  Toggle Department Enable
-    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  Get Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
     ${dep_name1}=  FakerLibrary.bs
     Set Suite Variable   ${dep_name1}
     ${dep_code1}=   Random Int  min=100   max=999
@@ -94,12 +103,7 @@ JD-TC-Get Services in Department-1
     Should Be Equal As Strings  ${resp.json()['services'][0]['name']}                       ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['services'][0]['description']}                ${ser_desc}
     Should Be Equal As Strings  ${resp.json()['services'][0]['serviceDuration']}            ${ser_duratn}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['notificationType']}           ${notifytype[2]}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['notification']}               ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['isPrePayment']}               ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['minPrePaymentAmount']}        ${min_prepayment}.0
     Should Be Equal As Strings  ${resp.json()['services'][0]['totalAmount']}                ${total_amount}.0
-    Should Be Equal As Strings  ${resp.json()['services'][0]['bType']}                      ${bType}
     Should Be Equal As Strings  ${resp.json()['services'][0]['status']}                     ${status[0]}
     Should Be Equal As Strings  ${resp.json()['services'][0]['taxable']}                    ${bool[0]}
     
@@ -107,12 +111,7 @@ JD-TC-Get Services in Department-1
     Should Be Equal As Strings  ${resp.json()['services'][1]['name']}                       ${SERVICE2}
     Should Be Equal As Strings  ${resp.json()['services'][1]['description']}                ${ser_desc}
     Should Be Equal As Strings  ${resp.json()['services'][1]['serviceDuration']}            ${ser_duratn}
-    Should Be Equal As Strings  ${resp.json()['services'][1]['notificationType']}           ${notifytype[2]}
-    Should Be Equal As Strings  ${resp.json()['services'][1]['notification']}               ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['services'][1]['isPrePayment']}               ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['services'][1]['minPrePaymentAmount']}        ${min_prepayment}.0
     Should Be Equal As Strings  ${resp.json()['services'][1]['totalAmount']}                ${total_amount}.0
-    Should Be Equal As Strings  ${resp.json()['services'][1]['bType']}                      ${bType}
     Should Be Equal As Strings  ${resp.json()['services'][1]['status']}                     ${status[0]}
     Should Be Equal As Strings  ${resp.json()['services'][1]['taxable']}                    ${bool[0]}
 
@@ -129,7 +128,16 @@ JD-TC-Get Services in Department-2
     Set Suite Variable   ${dep_name2}
     ${dep_code2}=   Random Int  min=100   max=999
     Set Suite Variable   ${dep_code2}
-    ${resp}=  Toggle Department Enable
+    
+    ${resp}=  Get Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
     ${resp}=  Create Department With ServiceName  ${dep_name2}  ${dep_code2}  ${dep_desc}    ${SERVICE1}  ${SERVICE2}  ${SERVICE3}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${depid2}  ${resp.json()}
@@ -138,27 +146,21 @@ JD-TC-Get Services in Department-2
     Should Be Equal As Strings  ${resp.json()['services'][0]['name']}                       ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['services'][0]['description']}                ${SERVICE1} ${description}
     Should Be Equal As Strings  ${resp.json()['services'][0]['serviceDuration']}            ${default_ser_durtn}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['notificationType']}           ${notifytype[0]}
     Should Be Equal As Strings  ${resp.json()['services'][0]['isPrePayment']}               ${bool[0]}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['bType']}                      ${bType}
     Should Be Equal As Strings  ${resp.json()['services'][0]['status']}                     ${status[0]}
     Should Be Equal As Strings  ${resp.json()['services'][0]['taxable']}                    ${bool[0]}
     
     Should Be Equal As Strings  ${resp.json()['services'][1]['name']}                       ${SERVICE2}
     Should Be Equal As Strings  ${resp.json()['services'][1]['description']}                ${SERVICE2} ${description}
     Should Be Equal As Strings  ${resp.json()['services'][1]['serviceDuration']}            ${default_ser_durtn}
-    Should Be Equal As Strings  ${resp.json()['services'][1]['notificationType']}           ${notifytype[0]}
     Should Be Equal As Strings  ${resp.json()['services'][1]['isPrePayment']}               ${bool[0]}
-    Should Be Equal As Strings  ${resp.json()['services'][1]['bType']}                      ${bType}
     Should Be Equal As Strings  ${resp.json()['services'][1]['status']}                     ${status[0]}
     Should Be Equal As Strings  ${resp.json()['services'][1]['taxable']}                    ${bool[0]}
 
     Should Be Equal As Strings  ${resp.json()['services'][2]['name']}                       ${SERVICE3}
     Should Be Equal As Strings  ${resp.json()['services'][2]['description']}                ${SERVICE3} ${description}
     Should Be Equal As Strings  ${resp.json()['services'][2]['serviceDuration']}            ${default_ser_durtn}
-    Should Be Equal As Strings  ${resp.json()['services'][2]['notificationType']}           ${notifytype[0]}
     Should Be Equal As Strings  ${resp.json()['services'][2]['isPrePayment']}               ${bool[0]}
-    Should Be Equal As Strings  ${resp.json()['services'][2]['bType']}                      ${bType}
     Should Be Equal As Strings  ${resp.json()['services'][2]['status']}                     ${status[0]}
     Should Be Equal As Strings  ${resp.json()['services'][2]['taxable']}                    ${bool[0]}
 
@@ -174,9 +176,46 @@ JD-TC-Get Services in Department-UH2
 
     # ${resp}=  ConsumerLogin  ${CUSERNAME0}  ${PASSWORD}
     # Should Be Equal As Strings  ${resp.status_code}  200
-    ${CUSERNAME0}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME0}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME0}    ${account_id}  ${token} 
+    #............provider consumer creation..........
+    
+    clear_customer   ${PUSERNAME_K}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${acc_id1}  ${resp.json()['id']}
+
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable  ${PCPHONENO}  555${PH_Number}
+
+    ${fname}=  generate_firstname
+    ${lastname}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lastname}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${acc_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+    
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${acc_id1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
