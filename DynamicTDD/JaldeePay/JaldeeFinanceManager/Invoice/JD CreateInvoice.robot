@@ -1384,6 +1384,19 @@ JD-TC-CreateInvoice-11
     Should Be Equal As Strings   ${response_amountTotal}  ${Tot}
     Set Suite Variable  ${invoice_wtlistonline_uid}  ${resp.json()[0]['invoiceUid']}
 
+    FOR   ${a}  IN RANGE   15
+       
+        ${resp}=  Flush Analytics Data to DB
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        sleep  01s
+        Exit For Loop If    ${resp.content}=="FREE"
+    
+    END
+    #Finance Invoice Partially Paid Count
+    ${resp}=  Get Finance Analytics  frequency=${dateCategory[0]}   accId=${pid1}   locationId=${p1_lid}     metricId=166    
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-CreateInvoice-12
 
@@ -1512,6 +1525,30 @@ JD-TC-CreateInvoice-12
 
     ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    FOR   ${a}  IN RANGE   15
+       
+        ${resp}=  Flush Analytics Data to DB
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        sleep  01s
+        Exit For Loop If    ${resp.content}=="FREE"
+    
+    END
+    #Finance Invoice Paid Total
+    ${resp}=  Get Finance Analytics  frequency=${dateCategory[0]}   accId=${pid1}   locationId=${p1_lid}     metricId=180    
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    #Finance Invoice Due Total
+    ${resp}=  Get Finance Analytics  frequency=${dateCategory[0]}   accId=${pid1}   locationId=${p1_lid}     metricId=181   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    #Finance Invoice Count
+    ${resp}=  Get Finance Analytics  frequency=${dateCategory[0]}   accId=${pid1}   locationId=${p1_lid}     metricId=160   
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Category With Filter  categoryType-eq=${categoryType[3]}   name-eq=${Booking} 
