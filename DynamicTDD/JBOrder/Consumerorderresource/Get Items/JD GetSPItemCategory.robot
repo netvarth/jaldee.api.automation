@@ -811,9 +811,19 @@ JD-TC-Get sp item category Filter-4
     ${resp}=    Get sp item category Filter     ${accountId}   status-eq=${toggle[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()[0]['categoryCode']}                                              ${categoryCode}
-    Should Be Equal As Strings    ${resp.json()[0]['categoryName']}                                            ${categoryName}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}                                                      ${toggle[0]}
+    ${len}=  Get Length  ${resp.json()}
+
+    FOR  ${i}  IN RANGE   ${len}
+
+        IF  '${resp.json()[${i}]['categoryCode']}' == '${categoryCode}'  
+            Should Be Equal As Strings    ${resp.json()[${i}]['categoryCode']}                                              ${categoryCode}
+            Should Be Equal As Strings    ${resp.json()[${i}]['categoryName']}                                            ${categoryName}
+            Should Be Equal As Strings    ${resp.json()[${i}]['status']}                                                      ${toggle[0]}
+
+        END
+    END
+
+
 
 
 

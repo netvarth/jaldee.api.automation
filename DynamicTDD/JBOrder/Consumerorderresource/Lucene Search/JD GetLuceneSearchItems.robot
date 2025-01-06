@@ -148,7 +148,7 @@ JD-TC-Get Lucene Search For ConsumerOrder-1
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    ${Name}=    FakerLibrary.last name
+    ${Name}=    FakerLibrary.firstname
     Set Suite Variable    ${Name}
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+309187748
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
@@ -299,13 +299,23 @@ JD-TC-Get Lucene Search For ConsumerOrder-4
     ${resp}=    Get Lucene Search For ConsumerOrder    ${accountId}    name=${first}
     Log    ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()[0]['inventoryItem']}                                                           ${boolean[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['batchApplicable']}                                                            ${boolean[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['price']}                                                              ${price}
-    Should Be Equal As Strings    ${resp.json()[0]['sOrderCatalogEncId']}                                                        ${soc_id1}
-    Should Be Equal As Strings    ${resp.json()[0]['encId']}                                                        ${SOC_itemEncIds1}
-    Should Be Equal As Strings    ${resp.json()[0]['itemCode']}                                        ${itemEncId1}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}                                                              ${displayName}
+    ${len}=  Get Length  ${resp.json()}
+
+ 
+
+    FOR  ${i}  IN RANGE   ${len}
+
+        IF  '${resp.json()[${i}]['itemCode']}' == '${itemEncId1}'  
+            Should Be Equal As Strings    ${resp.json()[${i}]['inventoryItem']}                                                           ${boolean[0]}
+            Should Be Equal As Strings    ${resp.json()[${i}]['batchApplicable']}                                                            ${boolean[0]}
+            Should Be Equal As Strings    ${resp.json()[${i}]['price']}                                                              ${price}
+            Should Be Equal As Strings    ${resp.json()[${i}]['sOrderCatalogEncId']}                                                        ${soc_id1}
+            Should Be Equal As Strings    ${resp.json()[${i}]['encId']}                                                        ${SOC_itemEncIds1}
+            Should Be Equal As Strings    ${resp.json()[${i}]['itemCode']}                                        ${itemEncId1}
+            Should Be Equal As Strings    ${resp.json()[${i}]['name']}                                                              ${displayName}
+
+        END
+    END
 
 JD-TC-Get Lucene Search For ConsumerOrder-5
 

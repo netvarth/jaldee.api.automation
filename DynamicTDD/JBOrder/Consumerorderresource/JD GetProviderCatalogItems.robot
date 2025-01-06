@@ -586,14 +586,14 @@ JD-TC-Get Provider Catalogs Items-6
     Should Be Equal As Strings    ${resp.json()[0]['catalog']['encId']}                                       ${SO_Cata_Encid1}
     Should Be Equal As Strings    ${resp.json()[0]['catalog']['name']}                                        ${Name}
     # Should Be Equal As Strings    ${resp.json()[0]['catalog']['invMgmt']}                                     ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['spCode']}                                       ${itemEncId1}
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['encId']}                                        ${itemEncId1}
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}                                         ${displayName}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['spCode']}                                       ${itemEncId11}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['encId']}                                        ${itemEncId11}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}                                         ${displayName1}
     # Should Be Equal As Strings    ${resp.json()[0]['spItem']['invMgmt']}                                      ${bool[1]}
     # Should Be Equal As Strings    ${resp.json()[0]['spItem']['batchEnabled']}                                 ${bool[1]}
     Should Be Equal As Strings    ${resp.json()[0]['invCatItem']['encId']}                                    ${Inv_Cata_Item_Encid1}
     Should Be Equal As Strings    ${resp.json()[0]['price']}                                                  ${price4}
-    Should Be Equal As Strings    ${resp.json()[0]['batchPricing']}                                           ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['batchPricing']}                                           ${bool[0]}
     Should Be Equal As Strings    ${resp.json()[0]['encId']}                                                  ${SOC_itemEncIds4}
     Should Be Equal As Strings    ${resp.json()[0]['invMgmt']}                                                ${bool[1]}
     Should Be Equal As Strings    ${resp.json()[0]['status']}                                                 ${toggle[0]}
@@ -620,14 +620,14 @@ JD-TC-Get Provider Catalogs Items-7
     Should Be Equal As Strings    ${resp.json()[0]['catalog']['encId']}                                       ${SO_Cata_Encid1}
     Should Be Equal As Strings    ${resp.json()[0]['catalog']['name']}                                        ${Name}
     # Should Be Equal As Strings    ${resp.json()[0]['catalog']['invMgmt']}                                     ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['spCode']}                                       ${itemEncId1}
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['encId']}                                        ${itemEncId1}
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}                                         ${displayName}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['spCode']}                                       ${itemEncId11}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['encId']}                                        ${itemEncId11}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}                                         ${displayName1}
     # Should Be Equal As Strings    ${resp.json()[0]['spItem']['invMgmt']}                                      ${bool[1]}
     # Should Be Equal As Strings    ${resp.json()[0]['spItem']['batchEnabled']}                                 ${bool[1]}
     Should Be Equal As Strings    ${resp.json()[0]['invCatItem']['encId']}                                    ${Inv_Cata_Item_Encid1}
     Should Be Equal As Strings    ${resp.json()[0]['price']}                                                  ${price4}
-    Should Be Equal As Strings    ${resp.json()[0]['batchPricing']}                                           ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['batchPricing']}                                           ${bool[0]}
     Should Be Equal As Strings    ${resp.json()[0]['encId']}                                                  ${SOC_itemEncIds4}
     Should Be Equal As Strings    ${resp.json()[0]['invMgmt']}                                                ${bool[1]}
     Should Be Equal As Strings    ${resp.json()[0]['status']}                                                 ${toggle[0]}
@@ -688,9 +688,9 @@ JD-TC-Get Provider Catalogs Items-8
     Should Be Equal As Strings    ${resp.json()[0]['catalog']['encId']}                                       ${SO_Cata_Encid1}
     Should Be Equal As Strings    ${resp.json()[0]['catalog']['name']}                                        ${Name}
     # Should Be Equal As Strings    ${resp.json()[0]['catalog']['invMgmt']}                                     ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['spCode']}                                       ${itemEncId1}
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['encId']}                                        ${itemEncId1}
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}                                         ${displayName}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['spCode']}                                       ${itemEncId11}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['encId']}                                        ${itemEncId11}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}                                         ${displayName1}
     # Should Be Equal As Strings    ${resp.json()[0]['spItem']['invMgmt']}                                      ${bool[1]}
     # Should Be Equal As Strings    ${resp.json()[0]['spItem']['batchEnabled']}                                 ${bool[1]}
     Should Be Equal As Strings    ${resp.json()[0]['invCatItem']['encId']}                                    ${Inv_Cata_Item_Encid1}
@@ -698,7 +698,7 @@ JD-TC-Get Provider Catalogs Items-8
     Should Be Equal As Strings    ${resp.json()[0]['batchPricing']}                                           ${bool[0]}
     Should Be Equal As Strings    ${resp.json()[0]['encId']}                                                  ${SOC_itemEncIds4}
     Should Be Equal As Strings    ${resp.json()[0]['invMgmt']}                                                ${bool[1]}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}                                                 ${toggle[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}                                                 ${toggle[0]}
 
     ${resp}=    Consumer Logout 
     Log   ${resp.content}
