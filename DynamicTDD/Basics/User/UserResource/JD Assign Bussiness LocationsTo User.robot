@@ -8,6 +8,7 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
@@ -25,10 +26,7 @@ JD-TC-AssignBussinessLocationsToUser-1
 
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
-    
-    # clear_queue      ${HLPUSERNAME17}
-    # clear_location   ${HLPUSERNAME17}
-    # clear_service    ${HLPUSERNAME17}
+
     clear_customer   ${HLPUSERNAME17}
 
     IF  ${decrypted_data['enableRbac']}==${bool[1]}
@@ -58,23 +56,16 @@ JD-TC-AssignBussinessLocationsToUser-1
     ${resp}=    Get Locations
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-#     Set Suite Variable  ${pincode1}  ${resp.json()[0]['pinCode']}
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
+        ${resp}=  Enable Disable Department  ${toggle[0]}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-
     END
-    
-#     sleep  2s
-#     ${resp}=  Get Departments
-#     Log   ${resp.json()}
-#     Should Be Equal As Strings  ${resp.status_code}  200
-
+ 
     ${dep_name1}=  FakerLibrary.bs
     ${dep_code1}=   Random Int  min=100   max=999
     ${dep_desc1}=   FakerLibrary.word  
@@ -94,25 +85,8 @@ JD-TC-AssignBussinessLocationsToUser-1
     ${lastname1}=  FakerLibrary.last_name
     ${address}=  get_address
     ${dob1}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
-
-    # ${resp}=  Get LocationsByPincode     ${pin}
-    FOR    ${i}    IN RANGE    3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${city1}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Suite Variable  ${state1}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Suite Variable  ${pin1}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
     
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${countryCodes[0]}  ${PUSERNAME_U1}   ${userType[0]}    deptId=${dep_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id1}  ${resp.json()}
@@ -123,25 +97,8 @@ JD-TC-AssignBussinessLocationsToUser-1
     ${lastname2}=  FakerLibrary.last_name
     ${address2}=  get_address
     ${dob2}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
-
-    # ${resp}=  Get LocationsByPincode     ${pin}
-    FOR    ${i}    IN RANGE    3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${city2}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Suite Variable  ${state2}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Suite Variable  ${pin2}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
-
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.${test_mail}   ${userType[0]}  ${pin2}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+   
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${countryCodes[0]}  ${PUSERNAME_U2}   ${userType[0]}    deptId=${dep_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id2}  ${resp.json()}
@@ -153,19 +110,10 @@ JD-TC-AssignBussinessLocationsToUser-1
 
     ${bussLocations}=  Create List  ${lid1}  ${lid2}
 
-    sleep  02s
     ${resp}=  Get User
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-
-    # Verify Response List  ${resp}  0  id=${u_id2}  firstName=${firstname2}  lastName=${lastname2}  mobileNo=${PUSERNAME_U2}  dob=${dob2}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U2}.${test_mail}   state=${state2}  pincode=${pin2}
-    # ...    deptId=${dep_id}  subdomain=${sub_domain_id}   bussLocations=${bussLocations}   
-    # Variable Should Exist   ${resp.content}  ${city2}
-    # Verify Response List  ${resp}  1  id=${u_id1}  firstName=${firstname1}  lastName=${lastname1}  mobileNo=${PUSERNAME_U1}  dob=${dob1}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  city=${city1}  state=${state1}  pincode=${pin1}
-    # ...    deptId=${dep_id}  subdomain=${sub_domain_id}   bussLocations=${bussLocations}   
-    # Variable Should Exist   ${resp.content}  ${city1}
-   
     ${resp}=  Get User By Id  ${u_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -177,6 +125,7 @@ JD-TC-AssignBussinessLocationsToUser-1
 JD-TC-AssignBussinessLocationsToUser-2
 
     [Documentation]  Assign bussiness locations to user ,user also have team here same team members have different locations
+
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -213,25 +162,8 @@ JD-TC-AssignBussinessLocationsToUser-2
     ${lastname1}=  FakerLibrary.last_name
     ${address}=  get_address
     ${dob1}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
-
-    # ${resp}=  Get LocationsByPincode     ${pin}
-    FOR    ${i}    IN RANGE    3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${city}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Suite Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Suite Variable  ${pin3}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
-    
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+   
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${countryCodes[0]}  ${PUSERNAME_U1}   ${userType[0]}    deptId=${dep_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id3}  ${resp.json()}
@@ -243,7 +175,7 @@ JD-TC-AssignBussinessLocationsToUser-2
     ${address2}=  get_address
     ${dob2}=  FakerLibrary.Date
     
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${countryCodes[0]}  ${PUSERNAME_U2}   ${userType[0]}    deptId=${dep_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id4}  ${resp.json()}
@@ -260,13 +192,10 @@ JD-TC-AssignBussinessLocationsToUser-2
 
     ${bussLocations}=  Create List  ${lid1}  ${lid2}
     ${team}=    Create List  ${t_id2}
-    sleep  02s
-
+   
     ${resp}=  Get User
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response List  ${resp}  0  id=${u_id4}  firstName=${firstname2}  lastName=${lastname2}  mobileNo=${PUSERNAME_U2}  dob=${dob2}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U2}.${test_mail}  city=${city1}  state=${state1}  pincode=${pin1}
-    # ...    deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}  bussLocations=${bussLocations}   teams=${team} 
    
     ${userIds}=  Create List   ${u_id3}
     ${resp}=   Assign Business_loc To User  ${userIds}  ${lid0}  
@@ -274,20 +203,15 @@ JD-TC-AssignBussinessLocationsToUser-2
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${bussLocations1}=  Create List  ${lid0} 
-    sleep  02s
-
+  
     ${resp}=  Get User
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response List  ${resp}  0  id=${u_id4}  firstName=${firstname2}  lastName=${lastname2}  mobileNo=${PUSERNAME_U2}  dob=${dob2}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U2}.${test_mail}  city=${city1}  state=${state1}  pincode=${pin1}
-    # ...    deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}  bussLocations=${bussLocations}   teams=${team} 
-    # Verify Response List  ${resp}  1  id=${u_id3}  firstName=${firstname1}  lastName=${lastname1}  mobileNo=${PUSERNAME_U1}  dob=${dob1}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  city=${city}  state=${state}  pincode=${pin3}
-    # ...    deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}  bussLocations=${bussLocations1}   teams=${team}
-
-
+  
 JD-TC-AssignBussinessLocationsToUser-3
 
     [Documentation]  Assign bussiness locations to user one user have multiple location(account level)
+
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -298,25 +222,8 @@ JD-TC-AssignBussinessLocationsToUser-3
     ${lastname1}=  FakerLibrary.last_name
     ${address}=  get_address
     ${dob1}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
-
-    # ${resp}=  Get LocationsByPincode     ${pin}
-    FOR    ${i}    IN RANGE    3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${city}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Suite Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Suite Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
-    
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+  
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${countryCodes[0]}  ${PUSERNAME_U1}   ${userType[0]}    deptId=${dep_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id3}  ${resp.json()}
@@ -327,16 +234,13 @@ JD-TC-AssignBussinessLocationsToUser-3
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${bussLocations}=  Create List  ${lid1}  ${lid2}
-    sleep  02s
-
+ 
     ${resp}=  Get User
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response List  ${resp}  0  id=${u_id3}  firstName=${firstname1}  lastName=${lastname1}  mobileNo=${PUSERNAME_U1}  dob=${dob1}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  city=${city}  state=${state}  pincode=${pin}
-    # ...    deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}  bussLocations=${bussLocations}   
-
   
 JD-TC-AssignBussinessLocationsToUser-4
+
     [Documentation]  Assign bussiness locations to assistant users multiple locations (account level)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
@@ -353,25 +257,8 @@ JD-TC-AssignBussinessLocationsToUser-4
     ${lastname1}=  FakerLibrary.last_name
     ${address}=  get_address
     ${dob1}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
-
-    # ${resp}=  Get LocationsByPincode     ${pin}
-    FOR    ${i}    IN RANGE    3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${city1}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Suite Variable  ${state1}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Suite Variable  ${pin1}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
-    
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[1]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+  
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${countryCodes[0]}  ${PUSERNAME_U1}   ${userType[0]}    deptId=${dep_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id}  ${resp.json()}
@@ -380,9 +267,9 @@ JD-TC-AssignBussinessLocationsToUser-4
     ${resp}=   Assign Business_loc To User  ${userIds}  ${lid1}  ${lid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    sleep  02s
-
+  
     ${bussLocations}=  Create List  ${lid1}  ${lid2}
+
     ${resp}=  Get User
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -394,19 +281,11 @@ JD-TC-AssignBussinessLocationsToUser-4
         ...    Should Be Equal As Strings       ${resp.json()[${i}]['firstName']}                       ${firstname1}       
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['lastName']}                        ${lastname1} 
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['mobileNo']}                        ${PUSERNAME_U1}      
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['dob']}                             ${dob1}      
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['gender']}                          ${Genderlist[0]}      
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[1]}     
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U1}.${test_mail}  
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          0     
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['subdomain']}                       0
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['admin']}                           ${bool[0]}
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['pincode']}                         ${pin1} 
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['bussLocations']}                   ${bussLocations}
     END
     
 JD-TC-AssignBussinessLocationsToUser-5
+
     [Documentation]  Assign bussiness locations to users by user login
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
@@ -417,40 +296,8 @@ JD-TC-AssignBussinessLocationsToUser-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+701113
-    clear_users  ${PUSERNAME_U1}
-    ${firstname1}=  FakerLibrary.name
-    ${lastname1}=  FakerLibrary.last_name
-    ${address}=  get_address
-    ${dob1}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
+    ${PUSERNAME_U1}  ${u_id} =  Create and Configure Sample User    deptId=${dep_id}
 
-    # ${resp}=  Get LocationsByPincode     ${pin}
-    FOR    ${i}    IN RANGE    3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${city1}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Suite Variable  ${state1}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Suite Variable  ${pin1}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
-    
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${u_id}  ${resp.json()}
-
-    ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -459,17 +306,9 @@ JD-TC-AssignBussinessLocationsToUser-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${NO_PERMISSION_TO_ADD_LOCATION}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${bussLocations}=  Create List  ${lid1}  ${lid2}
-    # ${resp}=  Get User
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response List  ${resp}  0  id=${u_id}  firstName=${firstname1}  lastName=${lastname1}  mobileNo=${PUSERNAME_U1}  dob=${dob1}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  city=${city1}  state=${state1}  pincode=${pin1}
-    # ...    deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}  bussLocations=${bussLocations}   
-
    
 JD-TC-AssignBussinessLocationsToUser-UH1
+
     [Documentation]  Assign bussiness disabled locations to users (account level)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
@@ -488,63 +327,8 @@ JD-TC-AssignBussinessLocationsToUser-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+701185
-    clear_users  ${PUSERNAME_U1}
-    ${firstname1}=  FakerLibrary.name
-    ${lastname1}=  FakerLibrary.last_name
-    ${address}=  get_address
-    ${dob1}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
-
-    # ${resp}=  Get LocationsByPincode     ${pin}
-    FOR    ${i}    IN RANGE    3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${city1}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Suite Variable  ${state1}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Suite Variable  ${pin1}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
-    
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${u_id3}  ${resp.json()}
-
-    ${PUSERNAME_U2}=  Evaluate  ${PUSERNAME}+701189
-    clear_users  ${PUSERNAME_U2}
-    ${firstname2}=  FakerLibrary.name
-    ${lastname2}=  FakerLibrary.last_name
-    ${address2}=  get_address
-    ${dob2}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
-
-    # ${resp}=  Get LocationsByPincode     ${pin}
-    FOR    ${i}    IN RANGE    3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${city2}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Suite Variable  ${state2}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Suite Variable  ${pin2}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
-
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.${test_mail}   ${userType[0]}  ${pin2}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${u_id4}  ${resp.json()}
+    ${u_id3} =  Create Sample User    deptId=${dep_id}
+    ${u_id4} =  Create Sample User    deptId=${dep_id}
 
     ${resp}=   Disable Location  ${lid3}
     Log   ${resp.json()}
@@ -555,7 +339,6 @@ JD-TC-AssignBussinessLocationsToUser-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.content}  "${CANNOT_ASSIGN_DISABLED_LOCATION}"
-
 
 JD-TC-AssignBussinessLocationsToUser-UH2
 
@@ -572,21 +355,46 @@ JD-TC-AssignBussinessLocationsToUser-UH3
 
     [Documentation]  Assign bussiness locations to user with consumer login
 
-    # ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=    Send Otp For Login    ${CUSERNAME8}    ${account_id}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    #............provider consumer creation..........
+    
+    clear_customer   ${HLPUSERNAME17}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${acc_id1}  ${resp.json()['id']}
+
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable  ${PCPHONENO}  555${PH_Number}
+
+    ${fname}=  generate_firstname
+    ${lastname}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lastname}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${acc_id1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
-
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${account_id}  ${token} 
+    
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${acc_id1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -596,8 +404,8 @@ JD-TC-AssignBussinessLocationsToUser-UH3
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  ${resp.content}  "${LOGIN_NO_ACCESS_FOR_URL}"
 
-
 JD-TC-AssignBussinessLocationsToUser-UH4
+
     [Documentation]  Assign bussiness locations to users by user login location created in user level
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
@@ -608,82 +416,20 @@ JD-TC-AssignBussinessLocationsToUser-UH4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+701115
-    clear_users  ${PUSERNAME_U1}
-    ${firstname1}=  FakerLibrary.name
-    ${lastname1}=  FakerLibrary.last_name
-    ${address}=  get_address
-    ${dob1}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
+    ${PUSERNAME_U1}  ${u_id} =  Create and Configure Sample User    deptId=${dep_id}
 
-    # ${resp}=  Get LocationsByPincode     ${pin}
-    FOR    ${i}    IN RANGE    3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${city1}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Suite Variable  ${state1}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Suite Variable  ${pin1}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
-    
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${u_id}  ${resp.json()}
-
-    ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${lid4}=   Create Sample Location
-    ${DAY}=  db.get_date_by_timezone  ${tz}   
-    ${list}=  Create List  1  2  3  4  5  6  7
-    # ${sTime}=  db.get_time_by_timezone   ${tz}
-    ${sTime}=  db.get_time_by_timezone  ${tz}
-    ${eTime}=  add_timezone_time  ${tz}  0  30  
-    # ${city}=   FakerLibrary.state
-    # ${latti}=  get_latitude
-    # ${longi}=  get_longitude
-    # ${postcode}=  FakerLibrary.postcode
-    # ${address}=  get_address
     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    Set Suite Variable  ${tz}
-    ${parking}    Random Element     ${parkingType} 
-    ${24hours}    Random Element    ['True','False']
-    ${url}=   FakerLibrary.url
-    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
-    Log  ${resp.json()}
+   
+    ${resp}=  Create Location   ${city}  ${longi}  ${latti}  ${postcode}  ${address}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.content}  "${NOT_PERMITTED_TO_CREATE_LOCATION}"
 
-    # ${userIds}=  Create List  ${u_id}  
-    # ${resp}=   Assign Business_loc To User  ${userIds}  ${lid4}  
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${bussLocations}=  Create List  ${lid4}
-    # ${resp}=  Get User
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response List  ${resp}  0  id=${u_id}  firstName=${firstname1}  lastName=${lastname1}  mobileNo=${PUSERNAME_U1}  dob=${dob1}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  city=${city1}  state=${state1}  pincode=${pin1}
-    # ...    deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}  bussLocations=${bussLocations}   teams=[] 
-
-    # ${resp}=  Get User By Id  ${u_id}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
 JD-TC-AssignBussinessLocationsToUser-UH5
+
     [Documentation]  Assign another provider bussiness locations to users 
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME75}  ${PASSWORD}
@@ -705,63 +451,8 @@ JD-TC-AssignBussinessLocationsToUser-UH5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+701117
-    clear_users  ${PUSERNAME_U1}
-    ${firstname1}=  FakerLibrary.name
-    ${lastname1}=  FakerLibrary.last_name
-    ${address}=  get_address
-    ${dob1}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
-
-    # ${resp}=  Get LocationsByPincode     ${pin}
-    FOR    ${i}    IN RANGE    3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${city1}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Suite Variable  ${state1}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Suite Variable  ${pin1}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
-    
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${u_id1}  ${resp.json()}
-
-    ${PUSERNAME_U2}=  Evaluate  ${PUSERNAME}+701118
-    clear_users  ${PUSERNAME_U2}
-    ${firstname2}=  FakerLibrary.name
-    ${lastname2}=  FakerLibrary.last_name
-    ${address2}=  get_address
-    ${dob2}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
-
-    # ${resp}=  Get LocationsByPincode     ${pin}
-    FOR    ${i}    IN RANGE    3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${city2}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Suite Variable  ${state2}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Suite Variable  ${pin2}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
-
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.${test_mail}   ${userType[0]}  ${pin2}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${u_id2}  ${resp.json()}
+    ${u_id1} =  Create Sample User    deptId=${dep_id}
+    ${u_id2} =  Create Sample User    deptId=${dep_id}
 
     ${userIds}=  Create List  ${u_id1}  ${u_id2}
     ${resp}=   Assign Business_loc To User  ${userIds}  ${lid7}  
@@ -769,8 +460,8 @@ JD-TC-AssignBussinessLocationsToUser-UH5
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.content}  "${LOCATION_NOT_FOUND}"
 
-   
 JD-TC-AssignBussinessLocationsToUser-UH6
+
     [Documentation]  Assign bussiness locations to epmty users list 
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
@@ -781,43 +472,9 @@ JD-TC-AssignBussinessLocationsToUser-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+701116
-    clear_users  ${PUSERNAME_U1}
-    ${firstname1}=  FakerLibrary.name
-    ${lastname1}=  FakerLibrary.last_name
-    ${address}=  get_address
-    ${dob1}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
-
-    # ${resp}=  Get LocationsByPincode     ${pin}
-    FOR    ${i}    IN RANGE    3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${city1}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Suite Variable  ${state1}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Suite Variable  ${pin1}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
     
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${u_id}  ${resp.json()}
-
-    # ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
-    # Should Be Equal As Strings  ${resp[0].status_code}  200
-    # Should Be Equal As Strings  ${resp[1].status_code}  200
-    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
+    ${u_id} =  Create Sample User    deptId=${dep_id}
+   
     ${userIds}=  Create List  
     ${resp}=   Assign Business_loc To User  ${userIds}  ${lid2}  
     Log   ${resp.json()}
@@ -827,10 +484,9 @@ JD-TC-AssignBussinessLocationsToUser-UH6
     ${resp}=  Get User
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response List  ${resp}  0  id=${u_id}  firstName=${firstname1}  lastName=${lastname1}  mobileNo=${PUSERNAME_U1}  dob=${dob1}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  city=${city1}  state=${state1}  pincode=${pin1}
-    # ...    deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}  
-    
+   
 JD-TC-AssignBussinessLocationsToUser-UH7
+
     [Documentation]  Assign bussiness locations to disabled user
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
@@ -841,35 +497,8 @@ JD-TC-AssignBussinessLocationsToUser-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+701143
-    clear_users  ${PUSERNAME_U1}
-    ${firstname1}=  FakerLibrary.name
-    ${lastname1}=  FakerLibrary.last_name
-    ${address}=  get_address
-    ${dob1}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
-
-    # ${resp}=  Get LocationsByPincode     ${pin}
-    FOR    ${i}    IN RANGE    3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${city1}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Suite Variable  ${state1}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Suite Variable  ${pin1}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
-    
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${u_id}  ${resp.json()}
-
+    ${u_id} =  Create Sample User    deptId=${dep_id}
+   
     ${resp}=  EnableDisable User  ${u_id}  ${toggle[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -882,7 +511,7 @@ JD-TC-AssignBussinessLocationsToUser-UH7
     ${resp}=   Assign Business_loc To User  ${userIds}  ${lid2}  
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    # Should Be Equal As Strings  "${resp.json()}"  "${DISABLED_USER_CANT_ADD_TOTEAM}"
+    Should Be Equal As Strings  "${resp.json()}"  "Cannot assign business location to a INACTIVE user"
     
 
 
