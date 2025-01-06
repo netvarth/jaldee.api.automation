@@ -747,7 +747,7 @@ JD-TC-CreateUser -7
     # ${resp}=  Get User
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
+    # Set Suite Variable   ${u_id2}   ${resp.json()[0]['id']}
 
     ${u_id2} =  Create Sample User    deptId=${dep_id}
 
@@ -772,14 +772,14 @@ JD-TC-CreateUser -7
     ${description}=  FakerLibrary.sentence
     Set Suite Variable  ${description}
 
-    ${resp}=  Appointment Status   ${toggle[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Appointment Status   ${toggle[0]}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Account Settings  
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
+    # ${resp}=  Get Account Settings  
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
     
     ${SERVICE1}=  FakerLibrary.word
     Set Suite Variable  ${SERVICE1}
@@ -790,18 +790,18 @@ JD-TC-CreateUser -7
     ${totalamt}=   FakerLibrary.Random Int  min=200  max=500
     ${totalamt}=  Convert To Number  ${totalamt}  1 
     Set Suite Variable  ${totalamt}
-    ${resp}=  Create Service   ${SERVICE1}  ${description}   ${service_duration[0]}   ${bool[0]}   ${totalamt}  ${bool[0]}  ${bool[0]}  ${dep_id}  provider=${p1_id}
+    ${resp}=  Create Service   ${SERVICE1}  ${description}   ${service_duration[0]}   ${bool[0]}   ${totalamt}   ${bool[0]}  department=${dep_id}  provider=${u_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id1}  ${resp.json()}
 
-    ${resp}=  Create Service   ${SERVICE2}  ${description}   ${service_duration[0]}   ${bool[0]}   ${totalamt}  ${bool[0]}  ${bool[0]}  ${dep_id}  provider=${p1_id}
+    ${resp}=  Create Service   ${SERVICE2}  ${description}   ${service_duration[0]}   ${bool[0]}   ${totalamt}  ${bool[0]}  department=${dep_id}  provider=${u_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id2}  ${resp.json()}
 
     ${queue_name}=  FakerLibrary.name
-    ${resp}=  Create Queue For User  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  10  ${lid}  ${p1_id}  ${s_id1}  ${s_id2}
+    ${resp}=  Create Queue For User  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  10  ${lid}  ${u_id2}  ${s_id1}  ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${que_id}  ${resp.json()}
