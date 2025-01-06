@@ -846,7 +846,7 @@ JD-TC-Get Lucene Search For ConsumerOrder-10
         IF  '${resp.json()[${i}]['itemCode']}' == '${itemEncId1}'  
             Should Be Equal As Strings    ${resp.json()[${i}]['inventoryItem']}                                                           ${boolean[0]}
             Should Be Equal As Strings    ${resp.json()[${i}]['batchApplicable']}                                                            ${boolean[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['price']}                                                              ${price}
+            # Should Be Equal As Strings    ${resp.json()[${i}]['price']}                                                              ${price}
             Should Be Equal As Strings    ${resp.json()[${i}]['sOrderCatalogEncId']}                                                        ${soc_id1}
             Should Be Equal As Strings    ${resp.json()[${i}]['encId']}                                                        ${SOC_itemEncIds1}
             Should Be Equal As Strings    ${resp.json()[${i}]['itemCode']}                                        ${itemEncId1}

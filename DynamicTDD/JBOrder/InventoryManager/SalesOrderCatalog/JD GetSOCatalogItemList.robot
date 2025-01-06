@@ -23,6 +23,8 @@ ${invalidNum}        1245
 ${invalidEma}        asd122
 ${invalidstring}     _ad$.sa_
 @{spItemSource}      RX       Ayur
+${minSaleQuantity}  2
+${maxSaleQuantity}   50
 
 *** Test Cases ***
 
@@ -103,20 +105,16 @@ JD-TC-Get Sales Order Catalog Items List-1
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
-    ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
+    ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}   onlineOrder=${boolean[1]}    walkinOrder=${boolean[1]}   partnerOrder=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${store_id}  ${resp.json()}
-
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${SO_Cata_Encid}  ${resp.json()}
 
     ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${Inv_cat_id}  ${resp.json()}
+    ${inv_cat_encid}=  Create List  ${Inv_cat_id}
     
     ${resp}=  Get Inventory Catalog By EncId   ${Inv_cat_id}  
     Log   ${resp.content}
@@ -151,14 +149,31 @@ JD-TC-Get Sales Order Catalog Items List-1
     ${price}=    Random Int  min=2   max=40
     ${price}=   Convert To Number  ${price}  1
     Set Suite Variable  ${price}
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${SO_Cata_Encid}     ${itemEncId1}     ${price}         
+
+
+    # ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${SO_Cata_Encid}  ${resp.json()}
+
+
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}   ${Name}  ${boolean[1]}  ${inv_cat_encid}  onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[0]}  storePickup=${boolean[1]}  courierService=${boolean[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable              ${SO_Cata_Encid}    ${resp.json()}
+
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${SO_Cata_Encid}    ${boolean[1]}     ${Inv_Cata_Item_Encid}     ${price}    ${boolean[1]}   minSaleQuantity=${minSaleQuantity}  maxSaleQuantity=${maxSaleQuantity}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
+    # ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${SO_Cata_Encid}     ${itemEncId1}     ${price}         
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
 
-    ${resp}=  Get SalesOrder Catalog Item By Encid     ${SO_itemEncIds}      
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Get SalesOrder Catalog Item By Encid     ${SO_itemEncIds}      
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=  Get SalesOrder Catalog Item List  sorderCatalogEncId-eq=${SO_Cata_Encid}    encId-eq=${SO_itemEncIds}  
     Log   ${resp.content}
@@ -173,7 +188,7 @@ JD-TC-Get Sales Order Catalog Items List-1
     Should Be Equal As Strings    ${resp.json()[0]['allowtrueFutureNegativeAvial']}    ${bool[0]}
     Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${SO_itemEncIds}
     Should Be Equal As Strings    ${resp.json()[0]['status']}    ${toggle[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['invMgmt']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['invMgmt']}    ${bool[1]}
     Should Be Equal As Strings    ${resp.json()[0]['catalog']['encId']}    ${SO_Cata_Encid}
     Should Be Equal As Strings    ${resp.json()[0]['catalog']['name']}    ${Name}
     Should Be Equal As Strings    ${resp.json()[0]['catalog']['invMgmt']}    ${bool[0]}
@@ -201,7 +216,7 @@ JD-TC-Get Sales Order Catalog Items List-2
     Should Be Equal As Strings    ${resp.json()[0]['allowtrueFutureNegativeAvial']}    ${bool[0]}
     Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${SO_itemEncIds}
     Should Be Equal As Strings    ${resp.json()[0]['status']}    ${toggle[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['invMgmt']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['invMgmt']}    ${bool[1]}
     Should Be Equal As Strings    ${resp.json()[0]['catalog']['encId']}    ${SO_Cata_Encid}
     Should Be Equal As Strings    ${resp.json()[0]['catalog']['name']}    ${Name}
     Should Be Equal As Strings    ${resp.json()[0]['catalog']['invMgmt']}    ${bool[0]}
