@@ -8,6 +8,7 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
@@ -555,11 +556,50 @@ JD-TC-CreateUser -UH8
 
     [Documentation]   Consumer create a User
 
-    ${resp}=   Consumer Login  ${CUSERNAME1}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    #............provider consumer creation..........
+    
+    clear_customer   ${PUSERNAME_E}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${acc_id1}  ${resp.json()['id']}
+
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable  ${PCPHONENO}  555${PH_Number}
+
+    ${fname}=  generate_firstname
+    ${lastname}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lastname}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${acc_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+    
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${acc_id1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${countryCodes[0]}  ${PUSERNAME_U1}   ${userType[0]}    deptId=${dep_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_NO_ACCESS_FOR_URL}"
@@ -572,59 +612,99 @@ JD-TC-CreateUser -7
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    Set Suite Variable  ${DAY1}  ${DAY1}
-    ${list}=  Create List  1  2  3  4  5  6  7
-    Set Suite Variable  ${list}  ${list}
-    ${ph1}=  Evaluate  ${PUSERNAME_E}+1000000000
-    ${ph2}=  Evaluate  ${PUSERNAME_E}+2000000000
-    ${views}=  Random Element    ${Views}
-    ${name1}=  FakerLibrary.name
-    ${name2}=  FakerLibrary.name
-    ${name3}=  FakerLibrary.name
-    ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
-    ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}181.${test_mail}  ${views}
-    ${bs}=  FakerLibrary.bs
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # Set Suite Variable  ${DAY1}  ${DAY1}
+    # ${list}=  Create List  1  2  3  4  5  6  7
+    # Set Suite Variable  ${list}  ${list}
+    # ${ph1}=  Evaluate  ${PUSERNAME_E}+1000000000
+    # ${ph2}=  Evaluate  ${PUSERNAME_E}+2000000000
+    # ${views}=  Random Element    ${Views}
+    # ${name1}=  FakerLibrary.name
+    # ${name2}=  FakerLibrary.name
+    # ${name3}=  FakerLibrary.name
+    # ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
+    # ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
+    # ${emails1}=  Emails  ${name3}  Email  ${P_Email}181.${test_mail}  ${views}
+    # ${bs}=  FakerLibrary.bs
+    # ${companySuffix}=  FakerLibrary.companySuffix
+    # # ${city}=   FakerLibrary.state
+    # # ${latti}=  get_latitude
+    # # ${longi}=  get_longitude
+    # # ${postcode}=  FakerLibrary.postcode
+    # # ${address}=  get_address
+    # ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    # ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    # Set Suite Variable  ${tz}
+    # ${parking}   Random Element   ${parkingType}
+    # ${24hours}    Random Element    ${bool}
+    # ${desc}=   FakerLibrary.sentence
+    # ${url}=   FakerLibrary.url
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${sTime}=  db.subtract_timezone_time  ${tz}  0  30
+    # Set Suite Variable  ${BsTime30}  ${sTime}
+    # ${eTime}=  add_timezone_time  ${tz}  1  00  
+    # Set Suite Variable  ${BeTime30}  ${eTime}
+    # ${resp}=  Update Business Profile with schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+
+    # ${fields}=   Get subDomain level Fields  ${domains}  ${sub_domains}
+    # Log  ${fields.json()}
+    # Should Be Equal As Strings    ${fields.status_code}   200
+
+    # ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
+
+    # ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sub_domains}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${resp}=  Get specializations Sub Domain  ${domains}  ${sub_domains}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+
+    # ${spec}=  get_Specializations  ${resp.json()}
+    # ${resp}=  Update Specialization  ${spec}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${bs}=  FakerLibrary.company
     ${companySuffix}=  FakerLibrary.companySuffix
-    # ${city}=   FakerLibrary.state
-    # ${latti}=  get_latitude
-    # ${longi}=  get_longitude
-    # ${postcode}=  FakerLibrary.postcode
-    # ${address}=  get_address
-    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
-    ${24hours}    Random Element    ${bool}
+    ${24hours}    Random Element    ['True','False']
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
+    ${name3}=  FakerLibrary.word
+    # ${emails1}=  Emails  ${name3}  Email  ${email_id}  ${views}
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Test Variable  ${tz}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${sTime}=  db.subtract_timezone_time  ${tz}  0  30
-    Set Suite Variable  ${BsTime30}  ${sTime}
-    ${eTime}=  add_timezone_time  ${tz}  1  00  
-    Set Suite Variable  ${BeTime30}  ${eTime}
-    ${resp}=  Update Business Profile with schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${description}=  FakerLibrary.sentence
+
+    ${b_loc}=  Create Dictionary  place=${city}   longitude=${longi}   lattitude=${latti}    googleMapUrl=${url}   pinCode=${postcode}  address=${address}  parkingType=${parking}  open24hours=${24hours}
+    # ${emails}=  Create List  ${emails1}
+    ${resp}=  Update Business Profile with kwargs   businessName=${bs}   businessUserName=${firstname}${SPACE}${lastname}   businessDesc=Description:${SPACE}${description}  shortName=${companySuffix}  baseLocation=${b_loc}   #emails=${emails}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${fields}=   Get subDomain level Fields  ${domains}  ${sub_domains}
-    Log  ${fields.json()}
-    Should Be Equal As Strings    ${fields.status_code}   200
+    Log  ${fields.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
 
     ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sub_domains}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get specializations Sub Domain  ${domains}  ${sub_domains}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${spec_len}=  Get Length  ${resp.json()}
+    ${specs}=  random.choices  ${resp.json()}  k=2
+    ${spec}=  Create List    ${specs[0]['displayName']}   ${specs[1]['displayName']}
 
-    ${spec}=  get_Specializations  ${resp.json()}
-    ${resp}=  Update Specialization  ${spec}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    ${resp}=  Update Business Profile with kwargs  specialization=${spec}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
@@ -648,26 +728,28 @@ JD-TC-CreateUser -7
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     
-    ${location}=  FakerLibrary.city
-    ${state}=  FakerLibrary.state
+    # ${location}=  FakerLibrary.city
+    # ${state}=  FakerLibrary.state
 
-    ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+651122
-    clear_users  ${PUSERNAME_E}
-    ${firstname1}=  FakerLibrary.name
-    ${lastname1}=  FakerLibrary.last_name
-    ${address}=  get_address
-    ${dob1}=  FakerLibrary.Date
-    ${pin1}=  get_pincode
+    # ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+651122
+    # clear_users  ${PUSERNAME_E}
+    # ${firstname1}=  FakerLibrary.name
+    # ${lastname1}=  FakerLibrary.last_name
+    # ${address}=  get_address
+    # ${dob1}=  FakerLibrary.Date
+    # ${pin1}=  get_pincode
     
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${u_id2}  ${resp.json()}
+    # ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${u_id2}  ${resp.json()}
    
-    ${resp}=  Get User
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
+    # ${resp}=  Get User
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
+
+    ${u_id2} =  Create Sample User    deptId=${dep_id}
 
     ${p_id}=  get_acc_id  ${PUSERNAME_E}
     Set Suite Variable   ${p_id}
@@ -708,12 +790,12 @@ JD-TC-CreateUser -7
     ${totalamt}=   FakerLibrary.Random Int  min=200  max=500
     ${totalamt}=  Convert To Number  ${totalamt}  1 
     Set Suite Variable  ${totalamt}
-    ${resp}=  Create Service For User  ${SERVICE1}  ${description}   ${service_duration[0]}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  ${EMPTY}  ${totalamt}  ${bool[0]}  ${bool[0]}  ${dep_id}  ${p1_id}
+    ${resp}=  Create Service   ${SERVICE1}  ${description}   ${service_duration[0]}   ${bool[0]}   ${totalamt}  ${bool[0]}  ${bool[0]}  ${dep_id}  provider=${p1_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id1}  ${resp.json()}
 
-    ${resp}=  Create Service For User  ${SERVICE2}  ${description}   ${service_duration[0]}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  ${EMPTY}  ${totalamt}  ${bool[0]}  ${bool[0]}  ${dep_id}  ${p1_id}
+    ${resp}=  Create Service   ${SERVICE2}  ${description}   ${service_duration[0]}   ${bool[0]}   ${totalamt}  ${bool[0]}  ${bool[0]}  ${dep_id}  provider=${p1_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id2}  ${resp.json()}
