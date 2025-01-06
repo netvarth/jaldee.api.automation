@@ -33,6 +33,11 @@ JD-TC-OTPVerify-3
     
     clear_customer   ${PUSERNAME306}
 
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${acc_id1}  ${resp.json()['id']}
+
     ${PH_Number}=  FakerLibrary.Numerify  %#####
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
