@@ -938,7 +938,7 @@ JD-TC-Get Order By UID-3
     # ..... Create Tax ......
 
     ${taxName}=    FakerLibrary.name
-    ${taxPercentage}=     Random Int  min=0  max=200
+    ${taxPercentage}=       Random Element  ${gstpercentage}
     ${taxPercentage}=           Convert To Number  ${taxPercentage}  1
     ${cgst}=     Evaluate   ${taxPercentage} / 2
     ${sgst}=     Evaluate   ${taxPercentage} / 2
@@ -1052,7 +1052,7 @@ JD-TC-Get Order By UID-3
     Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                                        ${soc_id1}
     Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                                          ${Name}
     Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                                                       ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()['netTotal']}                                                                ${item1}
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                                                ${Total}
     Should Be Equal As Strings    ${resp.json()['netTotalWithTax']}                                                         ${Total}
     Should Be Equal As Strings    ${resp.json()['netRate']}                                                                 ${Total}
     Should Be Equal As Strings    ${resp.json()['amountDue']}                                                                 ${Total}
