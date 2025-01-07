@@ -141,6 +141,7 @@ JD-TC-Checkout Cart-1
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
+
     ${Name}=    FakerLibrary.last name
     Set Suite Variable    ${Name}
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+200187748
@@ -1552,7 +1553,7 @@ JD-TC-Checkout Cart-UH4
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
-    ${Name1}=    FakerLibrary.last name
+    ${Name1}=    FakerLibrary.country
     Set Test Variable    ${Name1}
 
     ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}   onlineOrder=${boolean[1]}    walkinOrder=${boolean[1]}   partnerOrder=${boolean[1]}

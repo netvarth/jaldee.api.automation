@@ -32,9 +32,13 @@ JD-TC-Get Lucene Search For ConsumerOrder-1
 
     [Documentation]  Get Lucene Search For ConsumerOrder
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${firstname}  ${lastname}  ${PUSERPH11}  ${LoginId}=  Provider Signup
+    Set Suite Variable  ${PUSERPH11}  
+
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -115,10 +119,10 @@ JD-TC-Get Lucene Search For ConsumerOrder-1
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH11}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLPUSERNAME5}
+    ${accountId}=  get_acc_id  ${PUSERPH11}
     Set Suite Variable    ${accountId} 
 
 
@@ -417,7 +421,7 @@ JD-TC-Get Lucene Search For ConsumerOrder-7
 
     [Documentation]  Get Lucene Search using provider login
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH11}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -655,9 +659,12 @@ JD-TC-Get Lucene Search For ConsumerOrder-10
 
     [Documentation]  search item with name starting with almost similar name
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${firstname}  ${lastname}  ${PUSERPH10}  ${LoginId}=  Provider Signup
+    Set Suite Variable  ${PUSERPH10}  
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -719,10 +726,10 @@ JD-TC-Get Lucene Search For ConsumerOrder-10
 
 
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLPUSERNAME6}
+    ${accountId}=  get_acc_id  ${PUSERPH10}
     Set Test Variable    ${accountId} 
 
 

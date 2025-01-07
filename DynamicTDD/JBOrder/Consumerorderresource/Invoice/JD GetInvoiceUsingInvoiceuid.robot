@@ -749,7 +749,7 @@ JD-TC-Get Invoice Using InvoiceID-UH1
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings  ${resp.json()}   ${ITEM_REQ_QTY_NOTAVALIABLE_WITHOUT_QTY}
 
-*** Comments ***
+
 
 JD-TC-Get Invoice Using InvoiceID-3
 

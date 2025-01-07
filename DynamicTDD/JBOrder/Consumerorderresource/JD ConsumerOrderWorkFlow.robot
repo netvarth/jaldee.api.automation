@@ -29,9 +29,13 @@ JD-TC-Work Flow-1
 
     [Documentation]  Create cart then checkout items make paymenyment by consumer.provider complete the order
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${firstname}  ${lastname}  ${PUSERPH12}  ${LoginId}=  Provider Signup
+    Set Suite Variable  ${PUSERPH12}  
+
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -108,10 +112,10 @@ JD-TC-Work Flow-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLPUSERNAME28}
+    ${accountId}=  get_acc_id  ${PUSERPH12}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
@@ -216,7 +220,7 @@ JD-TC-Work Flow-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
