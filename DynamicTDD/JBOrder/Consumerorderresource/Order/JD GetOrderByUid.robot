@@ -1016,13 +1016,29 @@ JD-TC-Get Order By UID-3
     ${quantity}=  FakerLibrary.Random Int  min=${minSaleQuantity}   max=${maxSaleQuantity}
     ${quantity}=                    Convert To Number  ${quantity}  1
     ${item1}=  Evaluate  ${price}*${quantity}
-    ${taxtot}=  Evaluate  ${item1}*${taxPercentage} 
-    ${taxtot}=  Evaluate  ${taxtot} / 100
+    # ${taxtot}=  Evaluate  ${item1}*${taxPercentage} 
+    # ${taxtot}=  Evaluate  ${taxtot} / 100
+    # ${Total}=  Evaluate  ${item1}+${taxtot}
+    # ${Total}=  roundoff  ${Total}
+
+
+    ${taxPerValue} =  Evaluate  ${taxPercentage} / 100
+    ${actualAmount} =  Evaluate  ${price} / (1 + ${taxPerValue})
+    ${netTotalamount}=   Evaluate    ${actualAmount} * ${quantity} 
+
+    ${netTotalamount}=   Convert To Integer  ${netTotalamount}  
+    ${taxAmount} =  Evaluate  ${actualAmount} * ${taxPercentage} / 100
+    ${taxAmount}=     roundoff    ${taxAmount}   2
+    
+    ${taxtot}=  Evaluate  ${taxAmount}*${quantity} 
+    ${taxtot}=     roundoff    ${taxtot}   2
+    ${cgsttot}=     Evaluate   ${taxtot} / 2
+    # ${Total1}=  Evaluate  ${item1}+${item2}+${item3}
+    # ${Total}=  Evaluate  ${item1}+${item2}+${item3}+${taxtot}
     ${Total}=  Evaluate  ${item1}+${taxtot}
     ${Total}=  roundoff  ${Total}
-    ${cgsttot}=     Evaluate   ${taxtot} / 2
 
-
+    ${netTotal}=  Evaluate  ${item1} - ${taxtot}
     ${catalogItem}=  Create Dictionary    encId=${SOC_itemEncIds1}
     ${catalogItems}=  Create Dictionary    catalogItem=${catalogItem}  quantity=${quantity}
 
@@ -1052,10 +1068,8 @@ JD-TC-Get Order By UID-3
     Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                                        ${soc_id1}
     Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                                          ${Name}
     Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                                                       ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()['netTotal']}                                                                ${Total}
-    Should Be Equal As Strings    ${resp.json()['netTotalWithTax']}                                                         ${Total}
-    Should Be Equal As Strings    ${resp.json()['netRate']}                                                                 ${Total}
-    Should Be Equal As Strings    ${resp.json()['amountDue']}                                                                 ${Total}
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                                                ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                                                 ${item1}
     Should Be Equal As Strings    ${resp.json()['location']['id']}                                                            ${locId1}
     Should Be Equal As Strings    ${resp.json()['store']['id']}                                                              ${Stidd}
     Should Be Equal As Strings    ${resp.json()['orderFor']['id']}                                                          ${cid}
@@ -1103,6 +1117,9 @@ JD-TC-Get Order By UID-3
     # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['createdBy']}                                                ${p1_id}
     # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['updatedBy']}                                                0
     # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItemDto']['itemPropertyType']}                                         ${itemPropertyType}
+    Should Be Equal As Strings    ${resp.json()['netTotalWithTax']}                                                         ${item1}
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                                                 ${item1}
+
 
 JD-TC-Get Order By UID-4
 

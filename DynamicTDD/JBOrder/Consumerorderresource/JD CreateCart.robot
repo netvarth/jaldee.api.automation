@@ -286,7 +286,7 @@ JD-TC-create cart-1
     Set Suite Variable    ${cart_uid}    ${resp.json()['uid']}
 
 
-    ${resp}=    Get ConsumerCart By Uid   ${cartUid} 
+    ${resp}=    Get ConsumerCart By Uid   ${cart_uid} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                                              ${cid}
@@ -599,14 +599,15 @@ JD-TC-create cart-2
     # ${netTotalamount}=  Convert To Number  ${netTotalamount}    1
     ${netTotalamount}=   Convert To Integer  ${netTotalamount}  
     ${taxAmount} =  Evaluate  ${actualAmount} * ${taxPercentage} / 100
-
+    ${taxAmount}=     roundoff    ${taxAmount}   2
     
-    ${taxtot}=  Evaluate  ${item3}*${taxPercentage} 
-    ${taxtot}=  Evaluate  ${taxtot} / 100
+    ${taxtot}=  Evaluate  ${taxAmount}*${quantity} 
+    ${taxtot}=     roundoff    ${taxtot}   2
     ${Total1}=  Evaluate  ${item1}+${item2}+${item3}
     ${Total}=  Evaluate  ${item1}+${item2}+${item3}+${taxtot}
     ${Total}=  roundoff  ${Total}
 
+    ${netTotal}=  Evaluate  ${Total1} - ${taxtot}
     ${catalogItem}=  Create Dictionary    encId=${SOC_itemEncIds1}
     ${catalogItem1}=  Create Dictionary    encId=${SOC_itemEncIds2}
     ${catalogItem2}=  Create Dictionary    encId=${SOC_itemEncIds3}
@@ -636,7 +637,7 @@ JD-TC-create cart-2
     Should Be Equal As Strings    ${resp.json()['netRate']}                                                             ${Total1}
     Should Be Equal As Strings    ${resp.json()['locationId']}                                                            ${locId1}
     Should Be Equal As Strings    ${resp.json()['taxTotal']}                                                             ${taxtot}
-    Should Be Equal As Strings    ${resp.json()['netTotal']}                                                            ${Total}
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                                            ${netTotal}
 
 
 
@@ -1559,6 +1560,11 @@ JD-TC-create cart-UH11
     Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
 
 
+    ${resp}=    Remove All Items From Cart   ${cart_uid} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
     ${quantity}=  FakerLibrary.Random Int  min=${minSaleQuantity}   max=${maxSaleQuantity}
     ${quantity}=                    Convert To Number  ${quantity}  1
 
@@ -1566,12 +1572,25 @@ JD-TC-create cart-UH11
     ${catalogItems}=  Create Dictionary    catalogItem=${catalogItem}  quantity=${quantity}
 
 
-    ${ADD_ONE_ITEM_IN_ONE_CART}=  format String   ${ADD_ONE_ITEM_IN_ONE_CART}   item
+    # ${ADD_ONE_ITEM_IN_ONE_CART}=  format String   ${ADD_ONE_ITEM_IN_ONE_CART}   item
 
     ${resp}=  Create Cart From Consumerside      ${store_id}    ${cid}      ${deliveryType[0]}    ${catalogItems}   ${catalogItems}   
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings  ${resp.json()}   ${ADD_ONE_ITEM_IN_ONE_CART}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable    ${cart_uid11}    ${resp.json()['uid']}
+
+    ${totalQuantity}=  Evaluate  ${quantity}* 2
+    ${net_tot}=  Evaluate  ${price}*${totalQuantity}
+    ${resp}=    Get ConsumerCart With Items By Uid   ${cart_uid11} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get ConsumerCart By Uid   ${cart_uid11} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                                            ${net_tot}
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                                             ${net_tot}
+    # Should Be Equal As Strings  ${resp.json()}   ${ADD_ONE_ITEM_IN_ONE_CART}
 
 JD-TC-create cart-UH12
 
