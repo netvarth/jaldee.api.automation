@@ -58,7 +58,7 @@ Verify Otp For Login
 
     Check And Create YNW Session
     ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
-    ${resp}=    POST On Session    ynw    /consumer/oauth/otp/${key}/verify  headers=${headers2}  expected_status=any
+    ${resp}=    POST On Session    ynw    /consumer/oauth/${otp_purpose_list[${purpose}]}/otp/${key}/verify  headers=${headers2}  expected_status=any
     Check Deprication  ${resp}  Verify Otp For Login
     RETURN  ${resp}
 

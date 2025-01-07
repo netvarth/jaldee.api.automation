@@ -74,7 +74,7 @@ Account Activation
     END
 
     ${headers2}=     Create Dictionary    Content-Type=application/json    #Authorization=browser
-    ${resp}=    POST On Session    ynw    /provider/oauth/otp/${key}/verify  headers=${headers2}  expected_status=any
+    ${resp}=    POST On Session    ynw    /provider/oauth/${otp_purpose_list[${purpose}]}/otp/${key}/verify  headers=${headers2}  expected_status=any
     Check Deprication  ${resp}  Account Activation
     RETURN  ${resp}
 

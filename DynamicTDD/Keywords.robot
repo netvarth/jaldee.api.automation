@@ -220,10 +220,14 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 ...                         rejectLoanApplication  viewCustomerPhoneNumber  createLocation  updateLocation  disablePartner
 ...                         enablePartner  createBranch  updateBranch  viewKycReport  
 &{OtpPurpose}   ProviderSignUp=0  ConsumerSignUp=1  ProviderResetPassword=2  ConsumerResetPassword=3  ProviderVerifyEmail=4    
-...             ConsumerVerifyEmail=5  VersionChange=6  AdminResetPassword=7  ManagerResetPassword=8  AssistantResetPassword=9  
-...             AccountContactUpdate=10  SignIn=11  Authentication=12  ConsumerVerifyPhone=13  ProviderVerifyPhone=14  ConsumerAcceptance=15  
-...             PartnerResetPassword=16  CoApplicantVerifyPhone=17  CoApplicantVerifyEmail=18  MultiFactorAuthentication=19  EquifaxScoreGenerate=20
-...             CibilScoreGenerate=21  SPDataImport=22  CONSENT_FORM=23  ResetLoginId=24  LinkLogin=25
+...             ConsumerVerifyEmail=5  VersionChange=6  AccountContactUpdate=7   Authentication=8  ConsumerVerifyPhone=9  ProviderVerifyPhone=10  
+...             ConsumerAcceptance=11   PartnerResetPassword=12  CoApplicantVerifyPhone=13  CoApplicantVerifyEmail=14  MultiFactorAuthentication=15 
+...             EquifaxScoreGenerate=16  CibilScoreGenerate=17  SPDataImport=18  CONSENT_FORM=19  ResetLoginId=20  LinkLogin=21  LeadConsumerVerify=22
+...             LosLeadCoApplicantVerifyPhone=23  losLeadCoApplicantVerifyEmail=24
+
+@{otp_purpose_list}                 signup  signup  resetPassword  resetPassword  email  email  changeversion  contact  login  phone  phone  phone  
+...                                 resetPassword  phone  email  secondfactor  equifax  cibil  dataimport  consentform  resetLogin
+...                                 link  lead  phone  email
 
 @{LoanApplicationStatus}            Active      Completed       Cancelled       Rejected    Inactive
 @{custdeets}                        firstName  lastName  phoneNo  countryCode  gender  dob

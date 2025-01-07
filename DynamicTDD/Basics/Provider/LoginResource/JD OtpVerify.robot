@@ -2850,8 +2850,7 @@ JD-TC-OTPVerify-26
 
 JD-TC-OTPVerify-27
 
-    [Documentation]  add a provider consumer by provider then try to login that provider consumer from csite with a wrong otp for 3 attempts.
-    ...   then check the login.
+    [Documentation]  do the provider signup and check forget password and forget login id otp check..
 
     ${domresp}=  Get BusinessDomainsConf
     Log   ${domresp.content}
@@ -2920,16 +2919,18 @@ JD-TC-OTPVerify-27
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
-    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
-
-    # ${resp}=  Account Activation  ${PUSERNAME_A}   ${OtpPurpose['ProviderResetPassword']}    JSESSIONYNW=${jsessionynw_value} 
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-    # Should Be Equal As Strings  ${resp.json()}   ${OTP_VALIDATION_FAILED}
-
-    #..wrong otp attempt 1..
     ${wrong_otp}=    Generate Random String    4    [NUMBERS]
-    ${resp}=  Account Activation  ${PUSERNAME_A}   ${OtpPurpose['ProviderResetPassword']}  ${wrong_otp}   JSESSIONYNW=${jsessionynw_value} 
+    ${resp}=    Forgot Password   otp=${wrong_otp}  
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings  ${resp.json()}   ${OTP_VALIDATION_FAILED}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}   ${ENTER_VALID_OTP}
+
+    ${resp}=    Forgot LoginId   countryCode=${countryCodes[1]}  phoneNo=${PUSERNAME_A}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${wrong_otp}=    Generate Random String    4    [NUMBERS]
+    ${resp}=    Forgot LoginId     otp=${wrong_otp}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}   ${ENTER_VALID_OTP}
