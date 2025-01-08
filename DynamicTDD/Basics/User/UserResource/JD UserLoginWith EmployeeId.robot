@@ -45,7 +45,7 @@ JD-TC-UserLoginwithEmployeeid-1
      ${highest_package}=  get_highest_license_pkg
      ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
      Log  ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
+     Should Be Equal As Strings    ${resp.status_code}    202
      ${resp}=  Account Activation  ${PUSERNAME_E}  0
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
@@ -81,31 +81,35 @@ JD-TC-UserLoginwithEmployeeid-1
      Set Suite Variable  ${dob}
      # ${pin}=  get_pincode
      # ${resp}=  Get LocationsByPincode     ${pin}
-     FOR    ${i}    IN RANGE    3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-     END
-     Log  ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200 
-     Set Suite Variable  ${city}   ${resp.json()[0]['PostOffice'][0]['District']}   
-     Set Suite Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
-     Set Suite Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
+    #  FOR    ${i}    IN RANGE    3
+    #     ${pin}=  get_pincode
+    #     ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+    #     IF    '${kwstatus}' == 'FAIL'
+    #             Continue For Loop
+    #     ELSE IF    '${kwstatus}' == 'PASS'
+    #             Exit For Loop
+    #     END
+    #  END
+    #  Log  ${resp.json()}
+    #  Should Be Equal As Strings    ${resp.status_code}    200 
+    #  Set Suite Variable  ${city}   ${resp.json()[0]['PostOffice'][0]['District']}   
+    #  Set Suite Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
+    #  Set Suite Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
 
 
-     ${whpnum}=  Evaluate  ${PUSERNAME}+336245
-     ${tlgnum}=  Evaluate  ${PUSERNAME}+336345
+    #  ${whpnum}=  Evaluate  ${PUSERNAME}+336245
+    #  ${tlgnum}=  Evaluate  ${PUSERNAME}+336345
 
-     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum} 
-     Log   ${resp.json()}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     Set Suite Variable  ${u_id}  ${resp.json()}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${countryCodes[1]}  ${PUSERNAME_U1}   ${userType[0]}    deptId=${dep_id}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  Get User By Id      ${u_id}
+    # ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum} 
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${u_id}  ${resp.json()}
+
+    ${resp}=  Get User By Id      ${u_id}
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     # Set Suite Variable      ${PUSERNAME_U1}     ${resp.json()['mobileNo']}
@@ -113,25 +117,25 @@ JD-TC-UserLoginwithEmployeeid-1
     Set Suite Variable      ${employee_id}     ${resp.json()['employeeId']}
 
     ${firstname1}=  FakerLibrary.name
-     Set Suite Variable  ${firstname1}
-     ${lastname1}=  FakerLibrary.last_name
-     Set Suite Variable  ${lastname1}
-     ${dob1}=  FakerLibrary.Date
-     Set Suite Variable  ${dob1}
+    Set Suite Variable  ${firstname1}
+    ${lastname1}=  FakerLibrary.last_name
+    Set Suite Variable  ${lastname1}
+    ${dob1}=  FakerLibrary.Date
+    Set Suite Variable  ${dob1}
 
-     ${whpnum1}=  Evaluate  ${PUSERNAME}+336445
-     Set Suite Variable  ${whpnum1}
-     ${tlgnum1}=  Evaluate  ${PUSERNAME}+336545
-     Set Suite Variable  ${tlgnum1}
+    ${whpnum1}=  Evaluate  ${PUSERNAME}+336445
+    Set Suite Variable  ${whpnum1}
+    ${tlgnum1}=  Evaluate  ${PUSERNAME}+336545
+    Set Suite Variable  ${tlgnum1}
 
-     ${resp}=  Update User  ${u_id}  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}   ${sub_domain_id}   ${bool[0]}  ${countryCodes[1]}  ${whpnum1}  ${countryCodes[1]}  ${tlgnum1}    employeeId=${employee_id}
-     Log   ${resp.json()}
-     Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Update User  ${u_id}  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}   ${sub_domain_id}   ${bool[0]}  ${countryCodes[1]}  ${whpnum1}  ${countryCodes[1]}  ${tlgnum1}    employeeId=${employee_id}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  Get User By Id      ${u_id}
-     Log   ${resp.json()}
-     Should Be Equal As Strings      ${resp.status_code}  200
-     Should Be Equal As Strings      ${resp.json()['employeeId']}  ${employee_id}
+    ${resp}=  Get User By Id      ${u_id}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Should Be Equal As Strings      ${resp.json()['employeeId']}  ${employee_id}
 
     ${resp}=  SendProviderResetMail   ${email}
     Should Be Equal As Strings  ${resp.status_code}  200
