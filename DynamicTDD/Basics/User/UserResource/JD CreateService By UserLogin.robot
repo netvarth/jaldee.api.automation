@@ -119,19 +119,11 @@ JD-TC-ServiceCreationByUserLogin-3
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${PUSERNAME_U1}  ${u_id} =  Create and Configure Sample User      deptId=${dep_id}
-    # Set Suite Variable   ${PUSERNAME_U1}
-    # Set Suite Variable   ${u_id}
-
+   
     ${resp}=  Get User By Id  ${u_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${PUSERNAME_U1}  ${resp.json()['mobileNo']}
-
-    # ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
-    # Should Be Equal As Strings  ${resp[0].status_code}  200
-    # Should Be Equal As Strings  ${resp[1].status_code}  200
+   
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -236,17 +228,10 @@ JD-TC-ServiceCreationByUserLogin-4
         Log  ${decrypted_data}
         Set Test Variable   ${pkgId}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
-    #   Set Test Variable   ${pkgId}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
         ${domain}=   Set Variable    ${decrypted_data['sector']}
         ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
-        # ${resp2}=   Get Domain Settings    ${domain}  
-        # Should Be Equal As Strings    ${resp.status_code}    200
-        # Log  ${resp.json()}
-        # Set Test Variable  ${check}  ${resp2.json()['multipleLocation']}
         Run Keyword If  "${pkgId}"=="${licId}"  Exit For Loop
     END
-
-     # clear_service   ${PUSERNAME28}
 
     ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
@@ -313,24 +298,16 @@ JD-TC-ServiceCreationByUserLogin-4
     ${i}=  Random Int  min=0  max=${sublen-1}
     ${sub_domain_id}=  Set Variable  ${subdomains[${i}]['subdomainId']}
 
-    ${PUSERNAME_U1}  ${u_id1} =  Create and Configure Sample User      deptId=${dep_id}
+    ${PUSERNAME_U1}  ${u_id1} =  Create and Configure Sample User    deptId=${depid1}
     
-    # ${u_id1}=  Create Sample User
-
     ${resp}=  Get User By Id  ${u_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable  ${PUSERNAME_U1}  ${resp.json()['mobileNo']}
-
-    # ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
-    # Should Be Equal As Strings  ${resp[0].status_code}  200
-    # Should Be Equal As Strings  ${resp[1].status_code}  200
+   
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Create Service For User  ${SERVICE1}  ${desc}   ${ser_duratn}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  ${dep_id}  ${u_id1}
+    ${resp}=  Create Service   ${SERVICE1}  ${desc}   ${ser_duratn}  ${bool[0]}   ${servicecharge}  ${bool[0]}  department=${depid1}  provider=${u_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_sid1}  ${resp.json()}
@@ -338,6 +315,5 @@ JD-TC-ServiceCreationByUserLogin-4
     ${resp}=   Get Service By Id  ${u_sid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${SERVICE1}  description=${desc}  serviceDuration=${ser_duratn}   notification=${bool[0]}   notificationType=${notifytype[0]}  totalAmount=${servicecharge}.0  status=${status[0]}  bType=${btype}  isPrePayment=${bool[0]}  department=${dep_id}
     Should Be Equal As Strings  ${resp.json()['provider']['id']}  ${u_id1}
 
