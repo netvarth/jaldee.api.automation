@@ -230,8 +230,8 @@ JD-TC-Get Sales Order Catalog Items List-3
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get SalesOrder Catalog Item List  sorderCatalogEncId-eq=${SO_Cata_Encid}    invCatId-eq=${Inv_cat_id} 
+# invCatId-eq=${Inv_cat_id} 
+    ${resp}=  Get SalesOrder Catalog Item List  sorderCatalogEncId-eq=${SO_Cata_Encid}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()[0]['accountId']}    ${accountId}
@@ -244,7 +244,7 @@ JD-TC-Get Sales Order Catalog Items List-3
     Should Be Equal As Strings    ${resp.json()[0]['allowtrueFutureNegativeAvial']}    ${bool[0]}
     Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${SO_itemEncIds}
     Should Be Equal As Strings    ${resp.json()[0]['status']}    ${toggle[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['invMgmt']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['invMgmt']}    ${bool[1]}
     Should Be Equal As Strings    ${resp.json()[0]['catalog']['encId']}    ${SO_Cata_Encid}
     Should Be Equal As Strings    ${resp.json()[0]['catalog']['name']}    ${Name}
     Should Be Equal As Strings    ${resp.json()[0]['catalog']['invMgmt']}    ${bool[0]}

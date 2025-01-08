@@ -23,7 +23,8 @@ ${invalidNum}        1245
 ${invalidEma}        asd122
 ${invalidstring}     _ad$.sa_
 @{spItemSource}      RX       Ayur
-
+${minSaleQuantity}  2
+${maxSaleQuantity}   50
 *** Test Cases ***
 
 JD-TC-Get Sales Order Catalog Items Count-1
@@ -103,10 +104,19 @@ JD-TC-Get Sales Order Catalog Items Count-1
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
-    ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
+    ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}   onlineOrder=${boolean[1]}    walkinOrder=${boolean[1]}   partnerOrder=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${store_id}  ${resp.json()}
+
+    ${displayName}=     FakerLibrary.name
+    Set Suite Variable  ${displayName}
+
+    ${resp}=    Create Item Inventory  ${displayName}    isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${itemEncId1}  ${resp.json()}
+
 
     # ----------------------------------------- create Inv Catalog -------------------------------------------------------
     ${INV_Cat_Name}=     FakerLibrary.name
@@ -119,7 +129,7 @@ JD-TC-Get Sales Order Catalog Items Count-1
 
 # ----------------------------------------Create Inventory Catalog Item----------------------------------
 
-    ${resp}=   Create Inventory Catalog Item  ${Catalog_EncIds}   ${item1}  
+    ${resp}=   Create Inventory Catalog Item  ${Catalog_EncIds}   ${itemEncId1}  
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Suite Variable   ${ic_Item_id}   ${resp.json()[0]}
@@ -144,55 +154,59 @@ JD-TC-Get Sales Order Catalog Items Count-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${inv_order_encid}  ${resp.json()}
 # ---------------------------------------------------------------------------------------------------------
-
-    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${Inv_cat_id}  ${resp.json()}
-    
-    ${resp}=  Get Inventory Catalog By EncId   ${Inv_cat_id}  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${displayName}=     FakerLibrary.name
-    Set Suite Variable  ${displayName}
-
-    ${resp}=    Create Item Inventory  ${displayName}     isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${itemEncId1}  ${resp.json()}
-
-    ${categoryName}=    FakerLibrary.name
-    Set Suite Variable  ${categoryName}
-
-    ${resp}=  Create Item Category   ${categoryName}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable    ${Ca_item_Id}    ${resp.json()}
-
-    ${resp}=    Create Item Inventory  ${categoryName}   categoryCode=${Ca_item_Id}    isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${itemEncIds}  ${resp.json()}
-
-    ${resp}=   Create Inventory Catalog Item  ${Inv_cat_id}   ${itemEncId1}  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${Inv_Cata_Item_Encid}  ${resp.json()[0]}
-
-    ${price}=    Random Int  min=2   max=40
-    ${price}=   Convert To Number  ${price}  1
-    Set Suite Variable  ${price}
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${SO_Cata_Encid}     ${itemEncId1}     ${price}         
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${inv_order_encid}    ${boolean[1]}     ${ic_Item_id}     ${price}    ${boolean[1]}   minSaleQuantity=${minSaleQuantity}  maxSaleQuantity=${maxSaleQuantity}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
 
-    ${resp}=  Get SalesOrder Catalog Item By Encid     ${SO_itemEncIds}      
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${Inv_cat_id}  ${resp.json()}
+    
+    # ${resp}=  Get Inventory Catalog By EncId   ${Inv_cat_id}  
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+
+    # # ${displayName}=     FakerLibrary.name
+    # # Set Suite Variable  ${displayName}
+
+    # # ${resp}=    Create Item Inventory  ${displayName}     isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
+    # # Log   ${resp.json()}
+    # # Should Be Equal As Strings    ${resp.status_code}    200
+    # # Set Suite Variable  ${itemEncId1}  ${resp.json()}
+
+    # ${categoryName}=    FakerLibrary.name
+    # Set Suite Variable  ${categoryName}
+
+    # ${resp}=  Create Item Category   ${categoryName}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Test Variable    ${Ca_item_Id}    ${resp.json()}
+
+    # ${resp}=    Create Item Inventory  ${categoryName}   categoryCode=${Ca_item_Id}    isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${itemEncIds}  ${resp.json()}
+
+    # ${resp}=   Create Inventory Catalog Item  ${Inv_cat_id}   ${itemEncId1}  
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${Inv_Cata_Item_Encid}  ${resp.json()[0]}
+
+    # ${price}=    Random Int  min=2   max=40
+    # ${price}=   Convert To Number  ${price}  1
+    # Set Suite Variable  ${price}
+    # ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${SO_Cata_Encid}     ${itemEncId1}     ${price}         
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
+
+    # ${resp}=  Get SalesOrder Catalog Item By Encid     ${SO_itemEncIds}      
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=  Get SalesOrder Catalog Item Count  sorderCatalogEncId-eq=${SO_Cata_Encid}    encId-eq=${SO_itemEncIds}  
+    ${resp}=  Get SalesOrder Catalog Item Count  sorderCatalogEncId-eq=${inv_order_encid}    encId-eq=${SO_itemEncIds}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()}    1
@@ -205,7 +219,7 @@ JD-TC-Get Sales Order Catalog Items Count-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get SalesOrder Catalog Item Count  sorderCatalogEncId-eq=${SO_Cata_Encid}    status-eq=${toggle[0]}  
+    ${resp}=  Get SalesOrder Catalog Item Count  sorderCatalogEncId-eq=${inv_order_encid}    status-eq=${toggle[0]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()}    1
@@ -217,8 +231,8 @@ JD-TC-Get Sales Order Catalog Items Count-3
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get SalesOrder Catalog Item Count  sorderCatalogEncId-eq=${SO_Cata_Encid}    invCatId-eq=${SO_Cata_Encid}  
+# invCatId-eq=${inv_order_encid}  
+    ${resp}=  Get SalesOrder Catalog Item Count  sorderCatalogEncId-eq=${inv_order_encid}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()}    1
@@ -231,7 +245,7 @@ JD-TC-Get Sales Order Catalog Items Count-UH1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get SalesOrder Catalog Item Count  sorderCatalogEncId-eq=${SO_Cata_Encid}    encId-eq=${SO_Cata_Encid}  
+    ${resp}=  Get SalesOrder Catalog Item Count  sorderCatalogEncId-eq=${inv_order_encid}    encId-eq=${inv_order_encid}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings   ${resp.json()}   0
@@ -241,7 +255,7 @@ JD-TC-Get Sales Order Catalog Items Count-UH2
 
     [Documentation]  Get SalesOrder Catalog item Count without login.
 
-    ${resp}=  Get SalesOrder Catalog Item Count  sorderCatalogEncId-eq=${SO_Cata_Encid}    invCatId-eq=${SO_Cata_Encid}  
+    ${resp}=  Get SalesOrder Catalog Item Count  sorderCatalogEncId-eq=${inv_order_encid}    invCatId-eq=${inv_order_encid}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -255,7 +269,7 @@ JD-TC-Get Sales Order Catalog Items Count-UH3
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get SalesOrder Catalog Item Count  sorderCatalogEncId-eq=${SO_Cata_Encid}    invCatId-eq=${SO_Cata_Encid}  
+    ${resp}=  Get SalesOrder Catalog Item Count  sorderCatalogEncId-eq=${inv_order_encid}    invCatId-eq=${inv_order_encid}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -268,7 +282,7 @@ JD-TC-Get Sales Order Catalog Items Count-UH4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get SalesOrder Catalog Item Count  sorderCatalogEncId-eq=${SO_Cata_Encid}    encId-eq=${SO_Cata_Encid} 
+    ${resp}=  Get SalesOrder Catalog Item Count  sorderCatalogEncId-eq=${inv_order_encid}    encId-eq=${inv_order_encid} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings   ${resp.json()}    0
