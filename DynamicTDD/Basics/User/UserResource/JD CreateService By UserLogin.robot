@@ -8,6 +8,7 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
@@ -157,9 +158,49 @@ JD-TC-ServiceCreationByUserLogin -UH2
 
     [Documentation]   Consumer  create a service for user
 
-    ${resp}=   Consumer Login  ${CUSERNAME1}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    #............provider consumer creation..........
+    
+    clear_customer   ${PUSERNAME_E}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${acc_id1}  ${resp.json()['id']}
+
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable  ${PCPHONENO}  555${PH_Number}
+
+    ${fname}=  generate_firstname
+    ${lastname}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lastname}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${acc_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+    
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${acc_id1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
     ${resp}=  Create Service   ${SERVICE1}  ${description}   ${dur}   ${bool[0]}   ${amt}   ${bool[0]}  department=${dep_id}  provider=${u_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
@@ -207,37 +248,19 @@ JD-TC-ServiceCreationByUserLogin-4
 
      # clear_service   ${PUSERNAME28}
 
-    ${resp}=  View Waitlist Settings
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp1}=   ${resp}=  View Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[1]}
-        ${resp}=  Toggle Department Disable
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-
-    END
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
-
-    ${resp}=  Get Service
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
+        ${resp}=  Enable Disable Department  ${toggle[0]}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-
     END
+    
+    ${resp}=  Get Service
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
      
-     ${resp}=  Get Departments 
-     Log  ${resp.json()}
-     # Should Be Equal As Strings  ${resp.status_code}  200
-
     ${dep_name1}=  FakerLibrary.bs
     Set Suite Variable   ${dep_name1}
     ${dep_code1}=   Random Int  min=100   max=999
@@ -258,7 +281,7 @@ JD-TC-ServiceCreationByUserLogin-4
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
     ${ser_duratn}=      Random Int   min=10   max=30
-    ${resp}=  Create Service Department  ${SERVICE1}  ${desc}   ${ser_duratn}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  ${depid1}
+    ${resp}=  Create Service   ${SERVICE1}  ${desc}   ${ser_duratn}  ${bool[0]}   ${servicecharge}  ${bool[0]}  department=${depid1}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid1}  ${resp.json()}
 
@@ -289,18 +312,21 @@ JD-TC-ServiceCreationByUserLogin-4
     ${sublen}=   Get Length  ${subdomains}
     ${i}=  Random Int  min=0  max=${sublen-1}
     ${sub_domain_id}=  Set Variable  ${subdomains[${i}]['subdomainId']}
-    ${u_id1}=  Create Sample User
+
+    ${PUSERNAME_U1}  ${u_id1} =  Create and Configure Sample User      deptId=${dep_id}
+    
+    # ${u_id1}=  Create Sample User
 
     ${resp}=  Get User By Id  ${u_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${PUSERNAME_U1}  ${resp.json()['mobileNo']}
+    # Set Suite Variable  ${PUSERNAME_U1}  ${resp.json()['mobileNo']}
 
-    ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
+    # ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
+    # Should Be Equal As Strings  ${resp[0].status_code}  200
+    # Should Be Equal As Strings  ${resp[1].status_code}  200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
