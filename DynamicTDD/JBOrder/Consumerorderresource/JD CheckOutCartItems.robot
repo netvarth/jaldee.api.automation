@@ -21,7 +21,7 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 ${minSaleQuantity}  2
-${maxSaleQuantity}   50
+${maxSaleQuantity}   49
 
 *** Test Cases ***
 

@@ -240,7 +240,7 @@ JD-TC-CreateItemInv-1
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
  
-*** Comments ***
+
 JD-TC-CreateItemInv-2
 
     [Documentation]   Create Item Inv - name is empty

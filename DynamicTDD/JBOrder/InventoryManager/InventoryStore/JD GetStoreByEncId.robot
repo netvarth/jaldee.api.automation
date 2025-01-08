@@ -86,7 +86,7 @@ JD-TC-GetStoreByEncid-1
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    ${Name}=    FakerLibrary.last name
+    ${Name}=    FakerLibrary.word
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}

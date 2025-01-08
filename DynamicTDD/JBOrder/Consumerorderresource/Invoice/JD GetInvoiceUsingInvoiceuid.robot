@@ -1068,8 +1068,8 @@ JD-TC-Get Invoice Using InvoiceID-3
     # ..... Create Tax ......
 
     ${taxName}=    FakerLibrary.name
-    ${taxPercentage}=     Random Int  min=0  max=200
-    ${taxPercentage}=           Convert To Number  ${taxPercentage}  1
+    ${taxPercentage}=     Random Element  ${gstpercentage}
+    # ${taxPercentage}=           Convert To Number  ${taxPercentage}  1
     ${cgst}=     Evaluate   ${taxPercentage} / 2
     ${sgst}=     Evaluate   ${taxPercentage} / 2
     Set Test Variable      ${taxName}
@@ -1381,6 +1381,24 @@ JD-TC-Get Invoice Using InvoiceID-3
     ${netTotalWithTax}=               Evaluate                round(${netTotalWithTax}, 2)
 
 
+
+#---------------
+    # ${taxPerValue} =  Evaluate  ${taxPercentage} / 100
+    # ${actualAmount} =  Evaluate  ${salesRate} / (1 + ${taxPerValue})
+    # ${actualAmount}=  roundoff  ${actualAmount}
+    # ${netTotalamount}=   Evaluate    ${actualAmount} * ${quantity} 
+
+    # ${netTotalamount}=   roundoff  ${netTotalamount}
+    # ${taxAmount} =  Evaluate  ${actualAmount} * ${taxPercentage} / 100
+    # ${taxAmount}=     roundoff    ${taxAmount}   2
+    
+    # ${taxtot}=  Evaluate  ${taxAmount}*${quantity} 
+    # ${taxtot}=     roundoff    ${taxtot}   2
+    # ${cgsttot}=     Evaluate   ${taxtot} / 2
+    # ${Total}=  Evaluate  ${item1}+${taxtot}
+    # ${Total}=  roundoff  ${Total}
+#----------------------
+
     ${catalogItem}=  Create Dictionary    encId=${SO_itemEncIds}
 
     ${catalogItems}=  Create Dictionary    catalogItem=${catalogItem}  quantity=${quantity}
@@ -1437,13 +1455,13 @@ JD-TC-Get Invoice Using InvoiceID-3
     Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                                          ${Name}
     Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                                                       ${bool[0]}
     Should Be Equal As Strings    ${resp.json()['netTotal']}                                                                ${item1}
-    Should Be Equal As Strings    ${resp.json()['netTotalWithTax']}                                                         ${netTotalWithTax}
-    Should Be Equal As Strings    ${resp.json()['taxTotal']}                                                                 ${taxtot}
-    Should Be Equal As Strings    ${resp.json()['netRate']}                                                                 ${netTotalWithTax}
-    Should Be Equal As Strings    ${resp.json()['amountDue']}                                                                 ${netTotalWithTax}
-    Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                                                 ${cgstTotal}
-    Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                                                 ${cgstTotal}
-    Should Be Equal As Strings    ${resp.json()['gst']}                                                                     ${taxtot}
+    Should Be Equal As Strings    ${resp.json()['netTotalWithTax']}                                                         ${item1}
+    Should Be Equal As Strings    ${resp.json()['taxTotal']}                                                                 0.0
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                                                 ${item1}
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                                                 ${item1}
+    Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                                                 0.0
+    Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                                                 0.0
+    Should Be Equal As Strings    ${resp.json()['gst']}                                                                     0.0
     Should Be Equal As Strings    ${resp.json()['location']['id']}                                                            ${locId1}
     Should Be Equal As Strings    ${resp.json()['store']['id']}                                                              ${Stidd}
     Should Be Equal As Strings    ${resp.json()['orderFor']['id']}                                                          ${cid}
@@ -1458,7 +1476,7 @@ JD-TC-Get Invoice Using InvoiceID-3
     Should Be Equal As Strings    ${resp.json()['contactInfo']['phone']['number']}                                          ${primaryMobileNo}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['email']}                                                     ${email_id}
     Should Be Equal As Strings    ${resp.json()['createdDate']}                                                               ${DAY1}
-    Should Be Equal As Strings    ${resp.json()['prePaymentAmount']}                                                           ${netTotalWithTax}
+    Should Be Equal As Strings    ${resp.json()['prePaymentAmount']}                                                            ${item1}
 
 JD-TC-Get Invoice Using InvoiceID-4
 

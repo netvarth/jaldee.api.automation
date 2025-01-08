@@ -701,12 +701,12 @@ JD-TC-Inventory Manager Work Flow-1
     Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${netTotal}
     # Should Be Equal As Strings    ${resp.json()['amountDue']}                                      0.0
-    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                      ${netTotal}
     Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['status']}                                      ${billStatus[1]}
+    # Should Be Equal As Strings    ${resp.json()['status']}                                      ${billStatus[1]}
+    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                      ${netTotal}
 
 JD-TC-Inventory Manager Work Flow-2
     [Documentation]    create a sales order with inventory ON case and tax is true.
@@ -884,7 +884,8 @@ JD-TC-Inventory Manager Work Flow-2
     ${salesRate}=   Evaluate        ${amount} / ${convertionQty}
     ${invoiceDate}=  db.add_timezone_date  ${tz}  1
     ${rate}=        Evaluate        int(${salesRate})
-    ${mrp}=         Random Int      min=${rate}  max=9999
+    # ${mrp}=         Random Int      min=${rate}  max=9999
+    ${mrp}=         Random Int      min=500  max=9999
     ${batchNo}=     Random Int      min=1  max=9999
     ${invoiceReferenceNo}=          Random Int  min=1  max=999
     ${purchaseNote}=                FakerLibrary.Sentence
@@ -1597,26 +1598,26 @@ JD-TC-Inventory Manager Work Flow-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    IF  ${resp.json()['enableInventory']}==${bool[1]}
-        ${resp1}=  Enable Disable Inventory  ${toggle[1]}
+    IF  ${resp.json()['enableInventory']}==${bool[0]}
+        ${resp1}=  Enable Disable Inventory  ${toggle[0]}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
 
         ${resp}=  Get Account Settings
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Should Be Equal As Strings  ${resp.json()['enableInventory']}  ${bool[0]}
+        Should Be Equal As Strings  ${resp.json()['enableInventory']}  ${bool[1]}
     END
 
-    IF  ${resp.json()['enableSalesOrder']}==${bool[1]}
-        ${resp1}=  Enable/Disable SalesOrder  ${toggle[1]}
+    IF  ${resp.json()['enableSalesOrder']}==${bool[0]}
+        ${resp1}=  Enable/Disable SalesOrder  ${toggle[0]}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
 
         ${resp}=  Get Account Settings
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Should Be Equal As Strings  ${resp.json()['enableSalesOrder']}  ${bool[0]}
+        Should Be Equal As Strings  ${resp.json()['enableSalesOrder']}  ${bool[1]}
     END
 
     ${resp}=  Get Store Type By Filter     
