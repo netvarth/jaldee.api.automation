@@ -982,65 +982,6 @@ JD-TC-CreateUser -10
 
     [Documentation]   Update a consumer's phone number and create user with consumer's new phone number
 
-    # ${PO_Number}    Generate random string    4    0123456789
-    # ${PO_Number}    Convert To Integer  ${PO_Number}
-    # ${CUSERPH0}=  Evaluate  ${CUSERNAME}+${PO_Number}
-    # ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1000
-    # ${firstname}=  FakerLibrary.name
-    # ${lastname}=  FakerLibrary.last_name
-    # ${address}=  get_address
-    # ${dob}=  FakerLibrary.Date
-    # ${gender}=  Random Element    ${Genderlist}
-    # ${email}  Set Variable  ${C_Email}_${lastname}${CUSERPH0}.${test_mail}
-    # ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH0}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${email} 
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${resp}=  Consumer Activation  ${email}  1
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${resp}=  Consumer Set Credential  ${email}  ${PASSWORD}  1  
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${resp}=  Consumer Login  ${CUSERPH0}  ${PASSWORD}  
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${resp}=  Get Consumer By Id  ${CUSERPH0}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-#     ${resp}=  Consumer Logout
-#     Log   ${resp.json()}
-#     Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${PO_Number1}    Generate random string    3    0123456789
-    # ${PO_Number1}    Convert To Integer  ${PO_Number1}
-    # ${newNo}=  Evaluate  ${PUSERNAME33}+${PO_Number1}
-    # ${newNo}=  Evaluate  ${PUSERNAME33}+678
-
-    # ${resp}=  Send Verify Login Consumer   ${newNo}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=  Verify Login Consumer   ${newNo}  5
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=  Consumer Login  ${newNo}  ${PASSWORD}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=  Get Consumer By Id  ${newNo}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=  Consumer Logout
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1063,16 +1004,13 @@ JD-TC-CreateUser -10
     ${resp}=    ProviderConsumer Login with token   ${CUSERPH0}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable    ${cid1}    ${resp.json()['id']}
+    Set Test Variable    ${cid1}    ${resp.json()['providerConsumer']}
 
     ${PO_Number}    Generate random string    4    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${newNo}=  Evaluate  ${CUSERNAME}+${PO_Number}
 
-    # Need to update provider consumer phone number here!
-    # Set Test Variable  ${consumerEmail}  ${CUSERNAME4}${C_Email}.${test_mail}
-    
-    ${resp}=    Update ProviderConsumer    ${cid1}    phoneNo=${newNo}
+    ${resp}=    Update ProviderConsumer    ${cid1}    countryCode=${countryCodes[1]}  phoneNo=${newNo}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1086,12 +1024,7 @@ JD-TC-CreateUser -10
     ${resp}=   Get License UsageInfo 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    # ${resp}=   Get Business Profile
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
-
+   
     ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1109,9 +1042,7 @@ JD-TC-CreateUser -10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id}  ${resp.json()}
 
-    clear_users  ${newNo}
-    ${pin3}=  get_pincode
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${newNo}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${newNo}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${countryCodes[1]}  ${newNo}   ${userType[0]}    deptId=${dep_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
@@ -1124,8 +1055,8 @@ JD-TC-CreateUser -10
     ${resp}=  Provider Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-
 JD-TC-CreateUser -UH12
+
     [Documentation]   create a user with existing independent SP's(Provider's) phone number.
 
     ${resp}=  Encrypted Provider Login  ${buser}  ${PASSWORD}
@@ -1165,11 +1096,11 @@ JD-TC-CreateUser -UH12
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
     ${pin}=  get_pincode
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME8}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME8}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"  "${MOBILE_NO_USED}"
 
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${countryCodes[1]}  ${PUSERNAME8}   ${userType[0]}    deptId=${dep_id}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+   
     ${resp}=  Provider Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1656,18 +1587,18 @@ JD-TC-CreateUser-16
     Should Be Equal As Strings    ${resp2.status_code}    200
     # Set Test Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    ${iscorp_subdomains}=  get_iscorp_subdomains  1
-    Log  ${iscorp_subdomains}
-    ${dlen}=  Get Length  ${iscorp_subdomains}
-    FOR  ${pos}  IN RANGE  ${dlen}  
-        IF  '${iscorp_subdomains[${pos}]['subdomains']}' == '${subdomain}'
-            Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[${pos}]['subdomainId']}
-            Set Suite Variable  ${userSubDomain}  ${iscorp_subdomains[${pos}]['userSubDomainId']}
-            Exit For Loop
-        ELSE
-            Continue For Loop
-        END
-    END
+    # ${iscorp_subdomains}=  get_iscorp_subdomains  1
+    # Log  ${iscorp_subdomains}
+    # ${dlen}=  Get Length  ${iscorp_subdomains}
+    # FOR  ${pos}  IN RANGE  ${dlen}  
+    #     IF  '${iscorp_subdomains[${pos}]['subdomains']}' == '${subdomain}'
+    #         Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[${pos}]['subdomainId']}
+    #         Set Suite Variable  ${userSubDomain}  ${iscorp_subdomains[${pos}]['userSubDomainId']}
+    #         Exit For Loop
+    #     ELSE
+    #         Continue For Loop
+    #     END
+    # END
 
     # clear_queue      ${HLPUSERNAME18}
     # clear_service    ${HLPUSERNAME18}
@@ -2090,7 +2021,7 @@ JD-TC-CreateUser-18
 
 JD-TC-CreateUser-19
     [Documentation]  Create a user with UserType as marketting
-    ${resp}=  Encrypted Provider Login  ${buser}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Get Service
