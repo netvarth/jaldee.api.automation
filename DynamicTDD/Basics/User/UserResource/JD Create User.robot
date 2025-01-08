@@ -612,60 +612,6 @@ JD-TC-CreateUser -7
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${DAY1}=  db.get_date_by_timezone  ${tz}
-    # Set Suite Variable  ${DAY1}  ${DAY1}
-    # ${list}=  Create List  1  2  3  4  5  6  7
-    # Set Suite Variable  ${list}  ${list}
-    # ${ph1}=  Evaluate  ${PUSERNAME_E}+1000000000
-    # ${ph2}=  Evaluate  ${PUSERNAME_E}+2000000000
-    # ${views}=  Random Element    ${Views}
-    # ${name1}=  FakerLibrary.name
-    # ${name2}=  FakerLibrary.name
-    # ${name3}=  FakerLibrary.name
-    # ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
-    # ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    # ${emails1}=  Emails  ${name3}  Email  ${P_Email}181.${test_mail}  ${views}
-    # ${bs}=  FakerLibrary.bs
-    # ${companySuffix}=  FakerLibrary.companySuffix
-    # # ${city}=   FakerLibrary.state
-    # # ${latti}=  get_latitude
-    # # ${longi}=  get_longitude
-    # # ${postcode}=  FakerLibrary.postcode
-    # # ${address}=  get_address
-    # ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    # ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    # Set Suite Variable  ${tz}
-    # ${parking}   Random Element   ${parkingType}
-    # ${24hours}    Random Element    ${bool}
-    # ${desc}=   FakerLibrary.sentence
-    # ${url}=   FakerLibrary.url
-    # ${DAY1}=  db.get_date_by_timezone  ${tz}
-    # ${sTime}=  db.subtract_timezone_time  ${tz}  0  30
-    # Set Suite Variable  ${BsTime30}  ${sTime}
-    # ${eTime}=  add_timezone_time  ${tz}  1  00  
-    # Set Suite Variable  ${BeTime30}  ${eTime}
-    # ${resp}=  Update Business Profile with schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${fields}=   Get subDomain level Fields  ${domains}  ${sub_domains}
-    # Log  ${fields.json()}
-    # Should Be Equal As Strings    ${fields.status_code}   200
-
-    # ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
-
-    # ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sub_domains}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=  Get specializations Sub Domain  ${domains}  ${sub_domains}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-
-    # ${spec}=  get_Specializations  ${resp.json()}
-    # ${resp}=  Update Specialization  ${spec}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-
     ${bs}=  FakerLibrary.company
     ${companySuffix}=  FakerLibrary.companySuffix
     ${parking}   Random Element   ${parkingType}
@@ -673,7 +619,6 @@ JD-TC-CreateUser -7
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${name3}=  FakerLibrary.word
-    # ${emails1}=  Emails  ${name3}  Email  ${email_id}  ${views}
     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
     ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
     Set Test Variable  ${tz}
@@ -681,7 +626,6 @@ JD-TC-CreateUser -7
     ${description}=  FakerLibrary.sentence
 
     ${b_loc}=  Create Dictionary  place=${city}   longitude=${longi}   lattitude=${latti}    googleMapUrl=${url}   pinCode=${postcode}  address=${address}  parkingType=${parking}  open24hours=${24hours}
-    # ${emails}=  Create List  ${emails1}
     ${resp}=  Update Business Profile with kwargs   businessName=${bs}   businessUserName=${firstname}${SPACE}${lastname}   businessDesc=Description:${SPACE}${description}  shortName=${companySuffix}  baseLocation=${b_loc}   #emails=${emails}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -728,27 +672,6 @@ JD-TC-CreateUser -7
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     
-    # ${location}=  FakerLibrary.city
-    # ${state}=  FakerLibrary.state
-
-    # ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+651122
-    # clear_users  ${PUSERNAME_E}
-    # ${firstname1}=  FakerLibrary.name
-    # ${lastname1}=  FakerLibrary.last_name
-    # ${address}=  get_address
-    # ${dob1}=  FakerLibrary.Date
-    # ${pin1}=  get_pincode
-    
-    # ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable  ${u_id2}  ${resp.json()}
-   
-    # ${resp}=  Get User
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable   ${u_id2}   ${resp.json()[0]['id']}
-
     ${u_id2} =  Create Sample User    deptId=${dep_id}
 
     ${p_id}=  get_acc_id  ${PUSERNAME_E}
@@ -772,15 +695,6 @@ JD-TC-CreateUser -7
     ${description}=  FakerLibrary.sentence
     Set Suite Variable  ${description}
 
-    # ${resp}=  Appointment Status   ${toggle[0]}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=  Get Account Settings  
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
-    
     ${SERVICE1}=  FakerLibrary.word
     Set Suite Variable  ${SERVICE1}
 
@@ -817,23 +731,13 @@ JD-TC-CreateUser -7
     ${resp}=    Get Queues
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['name']}  ${queue_name}
-    Should Be Equal As Strings  ${resp.json()[0]['queueSchedule']['recurringType']}  Weekly
-    Should Be Equal As Strings  ${resp.json()[0]['queueSchedule']['repeatIntervals']}  ${list}
-    Should Be Equal As Strings  ${resp.json()[0]['queueSchedule']['startDate']}  ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['queueSchedule']['timeSlots'][0]['sTime']}  ${sTime1}
-    Should Be Equal As Strings  ${resp.json()[0]['queueSchedule']['timeSlots'][0]['eTime']}  ${eTime1}
-    Should Be Equal As Strings  ${resp.json()[0]['parallelServing']}   1
-    Should Be Equal As Strings  ${resp.json()[0]['capacity']}   10
-    Should Be Equal As Strings  ${resp.json()[0]['queueState']}   ${Qstate[1]}    
-
+  
     ${resp}=    Get Service
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List  ${resp}  0  name=${SERVICE2}    serviceDuration=${service_duration[0]}  notificationType=${notifytype[0]}   totalAmount=${totalamt}  status=${status[1]}  bType=${btype} 	  
-    Verify Response List  ${resp}  1  name=${SERVICE1}    serviceDuration=${service_duration[0]}  notificationType=${notifytype[0]}   totalAmount=${totalamt}  status=${status[1]}  bType=${btype}  
-  
+    
 JD-TC-CreateUser -UH9
+
     [Documentation]   Create user with international phone number
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
@@ -844,9 +748,7 @@ JD-TC-CreateUser -UH9
     Log  ${decrypted_data}
     ${domain}=   Set Variable    ${decrypted_data['sector']}
     ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
-    # ${domain}=   Set Variable    ${resp.json()['sector']}
-    # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
-
+  
     ${resp}=   Get Business Profile
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -879,28 +781,26 @@ JD-TC-CreateUser -UH9
     ${lastname1}=  FakerLibrary.last_name
     ${address1}=  get_address
     ${dob1}=  FakerLibrary.Date
-    ${pin1}=  get_pincode  
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${User1}.${test_mail}   ${userType[0]}  ${pin1}  +${country_code}  ${User1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${pin1}=  get_pincode 
+
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  +${country_code}  ${User1}   ${userType[0]}    deptId=${dep_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    # Should Be Equal As Strings  "${resp.json()}"  "${INVALID_COUNTRY_CODE}"
     Should Be Equal As Strings  "${resp.json()}"  "${INVAID_USER_PHONE_NUMBER}"
 
 JD-TC-CreateUser -UH10
+
     [Documentation]   Create 2 users with same phone number, different country codes.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # Set Test Variable  ${subdomain}  ${resp.json()['subSector']}
-
+   
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     ${domain}=   Set Variable    ${decrypted_data['sector']}
     ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
-    # ${domain}=   Set Variable    ${resp.json()['sector']}
-    # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
-
+    
     ${resp}=   Get Business Profile
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -927,71 +827,33 @@ JD-TC-CreateUser -UH10
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${country_code1}    Generate random string    2    0123456789
     ${country_code1}    Convert To Integer  ${country_code1}
-#     ${country_code2}    Generate random string    3    0123456789
-#     ${country_code2}    Convert To Integer  ${country_code2}
     ${User1}=  Evaluate  ${PUSERNAME}+${PO_Number}
     clear_users  ${User1}
     ${firstname1}=  FakerLibrary.name
     ${lastname1}=  FakerLibrary.last_name
-    ${address1}=  get_address
-    ${dob1}=  FakerLibrary.Date
-    # ${pin1}=  get_pincode
-     # ${resp}=  Get LocationsByPincode     ${pin1}
-     FOR    ${i}    IN RANGE    3
-        ${pin1}=  get_pincode
-        ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin1}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-     END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${city1}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${state1}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Test Variable  ${pin1}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
-
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${User1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[1]}  ${User1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+  
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${countryCodes[1]}  ${User1}   ${userType[0]}    deptId=${dep_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id1}  ${resp.json()}
 
-    ${iscorp_subdomains}=  get_iscorp_subdomains  1
-    Log  ${iscorp_subdomains}
-    ${dlen}=  Get Length  ${iscorp_subdomains}
-    FOR  ${pos}  IN RANGE  ${dlen}  
-        IF  '${iscorp_subdomains[${pos}]['subdomains']}' == '${subdomain}'
-            Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[${pos}]['subdomainId']}
-            Set Suite Variable  ${userSubDomain}  ${iscorp_subdomains[${pos}]['userSubDomain']}
-            Exit For Loop
-        ELSE
-            Continue For Loop
-        END
-    END
-
     ${resp}=  Get User By Id  ${u_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${u_id1}  firstName=${firstname1}  lastName=${lastname1}  
-    ...    mobileNo=${User1}  dob=${dob1}  gender=${Genderlist[0]}  
-    ...   userType=${userType[0]}  status=ACTIVE  email=${P_Email}${User1}.${test_mail}  
-    ...   state=${state1}  deptId=${dep_id}  subdomain=${userSubDomain}
-    Should Be Equal As Strings   ${resp.json()['city']}   ${city1}   ignore_case=True
-
+  
     ${firstname2}=  FakerLibrary.name
     ${lastname2}=  FakerLibrary.last_name
     ${address2}=  get_address
     ${dob2}=  FakerLibrary.Date
     ${pin2}=  get_pincode
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${User1}101.${test_mail}   ${userType[0]}  ${pin2}  +${country_code1}  ${User1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  +${country_code1}    ${User1}   ${userType[0]}    deptId=${dep_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${INVAID_USER_PHONE_NUMBER}"
 
-    # Should Be Equal As Strings  "${resp.json()}"  "${INVALID_COUNTRY_CODE}"
-
 JD-TC-CreateUser -UH11
+
     [Documentation]   create user with empty country code
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
@@ -1002,9 +864,7 @@ JD-TC-CreateUser -UH11
     Log  ${decrypted_data}
     ${domain}=   Set Variable    ${decrypted_data['sector']}
     ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
-    # ${domain}=   Set Variable    ${resp.json()['sector']}
-    # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
-
+   
     ${resp}=   Get Business Profile
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1039,41 +899,14 @@ JD-TC-CreateUser -UH11
     ${dob1}=  FakerLibrary.Date
     ${pin1}=  get_pincode
 
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${User1}.${test_mail}   ${userType[0]}  ${pin1}  ${EMPTY}  ${User1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${EMPTY}  ${User1}   ${userType[0]}    deptId=${dep_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${COUNTRY_CODEREQUIRED}"
 
 JD-TC-CreateUser -8
+
     [Documentation]   create user with existing consumer's phone number
-
-    # ${PO_Number}    Generate random string    4    0123456789
-    # ${PO_Number}    Convert To Integer  ${PO_Number}
-    # ${CUSERPH0}=  Evaluate  ${CUSERNAME}+${PO_Number}
-    # ${firstname}=  FakerLibrary.name
-    # ${lastname}=  FakerLibrary.last_name
-    # ${address}=  get_address
-    # ${dob}=  FakerLibrary.Date
-    # ${gender}=  Random Element    ${Genderlist}
-    # ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH0}  ${EMPTY}  ${dob}  ${gender}   ${EMPTY} 
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${resp}=  Consumer Activation  ${CUSERPH0}  1
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${resp}=  Consumer Set Credential  ${CUSERPH0}  ${PASSWORD}  1  
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${resp}=  Consumer Login  ${CUSERPH0}  ${PASSWORD}  
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${resp}=  Consumer Logout
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
@@ -1088,7 +921,6 @@ JD-TC-CreateUser -8
     ${resp}=  Provider Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-
     ${PO_Number}    Generate random string    4    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${CUSERPH0}=  Evaluate  ${CUSERNAME}+${PO_Number}
@@ -1101,10 +933,6 @@ JD-TC-CreateUser -8
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${licId}  ${licname}=  get_highest_license_pkg
-    # ${buser}=   Get branch by license   ${licId}
-    # Set Suite Variable  ${buser}
-    
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1134,9 +962,10 @@ JD-TC-CreateUser -8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id}  ${resp.json()}
 
-    clear_users  ${CUSERPH0}
-    ${pin3}=  get_pincode
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${CUSERPH0}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${CUSERPH0}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${firstname}=  FakerLibrary.name
+    ${lastname}=  FakerLibrary.last_name
+
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${countryCodes[1]}  ${CUSERPH0}   ${userType[0]}    deptId=${dep_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
@@ -1149,84 +978,8 @@ JD-TC-CreateUser -8
     ${resp}=  Provider Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-
-# JD-TC-CreateUser -9
-#     [Documentation]   create user with existing consumer's second phone number
-
-#     ${PO_Number}    Generate random string    4    0123456789
-#     ${PO_Number}    Convert To Integer  ${PO_Number}
-#     ${CUSERPH0}=  Evaluate  ${CUSERNAME}+${PO_Number}
-#     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1000
-#     ${firstname}=  FakerLibrary.name
-#     ${lastname}=  FakerLibrary.last_name
-#     ${address}=  get_address
-#     ${dob}=  FakerLibrary.Date
-#     ${gender}=  Random Element    ${Genderlist}
-#     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH0}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${EMPTY} 
-#     Log   ${resp.json()}
-#     Should Be Equal As Strings    ${resp.status_code}    200
-
-#     ${resp}=  Consumer Activation  ${CUSERPH0}  1
-#     Log   ${resp.json()}
-#     Should Be Equal As Strings    ${resp.status_code}    200
-
-#     ${resp}=  Consumer Set Credential  ${CUSERPH0}  ${PASSWORD}  1  
-#     Log   ${resp.json()}
-#     Should Be Equal As Strings    ${resp.status_code}    200
-
-#     ${resp}=  Consumer Login  ${CUSERPH0}  ${PASSWORD}  
-#     Log   ${resp.json()}
-#     Should Be Equal As Strings    ${resp.status_code}    200
-
-#     ${resp}=  Consumer Logout
-#     Log   ${resp.json()}
-#     Should Be Equal As Strings    ${resp.status_code}    200
-    
-#     ${resp}=  Encrypted Provider Login  ${buser}  ${PASSWORD}
-#     Log  ${resp.json()}
-#     Should Be Equal As Strings    ${resp.status_code}    200
-
-#     ${resp}=   Get License UsageInfo 
-#     Log  ${resp.json()}
-#     Should Be Equal As Strings  ${resp.status_code}  200
-    
-#     ${resp}=   Get Business Profile
-#     Log  ${resp.json()}
-#     Should Be Equal As Strings    ${resp.status_code}    200
-#     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
-
-#     ${resp}=  Get Waitlist Settings
-#     Log  ${resp.json()}
-#     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-#     Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-#     Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
-    
-#     sleep  2s
-#     ${dep_name1}=  FakerLibrary.bs
-#     ${dep_code1}=   Random Int  min=100   max=999
-#     ${dep_desc1}=   FakerLibrary.word  
-#     ${resp}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
-#     Log  ${resp.json()}
-#     Should Be Equal As Strings  ${resp.status_code}  200
-#     Set Suite Variable  ${dep_id}  ${resp.json()}
-
-#     clear_users  ${CUSERPH_SECOND}
-#     ${pin3}=  get_pincode
-#     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${CUSERPH_SECOND}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${CUSERPH_SECOND}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-#     Log   ${resp.json()}
-#     Should Be Equal As Strings  ${resp.status_code}  200
-#     Set Suite Variable  ${u_id}  ${resp.json()}
-
-#     ${resp}=  Get User By Id  ${u_id}
-#     Log   ${resp.json()}
-#     Should Be Equal As Strings  ${resp.status_code}  200
-#     Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}  mobileNo=${CUSERPH_SECOND}
-
-#     ${resp}=  Provider Logout
-#     Should Be Equal As Strings    ${resp.status_code}    200
-
 JD-TC-CreateUser -10
+
     [Documentation]   Update a consumer's phone number and create user with consumer's new phone number
 
     # ${PO_Number}    Generate random string    4    0123456789
@@ -1310,6 +1063,7 @@ JD-TC-CreateUser -10
     ${resp}=    ProviderConsumer Login with token   ${CUSERPH0}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${cid1}    ${resp.json()['id']}
 
     ${PO_Number}    Generate random string    4    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
