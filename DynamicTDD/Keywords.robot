@@ -225,7 +225,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 ...             EquifaxScoreGenerate=16  CibilScoreGenerate=17  SPDataImport=18  CONSENT_FORM=19  ResetLoginId=20  LinkLogin=21  LeadConsumerVerify=22
 ...             LosLeadCoApplicantVerifyPhone=23  losLeadCoApplicantVerifyEmail=24
 
-@{otp_purpose_list}                 signup  signup  resetPassword  resetPassword  email  email  changeversion  contact  login  phone  phone  phone  
+@{otp_purpose_list}                 signup  signup  resetpassword  resetpassword  email  email  changeversion  contact  login  phone  phone  phone  
 ...                                 resetPassword  phone  email  secondfactor  equifax  cibil  dataimport  consentform  resetLogin
 ...                                 link  lead  phone  email
 
