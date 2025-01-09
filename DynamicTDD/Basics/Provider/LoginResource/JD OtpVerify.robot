@@ -2934,3 +2934,91 @@ JD-TC-OTPVerify-27
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings  ${resp.json()}   ${ENTER_VALID_OTP}
+
+JD-TC-OTPVerify-28
+
+    [Documentation]  do a provider consumer signup and verify otp.
+
+    #............provider consumer signup..........
+    
+    ${NewCustomer}  ${token}  Create Sample Customer  ${acc_id1}
+    
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${acc_id1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-OTPVerify-29
+
+    [Documentation]  do a provider consumer signup  with a wrong otp for 5 attempts.
+    ...   then After 5 try, check the provider consumer is locked to do further tries for 1s time period.
+    ...   when it is unlocked , try to verify login with a valid otp.
+
+    #............provider consumer signup..........
+    
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable  ${PCPHONENO}  555${PH_Number}
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${acc_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    #..wrong otp attempt 1..
+    ${wrong_otp}=    Generate Random String    4    [NUMBERS]
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}  ${wrong_otp}   JSESSIONYNW=${jsessionynw_value} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings  ${resp.json()}   ${OTP_VALIDATION_FAILED}
+    
+    #..wrong otp attempt 2..
+    ${wrong_otp}=    Generate Random String    4    [NUMBERS]
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}  ${wrong_otp}   JSESSIONYNW=${jsessionynw_value} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings  ${resp.json()}   ${OTP_VALIDATION_FAILED}
+    
+    #..wrong otp attempt 3..
+    ${wrong_otp}=    Generate Random String    4    [NUMBERS]
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}  ${wrong_otp}   JSESSIONYNW=${jsessionynw_value} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings  ${resp.json()}   ${OTP_VALIDATION_FAILED}
+    
+    #..wrong otp attempt 4..
+    ${wrong_otp}=    Generate Random String    4    [NUMBERS]
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}  ${wrong_otp}   JSESSIONYNW=${jsessionynw_value} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings  ${resp.json()}   ${OTP_VALIDATION_FAILED}
+    
+    #..wrong otp attempt 5..
+    ${wrong_otp}=    Generate Random String    4    [NUMBERS]
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}  ${wrong_otp}   JSESSIONYNW=${jsessionynw_value} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings  ${resp.json()}   ${OTP_VALIDATION_FAILED}
+    
+    #..wrong otp attempt 6,, account locked..
+    ${wrong_otp}=    Generate Random String    4    [NUMBERS]
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}  ${wrong_otp}   JSESSIONYNW=${jsessionynw_value} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   403
+    Should Be Equal As Strings  ${resp.content}   "it is locked for a while. try after some time"
+
+    sleep   1s
+
+    ${resp}=   Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+    
+    ${firstName}=  generate_firstname
+    ${lastName}=  FakerLibrary.last_name
+    ${email}  Set Variable  ${firstName}${C_Email}.${test_mail}
+
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}  ${PCPHONENO}  ${acc_id1}  Authorization=${token}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200    

@@ -136,7 +136,7 @@ Get stores Count filter
 
 
 Create Sample Customer
-    [Arguments]  ${accountId}  ${primaryMobileNo}=${EMPTY}
+    [Arguments]  ${accountId}  ${primaryMobileNo}=${EMPTY}   ${otp_verify}=0
 
     IF  '''${primaryMobileNo}''' == '''${EMPTY}'''
         IF  "${ENVIRONMENT}" == "local"
@@ -157,7 +157,7 @@ Create Sample Customer
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=  Verify Otp For Login  ${primaryMobileNo}  ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=  Verify Otp For Login  ${primaryMobileNo}  ${OtpPurpose['Authentication']}  ${otp_verify}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
