@@ -825,8 +825,8 @@ JD-TC-CreateUser -UH10
 
     ${PO_Number}    Generate random string    5    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
-    ${country_code1}    Generate random string    2    0123456789
-    ${country_code1}    Convert To Integer  ${country_code1}
+    ${country_code11}    Generate random string    2    0123456789
+    ${country_code11}    Convert To Integer  ${country_code11}
     ${User1}=  Evaluate  ${PUSERNAME}+${PO_Number}
     clear_users  ${User1}
     ${firstname1}=  FakerLibrary.name
@@ -847,7 +847,7 @@ JD-TC-CreateUser -UH10
     ${dob2}=  FakerLibrary.Date
     ${pin2}=  get_pincode
 
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  +${country_code1}    ${User1}   ${userType[0]}    deptId=${dep_id}
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  +${country_code11}    ${User1}   ${userType[0]}    deptId=${dep_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${INVAID_USER_PHONE_NUMBER}"
@@ -1162,7 +1162,7 @@ JD-TC-CreateUser -11
     ${PUSERPH1}=  Evaluate  ${PUSERNAME}+3457
     clear_users  ${PUSERPH1}
     
-    ${resp}=  Update User  ${u_id}    ${countryCodes[1]}  ${PUSERPH1}    ${userType[2]}   firstName=${firstname}  lastName=${lastname}   
+    ${resp}=  Update User  ${u_id}    +${countryCodes[1]}  ${PUSERPH1}    ${userType[2]}   firstName=${firstname}  lastName=${lastname}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     # ${resp}=  Update User   ${u_id}   ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.${test_mail}   ${userType[2]}  ${pin}  ${countryCodes[1]}  ${PUSERPH1}  ${dep_id}  ${sub_domain_id}  ${bool[1]}  ${countryCodes[1]}  ${PUSERPH1}  ${countryCodes[1]}  ${PUSERPH1}
@@ -1247,9 +1247,9 @@ JD-TC-CreateUser -12
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${EMPTY}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERPH0}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${EMPTY}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERPH0}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
 
     ${resp}=  Get User By Id  ${u_id}
@@ -1263,9 +1263,13 @@ JD-TC-CreateUser -12
     ${PUSERPH1}=  Evaluate  ${PUSERNAME}+3459
     clear_users  ${PUSERPH1}
     
-    ${resp}=  Update User   ${u_id}   ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${EMPTY}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERPH1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    Log   ${resp.json()}
+    ${resp}=  Update User  ${u_id}    +${countryCodes[1]}  ${PUSERPH1}    ${userType[2]}   firstName=${firstname}  lastName=${lastname}   
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${resp}=  Update User   ${u_id}   ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${EMPTY}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERPH1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get User By Id  ${u_id}
     Log   ${resp.json()}
@@ -1277,10 +1281,14 @@ JD-TC-CreateUser -12
     ${address}=  get_address
     ${dob}=  FakerLibrary.Date
     ${pin}=  get_pincode
-   
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${EMPTY}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERPH0}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${countryCodes[1]}  ${PUSERPH0}   ${userType[0]}    deptId=${dep_id}
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  200 
+
+    # ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${EMPTY}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERPH0}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
 
     ${resp}=  Get User By Id  ${u_id}
