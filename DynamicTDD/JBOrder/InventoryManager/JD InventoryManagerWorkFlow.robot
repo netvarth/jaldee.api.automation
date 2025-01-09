@@ -708,6 +708,9 @@ JD-TC-Inventory Manager Work Flow-1
     # Should Be Equal As Strings    ${resp.json()['status']}                                      ${billStatus[1]}
     Should Be Equal As Strings    ${resp.json()['amountPaid']}                                      ${netTotal}
 
+
+*** Comments ***
+
 JD-TC-Inventory Manager Work Flow-2
     [Documentation]    create a sales order with inventory ON case and tax is true.
     
