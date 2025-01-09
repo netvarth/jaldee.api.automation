@@ -492,7 +492,7 @@ JD-TC-ConvertToOrder-1
     Set Suite Variable      ${remark}
     Set Suite Variable      ${dos}
 
-    ${resp}=    Create Frequency  ${frequency}  ${dosage}  description=${description}  remark=${remark}
+    ${resp}=    Create Frequency  ${frequency}  ${dos}  description=${description}  remark=${remark}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
     Set Suite Variable              ${frequency_id}         ${resp.json()}
@@ -540,7 +540,7 @@ JD-TC-ConvertToOrder-1
     Set Suite Variable      ${duration1}
     Set Suite Variable      ${quantity1}
 
-    ${resp}=    RX Create Prescription  ${cid}  ${doc1}  ${displayName1}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}  itemDosage=1
+    ${resp}=    RX Create Prescription  ${cid}  ${doc1}  ${displayName1}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}  itemDosage=${dos}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
     Set Suite Variable              ${prescription_id}      ${resp.json()}
