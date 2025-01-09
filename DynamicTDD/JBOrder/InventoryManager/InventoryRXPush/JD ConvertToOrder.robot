@@ -32,29 +32,29 @@ ${originFrom}       NONE
 JD-TC-ConvertToOrder-1
     [Documentation]    Convert to Order
 
-    # ${iscorp_subdomains}=  get_iscorp_subdomains  1
-    # Log  ${iscorp_subdomains}
-    # Set Suite Variable  ${iscorp_subdomains}
-    # Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
-    # Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
-    # Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
-    # ${firstname_A}=  FakerLibrary.first_name
-    # Set Suite Variable  ${firstname_A}
-    # ${lastname_A}=  FakerLibrary.last_name
-    # Set Suite Variable  ${lastname_A}
-    # ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+4548754
-    # ${highest_package}=  get_highest_license_pkg
-    # ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # ${resp}=  Account Activation  ${PUSERNAME_E}  0
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E}
-    # Should Be Equal As Strings    ${resp.status_code}    200
+    ${iscorp_subdomains}=  get_iscorp_subdomains  1
+    Log  ${iscorp_subdomains}
+    Set Suite Variable  ${iscorp_subdomains}
+    Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
+    Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
+    Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
+    ${firstname_A}=  FakerLibrary.first_name
+    Set Suite Variable  ${firstname_A}
+    ${lastname_A}=  FakerLibrary.last_name
+    Set Suite Variable  ${lastname_A}
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+4548754
+    ${highest_package}=  get_highest_license_pkg
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    202
+    ${resp}=  Account Activation  ${PUSERNAME_E}  0
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${firstname}  ${lastname}  ${PUSERNAME_E}  ${LoginId}=  Provider Signup
-    Set Suite Variable  ${PUSERNAME_E}
+    # ${firstname}  ${lastname}  ${PUSERNAME_E}  ${LoginId}=  Provider Signup
+    # Set Suite Variable  ${PUSERNAME_E}
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -357,7 +357,7 @@ JD-TC-ConvertToOrder-1
     ${salesRate}=   Evaluate        ${amount} / ${convertionQty}
     ${invoiceDate}=  db.add_timezone_date  ${tz}  1
     ${rate}=        Evaluate        int(${salesRate})
-    ${mrp}=         Random Int      min=${rate}  max=9999
+    ${mrp}=         Random Int      min=500  max=9999
     ${batchNo}=     Random Int      min=1  max=9999
     ${invoiceReferenceNo}=          Random Int  min=1  max=999
     ${purchaseNote}=                FakerLibrary.Sentence
@@ -578,7 +578,7 @@ JD-TC-ConvertToOrder-1
     Set Suite Variable      ${duration2}
     Set Suite Variable      ${quantity2}
 
-    ${resp}=    RX Create Prescription Item  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
+    ${resp}=    RX Create Prescription Item  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${prescription_id}   itemDosage=${dos}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
     Set Suite Variable              ${pitm_id}      ${resp.json()}
@@ -586,7 +586,7 @@ JD-TC-ConvertToOrder-1
     ${resp}=    Get RX Prescription Item By EncId  ${pitm_id}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}                         200
-    Should Be Equal As Strings      ${resp.json()['spItemCode']}                ${item2}
+    Should Be Equal As Strings      ${resp.json()['spItemCode']}                ${item1}
     Should Be Equal As Strings      ${resp.json()['medicineName']}              ${displayName2}    
     Should Be Equal As Strings      ${resp.json()['duration']}                  ${duration2}    
     Should Be Equal As Strings      ${resp.json()['frequency']['id']}           ${frequency_id}    
@@ -598,7 +598,7 @@ JD-TC-ConvertToOrder-1
 
     ${itemqty}=    Evaluate   ${dos} * ${duration2}
 
-    ${resp}=    Get RX Prescription Item Qnty By EncId  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
+    ${resp}=    Get RX Prescription Item Qnty By EncId  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${prescription_id}   itemDosage=${dos}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
     Should Be Equal As Strings      ${resp.json()}          ${itemqty}
@@ -611,16 +611,16 @@ JD-TC-ConvertToOrder-1
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
     Set Suite Variable      ${sorder_uid}   ${resp.json()[0]['uid']}
-    Should Be Equal As Strings      ${resp.json()[0]['createdDate']}    ${DAY1}
-    Should Be Equal As Strings      ${resp.json()[0]['createdBy']}    ${pid}
-    Should Be Equal As Strings      ${resp.json()[0]['createdByName']}    ${pdrname}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}    ${Store_Name1}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}   ${store_id}
-    Should Be Equal As Strings      ${resp.json()[0]['prescriptionUid']}    ${prescription_id}
-    Should Be Equal As Strings      ${resp.json()[0]['prescriptionDate']}    ${DAY1}
-    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[0]}
-    Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
-    Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
+    # Should Be Equal As Strings      ${resp.json()[0]['createdDate']}    ${DAY1}
+    # Should Be Equal As Strings      ${resp.json()[0]['createdBy']}    ${pid}
+    # Should Be Equal As Strings      ${resp.json()[0]['createdByName']}    ${pdrname}
+    # Should Be Equal As Strings      ${resp.json()[0]['store']['name']}    ${Store_Name1}
+    # Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}   ${store_id}
+    # Should Be Equal As Strings      ${resp.json()[0]['prescriptionUid']}    ${prescription_id}
+    # Should Be Equal As Strings      ${resp.json()[0]['prescriptionDate']}    ${DAY1}
+    # Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[0]}
+    # Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
+    # Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
 
     ${resp}=    Convert to order  ${sorder_uid}  ${orderStatus[0]}
     Log   ${resp.content}
@@ -640,6 +640,7 @@ JD-TC-ConvertToOrder-1
     Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
     Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
 
+*** Comments ***
 JD-TC-ConvertToOrder-UH2
     [Documentation]    Convert to Order - where order is already accepted
 

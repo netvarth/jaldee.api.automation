@@ -61,10 +61,13 @@ JD-TC-GetStoreListByFilter-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable      ${typeid}   ${resp.json()['id']}
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
+    ${firstname}  ${lastname}  ${PUSERNAME_E}  ${LoginId}=  Provider Signup
+    Set Suite Variable  ${PUSERNAME_E}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLPUSERNAME1}
+    ${accountId}=  get_acc_id  ${PUSERNAME_E}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
@@ -154,7 +157,7 @@ JD-TC-GetStoreListByFilter-2
 
     [Documentation]  Get Store List By Filter - storeNature filter
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -173,7 +176,7 @@ JD-TC-GetStoreListByFilter-3
 
     [Documentation]  Get Store List By Filter - storeCode filter
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -192,7 +195,7 @@ JD-TC-GetStoreListByFilter-4
 
     [Documentation]  Get Store List By Filter - encId filter
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -211,7 +214,7 @@ JD-TC-GetStoreListByFilter-5
 
     [Documentation]  Get Store List By Filter - city filter
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -239,7 +242,7 @@ JD-TC-GetStoreListByFilter-6
 
     [Documentation]  Get Store List By Filter - district filter
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -266,7 +269,7 @@ JD-TC-GetStoreListByFilter-7
 
     [Documentation]  Get Store List By Filter - state filter
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -294,7 +297,7 @@ JD-TC-GetStoreListByFilter-8
 
     [Documentation]  Get Store List By Filter - country filter
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -321,7 +324,7 @@ JD-TC-GetStoreListByFilter-9
 
     [Documentation]  Get Store List By Filter - pincode filter
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -349,7 +352,7 @@ JD-TC-GetStoreListByFilter-10
 
     [Documentation]  Get Store List By Filter - status filter
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -376,7 +379,7 @@ JD-TC-GetStoreListByFilter-11
 
     [Documentation]  Get Store List By Filter - filter
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -404,7 +407,7 @@ JD-TC-GetStoreListByFilter-12
 
     [Documentation]  Get Store List By Filter - storeType filter
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
