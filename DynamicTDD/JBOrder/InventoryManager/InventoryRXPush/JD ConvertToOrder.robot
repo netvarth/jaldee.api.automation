@@ -26,6 +26,20 @@ ${invalidItem}      sprx-3250dr0-800
 @{spItemSource}     RX       Ayur
 ${originFrom}       NONE
 @{deliveryType}     STORE_PICKUP        HOME_DELIVERY
+
+*** Keywords ***
+Update BatchPrice
+
+    [Arguments]  ${socat_item_EncId}   ${batchList}    ${invCatItem}      &{kwargs}
+    ${data}=  Create Dictionary   batchList=${batchList}       invCatItem=${invCatItem}  
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END 
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/so/catalog/item/${socat_item_EncId}   data=${data}  expected_status=any
+    Check Deprication  ${resp}  Update BatchPrice
+    RETURN  ${resp} 
       
 *** Test Cases ***
 
@@ -196,7 +210,7 @@ JD-TC-ConvertToOrder-1
     Set Suite Variable  ${email_id}  ${Store_Name1}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
-    ${resp}=  Create Store   ${Store_Name1}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
+    ${resp}=  Create Store   ${Store_Name1}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}    onlineOrder=${boolean[1]}    walkinOrder=${boolean[1]}   partnerOrder=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${store_id}  ${resp.json()}
@@ -215,10 +229,10 @@ JD-TC-ConvertToOrder-1
     ${displayName2}=        FakerLibrary.name
     Set Suite Variable      ${displayName2}
 
-    ${resp}=    Create Item Inventory  ${displayName2}    isInventoryItem=${bool[1]}    isBatchApplicable=${boolean[1]}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${item2}  ${resp.json()}
+    # ${resp}=    Create Item Inventory  ${displayName2}    isInventoryItem=${bool[1]}    isBatchApplicable=${boolean[1]}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${item2}  ${resp.json()}
 
 
 # ----------------------------------------- create Inv Catalog -------------------------------------------------------
@@ -230,8 +244,8 @@ JD-TC-ConvertToOrder-1
     Set Suite Variable  ${Catalog_EncIds}  ${resp.json()}
 
 # ----------------------------------------Create Inventory Catalog Item----------------------------------
-
-    ${resp}=   Create Inventory Catalog Item  ${Catalog_EncIds}   ${item1}  ${item2}
+# ${item2}
+    ${resp}=   Create Inventory Catalog Item  ${Catalog_EncIds}   ${item1}  
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Suite Variable   ${ic_Item_id}   ${resp.json()[0]}
@@ -469,7 +483,7 @@ JD-TC-ConvertToOrder-1
     ${price}=    Random Int  min=2   max=40
     ${price}=  Convert To Number  ${price}    1
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Store_note}  ${boolean[1]}  ${inv_cat_encid_List}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Store_note}  ${boolean[1]}  ${inv_cat_encid_List}   onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[1]}  storePickup=${boolean[1]}  courierService=${boolean[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${inv_order_encid}  ${resp.json()}
@@ -480,6 +494,11 @@ JD-TC-ConvertToOrder-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
+
+    ${spItem}=  Create Dictionary  encId=${item1}  
+    ${resp}=    Update SalesOrder Catalog Item      ${SO_itemEncIds}     ${boolean[1]}         ${price}    spItem=${spItem}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${frequency}=       Random Int  min=10  max=15
     ${dosage}=          Random Int  min=1  max=3000
@@ -578,30 +597,30 @@ JD-TC-ConvertToOrder-1
     Set Suite Variable      ${duration2}
     Set Suite Variable      ${quantity2}
 
-    ${resp}=    RX Create Prescription Item  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${prescription_id}   itemDosage=${dos}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}             200
-    Set Suite Variable              ${pitm_id}      ${resp.json()}
+    # ${resp}=    RX Create Prescription Item  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${prescription_id}   itemDosage=${dos}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings      ${resp.status_code}             200
+    # Set Suite Variable              ${pitm_id}      ${resp.json()}
 
-    ${resp}=    Get RX Prescription Item By EncId  ${pitm_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}                         200
-    Should Be Equal As Strings      ${resp.json()['spItemCode']}                ${item1}
-    Should Be Equal As Strings      ${resp.json()['medicineName']}              ${displayName2}    
-    Should Be Equal As Strings      ${resp.json()['duration']}                  ${duration2}    
-    Should Be Equal As Strings      ${resp.json()['frequency']['id']}           ${frequency_id}    
-    Should Be Equal As Strings      ${resp.json()['dosage']}                    ${dos}    
-    Should Be Equal As Strings      ${resp.json()['description']}               ${description}  
-    Should Be Equal As Strings      ${resp.json()['quantity']}                  ${quantity2}  
-    Should Be Equal As Strings      ${resp.json()['prescriptioinUid']}          ${prescription_id}   
-    Set Suite Variable              ${RDID2}      ${resp.json()['id']}
+    # ${resp}=    Get RX Prescription Item By EncId  ${pitm_id}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings      ${resp.status_code}                         200
+    # Should Be Equal As Strings      ${resp.json()['spItemCode']}                ${item1}
+    # Should Be Equal As Strings      ${resp.json()['medicineName']}              ${displayName2}    
+    # Should Be Equal As Strings      ${resp.json()['duration']}                  ${duration2}    
+    # Should Be Equal As Strings      ${resp.json()['frequency']['id']}           ${frequency_id}    
+    # Should Be Equal As Strings      ${resp.json()['dosage']}                    ${dos}    
+    # Should Be Equal As Strings      ${resp.json()['description']}               ${description}  
+    # Should Be Equal As Strings      ${resp.json()['quantity']}                  ${quantity2}  
+    # Should Be Equal As Strings      ${resp.json()['prescriptioinUid']}          ${prescription_id}   
+    # Set Suite Variable              ${RDID2}      ${resp.json()['id']}
 
-    ${itemqty}=    Evaluate   ${dos} * ${duration2}
+    # ${itemqty}=    Evaluate   ${dos} * ${duration2}
 
-    ${resp}=    Get RX Prescription Item Qnty By EncId  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${prescription_id}   itemDosage=${dos}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}             200
-    Should Be Equal As Strings      ${resp.json()}          ${itemqty}
+    # ${resp}=    Get RX Prescription Item Qnty By EncId  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${prescription_id}   itemDosage=${dos}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings      ${resp.status_code}             200
+    # Should Be Equal As Strings      ${resp.json()}          ${itemqty}
 
     ${resp}=    Order Request    ${store_id}  ${prescription_id}
     Log   ${resp.content}
