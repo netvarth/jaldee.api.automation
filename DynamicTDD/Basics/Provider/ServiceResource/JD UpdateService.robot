@@ -1179,7 +1179,47 @@ JD-TC-UpdateService-27
     Should Be Equal As Strings  ${resp.json()['postInfoTitle']}   ${postInfoTitle}
     Should Be Equal As Strings  ${resp.json()['postInfoText']}   ${EMPTY}
 
+JD-TC-CreateService-28
 
+    [Documentation]   Create service for a user
+
+    ${licid}  ${licname}=  get_highest_license_pkg
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup without Profile  LicenseId=${licid}
+    Set Suite Variable  ${PUSERNAME_A}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${PUSER_A_U1}  ${u_id1} =  Create and Configure Sample User  #admin=${bool[1]}
+    Set Suite Variable  ${PUSER_A_U1}
+
+    ${resp}=    Provider Logout
+    Should Be Equal As Strings  ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${PUSER_A_U1}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}   200
+
+    ${description}=  FakerLibrary.sentence
+    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  provider=${u_id1}  automaticInvoiceGeneration=${bool[1]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200  
+    Set Test Variable  ${s_id}  ${resp.json()} 
+    
+    ${resp}=   Get Service By Id  ${resp.json()}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+   
+    ${resp}=  Update Service  ${s_id}  ${resp.json()['name']}  ${resp.json()['description']}   ${resp.json()['serviceDuration']}  ${bool[0]}  ${resp.json()['totalAmount']}   provider=${u_id1}   automaticInvoiceGeneration=${bool[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+  
 JD-TC-UpdateService-UH1
     [Documentation]  Update a service name to an already existing name
 
