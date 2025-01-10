@@ -1024,7 +1024,7 @@ JD-TC-Get Order By UID-3
 
     ${taxPerValue} =  Evaluate  ${taxPercentage} / 100
     ${actualAmount} =  Evaluate  ${price} / (1 + ${taxPerValue})
-    ${actualAmount}=  roundoff  ${actualAmount}
+
     ${netTotalamount}=   Evaluate    ${actualAmount} * ${quantity} 
 
     ${netTotalamount}=   roundoff  ${netTotalamount}
@@ -1060,7 +1060,7 @@ JD-TC-Get Order By UID-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${orderUid}    ${resp.json()}
-
+    ${actualAmount}=  roundoff  ${actualAmount}
     ${resp}=    GetOrder using uid   ${orderUid} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200

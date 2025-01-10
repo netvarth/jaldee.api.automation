@@ -112,7 +112,7 @@ JD-TC-GetStoreListByFilter-1
     ${email}=  Create List  ${email_id}
     Set Suite Variable  ${email_id}
 
-    ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}  storeCode=${storeCode1}   city=${city}  district=${district}  State=${State}  country=${country}  pincode=${pincode}
+    ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}  storeCode=${storeCode1}   city=${city}  district=${district}  state=${State}  country=${country}  pincode=${pincode}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${store_id}  ${resp.json()}
@@ -131,7 +131,7 @@ JD-TC-GetStoreListByFilter-1
     ${storeCode2}=   FakerLibrary.Random Number
     Set Suite Variable  ${storeCode2}   
 
-    ${resp}=  Create Store   ${Name2}  ${St_Id2}    ${locId1}  ${email2}     ${PhoneNumber2}  ${countryCodes[0]}  storeCode=${storeCode2}  city=${city}  district=${district}  State=${State}  country=${country}  pincode=${pincode}
+    ${resp}=  Create Store   ${Name2}  ${St_Id2}    ${locId1}  ${email2}     ${PhoneNumber2}  ${countryCodes[0]}  storeCode=${storeCode2}  city=${city}  district=${district}  state=${State}  country=${country}  pincode=${pincode}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${store_id2}  ${resp.json()}

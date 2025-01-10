@@ -138,7 +138,8 @@ JD-TC-Get Delivery Address of ProviderConsumer-UH1
 
     ${resp}=    Get Consumer Delivery Address   
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    401
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  "${resp.json()}"   "${NO_ACCESS_TO_URL}"
     
 JD-TC-Get Delivery Address of ProviderConsumer-UH2
 

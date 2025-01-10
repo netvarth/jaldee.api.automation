@@ -2464,7 +2464,7 @@ JD-TC-create cart-UH15
     ${totalAmount}=             Evaluate                ${amount} * ${quantity}
     ${invoiceDate}=             db.add_timezone_date    ${tz}  1
     ${rate}=                    Evaluate                int(${salesRate})
-    ${mrp}=                     Random Int              min=${rate}  max=9999
+    ${mrp}=                     Random Int              min=500  max=9999
     ${mrp}=                     Convert To Number  ${mrp}  1
     ${batchNo}=                 Random Int              min=1  max=9999
     ${invoiceReferenceNo}=      Random Int              min=1  max=999
