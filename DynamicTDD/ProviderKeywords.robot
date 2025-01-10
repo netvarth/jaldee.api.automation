@@ -17328,7 +17328,19 @@ Get Item Transaction Count Filter
     Check Deprication  ${resp}  Get Item Transaction Count Filter
     RETURN  ${resp}
 
+Update BatchPrice
 
+    [Arguments]  ${socat_item_EncId}   ${batchList}    ${invCatItem}      &{kwargs}
+    ${data}=  Create Dictionary   batchList=${batchList}       invCatItem=${invCatItem}  
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END 
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/so/catalog/item/${socat_item_EncId}   data=${data}  expected_status=any
+    Check Deprication  ${resp}  Update BatchPrice
+    RETURN  ${resp} 
+      
 
 #---------------------------RX Push-----------------------------------------    
 

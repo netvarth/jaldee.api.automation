@@ -27,20 +27,7 @@ ${invalidItem}      sprx-3250dr0-800
 ${originFrom}       NONE
 @{deliveryType}     STORE_PICKUP        HOME_DELIVERY
 
-*** Keywords ***
-Update BatchPrice
 
-    [Arguments]  ${socat_item_EncId}   ${batchList}    ${invCatItem}      &{kwargs}
-    ${data}=  Create Dictionary   batchList=${batchList}       invCatItem=${invCatItem}  
-    FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary   ${data}   ${key}=${value}
-    END 
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/so/catalog/item/${socat_item_EncId}   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Update BatchPrice
-    RETURN  ${resp} 
-      
 *** Test Cases ***
 
 JD-TC-ConvertToOrder-1
@@ -406,6 +393,7 @@ JD-TC-ConvertToOrder-1
     ${resp}=  Get Inventoryitem      ${ic_Item_id}         
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${inventoryItemBatch_uid}  ${resp.json()[0]['uid']}   
     Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
     Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
     Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
@@ -495,8 +483,12 @@ JD-TC-ConvertToOrder-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
 
-    ${spItem}=  Create Dictionary  encId=${item1}  
-    ${resp}=    Update SalesOrder Catalog Item      ${SO_itemEncIds}     ${boolean[1]}         ${price}    spItem=${spItem}
+
+    ${invCatItem}=  Create Dictionary  encId=${ic_Item_id}  
+    ${inventoryItemBatch}=  Create Dictionary  encId=${inventoryItemBatch_uid}  
+    ${batchList}=  Create Dictionary  name=${Store_note}   price=${price}    inventoryItemBatch=${inventoryItemBatch}
+    ${batchList}=  Create List  ${batchList}
+    ${resp}=    Update BatchPrice      ${SO_itemEncIds}     ${batchList}         ${invCatItem}    invMgmt=${boolean[1]}   sortOrder=${price}   mrp=${price}   price=${price}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -659,7 +651,7 @@ JD-TC-ConvertToOrder-1
     Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
     Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
 
-*** Comments ***
+# *** Comments ***
 JD-TC-ConvertToOrder-UH2
     [Documentation]    Convert to Order - where order is already accepted
 
