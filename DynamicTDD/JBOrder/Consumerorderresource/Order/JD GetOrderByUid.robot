@@ -1041,6 +1041,7 @@ JD-TC-Get Order By UID-3
 
     ${netTotal}=  Evaluate  ${item1} - ${taxtot}
     ${netTotal}=  roundoff  ${netTotal}
+    ${netTotal}=  Convert To Integer  ${netTotal}  
     ${catalogItem}=  Create Dictionary    encId=${SOC_itemEncIds1}
     ${catalogItems}=  Create Dictionary    catalogItem=${catalogItem}  quantity=${quantity}
 
@@ -1064,13 +1065,15 @@ JD-TC-Get Order By UID-3
     ${resp}=    GetOrder using uid   ${orderUid} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${response_netTotal}=  Convert To Integer  ${resp.json()['netTotal']}
+    ${response_netTotal_item}=  Convert To Integer  ${resp.json()['itemDtoList'][0]['netTotal']}  
     Should Be Equal As Strings    ${resp.json()['accountId']}                                                               ${accountId}
     Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                                                  ${cid}
     Should Be Equal As Strings    ${resp.json()['providerConsumer']['name']}                                                ${firstName} ${lastName}
     Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                                        ${soc_id1}
     Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                                          ${Name}
     Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                                                       ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()['netTotal']}                                                                ${netTotal}
+    Should Be Equal As Strings    ${response_netTotal}                                                               ${netTotal}
     Should Be Equal As Strings    ${resp.json()['amountDue']}                                                                 ${item1}
     Should Be Equal As Strings    ${resp.json()['location']['id']}                                                            ${locId1}
     Should Be Equal As Strings    ${resp.json()['store']['id']}                                                              ${Stidd}
@@ -1097,7 +1100,7 @@ JD-TC-Get Order By UID-3
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['status']}                                                        ${toggle[0]}
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['dueQuantity']}                                                       ${quantity}
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['itemAmount']}                                                        ${actualAmount}
-    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['netTotal']}                                                        ${netTotal}
+    Should Be Equal As Strings    ${response_netTotal_item}                                                        ${netTotal}
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['netRate']}                                                        ${item1}
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['cgst']}                                                       ${cgsttot}
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['sgst']}                                                       ${cgsttot}

@@ -484,7 +484,7 @@ JD-TC-Get Provider Catalogs Items Count-UH3
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
 
-    ${resp}=    Get Provider Catalog Item Count Filter    sorderCatalogEncId-eq=${SO_Cata_Encid1}   encId-eq=${SOC_itemEncIds4}  status-eq=${toggle[1]}  accountId-eq=${accountId}   storeEncId-eq=${store_id}
+    ${resp}=    Get Provider Catalog Item Count Filter    sorderCatalogEncId-eq=${SO_Cata_Encid1}     status-eq=${toggle[1]}  accountId-eq=${accountId}   storeEncId-eq=${store_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()}                                             1
