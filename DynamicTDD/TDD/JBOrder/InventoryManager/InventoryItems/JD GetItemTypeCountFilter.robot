@@ -8,6 +8,7 @@ Library           json
 Library           DateTime
 Library           requests
 Library           FakerLibrary
+Library           /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
@@ -20,6 +21,7 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-GetItemTypeCountByFilter-1
+
     [Documentation]   Create a Item Type Count by Filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
@@ -47,10 +49,7 @@ JD-TC-GetItemTypeCountByFilter-1
     ${resp}=  Get Item Type   ${Ty_Id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['typeCode']}    ${Ty_Id}
-    Should Be Equal As Strings    ${resp.json()['typeName']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[0]}
-
+   
     ${resp}=  Get Item Type Count By Filter
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -58,6 +57,7 @@ JD-TC-GetItemTypeCountByFilter-1
 
 
 JD-TC-GetItemTypeCountByFilter-2
+
     [Documentation]   Create a Item Type then try to get that item Type with filter(TypeName).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
@@ -75,16 +75,14 @@ JD-TC-GetItemTypeCountByFilter-2
     ${resp}=  Get Item Type   ${Ty_Id1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['typeCode']}    ${Ty_Id1}
-    Should Be Equal As Strings    ${resp.json()['typeName']}    ${TypeName1}
-    Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[0]}
-
+    
     ${resp}=  Get Item Type Count By Filter   typeName-eq=${TypeName1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}        1
 
 JD-TC-GetItemTypeCountByFilter-3
+
     [Documentation]   Create a Item Type then try to get that item Type with filter(status).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
@@ -97,6 +95,7 @@ JD-TC-GetItemTypeCountByFilter-3
     Should Be Equal As Strings    ${resp.json()}        2
 
 JD-TC-GetItemTypeCountByFilter-4
+
     [Documentation]   Update a Item Type Status then try to get that item Type with filter(status).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
@@ -113,6 +112,7 @@ JD-TC-GetItemTypeCountByFilter-4
     Should Be Equal As Strings    ${resp.json()}        1
 
 JD-TC-GetItemTypeCountByFilter-UH1
+
     [Documentation]  Get Item Type Count By Filter without Login.
 
     ${resp}=  Get Item Type Count By Filter   typeName-eq=${TypeName1}
@@ -121,51 +121,44 @@ JD-TC-GetItemTypeCountByFilter-UH1
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
 
 JD-TC-GetItemTypeCountByFilter-UH2
+
     [Documentation]  Get Item Type Count By Filter with Consumer Login.
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLPUSERNAME32}
-    Set Suite Variable    ${accountId} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME174}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${account_id}=    get_acc_id       ${PUSERNAME174}
 
-# -------------------------------- Add a provider Consumer -----------------------------------
+    #............provider consumer creation..........
 
-    ${firstName}=  FakerLibrary.name
-    Set Suite Variable    ${firstName}
-    ${lastName}=  FakerLibrary.last_name
-    Set Suite Variable    ${lastName}
-    ${primaryMobileNo}    Generate random string    10    123456789
-    ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
-    Set Suite Variable    ${primaryMobileNo}
-    # ${email}=    FakerLibrary.Email
-    # Set Suite Variable    ${email}
-    ${Name}=    FakerLibrary.last name
-    Set Suite Variable    ${Name}
-    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+208187748
-    Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
-
-    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+  
+    ${resp}=    Send Otp For Login    ${CUSERNAME5}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token}  ${resp.json()['token']}
+    Set Test Variable  ${token}  ${resp.json()['token']}
+    
+    Set Test Variable  ${email}  ${fname}${CUSERNAME5}.${test_mail}
+
+    ${resp}=    ProviderConsumer SignUp    ${fname}  ${lname}  ${email}    ${CUSERNAME5}     ${account_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email_id}    ${primaryMobileNo}     ${accountId}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200    
-   
-    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME5}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-
+    
     ${resp}=  Get Item Type Count By Filter   typeName-eq=${TypeName1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    401

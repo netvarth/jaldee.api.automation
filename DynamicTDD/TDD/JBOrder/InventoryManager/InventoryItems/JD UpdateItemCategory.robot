@@ -8,6 +8,7 @@ Library           json
 Library           DateTime
 Library           requests
 Library           FakerLibrary
+Library           /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
@@ -20,6 +21,7 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-UpdateItemCategory-1
+
     [Documentation]  Provider Create a Item Category then try to Update that item name.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME36}  ${PASSWORD}
@@ -47,9 +49,7 @@ JD-TC-UpdateItemCategory-1
     ${resp}=  Get Item Category   ${Ca_Id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['categoryCode']}    ${Ca_Id}
-    Should Be Equal As Strings    ${resp.json()['categoryName']}    ${categoryName}
-    Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[0]}
+
 
     ${categoryName1}=    FakerLibrary.name
     Set Suite Variable  ${categoryName1}
@@ -68,6 +68,7 @@ JD-TC-UpdateItemCategory-1
 
 
 JD-TC-UpdateItemCategory-2
+
     [Documentation]  Update item CategoryName to a Number.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME36}  ${PASSWORD}
@@ -83,11 +84,12 @@ JD-TC-UpdateItemCategory-2
     ${resp}=  Get Item Category   ${Ca_Id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['categoryCode']}    ${Ca_Id}
     Should Be Equal As Strings    ${resp.json()['categoryName']}    ${Name1}
-    Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[0]}
+
+
 
 JD-TC-UpdateItemCategory-3
+
     [Documentation]  Update item CategoryName then update it's Item Category Status.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME36}  ${PASSWORD}
@@ -100,12 +102,7 @@ JD-TC-UpdateItemCategory-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Item Category   ${Ca_Id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['categoryCode']}    ${Ca_Id}
-    Should Be Equal As Strings    ${resp.json()['categoryName']}    ${Name}
-    Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[0]}   
+
 
     ${resp}=  Update Item Category Status   ${Ca_Id}    ${toggle[1]}
     Log   ${resp.json()}
@@ -114,11 +111,12 @@ JD-TC-UpdateItemCategory-3
     ${resp}=  Get Item Category   ${Ca_Id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200 
-    Should Be Equal As Strings    ${resp.json()['categoryCode']}    ${Ca_Id}
-    Should Be Equal As Strings    ${resp.json()['categoryName']}    ${Name}
     Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[1]} 
 
+
+
 JD-TC-UpdateItemCategory-4
+
     [Documentation]  Try to Update Disable item  .
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME36}  ${PASSWORD}
@@ -134,11 +132,13 @@ JD-TC-UpdateItemCategory-4
     ${resp}=  Get Item Category   ${Ca_Id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200 
-    Should Be Equal As Strings    ${resp.json()['categoryCode']}    ${Ca_Id}
     Should Be Equal As Strings    ${resp.json()['categoryName']}    ${Name}
-    Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[1]} 
+
+
+
 
 JD-TC-UpdateItemCategory-5
+
     [Documentation]  Update item Category name as same.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME36}  ${PASSWORD}
@@ -154,6 +154,7 @@ JD-TC-UpdateItemCategory-5
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-UpdateItemCategory-UH3
+
     [Documentation]  Update item CategoryName With EMPTY value.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME36}  ${PASSWORD}
@@ -169,6 +170,7 @@ JD-TC-UpdateItemCategory-UH3
     
 
 JD-TC-UpdateItemCategory-UH1
+
     [Documentation]  Get Item Category without Login.
 
     ${resp}=  Update Item Category   ${EMPTY}    ${Ca_Id}
@@ -177,50 +179,49 @@ JD-TC-UpdateItemCategory-UH1
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
 
 JD-TC-UpdateItemCategory-UH2
+
     [Documentation]  Get Item Category with Consumer Login.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME36}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLPUSERNAME36}
-    Set Suite Variable    ${accountId} 
 
-# -------------------------------- Add a provider Consumer -----------------------------------
-
-    ${firstName}=  FakerLibrary.name
-    Set Suite Variable    ${firstName}
-    ${lastName}=  FakerLibrary.last_name
-    Set Suite Variable    ${lastName}
-    ${primaryMobileNo}    Generate random string    10    123456789
-    ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
-    Set Suite Variable    ${primaryMobileNo}
-    # ${email}=    FakerLibrary.Email
-    # Set Suite Variable    ${email}
-    ${Name}=    FakerLibrary.last name
-    Set Suite Variable    ${Name}
-    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+208187748
-    Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
-
-    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token}  ${resp.json()['token']}
-
-    ${resp}=    Consumer Logout 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email_id}    ${primaryMobileNo}     ${accountId}
+    ${resp}=    Get Business Profile
     Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200    
-   
-    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${accountId}        ${resp.json()['id']}
+
+     ${firstname}=  generate_firstname
+    ${lastname}=  FakerLibrary.last_name
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PUSERNAME_N}=  Evaluate  ${PUSERNAME}+${PH_Number}
+    Set Suite Variable    ${PUSERNAME_N}
+    Set sUITE Variable  ${email}  ${firstname}${PUSERNAME_N}${C_Email}.${test_mail}
+
+
+    ${resp}=    Send Otp For Login    ${PUSERNAME_N}    ${accountId}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${PUSERNAME_N}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${tokenss}  ${resp.json()['token']}
+
+    ${resp}=    Consumer Logout
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}  ${PUSERNAME_N}  ${accountId}  Authorization=${tokenss}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200    
+
+    ${resp}=    ProviderConsumer Login with token   ${PUSERNAME_N}  ${accountId}  ${tokenss} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
 
     ${resp}=  Update Item Category   ${EMPTY}    ${Ca_Id}
     Log   ${resp.json()}

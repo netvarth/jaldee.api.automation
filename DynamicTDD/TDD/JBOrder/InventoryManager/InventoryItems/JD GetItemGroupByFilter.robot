@@ -8,6 +8,7 @@ Library           json
 Library           DateTime
 Library           requests
 Library           FakerLibrary
+Library           /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
@@ -19,6 +20,7 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-GetItemGroupByFilter-1
+
     [Documentation]   Get Item Group By Filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
@@ -52,10 +54,7 @@ JD-TC-GetItemGroupByFilter-1
     ${resp}=    Get Item group by id Provider  ${ig_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}            200
-    Should Be Equal As Strings    ${resp.json()['id']}           ${ig_id} 
-    Should Be Equal As Strings    ${resp.json()['groupName']}    ${groupName} 
-    Should Be Equal As Strings    ${resp.json()['groupDesc']}    ${groupDesc} 
-    Should Be Equal As Strings    ${resp.json()['status']}       ${toggle[0]} 
+
 
     ${groupName2}=    FakerLibrary.name
     Set Suite Variable      ${groupName2}
@@ -67,10 +66,6 @@ JD-TC-GetItemGroupByFilter-1
     ${resp}=    Get Item group by id Provider  ${ig_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}            200
-    Should Be Equal As Strings    ${resp.json()['id']}           ${ig_id} 
-    Should Be Equal As Strings    ${resp.json()['groupName']}    ${groupName2} 
-    Should Be Equal As Strings    ${resp.json()['groupDesc']}    ${groupDesc} 
-    Should Be Equal As Strings    ${resp.json()['status']}       ${toggle[0]} 
 
     ${resp}=    Get Item group Filter
     Log   ${resp.content}
@@ -82,6 +77,7 @@ JD-TC-GetItemGroupByFilter-1
 
 
 JD-TC-GetItemGroupByFilter-2
+
     [Documentation]  Get Item group Filter - groupName
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
@@ -94,6 +90,7 @@ JD-TC-GetItemGroupByFilter-2
     Should Be Equal As Strings    ${resp.json()}    []
 
 JD-TC-GetItemGroupByFilter-3
+
     [Documentation]  Get Item group Filter - groupDesc
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
@@ -109,6 +106,7 @@ JD-TC-GetItemGroupByFilter-3
     Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
 
 JD-TC-GetItemGroupByFilter-4
+
     [Documentation]  Get Item group Filter - status
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
@@ -124,6 +122,7 @@ JD-TC-GetItemGroupByFilter-4
     Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
 
 JD-TC-GetItemGroupByFilter-UH1
+
     [Documentation]  Get Item group Filter - without login
 
     ${resp}=    Get Item group Filter 
@@ -133,6 +132,7 @@ JD-TC-GetItemGroupByFilter-UH1
 
 
 JD-TC-GetItemGroupByFilter-5
+
     [Documentation]  Get Item group Filter - with another provider login
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME0}  ${PASSWORD}

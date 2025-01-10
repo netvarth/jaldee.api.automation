@@ -8,6 +8,7 @@ Library           json
 Library           DateTime
 Library           requests
 Library           FakerLibrary
+Library           /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
@@ -19,6 +20,7 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-CreateItemGroup-1
+
     [Documentation]   Create Item Group
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -58,6 +60,7 @@ JD-TC-CreateItemGroup-1
     Should Be Equal As Strings    ${resp.json()['status']}       ${toggle[0]} 
 
 JD-TC-CreateItemGroup-UH1
+
     [Documentation]   Create Item Group - Group name is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -71,6 +74,7 @@ JD-TC-CreateItemGroup-UH1
     
 
 JD-TC-CreateItemGroup-UH2
+
     [Documentation]   Create Item Group - gropu name is already exists
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -83,6 +87,7 @@ JD-TC-CreateItemGroup-UH2
     Should Be Equal As Strings    ${resp.json()}         ${GROUP_NAME_ALREADY_EXIST}
 
 JD-TC-CreateItemGroup-UH3
+
     [Documentation]   Create Item Group - gropu code is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -96,6 +101,7 @@ JD-TC-CreateItemGroup-UH3
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemGroup-UH4
+
     [Documentation]   Create Item Group - Group des is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -109,6 +115,7 @@ JD-TC-CreateItemGroup-UH4
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemGroup-UH5
+
     [Documentation]   Create Item Group - without login
 
     ${resp}=    Create Item group Provider  ${groupName}  ${groupCode}  ${groupDesc}

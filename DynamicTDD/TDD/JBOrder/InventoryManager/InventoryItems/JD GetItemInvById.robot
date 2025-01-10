@@ -25,11 +25,11 @@ ${fileSize}     0.00458
 ${order}        0
 *** Test Cases ***
 
-JD-TC-GetItemInvCountByFilter-1
+JD-TC-GetItemInv-1
 
-    [Documentation]   Get Item Inv Count By Filter
+    [Documentation]   Get Item Inv
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -82,7 +82,7 @@ JD-TC-GetItemInvCountByFilter-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable     ${itemjrx}   ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -238,71 +238,94 @@ JD-TC-GetItemInvCountByFilter-1
     ${resp}=    Get Item Inventory  ${item}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['itemCode']}                  ${itemjrx}
+    Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['itemName']}                  ${itemName}
+    Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['description']}               ${description}
+    Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['sku']}                       ${sku}
+    Should Be Equal As Strings      ${resp.json()['name']}                                      ${name}
+    Should Be Equal As Strings      ${resp.json()['shortDesc']}                                 ${shortDesc}
+    Should Be Equal As Strings      ${resp.json()['internalDesc']}                              ${internalDesc}
+    Should Be Equal As Strings      ${resp.json()['isInventoryItem']}                           ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()['itemCategory']['categoryCode']}              ${categoryCode}
+    Should Be Equal As Strings      ${resp.json()['itemCategory']['categoryName']}              ${categoryName}
+    Should Be Equal As Strings      ${resp.json()['itemCategory']['status']}                    ${toggle[0]}
+    Should Be Equal As Strings      ${resp.json()['itemSubCategory']['categoryCode']}           ${categoryCode}
+    Should Be Equal As Strings      ${resp.json()['itemSubCategory']['categoryName']}           ${categoryName}
+    Should Be Equal As Strings      ${resp.json()['itemSubCategory']['status']}                 ${toggle[0]}
+    Should Be Equal As Strings      ${resp.json()['itemType']['typeCode']}                      ${typeCode}
+    Should Be Equal As Strings      ${resp.json()['itemType']['typeName']}                      ${TypeName}
+    Should Be Equal As Strings      ${resp.json()['itemType']['status']}                        ${toggle[0]}
+    Should Be Equal As Strings      ${resp.json()['itemSubType']['typeCode']}                   ${typeCode}
+    Should Be Equal As Strings      ${resp.json()['itemSubType']['typeName']}                   ${TypeName}
+    Should Be Equal As Strings      ${resp.json()['itemSubType']['status']}                     ${toggle[0]}
+    Should Be Equal As Strings      ${resp.json()['itemGroups'][0]}                             ${ig_id}
+    Should Be Equal As Strings      ${resp.json()['itemGroups'][1]}                             ${ig_id2}
+    Should Be Equal As Strings      ${resp.json()['itemSubGroups'][0]}                          ${ig_id}
+    Should Be Equal As Strings      ${resp.json()['itemSubGroups'][1]}                          ${ig_id2}
+    Should Be Equal As Strings      ${resp.json()['hsnCode']['hsnCode']}                        ${hsnCode}
+    Should Be Equal As Strings      ${resp.json()['hsnCode']['status']}                         ${toggle[0]}
+    Should Be Equal As Strings      ${resp.json()['itemManufacturer']['manufacturerCode']}      ${manufacturerCode}
+    Should Be Equal As Strings      ${resp.json()['itemManufacturer']['manufacturerName']}      ${manufactureName}
+    Should Be Equal As Strings      ${resp.json()['itemManufacturer']['status']}                ${toggle[0]}
+    Should Be Equal As Strings      ${resp.json()['tax'][0]}                                    ${itemtax_id}
+    Should Be Equal As Strings      ${resp.json()['composition'][0]}                            ${compositionCode}
+    Should Be Equal As Strings      ${resp.json()['sku']}                                       ${sku}
+    Should Be Equal As Strings      ${resp.json()['itemUnits'][0]}                              ${iu_id}
+    Should Be Equal As Strings      ${resp.json()['isBatchApplicable']}                         ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileName']}                ${jpgfile}
+    Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileSize']}                ${fileSize}
+    Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileType']}                ${fileType}
+    Should Be Equal As Strings      ${resp.json()['attachments'][0]['order']}                   ${order}
+    Should Be Equal As Strings      ${resp.json()['attachments'][0]['action']}                  ${file_action[0]}
+    Should Be Equal As Strings      ${resp.json()['attachments'][0]['driveId']}                 ${driveId}
+    Should Be Equal As Strings      ${resp.json()['status']}                                    ${toggle[0]}
 
+JD-TC-GetItemInv-Uh1
 
-    ${resp}=    Get Item inv Count Filter
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
-    Should Be Equal As Strings      ${resp.json()}          1
+    [Documentation]   Get Item Inv - where item code is invalid
 
-
-JD-TC-GetItemInvFilter-2
-
-    [Documentation]   Get Item Inv Count By Filter - status filter
-
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Item inv Count Filter  status-eq=${toggle[0]}
+    ${inv}=     Random Int  min=999     max=9999
+
+    ${resp}=    Get Item Inventory  ${inv}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
-    Should Be Equal As Strings      ${resp.json()}          1
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Should Be Empty         ${resp.content}
 
-JD-TC-GetItemInvFilter-3
+JD-TC-GetItemInv-UH2
 
-    [Documentation]   Get Item Inv Count By Filter - status filter
-
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get Item inv Count Filter  status-eq=${toggle[1]}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
-    Should Be Equal As Strings      ${resp.json()}          0
-
-JD-TC-GetItemInvFilter-UH1
-
-    [Documentation]   Get Item Inv Count By Filter - without login
-
-    ${resp}=    Get Item inv Count Filter
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}    419
-    Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
-
-JD-TC-GetItemInvFilter-UH2
-
-    [Documentation]   Get Item Inv Count By Filter - SA Login
-
-    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Get Item inv Count Filter
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}    419
-    Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
-
-JD-TC-GetItemInvFilter-UH3
-
-    [Documentation]   Get Item Inv Count By Filter - another provider trying to get
+    [Documentation]   Get Item Inv - another provider trying to get
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Item inv Count Filter
+    ${resp}=    Get Item Inventory  ${item}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
-    Should Be Equal As Strings      ${resp.json()}      0
+    Should Be Empty         ${resp.content}
+
+JD-TC-GetItemInv-UH3
+
+    [Documentation]   Get Item Inv - without login
+
+    ${resp}=    Get Item Inventory  ${item}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
+
+JD-TC-GetItemInv-UH4
+
+    [Documentation]   Get Item Inv - SA Login
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Item Inventory  ${item}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 

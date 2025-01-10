@@ -8,6 +8,7 @@ Library           json
 Library           DateTime
 Library           requests
 Library           FakerLibrary
+Library           /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
@@ -20,11 +21,14 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-CreateItemCategory-1
+
     [Documentation]  Provider Create a Item Category.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME0}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${account_id}=    get_acc_id       ${HLPUSERNAME0}
+    Set Suite Variable  ${account_id} 
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -43,7 +47,46 @@ JD-TC-CreateItemCategory-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+   #............provider consumer creation..........
+
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Suite Variable  ${primaryMobileNo}  555${PH_Number}
+
+    ${fname}=  generate_firstname
+    ${lname}=  FakerLibrary.last_name
+    # Set Suite Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+   
+    ${resp}=    ProviderConsumer SignUp    ${fname}  ${lname}  ${EMPTY}  ${primaryMobileNo}  ${account_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    # ${resp}=    Consumer Logout 
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}  ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Consumer Logout 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
 JD-TC-CreateItemCategory-2
+
     [Documentation]  Provider Create another Item Category contain 250 words.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME0}  ${PASSWORD}
@@ -57,6 +100,7 @@ JD-TC-CreateItemCategory-2
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemCategory-3
+
     [Documentation]  Provider Create another Item Category with Number.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME0}  ${PASSWORD}
@@ -70,6 +114,7 @@ JD-TC-CreateItemCategory-3
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemCategory-UH1
+
     [Documentation]  Provider Create another Item Category with same name.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME0}  ${PASSWORD}
@@ -84,6 +129,7 @@ JD-TC-CreateItemCategory-UH1
     Should Be Equal As Strings    ${resp.json()}    ${CATOGORY_NAME_ALRADY_EXIST}
 
 JD-TC-CreateItemCategory-UH2
+
     [Documentation]  Provider Create a Item Category without Login.
 
     ${categoryName}=    FakerLibrary.Random Number
@@ -94,48 +140,11 @@ JD-TC-CreateItemCategory-UH2
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
 
 JD-TC-CreateItemCategory-UH3
+
     [Documentation]  Provider Create a Item Category with Consumer Login.
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME0}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLPUSERNAME0}
-    Set Suite Variable    ${accountId} 
 
-# -------------------------------- Add a provider Consumer -----------------------------------
-
-    ${firstName}=  FakerLibrary.name
-    Set Suite Variable    ${firstName}
-    ${lastName}=  FakerLibrary.last_name
-    Set Suite Variable    ${lastName}
-    ${primaryMobileNo}    Generate random string    10    123456789
-    ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
-    Set Suite Variable    ${primaryMobileNo}
-    # ${email}=    FakerLibrary.Email
-    # Set Suite Variable    ${email}
-    ${Name}=    FakerLibrary.last name
-    Set Suite Variable    ${Name}
-    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+208187748
-    Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
-
-    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token}  ${resp.json()['token']}
-
-    ${resp}=    Consumer Logout 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email_id}    ${primaryMobileNo}     ${accountId}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200    
-   
-    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

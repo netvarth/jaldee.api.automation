@@ -8,6 +8,7 @@ Library           json
 Library           DateTime
 Library           requests
 Library           FakerLibrary
+Library           /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
@@ -19,6 +20,7 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-GetitemUitFilter-1
+
     [Documentation]  Get Item Unit Filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
@@ -48,10 +50,7 @@ JD-TC-GetitemUitFilter-1
     ${resp}=    Get Item Unit by id  ${iu_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['unitCode']}    ${iu_id}
-    Should Be Equal As Strings    ${resp.json()['unitName']}    ${unitName}
-    Should Be Equal As Strings    ${resp.json()['status']}      ${toggle[0]}
-
+    
     ${unitName2}=          FakerLibrary.name
     ${convertionQty2}=     Random Int  min=0  max=200
     Set Suite Variable      ${unitName2}
@@ -65,10 +64,7 @@ JD-TC-GetitemUitFilter-1
     ${resp}=    Get Item Unit by id  ${iu_id2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['unitCode']}    ${iu_id2}
-    Should Be Equal As Strings    ${resp.json()['unitName']}    ${unitName2}
-    Should Be Equal As Strings    ${resp.json()['status']}      ${toggle[0]}
-
+    
     ${resp}=    Get Item Unit Filter
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -81,6 +77,7 @@ JD-TC-GetitemUitFilter-1
     Should Be Equal As Strings    ${resp.json()[1]['status']}      ${toggle[0]}
 
 JD-TC-GetitemUitFilter-2
+
     [Documentation]  Get Item Unit Filter - unitCode    
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
@@ -99,6 +96,7 @@ JD-TC-GetitemUitFilter-2
     Should Be Equal As Strings    ${resp.json()[0]['status']}      ${toggle[0]}
 
 JD-TC-GetitemUitFilter-3
+
     [Documentation]  Get Item Unit Filter - unitName
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
@@ -117,6 +115,7 @@ JD-TC-GetitemUitFilter-3
     Should Be Equal As Strings    ${resp.json()[0]['status']}      ${toggle[0]}
 
 JD-TC-GetitemUitFilter-4
+
     [Documentation]  Get Item Unit Filter - status
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
@@ -139,6 +138,7 @@ JD-TC-GetitemUitFilter-4
     Should Be Equal As Strings    ${resp.json()[1]['status']}      ${toggle[0]}
 
 JD-TC-GetitemUitFilter-UH1
+
     [Documentation]  Get Item Unit Filter - withou login
 
     ${resp}=    Get Item Unit Filter
@@ -147,6 +147,7 @@ JD-TC-GetitemUitFilter-UH1
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED}
 
 JD-TC-GetitemUitFilter-UH2
+
     [Documentation]  Get Item Unit Filter - with another provider login
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}

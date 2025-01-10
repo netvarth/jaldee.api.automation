@@ -1290,3 +1290,53 @@ JD-TC-UpdateItemInv-53
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings    ${resp.json()}        ${INVALID_FIELD}
+
+
+JD-TC-UpdateItemInv-54
+    [Documentation]   Update Item Inv -Updated with badge
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME44}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${name2}=            FakerLibrary.name
+
+    ${resp}=  db.getType   ${pngfile} 
+    Log  ${resp}
+    ${fileType2}=  Get From Dictionary       ${resp}    ${pngfile} 
+    Set Suite Variable    ${fileType2}
+    ${caption2}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption2}
+
+    ${resp}    upload file to temporary location    ${file_action[0]}    ${pid}    ${ownerType[0]}    ${pdrname}    ${pngfile}    ${fileSize}    ${caption2}    ${fileType2}    ${EMPTY}    ${order}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200 
+    Set Suite Variable    ${driveId2}    ${resp.json()[0]['driveId']}
+
+    ${resp}    change status of the uploaded file    ${QnrStatus[1]}    ${driveId2}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+    ${attachments2}=    Create Dictionary   action=${file_action[0]}  fileName=${pngfile}  fileSize=${fileSize}  fileType=${fileType2}  order=${order}    driveId=${driveId2}
+    Log  ${attachments2}
+    ${attachments3}=  Create List   ${attachments2}
+    Set Suite Variable    ${attachments3}
+
+    ${badges}=  Create Dictionary  attachments=${attachments3}   name=${name2}   link=${name2}
+    ${badges1}=  Create List   ${badges}
+
+    ${resp}=    Update Item Inventory  ${spCode}  name=${name2}    badges=${badges1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200 
+
+    ${resp}=    Get Item Inventory  ${item}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()['badges'][0]['name']}                         ${name2}
+    Should Be Equal As Strings      ${resp.json()['badges'][0]['link']}                         ${name2}
+    Should Be Equal As Strings      ${resp.json()['badges'][0]['attachments'][0]['fileName']}                ${pngfile}
+    Should Be Equal As Strings      ${resp.json()['badges'][0]['attachments'][0]['fileSize']}                ${fileSize}
+    Should Be Equal As Strings      ${resp.json()['badges'][0]['attachments'][0]['fileType']}                ${fileType2}
+    Should Be Equal As Strings      ${resp.json()['badges'][0]['attachments'][0]['order']}                   ${order}
+    Should Be Equal As Strings      ${resp.json()['badges'][0]['attachments'][0]['action']}                  ${file_action[0]}
+    Should Be Equal As Strings      ${resp.json()['badges'][0]['attachments'][0]['driveId']}                 ${driveId2}

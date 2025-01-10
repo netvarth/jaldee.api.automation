@@ -8,9 +8,9 @@ Library           json
 Library           DateTime
 Library           requests
 Library           FakerLibrary
+Library           /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
-Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
@@ -27,6 +27,7 @@ ${order}        0
 *** Test Cases ***
 
 JD-TC-CreateItemInv-1
+
     [Documentation]   Create Item Inv
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -229,7 +230,7 @@ JD-TC-CreateItemInv-1
     Set Suite Variable  ${name}
     Set Suite Variable  ${shortDesc}
     Set Suite Variable  ${internalDesc}
-
+    # ${resp}=    Create Item Inventory  ${name}  shortDesc=${shortDesc}   internalDesc=${internalDesc}   itemCode=${itemjrx}   categoryCode=${categoryCode}  categoryCode2=${categoryCode}  typeCode=${typeCode}  typeCode2=${typeCode}  hsnCode=${hsnCode}  manufacturerCode=${manufacturerCode}  sku=${sku}  isBatchApplicable=${boolean[0]}  isInventoryItem=${boolean[0]}  itemGroups=${itemGroups}  itemSubGroups=${itemGroups}  tax=${tax}  composition=${composition}  itemUnits=${itemUnits}  
     ${resp}=    Create Item Inventory  ${name}  shortDesc=${shortDesc}   internalDesc=${internalDesc}   itemCode=${itemjrx}   categoryCode=${categoryCode}  categoryCode2=${categoryCode}  typeCode=${typeCode}  typeCode2=${typeCode}  hsnCode=${hsnCode}  manufacturerCode=${manufacturerCode}  sku=${sku}  isBatchApplicable=${boolean[0]}  isInventoryItem=${boolean[0]}  itemGroups=${itemGroups}  itemSubGroups=${itemGroups}  tax=${tax}  composition=${composition}  itemUnits=${itemUnits}  attachments=${attachments}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -238,64 +239,25 @@ JD-TC-CreateItemInv-1
     ${resp}=    Get Item Inventory  ${item}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
-    Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['itemCode']}                  ${itemjrx}
-    Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['itemName']}                  ${itemName}
-    Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['description']}               ${description}
-    Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['sku']}                       ${sku}
-    Should Be Equal As Strings      ${resp.json()['name']}                                      ${name}
-    Should Be Equal As Strings      ${resp.json()['shortDesc']}                                 ${shortDesc}
-    Should Be Equal As Strings      ${resp.json()['internalDesc']}                              ${internalDesc}
-    Should Be Equal As Strings      ${resp.json()['isInventoryItem']}                           ${bool[0]}
-    Should Be Equal As Strings      ${resp.json()['itemCategory']['categoryCode']}              ${categoryCode}
-    Should Be Equal As Strings      ${resp.json()['itemCategory']['categoryName']}              ${categoryName}
-    Should Be Equal As Strings      ${resp.json()['itemCategory']['status']}                    ${toggle[0]}
-    Should Be Equal As Strings      ${resp.json()['itemSubCategory']['categoryCode']}           ${categoryCode}
-    Should Be Equal As Strings      ${resp.json()['itemSubCategory']['categoryName']}           ${categoryName}
-    Should Be Equal As Strings      ${resp.json()['itemSubCategory']['status']}                 ${toggle[0]}
-    Should Be Equal As Strings      ${resp.json()['itemType']['typeCode']}                      ${typeCode}
-    Should Be Equal As Strings      ${resp.json()['itemType']['typeName']}                      ${TypeName}
-    Should Be Equal As Strings      ${resp.json()['itemType']['status']}                        ${toggle[0]}
-    Should Be Equal As Strings      ${resp.json()['itemSubType']['typeCode']}                   ${typeCode}
-    Should Be Equal As Strings      ${resp.json()['itemSubType']['typeName']}                   ${TypeName}
-    Should Be Equal As Strings      ${resp.json()['itemSubType']['status']}                     ${toggle[0]}
-    Should Be Equal As Strings      ${resp.json()['itemGroups'][0]}                             ${ig_id}
-    Should Be Equal As Strings      ${resp.json()['itemGroups'][1]}                             ${ig_id2}
-    Should Be Equal As Strings      ${resp.json()['itemSubGroups'][0]}                          ${ig_id}
-    Should Be Equal As Strings      ${resp.json()['itemSubGroups'][1]}                          ${ig_id2}
-    Should Be Equal As Strings      ${resp.json()['hsnCode']['hsnCode']}                        ${hsnCode}
-    Should Be Equal As Strings      ${resp.json()['hsnCode']['status']}                         ${toggle[0]}
-    Should Be Equal As Strings      ${resp.json()['itemManufacturer']['manufacturerCode']}      ${manufacturerCode}
-    Should Be Equal As Strings      ${resp.json()['itemManufacturer']['manufacturerName']}      ${manufactureName}
-    Should Be Equal As Strings      ${resp.json()['itemManufacturer']['status']}                ${toggle[0]}
-    Should Be Equal As Strings      ${resp.json()['tax'][0]}                                    ${itemtax_id}
-    Should Be Equal As Strings      ${resp.json()['composition'][0]}                            ${compositionCode}
-    Should Be Equal As Strings      ${resp.json()['sku']}                                       ${sku}
-    Should Be Equal As Strings      ${resp.json()['itemUnits'][0]}                              ${iu_id}
-    Should Be Equal As Strings      ${resp.json()['isBatchApplicable']}                        ${bool[0]}
-    Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileName']}                ${jpgfile}
-    Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileSize']}                ${fileSize}
-    Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileType']}                ${fileType}
-    Should Be Equal As Strings      ${resp.json()['attachments'][0]['order']}                   ${order}
-    Should Be Equal As Strings      ${resp.json()['attachments'][0]['action']}                  ${file_action[0]}
-    Should Be Equal As Strings      ${resp.json()['attachments'][0]['driveId']}                 ${driveId}
-    Should Be Equal As Strings      ${resp.json()['status']}                                    ${toggle[0]}
-
  
+
 JD-TC-CreateItemInv-2
+
     [Documentation]   Create Item Inv - name is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${FIELD_REQUIRED}=  format String   ${FIELD_REQUIRED}   Name is  
-
+    ${FIELD_REQUIRED}=  format String   ${FIELD_REQUIRED}  Name is 
     ${resp}=    Create Item Inventory  ${empty}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings    ${resp.json()}    ${FIELD_REQUIRED}
 
+
 JD-TC-CreateItemInv-3
+
     [Documentation]   Create Item Inv - update short description
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -311,6 +273,7 @@ JD-TC-CreateItemInv-3
 
 
 JD-TC-CreateItemInv-4
+
     [Documentation]   Create Item Inv - short description is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -325,6 +288,7 @@ JD-TC-CreateItemInv-4
 
 
 JD-TC-CreateItemInv-5
+
     [Documentation]   Create Item Inv - update internal description
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -340,6 +304,7 @@ JD-TC-CreateItemInv-5
 
 
 JD-TC-CreateItemInv-6
+
     [Documentation]   Create Item Inv - internal description is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -354,6 +319,7 @@ JD-TC-CreateItemInv-6
 
 
 JD-TC-CreateItemInv-7
+
     [Documentation]   Create Item Inv - sku is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -369,6 +335,7 @@ JD-TC-CreateItemInv-7
 
 
 JD-TC-CreateItemInv-8
+
     [Documentation]   Create Item Inv - sku is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -383,6 +350,7 @@ JD-TC-CreateItemInv-8
 
 
 JD-TC-CreateItemInv-9
+
     [Documentation]   Create Item Inv - isBatchApplicable is true
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -399,6 +367,7 @@ JD-TC-CreateItemInv-9
 
 
 JD-TC-CreateItemInv-10
+
     [Documentation]   Create Item Inv - isInventoryItem is true
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -413,6 +382,7 @@ JD-TC-CreateItemInv-10
 
 
 JD-TC-CreateItemInv-11
+
     [Documentation]   Create Item Inv - itemGroups is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -428,6 +398,7 @@ JD-TC-CreateItemInv-11
 
 
 JD-TC-CreateItemInv-12
+
     [Documentation]   Create Item Inv - itemSubGroups is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -443,6 +414,7 @@ JD-TC-CreateItemInv-12
 
 
 JD-TC-CreateItemInv-13
+
     [Documentation]   Create Item Inv - tax is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -458,6 +430,7 @@ JD-TC-CreateItemInv-13
 
 
 JD-TC-CreateItemInv-14
+
     [Documentation]   Create Item Inv - composition is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -473,6 +446,7 @@ JD-TC-CreateItemInv-14
 
 
 JD-TC-CreateItemInv-15
+
     [Documentation]   Create Item Inv - itemUnits is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -488,6 +462,7 @@ JD-TC-CreateItemInv-15
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemInv-16
+
     [Documentation]   Create Item Inv - attachment is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -504,6 +479,7 @@ JD-TC-CreateItemInv-16
 
 
 JD-TC-CreateItemInv-17
+
     [Documentation]   Create Item Inv - update item code
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -547,6 +523,7 @@ JD-TC-CreateItemInv-17
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemInv-18
+
     [Documentation]   Create Item Inv - Created with category code
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -569,6 +546,7 @@ JD-TC-CreateItemInv-18
 
 
 JD-TC-CreateItemInv-19
+
     [Documentation]   Create Item Inv -Created with Subcategory
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -583,6 +561,7 @@ JD-TC-CreateItemInv-19
 
 
 JD-TC-CreateItemInv-20
+
     [Documentation]   Create Item Inv - Created with type
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -604,6 +583,7 @@ JD-TC-CreateItemInv-20
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemInv-21
+
     [Documentation]   Create Item Inv - Created with sub type
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -618,6 +598,7 @@ JD-TC-CreateItemInv-21
 
 
 JD-TC-CreateItemInv-22
+
     [Documentation]   Create Item Inv - Created with hsn
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -632,6 +613,7 @@ JD-TC-CreateItemInv-22
 
 
 JD-TC-CreateItemInv-23
+
     [Documentation]   Create Item Inv - Created with manufacturerCode
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -654,6 +636,7 @@ JD-TC-CreateItemInv-23
 
 
 JD-TC-CreateItemInv-24
+
     [Documentation]   Create Item Inv - Created with sku 
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -668,6 +651,7 @@ JD-TC-CreateItemInv-24
 
 
 JD-TC-CreateItemInv-25
+
     [Documentation]   Create Item Inv - Created with itemGroups
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -682,6 +666,7 @@ JD-TC-CreateItemInv-25
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemInv-26
+
     [Documentation]   Create Item Inv - Created with itemSubGroups
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -697,6 +682,7 @@ JD-TC-CreateItemInv-26
 
 
 JD-TC-CreateItemInv-27
+
     [Documentation]   Create Item Inv - Created with tax
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -728,6 +714,7 @@ JD-TC-CreateItemInv-27
 
 
 JD-TC-CreateItemInv-28
+
     [Documentation]   Create Item Inv - Created with composition
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -752,6 +739,7 @@ JD-TC-CreateItemInv-28
 
 
 JD-TC-CreateItemInv-29
+
     [Documentation]   Create Item Inv - Created with itemUnits
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -778,6 +766,7 @@ JD-TC-CreateItemInv-29
 
 
 JD-TC-CreateItemInv-30
+
     [Documentation]   Create Item Inv -Created with attachment
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -813,6 +802,7 @@ JD-TC-CreateItemInv-30
 
 
 JD-TC-CreateItemInv-UH1
+
     [Documentation]   Create Item Inv - with same item name 
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -825,6 +815,7 @@ JD-TC-CreateItemInv-UH1
     Should Be Equal As Strings    ${resp.json()}         ${NAME_ALREADY_EXIST} 
 
 JD-TC-CreateItemInv-UH2
+
     [Documentation]   Create Item Inv - item code as random number
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -843,6 +834,7 @@ JD-TC-CreateItemInv-UH2
 
 
 JD-TC-CreateItemInv-Uh3
+
     [Documentation]   Create Item Inv - item code is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -858,6 +850,7 @@ JD-TC-CreateItemInv-Uh3
     Should Be Equal As Strings    ${resp.json()}        ${INVALID_FIELD}
 
 JD-TC-CreateItemInv-UH4
+
     [Documentation]   Create Item Inv - category code is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -875,6 +868,7 @@ JD-TC-CreateItemInv-UH4
 
 
 JD-TC-CreateItemInv-UH5
+
     [Documentation]   Create Item Inv - category Code is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -891,6 +885,7 @@ JD-TC-CreateItemInv-UH5
 
 
 JD-TC-CreateItemInv-UH6
+
     [Documentation]   Create Item Inv - Subcategory is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -909,6 +904,7 @@ JD-TC-CreateItemInv-UH6
 
 
 JD-TC-CreateItemInv-UH7
+
     [Documentation]   Create Item Inv - Sub category is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -926,6 +922,7 @@ JD-TC-CreateItemInv-UH7
 
 
 JD-TC-CreateItemInv-UH8
+
     [Documentation]   Create Item Inv - type is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -944,6 +941,7 @@ JD-TC-CreateItemInv-UH8
 
 
 JD-TC-CreateItemInv-UH9
+
     [Documentation]   Create Item Inv - type is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -961,6 +959,7 @@ JD-TC-CreateItemInv-UH9
 
 
 JD-TC-CreateItemInv-UH10
+
     [Documentation]   Create Item Inv - sub type is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -978,6 +977,7 @@ JD-TC-CreateItemInv-UH10
 
 
 JD-TC-CreateItemInv-UH11
+
     [Documentation]   Create Item Inv - sub type is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -993,6 +993,7 @@ JD-TC-CreateItemInv-UH11
     Should Be Equal As Strings    ${resp.json()}        ${INVALID_FIELD}
 
 JD-TC-CreateItemInv-UH12
+
     [Documentation]   Create Item Inv - hsn is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -1011,6 +1012,7 @@ JD-TC-CreateItemInv-UH12
 
 
 JD-TC-CreateItemInv-UH13
+
     [Documentation]   Create Item Inv - hsn is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -1027,6 +1029,7 @@ JD-TC-CreateItemInv-UH13
     Should Be Equal As Strings    ${resp.json()}        ${INVALID_FIELD}
 
 JD-TC-CreateItemInv-UH14
+
     [Documentation]   Create Item Inv - manufacturerCode is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -1044,6 +1047,7 @@ JD-TC-CreateItemInv-UH14
 
 
 JD-TC-CreateItemInv-UH15
+
     [Documentation]   Create Item Inv - manufacturerCode is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -1059,6 +1063,7 @@ JD-TC-CreateItemInv-UH15
     Should Be Equal As Strings    ${resp.json()}        ${INVALID_FIELD}
 
 JD-TC-CreateItemInv-UH16
+
     [Documentation]   Create Item Inv - itemGroups is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -1077,6 +1082,7 @@ JD-TC-CreateItemInv-UH16
     Should Be Equal As Strings    ${resp.json()}        ${INVALID_FIELD}
 
 JD-TC-CreateItemInv-UH17
+
     [Documentation]   Create Item Inv - itemSubGroups is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -1095,6 +1101,7 @@ JD-TC-CreateItemInv-UH17
     Should Be Equal As Strings    ${resp.json()}        ${INVALID_FIELD}
 
 JD-TC-CreateItemInv-UH18
+
     [Documentation]   Create Item Inv - tax is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -1114,6 +1121,7 @@ JD-TC-CreateItemInv-UH18
     Should Be Equal As Strings    ${resp.json()}        ${INVALID_FIELD}
 
 JD-TC-CreateItemInv-UH19
+
     [Documentation]   Create Item Inv - composition is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -1133,6 +1141,7 @@ JD-TC-CreateItemInv-UH19
     Should Be Equal As Strings    ${resp.json()}        ${INVALID_FIELD}
 
 JD-TC-CreateItemInv-UH20
+
     [Documentation]   Create Item Inv - itemUnits is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -1152,6 +1161,7 @@ JD-TC-CreateItemInv-UH20
     Should Be Equal As Strings    ${resp.json()}        ${INVALID_FIELD}
 
 JD-TC-CreateItemInv-UH21
+
     [Documentation]   Create Item Inv - without login
 
     ${name2}=            FakerLibrary.name
@@ -1160,3 +1170,59 @@ JD-TC-CreateItemInv-UH21
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    419
     Should Be Equal As Strings    ${resp.json()}         ${SESSION_EXPIRED}
+
+JD-TC-CreateItemInv-31
+
+    [Documentation]   Create Item Inv with badge
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    # .... Attachments ......
+
+    ${resp}=  db.getType   ${jpgfile} 
+    Log  ${resp}
+    ${fileType}=  Get From Dictionary       ${resp}    ${jpgfile} 
+    Set Suite Variable    ${fileType}
+    ${caption}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption}
+
+    ${resp}    upload file to temporary location    ${file_action[0]}    ${pid}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200 
+    Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
+
+    ${resp}    change status of the uploaded file    ${QnrStatus[1]}    ${driveId}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+    ${attachments}=    Create Dictionary   action=${file_action[0]}  fileName=${jpgfile}  fileSize=${fileSize}  fileType=${fileType}  order=${order}    driveId=${driveId}
+    Log  ${attachments}
+    ${attachments}=  Create List   ${attachments}
+    Set Suite Variable    ${attachments}
+
+
+    ${name2}=            FakerLibrary.name
+    ${shortDesc2}=       FakerLibrary.sentence
+
+    ${badges}=  Create Dictionary  attachments=${attachments}   name=${name2}   link=${name2}
+    ${badges1}=  Create List   ${badges}
+
+    ${resp}=    Create Item Inventory  ${name2}    badges=${badges1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable      ${item}  ${resp.json()}
+
+    ${resp}=    Get Item Inventory  ${item}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()['badges'][0]['name']}                         ${name2}
+    Should Be Equal As Strings      ${resp.json()['badges'][0]['link']}                         ${name2}
+    Should Be Equal As Strings      ${resp.json()['badges'][0]['attachments'][0]['fileName']}                ${jpgfile}
+    Should Be Equal As Strings      ${resp.json()['badges'][0]['attachments'][0]['fileSize']}                ${fileSize}
+    Should Be Equal As Strings      ${resp.json()['badges'][0]['attachments'][0]['fileType']}                ${fileType}
+    Should Be Equal As Strings      ${resp.json()['badges'][0]['attachments'][0]['order']}                   ${order}
+    Should Be Equal As Strings      ${resp.json()['badges'][0]['attachments'][0]['action']}                  ${file_action[0]}
+    Should Be Equal As Strings      ${resp.json()['badges'][0]['attachments'][0]['driveId']}                 ${driveId}
