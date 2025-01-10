@@ -19,6 +19,74 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 *** Test Cases ***
 
+   
+JD-TC-OTPVerify-30
+
+    [Documentation]  add a provider consumer by provider then try to login after the otp expiry time period(10s) check access key table for otp removed.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME306}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    #............provider consumer creation..........
+    
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${acc_id1}  ${resp.json()['id']}
+
+    clear_customer   ${PUSERNAME306}
+
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable  ${PCPHONENO}  222${PH_Number}
+
+    ${fname}=  generate_firstname
+    ${lastname}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lastname}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${acc_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    sleep   10s
+
+    ${key}=   verify accnt  ${PCPHONENO}  ${OtpPurpose['Authentication']}   ${jsessionynw_value}
+
+    ${resp}=   Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   401
+    Should Be Equal As Strings  ${resp.content}   "OTP expired"
+
+    ${otp_check}=   otp_check  ${PCPHONENO}
+
+    ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    OTP Trancation Check
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  SuperAdmin Logout 
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME306}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${otp_check}=   otp_check  ${PCPHONENO}
+
+
+*** Comments ***
 JD-TC-OTPVerify-1
 
     [Documentation]  add a provider consumer by provider then login that provider consumer from csite with a valid otp in first attempt.
@@ -3023,7 +3091,7 @@ JD-TC-OTPVerify-29
     ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}  ${PCPHONENO}  ${acc_id1}  Authorization=${token}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200    
-    
+
 JD-TC-OTPVerify-30
 
     [Documentation]  add a provider consumer by provider then try to login after the otp expiry time period(10s) check access key table for otp removed.
