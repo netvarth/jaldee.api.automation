@@ -2922,3 +2922,12 @@ Get Lucene Search For ConsumerOrder
     ${resp}=    GET On Session    synw    /searchdetails/${account}/sordercatalog/item/suggestion/search   params=${param}     expected_status=any
     Check Deprication  ${resp}  Get Lucene Search For ConsumerOrder
     RETURN  ${resp}
+
+#...........UserAgentTask............
+
+OTP Trancation Check
+
+    Check And Create YNW SuperAdmin Session
+    ${resp}=    POST On Session    synw    /userAgent/otpTrancationTask    expected_status=any  
+    Check Deprication  ${resp}  OTP Trancation Check
+    RETURN  ${resp}

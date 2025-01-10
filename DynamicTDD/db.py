@@ -137,10 +137,10 @@ def log_request(response):
 
 def verify_accnt(email,purpose,sessionID=''):
     if str(email).isdigit() and str(email).startswith('55'):
-        print ("if: ", email)
+        print("if: ", email)
         return 55555
     else:
-        print ("else:")
+        print("else:")
         dbconn = connect_db(db_host, db_user, db_passwd, db)
         try:
             with dbconn.cursor() as cur:
@@ -166,14 +166,34 @@ def verify_accnt(email,purpose,sessionID=''):
                 row = cur.fetchone()
                 return row[0]
         except Exception as e:
-            print ("Exception:", e)
-            print ("Exception at line no:", e.__traceback__.tb_lineno)
+            print("Exception:", e)
+            print("Exception at line no:", e.__traceback__.tb_lineno)
             return 0
         finally:
             if dbconn is not None:
                 dbconn.close()
 
+def otp_check(email):
+    dbconn = connect_db(db_host, db_user, db_passwd, db)
+    try:
+        with dbconn.cursor() as cur:
+            cur.execute("SELECT sharedkey FROM access_key_tbl WHERE login_id='%s'" % email)
+            result = cur.fetchone()
+            print(result)
+            return result[0]  
+        
+        if result is None:
+            print("Value successfully removed from the database.")
+        else:
+            print("Value still exists in the database:", result)
 
+    except Exception as e:
+        print("Exception:", e)
+        print("Exception at line no:", e.__traceback__.tb_lineno)
+        return 0
+    finally:
+        if dbconn is not None:
+            dbconn.close()
 
 def get_id(email):
     print("In function: ", inspect.stack()[0].function)
