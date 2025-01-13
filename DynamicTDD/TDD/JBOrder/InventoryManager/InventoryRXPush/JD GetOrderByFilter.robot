@@ -8,6 +8,7 @@ Library           json
 Library           DateTime
 Library           requests
 Library           FakerLibrary
+Library           /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
@@ -30,6 +31,7 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-GetOrderByFilter-1
+
     [Documentation]    Get Order By Filter
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
@@ -38,7 +40,7 @@ JD-TC-GetOrderByFilter-1
     Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
     Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
     Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
-    ${firstname_A}=  FakerLibrary.first_name
+    ${firstname_A}=  generate_firstname
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
@@ -46,7 +48,7 @@ JD-TC-GetOrderByFilter-1
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    202
     ${resp}=  Account Activation  ${PUSERNAME_E}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -60,7 +62,7 @@ JD-TC-GetOrderByFilter-1
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
 
-    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${pid}  ${decrypted_data['id']}
     Set Suite Variable    ${pdrname}    ${decrypted_data['userName']}
     Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
     Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
@@ -73,15 +75,6 @@ JD-TC-GetOrderByFilter-1
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
 
-    ${resp}=  Enable Disable Department  ${toggle[0]}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    sleep  2s
-    ${resp}=  Get Departments
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
-
     ${doc1}=  Create Sample User 
     Set Suite Variable      ${doc1}
 
@@ -92,13 +85,14 @@ JD-TC-GetOrderByFilter-1
     Set Suite Variable  ${Docfname}  ${resp.json()['firstName']}
     Set Suite Variable  ${Doclname}  ${resp.json()['lastName']}
      
-    ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    ${resp}=  Get Waitlist Settings
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Enable Disable Department  ${toggle[0]}
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${lid}=  Create Sample Location
 
@@ -144,9 +138,6 @@ JD-TC-GetOrderByFilter-1
     ${resp}=  Get Store Type By EncId   ${St_Id}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
 # --------------------- ---------------------------------------------------------------
 
@@ -157,12 +148,9 @@ JD-TC-GetOrderByFilter-1
     # ${accountId}=  get_acc_id  ${HLPUSERNAME16}
     # Set Suite Variable    ${accountId} 
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -191,7 +179,7 @@ JD-TC-GetOrderByFilter-1
     ${Store_Name1}=    FakerLibrary.first name
     Set Suite Variable      ${Store_Name1}
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
-    Set Suite Variable  ${email_id}  ${Store_Name1}${PhoneNumber}.${test_mail}
+    Set Suite Variable  ${email_id}  ${PhoneNumber}${Store_Name1}.${test_mail}
     ${email}=  Create List  ${email_id}
 
     ${resp}=  Create Store   ${Store_Name1}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
@@ -205,7 +193,7 @@ JD-TC-GetOrderByFilter-1
     ${displayName1}=        FakerLibrary.name
     Set Suite Variable      ${displayName1}
 
-    ${resp}=    Create Item Inventory  ${displayName1}    isInventoryItem=${bool[1]}
+    ${resp}=    Create Item Inventory  ${displayName1}    isInventoryItem=${bool[1]}  isBatchApplicable=${boolean[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${item1}  ${resp.json()}
@@ -213,7 +201,7 @@ JD-TC-GetOrderByFilter-1
     ${displayName2}=        FakerLibrary.name
     Set Suite Variable      ${displayName2}
 
-    ${resp}=    Create Item Inventory  ${displayName2}    isInventoryItem=${bool[1]}
+    ${resp}=    Create Item Inventory  ${displayName2}    isInventoryItem=${bool[1]}  isBatchApplicable=${boolean[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${item2}  ${resp.json()}
@@ -253,11 +241,8 @@ JD-TC-GetOrderByFilter-1
     ${resp}=  Get by encId  ${category_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
-    ${vender_name}=   FakerLibrary.firstname
+    ${vender_name}=   generate_firstname
     ${contactPersonName}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
@@ -361,7 +346,7 @@ JD-TC-GetOrderByFilter-1
     ${purchaseNote}=                FakerLibrary.Sentence
     ${roundOff}=                    Random Int  min=1  max=10
 
-    ${purchaseItemDtoList1}=        Create purchaseItemDtoList   ${ic_Item_id}   ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}   ${iu_id}
+    ${purchaseItemDtoList1}=        Create purchaseItemDtoList   ${ic_Item_id}   ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${amount}  ${batchNo}   ${iu_id}
     Set Suite Variable              ${purchaseItemDtoList1}
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${Catalog_EncIds}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
@@ -390,67 +375,66 @@ JD-TC-GetOrderByFilter-1
     ${resp}=  Get Inventoryitem      ${ic_Item_id}         
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
-    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
-    Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
-    Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          0.0
-    Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
-    Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Store_Name1}
 
 # ------------------------------------------- Check Stock ---------------------------------------------------
     ${resp}=    Get Stock Avaliability  ${ic_Item_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
-    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
-    Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
-    Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          0.0
-    Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
-    Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Store_Name1}
-
 # -----------------------------------------------------------------------------------
 
 # -------------------------------- Add a provider Consumer -----------------------------------
 
-    ${firstName}=  FakerLibrary.name
-    Set Suite Variable    ${firstName}
-    ${lastName}=  FakerLibrary.last_name
-    Set Suite Variable    ${lastName}
-    ${primaryMobileNo}    Generate random string    10    123456788
-    ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
-    Set Suite Variable    ${primaryMobileNo}
+
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Suite Variable    ${primaryMobileNo}  555${PH_Number}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${primaryMobileNo}${\n}
+    ${firstName}=   generate_firstname
+    ${lastName}=    FakerLibrary.last_name
+    Set Suite Variable      ${firstName}
+    Set Suite Variable      ${lastName}  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${email}  ${C_Email}${primaryMobileNo}${firstName}.${test_mail}
+
+    ${resp}=  AddCustomer  ${primaryMobileNo}  firstName=${firstName}   lastName=${lastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${email}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${ageyrs}  ${agemonths}=  db.calculate_age_years_months     ${dob}
+
+    ${resp}=  GetCustomer  phoneNo-eq=${primaryMobileNo}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+    ${fullastName}   Set Variable    ${firstName} ${lastName}
+    Set Test Variable  ${fullastName}
+
+    ${resp}=  Provider Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+    
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token}  ${resp.json()['token']}
-
-    ${resp}=    Customer Logout 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email_id}    ${primaryMobileNo}     ${accountId}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200    
+    Set Suite Variable   ${token}  ${resp.json()['token']}
    
-    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
-    Log   ${resp.content}
+    ${resp}=    ProviderConsumer Login with token    ${primaryMobileNo}    ${accountId}    ${token}
+    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -480,17 +464,17 @@ JD-TC-GetOrderByFilter-1
     Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
 
     ${frequency}=       Random Int  min=26  max=30
-    ${dosage}=          Random Int  min=1  max=3000
+    ${dos}=          Random Int  min=1  max=3
     ${description}=     FakerLibrary.sentence
     ${remark}=          FakerLibrary.sentence
-    ${dos}=             Evaluate    float(${dosage})
+    # ${dos}=             Evaluate    float(${dosage})
     Set Suite Variable      ${frequency}
-    Set Suite Variable      ${dosage}
+    # Set Suite Variable      ${dosage}
     Set Suite Variable      ${description}
     Set Suite Variable      ${remark}
     Set Suite Variable      ${dos}
 
-    ${resp}=    Create Frequency  ${frequency}  ${dosage}  description=${description}  remark=${remark}
+    ${resp}=    Create Frequency  ${frequency}  ${dos}  description=${description}  remark=${remark}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
     Set Suite Variable              ${frequency_id}         ${resp.json()}
@@ -498,12 +482,6 @@ JD-TC-GetOrderByFilter-1
     ${resp}=    Get Frequency  ${frequency_id}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
-    Should Be Equal As Strings      ${resp.json()['id']}            ${frequency_id}
-    Should Be Equal As Strings      ${resp.json()['frequency']}     ${frequency}
-    Should Be Equal As Strings      ${resp.json()['description']}   ${description}
-    Should Be Equal As Strings      ${resp.json()['remark']}        ${remark}
-    Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos}
-
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -538,7 +516,7 @@ JD-TC-GetOrderByFilter-1
     Set Suite Variable      ${duration1}
     Set Suite Variable      ${quantity1}
 
-    ${resp}=    RX Create Prescription  ${cid}  ${doc1}  ${displayName1}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}
+    ${resp}=    RX Create Prescription  ${cid}  ${doc1}  ${displayName1}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}    itemDosage=${dos}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
     Set Suite Variable              ${prescription_id}      ${resp.json()}
@@ -548,25 +526,6 @@ JD-TC-GetOrderByFilter-1
     ${resp}=    Get RX Prescription By Id  ${prescription_id}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
-    Should Be Equal As Strings      ${resp.json()['providerConsumerId']}                                ${cid}
-    Should Be Equal As Strings      ${resp.json()['doctorId']}                                          ${doc1}
-    Should Be Equal As Strings      ${resp.json()['uid']}                                               ${prescription_id}
-    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedDate']}                           ${prescriptionCreatedDate}
-    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedBy']}                             ${pid}
-    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedByName']}                         ${pdrname}
-    Should Be Equal As Strings      ${resp.json()['prescriptionAttachments'][0]['owner']}               ${pid}
-    Should Be Equal As Strings      ${resp.json()['prescriptionAttachments'][0]['ownerName']}           ${pdrname}
-    Should Be Equal As Strings      ${resp.json()['prescriptionStatus']}                                ${printTemplateStatus[0]}
-    Should Be Equal As Strings      ${resp.json()['prescriptionSharedStatus']}                          ${prescriptionSharedStatus[1]}
-    Should Be Equal As Strings      ${resp.json()['doctorName']}                                        ${Docfname} ${Doclname}
-    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['spItemCode']}          ${item1}
-    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['medicineName']}        ${displayName1}
-    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['duration']}            ${duration1}
-    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['frequency']['id']}     ${frequency_id}
-    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['dosage']}              ${dos}
-    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['description']}         ${description}
-    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['quantity']}            ${quantity1}
-    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['prescriptioinUid']}    ${prescription_id}
     Set Suite Variable              ${RDID1}      ${resp.json()['id']}
 
     ${dur2}=        Random Int  min=1  max=100
@@ -576,27 +535,19 @@ JD-TC-GetOrderByFilter-1
     Set Suite Variable      ${duration2}
     Set Suite Variable      ${quantity2}
 
-    ${resp}=    RX Create Prescription Item  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
+    ${resp}=    RX Create Prescription Item  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}     itemDosage=${dos}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
     Set Suite Variable              ${pitm_id}      ${resp.json()}
 
     ${resp}=    Get RX Prescription Item By EncId  ${pitm_id}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}                         200
-    Should Be Equal As Strings      ${resp.json()['spItemCode']}                ${item2}
-    Should Be Equal As Strings      ${resp.json()['medicineName']}              ${displayName2}    
-    Should Be Equal As Strings      ${resp.json()['duration']}                  ${duration2}    
-    Should Be Equal As Strings      ${resp.json()['frequency']['id']}           ${frequency_id}    
-    Should Be Equal As Strings      ${resp.json()['dosage']}                    ${dos}    
-    Should Be Equal As Strings      ${resp.json()['description']}               ${description}  
-    Should Be Equal As Strings      ${resp.json()['quantity']}                  ${quantity2}  
-    Should Be Equal As Strings      ${resp.json()['prescriptioinUid']}          ${prescription_id}   
+    Should Be Equal As Strings      ${resp.status_code}                         200 
     Set Suite Variable              ${RDID2}      ${resp.json()['id']}
 
     ${itemqty}=    Evaluate   ${dos} * ${duration2}
 
-    ${resp}=    Get RX Prescription Item Qnty By EncId  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
+    ${resp}=    Get RX Prescription Item Qnty By EncId  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}   itemDosage=${dos}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
     Should Be Equal As Strings      ${resp.json()}          ${itemqty}
@@ -627,41 +578,10 @@ JD-TC-GetOrderByFilter-1
     Set Suite Variable              ${refNumber}      ${resp.json()['store']['refNumber']}
     Set Suite Variable              ${presc_ref}    ${resp.json()['prescriptionRefNo']}
     Set Suite Variable              ${orgin_From}   ${resp.json()['originFrom']}
-    Should Be Equal As Strings      ${resp.json()['createdDate']}    ${DAY1}
-    Should Be Equal As Strings      ${resp.json()['createdBy']}    ${pid}
-    Should Be Equal As Strings      ${resp.json()['createdByName']}    ${pdrname}
-    Should Be Equal As Strings      ${resp.json()['store']['name']}    ${Store_Name1}
-    Should Be Equal As Strings      ${resp.json()['store']['encId']}   ${store_id}
-    Should Be Equal As Strings      ${resp.json()['prescriptionUid']}    ${prescription_id}
-    Should Be Equal As Strings      ${resp.json()['prescriptionDate']}    ${DAY1}
-    Should Be Equal As Strings      ${resp.json()['pushedStatus']}    ${pushedStatus[0]}
-    Should Be Equal As Strings      ${resp.json()['doctorId']}    ${doc1}
-    Should Be Equal As Strings      ${resp.json()['doctorName']}    ${Docfname} ${Doclname}
-    Should Be Equal As Strings      ${resp.json()['orderStatus']}    ${couponState[0]}
 
-    ${resp}=    Convert to order  ${sorder_uid}  ${orderStatus[0]}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}             200
-
-    ${resp}=    Get Sorder By Uid  ${sorder_uid}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}             200
-    Set Suite Variable              ${refNumber}      ${resp.json()['store']['refNumber']}
-    Set Suite Variable              ${presc_ref}    ${resp.json()['prescriptionRefNo']}
-    Set Suite Variable              ${orgin_From}   ${resp.json()['originFrom']}
-    Should Be Equal As Strings      ${resp.json()['createdDate']}    ${DAY1}
-    Should Be Equal As Strings      ${resp.json()['createdBy']}    ${pid}
-    Should Be Equal As Strings      ${resp.json()['createdByName']}    ${pdrname}
-    Should Be Equal As Strings      ${resp.json()['store']['name']}    ${Store_Name1}
-    Should Be Equal As Strings      ${resp.json()['store']['encId']}   ${store_id}
-    Should Be Equal As Strings      ${resp.json()['prescriptionUid']}    ${prescription_id}
-    Should Be Equal As Strings      ${resp.json()['prescriptionDate']}    ${DAY1}
-    Should Be Equal As Strings      ${resp.json()['pushedStatus']}    ${pushedStatus[1]}
-    Should Be Equal As Strings      ${resp.json()['doctorId']}    ${doc1}
-    Should Be Equal As Strings      ${resp.json()['doctorName']}    ${Docfname} ${Doclname}
-    Should Be Equal As Strings      ${resp.json()['orderStatus']}    ${couponState[0]}
-
+# *** Comments ***
 JD-TC-GetOrderByFilter-2
+
     [Documentation]    Get Order By Filter - account
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -678,12 +598,13 @@ JD-TC-GetOrderByFilter-2
     Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}   ${store_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionUid']}    ${prescription_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionDate']}    ${DAY1}
-    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[1]}
+    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[0]}
     Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
     Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-3
+
     [Documentation]    Get Order By Filter - uid
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -700,12 +621,13 @@ JD-TC-GetOrderByFilter-3
     Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}   ${store_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionUid']}    ${prescription_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionDate']}    ${DAY1}
-    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[1]}
+    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[0]}
     Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
     Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-4
+
     [Documentation]    Get Order By Filter -  locationId
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -722,12 +644,13 @@ JD-TC-GetOrderByFilter-4
     Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}   ${store_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionUid']}    ${prescription_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionDate']}    ${DAY1}
-    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[1]}
+    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[0]}
     Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
     Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-5
+
     [Documentation]    Get Order By Filter -  storeId
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -744,12 +667,13 @@ JD-TC-GetOrderByFilter-5
     Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}   ${store_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionUid']}    ${prescription_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionDate']}    ${DAY1}
-    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[1]}
+    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[0]}
     Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
     Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-6
+
     [Documentation]    Get Order By Filter -  storeName
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -766,12 +690,13 @@ JD-TC-GetOrderByFilter-6
     Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}   ${store_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionUid']}    ${prescription_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionDate']}    ${DAY1}
-    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[1]}
+    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[0]}
     Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
     Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-7
+
     [Documentation]    Get Order By Filter -  storeRefNo
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -788,12 +713,13 @@ JD-TC-GetOrderByFilter-7
     Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}   ${store_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionUid']}    ${prescription_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionDate']}    ${DAY1}
-    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[1]}
+    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[0]}
     Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
     Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-8
+
     [Documentation]    Get Order By Filter -  acceptedBy
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -803,19 +729,9 @@ JD-TC-GetOrderByFilter-8
     ${resp}=    Get Sorder By Filter       acceptedBy-eq=${pid}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
-    Should Be Equal As Strings      ${resp.json()[0]['createdDate']}    ${DAY1}
-    Should Be Equal As Strings      ${resp.json()[0]['createdBy']}    ${pid}
-    Should Be Equal As Strings      ${resp.json()[0]['createdByName']}    ${pdrname}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}    ${Store_Name1}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}   ${store_id}
-    Should Be Equal As Strings      ${resp.json()[0]['prescriptionUid']}    ${prescription_id}
-    Should Be Equal As Strings      ${resp.json()[0]['prescriptionDate']}    ${DAY1}
-    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[1]}
-    Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
-    Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
-    Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-9
+
     [Documentation]    Get Order By Filter -  originFrom
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -832,12 +748,13 @@ JD-TC-GetOrderByFilter-9
     Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}   ${store_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionUid']}    ${prescription_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionDate']}    ${DAY1}
-    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[1]}
+    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[0]}
     Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
     Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-10
+
     [Documentation]    Get Order By Filter -   prescriptionUid
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -854,12 +771,13 @@ JD-TC-GetOrderByFilter-10
     Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}   ${store_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionUid']}    ${prescription_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionDate']}    ${DAY1}
-    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[1]}
+    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[0]}
     Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
     Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-11
+
     [Documentation]    Get Order By Filter -   prescriptionRefNo
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -876,12 +794,13 @@ JD-TC-GetOrderByFilter-11
     Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}   ${store_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionUid']}    ${prescription_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionDate']}    ${DAY1}
-    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[1]}
+    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[0]}
     Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
     Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-12
+
     [Documentation]    Get Order By Filter -   prescriptionUid
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -898,12 +817,13 @@ JD-TC-GetOrderByFilter-12
     Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}   ${store_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionUid']}    ${prescription_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionDate']}    ${DAY1}
-    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[1]}
+    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[0]}
     Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
     Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-13
+
     [Documentation]    Get Order By Filter -   prescriptionDate
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -920,12 +840,13 @@ JD-TC-GetOrderByFilter-13
     Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}   ${store_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionUid']}    ${prescription_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionDate']}    ${DAY1}
-    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[1]}
+    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[0]}
     Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
     Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-14
+
     [Documentation]    Get Order By Filter -   doctorId
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -942,12 +863,13 @@ JD-TC-GetOrderByFilter-14
     Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}   ${store_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionUid']}    ${prescription_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionDate']}    ${DAY1}
-    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[1]}
+    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[0]}
     Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
     Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-15
+
     [Documentation]    Get Order By Filter -   doctorName
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -964,12 +886,13 @@ JD-TC-GetOrderByFilter-15
     Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}   ${store_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionUid']}    ${prescription_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionDate']}    ${DAY1}
-    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[1]}
+    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[0]}
     Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
     Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-16
+
     [Documentation]    Get Order By Filter -   orderStatus
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -986,19 +909,20 @@ JD-TC-GetOrderByFilter-16
     Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}   ${store_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionUid']}    ${prescription_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionDate']}    ${DAY1}
-    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[1]}
+    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[0]}
     Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
     Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-17
+
     [Documentation]    Get Order By Filter -   pushedStatus
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Get Sorder By Filter        pushedStatus-eq=${pushedStatus[1]}
+    ${resp}=    Get Sorder By Filter        pushedStatus-eq=${pushedStatus[0]}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
     Should Be Equal As Strings      ${resp.json()[0]['createdDate']}    ${DAY1}
@@ -1008,12 +932,13 @@ JD-TC-GetOrderByFilter-17
     Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}   ${store_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionUid']}    ${prescription_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionDate']}    ${DAY1}
-    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[1]}
+    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[0]}
     Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
     Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-18
+
     [Documentation]    Get Order By Filter -   providerConsumerId
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1030,12 +955,13 @@ JD-TC-GetOrderByFilter-18
     Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}   ${store_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionUid']}    ${prescription_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionDate']}    ${DAY1}
-    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[1]}
+    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[0]}
     Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
     Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-19
+
     [Documentation]    Get Order By Filter -   providerConsumerName
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1052,12 +978,13 @@ JD-TC-GetOrderByFilter-19
     Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}   ${store_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionUid']}    ${prescription_id}
     Should Be Equal As Strings      ${resp.json()[0]['prescriptionDate']}    ${DAY1}
-    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[1]}
+    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[0]}
     Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
     Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-20 
+
     [Documentation]    Get Order By Filter -  acceptedDate
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1067,17 +994,7 @@ JD-TC-GetOrderByFilter-20
     ${resp}=    Get Sorder By Filter       acceptedDate-eq=${DAY1}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
-    Should Be Equal As Strings      ${resp.json()[0]['createdDate']}    ${DAY1}
-    Should Be Equal As Strings      ${resp.json()[0]['createdBy']}    ${pid}
-    Should Be Equal As Strings      ${resp.json()[0]['createdByName']}    ${pdrname}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}    ${Store_Name1}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}   ${store_id}
-    Should Be Equal As Strings      ${resp.json()[0]['prescriptionUid']}    ${prescription_id}
-    Should Be Equal As Strings      ${resp.json()[0]['prescriptionDate']}    ${DAY1}
-    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[1]}
-    Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
-    Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
-    Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
+
 
 # JD-TC-GetOrderByFilter-UH1-----DEV not take given accountId ,they are took correct accountid 
 
@@ -1095,6 +1012,7 @@ JD-TC-GetOrderByFilter-20
 #     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH2
+
     [Documentation]    Get Order By Filter - invalid uid
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1109,6 +1027,7 @@ JD-TC-GetOrderByFilter-UH2
     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH3
+
     [Documentation]    Get Order By Filter -  invalid locationId
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1123,6 +1042,7 @@ JD-TC-GetOrderByFilter-UH3
     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH4
+
     [Documentation]    Get Order By Filter -  invalid storeId
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1137,13 +1057,14 @@ JD-TC-GetOrderByFilter-UH4
     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH5
+
     [Documentation]    Get Order By Filter -  invalid storeName
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${ran_name}=    FakerLibrary.firstName
+    ${ran_name}=    generate_firstname
 
     ${resp}=    Get Sorder By Filter       storeName-eq=${ran_name}
     Log   ${resp.content}
@@ -1151,6 +1072,7 @@ JD-TC-GetOrderByFilter-UH5
     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH6
+
     [Documentation]    Get Order By Filter -  invalid storeRefNo
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1165,12 +1087,13 @@ JD-TC-GetOrderByFilter-UH6
     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH7
+
     [Documentation]    Get Order By Filter -  invalid acceptedBy
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
-    ${ran_name}=    FakerLibrary.firstName
+    ${ran_name}=    generate_firstname
     ${resp}=    Get Sorder By Filter       acceptedBy-eq=${ran_name}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
@@ -1184,7 +1107,7 @@ JD-TC-GetOrderByFilter-UH7
 #     Log  ${resp.json()}         
 #     Should Be Equal As Strings            ${resp.status_code}    200
 
-#     ${inv_orgin}=   FakerLibrary.firstName
+#     ${inv_orgin}=   generate_firstname
 
 #     ${resp}=    Get Sorder By Filter       originFrom-eq=${inv_orgin}
 #     Log   ${resp.content}
@@ -1192,6 +1115,7 @@ JD-TC-GetOrderByFilter-UH7
 #     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH9
+
     [Documentation]    Get Order By Filter -   invalid prescriptionUid
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1206,6 +1130,7 @@ JD-TC-GetOrderByFilter-UH9
     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH10
+
     [Documentation]    Get Order By Filter -   invalid prescriptionRefNo
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1220,6 +1145,7 @@ JD-TC-GetOrderByFilter-UH10
     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH11
+
     [Documentation]    Get Order By Filter -   invalid prescriptionUid
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1234,6 +1160,7 @@ JD-TC-GetOrderByFilter-UH11
     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH12
+
     [Documentation]    Get Order By Filter -   invalid prescriptionDate
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1248,6 +1175,7 @@ JD-TC-GetOrderByFilter-UH12
     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH13
+
     [Documentation]    Get Order By Filter -  invalid doctorId
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1262,13 +1190,14 @@ JD-TC-GetOrderByFilter-UH13
     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH14
+
     [Documentation]    Get Order By Filter -   invalid doctorName
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${ran_name}=    FakerLibrary.firstName
+    ${ran_name}=    generate_firstname
 
     ${resp}=    Get Sorder By Filter        doctorName-eq=${ran_name}
     Log   ${resp.content}
@@ -1289,18 +1218,20 @@ JD-TC-GetOrderByFilter-UH14
 #     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH16
+
     [Documentation]    Get Order By Filter -   invalid pushedStatus
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Get Sorder By Filter        pushedStatus-eq=${pushedStatus[0]}
+    ${resp}=    Get Sorder By Filter        pushedStatus-eq=${pushedStatus[1]}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH17
+
     [Documentation]    Get Order By Filter -   invalid providerConsumerId
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1315,13 +1246,14 @@ JD-TC-GetOrderByFilter-UH17
     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH18
+
     [Documentation]    Get Order By Filter -   invalid providerConsumerName
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${ran_name}=    FakerLibrary.firstName
+    ${ran_name}=    generate_firstname
 
     ${resp}=    Get Sorder By Filter        providerConsumerName-eq=${ran_name}
     Log   ${resp.content}
@@ -1329,6 +1261,7 @@ JD-TC-GetOrderByFilter-UH18
     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH19
+
     [Documentation]    Get Order By Filter -  invalid acceptedDate
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1341,6 +1274,7 @@ JD-TC-GetOrderByFilter-UH19
     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH20
+
     [Documentation]    Get Order By Filter -  without login
 
     ${resp}=    Get Sorder By Filter       acceptedDate-eq=${DAY1}

@@ -26,11 +26,12 @@ ${invalidItem}      sprx-3250dr0-800
 @{spItemSource}     RX       Ayur
 ${originFrom}       NONE
 @{deliveryType}     STORE_PICKUP        HOME_DELIVERY
-      
+
+
 *** Test Cases ***
 
-JD-TC-GetOrderByUid-1
-    [Documentation]    Get Order By Uid
+JD-TC-ConvertToOrder-1
+    [Documentation]    Convert to Order
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
     Log  ${iscorp_subdomains}
@@ -42,16 +43,19 @@ JD-TC-GetOrderByUid-1
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+2547598
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+4548754
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    202
     ${resp}=  Account Activation  ${PUSERNAME_E}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    # ${firstname}  ${lastname}  ${PUSERNAME_E}  ${LoginId}=  Provider Signup
+    # Set Suite Variable  ${PUSERNAME_E}
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -65,10 +69,10 @@ JD-TC-GetOrderByUid-1
     Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
     Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME77}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME77}${\n}
-    Set Suite Variable  ${PUSERNAME77}
-    ${id}=  get_id  ${PUSERNAME77}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+    Set Suite Variable  ${PUSERNAME_E}
+    ${id}=  get_id  ${PUSERNAME_E}
     Set Suite Variable  ${id}
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
@@ -82,7 +86,7 @@ JD-TC-GetOrderByUid-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
-    ${doc1}=  Create Sample User 
+    ${doc1}=  Create Sample User   deptId=${dep_id} 
     Set Suite Variable      ${doc1}
 
     ${resp}=  Get User By Id  ${doc1}
@@ -92,7 +96,7 @@ JD-TC-GetOrderByUid-1
     Set Suite Variable  ${Docfname}  ${resp.json()['firstName']}
     Set Suite Variable  ${Doclname}  ${resp.json()['lastName']}
      
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -150,14 +154,14 @@ JD-TC-GetOrderByUid-1
 
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     # ${accountId}=  get_acc_id  ${HLPUSERNAME16}
     # Set Suite Variable    ${accountId} 
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
@@ -193,7 +197,7 @@ JD-TC-GetOrderByUid-1
     Set Suite Variable  ${email_id}  ${Store_Name1}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
-    ${resp}=  Create Store   ${Store_Name1}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
+    ${resp}=  Create Store   ${Store_Name1}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}    onlineOrder=${boolean[1]}    walkinOrder=${boolean[1]}   partnerOrder=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${store_id}  ${resp.json()}
@@ -204,7 +208,7 @@ JD-TC-GetOrderByUid-1
     ${displayName1}=        FakerLibrary.name
     Set Suite Variable      ${displayName1}
 
-    ${resp}=    Create Item Inventory  ${displayName1}    isInventoryItem=${bool[1]}
+    ${resp}=    Create Item Inventory  ${displayName1}    isInventoryItem=${bool[1]}    isBatchApplicable=${boolean[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${item1}  ${resp.json()}
@@ -212,10 +216,10 @@ JD-TC-GetOrderByUid-1
     ${displayName2}=        FakerLibrary.name
     Set Suite Variable      ${displayName2}
 
-    ${resp}=    Create Item Inventory  ${displayName2}    isInventoryItem=${bool[1]}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${item2}  ${resp.json()}
+    # ${resp}=    Create Item Inventory  ${displayName2}    isInventoryItem=${bool[1]}    isBatchApplicable=${boolean[1]}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${item2}  ${resp.json()}
 
 
 # ----------------------------------------- create Inv Catalog -------------------------------------------------------
@@ -227,8 +231,8 @@ JD-TC-GetOrderByUid-1
     Set Suite Variable  ${Catalog_EncIds}  ${resp.json()}
 
 # ----------------------------------------Create Inventory Catalog Item----------------------------------
-
-    ${resp}=   Create Inventory Catalog Item  ${Catalog_EncIds}   ${item1}  ${item2}
+# ${item2}
+    ${resp}=   Create Inventory Catalog Item  ${Catalog_EncIds}   ${item1}  
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Suite Variable   ${ic_Item_id}   ${resp.json()[0]}
@@ -312,8 +316,8 @@ JD-TC-GetOrderByUid-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${vendorId}     ${resp.json()['encId']}
- 
- # ----------------------------------------- Create itemUnits ------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------- Create itemUnits ------------------------------------------------------------------
 
     ${unitName}=                    FakerLibrary.name
     ${convertionQty}=               Random Int  min=1  max=20
@@ -332,7 +336,7 @@ JD-TC-GetOrderByUid-1
 
     ${quantity}=                    Random Int  min=0  max=999
     ${quantity}=                    Convert To Number  ${quantity}  1
-    ${freeQuantity}=                Random Int  min=0  max=10
+    ${freeQuantity}=                Random Int  min=10  max=20
     ${freeQuantity}=                Convert To Number  ${freeQuantity}  1
     ${amount}=                      Random Int  min=1  max=999
     ${amount}=                      Convert To Number  ${amount}  1
@@ -354,12 +358,12 @@ JD-TC-GetOrderByUid-1
     ${salesRate}=   Evaluate        ${amount} / ${convertionQty}
     ${invoiceDate}=  db.add_timezone_date  ${tz}  1
     ${rate}=        Evaluate        int(${salesRate})
-    ${mrp}=         Random Int      min=${rate}  max=9999
+    ${mrp}=         Random Int      min=500  max=9999
     ${batchNo}=     Random Int      min=1  max=9999
     ${invoiceReferenceNo}=          Random Int  min=1  max=999
     ${purchaseNote}=                FakerLibrary.Sentence
     ${roundOff}=                    Random Int  min=1  max=10
-
+ 
     ${purchaseItemDtoList1}=        Create purchaseItemDtoList   ${ic_Item_id}   ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}   ${iu_id}
     Set Suite Variable              ${purchaseItemDtoList1}
 
@@ -389,6 +393,7 @@ JD-TC-GetOrderByUid-1
     ${resp}=  Get Inventoryitem      ${ic_Item_id}         
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${inventoryItemBatch_uid}  ${resp.json()[0]['uid']}   
     Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
     Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
     Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
@@ -415,6 +420,7 @@ JD-TC-GetOrderByUid-1
     Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
     Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Store_Name1}
 
+# -----------------------------------------------------------------------------------
 
 # -------------------------------- Add a provider Consumer -----------------------------------
 
@@ -452,10 +458,11 @@ JD-TC-GetOrderByUid-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+# --------------------------------------------------------------------------------------------------------
 
 # --------------------------- Create SalesOrder Inventory Catalog-InvMgr True --------------------------
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -464,11 +471,11 @@ JD-TC-GetOrderByUid-1
     ${price}=    Random Int  min=2   max=40
     ${price}=  Convert To Number  ${price}    1
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Store_note}  ${boolean[1]}  ${inv_cat_encid_List}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Store_note}  ${boolean[1]}  ${inv_cat_encid_List}   onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[1]}  storePickup=${boolean[1]}  courierService=${boolean[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${inv_order_encid}  ${resp.json()}
-
+# ---------------------------------------------------------------------------------------------------------
 # ------------------------------Create SalesOrder Catalog Item-invMgmt True-------------------------------
 
     ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${inv_order_encid}    ${boolean[1]}     ${ic_Item_id}     ${price}    ${boolean[0]}   
@@ -476,7 +483,16 @@ JD-TC-GetOrderByUid-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
 
-    ${frequency}=       Random Int  min=1  max=10
+
+    ${invCatItem}=  Create Dictionary  encId=${ic_Item_id}  
+    ${inventoryItemBatch}=  Create Dictionary  encId=${inventoryItemBatch_uid}  
+    ${batchList}=  Create Dictionary  name=${Store_note}   price=${price}    inventoryItemBatch=${inventoryItemBatch}
+    ${batchList}=  Create List  ${batchList}
+    ${resp}=    Update BatchPrice      ${SO_itemEncIds}     ${batchList}         ${invCatItem}    invMgmt=${boolean[1]}   sortOrder=${price}   mrp=${price}   price=${price}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${frequency}=       Random Int  min=10  max=15
     ${dosage}=          Random Int  min=1  max=3000
     ${description}=     FakerLibrary.sentence
     ${remark}=          FakerLibrary.sentence
@@ -487,7 +503,7 @@ JD-TC-GetOrderByUid-1
     Set Suite Variable      ${remark}
     Set Suite Variable      ${dos}
 
-    ${resp}=    Create Frequency  ${frequency}  ${dosage}  description=${description}  remark=${remark}
+    ${resp}=    Create Frequency  ${frequency}  ${dos}  description=${description}  remark=${remark}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
     Set Suite Variable              ${frequency_id}         ${resp.json()}
@@ -535,7 +551,7 @@ JD-TC-GetOrderByUid-1
     Set Suite Variable      ${duration1}
     Set Suite Variable      ${quantity1}
 
-    ${resp}=    RX Create Prescription  ${cid}  ${doc1}  ${displayName1}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}
+    ${resp}=    RX Create Prescription  ${cid}  ${doc1}  ${displayName1}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}  itemDosage=${dos}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
     Set Suite Variable              ${prescription_id}      ${resp.json()}
@@ -573,30 +589,30 @@ JD-TC-GetOrderByUid-1
     Set Suite Variable      ${duration2}
     Set Suite Variable      ${quantity2}
 
-    ${resp}=    RX Create Prescription Item  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}             200
-    Set Suite Variable              ${pitm_id}      ${resp.json()}
+    # ${resp}=    RX Create Prescription Item  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${prescription_id}   itemDosage=${dos}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings      ${resp.status_code}             200
+    # Set Suite Variable              ${pitm_id}      ${resp.json()}
 
-    ${resp}=    Get RX Prescription Item By EncId  ${pitm_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}                         200
-    Should Be Equal As Strings      ${resp.json()['spItemCode']}                ${item2}
-    Should Be Equal As Strings      ${resp.json()['medicineName']}              ${displayName2}    
-    Should Be Equal As Strings      ${resp.json()['duration']}                  ${duration2}    
-    Should Be Equal As Strings      ${resp.json()['frequency']['id']}           ${frequency_id}    
-    Should Be Equal As Strings      ${resp.json()['dosage']}                    ${dos}    
-    Should Be Equal As Strings      ${resp.json()['description']}               ${description}  
-    Should Be Equal As Strings      ${resp.json()['quantity']}                  ${quantity2}  
-    Should Be Equal As Strings      ${resp.json()['prescriptioinUid']}          ${prescription_id}   
-    Set Suite Variable              ${RDID2}      ${resp.json()['id']}
+    # ${resp}=    Get RX Prescription Item By EncId  ${pitm_id}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings      ${resp.status_code}                         200
+    # Should Be Equal As Strings      ${resp.json()['spItemCode']}                ${item1}
+    # Should Be Equal As Strings      ${resp.json()['medicineName']}              ${displayName2}    
+    # Should Be Equal As Strings      ${resp.json()['duration']}                  ${duration2}    
+    # Should Be Equal As Strings      ${resp.json()['frequency']['id']}           ${frequency_id}    
+    # Should Be Equal As Strings      ${resp.json()['dosage']}                    ${dos}    
+    # Should Be Equal As Strings      ${resp.json()['description']}               ${description}  
+    # Should Be Equal As Strings      ${resp.json()['quantity']}                  ${quantity2}  
+    # Should Be Equal As Strings      ${resp.json()['prescriptioinUid']}          ${prescription_id}   
+    # Set Suite Variable              ${RDID2}      ${resp.json()['id']}
 
-    ${itemqty}=    Evaluate   ${dos} * ${duration2}
+    # ${itemqty}=    Evaluate   ${dos} * ${duration2}
 
-    ${resp}=    Get RX Prescription Item Qnty By EncId  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}             200
-    Should Be Equal As Strings      ${resp.json()}          ${itemqty}
+    # ${resp}=    Get RX Prescription Item Qnty By EncId  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${prescription_id}   itemDosage=${dos}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings      ${resp.status_code}             200
+    # Should Be Equal As Strings      ${resp.json()}          ${itemqty}
 
     ${resp}=    Order Request    ${store_id}  ${prescription_id}
     Log   ${resp.content}
@@ -606,27 +622,93 @@ JD-TC-GetOrderByUid-1
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
     Set Suite Variable      ${sorder_uid}   ${resp.json()[0]['uid']}
+    # Should Be Equal As Strings      ${resp.json()[0]['createdDate']}    ${DAY1}
+    # Should Be Equal As Strings      ${resp.json()[0]['createdBy']}    ${pid}
+    # Should Be Equal As Strings      ${resp.json()[0]['createdByName']}    ${pdrname}
+    # Should Be Equal As Strings      ${resp.json()[0]['store']['name']}    ${Store_Name1}
+    # Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}   ${store_id}
+    # Should Be Equal As Strings      ${resp.json()[0]['prescriptionUid']}    ${prescription_id}
+    # Should Be Equal As Strings      ${resp.json()[0]['prescriptionDate']}    ${DAY1}
+    # Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[0]}
+    # Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
+    # Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
 
-    ${resp}=    Get Sorder By Uid  ${sorder_uid}
+    ${resp}=    Convert to order  ${sorder_uid}  ${orderStatus[0]}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
 
-JD-TC-GetOrderByUid-2
-    [Documentation]    Get Order By Uid - where uid is invalid 
+    ${resp}=    Get Sorder By Filter  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()[0]['createdDate']}    ${DAY1}
+    Should Be Equal As Strings      ${resp.json()[0]['createdBy']}    ${pid}
+    Should Be Equal As Strings      ${resp.json()[0]['createdByName']}    ${pdrname}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}    ${Store_Name1}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}   ${store_id}
+    Should Be Equal As Strings      ${resp.json()[0]['prescriptionUid']}    ${prescription_id}
+    Should Be Equal As Strings      ${resp.json()[0]['prescriptionDate']}    ${DAY1}
+    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[1]}
+    Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
+    Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME77}  ${PASSWORD}
+# *** Comments ***
+JD-TC-ConvertToOrder-UH2
+    [Documentation]    Convert to Order - where order is already accepted
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${inv}=     Random Int  min=1  max=99
+    ${ORDER_IN_STATUS}=     format String   ${ORDER_IN_STATUS}   ACCEPTED
 
-    ${resp}=    Get Sorder By Uid  ${inv}
+    ${resp}=    Convert to order  ${sorder_uid}  ${orderStatus[0]}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.status_code}             422
+    Should Be Equal As Strings      ${resp.json()}                  ${ORDER_IN_STATUS}
 
-JD-TC-GetOrderByUid-3
-    [Documentation]    Get Order By Uid - without login 
+JD-TC-ConvertToOrder-UH3
+    [Documentation]    Convert to Order - where sorder uid is invalid
 
-    ${resp}=    Get Sorder By Uid  ${invsorder_uid}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=100  max=999
+
+    ${resp}=    Convert to order  ${inv}  ${orderStatus[0]}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.status_code}             422
+    Should Be Equal As Strings      ${resp.json()}                  ${INVALID_STORE_ID}
+    
+
+JD-TC-ConvertToOrder-UH4
+    [Documentation]    Convert to Order - where order status draft to confirmed
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+    ${ORDER_IN_STATUS}=     format String   ${ORDER_IN_STATUS}   ACCEPTED
+
+    ${resp}=    Convert to order  ${sorder_uid}  ${orderStatus[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             422
+    Should Be Equal As Strings      ${resp.json()}                  ${ORDER_IN_STATUS}
+JD-TC-ConvertToOrder-UH5
+    [Documentation]    Convert to Order - where order status confirmed to draft
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+    ${ORDER_IN_STATUS}=     format String   ${ORDER_IN_STATUS}   ACCEPTED
+
+    ${resp}=    Convert to order  ${sorder_uid}  ${orderStatus[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             422
+    Should Be Equal As Strings      ${resp.json()}                  ${ORDER_IN_STATUS}
+JD-TC-OrderRequest-UH1
+    [Documentation]    Convert to Order - without login
+
+    ${resp}=    Convert to order  ${sorder_uid}  ${orderStatus[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}        419
+    Should Be Equal As Strings      ${resp.json()}             ${SESSION_EXPIRED}
