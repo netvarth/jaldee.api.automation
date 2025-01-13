@@ -390,6 +390,7 @@ JD-TC-OrderRequest-1
     ${resp}=  Get Inventoryitem      ${ic_Item_id}         
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${inventoryItemBatch_uid}  ${resp.json()[0]['uid']}   
     # Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
     # Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
     # Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
@@ -479,6 +480,16 @@ JD-TC-OrderRequest-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
 
+
+
+    ${invCatItem}=  Create Dictionary  encId=${ic_Item_id}  
+    ${inventoryItemBatch}=  Create Dictionary  encId=${inventoryItemBatch_uid}  
+    ${batchList}=  Create Dictionary  name=${Store_note}   price=${price}    inventoryItemBatch=${inventoryItemBatch}
+    ${batchList}=  Create List  ${batchList}
+    ${resp}=    Update BatchPrice      ${SO_itemEncIds}     ${batchList}         ${invCatItem}    invMgmt=${boolean[1]}   sortOrder=${price}   mrp=${price}   price=${price}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
     ${frequency}=       Random Int  min=36  max=40
     ${dosage}=          Random Int  min=1  max=3000
     ${description}=     FakerLibrary.sentence
@@ -503,6 +514,8 @@ JD-TC-OrderRequest-1
     # Should Be Equal As Strings      ${resp.json()['description']}   ${description}
     # Should Be Equal As Strings      ${resp.json()['remark']}        ${remark}
     # Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos}
+
+
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -637,7 +650,7 @@ JD-TC-OrderRequest-UH2
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Convert to order  ${sorder_uid}  ${orderStatus[1]}
+    ${resp}=    Convert to order  ${sorder_uid}  ${orderStatus[0]}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
 
