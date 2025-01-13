@@ -26,6 +26,7 @@ ${SERVICE6}               SERVICE4006
 ${sample}                     4452135820
 @{service_names}
 
+
 *** Test Cases ***
 
 # JD-TC-AddToWaitlist-0
@@ -1646,7 +1647,167 @@ JD-TC-AddToWaitlist-UH19
 
 
 
+*** Comments ***
 
+// have written this case as we got a bug from field(Dr.Smitha), they cannot update queue with token start even if no active tokens in it.
+
+
+JD-TC-AddToWaitlist-1
+
+      [Documentation]   Add a consumer to the waitlist for the current day
+
+      ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}   
+      Log   ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}   200
+
+      ${resp}=  Get Waitlist Settings
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      IF  ${resp.json()['enabledWaitlist']}==${bool[0]}   
+            ${resp}=   Enable Waitlist
+            Should Be Equal As Strings  ${resp.status_code}  200
+      END
+
+      ${resp}=  AddCustomer  ${CUSERNAME1}
+      Log   ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${cid}  ${resp.json()}
+
+      ${resp}=    Get Locations
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      IF   '${resp.content}' == '${emptylist}'
+            ${loc_id1}=  Create Sample Location
+            ${resp}=   Get Location ById  ${loc_id1}
+            Log  ${resp.content}
+            Should Be Equal As Strings  ${resp.status_code}  200
+            Set Test Variable  ${tz}  ${resp.json()['timezone']}
+      ELSE
+            Set Test Variable  ${loc_id1}  ${resp.json()[0]['id']}
+            Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+      END
+
+      ${resp}=  Get Waitlist Settings
+      Log  ${resp.content}
+      Should Be Equal As Strings    ${resp.status_code}    200
+      IF  ${resp.json()['filterByDept']}==${bool[0]}
+            ${resp1}=  Enable Disable Department  ${toggle[0]}
+            Log  ${resp1.content}
+            Should Be Equal As Strings  ${resp1.status_code}  200
+      END
+
+      ${resp}=  Get Departments
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      IF   '${resp.content}' == '${emptylist}'
+                  ${dep_name1}=  FakerLibrary.bs
+                  ${dep_code1}=   Random Int  min=100   max=999
+                  ${dep_desc1}=   FakerLibrary.word  
+                  ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+                  Log  ${resp1.content}
+                  Should Be Equal As Strings  ${resp1.status_code}  200
+                  Set Test Variable  ${dep_id}  ${resp1.json()}
+      ELSE
+                  Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+      END
+
+      ${loc_id2}=  Create Sample Location
+      ${resp}=   Get Location ById  ${loc_id2}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable  ${tz2}  ${resp.json()['timezone']}
+
+      ${loc_id3}=  Create Sample Location
+      ${resp}=   Get Location ById  ${loc_id3}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable  ${tz3}  ${resp.json()['timezone']}
+
+      ${SERVICE1}=    generate_unique_service_name  ${service_names}  
+      Append To List  ${service_names}  ${SERVICE1} 
+      
+      ${SERVICE2}=    generate_unique_service_name  ${service_names}   
+      Append To List  ${service_names}  ${SERVICE2} 
+      
+      ${SERVICE3}=    generate_unique_service_name  ${service_names}  
+      Append To List  ${service_names}  ${SERVICE3} 
+     
+      ${ser_id1}=   Create Sample Service  ${SERVICE1}   maxBookingsAllowed=15   department=${dep_id}
+      ${ser_id2}=   Create Sample Service  ${SERVICE2}   maxBookingsAllowed=15   department=${dep_id}
+      ${ser_id3}=   Create Sample Service  ${SERVICE3}   maxBookingsAllowed=15   department=${dep_id}
+   
+      ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+      ${q_name}=    FakerLibrary.name
+      ${list}=  Create List   1  2  3  4  5  6  7
+      ${strt_time}=   db.get_time_by_timezone  ${tz}
+      ${end_time}=    db.add_timezone_time  ${tz}  3  00 
+      ${parallel}=   Random Int  min=1   max=1
+      ${capacity}=  Random Int   min=10   max=20
+      ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id2}  100  ${ser_id1}  ${ser_id2}  ${ser_id3}
+      Log   ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${que_id1}   ${resp.json()}
+
+      ${resp}=  Get Queue ById  ${que_id1}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${q_name1}=    FakerLibrary.name
+      ${strt_time1}=   db.get_time_by_timezone  ${tz}
+      ${end_time1}=    db.add_timezone_time  ${tz}  3  00 
+      ${resp}=  Create Queue    ${q_name1}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time1}  ${end_time1}  ${parallel}   ${capacity}    ${loc_id3}  30  ${ser_id1}  ${ser_id2}  ${ser_id3}
+      Log   ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${que_id2}   ${resp.json()}
+
+      ${resp}=  Get Queue ById  ${que_id2}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${q_name1}=    FakerLibrary.name
+      ${strt_time2}=   db.add_timezone_time  ${tz}  5  00 
+      ${end_time2}=    db.add_timezone_time  ${tz}  6  00 
+      ${resp}=  Create Queue    ${q_name1}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time2}  ${end_time2}  ${parallel}   ${capacity}    ${loc_id3}  30  ${ser_id1}  ${ser_id2}  ${ser_id3}
+      Log   ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${que_id3}   ${resp.json()}
+
+      ${resp}=  Get Queue ById  ${que_id3}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${q_name1}=    FakerLibrary.name
+      ${strt_time2}=   db.add_timezone_time  ${tz}  5  00 
+      ${end_time2}=    db.add_timezone_time  ${tz}  6  00 
+      ${resp}=  Create Queue    ${q_name1}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time2}  ${end_time2}  ${parallel}   ${capacity}    ${loc_id1}  null  ${ser_id1}  ${ser_id2}  ${ser_id3}
+      Log   ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${que_id4}   ${resp.json()}
+
+      ${resp}=  Get Queue ById  ${que_id4}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${desc}=   FakerLibrary.word
+      Set Suite Variable  ${desc}
+      ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
+      Log   ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      ${wid}=  Get Dictionary Values  ${resp.json()}
+      Set Test Variable  ${wid1}  ${wid[0]}
+
+      ${resp}=  Get Waitlist By Id  ${wid1} 
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${resp}=  Waitlist Action  ${waitlist_actions[1]}    ${wid1}
+      Log   ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      
+      ${q_name2}=    FakerLibrary.name
+      ${resp}=  Update Queue  ${que_id2}  ${q_name2}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time1}  ${end_time1}  ${parallel}  ${capacity}  ${loc_id3}  120  ${ser_id1}  ${ser_id2}
+      Log   ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
 
 
 
