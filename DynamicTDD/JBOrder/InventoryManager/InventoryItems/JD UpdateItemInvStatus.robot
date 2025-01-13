@@ -24,18 +24,11 @@ ${fileSize}     0.00458
 ${order}        0
 *** Test Cases ***
 
-JD-TC-GetItemInv-1
-    [Documentation]   Get Item Inv
+JD-TC-UpdateItemInvStatus-1
+    [Documentation]   Update Item Inv Status
 
-    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${firstname}  ${lastname}  ${PUSERNAME_R}  ${LoginId}=  Provider Signup
-    Set Suite Variable  ${PUSERNAME_R}
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
-    Log   ${resp.content}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
@@ -87,7 +80,7 @@ JD-TC-GetItemInv-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable     ${itemjrx}   ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -235,7 +228,7 @@ JD-TC-GetItemInv-1
     Set Suite Variable  ${shortDesc}
     Set Suite Variable  ${internalDesc}
 
-    ${resp}=    Create Item Inventory  ${name}  shortDesc=${shortDesc}   internalDesc=${internalDesc}   itemCode=${itemjrx}   categoryCode=${categoryCode}  categoryCode2=${categoryCode}  typeCode=${typeCode}  typeCode2=${typeCode}  hsnCode=${hsnCode}  manufacturerCode=${manufacturerCode}  sku=${sku}  isBatchApplicable=${boolean[0]}  isInventoryItem=${boolean[0]}  itemGroups=${itemGroups}  itemSubGroups=${itemGroups}  tax=${tax}  composition=${composition}  itemUnits=${itemUnits}  attachments=${attachments}
+    ${resp}=    Create Item Inventory  ${name}  shortDesc=${shortDesc}   internalDesc=${internalDesc}   itemCode=${itemjrx}   categoryCode=${categoryCode}  categoryCode2=${categoryCode}  typeCode=${typeCode}  typeCode2=${typeCode}  hsnCode=${hsnCode}  manufacturerCode=${manufacturerCode}  sku=${sku}  isBatchApplication=${boolean[0]}  isInventoryItem=${boolean[0]}  itemGroups=${itemGroups}  itemSubGroups=${itemGroups}  tax=${tax}  composition=${composition}  itemUnits=${itemUnits}  attachments=${attachments}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable      ${item}  ${resp.json()}
@@ -243,90 +236,94 @@ JD-TC-GetItemInv-1
     ${resp}=    Get Item Inventory  ${item}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
-    Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['itemCode']}                  ${itemjrx}
-    Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['itemName']}                  ${itemName}
-    Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['description']}               ${description}
-    Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['sku']}                       ${sku}
-    Should Be Equal As Strings      ${resp.json()['name']}                                      ${name}
-    Should Be Equal As Strings      ${resp.json()['shortDesc']}                                 ${shortDesc}
-    Should Be Equal As Strings      ${resp.json()['internalDesc']}                              ${internalDesc}
-    Should Be Equal As Strings      ${resp.json()['isInventoryItem']}                           ${bool[0]}
-    Should Be Equal As Strings      ${resp.json()['itemCategory']['categoryCode']}              ${categoryCode}
-    Should Be Equal As Strings      ${resp.json()['itemCategory']['categoryName']}              ${categoryName}
-    Should Be Equal As Strings      ${resp.json()['itemCategory']['status']}                    ${toggle[0]}
-    Should Be Equal As Strings      ${resp.json()['itemSubCategory']['categoryCode']}           ${categoryCode}
-    Should Be Equal As Strings      ${resp.json()['itemSubCategory']['categoryName']}           ${categoryName}
-    Should Be Equal As Strings      ${resp.json()['itemSubCategory']['status']}                 ${toggle[0]}
-    Should Be Equal As Strings      ${resp.json()['itemType']['typeCode']}                      ${typeCode}
-    Should Be Equal As Strings      ${resp.json()['itemType']['typeName']}                      ${TypeName}
-    Should Be Equal As Strings      ${resp.json()['itemType']['status']}                        ${toggle[0]}
-    Should Be Equal As Strings      ${resp.json()['itemSubType']['typeCode']}                   ${typeCode}
-    Should Be Equal As Strings      ${resp.json()['itemSubType']['typeName']}                   ${TypeName}
-    Should Be Equal As Strings      ${resp.json()['itemSubType']['status']}                     ${toggle[0]}
-    Should Be Equal As Strings      ${resp.json()['itemGroups'][0]}                             ${ig_id}
-    Should Be Equal As Strings      ${resp.json()['itemGroups'][1]}                             ${ig_id2}
-    Should Be Equal As Strings      ${resp.json()['itemSubGroups'][0]}                          ${ig_id}
-    Should Be Equal As Strings      ${resp.json()['itemSubGroups'][1]}                          ${ig_id2}
-    Should Be Equal As Strings      ${resp.json()['hsnCode']['hsnCode']}                        ${hsnCode}
-    Should Be Equal As Strings      ${resp.json()['hsnCode']['status']}                         ${toggle[0]}
-    Should Be Equal As Strings      ${resp.json()['itemManufacturer']['manufacturerCode']}      ${manufacturerCode}
-    Should Be Equal As Strings      ${resp.json()['itemManufacturer']['manufacturerName']}      ${manufactureName}
-    Should Be Equal As Strings      ${resp.json()['itemManufacturer']['status']}                ${toggle[0]}
-    Should Be Equal As Strings      ${resp.json()['tax'][0]}                                    ${itemtax_id}
-    Should Be Equal As Strings      ${resp.json()['composition'][0]}                            ${compositionCode}
-    Should Be Equal As Strings      ${resp.json()['sku']}                                       ${sku}
-    Should Be Equal As Strings      ${resp.json()['itemUnits'][0]}                              ${iu_id}
-    Should Be Equal As Strings      ${resp.json()['isBatchApplicable']}                         ${bool[0]}
-    Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileName']}                ${jpgfile}
-    Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileSize']}                ${fileSize}
-    Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileType']}                ${fileType}
-    Should Be Equal As Strings      ${resp.json()['attachments'][0]['order']}                   ${order}
-    Should Be Equal As Strings      ${resp.json()['attachments'][0]['action']}                  ${file_action[0]}
-    Should Be Equal As Strings      ${resp.json()['attachments'][0]['driveId']}                 ${driveId}
-    Should Be Equal As Strings      ${resp.json()['status']}                                    ${toggle[0]}
+    Should Be Equal As Strings      ${resp.json()['status']}         ${toggle[0]}
 
-JD-TC-GetItemInv-Uh1
-    [Documentation]   Get Item Inv - where item code is invalid
+    ${resp}=    Update Item Inv Status   ${item}   ${toggle[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${inv}=     Random Int  min=999     max=9999
-
-    ${resp}=    Get Item Inventory  ${inv}
+    ${resp}=    Get Item Inventory  ${item}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
-    Should Be Empty         ${resp.content}
+    Should Be Equal As Strings      ${resp.json()['status']}         ${toggle[1]}
 
-JD-TC-GetItemInv-UH2
-    [Documentation]   Get Item Inv - another provider trying to get
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
-    Log  ${resp.content}
+JD-TC-UpdateItemInvStatus-2
+    [Documentation]  Update Item Inv Status - Disable to Disable
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get Item Inventory  ${item}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
-    Should Be Empty         ${resp.content}
+    Should Be Equal As Strings      ${resp.json()['status']}         ${toggle[1]}
 
-JD-TC-GetItemInv-UH3
-    [Documentation]   Get Item Inv - without login
+    ${resp}=    Update Item Inv Status  ${item}  ${toggle[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+
+JD-TC-UpdateItemInvStatus-3
+    [Documentation]  Update Item Inv Status - Disable to Enable
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get Item Inventory  ${item}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}    419
-    Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()['status']}         ${toggle[1]}
 
-JD-TC-GetItemInv-UH4
-    [Documentation]   Get Item Inv - SA Login
-
-    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=    Update Item Inv Status  ${item}  ${toggle[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get Item Inventory  ${item}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}    419
-    Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()['status']}         ${toggle[0]}
+
+JD-TC-UpdateItemInvStatus-4
+    [Documentation]  Update Item Inv Status - Enable to Enable
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Item Inventory  ${item}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()['status']}         ${toggle[0]}
+
+    ${resp}=    Update Item Inv Status  ${item}  ${toggle[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+
+
+JD-TC-UpdateItemInvStatus-5
+    [Documentation]  Update Item Inv Status - without login
+
+    ${resp}=    Update Item Inv Status  ${item}  ${toggle[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}         ${SESSION_EXPIRED}
+
+JD-TC-UpdateItemInvStatus-6
+    [Documentation]  Update Item Inv Status - where id is invalid
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Item Inventory  ${item}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()['status']}         ${toggle[0]}
+
+    ${inv}=     Random Int  min=999  max=9999
+
+    ${resp}=    Update Item Inv Status  ${inv}  ${toggle[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
