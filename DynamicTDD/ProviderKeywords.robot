@@ -17470,10 +17470,13 @@ Get RX Prescription Item By EncId
 
 RX Update Prescription Item
 
-    [Arguments]  ${id}  ${medicineName}  ${duration}  ${quantity}  ${description}  ${spItemCode}  ${dosage}  ${frequency_id}  ${prescriptioinUid}
+    [Arguments]  ${id}  ${medicineName}  ${duration}  ${quantity}  ${description}  ${spItemCode}  ${dosage}  ${frequency_id}  ${prescriptioinUid}   &{kwargs}
 
     ${frequency}=   Create Dictionary  id=${frequency_id}
     ${data}=  Create Dictionary  id=${id}  medicineName=${medicineName}  duration=${duration}  quantity=${quantity}  description=${description}  spItemCode=${spItemCode}  dosage=${dosage}  frequency=${frequency}  prescriptioinUid=${prescriptioinUid}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/medicalrecord/prescription/item   data=${data}  expected_status=any

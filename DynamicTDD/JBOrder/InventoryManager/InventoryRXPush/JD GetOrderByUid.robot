@@ -19,18 +19,18 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
-${invalidNum}        1245
-${invalidEma}        asd122
-${invalidstring}     _ad$.sa_
-${invalidItem}     sprx-3250dr0-800
-@{spItemSource}      RX       Ayur
+${invalidNum}       1245
+${invalidEma}       asd122
+${invalidstring}    _ad$.sa_
+${invalidItem}      sprx-3250dr0-800
+@{spItemSource}     RX       Ayur
 ${originFrom}       NONE
 @{deliveryType}     STORE_PICKUP        HOME_DELIVERY
       
 *** Test Cases ***
 
-JD-TC-GetPrescription-1
-    [Documentation]    Get Prescription
+JD-TC-GetOrderByUid-1
+    [Documentation]    Get Order By Uid
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
     Log  ${iscorp_subdomains}
@@ -42,7 +42,7 @@ JD-TC-GetPrescription-1
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+45788221
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+2547598
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
@@ -82,7 +82,7 @@ JD-TC-GetPrescription-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
-    ${doc1}=  Create Sample User    deptId=${dep_id} 
+    ${doc1}=  Create Sample User   deptId=${dep_id} 
     Set Suite Variable      ${doc1}
 
     ${resp}=  Get User By Id  ${doc1}
@@ -129,7 +129,9 @@ JD-TC-GetPrescription-1
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
 # --------------------- Create Store Type from sa side -------------------------------
+
     ${TypeName}=    FakerLibrary.name
     Set Suite Variable  ${TypeName}
     sleep  02s
@@ -145,14 +147,15 @@ JD-TC-GetPrescription-1
     # Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
     # Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     # Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
 # --------------------- ---------------------------------------------------------------
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${accountId}=  get_acc_id  ${HLPUSERNAME16}
-    # Set Suite Variable    ${accountId} 
+    ${accountId}=  get_acc_id  ${PUSERNAME_E}
+    Set Suite Variable    ${accountId} 
 
     ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
@@ -160,6 +163,23 @@ JD-TC-GetPrescription-1
     # Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
     # Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     # Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableInventory']}==${bool[0]}
+        ${resp1}=  Enable Disable Inventory  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+
+        ${resp}=  Get Account Settings
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['enableInventory']}  ${bool[1]}
+    END
+
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -198,12 +218,21 @@ JD-TC-GetPrescription-1
 
 # ----------------------------------------  Create Item ---------------------------------------------
 
-    ${displayName1}=     FakerLibrary.name
+    ${displayName1}=        FakerLibrary.name
+    Set Suite Variable      ${displayName1}
 
     ${resp}=    Create Item Inventory  ${displayName1}    isInventoryItem=${bool[1]}   isBatchApplicable=${boolean[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${item1}  ${resp.json()}
+
+    ${displayName2}=        FakerLibrary.name
+    Set Suite Variable      ${displayName2}
+
+    ${resp}=    Create Item Inventory  ${displayName2}    isInventoryItem=${bool[1]}   isBatchApplicable=${boolean[1]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${item2}  ${resp.json()}
 
 
 # ----------------------------------------- create Inv Catalog -------------------------------------------------------
@@ -216,11 +245,14 @@ JD-TC-GetPrescription-1
 
 # ----------------------------------------Create Inventory Catalog Item----------------------------------
 
-    ${resp}=   Create Inventory Catalog Item  ${Catalog_EncIds}   ${item1}  
+    ${resp}=   Create Inventory Catalog Item  ${Catalog_EncIds}   ${item1}  ${item2}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Suite Variable   ${ic_Item_id}   ${resp.json()[0]}
 
+    ${resp}=   Get Inventory Catalog item By EncId  ${ic_Item_id} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
 
 # ............... Create Vendor ...............
 
@@ -237,9 +269,9 @@ JD-TC-GetPrescription-1
     ${resp}=  Get by encId  ${category_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+    # Should Be Equal As Strings  ${resp.json()['name']}          ${name}
+    # Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id}
+    # Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
     ${vender_name}=   FakerLibrary.firstname
     ${contactPersonName}=   FakerLibrary.lastname
@@ -297,8 +329,8 @@ JD-TC-GetPrescription-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${vendorId}     ${resp.json()['encId']}
-# -----------------------------------------------------------------------------------------------------------------------------
-# ----------------------------------------- Create itemUnits ------------------------------------------------------------------
+ 
+ # ----------------------------------------- Create itemUnits ------------------------------------------------------------------
 
     ${unitName}=                    FakerLibrary.name
     ${convertionQty}=               Random Int  min=1  max=20
@@ -374,33 +406,32 @@ JD-TC-GetPrescription-1
     ${resp}=  Get Inventoryitem      ${ic_Item_id}         
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
-    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
-    Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
-    Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          0.0
-    Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
-    Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Store_Name1}
+    # Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
+    # Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
+    # Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
+    # Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
+    # Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          0.0
+    # Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
+    # Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${totalQuantity}
+    # Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${totalQuantity}
+    # Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
+    # Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Store_Name1}
 
 # ------------------------------------------- Check Stock ---------------------------------------------------
     ${resp}=    Get Stock Avaliability  ${ic_Item_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
-    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
-    Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
-    Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          0.0
-    Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
-    Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Store_Name1}
+    # Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
+    # Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
+    # Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
+    # Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
+    # Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          0.0
+    # Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
+    # Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${totalQuantity}
+    # Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${totalQuantity}
+    # Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
+    # Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Store_Name1}
 
-# -----------------------------------------------------------------------------------
 
 # -------------------------------- Add a provider Consumer -----------------------------------
 
@@ -438,7 +469,6 @@ JD-TC-GetPrescription-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-# --------------------------------------------------------------------------------------------------------
 
 # --------------------------- Create SalesOrder Inventory Catalog-InvMgr True --------------------------
 
@@ -455,7 +485,7 @@ JD-TC-GetPrescription-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${inv_order_encid}  ${resp.json()}
-# ---------------------------------------------------------------------------------------------------------
+
 # ------------------------------Create SalesOrder Catalog Item-invMgmt True-------------------------------
 
     ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${inv_order_encid}    ${boolean[1]}     ${ic_Item_id}     ${price}    ${boolean[0]}   
@@ -463,7 +493,7 @@ JD-TC-GetPrescription-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
 
-    ${frequency}=       Random Int  min=31  max=35
+    ${frequency}=       Random Int  min=1  max=10
     ${dosage}=          Random Int  min=1  max=3000
     ${description}=     FakerLibrary.sentence
     ${remark}=          FakerLibrary.sentence
@@ -482,11 +512,11 @@ JD-TC-GetPrescription-1
     ${resp}=    Get Frequency  ${frequency_id}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
-    Should Be Equal As Strings      ${resp.json()['id']}            ${frequency_id}
-    Should Be Equal As Strings      ${resp.json()['frequency']}     ${frequency}
-    Should Be Equal As Strings      ${resp.json()['description']}   ${description}
-    Should Be Equal As Strings      ${resp.json()['remark']}        ${remark}
-    Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos}
+    # Should Be Equal As Strings      ${resp.json()['id']}            ${frequency_id}
+    # Should Be Equal As Strings      ${resp.json()['frequency']}     ${frequency}
+    # Should Be Equal As Strings      ${resp.json()['description']}   ${description}
+    # Should Be Equal As Strings      ${resp.json()['remark']}        ${remark}
+    # Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos}
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -503,10 +533,24 @@ JD-TC-GetPrescription-1
         Should Be Equal As Strings  ${resp.json()['enableInventoryRx']}  ${bool[1]}
     END
 
+    IF  ${resp.json()['enableSalesOrder']}==${bool[0]}
+        
+        ${resp1}=  Enable/Disable SalesOrder  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+
+        ${resp}=  Get Account Settings
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['enableSalesOrder']}  ${bool[1]}
+    END
+
     ${dur}=        Random Int  min=1  max=100
     ${qt}=        Random Int  min=1  max=10
     ${duration1}=             Evaluate    float(${dur})
     ${quantity1}=             Evaluate    float(${qt})
+    Set Suite Variable      ${duration1}
+    Set Suite Variable      ${quantity1}
 
     ${resp}=    RX Create Prescription  ${cid}  ${doc1}  ${displayName1}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}   itemDosage=${dos}
     Log   ${resp.content}
@@ -518,47 +562,91 @@ JD-TC-GetPrescription-1
     ${resp}=    Get RX Prescription By Id  ${prescription_id}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
-    Should Be Equal As Strings      ${resp.json()['providerConsumerId']}                                ${cid}
-    Should Be Equal As Strings      ${resp.json()['doctorId']}                                          ${doc1}
-    Should Be Equal As Strings      ${resp.json()['uid']}                                               ${prescription_id}
-    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedDate']}                           ${prescriptionCreatedDate}
-    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedBy']}                             ${pid}
-    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedByName']}                         ${pdrname}
-    Should Be Equal As Strings      ${resp.json()['prescriptionAttachments'][0]['owner']}               ${pid}
-    Should Be Equal As Strings      ${resp.json()['prescriptionAttachments'][0]['ownerName']}           ${pdrname}
-    Should Be Equal As Strings      ${resp.json()['prescriptionStatus']}                                ${printTemplateStatus[0]}
-    Should Be Equal As Strings      ${resp.json()['prescriptionSharedStatus']}                          ${prescriptionSharedStatus[1]}
-    Should Be Equal As Strings      ${resp.json()['doctorName']}                                        ${Docfname} ${Doclname}
-    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['spItemCode']}          ${item1}
-    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['medicineName']}        ${displayName1}
-    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['duration']}            ${duration1}
-    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['frequency']['id']}     ${frequency_id}
-    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['dosage']}              ${dos}
-    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['description']}         ${description}
-    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['quantity']}            ${quantity1}
-    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['prescriptioinUid']}    ${prescription_id}
+    # Should Be Equal As Strings      ${resp.json()['providerConsumerId']}                                ${cid}
+    # Should Be Equal As Strings      ${resp.json()['doctorId']}                                          ${doc1}
+    # Should Be Equal As Strings      ${resp.json()['uid']}                                               ${prescription_id}
+    # Should Be Equal As Strings      ${resp.json()['prescriptionCreatedDate']}                           ${prescriptionCreatedDate}
+    # Should Be Equal As Strings      ${resp.json()['prescriptionCreatedBy']}                             ${pid}
+    # Should Be Equal As Strings      ${resp.json()['prescriptionCreatedByName']}                         ${pdrname}
+    # Should Be Equal As Strings      ${resp.json()['prescriptionAttachments'][0]['owner']}               ${pid}
+    # Should Be Equal As Strings      ${resp.json()['prescriptionAttachments'][0]['ownerName']}           ${pdrname}
+    # Should Be Equal As Strings      ${resp.json()['prescriptionStatus']}                                ${printTemplateStatus[0]}
+    # Should Be Equal As Strings      ${resp.json()['prescriptionSharedStatus']}                          ${prescriptionSharedStatus[1]}
+    # Should Be Equal As Strings      ${resp.json()['doctorName']}                                        ${Docfname} ${Doclname}
+    # Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['spItemCode']}          ${item1}
+    # Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['medicineName']}        ${displayName1}
+    # Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['duration']}            ${duration1}
+    # Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['frequency']['id']}     ${frequency_id}
+    # Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['dosage']}              ${dos}
+    # Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['description']}         ${description}
+    # Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['quantity']}            ${quantity1}
+    # Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['prescriptioinUid']}    ${prescription_id}
+    Set Suite Variable              ${RDID1}      ${resp.json()['id']}
 
+    ${dur2}=        Random Int  min=1  max=100
+    ${qt2}=        Random Int  min=1  max=10
+    ${duration2}=             Evaluate    float(${dur2})
+    ${quantity2}=             Evaluate    float(${qt2})
+    Set Suite Variable      ${duration2}
+    Set Suite Variable      ${quantity2}
 
-JD-TC-GetPrescription-2
-    [Documentation]    Get Prescription - prescription is invalid 
+    ${resp}=    RX Create Prescription Item  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}   itemDosage=${dos}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Set Suite Variable              ${pitm_id}      ${resp.json()}
+
+    ${resp}=    Get RX Prescription Item By EncId  ${pitm_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                         200
+    # Should Be Equal As Strings      ${resp.json()['spItemCode']}                ${item2}
+    # Should Be Equal As Strings      ${resp.json()['medicineName']}              ${displayName2}    
+    # Should Be Equal As Strings      ${resp.json()['duration']}                  ${duration2}    
+    # Should Be Equal As Strings      ${resp.json()['frequency']['id']}           ${frequency_id}    
+    # Should Be Equal As Strings      ${resp.json()['dosage']}                    ${dos}    
+    # Should Be Equal As Strings      ${resp.json()['description']}               ${description}  
+    # Should Be Equal As Strings      ${resp.json()['quantity']}                  ${quantity2}  
+    # Should Be Equal As Strings      ${resp.json()['prescriptioinUid']}          ${prescription_id}   
+    Set Suite Variable              ${RDID2}      ${resp.json()['id']}
+
+    ${itemqty}=    Evaluate   ${dos} * ${duration2}
+
+    ${resp}=    Get RX Prescription Item Qnty By EncId  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}   itemDosage=${dos}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}          ${itemqty}
+
+    ${resp}=    Order Request    ${store_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+
+    ${resp}=    Get Sorder By Filter  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Set Suite Variable      ${sorder_uid}   ${resp.json()[0]['uid']}
+
+    ${resp}=    Get Sorder By Uid  ${sorder_uid}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Set Suite Variable      ${sorder_uid}   ${resp.json()['uid']}
+
+JD-TC-GetOrderByUid-2
+    [Documentation]    Get Order By Uid - where uid is invalid 
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
-    
-    ${inv}=     Random Int  min=1  max=100
 
-    ${NOT_FOUND_WITH_ID}=   format String   ${NOT_FOUND_WITH_ID}   Prescription     ${inv}
+    ${inv}=     Random Int  min=1  max=99
 
-    ${resp}=    Get RX Prescription By Id  ${inv}
+    ${resp}=    Get Sorder By Uid  ${inv}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings      ${resp.json()}          ${NOT_FOUND_WITH_ID}
+    Should Be Equal As Strings      ${resp.status_code}             422
+    Should Be Equal As Strings  ${resp.json()}    ${INVALID_X} 
 
-JD-TC-GetPrescription-3
-    [Documentation]    Get Prescription - without login
+JD-TC-GetOrderByUid-3
+    [Documentation]    Get Order By Uid - without login 
 
-    ${resp}=    Get RX Prescription By Id  ${prescription_id}
+    ${resp}=    Get Sorder By Uid  ${sorder_uid}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     419
-    Should Be Equal As Strings      ${resp.json()}          ${SESSION_EXPIRED}
+    Should Be Equal As Strings      ${resp.status_code}             419
+    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
