@@ -92,7 +92,7 @@ JD-TC-UpdateRXPrescriptionItem-1
     Set Suite Variable  ${Docfname}  ${resp.json()['firstName']}
     Set Suite Variable  ${Doclname}  ${resp.json()['lastName']}
      
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -421,7 +421,7 @@ JD-TC-UpdateRXPrescriptionItem-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -434,7 +434,7 @@ JD-TC-UpdateRXPrescriptionItem-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
