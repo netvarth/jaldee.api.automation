@@ -21,9 +21,12 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 JD-TC-CreateItemTaxCountFilter-1
     [Documentation]  Get Item tax Count Filter
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${firstname}  ${lastname}  ${PUSERNAME_R}  ${LoginId}=  Provider Signup
+    Set Suite Variable  ${PUSERNAME_R}
+
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -63,7 +66,7 @@ JD-TC-CreateItemTaxCountFilter-1
 JD-TC-CreateItemTaxCountFilter-2
     [Documentation]  Get Item tax Count Filter - taxCode filter
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -75,7 +78,7 @@ JD-TC-CreateItemTaxCountFilter-2
 JD-TC-CreateItemTaxCountFilter-3
     [Documentation]  Get Item tax Count Filter - taxName filter
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -87,7 +90,7 @@ JD-TC-CreateItemTaxCountFilter-3
 JD-TC-CreateItemTaxCountFilter-4
     [Documentation]  Get Item tax Count Filter - status
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

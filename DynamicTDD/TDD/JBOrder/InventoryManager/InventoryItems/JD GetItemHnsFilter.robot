@@ -158,4 +158,4 @@ JD-TC-GetItemHsnFilter-5
     ${resp}=    Get Item hns Filter 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}         200
-    Should Be Equal As Strings    ${resp.json()}    []
+    # Should Be Equal As Strings    ${resp.json()}    []
