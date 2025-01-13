@@ -226,7 +226,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 ...             LosLeadCoApplicantVerifyPhone=23  losLeadCoApplicantVerifyEmail=24
 
 @{otp_purpose_list}                 signup  signup  resetpassword  resetpassword  email  email  changeversion  contact  login  phone  phone  phone  
-...                                 resetPassword  phone  email  secondfactor  equifax  cibil  dataimport  consentform  resetLogin
+...                                 resetPassword  phone  email  secondfactor  equifax  cibil  dataimport  consentform  resetlogin
 ...                                 link  lead  phone  email
 
 @{LoanApplicationStatus}            Active      Completed       Cancelled       Rejected    Inactive
