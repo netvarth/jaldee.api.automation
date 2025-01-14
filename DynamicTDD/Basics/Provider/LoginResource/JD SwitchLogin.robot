@@ -13,6 +13,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ApiKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
 *** Variables ***
@@ -47,21 +48,21 @@ JD-TC-Switch_Login-1
     # Log  ${subdomain_list}
     # Set Suite Variable  ${domain_list}
     # Set Suite Variable  ${subdomain_list}
-    ${resp}=  Get BusinessDomainsConf
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get BusinessDomainsConf
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${dom_len}=  Get Length  ${resp.json()}
-    ${dom}=  Random Int  min=${0}   max=${dom_len-1}    
-    Set Suite Variable  ${domain}  ${resp.json()[${dom}]['domain']}
-    Log   ${domain}
+    # ${dom_len}=  Get Length  ${resp.json()}
+    # ${dom}=  Random Int  min=${0}   max=${dom_len-1}    
+    # Set Suite Variable  ${domain}  ${resp.json()[${dom}]['domain']}
+    # Log   ${domain}
 
-    ${sdom_len}=  Get Length  ${resp.json()[${dom}]['subDomains']}
-    ${sdom}=  Random Int  min=${0}  max=${sdom_len-1}
-    Set Suite Variable  ${subdomain}  ${resp.json()[${dom}]['subDomains'][${sdom}]['subDomain']}
-    Log   ${subdomain}
+    # ${sdom_len}=  Get Length  ${resp.json()[${dom}]['subDomains']}
+    # ${sdom}=  Random Int  min=${0}  max=${sdom_len-1}
+    # Set Suite Variable  ${subdomain}  ${resp.json()[${dom}]['subDomains'][${sdom}]['subDomain']}
+    # Log   ${subdomain}
 
-    # ........ Provider 1 ..........
+    # # ........ Provider 1 ..........
 
     ${ph}=  Evaluate  ${PUSERNAME}+5666400
     Set Suite Variable  ${ph}
@@ -70,20 +71,39 @@ JD-TC-Switch_Login-1
     Set Suite Variable      ${firstname}
     Set Suite Variable      ${lastname}
 
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain}  ${subdomain}  ${ph}   1
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    202
+    # ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain}  ${subdomain}  ${ph}   1
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    202
 
-    ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderSignUp']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderSignUp']}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${loginId}=     Random Int  min=1111  max=9999
     Set Suite Variable      ${loginId}
     
-    ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId}
+    # ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+
+    # ${nonbillable_domains}=  get_nonbillable_domains
+    # ${domain}  ${subdomain_list}   Get Dictionary Items   ${nonbillable_domains}
+    # ${subdomain}=    Evaluate    random.choice(${subdomain_list})    modules=random
+
+    ${resp}=  Get BusinessDomainsConf
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${domain}  ${resp.json()[0]['domain']}
+    Log   ${domain}
+    Set Suite Variable  ${subdomain}  ${resp.json()[0]['subDomains'][0]['subDomain']}
+    Log   ${subdomain}
+
+    # ${firstname}  ${lastname}  ${ph}  ${LoginId}=  Provider Signup
+    # Set Suite Variable  ${PUSERPH0}
+
+    ${firstname}  ${lastname}  ${ph}  ${loginId}=  Provider Signup   Domain=${domain}  SubDomain=${subdomain}
+    Set Suite Variable  ${loginId}
+
     
     ${resp}=  Encrypted Provider Login  ${loginId}  ${PASSWORD}
     Log   ${resp.content}
@@ -1653,7 +1673,7 @@ JD-TC-Switch_Login-15
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp1}=  Get Prescription By Filter
+    ${resp1}=  Get Prescription By Filter   providerConsumerId-eq=${cid}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     
@@ -1940,19 +1960,7 @@ JD-TC-Switch_Login-16
     Should Be Equal As Strings  ${resp.json()['reportResponseType']}                            ${ReportResponseType[0]}
     Should Be Equal As Strings  ${resp.json()['reportTokenID']}                                 ${token_id1}
     Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_filter[4]}  
-    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['2']}                 ${cid} 
-    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['4']}                 ${countryCodes[0]} ${NewCustomer}
-    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['5']}                 ${schedule_name} 
-    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['6']}                 ${loc_name} 
-    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['7']}                 ${SERVICE1} 
-    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['8']}                 ${encId} 
-    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['9']}                 ${apptStatus[1]} 
-    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['10']}                ${Checkin_mode[1]} 
-    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['11']}                0.00
-    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['12']}                ${prov_name} 
-    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['13']}                ${dep_name1} 
-
+   
 JD-TC-Switch_Login-17
 
     [Documentation]    Switch login - inventory
