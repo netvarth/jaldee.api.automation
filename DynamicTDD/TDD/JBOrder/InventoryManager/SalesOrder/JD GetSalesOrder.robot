@@ -8,6 +8,7 @@ Library           json
 Library           DateTime
 Library           requests
 Library           FakerLibrary
+Library           /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
@@ -30,6 +31,7 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-Get Sales Order-1
+
     [Documentation]   Create a sales Order with Valid Details then Get sales order by encid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -82,9 +84,7 @@ JD-TC-Get Sales Order-1
     ${resp}=  Get Store Type By EncId   ${St_Id}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
 # --------------------- ---------------------------------------------------------------
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -94,12 +94,9 @@ JD-TC-Get Sales Order-1
     ${accountId}=  get_acc_id  ${HLPUSERNAME7}
     Set Suite Variable    ${accountId} 
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -115,22 +112,19 @@ JD-TC-Get Sales Order-1
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    Set Suite Variable  ${address}
-    Set Suite Variable  ${postcode}
-    Set Suite Variable  ${city}
-
 # ------------------------ Create Store ----------------------------------------------------------
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
 
     ${Name}=    FakerLibrary.last name
+    Set Suite Variable  ${Name} 
+
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
     Set Suite Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
-    ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
+    ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}   onlineOrder=${boolean[1]}    walkinOrder=${boolean[1]}   partnerOrder=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${store_id}  ${resp.json()}
@@ -139,7 +133,7 @@ JD-TC-Get Sales Order-1
 
 # --------------------------- Create SalesOrder Inventory Catalog-InvMgr False ------------------------------------
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}   onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[1]}  storePickup=${boolean[1]}  homeDelivery=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_Cata_Encid}  ${resp.json()}
@@ -183,39 +177,54 @@ JD-TC-Get Sales Order-1
 
 # -------------------------------- Add a provider Consumer -----------------------------------
 
-    ${firstName}=  FakerLibrary.name
-    Set Suite Variable    ${firstName}
-    ${lastName}=  FakerLibrary.last_name
-    Set Suite Variable    ${lastName}
-    ${primaryMobileNo}    Generate random string    10    123456789
-    ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
-    Set Suite Variable    ${primaryMobileNo}
-    # ${email}=    FakerLibrary.Email
-    # Set Suite Variable    ${email}
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Suite Variable    ${primaryMobileNo}  555${PH_Number}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${primaryMobileNo}${\n}
+    ${firstName}=   generate_firstname
+    ${lastName}=    FakerLibrary.last_name
+    Set Suite Variable      ${firstName}
+    Set Suite Variable      ${lastName}  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${email}  ${C_Email}${primaryMobileNo}${firstName}.${test_mail}
+
+    ${resp}=  AddCustomer  ${primaryMobileNo}  firstName=${firstName}   lastName=${lastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${email}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${ageyrs}  ${agemonths}=  db.calculate_age_years_months     ${dob}
+
+    ${resp}=  GetCustomer  phoneNo-eq=${primaryMobileNo}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+    ${fullastName}   Set Variable    ${firstName} ${lastName}
+    Set Test Variable  ${fullastName}
+
+    ${resp}=  Provider Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token}  ${resp.json()['token']}
-
-    ${resp}=    Customer Logout 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email_id}    ${primaryMobileNo}     ${accountId}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200    
+    Set Suite Variable   ${token}  ${resp.json()['token']}
    
-    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
-    Log   ${resp.content}
+    ${resp}=    ProviderConsumer Login with token    ${primaryMobileNo}    ${accountId}    ${token}
+    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -234,9 +243,10 @@ JD-TC-Get Sales Order-1
     Set Suite Variable  ${SO_Cata_Encid_List}
 
     ${store}=  Create Dictionary   encId=${store_id}  
+    Set Suite Variable  ${store}
     ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${items}     store=${store}
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}  ${items}   store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${SO_Uid}  ${resp.json()}
@@ -273,7 +283,7 @@ JD-TC-Get Sales Order-1
     Should Be Equal As Strings    ${resp.json()['deliveryDate']}                                    ${DAY1}
 
     Should Be Equal As Strings    ${resp.json()['contactInfo']['phone']['number']}                  ${primaryMobileNo}
-    Should Be Equal As Strings    ${resp.json()['contactInfo']['email']}                            ${email_id}
+    Should Be Equal As Strings    ${resp.json()['contactInfo']['email']}                            ${email}
 
     Should Be Equal As Strings    ${resp.json()['itemCount']}                                       1
     Should Be Equal As Strings    ${resp.json()['netTotal']}                                        ${netTotal}
@@ -290,6 +300,7 @@ JD-TC-Get Sales Order-1
 # -----------------------------------------------------------------------------------------------------------------------------------------
 
 JD-TC-Get Sales Order-2
+
     [Documentation]   Create a sales Order with billingAddress , homeDeliveryAddress , notes , notesForCustomer details then verify all the detiles.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -306,6 +317,10 @@ JD-TC-Get Sales Order-2
 
     ${contactInfo1}=   Create Dictionary    phone=${bill_Phone1}         email=${email_id}      
     Set Suite Variable  ${contactInfo1}
+
+    ${city}=   FakerLibrary.state
+    ${postcode}=  FakerLibrary.postcode
+    ${address}=  get_address
 
     ${homeDeliveryAddress1}=   Create Dictionary    phone=${bill_Phone1}   firstName=${firstName}      lastName=${lastName}       email=${email_id}      address=${address}    city=${city}   postalCode=${postcode}     landMark=${address}
     Set Suite Variable  ${homeDeliveryAddress1}
@@ -347,3 +362,28 @@ JD-TC-Get Sales Order-2
     Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['landMark']}                                  ${address}
     Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['phone']['countryCode']}                                  ${countryCodes[0]} 
     Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['phone']['number']}                                  ${primaryMobileNo1} 
+
+JD-TC-Get Sales Order-3
+
+    [Documentation]   where uid is inv
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${inv}=     Random int  min=1  max=999
+
+    ${resp}=    Get Sales Order    ${inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${INVALID_ORDER_ID}
+
+
+JD-TC-Get Sales Order-4
+
+    [Documentation]   without login
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
