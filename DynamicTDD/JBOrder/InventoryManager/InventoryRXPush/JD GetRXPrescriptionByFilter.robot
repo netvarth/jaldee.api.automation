@@ -348,7 +348,7 @@ JD-TC-GetRXPrescriptionItemByFilter-1
     ${salesRate}=   Evaluate        ${amount} / ${convertionQty}
     ${invoiceDate}=  db.add_timezone_date  ${tz}  1
     ${rate}=        Evaluate        int(${salesRate})
-    ${mrp}=         Random Int      min=${rate}  max=9999
+    ${mrp}=         Random Int      min=500  max=9999
     ${batchNo}=     Random Int      min=1  max=9999
     ${invoiceReferenceNo}=          Random Int  min=1  max=999
     ${purchaseNote}=                FakerLibrary.Sentence
@@ -548,7 +548,7 @@ JD-TC-GetRXPrescriptionItemByFilter-1
     # Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['description']}         ${description}
     # Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['quantity']}            ${quantity1}
     # Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['prescriptioinUid']}    ${prescription_id}
-    Set Suite Variable              ${RDID1}      ${resp.json()['id']}
+    Set Suite Variable              ${RDID1}      ${resp.json()['mrPrescriptionItemsDtos'][0]['id']}
 
     ${dur2}=        Random Int  min=1  max=100
     ${qt2}=        Random Int  min=1  max=10

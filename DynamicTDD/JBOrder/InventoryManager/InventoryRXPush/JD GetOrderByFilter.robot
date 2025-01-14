@@ -340,7 +340,7 @@ JD-TC-GetOrderByFilter-1
     ${salesRate}=   Evaluate        ${amount} / ${convertionQty}
     ${invoiceDate}=  db.add_timezone_date  ${tz}  1
     ${rate}=        Evaluate        int(${salesRate})
-    ${mrp}=         Random Int      min=${rate}  max=9999
+    ${mrp}=         Random Int      min=500  max=9999
     ${batchNo}=     Random Int      min=1  max=9999
     ${invoiceReferenceNo}=          Random Int  min=1  max=999
     ${purchaseNote}=                FakerLibrary.Sentence
@@ -463,7 +463,7 @@ JD-TC-GetOrderByFilter-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
 
-    ${frequency}=       Random Int  min=26  max=30
+    ${frequency}=       Random Int  min=30  max=35
     ${dos}=          Random Int  min=1  max=3
     ${description}=     FakerLibrary.sentence
     ${remark}=          FakerLibrary.sentence

@@ -569,7 +569,7 @@ JD-TC-GetRXPrescriptionItem-2
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${inv}=     Random Int  min=1  max=100
+    ${inv}=     Random Int  min=7000  max=8000
 
     ${resp}=    Get RX Prescription Item By EncId  ${inv}
     Log   ${resp.content}

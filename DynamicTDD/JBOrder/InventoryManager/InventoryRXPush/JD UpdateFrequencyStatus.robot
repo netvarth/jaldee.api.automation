@@ -41,7 +41,7 @@ JD-TC-UpdateFrequencyStatus-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
-    ${frequency}=       Random Int  min=11  max=20
+    ${frequency}=       Random Int  min=1500  max=1550
     ${dosage}=          Random Int  min=1  max=3000
     ${description}=     FakerLibrary.sentence
     ${remark}=          FakerLibrary.sentence

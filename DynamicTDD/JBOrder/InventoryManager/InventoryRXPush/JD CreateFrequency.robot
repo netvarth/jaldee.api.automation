@@ -85,7 +85,7 @@ JD-TC-CreateFrequency-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${frequency3}=       Random Int  min=1  max=10
+    ${frequency3}=       Random Int  min=750  max=755
     ${dosage3}=          Random Int  min=1  max=3000
     ${dos3}=             Evaluate    float(${dosage3})
 

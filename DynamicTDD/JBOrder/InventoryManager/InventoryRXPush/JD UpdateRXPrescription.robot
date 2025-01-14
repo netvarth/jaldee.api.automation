@@ -623,12 +623,14 @@ JD-TC-UpdatePrescription-5
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${inv}=     Random Int  min=99  max=999
+    ${inv}=     Random Int  min=999  max=9999
 
     ${resp}=    RX Update Prescription  ${prescription_id}  ${cid}  ${inv}  ${medicineName2}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}    itemDosage=${dos}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     422
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_USER_ID}
+    # Should Be Equal As Strings  ${resp.status_code}  401
+    # Should Be Equal As Strings  "${resp.json()}"     "${NO_PERMISSION}" 
 
 JD-TC-UpdatePrescription-6
     [Documentation]    Update Prescription - doc id is empty
