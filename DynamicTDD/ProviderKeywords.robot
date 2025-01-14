@@ -17395,12 +17395,14 @@ Get RX Prescription By Id
 
 RX Update Prescription
 
-    [Arguments]  ${prescription_id}  ${providerConsumerId}  ${doctorId}  ${medicineName}  ${duration}  ${quantity}  ${description}  ${spItemCode}  ${dosage}  ${frequency_id}  ${html}
+    [Arguments]  ${prescription_id}  ${providerConsumerId}  ${doctorId}  ${medicineName}  ${duration}  ${quantity}  ${description}  ${spItemCode}  ${dosage}  ${frequency_id}  ${html}   &{kwargs}
 
     ${frequency}=   Create Dictionary  id=${frequency_id}
     ${mrPrescriptionItemsDtos}=  Create Dictionary  medicineName=${medicineName}  duration=${duration}  quantity=${quantity}  description=${description}  spItemCode=${spItemCode}  dosage=${dosage}  frequency=${frequency}
-    ${Prescription}=  Create List  ${mrPrescriptionItemsDtos} 
-    
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${mrPrescriptionItemsDtos}   ${key}=${value}
+    END
+    ${Prescription}=  Create List  ${mrPrescriptionItemsDtos}     
     ${data}=  Create Dictionary  providerConsumerId=${providerConsumerId}  doctorId=${doctorId}  mrPrescriptionItemsDtos=${Prescription}  html=${html}
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
