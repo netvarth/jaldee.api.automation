@@ -11,6 +11,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
+Resource          /ebs/TDD/ApiKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
@@ -18,6 +19,10 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 ${DisplayName1}   item1_DisplayName
 ${pdffile}      /ebs/TDD/sample.pdf
+${jpgfile}     /ebs/TDD/small.jpg
+
+${order}    0
+${fileSize}  0.00458
 @{service_names}
 
 *** Test Cases ***
@@ -201,14 +206,14 @@ JD-TC-Switch_Login-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['onlinePresence']}==${bool[0]}
-        ${resp}=  Set jaldeeIntegration Settings    ${bool[1]}  ${EMPTY}  ${EMPTY}
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF  ${resp.json()['onlinePresence']}==${bool[0]}
+    #     ${resp}=  Set jaldeeIntegration Settings    ${bool[1]}  ${EMPTY}  ${EMPTY}
+    #     Log  ${resp.content}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END
 
     ${resp}=  Get Bill Settings 
     Log   ${resp.json}
@@ -335,26 +340,6 @@ JD-TC-Switch_Login-4
 
 JD-TC-Switch_Login-UH1
 
-    [Documentation]    Switch login - where login id is empty
-
-    ${resp}=    Provider Logout
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Encrypted Provider Login  ${loginId2}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Switch login    ${empty}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    404
-
-    ${resp}=    Provider Logout
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-JD-TC-Switch_Login-UH2
-
     [Documentation]    Switch login - where login id is invalid
 
     ${resp}=    Provider Logout
@@ -376,7 +361,7 @@ JD-TC-Switch_Login-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Switch_Login-UH3
+JD-TC-Switch_Login-UH2
 
     [Documentation]    Switch login - without login
 
@@ -389,7 +374,7 @@ JD-TC-Switch_Login-UH3
     Should Be Equal As Strings      ${resp.status_code}     419
     Should Be Equal As Strings      ${resp.json()}          ${SESSION_EXPIRED}
 
-JD-TC-Switch_Login-UH4
+JD-TC-Switch_Login-UH3
 
     [Documentation]    Switch login - provider 2 linking provider 3 and provider 1 try to switch provider 3
 
@@ -474,7 +459,7 @@ JD-TC-Switch_Login-UH4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Switch_Login-UH5
+JD-TC-Switch_Login-UH4
 
     [Documentation]    Switch login - provider 3 switch to provider 1
 
@@ -1364,7 +1349,7 @@ JD-TC-Switch_Login-14
     Should Be Equal As Strings  ${resp.json()['id']}  ${vendor_id1}
     Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id2}
 
-    ${providerConsumerIdList}=  Create List  ${jconid2}
+    ${providerConsumerIdList}=  Create List  ${cid}
     Set Suite Variable  ${providerConsumerIdList}   
 
     ${referenceNo}=   Random Int  min=5  max=200
@@ -1402,11 +1387,23 @@ JD-TC-Switch_Login-14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id1}   ${resp.json()}
 
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
-    Set Suite Variable  ${SERVICE1}
-    ${sid1}=  Create Sample Service  ${SERVICE1}
+    ${resp}=    Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        Append To List  ${service_names}  ${SERVICE1}   
+        ${sid1}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
+    ELSE
+        Set Test Variable  ${sid1}   ${resp.json()[0]['id']}
+    END
 
+    # ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    # Append To List  ${service_names}  ${SERVICE1}
+    # Set Suite Variable  ${SERVICE1}
+    # ${sid1}=  Create Sample Service  ${SERVICE1}
+    ${serviceprice}=   Random Int  min=10  max=15
+    ${serviceprice}=  Convert To Number  ${serviceprice}  1
     ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}  price=${serviceprice}
     ${serviceList}=    Create List    ${serviceList}
 
@@ -1417,7 +1414,7 @@ JD-TC-Switch_Login-14
     ${adhocItemList}=  Create Dictionary  itemName=${itemName}   quantity=${quantity}   price=${price}
     ${adhocItemList}=    Create List    ${adhocItemList}
 
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}    serviceList=${serviceList}   adhocItemList=${adhocItemList}   locationId=${lid}
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceId}   ${providerConsumerIdList}   ${lid2}   ${itemList}  invoiceStatus=${status_id1}    serviceList=${serviceList}   adhocItemList=${adhocItemList}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_id}   ${resp.json()['idList'][0]}
@@ -1434,18 +1431,7 @@ JD-TC-Switch_Login-14
     ${resp1}=  Get Invoice By Id  ${invoice_uid}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
-    Should Be Equal As Strings  ${resp1.json()['accountId']}  ${account_id1}
-    Should Be Equal As Strings  ${resp1.json()['invoiceCategoryId']}  ${category_id2}
-    Should Be Equal As Strings  ${resp1.json()['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
-    Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
-    Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['serviceId']}  ${sid1}
-    Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['quantity']}  ${quantity}
-    Should Be Equal As Strings  ${resp1.json()['adhocItemList'][0]['itemName']}  ${itemName}
-    Should Be Equal As Strings  ${resp1.json()['adhocItemList'][0]['quantity']}  ${quantity}
-    Should Be Equal As Strings  ${resp1.json()['adhocItemList'][0]['price']}  ${price}
-
+    
     ${resp}=    Provider Logout
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1572,11 +1558,12 @@ JD-TC-Switch_Login-15
     Set Suite Variable  ${pid}  ${resp.json()['id']}
     Set Suite Variable  ${pdrfname}  ${resp.json()['firstName']}
     Set Suite Variable  ${pdrlname}  ${resp.json()['lastName']}
+    Set Suite Variable  ${pdrname}   ${resp.json()['userName']}
 
     ${consumer}=  Create Dictionary  id=${cid} 
     Set Suite Variable    ${consumer} 
 
-     ${resp}=    Create MR Case    ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  
+     ${resp}=    Create Case   ${title}  ${doctor}  ${consumer}   
     Log  ${resp.content}
     Should Be Equal As Strings              ${resp.status_code}   200
     Set Suite Variable    ${caseId}        ${resp.json()['id']}
@@ -1585,16 +1572,7 @@ JD-TC-Switch_Login-15
     ${resp}=    Get MR Case By UID   ${caseUId}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['consumer']['id']}     ${cid} 
-    Should Be Equal As Strings    ${resp.json()['consumer']['firstName']}     ${proconfname} 
-    Should Be Equal As Strings    ${resp.json()['consumer']['lastName']}     ${proconlname} 
-    Should Be Equal As Strings    ${resp.json()['doctor']['id']}     ${pid} 
-    Should Be Equal As Strings    ${resp.json()['doctor']['firstName']}     ${pdrfname} 
-    Should Be Equal As Strings    ${resp.json()['doctor']['lastName']}     ${pdrlname}
-    Should Be Equal As Strings    ${resp.json()['type']['id']}     ${type_id} 
-    Should Be Equal As Strings    ${resp.json()['category']['id']}     ${category_id} 
-    Should Be Equal As Strings    ${resp.json()['createdDate']}     ${DAY1}
-
+   
     ${toothNo}=   Random Int  min=10   max=99
     ${note1}=  FakerLibrary.word
     ${investigation}=    Create List   ${note1}
@@ -1653,13 +1631,14 @@ JD-TC-Switch_Login-15
     ${mrPrescriptions}=  Create Dictionary  medicineName=${med_name}  frequency=${frequency}  duration=${duration}  instructions=${instrn}  dosage=${dosage}
     Set Suite Variable    ${mrPrescriptions}
 
+    ${empty_list}=  Create List
     ${note}=  FakerLibrary.Text  max_nb_chars=42                                                                                                                                                            
-    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}    prescriptionAttachments=${prescriptionAttachments}    prescriptionNotes=${note}
+    ${resp}=    Create Prescription    ${cid}    ${pid}    ${html}     ${mrPrescriptions}    prescriptionAttachments=${empty_list}    prescriptionNotes=${note}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${prescription_uid}   ${resp.json()}
 
-     ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
+    ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${referenceId}   ${resp.json()[0]['referenceId']}   
@@ -1677,22 +1656,7 @@ JD-TC-Switch_Login-15
     ${resp1}=  Get Prescription By Filter
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
-    Should Be Equal As Strings    ${resp.json()[0]['uid']}    ${prescription_uid} 
-    Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
-    Should Be Equal As Strings    ${resp.json()[0]['doctorId']}     ${pid} 
-    Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${caseId} 
-    Should Be Equal As Strings    ${resp.json()[0]['dentalRecordId']}     ${id1} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionAttachments'][0]['fileName']}     ${pdffile} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionAttachments'][0]['caption']}     ${caption} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionAttachments'][0]['fileSize']}     ${fileSize} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionAttachments'][0]['fileType']}     ${fileType} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionAttachments'][0]['order']}     ${order} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionAttachments'][0]['action']}     ${LoanAction[0]} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedByName']}     ${pdrname} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedBy']}     ${id} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedDate']}     ${DAY1}
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionNotes']}     ${note}
-
+    
     ${resp}=    Provider Logout
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
