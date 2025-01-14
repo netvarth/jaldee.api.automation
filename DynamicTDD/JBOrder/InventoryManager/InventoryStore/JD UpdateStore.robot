@@ -121,7 +121,7 @@ JD-TC-UpdateStore-1
     Should Be Equal As Strings  ${resp.status_code}  200
    
 
-    ${Name2}=    FakerLibrary.last name
+    ${Name2}=    FakerLibrary.first name
     Set Suite Variable  ${Name2}
     ${PhoneNumber2}=  Evaluate  ${PUSERNAME}+100187748
     Set Suite Variable  ${PhoneNumber2}

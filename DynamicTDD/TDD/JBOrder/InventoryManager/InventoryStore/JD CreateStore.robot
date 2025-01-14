@@ -8,6 +8,7 @@ Library           json
 Library           DateTime
 Library           requests
 Library           FakerLibrary
+Library           /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
@@ -24,6 +25,7 @@ ${invalidEma}        asd122
 *** Test Cases ***
 
 JD-TC-CreateStore-1
+
     [Documentation]  Service Provider Create a store with valid details(store type is PHARMACY).
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -57,6 +59,9 @@ JD-TC-CreateStore-1
     ${resp}=  Get Store Type By EncId   ${St_Id}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
+    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
+    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
@@ -90,6 +95,7 @@ JD-TC-CreateStore-1
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateStore-2
+
     [Documentation]  Service Provider Create a store with valid details(store type is LAB).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -106,6 +112,7 @@ JD-TC-CreateStore-2
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateStore-3
+
     [Documentation]  Service Provider Create a store with valid details(store type is RADIOLOGY).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -127,17 +134,19 @@ JD-TC-CreateStore-3
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateStore-4
+
     [Documentation]  Service Provider Create another store with Same valid(store type is RADIOLOGY).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Store   ${Name}  ${St_Id2}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
+    ${resp}=  Create Store   ${TypeName1}  ${St_Id2}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateStore-5
+
     [Documentation]  Service Provider Create another store with EMPTY Name(store type is RADIOLOGY).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -150,6 +159,7 @@ JD-TC-CreateStore-5
     Should Be Equal As Strings    ${resp.json()}    ${PLEASE_ENTER_NAME}
 
 JD-TC-CreateStore-6
+
     [Documentation]  Service Provider Create another store with EMPTY storeTypeEncId.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -162,6 +172,7 @@ JD-TC-CreateStore-6
     Should Be Equal As Strings    ${resp.json()}    ${INVALID_STORE_TYPE_ID}
 
 JD-TC-CreateStore-7
+
     [Documentation]  Service Provider Create another store with EMPTY Location(store type is RADIOLOGY).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -174,6 +185,7 @@ JD-TC-CreateStore-7
     Should Be Equal As Strings    ${resp.json()}    ${LOCATION_INVALID}
 
 JD-TC-CreateStore-8
+
     [Documentation]  Service Provider Create another store with EMPTY EMAIL(store type is RADIOLOGY).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -185,9 +197,10 @@ JD-TC-CreateStore-8
     ${resp}=  Create Store   ${Name}  ${St_Id2}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${INVALID_EMAIL}
+    Should Be Equal As Strings    ${resp.json()}    ${EMAIL_INVALID}
 
 JD-TC-CreateStore-9
+
     [Documentation]  Service Provider Create another store with invalid PhoneNumber(store type is RADIOLOGY).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -200,17 +213,23 @@ JD-TC-CreateStore-9
     Should Be Equal As Strings    ${resp.json()}    ${INVALID_PHONE_NUM}
 
 JD-TC-CreateStore-10
+
     [Documentation]  Service Provider Create with already exist name and different encid(store type is LAB).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${FIELD_ALREADY_EXISTS}=        format String   ${FIELD_ALREADY_EXISTS}   Store    Name: ${Name}
+
     ${resp}=  Create Store   ${Name}  ${St_Id1}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${FIELD_ALREADY_EXISTS} 
+    
 
 JD-TC-CreateStore-UH1
+
     [Documentation]  Create Store without Login.
 
     ${resp}=  Create Store   ${Name}  ${St_Id1}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
