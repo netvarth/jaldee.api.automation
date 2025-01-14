@@ -8,16 +8,17 @@ Library           json
 Library           DateTime
 Library           requests
 Library           FakerLibrary
+Library           /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/SuperAdminKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
-Variables         /ebs/TDD/varfiles/providers.py
-Resource          /ebs/TDD/SuperAdminKeywords.robot
-Resource          /ebs/TDD/ProviderConsumerKeywords.robot
+
 
 *** Variables ***
 ${invalidNum}        1245
@@ -35,6 +36,7 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-Get Inventory Item Summary-1
+
     [Documentation]  Get Inventory Item Summary
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME317}  ${PASSWORD}
@@ -169,7 +171,7 @@ JD-TC-Get Inventory Item Summary-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${vender_name}=   FakerLibrary.firstname
+    ${vender_name}=   generate_firstname
     ${contactPersonName}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
@@ -389,7 +391,6 @@ JD-TC-Get Inventory Item Summary-1
     ${resp}=    Get Item Inventory  ${itemEncId1}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
-
     Set Suite Variable  ${itemPropertyType}  ${resp.json()['itemPropertyType']}
 
     # .... Add Item in Inventory catalog ..........................................................
@@ -437,6 +438,15 @@ JD-TC-Get Inventory Item Summary-1
     Set Suite Variable              ${sgstamount}
     Set Suite Variable              ${taxAmount}
     Set Suite Variable              ${netRate}
+
+    # ....Get Item Details from Inventory catalog ..........................................................
+
+
+    ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}   ${amount}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                     200
+
+
 
     ${inv_cat_encid_List}=  Create List  ${encid}
     ${price}=    Random Int  min=2   max=40
@@ -530,11 +540,6 @@ JD-TC-Get Inventory Item Summary-1
     ${totalQuantity}=   Evaluate    ${totalQuantity} * ${convertionQty}
 
 
-    ${resp}=  Get Inventory Item Count   storeEncId-eq=${store_id}   invCatalogEncId-eq=${encid}  from=0  count=10
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()}    1
-
 
     ${resp}=  Get Inventory Item Summary   storeEncId-eq=${store_id}   invCatalogEncId-eq=${encid}   from=0  count=10
     Log   ${resp.content}
@@ -558,6 +563,7 @@ JD-TC-Get Inventory Item Summary-1
 
 
 JD-TC-Get Inventory Item Summary-UH1
+
     [Documentation]  Get Inventory Item Summary
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME317}  ${PASSWORD}
@@ -570,6 +576,7 @@ JD-TC-Get Inventory Item Summary-UH1
     Should Be Equal As Strings   ${resp.json()}   ${STORE_REQUIRED}
 
 JD-TC-Get Inventory Item Summary-UH2
+
     [Documentation]  Get Inventory Item Summary where from is not passed
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME317}  ${PASSWORD}

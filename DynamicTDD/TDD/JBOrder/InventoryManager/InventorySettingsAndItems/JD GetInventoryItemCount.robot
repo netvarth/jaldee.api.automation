@@ -8,16 +8,17 @@ Library           json
 Library           DateTime
 Library           requests
 Library           FakerLibrary
+Library           /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/SuperAdminKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
-Variables         /ebs/TDD/varfiles/providers.py
-Resource          /ebs/TDD/SuperAdminKeywords.robot
-Resource          /ebs/TDD/ProviderConsumerKeywords.robot
+
 
 *** Variables ***
 ${invalidNum}        1245
@@ -32,6 +33,7 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-Get Inventory Item Count-1
+
     [Documentation]  Get Inventory Item Count
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME319}  ${PASSWORD}
@@ -100,7 +102,7 @@ JD-TC-Get Inventory Item Count-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${hsn_id}      ${resp.json()}
 
-    # .... Create Jrx Item (Got glitch)..............................................................................
+    # .... Create Jrx Item ..............................................................................
 
     ${itemName}=        FakerLibrary.name
     ${description}=     FakerLibrary.sentence
@@ -110,11 +112,6 @@ JD-TC-Get Inventory Item Count-1
     Set Suite Variable  ${sku}
 
     ${hsn}=     Create Dictionary    hsnCode=${hsnCode}
-
-    # ${resp}=    Create Item Jrx   ${itemName}  description=${description}  sku=${sku}  hsnCode=${hsn}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable     ${itemjrx}   ${resp.json()}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME319}  ${PASSWORD}
     Log   ${resp.content}
@@ -166,7 +163,7 @@ JD-TC-Get Inventory Item Count-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${vender_name}=   FakerLibrary.firstname
+    ${vender_name}=   generate_firstname
     ${contactPersonName}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
@@ -374,8 +371,8 @@ JD-TC-Get Inventory Item Count-1
     Set Suite Variable              ${internalDesc}
 
     # .... Create Items  ..........................................................
-#-------------itemCode=${itemjrx} 
-    ${resp}=    Create Item Inventory  ${name}  shortDesc=${shortDesc}   internalDesc=${internalDesc}     categoryCode=${categoryCode}  categoryCode2=${categoryCode}  typeCode=${typeCode}  typeCode2=${typeCode}  hsnCode=${hsnCode}  manufacturerCode=${manufacturerCode}  sku=${sku}  isBatchApplicable=${boolean[1]}  isInventoryItem=${boolean[1]}  itemGroups=${itemGroups}  itemSubGroups=${itemGroups}  tax=${tax}  composition=${composition}  itemUnits=${itemUnits}  attachments=${attachments}     
+#-------------itemCode=${itemjrx} attachments=${attachments}   
+    ${resp}=    Create Item Inventory  ${name}  shortDesc=${shortDesc}   internalDesc=${internalDesc}     categoryCode=${categoryCode}  categoryCode2=${categoryCode}  typeCode=${typeCode}  typeCode2=${typeCode}  hsnCode=${hsnCode}  manufacturerCode=${manufacturerCode}  sku=${sku}  isBatchApplicable=${boolean[1]}  isInventoryItem=${boolean[1]}  itemGroups=${itemGroups}  itemSubGroups=${itemGroups}  tax=${tax}  composition=${composition}  itemUnits=${itemUnits}    
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Suite Variable              ${itemEncId1}  ${resp.json()}
@@ -441,24 +438,10 @@ JD-TC-Get Inventory Item Count-1
     # ....Get Item Details from Inventory catalog ..........................................................
 
 
-    # ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings      ${resp.status_code}                     200
-    # Should Be Equal As Strings      ${resp.json()['quantity']}              ${quantity}
-    # Should Be Equal As Strings      ${resp.json()['freeQuantity']}          ${freeQuantity}
-    # Should Be Equal As Strings      ${resp.json()['totalQuantity']}         ${totalQuantity}
-    # Should Be Equal As Strings      ${resp.json()['amount']}                ${amount}
-    # Should Be Equal As Strings      ${resp.json()['discountPercentage']}    ${discountPercentage}
-    # Should Be Equal As Strings      ${resp.json()['discountAmount']}        ${discountAmount}
-    # Should Be Equal As Strings      ${resp.json()['taxableAmount']}         ${taxableAmount}
-    # Should Be Equal As Strings      ${resp.json()['cgstPercentage']}        ${cgst}
-    # Should Be Equal As Strings      ${resp.json()['sgstPercentage']}        ${sgst}
-    # Should Be Equal As Strings      ${resp.json()['cgst']}                  ${cgstamount}
-    # Should Be Equal As Strings      ${resp.json()['sgst']}                  ${sgstamount}
-    # Should Be Equal As Strings      ${resp.json()['taxPercentage']}         ${taxPercentage}
-    # Should Be Equal As Strings      ${resp.json()['taxAmount']}             ${taxAmount}
-    # Should Be Equal As Strings      ${resp.json()['netTotal']}              ${netTotal}
-    # # Should Be Equal As Strings      ${resp.json()['netRate']}               ${netRate}
+    ${resp}=    Get Item Details Inventory   ${store_id}   ${vendorId}   ${inventoryCatalogItem}   ${quantity}   ${freeQuantity}    ${amount}   ${fixedDiscount}   ${discountPercentage}     ${amount}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                     200
+
 
 
     ${inv_cat_encid_List}=  Create List  ${encid}
@@ -494,7 +477,7 @@ JD-TC-Get Inventory Item Count-1
     ${purchaseNote}=                FakerLibrary.Sentence
     ${roundOff}=                    Random Int  min=1  max=10
 
-    ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id}   ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}    
+    ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id}   ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${amount}  ${batchNo}  ${iu_id}    
 
     # .... Create Purchase ..........................................................
 
@@ -532,50 +515,36 @@ JD-TC-Get Inventory Item Count-1
     Should Be Equal As Strings      ${resp.status_code}                 200
     Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[2]}
 
-    # ${resp}=  Get Inventoryitem      ${ic_id}         
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # Set Suite Variable  ${batch_encid}  ${resp.json()[0]['uid']}
-    # ${enccid}=  Create Dictionary          encId=${batch_encid} 
-    # Set Suite Variable  ${enccid}
-
-    # ${Name1}=    FakerLibrary.last name
-    # ${price1}=    Random Int  min=2   max=40
-    # ${price1}=  Convert To Number  ${price1}    1
-    # ${catalog_details}=  Create Dictionary          name=${Name1}  price=${price1}   inventoryItemBatch=${enccid}   
-    # Set Suite Variable  ${catalog_details}  
-
-    # ${resp}=   Create Catalog Item Batch-invMgmt True   ${SO_itemEncIds}    ${catalog_details}  
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=  Get Inventory Item Count   storeEncId-eq=${store_id}   invCatalogEncId-eq=${encid}  from=0  count=10
+    ${resp}=  Get Inventory Item Count   storeEncId-eq=${store_id}   invCatalogEncId-eq=${encid}   from=0  count=10
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()}    1
 
 
 JD-TC-Get Inventory Item Count-2
+
     [Documentation]  Get Inventory Item Count
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME319}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Inventory Item Count   storeEncId-eq=${store_id}   from=0  count=10
+    ${resp}=  Get Inventory Item Count   storeEncId-eq=${store_id}  from=0  count=10
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()}    1
 
 JD-TC-Get Inventory Item Count-UH1
+
     [Documentation]  Get Inventory Item Count
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME319}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Inventory Item Count   invCatalogEncId-eq=${encid}  from=0  count=10
+    ${resp}=  Get Inventory Item Count   invCatalogEncId-eq=${encid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}   ${STORE_REQUIRED}
@@ -684,7 +653,7 @@ JD-TC-Get Inventory Item Count-3
     Set Suite Variable  ${email_id}  ${Name_store}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
-    ${resp}=  Create Store   ${Name_store}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}    walkinOrder=${boolean[1]}    partnerOrder=${boolean[1]}
+    ${resp}=  Create Store   ${Name_store}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}   walkinOrder=${boolean[1]}   partnerOrder=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${store_id}  ${resp.json()}
@@ -761,9 +730,11 @@ JD-TC-Get Inventory Item Count-3
     ${resp}=  Get by encId  ${category_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
+    Should Be Equal As Strings  ${resp.json()['accountId']}     ${accountId}
+    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
-
-    ${vender_name}=   FakerLibrary.firstname
+    ${vender_name}=   generate_firstname
     ${contactPersonName}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
@@ -858,7 +829,7 @@ JD-TC-Get Inventory Item Count-3
     ${purchaseNote}=                FakerLibrary.Sentence
     ${roundOff}=                    Random Int  min=1  max=10
 
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList   ${ic_Batch_Item_id}   ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}   ${iu_id}
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList   ${ic_Batch_Item_id}   ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${amount}  ${batchNo}   ${iu_id}
     Set Suite Variable              ${purchaseItemDtoList2}
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${Catalog_EncIds}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}  
@@ -892,48 +863,18 @@ JD-TC-Get Inventory Item Count-3
     Set Suite Variable            ${batch}       ${resp.json()[0]['batch']}  
 
 
-
 # ------------------------------------------------------------------------------------------------------------
 # ------------------------------------Get Item Transaction By Filter (After took sales order------------------------------------------------------------------------
 
     ${resp}=   Get Item Transaction By Filter  storeEncId-eq=${store_id}   itemCode-eq=${Batch_item1}  
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
-    # Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
-    # Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
-    # Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Name_store}
-    # Should Be Equal As Strings      ${resp.json()[0]['inventoryCatalog']['encId']}          ${Catalog_EncIds}
-    # Should Be Equal As Strings      ${resp.json()[0]['inventoryCatalog']['catalogName']}          ${Name_store}
-    # Should Be Equal As Strings      ${resp.json()[0]['inventoryCatalogItem']['encId']}          ${ic_Batch_Item_id}
-    # Should Be Equal As Strings      ${resp.json()[0]['spItem']['itemSourceEnum']}          RX
-    # Should Be Equal As Strings      ${resp.json()[0]['spItem']['spCode']}          ${Batch_item1}
-    # Should Be Equal As Strings      ${resp.json()[0]['spItem']['name']}          ${itemName1}
-    # Should Be Equal As Strings      ${resp.json()[0]['spItem']['itemPropertyType']}          ${itemPropertyType}
-    # Should Be Equal As Strings      ${resp.json()[0]['batch']}          ${batch}
-    # Should Be Equal As Strings      ${resp.json()[0]['updateType']}          ADD
-    # Should Be Equal As Strings      ${resp.json()[0]['updateTypeString']}          Add
-    # Should Be Equal As Strings      ${resp.json()[0]['updateQty']}          ${totalConvertedQuantity}
-    # Should Be Equal As Strings      ${resp.json()[0]['transactionTypeEnum']}          ${transactionTypeEnum[3]}
-    # Should Be Equal As Strings      ${resp.json()[0]['referenceNo']}          ${purchaseReferenceNo}
-    # Should Be Equal As Strings      ${resp.json()[0]['referenceDate']}          ${DAY1}
-    # Should Be Equal As Strings      ${resp.json()[0]['referenceUid']}          ${purchaseId}
-    # Should Be Equal As Strings      ${resp.json()[0]['createdBy']}          ${user_id}
-    # Should Be Equal As Strings      ${resp.json()[0]['createdDate']}          ${DAY1}
+
 # ------------------------------------------- Check Stock ---------------------------------------------------
     ${resp}=    Get Stock Avaliability  ${ic_Batch_Item_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # Should Be Equal As Strings      ${resp.json()[0]['uid']}          ${purchaseId}
-    # Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
-    # Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
-    # Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
-    # Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
-    # Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          0.0
-    # Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
-    # Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${totalQuantity}
-    # Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${totalQuantity}
-    # Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
-    # Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Name_store}
+
 
 
 # --------------------------- Create SalesOrder Inventory Catalog-InvMgr True --------------------------
@@ -942,7 +883,7 @@ JD-TC-Get Inventory Item Count-3
     ${price}=    Random Int  min=2   max=40
     ${price}=  Convert To Number  ${price}    1
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Store_note}  ${boolean[1]}  ${inv_cat_encid_List}   walkInOrder=${boolean[1]}    storePickup=${boolean[1]}    homeDelivery=${boolean[1]}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Store_note}  ${boolean[1]}  ${inv_cat_encid_List}    walkInOrder=${boolean[1]}  storePickup=${boolean[1]}  homeDelivery=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${inv_order_encid}  ${resp.json()}
@@ -981,7 +922,7 @@ JD-TC-Get Inventory Item Count-3
     ${resp}=   Get list by item encId   ${SO_Batch_itemEncIds}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-
+    ${netRate}=  Convert To Number  ${resp.json()[0]['price']}    1
 
 
 
@@ -1007,12 +948,14 @@ JD-TC-Get Inventory Item Count-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    Consumer Logout  
+    ${resp}=    Consumer Logout
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1025,7 +968,7 @@ JD-TC-Get Inventory Item Count-3
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
-    ${resp}=    Consumer Logout  
+    ${resp}=    Consumer Logout
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1080,8 +1023,8 @@ JD-TC-Get Inventory Item Count-3
     ${resp}=    Get Sales Order    ${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    # Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
-    # Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
 
 
 # ------------------------------------------- Check Stock ---------------------------------------------------
@@ -1091,16 +1034,7 @@ JD-TC-Get Inventory Item Count-3
     ${resp}=    Get Stock Avaliability  ${ic_Batch_Item_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
-    # Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
-    # Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
-    # Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
-    # Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          ${quantity}
-    # Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
-    # Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${Available_Quantity}
-    # Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${Available_Quantity}
-    # Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
-    # Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Name_store}
+
 
 # --------------------------------------------- Update SalesOrder Status from confirmed to completed --------------------------------------------------------
 
@@ -1111,14 +1045,12 @@ JD-TC-Get Inventory Item Count-3
     ${resp}=    Get Sales Order    ${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    # Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
-    # Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[2]}
     Set Suite Variable  ${order_reference}  ${resp.json()['orderRef']}
     Set Suite Variable  ${order_uid}  ${resp.json()['uid']}
 
 
 
-    ${resp}=  Get Inventory Item Count   storeEncId-eq=${store_id}   invCatalogEncId-eq=${Catalog_EncIds}  from=0  count=10
+    ${resp}=  Get Inventory Item Count   storeEncId-eq=${store_id}   invCatalogEncId-eq=${Catalog_EncIds}   from=0  count=10
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()}    1
