@@ -16984,11 +16984,14 @@ Get Item Remark Count Filter
 
 Update Order Items
 
-    [Arguments]   ${orderEncId}     ${catItemEncId}    ${quantity}
+    [Arguments]   ${orderEncId}     ${catItemEncId}    ${quantity}    &{kwargs}
 
     ${item}=  Create Dictionary   catItemEncId=${catItemEncId}    quantity=${quantity}
-    ${data}=   Create List    ${item} 
     # ${data}=  Create Dictionary        items=${items}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${item}   ${key}=${value}
+    END 
+    ${data}=   Create List    ${item} 
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/sorder/${orderEncId}/changeitems   data=${data}  expected_status=any
