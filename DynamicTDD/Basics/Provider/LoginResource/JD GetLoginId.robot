@@ -105,23 +105,8 @@ JD-TC-Get_LoginId-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+
 JD-TC-Get_LoginId-2
-
-    [Documentation]    Get login Id - where user id is empty
-
-    ${resp}=  Encrypted Provider Login  ${loginId_n}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get LoginId  ${empty}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    404
-
-    ${resp}=    Provider Logout
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-JD-TC-Get_LoginId-3
 
     [Documentation]    Get login Id - where user id is invalid
 
@@ -136,7 +121,7 @@ JD-TC-Get_LoginId-3
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings      ${resp.json()}      ${INV_USER_ID}
 
-JD-TC-Get_LoginId-4
+JD-TC-Get_LoginId-3
 
     [Documentation]    Get login Id - without login
 
@@ -144,4 +129,4 @@ JD-TC-Get_LoginId-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    
+        

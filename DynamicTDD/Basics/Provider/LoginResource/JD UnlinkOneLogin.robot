@@ -205,11 +205,13 @@ JD-TC-UNLINK_ONE_LOGIN-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
     ${resp}=    Connect with other login  ${loginId2}  password=${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
-    ${resp}=    Account Activation      ${ph2}  ${OtpPurpose['LinkLogin']}
+    ${resp}=    Account Activation      ${ph2}  ${OtpPurpose['LinkLogin']}   JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -231,7 +233,7 @@ JD-TC-UNLINK_ONE_LOGIN-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
-    ${resp}=    Account Activation      ${ph3}  ${OtpPurpose['LinkLogin']}
+    ${resp}=    Account Activation      ${ph3}  ${OtpPurpose['LinkLogin']}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
