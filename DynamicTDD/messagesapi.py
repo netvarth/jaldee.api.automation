@@ -2499,6 +2499,7 @@ USER_DISABLED=  "User is disabled"
 NEW_PASSWORD_REQ=   "New password required"
 INV_USER_ID=    "Invalid userId"
 INCORRECT_PASSWORD = "The password you entered is incorrect. Please try again."
+INVALID_LOGIN_ID=  "invalid login id"
 
 #   ConsumerOrder
 

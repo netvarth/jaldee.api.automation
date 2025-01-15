@@ -376,7 +376,7 @@ JD-TC-Switch_Login-UH1
     ${resp}=    Switch login    ${inv}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings      ${resp.json()}          ${INV_LOGIN_ID}  ignore_case=True
+    Should Be Equal As Strings      ${resp.json()}          ${INVALID_LOGIN_ID}  
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -1734,15 +1734,17 @@ JD-TC-Switch_Login-16
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
     ${resp}=    Connect with other login  ${loginId33}  password=${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
-    ${resp}=    Account Activation      ${phn3}  ${OtpPurpose['LinkLogin']}
+    ${resp}=    Account Activation      ${phn3}  ${OtpPurpose['LinkLogin']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${key2} =   db.Verify Accnt   ${phn3}    ${OtpPurpose['LinkLogin']}
+    ${key2} =   db.Verify Accnt   ${phn3}    ${OtpPurpose['LinkLogin']}  ${jsessionynw_value}
     Set Suite Variable   ${key2}
 
     ${resp}=    Connect with other login  ${loginId2}   otp=${key2}
@@ -2032,7 +2034,7 @@ JD-TC-Switch_Login-17
     ${accountId}=  get_acc_id  ${HLPUSERNAME16}
     Set Suite Variable    ${accountId} 
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}

@@ -70,7 +70,7 @@ JD-TC-Reset_Password-1
     ${newpassword}=     Random Int  min=111111  max=999999
     Set Suite Variable      ${newpassword}
 
-    ${resp}=    Reset Password LoginId Login  ${PASSWORD}  ${newpassword}
+    ${resp}=    Reset Password LoginId  ${PASSWORD}  ${newpassword}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -111,7 +111,7 @@ JD-TC-Reset_Password-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Reset Password LoginId Login  ${newpassword}  ${newpassword}
+    ${resp}=    Reset Password LoginId  ${newpassword}  ${newpassword}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
 
@@ -128,7 +128,7 @@ JD-TC-Reset_Password-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Reset Password LoginId Login  ${empty}  ${newpassword}
+    ${resp}=    Reset Password LoginId  ${empty}  ${newpassword}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${PASSWORD_MANDATORY}
@@ -148,7 +148,7 @@ JD-TC-Reset_Password-5
     ${ran}=     Random Int  min=1111  max=9999
     Set Suite Variable      ${ran}
 
-    ${resp}=    Reset Password LoginId Login  ${ran}  ${newpassword}
+    ${resp}=    Reset Password LoginId  ${ran}  ${newpassword}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${INCORRECT_OLD_PASSWORD}
@@ -165,7 +165,7 @@ JD-TC-Reset_Password-6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Reset Password LoginId Login  ${PASSWORD}  ${newpassword}
+    ${resp}=    Reset Password LoginId  ${PASSWORD}  ${newpassword}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${INCORRECT_OLD_PASSWORD}
@@ -182,7 +182,7 @@ JD-TC-Reset_Password-7
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Reset Password LoginId Login  ${newpassword}  ${empty}
+    ${resp}=    Reset Password LoginId  ${newpassword}  ${empty}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${NEW_PASSWORD_REQ}
@@ -191,7 +191,7 @@ JD-TC-Reset_Password-8
 
     [Documentation]    Reset Password - without login
 
-    ${resp}=    Reset Password LoginId Login  ${newpassword}  ${PASSWORD}
+    ${resp}=    Reset Password LoginId  ${newpassword}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     # Should Be Equal As Strings    ${resp.status_code}   419
