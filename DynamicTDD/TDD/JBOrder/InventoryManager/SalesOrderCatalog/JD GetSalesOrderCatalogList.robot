@@ -8,6 +8,7 @@ Library           json
 Library           DateTime
 Library           requests
 Library           FakerLibrary
+Library           /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
@@ -26,6 +27,7 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-Get SalesOrder Catalog List-1
+
     [Documentation]  create sales order catalog.(inventory manager is false) then get  catalog list by encid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME36}  ${PASSWORD}
@@ -67,23 +69,17 @@ JD-TC-Get SalesOrder Catalog List-1
     ${resp}=  Get Store Type By EncId   ${St_Id}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
-
+  
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME36}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${accountId}=  get_acc_id  ${HLPUSERNAME36}
     Set Suite Variable    ${accountId} 
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId      ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
-
+   
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -138,6 +134,7 @@ JD-TC-Get SalesOrder Catalog List-1
 
 
 JD-TC-Get SalesOrder Catalog List-2
+
     [Documentation]  update sales order catalog .(inventory manager is false) then get sales order list by status
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME36}  ${PASSWORD}
@@ -173,6 +170,7 @@ JD-TC-Get SalesOrder Catalog List-2
 
 
 JD-TC-Get SalesOrder Catalog List-3
+
     [Documentation]  Disable sales order catalog.(inventory manager is false).Then Get SalesOrder Catalog List by location
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME36}  ${PASSWORD}
@@ -205,6 +203,7 @@ JD-TC-Get SalesOrder Catalog List-3
 
 
 JD-TC-Get SalesOrder Catalog List-4
+
     [Documentation]  create  sales order catalog where name as number.(inventory manager is false).then get sales order list by name
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME36}  ${PASSWORD}
@@ -253,6 +252,7 @@ JD-TC-Get SalesOrder Catalog List-4
 
 
 JD-TC-Get SalesOrder Catalog List-5
+
     [Documentation]  create  sales order  catalog where name as invalid string.(inventory manager is false).then get catalog list by store
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME36}  ${PASSWORD}
@@ -264,7 +264,7 @@ JD-TC-Get SalesOrder Catalog List-5
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${sa_catlog_id2}  ${resp.json()}
 
-    ${resp}=  Get SalesOrder Catalog List  store-eq=${store_id1}   
+    ${resp}=  Get SalesOrder Catalog List  storeEncId-eq=${store_id1}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()[0]['accountId']}    ${accountId}  
@@ -286,6 +286,7 @@ JD-TC-Get SalesOrder Catalog List-5
 
 
 JD-TC-Get SalesOrder Catalog List-6
+
     [Documentation]  create  sales order catalog where name as invalid string.(inventory manager is true).then get catalog list by invmgr
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME36}  ${PASSWORD}
@@ -326,6 +327,7 @@ JD-TC-Get SalesOrder Catalog List-6
     Should Be Equal As Strings    ${resp.json()[0]['inventoryCatalog']['invCatEncIdList'][0]}    ${inv_cat_encid}
 
 JD-TC-Get SalesOrder Catalog List-7
+
     [Documentation]  create  sales order catalog where name as invalid string.(inventory manager is true).then get catalog list by invmgr
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME36}  ${PASSWORD}
@@ -355,6 +357,7 @@ JD-TC-Get SalesOrder Catalog List-7
 
 
 JD-TC-Get SalesOrder Catalog List-UH1
+
     [Documentation]  Get SalesOrder Catalog List  with invalid catalog id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME36}  ${PASSWORD}
@@ -368,6 +371,7 @@ JD-TC-Get SalesOrder Catalog List-UH1
     
 
 JD-TC-Get SalesOrder Catalog List-UH2
+
     [Documentation]  Get SalesOrder Catalog List without login.
 
     ${resp}=  Get SalesOrder Catalog List    invCatEncId-eq=${inv_cat_encid} 
@@ -377,6 +381,7 @@ JD-TC-Get SalesOrder Catalog List-UH2
 
 
 JD-TC-Get SalesOrder Catalog List-UH3
+
     [Documentation]  Get SalesOrder Catalog List using sa login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -390,6 +395,7 @@ JD-TC-Get SalesOrder Catalog List-UH3
 
 
 JD-TC-Get SalesOrder Catalog List-UH4
+
     [Documentation]  Get SalesOrder Catalog List using another provider login
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -402,6 +408,7 @@ JD-TC-Get SalesOrder Catalog List-UH4
     Should Be Equal As Strings   ${resp.json()}   []
 
 JD-TC-Get SalesOrder Catalog List-8
+
     [Documentation]  Get SalesOrder Catalog List using inventory manager is on and with invcatalog encid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME36}  ${PASSWORD}

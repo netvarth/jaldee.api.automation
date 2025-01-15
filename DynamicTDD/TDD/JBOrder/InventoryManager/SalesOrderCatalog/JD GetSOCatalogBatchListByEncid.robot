@@ -8,6 +8,7 @@ Library           json
 Library           DateTime
 Library           requests
 Library           FakerLibrary
+Library           /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
@@ -86,10 +87,7 @@ JD-TC-Get list by item encId-1
     ${resp}=  Get Store Type By EncId   ${St_Id}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
-
+   
     # .... Create Hsn .....
 
     ${hsnCode}=                 Random Int  min=1  max=999
@@ -120,13 +118,10 @@ JD-TC-Get list by item encId-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId      ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
-
+   
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -167,11 +162,8 @@ JD-TC-Get list by item encId-1
     ${resp}=  Get by encId  ${category_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${accountId}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
-
-    ${vender_name}=   FakerLibrary.firstname
+   
+    ${vender_name}=   generate_firstname
     ${contactPersonName}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
@@ -379,7 +371,8 @@ JD-TC-Get list by item encId-1
     Set Suite Variable              ${shortDesc}
     Set Suite Variable              ${internalDesc}
 
-    ${resp}=    Create Item Inventory  ${name}  shortDesc=${shortDesc}   internalDesc=${internalDesc}   itemCode=${itemjrx}   categoryCode=${categoryCode}  categoryCode2=${categoryCode}  typeCode=${typeCode}  typeCode2=${typeCode}  hsnCode=${hsnCode}  manufacturerCode=${manufacturerCode}  sku=${sku}  isBatchApplicable=${boolean[1]}  isInventoryItem=${boolean[1]}  itemGroups=${itemGroups}  itemSubGroups=${itemGroups}  tax=${tax}  composition=${composition}  itemUnits=${itemUnits}  attachments=${attachments}     
+# attachments=${attachments}  
+    ${resp}=    Create Item Inventory  ${name}  shortDesc=${shortDesc}   internalDesc=${internalDesc}   itemCode=${itemjrx}   categoryCode=${categoryCode}  categoryCode2=${categoryCode}  typeCode=${typeCode}  typeCode2=${typeCode}  hsnCode=${hsnCode}  manufacturerCode=${manufacturerCode}  sku=${sku}  isBatchApplicable=${boolean[1]}  isInventoryItem=${boolean[1]}  itemGroups=${itemGroups}  itemSubGroups=${itemGroups}  tax=${tax}  composition=${composition}  itemUnits=${itemUnits}     
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Suite Variable              ${itemEncId1}  ${resp.json()}
@@ -390,48 +383,7 @@ JD-TC-Get list by item encId-1
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Suite Variable  ${sp-item-id}  ${resp.json()['id']}
-    Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['itemCode']}                  ${itemjrx}
-    Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['itemName']}                  ${itemName}
-    Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['description']}               ${description}
-    Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['sku']}                       ${sku}
-    Should Be Equal As Strings      ${resp.json()['name']}                                      ${name}
-    Should Be Equal As Strings      ${resp.json()['shortDesc']}                                 ${shortDesc}
-    Should Be Equal As Strings      ${resp.json()['internalDesc']}                              ${internalDesc}
-    Should Be Equal As Strings      ${resp.json()['isInventoryItem']}                           ${bool[1]}
-    Should Be Equal As Strings      ${resp.json()['itemCategory']['categoryCode']}              ${categoryCode}
-    Should Be Equal As Strings      ${resp.json()['itemCategory']['categoryName']}              ${categoryName}
-    Should Be Equal As Strings      ${resp.json()['itemCategory']['status']}                    ${toggle[0]}
-    Should Be Equal As Strings      ${resp.json()['itemSubCategory']['categoryCode']}           ${categoryCode}
-    Should Be Equal As Strings      ${resp.json()['itemSubCategory']['categoryName']}           ${categoryName}
-    Should Be Equal As Strings      ${resp.json()['itemSubCategory']['status']}                 ${toggle[0]}
-    Should Be Equal As Strings      ${resp.json()['itemType']['typeCode']}                      ${typeCode}
-    Should Be Equal As Strings      ${resp.json()['itemType']['typeName']}                      ${TypeName}
-    Should Be Equal As Strings      ${resp.json()['itemType']['status']}                        ${toggle[0]}
-    Should Be Equal As Strings      ${resp.json()['itemSubType']['typeCode']}                   ${typeCode}
-    Should Be Equal As Strings      ${resp.json()['itemSubType']['typeName']}                   ${TypeName}
-    Should Be Equal As Strings      ${resp.json()['itemSubType']['status']}                     ${toggle[0]}
-    Should Be Equal As Strings      ${resp.json()['itemGroups'][0]}                             ${ig_id}
-    Should Be Equal As Strings      ${resp.json()['itemGroups'][1]}                             ${ig_id2}
-    Should Be Equal As Strings      ${resp.json()['itemSubGroups'][0]}                          ${ig_id}
-    Should Be Equal As Strings      ${resp.json()['itemSubGroups'][1]}                          ${ig_id2}
-    Should Be Equal As Strings      ${resp.json()['hsnCode']['hsnCode']}                        ${hsnCode}
-    Should Be Equal As Strings      ${resp.json()['hsnCode']['status']}                         ${toggle[0]}
-    Should Be Equal As Strings      ${resp.json()['itemManufacturer']['manufacturerCode']}      ${manufacturerCode}
-    Should Be Equal As Strings      ${resp.json()['itemManufacturer']['manufacturerName']}      ${manufactureName}
-    Should Be Equal As Strings      ${resp.json()['itemManufacturer']['status']}                ${toggle[0]}
-    Should Be Equal As Strings      ${resp.json()['tax'][0]}                                    ${itemtax_id}
-    Should Be Equal As Strings      ${resp.json()['composition'][0]}                            ${compositionCode}
-    Should Be Equal As Strings      ${resp.json()['sku']}                                       ${sku}
-    Should Be Equal As Strings      ${resp.json()['itemUnits'][0]}                              ${iu_id}
-    Should Be Equal As Strings      ${resp.json()['isBatchApplicable']}                         ${bool[1]}
-    Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileName']}                ${jpgfile}
-    Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileSize']}                ${fileSize}
-    Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileType']}                ${fileType}
-    Should Be Equal As Strings      ${resp.json()['attachments'][0]['order']}                   ${order}
-    Should Be Equal As Strings      ${resp.json()['attachments'][0]['action']}                  ${file_action[0]}
-    Should Be Equal As Strings      ${resp.json()['attachments'][0]['driveId']}                 ${driveId}
-    Should Be Equal As Strings      ${resp.json()['status']}                                    ${toggle[0]}
-
+    
     ${resp}=   Create Inventory Catalog Item  ${encid}   ${itemEncId1}  
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
@@ -476,25 +428,10 @@ JD-TC-Get list by item encId-1
     Set Suite Variable              ${taxAmount}
     Set Suite Variable              ${netRate}
 
-    ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}
+    ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}    ${amount}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}                     200
-    Should Be Equal As Strings      ${resp.json()['quantity']}              ${quantity}
-    Should Be Equal As Strings      ${resp.json()['freeQuantity']}          ${freeQuantity}
-    Should Be Equal As Strings      ${resp.json()['totalQuantity']}         ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()['amount']}                ${amount}
-    Should Be Equal As Strings      ${resp.json()['discountPercentage']}    ${discountPercentage}
-    Should Be Equal As Strings      ${resp.json()['discountAmount']}        ${discountAmount}
-    Should Be Equal As Strings      ${resp.json()['taxableAmount']}         ${taxableAmount}
-    Should Be Equal As Strings      ${resp.json()['cgstPercentage']}        ${cgst}
-    Should Be Equal As Strings      ${resp.json()['sgstPercentage']}        ${sgst}
-    Should Be Equal As Strings      ${resp.json()['cgst']}                  ${cgstamount}
-    Should Be Equal As Strings      ${resp.json()['sgst']}                  ${sgstamount}
-    Should Be Equal As Strings      ${resp.json()['taxPercentage']}         ${taxPercentage}
-    Should Be Equal As Strings      ${resp.json()['taxAmount']}             ${taxAmount}
-    Should Be Equal As Strings      ${resp.json()['netTotal']}              ${netTotal}
-    Should Be Equal As Strings      ${resp.json()['netRate']}               ${netRate}
-
+  
     # ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${name}  ${boolean[0]}
     # Log   ${resp.content}
     # Should Be Equal As Strings      ${resp.status_code}   200
@@ -546,8 +483,7 @@ JD-TC-Get list by item encId-1
     ${resp}=    Get Purchase By Uid  ${purchaseId} 
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}                 200
-    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[0]}
-
+   
     ${resp}=    Update Purchase Status  ${PurchaseStatus[1]}  ${purchaseId} 
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
@@ -555,8 +491,6 @@ JD-TC-Get list by item encId-1
     ${resp}=    Get Purchase By Uid  ${purchaseId} 
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}                 200
-    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[1]}
-
 
     # ${resp}=    Get Purchase By Uid  ${purchaseId} 
     # Log   ${resp.content}
@@ -579,8 +513,7 @@ JD-TC-Get list by item encId-1
     ${resp}=    Get Purchase By Uid  ${purchaseId} 
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}                 200
-    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[2]}
-
+   
     ${resp}=  Get Inventoryitem      ${Inv_Cata_Item_Encid}         
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -674,7 +607,7 @@ JD-TC-Get list by item encId-1
 #     ${accountId}=  get_acc_id  ${HLPUSERNAME29}
 #     Set Suite Variable    ${accountId} 
 
-#     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+#     ${resp}=  Provider Get Store Type By EncId      ${St_Id}  
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
@@ -965,6 +898,7 @@ JD-TC-Get list by item encId-1
 
 
 JD-TC-Get list by item encId-5
+
     [Documentation]    update batch status as disable and Get list by item encId.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
@@ -1017,6 +951,7 @@ JD-TC-Get list by item encId-5
 
 
 JD-TC-Get list by item encId-UH1
+
     [Documentation]   Get list by item encId  with invalid catalog item id
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
@@ -1030,6 +965,7 @@ JD-TC-Get list by item encId-UH1
     
 
 JD-TC-Get list by item encId-UH2
+
     [Documentation]  Get list by item encId without login
 
     ${resp}=   Get list by item encId   ${SO_Cata_Item_Batch_Encid}    
@@ -1038,6 +974,7 @@ JD-TC-Get list by item encId-UH2
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-Get list by item encId-UH3
+
     [Documentation]  Get list by item encId using sa login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}

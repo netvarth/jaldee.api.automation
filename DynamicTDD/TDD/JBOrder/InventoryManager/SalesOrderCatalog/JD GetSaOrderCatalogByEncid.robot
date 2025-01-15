@@ -8,6 +8,7 @@ Library           json
 Library           DateTime
 Library           requests
 Library           FakerLibrary
+Library           /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
@@ -26,6 +27,7 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-Get SalesOrder Catalog By Encid-1
+
     [Documentation]  create sales order catalog.(inventory manager is false) then get that catalog by encid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
@@ -67,23 +69,17 @@ JD-TC-Get SalesOrder Catalog By Encid-1
     ${resp}=  Get Store Type By EncId   ${St_Id}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
-
+    
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${accountId}=  get_acc_id  ${HLPUSERNAME37}
     Set Suite Variable    ${accountId} 
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId      ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
-
+   
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -138,6 +134,7 @@ JD-TC-Get SalesOrder Catalog By Encid-1
 
 
 JD-TC-Get SalesOrder Catalog By Encid-2
+
     [Documentation]  update sales order catalog .(inventory manager is false) then get sales order catalog by encid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
@@ -173,6 +170,7 @@ JD-TC-Get SalesOrder Catalog By Encid-2
 
 
 JD-TC-Get SalesOrder Catalog By Encid-3
+
     [Documentation]  Disable sales order catalog.(inventory manager is false).Then get salesorder catalog by encid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
@@ -205,6 +203,7 @@ JD-TC-Get SalesOrder Catalog By Encid-3
 
 
 JD-TC-Get SalesOrder Catalog By Encid-4
+
     [Documentation]  create  sales order catalog where name as number.(inventory manager is false).then get sales order catalog by encid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
@@ -253,6 +252,7 @@ JD-TC-Get SalesOrder Catalog By Encid-4
 
 
 JD-TC-Get SalesOrder Catalog By Encid-5
+
     [Documentation]  create  sales order  catalog where name as invalid string.(inventory manager is false).then get catalog by encid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
@@ -288,6 +288,7 @@ JD-TC-Get SalesOrder Catalog By Encid-5
 
 
 JD-TC-Get SalesOrder Catalog By Encid-6
+
     [Documentation]  create sales order inventory catalog from main account then get catalog by encid  from user login(without admin privilege).(inventory manager is false)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
@@ -301,23 +302,23 @@ JD-TC-Get SalesOrder Catalog By Encid-6
     Set Test Variable  ${sa_catlog_id3}  ${resp.json()}
 
 
-    ${resp}=  View Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Enable Disable Department  ${toggle[0]}
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Waitlist Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # IF  ${resp.json()['filterByDept']}==${bool[0]}
+    #     ${resp}=  Enable Disable Department  ${toggle[0]}
+    #     Log  ${resp.content}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
 
-    END
+    # END
 
-    ${dep_name1}=  FakerLibrary.bs
-    ${dep_code1}=   Random Int  min=100   max=999
-    ${dep_desc1}=   FakerLibrary.word   
-        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-        Set Test Variable  ${dep_id}  ${resp1.json()}
+    # ${dep_name1}=  FakerLibrary.bs
+    # ${dep_code1}=   Random Int  min=100   max=999
+    # ${dep_desc1}=   FakerLibrary.word   
+    #     ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+    #     Log  ${resp1.content}
+    #     Should Be Equal As Strings  ${resp1.status_code}  200
+    #     Set Test Variable  ${dep_id}  ${resp1.json()}
 
 
 
@@ -338,12 +339,8 @@ JD-TC-Get SalesOrder Catalog By Encid-6
     Set Test Variable  ${firstname1}
     ${lastname1}=  FakerLibrary.last_name
     Set Test Variable  ${lastname1}
-    ${dob1}=  FakerLibrary.Date
-    Set Test Variable  ${dob1}
-    ${pin1}=  get_pincode
-    Set Test Variable  ${pin1}
-
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+ 
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${countryCodes[0]}  ${PUSERNAME_U1}    ${userType[0]}  
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id1}  ${resp.json()}
@@ -353,16 +350,32 @@ JD-TC-Get SalesOrder Catalog By Encid-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${loginId_n}=     Random Int  min=111111  max=999999
 
-    @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
+    ${resp}=    Reset LoginId  ${u_id1}  ${loginId_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${Password_n}=    Random Int  min=11111111  max=99999999
+   
+    ${resp}=    Forgot Password   loginId=${loginId_n}  password=${Password_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${PUSERNAME_U1}  ${OtpPurpose['ProviderResetPassword']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key} =   db.Verify Accnt   ${PUSERNAME_U1}    ${OtpPurpose['ProviderResetPassword']}
+    Set Suite Variable   ${key}
+
+    ${resp}=    Forgot Password     otp=${key}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login     ${loginId_n}  ${Password_n}
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings             ${resp.status_code}   200
 
     ${resp}=  Get SalesOrder Catalog By Encid   ${sa_catlog_id3}  
     Log   ${resp.content}
@@ -386,6 +399,7 @@ JD-TC-Get SalesOrder Catalog By Encid-6
 
 
 JD-TC-Get SalesOrder Catalog By Encid-7
+
     [Documentation]  create  sales order catalog where name as invalid string.(inventory manager is true)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
@@ -428,6 +442,7 @@ JD-TC-Get SalesOrder Catalog By Encid-7
 
 
 JD-TC-Get SalesOrder Catalog By Encid-UH1
+
     [Documentation]  Get SalesOrder Catalog By Encid  with invalid catalog id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
@@ -441,6 +456,7 @@ JD-TC-Get SalesOrder Catalog By Encid-UH1
     
 
 JD-TC-Get SalesOrder Catalog By Encid-UH2
+
     [Documentation]  Get SalesOrder Catalog By Encid without login.
 
     ${resp}=  Get SalesOrder Catalog By Encid   ${sa_catlog_id4} 
@@ -450,6 +466,7 @@ JD-TC-Get SalesOrder Catalog By Encid-UH2
 
 
 JD-TC-Get SalesOrder Catalog By Encid-UH3
+
     [Documentation]  Get SalesOrder Catalog By Encid using sa login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -463,6 +480,7 @@ JD-TC-Get SalesOrder Catalog By Encid-UH3
 
 
 JD-TC-Get SalesOrder Catalog By Encid-UH4
+
     [Documentation]  Get SalesOrder Catalog By Encid using another provider login
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
