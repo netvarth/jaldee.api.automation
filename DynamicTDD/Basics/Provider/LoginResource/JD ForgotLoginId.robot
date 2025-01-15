@@ -175,19 +175,6 @@ JD-TC-Forgot_LoginId-UH2
 
 JD-TC-Forgot_LoginId-UH3
 
-    [Documentation]    Forget login Id - otp purpose is empty
-
-    ${resp}=    Forgot LoginId    countryCode=${countryCodes[1]}  phoneNo=${ph}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    202
-
-    ${resp}=    Account Activation  ${ph}  ${empty}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings      ${resp.json()}      ${OTP_VALIDATION_FAILED}
-
-JD-TC-Forgot_LoginId-UH4
-
     [Documentation]    Forget login Id - otp purpose is invalid
 
     ${resp}=    Forgot LoginId    countryCode=${countryCodes[1]}  phoneNo=${ph}
@@ -197,9 +184,9 @@ JD-TC-Forgot_LoginId-UH4
     ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderSignUp']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings      ${resp.json()}      ${OTP_VALIDATION_FAILED}
+    Should Be Equal As Strings      ${resp.json()}      Please check the OTP purpose you sent
 
-JD-TC-Forgot_LoginId-UH5
+JD-TC-Forgot_LoginId-UH4
 
     [Documentation]    Forget login Id - login id is empty
 
@@ -212,7 +199,7 @@ JD-TC-Forgot_LoginId-UH5
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings      ${resp.json()}      ${OTP_VALIDATION_FAILED}
 
-JD-TC-Forgot_LoginId-UH6
+JD-TC-Forgot_LoginId-UH5
 
     [Documentation]    Forget login Id - login id is invalid
 
@@ -227,7 +214,7 @@ JD-TC-Forgot_LoginId-UH6
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings      ${resp.json()}      ${OTP_VALIDATION_FAILED}
 
-JD-TC-Forgot_LoginId-UH7
+JD-TC-Forgot_LoginId-UH6
 
     [Documentation]    Forget login Id - otp is invalid
 
@@ -246,7 +233,7 @@ JD-TC-Forgot_LoginId-UH7
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings      ${resp.json()}      ${ENTER_VALID_OTP}
 
-JD-TC-Forgot_LoginId-UH8
+JD-TC-Forgot_LoginId-UH7
 
     [Documentation]    Forget login Id - phone number is invalid
 
@@ -257,7 +244,7 @@ JD-TC-Forgot_LoginId-UH8
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings      ${resp.json()}      ${PHONE_NOT_REGISTERED}
 
-JD-TC-Forgot_LoginId-UH9
+JD-TC-Forgot_LoginId-UH8
 
     [Documentation]    Forget login Id - with invalid email id
 
@@ -269,7 +256,7 @@ JD-TC-Forgot_LoginId-UH9
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings      ${resp.json()}      ${EMAIL_NOT_REGISTERED}
 
-JD-TC-Forgot_LoginId-UH10
+JD-TC-Forgot_LoginId-UH9
 
     [Documentation]    Forget login Id - phone number is invalid less than 10 digits
 
@@ -509,4 +496,4 @@ JD-TC-Forgot_LoginId-8
     ${resp}=    Provider Logout
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    
+

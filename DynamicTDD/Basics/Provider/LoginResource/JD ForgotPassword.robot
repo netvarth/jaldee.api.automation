@@ -160,7 +160,7 @@ JD-TC-Forgot_Password-UH3
     ${resp}=    Account Activation  ${loginId}  ${OtpPurpose['ProviderSignUp']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings      ${resp.json()}      ${OTP_VALIDATION_FAILED}
+    Should Be Equal As Strings      ${resp.json()}      Please check the OTP purpose you sent
 
 JD-TC-Forgot_Password-UH4
 
