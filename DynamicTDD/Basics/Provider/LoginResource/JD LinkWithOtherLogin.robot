@@ -478,15 +478,17 @@ JD-TC-Link_With_Other_Login-8
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
     ${resp}=    Connect with other login  ${loginId_n}    password=${Password_n}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
-    ${resp}=    Account Activation      ${user_num}  ${OtpPurpose['LinkLogin']}
+    ${resp}=    Account Activation      ${user_num}  ${OtpPurpose['LinkLogin']}   JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${key2} =   db.Verify Accnt   ${user_num}    ${OtpPurpose['LinkLogin']}
+    ${key2} =   db.Verify Accnt   ${user_num}    ${OtpPurpose['LinkLogin']}  ${jsessionynw_value}
     Set Suite Variable   ${key2}
 
     ${resp}=    Connect with other login  ${loginId_n}   otp=${key2}
@@ -595,23 +597,25 @@ JD-TC-Link_With_Other_Login-UH5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
     ${inv}=     Random Int  min=100000  max=200000
 
     ${resp}=    Connect with other login  ${loginId}    password=${inv}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
-    ${resp}=    Account Activation      ${ph}  ${OtpPurpose['LinkLogin']}
+    ${resp}=    Account Activation      ${ph}  ${OtpPurpose['LinkLogin']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${key2} =   db.Verify Accnt   ${ph}    ${OtpPurpose['LinkLogin']}
+    ${key2} =   db.Verify Accnt   ${ph}    ${OtpPurpose['LinkLogin']}   ${jsessionynw_value}
     Set Suite Variable   ${key2}
 
     ${resp}=    Connect with other login  ${loginId}   otp=${key2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${INCORRECT_CREDENTIALS}
+    Should Be Equal As Strings    ${resp.json()}    ${INCORRECT_PASSWORD}
 
     ${resp}=    Provider Logout
     Log   ${resp.content}

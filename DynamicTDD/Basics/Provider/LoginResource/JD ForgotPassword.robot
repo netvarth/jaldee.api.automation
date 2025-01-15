@@ -189,15 +189,17 @@ JD-TC-Forgot_Password-UH5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
     ${resp}=    Forgot Password   loginId=${loginId}  password=${validpass2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
-    ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderResetPassword']}
+    ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderResetPassword']}   JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${key} =   db.Verify Accnt   ${ph}    ${OtpPurpose['ProviderResetPassword']}
+    ${key} =   db.Verify Accnt   ${ph}    ${OtpPurpose['ProviderResetPassword']}   ${jsessionynw_value}
     Set Suite Variable   ${key}
 
     ${resp}=    Forgot Password     otp=${key}

@@ -2491,13 +2491,14 @@ ACCOUNT_DEACTIVATED_BASE = "Your account has been disabled. To restore your acco
 # LOGIN_LOGINiD_VALIDATION_NOT_FOUND = "Loginid validation failed."
 LOGIN_PASSWORD_VALIDATION_NOT_FOUND = "Password must be of minimum 8 chars with  one Number and one Capical letter"
 LOGIN_LOGINiD_VALIDATION_NOT_FOUND = "Login Id must be string with characters number seperated by dot,underScore or @  "
-INV_LOGIN_ID=   "Invalid Login Id"
+INV_LOGIN_ID=   "Invalid LoginId"
 PASSWORD_MANDATORY=   "Old password and new password are mandatory"
 INCORRECT_OLD_PASSWORD=  "Incorrect old password"
 INACTIVE_ACCOUNT=   "Account is InActive. Please contact SuperAdmin"
 USER_DISABLED=  "User is disabled"
 NEW_PASSWORD_REQ=   "New password required"
 INV_USER_ID=    "Invalid userId"
+INCORRECT_PASSWORD = "The password you entered is incorrect. Please try again."
 
 #   ConsumerOrder
 
