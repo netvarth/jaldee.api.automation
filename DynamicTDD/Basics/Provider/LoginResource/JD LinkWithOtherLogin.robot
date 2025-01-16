@@ -775,15 +775,17 @@ JD-TC-Link_With_Other_Login-UH8
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
     ${resp}=    Connect with other login  ${loginId_n}  password=${Password_n}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
-    ${resp}=    Account Activation      ${user_num}  ${OtpPurpose['LinkLogin']}
+    ${resp}=    Account Activation      ${user_num}  ${OtpPurpose['LinkLogin']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${key2} =   db.Verify Accnt   ${user_num}    ${OtpPurpose['LinkLogin']}
+    ${key2} =   db.Verify Accnt   ${user_num}    ${OtpPurpose['LinkLogin']}  ${jsessionynw_value}
     Set Suite Variable   ${key2}
 
     ${resp}=    Connect with other login  ${loginId_n}   otp=${key2}
