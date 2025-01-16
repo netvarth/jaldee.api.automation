@@ -3063,7 +3063,7 @@ JD-TC-OTPVerify-30
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    sleep   10s
+    sleep   12s
 
     ${key}=   verify accnt  ${PCPHONENO}  ${OtpPurpose['Authentication']}   ${jsessionynw_value}
 
