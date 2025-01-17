@@ -2390,6 +2390,7 @@ DUPLICATE_LINE_ITEMS = "Input contains duplicate {}"
 BADGE_ID_NOT_FOUND="Badge with ID {} does not found"
 BADGE_ID_MUST_GREATER_THAN_ZERO="Badge ID must be greater than 0. Invalid ID: {}"
 CANT_CHANGE_INV_MNGMT_IN_SOC = "You cannot disable inventory management for this catalog, as it includes inventory items."
+CANT_ADD_INV_ITEM_TO_NONINV_CATALOG = "You cannot add an inventory item because this is a non-inventory catalog"
 # Vendor
 INVALID_NAME="Invalid Name"
 CATEGORY_EXIST="Category exists with given name"

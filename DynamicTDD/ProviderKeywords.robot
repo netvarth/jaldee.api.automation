@@ -16753,11 +16753,14 @@ Get Item List By Catalog EncId
 
 Update SO Catalog Item Price
 
-    [Arguments]  ${catalogEncId}   ${itemEncId}    ${price}   ${batchEncId}     ${batch_price}
+    [Arguments]  ${catalogEncId}   ${itemEncId}    ${price}   ${batchEncId}     ${batch_price}  &{kwargs}
 
     ${batch}=   Create Dictionary  batchEncId=${batchEncId}    price=${batch_price}     
     ${batches}=     Create List       ${batch}
     ${data}=  Create Dictionary  price=${price}      Batches=${batches}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/so/catalog/${catalogEncId}/item/${itemEncId}/price   data=${data}  expected_status=any

@@ -393,7 +393,7 @@ JD-TC-Get list by item encId-1
     ${quantity}=                    Convert To Number  ${quantity}  1
     ${freeQuantity}=                Random Int  min=0  max=10
     ${freeQuantity}=                Convert To Number  ${freeQuantity}  1
-    ${amount}=                      Random Int  min=1  max=999
+    ${amount}=                      Random Int  min=1  max=500
     ${amount}=                      Convert To Number  ${amount}  1
     ${discountPercentage}=          Random Int  min=0  max=100
     ${discountPercentage}=          Convert To Number  ${discountPercentage}  1
@@ -432,18 +432,12 @@ JD-TC-Get list by item encId-1
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}                     200
   
-    # ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${name}  ${boolean[0]}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings      ${resp.status_code}   200
-    # Set Suite Variable              ${inv_order_encid}    ${resp.json()}
+
     ${inv_cat_encid_List}=  Create List  ${encid}
     ${price}=    Random Int  min=2   max=40
     ${price}=  Convert To Number  ${price}    1
     Set Suite Variable  ${price}
-    # ${resp}=   Create Inventory Catalog Item  ${inv_cat_encid}   ${itemEncId1}  
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # Set Suite Variable  ${Inv_Cata_Item_Encid}  ${resp.json()[0]}
+
 
     ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Name}  ${boolean[1]}  ${inv_cat_encid_List}
     Log   ${resp.content}
@@ -467,7 +461,7 @@ JD-TC-Get list by item encId-1
     ${salesRate}=   Evaluate        ${amount} / ${convertionQty}
     ${invoiceDate}=  db.add_timezone_date  ${tz}  1
     ${rate}=        Evaluate        int(${salesRate})
-    ${mrp}=         Random Int      min=${rate}  max=9999
+    ${mrp}=         Random Int      min=500  max=9999
     ${batchNo}=     Random Int      min=1  max=9999
     ${invoiceReferenceNo}=          Random Int  min=1  max=999
     ${purchaseNote}=                FakerLibrary.Sentence
@@ -553,6 +547,97 @@ JD-TC-Get list by item encId-1
     Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${name}
     Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${SO_Cata_Item_Batch_Encid} 
     Should Be Equal As Strings    ${resp.json()[0]['status']}     ${toggle[0]} 
+
+
+
+JD-TC-Get list by item encId-5
+
+    [Documentation]    update batch status as disable and Get list by item encId.
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${resp}=  Update Catalog Item Batch Status   ${SO_Cata_Item_Batch_Encid}     ${toggle[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${resp}=   Get list by item encId   ${SO_itemEncIds}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${netRate}=  Convert To Number  ${resp.json()[2]['price']}    1
+    # Should Be Equal As Strings    ${netRate}    ${price1}
+    # Should Be Equal As Strings    ${resp.json()[2]['name']}    ${Name3} 
+    # Should Be Equal As Strings    ${resp.json()[2]['accountId']}    ${accountId} 
+    # Should Be Equal As Strings    ${resp.json()[2]['catalogItem']['encId']}    ${SO_itemEncIds}    
+    # Should Be Equal As Strings    ${resp.json()[2]['spItem']['id']}    ${sp-item-id} 
+    # Should Be Equal As Strings    ${resp.json()[2]['spItem']['encId']}    ${itemEncId1} 
+    # Should Be Equal As Strings    ${resp.json()[2]['spItem']['name']}    ${displayName}
+    # Should Be Equal As Strings    ${resp.json()[2]['encId']}    ${SO_Cata_Item_Batch_Encid3} 
+    # Should Be Equal As Strings    ${resp.json()[2]['status']}     ${toggle[0]} 
+    # Should Be Equal As Strings    ${resp.json()[2]['name']}     ${Name3} 
+    # ${netRate1}=  Convert To Number  ${resp.json()[1]['price']}    1
+    # Should Be Equal As Strings    ${netRate1}    ${price2}
+    # Should Be Equal As Strings    ${resp.json()[1]['name']}    ${Name2} 
+    # Should Be Equal As Strings    ${resp.json()[1]['accountId']}    ${accountId} 
+    # Should Be Equal As Strings    ${resp.json()[1]['catalogItem']['encId']}    ${SO_itemEncIds}    
+    # Should Be Equal As Strings    ${resp.json()[1]['spItem']['id']}    ${sp-item-id} 
+    # Should Be Equal As Strings    ${resp.json()[1]['spItem']['encId']}    ${itemEncId1} 
+    # Should Be Equal As Strings    ${resp.json()[1]['spItem']['name']}    ${displayName}
+    # Should Be Equal As Strings    ${resp.json()[1]['encId']}    ${SO_Cata_Item_Batch_Encid2} 
+    # Should Be Equal As Strings    ${resp.json()[1]['status']}     ${toggle[1]} 
+    # Should Be Equal As Strings    ${resp.json()[1]['name']}     ${Name2} 
+    ${netRate2}=  Convert To Number  ${resp.json()[0]['price']}    1
+    Should Be Equal As Strings    ${netRate2}    ${price1}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}    ${Name1} 
+    Should Be Equal As Strings    ${resp.json()[0]['accountId']}    ${accountId} 
+    Should Be Equal As Strings    ${resp.json()[0]['catalogItem']['encId']}    ${SO_itemEncIds}    
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['id']}    ${sp-item-id} 
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['encId']}    ${itemEncId1} 
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${name}
+    Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${SO_Cata_Item_Batch_Encid} 
+    Should Be Equal As Strings    ${resp.json()[0]['status']}     ${toggle[1]} 
+
+
+
+
+JD-TC-Get list by item encId-UH1
+
+    [Documentation]   Get list by item encId  with invalid catalog item id
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Get list by item encId   ${itemEncId1}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${INVALID_CATALOG_ITEM_BATCH_ID}
+    
+
+JD-TC-Get list by item encId-UH2
+
+    [Documentation]  Get list by item encId without login
+
+    ${resp}=   Get list by item encId   ${SO_Cata_Item_Batch_Encid}    
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
+
+JD-TC-Get list by item encId-UH3
+
+    [Documentation]  Get list by item encId using sa login.
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get list by item encId   ${SO_Cata_Item_Batch_Encid}    
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 # *** Test Cases ***
 # JD-TC-Get list by item encId-1
@@ -896,94 +981,5 @@ JD-TC-Get list by item encId-1
 #     Should Be Equal As Strings    ${resp.json()[0]['status']}     ${toggle[0]} 
 #     Should Be Equal As Strings    ${resp.json()[0]['name']}     ${Name} 
 
-
-JD-TC-Get list by item encId-5
-
-    [Documentation]    update batch status as disable and Get list by item encId.
-
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-
-    ${resp}=  Update Catalog Item Batch Status   ${SO_Cata_Item_Batch_Encid}     ${toggle[1]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-
-    ${resp}=   Get list by item encId   ${SO_itemEncIds}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    # ${netRate}=  Convert To Number  ${resp.json()[2]['price']}    1
-    # Should Be Equal As Strings    ${netRate}    ${price1}
-    # Should Be Equal As Strings    ${resp.json()[2]['name']}    ${Name3} 
-    # Should Be Equal As Strings    ${resp.json()[2]['accountId']}    ${accountId} 
-    # Should Be Equal As Strings    ${resp.json()[2]['catalogItem']['encId']}    ${SO_itemEncIds}    
-    # Should Be Equal As Strings    ${resp.json()[2]['spItem']['id']}    ${sp-item-id} 
-    # Should Be Equal As Strings    ${resp.json()[2]['spItem']['encId']}    ${itemEncId1} 
-    # Should Be Equal As Strings    ${resp.json()[2]['spItem']['name']}    ${displayName}
-    # Should Be Equal As Strings    ${resp.json()[2]['encId']}    ${SO_Cata_Item_Batch_Encid3} 
-    # Should Be Equal As Strings    ${resp.json()[2]['status']}     ${toggle[0]} 
-    # Should Be Equal As Strings    ${resp.json()[2]['name']}     ${Name3} 
-    # ${netRate1}=  Convert To Number  ${resp.json()[1]['price']}    1
-    # Should Be Equal As Strings    ${netRate1}    ${price2}
-    # Should Be Equal As Strings    ${resp.json()[1]['name']}    ${Name2} 
-    # Should Be Equal As Strings    ${resp.json()[1]['accountId']}    ${accountId} 
-    # Should Be Equal As Strings    ${resp.json()[1]['catalogItem']['encId']}    ${SO_itemEncIds}    
-    # Should Be Equal As Strings    ${resp.json()[1]['spItem']['id']}    ${sp-item-id} 
-    # Should Be Equal As Strings    ${resp.json()[1]['spItem']['encId']}    ${itemEncId1} 
-    # Should Be Equal As Strings    ${resp.json()[1]['spItem']['name']}    ${displayName}
-    # Should Be Equal As Strings    ${resp.json()[1]['encId']}    ${SO_Cata_Item_Batch_Encid2} 
-    # Should Be Equal As Strings    ${resp.json()[1]['status']}     ${toggle[1]} 
-    # Should Be Equal As Strings    ${resp.json()[1]['name']}     ${Name2} 
-    ${netRate2}=  Convert To Number  ${resp.json()[0]['price']}    1
-    Should Be Equal As Strings    ${netRate2}    ${price1}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}    ${Name1} 
-    Should Be Equal As Strings    ${resp.json()[0]['accountId']}    ${accountId} 
-    Should Be Equal As Strings    ${resp.json()[0]['catalogItem']['encId']}    ${SO_itemEncIds}    
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['id']}    ${sp-item-id} 
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['encId']}    ${itemEncId1} 
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${name}
-    Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${SO_Cata_Item_Batch_Encid} 
-    Should Be Equal As Strings    ${resp.json()[0]['status']}     ${toggle[1]} 
-
-
-
-
-JD-TC-Get list by item encId-UH1
-
-    [Documentation]   Get list by item encId  with invalid catalog item id
-
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=   Get list by item encId   ${itemEncId1}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${INVALID_CATALOG_ITEM_BATCH_ID}
-    
-
-JD-TC-Get list by item encId-UH2
-
-    [Documentation]  Get list by item encId without login
-
-    ${resp}=   Get list by item encId   ${SO_Cata_Item_Batch_Encid}    
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  419
-    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
-
-JD-TC-Get list by item encId-UH3
-
-    [Documentation]  Get list by item encId using sa login.
-
-    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=   Get list by item encId   ${SO_Cata_Item_Batch_Encid}    
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  419
-    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 
