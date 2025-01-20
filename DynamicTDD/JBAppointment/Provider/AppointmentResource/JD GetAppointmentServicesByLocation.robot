@@ -22,6 +22,64 @@ ${self}     0
 
 *** Test Cases ***
 
+
+JD-TC-GetAppointmentServicesByLocation-9
+
+    [Documentation]  provider checks get service by location id for location in US
+
+    # clear_location_n_service  ${PUSERNAME210}
+    # clear_queue     ${PUSERNAME210}
+
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup without Profile  
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${pid}=  get_acc_id  ${PUSERNAME_A}
+    
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${s_id1}=   Create Sample Service  ${SERVICE1}
+
+    ${address} =  FakerLibrary.address
+    ${postcode}=  FakerLibrary.postcode
+
+    ${latti}  ${longi}  ${city}  ${country_abbr}  ${US_tz}=  FakerLibrary.Local Latlng  country_code=US  coords_only=False
+    ${resp}=  Create Location   ${city}  ${longi}  ${latti}  ${postcode}  ${address}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${loc_id1}  ${resp.json()}
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${DAY}=  db.get_date_by_timezone  ${US_tz}
+    ${DAY1}=  db.add_timezone_date  ${US_tz}  10
+
+    ${sTime}=  db.subtract_timezone_time  ${US_tz}  2  00
+    ${eTime}=  add_timezone_time  ${US_tz}  3  00  
+    ${sTime1}  ${eTime1}=  db.endtime_conversion  ${sTime}  ${eTime}
+    
+    ${schedule_name}=  FakerLibrary.bs
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    ${duration}=  FakerLibrary.Random Int  min=1  max=5
+    ${bool1}=  Random Element  ${bool}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY}  ${DAY1}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${loc_id1}  ${duration}  ${bool1}  ${s_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sch_id1}  ${resp.json()}
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+*** Comments ***
 JD-TC-GetAppointmentServicesByLocation-1
 
     [Documentation]  Provider get Service By LocationId.  
@@ -478,4 +536,4 @@ JD-TC-GetAppointmentServicesByLocation-8
     Should Be Equal As Strings  ${resp.json()[0]['id']}       ${s_id1}
     Should Be Equal As Strings  ${resp.json()[0]['name']}     ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()[0]['serviceAvailability']['nextAvailableDate']}    ${DAY}
-    
+
