@@ -243,20 +243,55 @@ JD-TC-Reset_LoginId-UH4
 
     [Documentation]    Reset login Id - reset loginid where user id is invalid   
 
-    ${resp}=  Encrypted Provider Login  ${new}  ${PASSWORD}
+    ${domresp}=  Get BusinessDomainsConf
+    Log  ${domresp.json()}
+    Should Be Equal As Strings  ${domresp.status_code}  200
+    ${len}=  Get Length  ${domresp.json()}
+    ${domain_list}=  Create List
+    ${subdomain_list}=  Create List
+    FOR  ${domindex}  IN RANGE  ${len}
+        Set Test Variable  ${d}  ${domresp.json()[${domindex}]['domain']}    
+        Append To List  ${domain_list}    ${d} 
+        Set Test Variable  ${sd}  ${domresp.json()[${domindex}]['subDomains'][0]['subDomain']}
+        Append To List  ${subdomain_list}    ${sd} 
+    END
+    Log  ${domain_list}
+    Log  ${subdomain_list}
+   
+    # ........ Provider 1 ..........
+
+    ${ph}=  Evaluate  ${PUSERNAME}+5666410
+    ${firstname}=  generate_firstname
+    ${lastname}=  FakerLibrary.last_name
+ 
+    ${highest_package}=  get_highest_license_pkg
+
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph}   ${highest_package[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderSignUp']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${inv}=     Random Int  min=123  max=999
+    ${loginId}=     Random Int  min=1111  max=9999
+    
+    ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Reset LoginId  ${inv}  ${new}
+    ${resp}=  Encrypted Provider Login  ${loginId}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${loginId_n}=     Random Int  min=1111  max=9999
+    
+    ${inv}=     Random Int  min=100858  max=242455
+
+    ${resp}=    Reset LoginId  ${inv}  ${loginId_n}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${EXISTING_LOGINID}
-
-    ${resp}=    Provider Logout
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()}    user Id should not be empty
 
 JD-TC-Reset_LoginId-UH6
 
@@ -265,11 +300,11 @@ JD-TC-Reset_LoginId-UH6
     ${resp}=  Encrypted Provider Login  ${new}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-
+    
     ${resp}=    Reset LoginId  ${NULL}  ${new}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${EXISTING_LOGINID}
+    Should Be Equal As Strings    ${resp.json()}    ${USER_ID_REQUIRED}
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
