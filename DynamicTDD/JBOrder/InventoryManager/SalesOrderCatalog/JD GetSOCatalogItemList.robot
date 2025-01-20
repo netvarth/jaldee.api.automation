@@ -46,34 +46,16 @@ JD-TC-Get Sales Order Catalog Items List-1
 
     ${TypeName}=    FakerLibrary.name
     Set Suite Variable  ${TypeName}
-    sleep  02s
+    sleep  01s
 
     ${resp}=  Create Store Type   ${TypeName}    ${storeNature[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${St_Id}    ${resp.json()}
-    sleep  02s
+    # sleep  02s
     ${TypeName1}=    FakerLibrary.name
     Set Suite Variable  ${TypeName1}
-    sleep  02s
 
-    ${resp}=  Create Store Type   ${TypeName1}    ${storeNature[1]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${St_Id1}    ${resp.json()}
-    sleep  02s
-    ${TypeName2}=    FakerLibrary.name
-    Set Suite Variable  ${TypeName2}
-    sleep  02s
-
-    ${resp}=  Create Store Type   ${TypeName2}    ${storeNature[2]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${St_Id2}    ${resp.json()}
-
-    ${resp}=  Get Store Type By EncId   ${St_Id}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
@@ -120,13 +102,6 @@ JD-TC-Get Sales Order Catalog Items List-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${displayName}=     FakerLibrary.name
-    Set Suite Variable  ${displayName}
-
-    ${resp}=    Create Item Inventory  ${displayName}    isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${itemEncId1}  ${resp.json()}
 
     ${categoryName}=    FakerLibrary.name
     Set Suite Variable  ${categoryName}
@@ -136,7 +111,41 @@ JD-TC-Get Sales Order Catalog Items List-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${Ca_item_Id}    ${resp.json()}
 
-    ${resp}=    Create Item Inventory  ${categoryName}   categoryCode=${Ca_item_Id}   isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
+    ${TypeName}=    FakerLibrary.name
+    Set Suite Variable  ${TypeName}
+
+    ${resp}=  Create Item Type   ${TypeName}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable    ${Ty_Id}    ${resp.json()}
+
+    ${displayName}=     FakerLibrary.name
+    Set Suite Variable  ${displayName}
+
+    ${resp}=  Get Item Category By Filter   categoryCode-eq=${Ca_item_Id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${Catgory_id}  ${resp.json()[0]['id']}
+
+
+
+    ${resp}=  Get Item Type   ${Ty_Id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${type_id}  ${resp.json()['id']}
+
+    ${resp}=    Create Item Inventory  ${displayName}   categoryCode=${Ca_item_Id}   typeCode=${Ty_Id}   isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${itemEncId1}  ${resp.json()}
+
+    ${resp}=    Get Item Inventory  ${itemEncId1}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Suite Variable  ${item_id}  ${resp.json()['id']}
+
+
+    ${resp}=    Create Item Inventory  ${categoryName}      isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncIds}  ${resp.json()}
@@ -232,6 +241,91 @@ JD-TC-Get Sales Order Catalog Items List-3
     Should Be Equal As Strings    ${resp.status_code}    200
 # invCatId-eq=${Inv_cat_id} 
     ${resp}=  Get SalesOrder Catalog Item List  sorderCatalogEncId-eq=${SO_Cata_Encid}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()[0]['accountId']}    ${accountId}
+    Should Be Equal As Strings    ${resp.json()[0]['price']}    ${price}
+    Should Be Equal As Strings    ${resp.json()[0]['taxInclude']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['batchPricing']}    ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['allowNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['allowNegativeTrueAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['allowFutureNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['allowtrueFutureNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${SO_itemEncIds}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}    ${toggle[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['invMgmt']}    ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog']['encId']}    ${SO_Cata_Encid}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog']['name']}    ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog']['invMgmt']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['encId']}    ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${displayName}
+
+JD-TC-Get Sales Order Catalog Items List-4
+
+    [Documentation]   Get SalesOrder Catalog item List by spitem id
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+# invCatId-eq=${Inv_cat_id} 
+    ${resp}=  Get SalesOrder Catalog Item List  sorderCatalogEncId-eq=${SO_Cata_Encid}    spItem-eq=${item_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()[0]['accountId']}    ${accountId}
+    Should Be Equal As Strings    ${resp.json()[0]['price']}    ${price}
+    Should Be Equal As Strings    ${resp.json()[0]['taxInclude']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['batchPricing']}    ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['allowNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['allowNegativeTrueAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['allowFutureNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['allowtrueFutureNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${SO_itemEncIds}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}    ${toggle[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['invMgmt']}    ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog']['encId']}    ${SO_Cata_Encid}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog']['name']}    ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog']['invMgmt']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['encId']}    ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${displayName}
+
+JD-TC-Get Sales Order Catalog Items List-5
+
+    [Documentation]   Get SalesOrder Catalog item List by spItemCategory
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+# invCatId-eq=${Inv_cat_id} 
+# spItemCategory-eq=id::${Catgory_id}
+    ${resp}=  Get SalesOrder Catalog Item List  sorderCatalogEncId-eq=${SO_Cata_Encid}    spItemCategoryId-eq=${Catgory_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()[0]['accountId']}    ${accountId}
+    Should Be Equal As Strings    ${resp.json()[0]['price']}    ${price}
+    Should Be Equal As Strings    ${resp.json()[0]['taxInclude']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['batchPricing']}    ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['allowNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['allowNegativeTrueAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['allowFutureNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['allowtrueFutureNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${SO_itemEncIds}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}    ${toggle[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['invMgmt']}    ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog']['encId']}    ${SO_Cata_Encid}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog']['name']}    ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog']['invMgmt']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['encId']}    ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${displayName}
+
+JD-TC-Get Sales Order Catalog Items List-6
+
+    [Documentation]   Get SalesOrder Catalog item List by spItemType
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+# invCatId-eq=${Inv_cat_id} 
+    ${resp}=  Get SalesOrder Catalog Item List  sorderCatalogEncId-eq=${SO_Cata_Encid}    spItemTypeId-eq=${type_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()[0]['accountId']}    ${accountId}

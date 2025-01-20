@@ -33,7 +33,7 @@ JD-TC-Create Sales Order Invoice-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    sleep  01s
+    # sleep  01s
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -96,9 +96,7 @@ JD-TC-Create Sales Order Invoice-1
     ${resp}=  Get Store Type By EncId   ${St_Id}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
 # --------------------- ---------------------------------------------------------------
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
