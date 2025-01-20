@@ -215,7 +215,7 @@ JD-TC-UNLINK_ONE_LOGIN-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${key2} =   db.Verify Accnt   ${ph2}    ${OtpPurpose['LinkLogin']}
+    ${key2} =   db.Verify Accnt   ${ph2}    ${OtpPurpose['LinkLogin']}   ${jsessionynw_value}
     Set Suite Variable   ${key2}
 
     ${resp}=    Connect with other login  ${loginId2}   otp=${key2}

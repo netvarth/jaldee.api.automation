@@ -303,11 +303,12 @@ JD-TC-Switch_Login-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    sleep  2s
     ${resp}=  Get Provider Details    ${pro_id}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['basicInfo']['id']}          ${pro_id}
-    Should Be Equal As Strings  ${resp.json()['basicInfo']['mobile']}      ${ph}
+    Should Be Equal As Strings  ${resp.json()['basicInfo']['mobile']}      ${ph2}
 
     ${resp}=    Provider Logout
     Log   ${resp.content}

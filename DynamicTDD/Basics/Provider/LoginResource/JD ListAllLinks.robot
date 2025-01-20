@@ -371,15 +371,17 @@ JD-TC-List_ALL_LINKS-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
     ${resp}=    Connect with other login  ${loginId2}  password=${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
-    ${resp}=    Account Activation      ${ph2}  ${OtpPurpose['LinkLogin']}
+    ${resp}=    Account Activation      ${ph2}  ${OtpPurpose['LinkLogin']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${key2} =   db.Verify Accnt   ${ph2}    ${OtpPurpose['LinkLogin']}
+    ${key2} =   db.Verify Accnt   ${ph2}    ${OtpPurpose['LinkLogin']}   ${jsessionynw_value}
     Set Suite Variable   ${key2}
 
     ${resp}=    Connect with other login  ${loginId2}   otp=${key2}
