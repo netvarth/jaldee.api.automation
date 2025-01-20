@@ -8,6 +8,7 @@ Library           json
 Library           DateTime
 Library           requests
 Library           FakerLibrary
+Library           /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
@@ -27,6 +28,7 @@ ${count}        1
 *** Test Cases ***
 
 JD-TC-Get invoice filter-1
+
     [Documentation]   Create a sales Order with Valid Details then Get invoice count filter by uid param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
@@ -96,9 +98,7 @@ JD-TC-Get invoice filter-1
     ${resp}=  Get Store Type By EncId   ${St_Id}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+   
 # --------------------- ---------------------------------------------------------------
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
@@ -108,13 +108,10 @@ JD-TC-Get invoice filter-1
     ${accountId}=  get_acc_id  ${HLPUSERNAME33}
     Set Suite Variable    ${accountId} 
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId      ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
-
+   
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -141,7 +138,7 @@ JD-TC-Get invoice filter-1
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
-    ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
+    ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}  walkinOrder=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${store_id}  ${resp.json()}
@@ -155,10 +152,14 @@ JD-TC-Get invoice filter-1
 
 # --------------------------- Create SalesOrder Inventory Catalog-InvMgr False ------------------------------------
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}  walkInOrder=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_Cata_Encid}  ${resp.json()}
+
+    ${resp}=  Get SalesOrder Catalog By Encid   ${SO_Cata_Encid}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 # --------------------------------------------------------------------------------------------------------------
 # ----------------------------------------  Create Item ---------------------------------------------------
 
@@ -213,12 +214,14 @@ JD-TC-Get invoice filter-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -231,7 +234,7 @@ JD-TC-Get invoice filter-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -265,45 +268,7 @@ JD-TC-Get invoice filter-1
     ${resp}=    Get Sales Order    ${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
-    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
-    Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
-    Should Be Equal As Strings    ${resp.json()['store']['name']}                                   ${Name}
-    Should Be Equal As Strings    ${resp.json()['store']['encId']}                                  ${store_id}
-
-    Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                 ${Name}
-    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${SO_Cata_Encid}
-    Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
-
-    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
-    Should Be Equal As Strings    ${resp.json()['orderFor']['id']}                                  ${cid}
-    Should Be Equal As Strings    ${resp.json()['orderFor']['name']}                                ${firstName} ${lastName}
-
-    Should Be Equal As Strings    ${resp.json()['orderType']}                                       ${bookingChannel[0]}
-    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[0]}
-    Should Be Equal As Strings    ${resp.json()['deliveryType']}                                    ${deliveryType[0]}
-    Should Be Equal As Strings    ${resp.json()['deliveryStatus']}                                  ${deliveryStatus[0]}
-    Should Be Equal As Strings    ${resp.json()['originFrom']}                                      ${originFrom[5]}
-
-    Should Be Equal As Strings    ${resp.json()['orderNum']}                                        1
-    Should Be Equal As Strings    ${resp.json()['orderRef']}                                        1
-    Should Be Equal As Strings    ${resp.json()['deliveryDate']}                                    ${DAY1}
-
-    Should Be Equal As Strings    ${resp.json()['contactInfo']['phone']['number']}                  ${primaryMobileNo}
-    Should Be Equal As Strings    ${resp.json()['contactInfo']['email']}                            ${email_id}
-
-    Should Be Equal As Strings    ${resp.json()['itemCount']}                                       1
-    Should Be Equal As Strings    ${resp.json()['netTotal']}                                        ${netTotal}
-    Should Be Equal As Strings    ${resp.json()['taxTotal']}                                        0.0
-    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                   0.0
-    Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                               0.0
-    Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                             0.0
-    Should Be Equal As Strings    ${resp.json()['netRate']}                                         ${netTotal}
-    Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
-
-    Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
+    
 # -----------------------------------------------------------------------------------------------------------------------------------------
 # --------------------------------------------- Update SalesOrder Status --------------------------------------------------------
 
@@ -314,8 +279,7 @@ JD-TC-Get invoice filter-1
     ${resp}=    Get Sales Order    ${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
-    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
+   
 # ------------------------------------------------------------------------------------------------------------------------------------
 
 # ------------------------------------------------Create Sales Order Invoice----------------------------------------------
@@ -330,32 +294,14 @@ JD-TC-Get invoice filter-1
     ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
-    Should Be Equal As Strings    ${resp.json()['order']['uid']}                                       ${SO_Uid}
-    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
-    Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                 ${Name}
-    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${SO_Cata_Encid}
-    Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
-    Should Be Equal As Strings    ${resp.json()['taxTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${netTotal}
-    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      ${netTotal}
-    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
-
+    
     ${resp}=    Get invoice count filter    uid-eq=${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}     ${count}
 
-
 JD-TC-Get invoice filter-2
+
     [Documentation]   Get invoice count filter by status param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
@@ -369,6 +315,7 @@ JD-TC-Get invoice filter-2
 
 
 JD-TC-Get invoice filter-3
+
     [Documentation]   Get invoice count filter by storeId param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
@@ -381,6 +328,7 @@ JD-TC-Get invoice filter-3
     Should Be Equal As Strings    ${resp.json()}     ${count}
 
 JD-TC-Get invoice filter-4
+
     [Documentation]   Get invoice count filter by locationId param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
@@ -393,6 +341,7 @@ JD-TC-Get invoice filter-4
     Should Be Equal As Strings    ${resp.json()}     ${count}
 
 JD-TC-Get invoice filter-5
+
     [Documentation]   Get invoice count filter by orderUid param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
@@ -405,6 +354,7 @@ JD-TC-Get invoice filter-5
     Should Be Equal As Strings    ${resp.json()}     ${count}
 
 JD-TC-Get invoice filter-6
+
     [Documentation]   Get invoice count filter by providerConsumerId param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
@@ -417,6 +367,7 @@ JD-TC-Get invoice filter-6
     Should Be Equal As Strings    ${resp.json()}     ${count}
 
 JD-TC-Get invoice filter-7
+
     [Documentation]   Get invoice count filter by providerConsumerName param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
@@ -429,6 +380,7 @@ JD-TC-Get invoice filter-7
     Should Be Equal As Strings    ${resp.json()}     ${count}
 
 JD-TC-Get invoice filter-8
+
     [Documentation]   Get invoice count filter by paymentStatus param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}

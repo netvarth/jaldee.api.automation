@@ -156,7 +156,7 @@ JD-TC-Create Catalog Item Batch-1
     ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}   onlineOrder=${boolean[1]}    walkinOrder=${boolean[1]}   partnerOrder=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable            ${store_id}           ${resp.json()} 
+    Set Suite Variable            ${store_id1}           ${resp.json()} 
 
     # ............... Create Vendor ...............
 
@@ -236,7 +236,7 @@ JD-TC-Create Catalog Item Batch-1
 
     # .......... Create Inventory Catalog Item ..........
 
-    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
+    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id1}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${encid}  ${resp.json()}
@@ -387,9 +387,9 @@ JD-TC-Create Catalog Item Batch-1
     ${resp}=    Create Item Inventory  ${name}  shortDesc=${shortDesc}   internalDesc=${internalDesc}   itemCode=${itemjrx}   categoryCode=${categoryCode}  categoryCode2=${categoryCode}  typeCode=${typeCode}  typeCode2=${typeCode}  hsnCode=${hsnCode}  manufacturerCode=${manufacturerCode}  sku=${sku}  isBatchApplicable=${boolean[1]}  isInventoryItem=${boolean[1]}  itemGroups=${itemGroups}  itemSubGroups=${itemGroups}  tax=${tax}  composition=${composition}  itemUnits=${itemUnits}  attachments=${attachments}     
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
-    Set Suite Variable              ${itemEncId1}  ${resp.json()}
+    Set Suite Variable              ${itemEncId11}  ${resp.json()}
 
-    ${resp}=    Get Item Inventory  ${itemEncId1}
+    ${resp}=    Get Item Inventory  ${itemEncId11}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
     # Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['itemCode']}                  ${itemjrx}
@@ -434,7 +434,7 @@ JD-TC-Create Catalog Item Batch-1
     # Should Be Equal As Strings      ${resp.json()['attachments'][0]['driveId']}                 ${driveId}
     # Should Be Equal As Strings      ${resp.json()['status']}                                    ${toggle[0]}
 
-    ${resp}=   Create Inventory Catalog Item  ${encid}   ${itemEncId1}  
+    ${resp}=   Create Inventory Catalog Item  ${encid}   ${itemEncId11}  
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Suite Variable   ${ic_id}   ${resp.json()[0]}
@@ -443,7 +443,7 @@ JD-TC-Create Catalog Item Batch-1
     ${quantity}=                    Convert To Number  ${quantity}  1
     ${freeQuantity}=                Random Int  min=0  max=10
     ${freeQuantity}=                Convert To Number  ${freeQuantity}  1
-    ${amount}=                      Random Int  min=1  max=999
+    ${amount}=                      Random Int  min=1  max=500
     ${amount}=                      Convert To Number  ${amount}  1
     ${discountPercentage}=          Random Int  min=0  max=100
     ${discountPercentage}=          Convert To Number  ${discountPercentage}  1
@@ -478,7 +478,7 @@ JD-TC-Create Catalog Item Batch-1
     Set Suite Variable              ${taxAmount}
     Set Suite Variable              ${netRate}
 
-    # ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}
+    # ${resp}=    Get Item Details Inventory  ${store_id1}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}
     # Log   ${resp.content}
     # Should Be Equal As Strings      ${resp.status_code}                     200
     # Should Be Equal As Strings      ${resp.json()['quantity']}              ${quantity}
@@ -497,7 +497,7 @@ JD-TC-Create Catalog Item Batch-1
     # Should Be Equal As Strings      ${resp.json()['netTotal']}              ${netTotal}
     # Should Be Equal As Strings      ${resp.json()['netRate']}               ${netRate}
 
-    # ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${name}  ${boolean[0]}
+    # ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id1}   ${name}  ${boolean[0]}
     # Log   ${resp.content}
     # Should Be Equal As Strings      ${resp.status_code}   200
     # Set Suite Variable              ${inv_order_encid}    ${resp.json()}
@@ -505,12 +505,12 @@ JD-TC-Create Catalog Item Batch-1
     ${price}=    Random Int  min=2   max=40
     ${price}=  Convert To Number  ${price}    1
     Set Suite Variable  ${price}
-    # ${resp}=   Create Inventory Catalog Item  ${inv_cat_encid}   ${itemEncId1}  
+    # ${resp}=   Create Inventory Catalog Item  ${inv_cat_encid}   ${itemEncId11}  
     # Log   ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
     # Set Suite Variable  ${Inv_Cata_Item_Encid}  ${resp.json()[0]}
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Name}  ${boolean[1]}  ${inv_cat_encid_List}    onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[1]}  storePickup=${boolean[1]}  courierService=${boolean[0]}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id1}  ${Name}  ${boolean[1]}  ${inv_cat_encid_List}    onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[1]}  storePickup=${boolean[1]}  courierService=${boolean[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${inv_order_encid}  ${resp.json()}
@@ -522,7 +522,7 @@ JD-TC-Create Catalog Item Batch-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
 
-    # ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${inv_order_encid}     ${itemEncId1}     ${price}         
+    # ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${inv_order_encid}     ${itemEncId11}     ${price}         
     # Log   ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
     # Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
@@ -532,7 +532,7 @@ JD-TC-Create Catalog Item Batch-1
     ${salesRate}=   Evaluate        ${amount} / ${convertionQty}
     ${invoiceDate}=  db.add_timezone_date  ${tz}  1
     ${rate}=        Evaluate        int(${salesRate})
-    ${mrp}=         Random Int      min=${rate}  max=9999
+    ${mrp}=         Random Int      min=500  max=9999
     ${batchNo}=     Random Int      min=1  max=9999
     ${invoiceReferenceNo}=          Random Int  min=1  max=999
     ${purchaseNote}=                FakerLibrary.Sentence
@@ -540,7 +540,7 @@ JD-TC-Create Catalog Item Batch-1
 
     ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id}   ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}   ${iu_id}    
 
-    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
+    ${resp}=    Create Purchase  ${store_id1}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
     Set Suite Variable              ${purchaseId}           ${resp.json()}
@@ -600,7 +600,7 @@ JD-TC-Create Catalog Item Batch-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Inventory Item Count   storeEncId-eq=${store_id}   invCatalogEncId-eq=${encid}   from=0  count=10
+    ${resp}=  Get Inventory Item Count   storeEncId-eq=${store_id1}   invCatalogEncId-eq=${encid}   from=0  count=10
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -945,12 +945,12 @@ JD-TC-Create Catalog Item Batch-2
 
     ${Name1}=    FakerLibrary.last name
 
-    ${resp}=  Create Inventory Catalog   ${Name1}  ${store_id}   
+    ${resp}=  Create Inventory Catalog   ${Name1}  ${store_id1}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${encid1}  ${resp.json()}
 
-    ${resp}=   Create Inventory Catalog Item  ${encid1}   ${itemEncId1}  
+    ${resp}=   Create Inventory Catalog Item  ${encid1}   ${itemEncId11}  
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Test Variable   ${ic_id1}   ${resp.json()[0]}
@@ -984,7 +984,7 @@ JD-TC-Create Catalog Item Batch-2
     ${taxAmount}=  roundoff  ${taxAmount}  
 
 
-    # ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}
+    # ${resp}=    Get Item Details Inventory  ${store_id1}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}
     # Log   ${resp.content}
     # Should Be Equal As Strings      ${resp.status_code}                     200
     # Should Be Equal As Strings      ${resp.json()['quantity']}              ${quantity}
@@ -1009,7 +1009,7 @@ JD-TC-Create Catalog Item Batch-2
 
 
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Name1}  ${boolean[1]}  ${inv_cat_encid_List}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id1}  ${Name1}  ${boolean[1]}  ${inv_cat_encid_List}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${inv_order_encid1}  ${resp.json()}
@@ -1035,7 +1035,7 @@ JD-TC-Create Catalog Item Batch-2
 
     ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id1}    ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}   ${iu_id}    
 
-    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid1}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
+    ${resp}=    Create Purchase  ${store_id1}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid1}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
     Set Test Variable              ${purchaseId}           ${resp.json()}

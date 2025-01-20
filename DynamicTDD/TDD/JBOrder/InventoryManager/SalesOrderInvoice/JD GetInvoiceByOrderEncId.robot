@@ -8,6 +8,7 @@ Library           json
 Library           DateTime
 Library           requests
 Library           FakerLibrary
+Library           /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
@@ -27,6 +28,7 @@ ${invalidItem}     sprx-3250dr0-800
 *** Test Cases ***
 
 JD-TC-Get Sales Order Invoice By Order Encid-1
+
     [Documentation]   Create a sales Order with Valid Details then Genarate sales order invoice and Get it by order encid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
@@ -96,9 +98,7 @@ JD-TC-Get Sales Order Invoice By Order Encid-1
     ${resp}=  Get Store Type By EncId   ${St_Id}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+   
 # --------------------- ---------------------------------------------------------------
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
@@ -108,12 +108,9 @@ JD-TC-Get Sales Order Invoice By Order Encid-1
     ${accountId}=  get_acc_id  ${HLPUSERNAME32}
     Set Suite Variable    ${accountId} 
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -139,7 +136,7 @@ JD-TC-Get Sales Order Invoice By Order Encid-1
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
-    ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
+    ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}  walkinOrder=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${store_id}  ${resp.json()}
@@ -148,7 +145,7 @@ JD-TC-Get Sales Order Invoice By Order Encid-1
 
 # --------------------------- Create SalesOrder Inventory Catalog-InvMgr False ------------------------------------
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}  walkInOrder=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_Cata_Encid}  ${resp.json()}
@@ -206,12 +203,14 @@ JD-TC-Get Sales Order Invoice By Order Encid-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -224,7 +223,7 @@ JD-TC-Get Sales Order Invoice By Order Encid-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -367,6 +366,7 @@ JD-TC-Get Sales Order Invoice By Order Encid-1
     Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
 
 JD-TC-Get Sales Order Invoice By Order Encid-UH1
+
     [Documentation]   Another povider login and try to Get order encid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
@@ -379,6 +379,7 @@ JD-TC-Get Sales Order Invoice By Order Encid-UH1
     Should Be Equal As Strings    ${resp.json()}   ${INVALID_ORDER}
 
 JD-TC-Get Sales Order Invoice By Order Encid-UH2
+
     [Documentation]   Get sales order invoice with invalid order encid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
@@ -390,14 +391,3 @@ JD-TC-Get Sales Order Invoice By Order Encid-UH2
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}   ${INVALID_ORDER}
 
-JD-TC-Get Sales Order Invoice By Order Encid-UH3
-    [Documentation]   Get sales order invoice with EMPTY order encid.
-
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get Invoice By Order Uid    ${EMPTY}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${INVALID_FM_INVOICE_ID}

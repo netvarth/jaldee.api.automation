@@ -372,7 +372,7 @@ JD-TC-Update Catalog Item Batch-1
     ${quantity}=                    Convert To Number  ${quantity}  1
     ${freeQuantity}=                Random Int  min=0  max=10
     ${freeQuantity}=                Convert To Number  ${freeQuantity}  1
-    ${amount}=                      Random Int  min=1  max=999
+    ${amount}=                      Random Int  min=1  max=500
     ${amount}=                      Convert To Number  ${amount}  1
     ${discountPercentage}=          Random Int  min=0  max=100
     ${discountPercentage}=          Convert To Number  ${discountPercentage}  1
@@ -466,7 +466,7 @@ JD-TC-Update Catalog Item Batch-1
     ${salesRate}=   Evaluate        ${amount} / ${convertionQty}
     ${invoiceDate}=  db.add_timezone_date  ${tz}  1
     ${rate}=        Evaluate        int(${salesRate})
-    ${mrp}=         Random Int      min=${rate}  max=9999
+    ${mrp}=         Random Int      min=500  max=9999
     ${batchNo}=     Random Int      min=1  max=9999
     ${invoiceReferenceNo}=          Random Int  min=1  max=999
     ${purchaseNote}=                FakerLibrary.Sentence
