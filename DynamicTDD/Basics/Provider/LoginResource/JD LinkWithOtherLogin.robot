@@ -104,7 +104,7 @@ JD-TC-Link_With_Other_Login-1
 
     ${b_loc}=  Create Dictionary  place=${city}   longitude=${longi}   lattitude=${latti}    googleMapUrl=${url}   pinCode=${postcode}  address=${address}
     ${emails}=  Create List  ${emails1}
-    ${resp}=  Update Business Profile with kwargs   businessName=${bs}   shortName=${bs}   businessDesc=Description baseLocation=${b_loc}   emails=${emails}  
+    ${resp}=  Update Business Profile with kwargs   businessName=${bs}   shortName=${bs}   businessDesc=Description   baseLocation=${b_loc}   emails=${emails}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

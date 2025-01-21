@@ -2500,7 +2500,7 @@ USER_DISABLED=  "User is disabled"
 NEW_PASSWORD_REQ=   "New password required"
 INV_USER_ID=    "Invalid userId"
 INCORRECT_PASSWORD = "The password you entered is incorrect. Please try again."
-INVALID_LOGIN_ID=  "invalid login id"
+INVALID_LOGIN_ID=  "Invalid login id"
 USER_ID_REQUIRED  = "User Id required"
 
 #   ConsumerOrder
