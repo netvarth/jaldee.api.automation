@@ -583,7 +583,7 @@ JD-TC-Link_With_Other_Login-UH4
     ${resp}=    Connect with other login  ${inv}    password=${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${INV_LOGIN_ID}
+    Should Be Equal As Strings    ${resp.json()}    	Invalid Login Id
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
