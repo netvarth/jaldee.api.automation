@@ -52,7 +52,7 @@ JD-TC-Get_Member_Count-1
     ${effectiveFrom}=  db.get_date_by_timezone  ${tz}
     ${effectiveTo}=      db.add_timezone_date  ${tz}  10  
     ${description2}=    FakerLibrary.bs
-    ${name2}=           generate_firstname
+    ${name2}=           FakerLibrary.last_name
     ${displayname2}=    generate_firstname
     ${effectiveFrom2}=  db.get_date_by_timezone  ${tz}
     ${effectiveTo2}=    db.add_timezone_date  ${tz}  12
@@ -107,6 +107,10 @@ JD-TC-Get_Member_Count-1
     ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${number1}     ${accountId}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200 
+
+    ${resp}=    ProviderConsumer Login with token   ${number1}    ${accountId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    Create Membership     ${firstName}    ${lastName}    ${number1}    ${membershipid}    ${countryCodes[1]}
     Log   ${resp.content}
