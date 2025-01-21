@@ -424,9 +424,9 @@ JD-TC-Make Cash Payment For Sales Order-3
 
     ${quantity}=    Random Int  min=20   max=50
 
-    ${Cg_encid}=  Create Dictionary   encId=${SO_Cata_Encid}   
-    ${SO_Cata_Encid_List}=  Create List       ${Cg_encid}
-    Set Suite Variable  ${SO_Cata_Encid_List}
+    # ${Cg_encid}=  Create Dictionary   encId=${SO_Cata_Encid}   
+    # ${SO_Cata_Encid_List}=  Create List       ${Cg_encid}
+    # Set Suite Variable  ${SO_Cata_Encid_List}
 
     ${store}=  Create Dictionary   encId=${store_id}  
     ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
@@ -582,9 +582,9 @@ JD-TC-Make Cash Payment For Sales Order-5
 
     ${quantity1}=    Random Int  min=20   max=50
 
-    ${Cg_encid}=  Create Dictionary   encId=${SO_Cata_Encid}   
-    ${SO_Cata_Encid_List}=  Create List       ${Cg_encid}
-    Set Suite Variable  ${SO_Cata_Encid_List}
+    # ${Cg_encid}=  Create Dictionary   encId=${SO_Cata_Encid}   
+    # ${SO_Cata_Encid_List}=  Create List       ${Cg_encid}
+    # Set Suite Variable  ${SO_Cata_Encid_List}
 
     ${store}=  Create Dictionary   encId=${store_id}  
     ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity1}   catItemBatchEncId=${SO_itemEncIds}
@@ -640,11 +640,11 @@ JD-TC-Make Cash Payment For Sales Order-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     # Should Be Equal As Strings    ${resp.json()['half_amt']}                                       ${half_amt}
-    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${half_amt}
-    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      0.0
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${netTotal} 
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      ${half_amt}
     Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       ${half_amt}
 
-    ${resp}=    Make Cash Payment For SalesOrder    ${SO_Inv2}   ${acceptPaymentBy[0]}	${netTotal}     ${note}   paymentOndate=${DAY1}
+    ${resp}=    Make Cash Payment For SalesOrder    ${SO_Inv2}   ${acceptPaymentBy[0]}	${half_amt}     ${note}   paymentOndate=${DAY1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -661,9 +661,9 @@ JD-TC-Make Cash Payment For Sales Order-6
 
     ${quantity1}=    Random Int  min=20   max=50
 
-    ${Cg_encid}=  Create Dictionary   encId=${SO_Cata_Encid}   
-    ${SO_Cata_Encid_List}=  Create List       ${Cg_encid}
-    Set Suite Variable  ${SO_Cata_Encid_List}
+    # ${Cg_encid}=  Create Dictionary   encId=${SO_Cata_Encid}   
+    # ${SO_Cata_Encid_List}=  Create List       ${Cg_encid}
+    # Set Suite Variable  ${SO_Cata_Encid_List}
 
     ${store}=  Create Dictionary   encId=${store_id}  
     ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity1}   catItemBatchEncId=${SO_itemEncIds}
@@ -711,7 +711,7 @@ JD-TC-Make Cash Payment For Sales Order-6
     ${half_amt}=  Evaluate  ${netTotal}/2
     ${half_amt}=  Convert To Number  ${half_amt}   1
 
-    ${resp}=    Make Cash Payment For SalesOrder    ${SO_Inv3}   ${acceptPaymentBy[2]}	${netTotal}     ${note}   paymentOndate=${DAY1}
+    ${resp}=    Make Cash Payment For SalesOrder    ${SO_Inv3}   ${acceptPaymentBy[2]}	${half_amt}     ${note}   paymentOndate=${DAY1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -720,8 +720,13 @@ JD-TC-Make Cash Payment For Sales Order-6
     Should Be Equal As Strings    ${resp.status_code}   200
     # Should Be Equal As Strings    ${resp.json()['half_amt']}                                       ${half_amt}
     Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${netTotal}
-    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      0.0
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      ${half_amt}
     Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       ${netTotal}
+
+    comment  Make Cash Payment For SalesOrder with EMPTY note.
+    ${resp}=    Make Cash Payment For SalesOrder    ${SO_Inv3}   ${acceptPaymentBy[0]}	${netTotal}    ${EMPTY}   paymentOndate=${DAY1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
 JD-TC-Make Cash Payment For Sales Order-7
     [Documentation]   Make Cash Payment For SalesOrder with wrong netTotal.
@@ -778,17 +783,17 @@ JD-TC-Make Cash Payment For Sales Order-10
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}   ${INVALID_FM_INVOICE_ID}
 
-JD-TC-Make Cash Payment For Sales Order-11
-    [Documentation]   Make Cash Payment For SalesOrder with EMPTY note.
+# JD-TC-Make Cash Payment For Sales Order-11
+#     [Documentation]   Make Cash Payment For SalesOrder with EMPTY note.
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+#     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
+#     Log   ${resp.content}
+#     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=    Make Cash Payment For SalesOrder    ${SO_Inv}   ${acceptPaymentBy[0]}	${netTotal}    ${EMPTY}   paymentOndate=${DAY1}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+#     ${resp}=    Make Cash Payment For SalesOrder    ${SO_Inv}   ${acceptPaymentBy[0]}	${netTotal}    ${EMPTY}   paymentOndate=${DAY1}
+#     Log   ${resp.content}
+#     Should Be Equal As Strings    ${resp.status_code}   200
 
 JD-TC-Make Cash Payment For Sales Order-12
     [Documentation]   Make Cash Payment For SalesOrder without login.
