@@ -311,7 +311,7 @@ JD-TC-Get Cart By ProviderConsumer-1
       ${postcode}=  FakerLibrary.postcode
       ${whatsapp}=  Create Dictionary  countryCode=+91  number=${new_no}
 
-      ${resp}=   Update Consumer Delivery Address    ${new_no}    ${firstname}    ${lastname}    ${email}    ${address}    ${city}  ${postcode}   ${landmark}  state=${city}  country=${city}  whatsapp=${whatsapp}  location=${locId1}
+      ${resp}=   Update Consumer Delivery Address    ${new_no}    ${firstname}    ${lastname}    ${email}    ${address}    ${city}  ${postcode}   ${landmark}  state=${city}  country=${city}  whatsapp=${whatsapp}  location=${locId1}   title=Mr
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
 
