@@ -2391,6 +2391,15 @@ BADGE_ID_NOT_FOUND="Badge with ID {} does not found"
 BADGE_ID_MUST_GREATER_THAN_ZERO="Badge ID must be greater than 0. Invalid ID: {}"
 CANT_CHANGE_INV_MNGMT_IN_SOC = "You cannot disable inventory management for this catalog, as it includes inventory items."
 CANT_ADD_INV_ITEM_TO_NONINV_CATALOG = "You cannot add an inventory item because this is a non-inventory catalog"
+
+# Item Option 
+MAX_SPITEM_ATTRIBUTE_NUM = "Can give at most 5 attributes for an item."
+ATTRIBUTES_CANT_REPEAT = "Attributes cannot be repeated."
+ATTRIBUTES_VALUES_CANT_REPEAT = "Attribute values cannot be repeated. Values repeated for the attribute {}"
+CANT_ADD_CHILD_ITEM_WITHOUT_PARENT = "Can't add item {} without virtual item"
+GIVEN_FIELD_CANT_BE_EMPTY = "{} can not be empty"
+VALUES_CANT_BE_EMPTY = "Values can't be empty for {}"
+
 # Vendor
 INVALID_NAME="Invalid Name"
 CATEGORY_EXIST="Category exists with given name"

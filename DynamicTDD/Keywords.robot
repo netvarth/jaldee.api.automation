@@ -305,7 +305,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{leadstageType}                    NEW  FOLLOWUP  KYC  KYC_VERIFICATION  SALESFIELD  SALESFIELD_VERIFICATION  
 @{loanstageType}                    DOCUMENT  FINANCIAL_INFO  PROPERTY_INFO  CREDIT_VERIFICATION  BRANCH_VERIFICATION  BUSINESS_INFO
 @{pushPurchaseToFinance}            AUTOMATIC   MANUAL
-
+@{ItemNature}                       SINGLE_ITEM   VIRTUAL_ITEM   SERVICE   PACKAGE
 
 *** Keywords ***
 

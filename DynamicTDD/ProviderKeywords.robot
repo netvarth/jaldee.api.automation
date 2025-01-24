@@ -75,6 +75,7 @@ Account Activation
 
     ${headers2}=     Create Dictionary    Content-Type=application/json    #Authorization=browser
     ${resp}=    POST On Session    ynw    /provider/oauth/${otp_purpose_list[${purpose}]}/otp/${key}/verify  headers=${headers2}  expected_status=any
+    #${resp}=    POST On Session    ynw    /provider/oauth/otp/${key}/verify  headers=${headers2}  expected_status=any
     Check Deprication  ${resp}  Account Activation
     RETURN  ${resp}
 
@@ -2261,6 +2262,16 @@ Create Item Unit
     Check Deprication  ${resp}  Create Item Unit
     RETURN  ${resp} 
 
+Reset SP Item
+
+    [Arguments]  ${name}   ${spItemCode}   ${itemAttributes}
+    ${data}=  Create Dictionary   name=${name}   spCode=${spItemCode}   itemAttributes=${itemAttributes}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PATCH On Session  ynw  /provider/spitem/reset  data=${data}  expected_status=any
+    Check Deprication  ${resp}  Reset SP Item
+    RETURN  ${resp} 
+
 Get Item Inventory
 
     [Arguments]   ${id}
@@ -2388,7 +2399,7 @@ Get Inventory Catalog By EncId
 
 Create Inventory Catalog Item
 
-    [Arguments]  ${icEncId}   @{vargs}
+    [Arguments]  ${icEncId}   @{vargs}  &{kwargs}
     Check And Create YNW Session
 
     ${len}=  Get Length  ${vargs}
@@ -2398,13 +2409,67 @@ Create Inventory Catalog Item
         Exit For Loop If  ${len}==0
         ${values}=  Create Dictionary   spCode=${vargs[${index}]}
         ${item}=  Create Dictionary   item=${values}
+        FOR    ${key}    ${value}    IN    &{kwargs}
+           Set To Dictionary    ${item}   ${key}=${value}
+
+        END
+
         Append To List  ${data}  ${item}
 
     END
+
     ${data}=    json.dumps    ${data}  
     ${resp}=  POST On Session  ynw  /provider/inventory/inventorycatalog/${icEncId}/items   data=${data}  expected_status=any
     Check Deprication  ${resp}  Create Inventory Catalog Item
     RETURN  ${resp} 
+
+
+# Create Inventory Catalog Item
+#     [Arguments]    ${icEncId}    @{vargs}    &{kwargs}
+#     Check And Create YNW Session
+
+#     ${len}=    Get Length    ${vargs}
+#     ${data}=    Create List
+
+#     FOR    ${index}    IN RANGE    ${len}
+#         Exit For Loop If    ${len} == 0
+#         ${values}=    Create Dictionary    item=${vargs[${index}]}
+
+#         # Create singleItems list
+#         ${singleItemsList}=    Create List
+#         :FOR    ${key}    ${value}    IN    &{kwargs}
+#             ${item}=    Create Dictionary    ${key}=${value}
+#             Append To List    ${singleItemsList}    ${item}
+#         END
+
+#         # Combine values into the final item
+#         ${item}=    Create Dictionary    item=${values}    singleItems=${singleItemsList}
+
+#         Append To List    ${data}    ${item}
+#     END
+
+#     # Convert to JSON and send the request
+#     ${data}=    json.dumps    ${data}
+#     ${resp}=    POST On Session    ynw    /provider/inventory/inventorycatalog/${icEncId}/items    data=${data}    expected_status=any
+#     Check Deprication    ${resp}    Create Inventory Catalog Item
+#     RETURN    ${resp}
+
+
+# Create Inventory Catalog Item With Single Item
+
+#     [Arguments]  ${icEncId}   &{kwargs}
+#     Check And Create YNW Session
+#     ${data}=  Create List
+#     FOR  ${key}  ${value}  IN  &{kwargs}
+#         Append To List  ${data}   ${key}=${value}
+#     END
+#     ${data}=    json.dumps    ${data}  
+#     ${resp}=  POST On Session  ynw  /provider/inventory/inventorycatalog/${icEncId}/items   data=${data}  expected_status=any
+#     Check Deprication  ${resp}  Create Inventory Catalog Item
+#     RETURN  ${resp} 
+
+
+
 
 Get Item Details Inventory
 
