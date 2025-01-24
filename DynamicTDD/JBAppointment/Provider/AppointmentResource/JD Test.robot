@@ -284,7 +284,7 @@ JD-TC-GetAppointmentTodayCount-5
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${pc_emailid1}  ${CUSERNAME9}  ${pid}  countryCode=${countryCodes[0]}    title=mr
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${pc_emailid1}  ${CUSERNAME9}  ${pid}  countryCode=${countryCodes[0]}    title=Mr.  
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200    
 
@@ -313,6 +313,10 @@ JD-TC-GetAppointmentTodayCount-5
     ${j}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j}]}
 
+    ${resp}=    Get ProviderConsumer
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
@@ -326,6 +330,10 @@ JD-TC-GetAppointmentTodayCount-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
+    ${resp}=    Get ProviderConsumer
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
     ${resp}=  Make payment Consumer Mock  ${pid}  ${prepay_amt}  ${purpose[0]}  ${apptid1}  ${s_id}  ${bool[0]}   ${bool[1]}  ${cid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -333,7 +341,7 @@ JD-TC-GetAppointmentTodayCount-5
     ${resp}=    Get ProviderConsumer
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['title']}    mr
+    Should Be Equal As Strings    ${resp.json()['title']}    Mr.
 
     ${resp}=  Consumer Logout
     Log   ${resp.json()}

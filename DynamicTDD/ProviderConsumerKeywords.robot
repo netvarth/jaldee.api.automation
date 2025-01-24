@@ -63,14 +63,14 @@ Verify Otp For Login
     RETURN  ${resp}
 
 ProviderConsumer SignUp
-    [Arguments]  ${firstName}  ${lastName}  ${email}  ${primaryMobileNo}   ${accountId}   ${countryCode}=91   &{kwargs} 
+    [Arguments]  ${firstName}  ${lastName}  ${email}  ${primaryMobileNo}   ${accountId}   ${countryCode}=91   ${title}=${EMPTY}   &{kwargs} 
     ${cons_headers}=  Create Dictionary  &{headers} 
     ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     # Set To Dictionary  ${cons_headers}   &{tzheaders}
     Set To Dictionary  ${cons_params}   &{locparam}
-    ${data1}=   Create Dictionary    primaryMobileNo=${primaryMobileNo}    firstName=${firstName}   lastName=${lastName}  email=${email}  countryCode=${countryCode}
+    ${data1}=   Create Dictionary    primaryMobileNo=${primaryMobileNo}    firstName=${firstName}   lastName=${lastName}  email=${email}  countryCode=${countryCode}   title=${title}
     ${data}=    Create Dictionary    userProfile=${data1}  accountId=${accountId}
     ${data}=    json.dumps    ${data}
     ${headers2}=     Create Dictionary    Content-Type=application/json    #Authorization=${token}
