@@ -2399,6 +2399,9 @@ ATTRIBUTES_VALUES_CANT_REPEAT = "Attribute values cannot be repeated. Values rep
 CANT_ADD_CHILD_ITEM_WITHOUT_PARENT = "Can't add item {} without virtual item"
 GIVEN_FIELD_CANT_BE_EMPTY = "{} can not be empty"
 VALUES_CANT_BE_EMPTY = "Values can't be empty for {}"
+ITEM_DISABLED="Item is in disabled status"
+CANT_BE_CHANGED_ITEM_IN_INV_CATALOG = "Can't change. Already added in inventory catalog"
+CANT_BE_CHANGED_ITEM_IN_SO_CATALOG = "Can't change. Already added in order catalog"
 
 # Vendor
 INVALID_NAME="Invalid Name"
