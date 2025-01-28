@@ -22,7 +22,7 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 
 JD-TC-CreateItemWithOptions-1
 
-    [Documentation]   Create Item With Item Options
+    [Documentation]   Create Inventory Item With Item Options
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log   ${resp.content}
@@ -87,7 +87,7 @@ JD-TC-CreateItemWithOptions-1
     ${resp}=  Create Store   ${SName}   ${St_Id}    ${locId1}   ${email}     ${PhoneNumber}   ${countryCodes[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable            ${store_id}           ${resp.json()} 
+    Set Suite Variable            ${store_id}           ${resp.json()} 
 
     # Create item 1
     ${values1}   Create List  Black   Red   White
@@ -150,6 +150,92 @@ JD-TC-CreateItemWithOptions-1
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
 
+    #Create inventory catalog and add virtual items(with all of its single items)
+    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${inv_cat_encid1}  ${resp.json()}
+    ${inv_cat_encid}=  Create List  ${inv_cat_encid1}
+
+    ${resp}=   Create Inventory Catalog Item   ${inv_cat_encid1}   ${item}   ${item2}  ${item3}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${Inv_Cata_Item_Encid1}  ${resp.json()[0]}
+
+    ${resp}=  Get Inventory Catalog By EncId   ${inv_cat_encid1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    
+JD-TC-CreateItemWithOptions-2
+
+    [Documentation]   Create Inventory Item With Item Options 2nd case 
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    # Create item 1
+    ${values1}   Create List  Black   Red   White
+    ${option1}=  Create Dictionary  attribute=color  position=${1}  values=${values1}
+    ${itemAttributes}=  Create List  ${option1} 
+    ${name}=            FakerLibrary.name
+    ${shortDesc}=       FakerLibrary.sentence
+    ${internalDesc}=    FakerLibrary.sentence
+    ${resp}=    Create Item Inventory   ${name}   shortDesc=${shortDesc}   internalDesc=${internalDesc}   isBatchApplicable=${boolean[0]}   isInventoryItem=${boolean[1]}   itemNature=${ItemNature[1]}   itemAttributes=${itemAttributes}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable      ${item}  ${resp.json()}
+
+    ${resp}=    Get Item Inventory  ${item}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+
+    ${resp}=    Get Item inv Filter   parentItemSpCode-eq=${item}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Suite Variable     ${singleItem1}   ${resp.json()[0]['spCode']}   
+    Set Suite Variable     ${singleItem2}   ${resp.json()[1]['spCode']}
+
+    #Create item 2
+    ${values2}   Create List   S    M    L
+    ${option2}=  Create Dictionary  attribute=size  position=${1}  values=${values2}
+    ${itemAttributes2}=  Create List  ${option2} 
+    ${name2}=            FakerLibrary.name
+    ${resp}=    Create Item Inventory   ${name2}    isBatchApplicable=${boolean[0]}   isInventoryItem=${boolean[1]}   itemNature=${ItemNature[1]}   itemAttributes=${itemAttributes2}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable      ${item2}  ${resp.json()}
+
+    ${resp}=    Get Item Inventory  ${item2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+
+    ${resp}=    Get Item inv Filter   parentItemSpCode-eq=${item2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Suite Variable     ${singleItem21}   ${resp.json()[0]['spCode']}   
+    Set Suite Variable     ${singleItem22}   ${resp.json()[1]['spCode']}
+    Set Suite Variable     ${singleItem23}   ${resp.json()[2]['spCode']}
+
+    #Create item 3
+    ${values3}   Create List   Men    Women
+    ${option3}=  Create Dictionary  attribute=type  position=${1}  values=${values3}
+    ${itemAttributes3}=  Create List  ${option3} 
+    ${name3}=            FakerLibrary.name
+    ${resp}=    Create Item Inventory   ${name3}    isBatchApplicable=${boolean[0]}   isInventoryItem=${boolean[1]}   itemNature=${ItemNature[1]}   itemAttributes=${itemAttributes3}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable      ${item3}  ${resp.json()}
+
+    ${resp}=    Get Item Inventory  ${item3}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+
+    ${resp}=    Get Item inv Filter   parentItemSpCode-eq=${item3}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+
+    #Create inventory catalog and add virtual items with specified single items
     ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
