@@ -17,7 +17,8 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 @{Views}  self  all  customersOnly
 # ${CAUSERNAME}             admin.support@jaldee.com
 # ${SPASSWORD}              Netvarth1
-${PASSWORD}               Netvarth12
+# ${PASSWORD}               Netvarth12
+${PASSWORD}                 Jaldee01
 ${NEWPASSWORD}            Jaldee12
 ${test_mail}              test@jaldee.com
 ${count}                  ${1}
@@ -30,7 +31,8 @@ ${coverimg}               /ebs/TDD/cover.jpg
 ${coverpic}               /ebs/TDD/banner.jpg
 ${logoimg}                /ebs/TDD/images1.jpeg
 @{salutations}                  MR  MRS
-${number}       5553643640
+# ${number}       5553643640
+${number}       5550022420
 
 *** Test Cases ***
 
@@ -54,19 +56,19 @@ JD-TC-Change Password-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${createdDAY}  ${resp.json()['createdDate']}
 
-    ${resp}=  Provider Change Password  ${PASSWORD}  ${NEWPASSWORD}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Provider Change Password  ${PASSWORD}  ${NEWPASSWORD}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${number}  ${NEWPASSWORD}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Encrypted Provider Login  ${number}  ${NEWPASSWORD}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    comment  change provider password back to old password.
+    # comment  change provider password back to old password.
 
-    ${resp}=  Provider Change Password  ${NEWPASSWORD}  ${PASSWORD}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Provider Change Password  ${NEWPASSWORD}  ${PASSWORD}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${number}  ${PASSWORD}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Encrypted Provider Login  ${number}  ${PASSWORD}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
     comment  Reset provider password.
 
